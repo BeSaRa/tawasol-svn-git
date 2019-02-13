@@ -3,7 +3,8 @@ module.exports = function (app) {
                                           $q,
                                           OUClassification,
                                           OUCorrespondenceSite,
-                                          langService) {
+                                          langService,
+                                          _) {
         'ngInject';
         return function Organization(model) {
             var self = this,

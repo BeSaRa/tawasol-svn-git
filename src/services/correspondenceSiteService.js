@@ -1,15 +1,16 @@
 module.exports = function (app) {
     app.service('correspondenceSiteService', function (urlService,
-                                                       toast,
-                                                       cmsTemplate,
-                                                       langService,
-                                                       dialog,
-                                                       $http,
-                                                       $q,
-                                                       generator,
-                                                       CorrespondenceSite,
-                                                       SearchCorrespondenceSite,
-                                                       _) {
+                                                          toast,
+                                                          errorCode,
+                                                          cmsTemplate,
+                                                          langService,
+                                                          dialog,
+                                                          $http,
+                                                          $q,
+                                                          generator,
+                                                          CorrespondenceSite,
+                                                          SearchCorrespondenceSite,
+                                                          _) {
         'ngInject';
         var self = this;
         self.serviceName = 'correspondenceSiteService';
@@ -35,7 +36,6 @@ module.exports = function (app) {
             return self.correspondenceSites.length ? $q.when(self.correspondenceSites) : self.loadCorrespondenceSites();
         };
 
-
         /**
          * @description load active correspondenceSites from server.
          * @returns {Promise|activeCorrespondenceSites}
@@ -53,6 +53,194 @@ module.exports = function (app) {
          */
         self.getActiveCorrespondenceSites = function () {
             return self.activeCorrespondenceSites.length ? $q.when(self.activeCorrespondenceSites) : self.loadActiveCorrespondenceSites();
+        };
+
+        /**
+         * @description load classifications with limit up to 50
+         * @param limit
+         * @return {*}
+         */
+        self.loadCorrespondenceSitesWithLimit = function (limit) {
+            return $http
+                .get(urlService.entityWithlimit.replace('{entityName}', 'correspondence-site').replace('{number}', limit ? limit : 50))
+                .then(function (result) {
+                    self.correspondenceSites = generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods);
+                    self.correspondenceSites = generator.interceptReceivedCollection('CorrespondenceSite', self.correspondenceSites);
+                    return self.correspondenceSites;
+                });
+        };
+        /**
+         * @description load sub correspondence sites for the given correspondence site.
+         * @param correspondenceSite
+         * @return {*}
+         */
+
+        self.loadSubCorrespondenceSites = function (correspondenceSite) {
+            var id = correspondenceSite.hasOwnProperty('id') ? correspondenceSite.id : correspondenceSite;
+            return $http
+                .get(urlService.childrenEntities.replace('{entityName}', 'correspondence-site').replace('{entityId}', id))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('CorrespondenceSite', generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods));
+                });
+        };
+        /**
+         * @description get correspondenceSite by correspondenceSiteId
+         * @param correspondenceSiteId
+         * @returns {CorrespondenceSite|undefined} return CorrespondenceSite Model or undefined if not found.
+         */
+        self.getCorrespondenceSiteById = function (correspondenceSiteId) {
+            correspondenceSiteId = correspondenceSiteId instanceof CorrespondenceSite ? correspondenceSiteId.id : correspondenceSiteId;
+            return _.find(self.correspondenceSites, function (correspondenceSite) {
+                return Number(correspondenceSite.id) === Number(correspondenceSiteId)
+            });
+        };
+
+        /**
+         * @description Filters parent correspondenceSites
+         * @param excludeCorrespondenceSite
+         * @return {Array}
+         */
+        self.getParentCorrespondenceSites = function (excludeCorrespondenceSite) {
+            return _.filter(self.correspondenceSites, function (correspondenceSite) {
+                if (excludeCorrespondenceSite)
+                    return !correspondenceSite.parent && excludeCorrespondenceSite.id !== correspondenceSite.id;
+                else
+                    return !correspondenceSite.parent;
+            });
+        };
+
+        /**
+         * @description Filters the main correspondence sites from given correspondence sites
+         * @param correspondenceSites
+         * @returns {Array}
+         */
+        self.getMainCorrespondenceSites = function (correspondenceSites) {
+            return _.filter(correspondenceSites, function (correspondenceSite) {
+                return !correspondenceSite.parent;
+            })
+        };
+
+        /**
+         * @description Contains methods for CRUD operations for correspondenceSites
+         */
+        self.controllerMethod = {
+            /**
+             * @description Opens popup to add new correspondenceSite
+             * @param parentCorrespondenceSite
+             * @param defaultOU
+             * @param $event
+             */
+            correspondenceSiteAdd: function (parentCorrespondenceSite, defaultOU, $event) {
+                var correspondenceSite = new CorrespondenceSite({
+                    parent: parentCorrespondenceSite,
+                    correspondenceTypeId: parentCorrespondenceSite ? parentCorrespondenceSite.correspondenceTypeId : null,
+                    isGlobal: !(!!defaultOU),
+                    relatedOus: defaultOU ? [defaultOU] : []
+                });
+                return dialog
+                    .showDialog({
+                        targetEvent: $event,
+                        templateUrl: cmsTemplate.getPopup('correspondence-site'),
+                        controller: 'correspondenceSitePopCtrl',
+                        controllerAs: 'ctrl',
+                        escapeToClose: false,
+                        locals: {
+                            editMode: false,
+                            correspondenceSite: correspondenceSite,
+                            defaultOU: defaultOU
+                        }
+                    });
+            },
+            /**
+             * @description Opens popup to edit correspondenceSite
+             * @param correspondenceSite
+             * @param $event
+             */
+            correspondenceSiteEdit: function (correspondenceSite, $event) {
+                return dialog
+                    .showDialog({
+                        targetEvent: $event,
+                        templateUrl: cmsTemplate.getPopup('correspondence-site'),
+                        controller: 'correspondenceSitePopCtrl',
+                        controllerAs: 'ctrl',
+                        escapeToClose: false,
+                        locals: {
+                            editMode: true,
+                            correspondenceSite: correspondenceSite,
+                            defaultOU: null
+                        }
+                    });
+            },
+            /**
+             * @description Show confirm box and delete correspondenceSite
+             * @param correspondenceSite
+             * @param $event
+             */
+            correspondenceSiteDelete: function (correspondenceSite, $event) {
+                return dialog
+                    .confirmMessage(langService.get('confirm_delete').change({name: correspondenceSite.getNames()}), null, null, $event)
+                    .then(function () {
+                        return self.deleteCorrespondenceSite(correspondenceSite)
+                            .then(function () {
+                                toast.success(langService.get('delete_specific_success').change({name: correspondenceSite.getNames()}));
+                                return true;
+                            })
+                            .catch(function (error) {
+                                return errorCode.checkIf(error, 'CAN_NOT_DELETE_LOOKUP', function () {
+                                    dialog.errorMessage(langService.get('cannot_delete_lookup').change({
+                                        lookup: langService.get('correspondence_site'),
+                                        used: langService.get('document')
+                                    }), null, null, $event);
+                                    return $q.reject('CAN_NOT_DELETE_LOOKUP');
+                                })
+                            });
+                    });
+            },
+            /**
+             * @description view sub CorrespondenceSites
+             * @param mainCorrespondenceSite
+             * @param $event
+             * @return {promise}
+             */
+            viewSubCorrespondenceSites: function (mainCorrespondenceSite, $event) {
+                return dialog
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('sub-correspondence-site'),
+                        controller: 'subCorrespondenceSiteViewPopCtrl',
+                        controllerAs: 'ctrl',
+                        targetEvent: $event,
+                        locals: {
+                            mainCorrespondenceSite: mainCorrespondenceSite
+                        },
+                        resolve: {
+                            subCorrespondenceSites: function () {
+                                'ngInject';
+                                return self.loadSubCorrespondenceSites(mainCorrespondenceSite);
+                            }
+                        }
+                    });
+            },
+            /**
+             * @description Opens popup for adding correspondence sites to OU from organization popup
+             * @param excluded
+             * @returns {promise}
+             */
+            showCorrespondenceSiteSelector: function (excluded) {
+                return dialog.showDialog({
+                    templateUrl: cmsTemplate.getPopup('correspondence-sites-selector'),
+                    controller: 'correspondenceSiteSelectorPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        excluded: excluded
+                    },
+                    resolve: {
+                        correspondenceSites: function () {
+                            'ngInject';
+                            return self.loadCorrespondenceSitesWithLimit(100);
+                        }
+                    }
+                });
+            }
         };
 
         /**
@@ -92,112 +280,7 @@ module.exports = function (app) {
             return $http
                 .delete((urlService.correspondenceSites + '/' + id));
         };
-        /**
-         * @description Delete bulk organization types.
-         * @param correspondenceSites
-         * @return {Promise|null}
-         */
-        self.deleteBulkCorrespondenceSites = function (correspondenceSites) {
-            var bulkIds = correspondenceSites[0].hasOwnProperty('id') ? _.map(correspondenceSites, 'id') : correspondenceSites;
-            return $http({
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                url: urlService.correspondenceSites + '/bulk',
-                data: bulkIds
-            }).then(function (result) {
-                /*result = result.data.rs;
-                var failedCorrespondenceSites = [];
-                _.map(result, function (value, key) {
-                    if (!value)
-                        failedCorrespondenceSites.push(Number(key));
-                });
-                return _.filter(correspondenceSites, function (correspondenceSite) {
-                    return (failedCorrespondenceSites.indexOf(correspondenceSite.id) > -1);
-                });*/
-                return generator.getBulkActionResponse(result, correspondenceSites, false, 'failed_delete_selected', 'delete_success', 'delete_success_except_following');
-            });
-        };
-        /**
-         * @description create the shred method to the model.
-         * @type {{delete: generator.delete, update: generator.update}}
-         * @private
-         */
-        self._sharedMethods = generator.generateSharedMethods(self.deleteCorrespondenceSite, self.updateCorrespondenceSite);
 
-        /**
-         * @description get correspondenceSite by correspondenceSiteId
-         * @param correspondenceSiteId
-         * @returns {CorrespondenceSite|undefined} return CorrespondenceSite Model or undefined if not found.
-         */
-        self.getCorrespondenceSiteById = function (correspondenceSiteId) {
-            correspondenceSiteId = correspondenceSiteId instanceof CorrespondenceSite ? correspondenceSiteId.id : correspondenceSiteId;
-            return _.find(self.correspondenceSites, function (correspondenceSite) {
-                return Number(correspondenceSite.id) === Number(correspondenceSiteId)
-            });
-        };
-
-        /**
-         * @description get children for parent correspondenceSites
-         * @param parents correspondenceSites to get they children
-         * @param children correspondenceSites to search in
-         * @return {Array}
-         */
-        self.getChildrenCorrespondenceSites = function (parents, children) {
-            return _.map(parents, function (correspondenceSite) {
-                correspondenceSite.children = [];
-                if (children.hasOwnProperty(correspondenceSite.id)) {
-                    correspondenceSite.setChildren(children[correspondenceSite.id]);
-                }
-                return correspondenceSite;
-            });
-        };
-        /**
-         * @description to make separation between parents and children records
-         * @param correspondenceSites
-         * @param parents
-         * @param children
-         * @return {*}
-         */
-        self.correspondenceSiteSeparator = function (correspondenceSites, parents, children) {
-            _.map(correspondenceSites, function (correspondenceSite) {
-                var parent = correspondenceSite.parent;
-                if (!parent) {
-                    parents.push(correspondenceSite);
-                } else {
-                    if (!children.hasOwnProperty(parent)) {
-                        children[parent] = [];
-                    }
-                    children[parent].push(correspondenceSite);
-                }
-            });
-            return self;
-        };
-        /**
-         * @description to create the hierarchy for the parent and child for correspondenceSites
-         * @param correspondenceSites
-         * @return {Array| CorrespondenceSite} array of parents correspondenceSites
-         */
-        self.createCorrespondenceSiteHierarchy = function (correspondenceSites) {
-            var parents = [], children = {};
-            return self
-                .correspondenceSiteSeparator(correspondenceSites, parents, children)
-                .getChildrenCorrespondenceSites(parents, children);
-        };
-        /**
-         * @description get parent correspondenceSites
-         * @param excludeCorrespondenceSite
-         * @return {Array}
-         */
-        self.getParentCorrespondenceSites = function (excludeCorrespondenceSite) {
-            return _.filter(self.correspondenceSites, function (correspondenceSite) {
-                if (excludeCorrespondenceSite)
-                    return !correspondenceSite.parent && excludeCorrespondenceSite.id !== correspondenceSite.id;
-                else
-                    return !correspondenceSite.parent;
-            });
-        };
         /**
          * @description Activate correspondenceSite
          * @param correspondenceSite
@@ -249,6 +332,14 @@ module.exports = function (app) {
                     return generator.getBulkActionResponse(result, correspondenceSites, false, 'failed_deactivate_selected', 'success_deactivate_selected', 'success_deactivate_selected_except_following');
                 });
         };
+
+        /**
+         * @description create the shred method to the model.
+         * @type {{delete: generator.delete, update: generator.update}}
+         * @private
+         */
+        self._sharedMethods = generator.generateSharedMethods(self.deleteCorrespondenceSite, self.updateCorrespondenceSite);
+
         /**
          * @description Check if record with same name exists. Returns true if exists
          * @param correspondenceSite
@@ -270,12 +361,11 @@ module.exports = function (app) {
             });
         };
 
-        self.getMainCorrespondenceSites = function (correspondenceSites) {
-            return _.filter(correspondenceSites, function (correspondenceSite) {
-                return !correspondenceSite.parent;
-            })
-        };
-
+        /**
+         * @description Filters the sub correspondence sites for given main correspondence site
+         * @param mainCorrespondenceSite
+         * @returns {Array}
+         */
         self.getSubCorrespondenceSites = function (mainCorrespondenceSite) {
             return _.filter(self.correspondenceSites, function (correspondenceSite) {
                 mainCorrespondenceSite = mainCorrespondenceSite.hasOwnProperty('id') ? mainCorrespondenceSite.id : mainCorrespondenceSite;
@@ -317,159 +407,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Contains methods for CRUD operations for correspondenceSites
-         */
-        self.controllerMethod = {
-            /**
-             * @description Opens popup to add new correspondenceSite
-             * @param parentCorrespondenceSite
-             * @param sub
-             * @param $event
-             */
-            correspondenceSiteAdd: function (parentCorrespondenceSite, sub, $event) {
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('correspondence-site'),
-                        controller: 'correspondenceSitePopCtrl',
-                        controllerAs: 'ctrl',
-                        escapeToClose: false,
-                        locals: {
-                            editMode: false,
-                            correspondenceSite: new CorrespondenceSite(),
-                            correspondenceSites: self.correspondenceSites,
-                            parent: parentCorrespondenceSite,
-                            sub: sub
-                        }
-                    });
-            },
-            /**
-             * @description Opens popup to edit correspondenceSite
-             * @param correspondenceSite
-             * @param $event
-             */
-            correspondenceSiteEdit: function (correspondenceSite, $event) {
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('correspondence-site'),
-                        controller: 'correspondenceSitePopCtrl',
-                        controllerAs: 'ctrl',
-                        escapeToClose: false,
-                        locals: {
-                            editMode: true,
-                            correspondenceSite: correspondenceSite,
-                            correspondenceSites: self.correspondenceSites,
-                            parent: correspondenceSite.parent,
-                            sub: false
-                        }
-                    });
-            },
-            subCorrespondenceSiteEdit: function (correspondenceSite, parent, $event) {
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('correspondence-site'),
-                        controller: 'correspondenceSitePopCtrl',
-                        controllerAs: 'ctrl',
-                        escapeToClose: false,
-                        locals: {
-                            editMode: true,
-                            correspondenceSite: correspondenceSite,
-                            correspondenceSites: self.correspondenceSites,
-                            parent: parent,
-                            sub: true
-                        }
-                    });
-            },
-            /**
-             * @description Show confirm box and delete correspondenceSite
-             * @param correspondenceSite
-             * @param $event
-             */
-            correspondenceSiteDelete: function (correspondenceSite, $event) {
-                return dialog
-                    .confirmMessage(langService.get('confirm_delete').change({name: correspondenceSite.getNames()}), null, null, $event)
-                    .then(function () {
-                        return self.deleteCorrespondenceSite(correspondenceSite)
-                            .then(function () {
-                                toast.success(langService.get('delete_specific_success').change({name: correspondenceSite.getNames()}));
-                                return true;
-                            });
-                    });
-            },
-            /**
-             * @description Show confirm box and delete bulk correspondenceSites
-             * @param correspondenceSites
-             * @param $event
-             */
-            correspondenceSiteDeleteBulk: function (correspondenceSites, $event) {
-                return dialog
-                    .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event || null)
-                    .then(function () {
-                        return self.deleteBulkCorrespondenceSites(correspondenceSites);
-                        /*.then(function (result) {
-                            var response = false;
-                            if (result.length === correspondenceSites.length) {
-                                toast.error(langService.get("failed_delete_selected"));
-                                response = false;
-                            } else if (result.length) {
-                                generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (correspondenceSite) {
-                                    return correspondenceSite.getNames();
-                                }));
-                                response = true;
-                            } else {
-                                toast.success(langService.get("delete_success"));
-                                response = true;
-                            }
-                            return response;
-                        });*/
-                    });
-            },
-            /**
-             * @description view sub CorrespondenceSites
-             * @param correspondenceSite
-             * @param $event
-             * @return {promise}
-             */
-            viewSubCorrespondenceSites: function (correspondenceSite, $event) {
-                return dialog
-                    .showDialog({
-                        templateUrl: cmsTemplate.getPopup('sub-correspondence-site'),
-                        controller: 'subCorrespondenceSiteViewPopCtrl',
-                        controllerAs: 'ctrl',
-                        targetEvent: $event,
-                        locals: {
-                            correspondenceSite: correspondenceSite,
-                            correspondenceSites: self.getMainCorrespondenceSites(self.correspondenceSites)
-                        },
-                        resolve: {
-                            subCorrespondenceSites: function () {
-                                'ngInject';
-                                return self.loadSubCorrespondenceSites(correspondenceSite);
-                            }
-                        }
-                    });
-            },
-            showCorrespondenceSiteSelector: function (excluded) {
-                return dialog.showDialog({
-                    templateUrl: cmsTemplate.getPopup('correspondence-sites-selector'),
-                    controller: 'correspondenceSiteSelectorPopCtrl',
-                    controllerAs: 'ctrl',
-                    locals: {
-                        excluded: excluded
-                    },
-                    resolve: {
-                        correspondenceSites: function () {
-                            'ngInject';
-                            return self.loadCorrespondenceSitesWithLimit(100);
-                        }
-                    }
-                });
-            }
-        };
-
-        /**
          * @description search in classifications .
          * @param searchText
          * @param parent
@@ -485,34 +422,5 @@ module.exports = function (app) {
                 return generator.interceptReceivedCollection('CorrespondenceSite', generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods));
             });
         };
-
-        /**
-         * @description load classifications with limit up to 50
-         * @param limit
-         * @return {*}
-         */
-        self.loadCorrespondenceSitesWithLimit = function (limit) {
-            return $http
-                .get(urlService.entityWithlimit.replace('{entityName}', 'correspondence-site').replace('{number}', limit ? limit : 50))
-                .then(function (result) {
-                    self.correspondenceSites = generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods);
-                    self.correspondenceSites = generator.interceptReceivedCollection('CorrespondenceSite', self.correspondenceSites);
-                    return self.correspondenceSites;
-                });
-        };
-        /**
-         * @description load sub correspondence sites for the given correspondence site.
-         * @param correspondenceSite
-         * @return {*}
-         */
-
-        self.loadSubCorrespondenceSites = function (correspondenceSite) {
-            var id = correspondenceSite.hasOwnProperty('id') ? correspondenceSite.id : correspondenceSite;
-            return $http
-                .get(urlService.childrenEntities.replace('{entityName}', 'correspondence-site').replace('{entityId}', id))
-                .then(function (result) {
-                    return generator.interceptReceivedCollection('CorrespondenceSite', generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods));
-                });
-        }
     });
 };

@@ -19,7 +19,6 @@ module.exports = function (app) {
                                                  mailNotificationService,
                                                  counterService,
                                                  gridService,
-                                                 correspondenceSiteService,
                                                  WorkItem,
                                                  ResolveDefer,
                                                  generator,

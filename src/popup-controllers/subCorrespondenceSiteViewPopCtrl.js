@@ -4,33 +4,30 @@ module.exports = function (app) {
                                                                  dialog,
                                                                  toast,
                                                                  generator,
-                                                                 correspondenceSite,
-                                                                 correspondenceSites,
-                                                                 correspondenceSiteService,
-                                                                 langService,
+                                                                 mainCorrespondenceSite,
                                                                  subCorrespondenceSites,
-                                                                 ouCorrespondenceSiteService) {
+                                                                 correspondenceSiteService,
+                                                                 langService) {
         'ngInject';
         var self = this;
         self.controllerName = 'subCorrespondenceSiteViewPopCtrl';
-        // current correspondenceSite to view his sub correspondenceSites
-        self.correspondenceSite = correspondenceSite;
 
-        self.correspondenceSites = subCorrespondenceSites;
+        self.mainCorrespondenceSite = mainCorrespondenceSite;
+        self.subCorrespondenceSites = subCorrespondenceSites;
+        self.selectedSubCorrespondenceSites = [];
 
-        self.parentCorrespondenceSites = correspondenceSites;
-
-        self.selectedCorrespondenceSites = [];
+        self.searchMode = '';
+        self.searchMode = false;
 
         /**
          * @description Gets the grid records by sorting
          */
         self.getSortedData = function () {
-            self.correspondenceSites = $filter('orderBy')(self.correspondenceSites, self.grid.order);
+            self.subCorrespondenceSites = $filter('orderBy')(self.subCorrespondenceSites, self.grid.order);
         };
 
-
         self.grid = {
+            progress: null,
             limit: 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
@@ -38,7 +35,7 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, {
                 label: langService.get('all'),
                 value: function () {
-                    return (self.correspondenceSites.length + 21);
+                    return (self.subCorrespondenceSites.length + 21);
                 }
             }]
         };
@@ -52,59 +49,54 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Opens dialog for add new correspondenceSite
+         * @description Opens dialog for add new subCorrespondenceSite
          * @param $event
          */
-        self.openAddCorrespondenceSiteDialog = function ($event) {
-            return correspondenceSiteService
-                .controllerMethod
-                .correspondenceSiteAdd($event)
-                .then(function () {
-                    self.reloadCorrespondenceSites();
+        self.openAddSubCorrespondenceSiteDialog = function ($event) {
+            return correspondenceSiteService.controllerMethod
+                .correspondenceSiteAdd(self.mainCorrespondenceSite, false, $event)
+                .then(function (result) {
+                    self.reloadSubCorrespondenceSites(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadSubCorrespondenceSites(self.grid.page);
                 });
         };
 
         /**
-         * @description Opens dialog for edit correspondenceSite
-         * @param correspondenceSite
+         * @description Opens dialog for edit subCorrespondenceSite
+         * @param subCorrespondenceSite
          * @param $event
          */
-        self.openEditCorrespondenceSiteDialog = function (correspondenceSite, $event) {
+        self.openEditSubCorrespondenceSiteDialog = function (subCorrespondenceSite, $event) {
             correspondenceSiteService
                 .controllerMethod
-                .correspondenceSiteEdit(correspondenceSite, $event)
-                .then(function () {
-                    self.reloadCorrespondenceSites(self.grid.page).then(function () {
-                        toast.success(langService.get('edit_success').change({name: correspondenceSite.getNames()}));
+                .correspondenceSiteEdit(subCorrespondenceSite, $event)
+                .then(function (result) {
+                    self.reloadSubCorrespondenceSites(self.grid.page).then(function () {
+                        toast.success(langService.get('edit_success').change({name: subCorrespondenceSite.getNames()}));
                     });
                 })
-                .catch(function (correspondenceSite) {
-                    self.replaceRecordFromGrid(correspondenceSite);
+                .catch(function (error) {
+                    self.reloadSubCorrespondenceSites(self.grid.page);
                 });
         };
 
-        self.replaceRecordFromGrid = function (correspondenceSite) {
-            self.correspondenceSite.children.splice(_.findIndex(self.correspondenceSite.children, function (item) {
-                return item.id === correspondenceSite.id;
-            }), 1, correspondenceSite);
-        };
         /**
          * reload the grid again and if the pageNumber provide the current grid will be on it.
          * @param pageNumber
          * @return {*|Promise<Correspondence sites>}
          */
-        self.reloadCorrespondenceSites = function (pageNumber) {
+        self.reloadSubCorrespondenceSites = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
+            self.searchMode = false;
+            self.searchModel = '';
             return correspondenceSiteService
-                .loadSubCorrespondenceSites(self.correspondenceSite)
+                .loadSubCorrespondenceSites(self.mainCorrespondenceSite)
                 .then(function (result) {
-                    self.correspondenceSites = result;
-                    if (!self.correspondenceSites.length) {
-                        dialog.hide(self.parentCorrespondenceSites);
-                    }
-
-                    self.selectedCorrespondenceSites = [];
+                    self.subCorrespondenceSites = result;
+                    self.selectedSubCorrespondenceSites = [];
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
@@ -114,158 +106,110 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Delete single correspondenceSite
-         * @param correspondenceSite
+         * @description Delete single subCorrespondenceSite
+         * @param subCorrespondenceSite
          * @param $event
          */
-        self.removeCorrespondenceSite = function (correspondenceSite, $event) {
+        self.removeSubCorrespondenceSite = function (subCorrespondenceSite, $event) {
             correspondenceSiteService
                 .controllerMethod
-                .correspondenceSiteDelete(correspondenceSite, $event)
+                .correspondenceSiteDelete(subCorrespondenceSite, $event)
                 .then(function () {
-                    self.reloadCorrespondenceSites(self.grid.page);
+                    self.reloadSubCorrespondenceSites(self.grid.page);
                 });
         };
 
         /**
-         * @description Delete multiple selected correspondenceSite
-         * @param $event
+         * @description change the status of subCorrespondenceSite
+         * @param subCorrespondenceSite
          */
-        self.removeBulkCorrespondenceSites = function ($event) {
-            correspondenceSiteService
-                .controllerMethod
-                .correspondenceSiteDeleteBulk(self.selectedCorrespondenceSites, $event)
-                .then(function () {
-                    self.reloadCorrespondenceSites(self.grid.page);
-                });
-        };
-
-        /**
-         * @description change the status of correspondenceSite
-         * @param correspondenceSite
-         */
-        self.changeStatusCorrespondenceSite = function (correspondenceSite) {
-            self.statusServices[correspondenceSite.status](correspondenceSite)
+        self.changeStatusSubCorrespondenceSite = function (subCorrespondenceSite) {
+            subCorrespondenceSite.updateStatus()
                 .then(function () {
                     toast.success(langService.get('status_success'));
                 })
                 .catch(function () {
-                    correspondenceSite.status = !correspondenceSite.status;
+                    subCorrespondenceSite.status = !subCorrespondenceSite.status;
                     dialog.errorMessage(langService.get('something_happened_when_update_status'));
                 })
         };
         /**
-         * @description change the status of correspondenceSite
-         * @param correspondenceSite
+         * @description change the global of subCorrespondenceSite
+         * @param subCorrespondenceSite
          */
-        self.changeGlobalCorrespondenceSite = function (correspondenceSite) {
-            // if correspondenceSite global and has organizations.
-            if (correspondenceSite.isGlobal && correspondenceSite.hasOrganizations()) {
+        self.changeGlobalSubCorrespondenceSite = function (subCorrespondenceSite) {
+            //If subCorrespondenceSite is not global(after change), its not allowed. Show alert to user
+            if (!subCorrespondenceSite.isGlobal) {
+                subCorrespondenceSite.isGlobal = true;
+                dialog.alertMessage(langService.get('can_not_change_global_to_private').change({type: langService.get('correspondence_site')}));
+            } else {
                 dialog.confirmMessage(langService.get('related_organization_confirm'))
                     .then(function () {
-                        correspondenceSite
-                            .deleteAllOUCorrespondenceSites()
-                            .then(function () {
-                                correspondenceSite.isGlobal = true;
-                                correspondenceSite.update().then(self.displayCorrespondenceSiteGlobalMessage);
-                            });
+                        subCorrespondenceSite.update().then(self.displayCorrespondenceSiteGlobalMessage);
                     })
                     .catch(function () {
-                        correspondenceSite.isGlobal = false;
-                    })
-            }
-            // if correspondenceSite global and has not organizations.
-            if (correspondenceSite.isGlobal && !correspondenceSite.hasOrganizations()) {
-                correspondenceSite.update().then(self.displayCorrespondenceSiteGlobalMessage);
-            }
-            // if correspondenceSite not global and no organizations.
-            if (!correspondenceSite.isGlobal && !correspondenceSite.hasOrganizations()) {
-                self.openSelectOUCorrespondenceSiteDialog(correspondenceSite)
-                    .then(function (correspondenceSite) {
-                        correspondenceSite.update().then(self.displayCorrespondenceSiteGlobalMessage);
-                    })
-                    .catch(function () {
-                        correspondenceSite.setIsGlobal(true).update();
+                        subCorrespondenceSite.isGlobal = !subCorrespondenceSite.isGlobal;
                     });
             }
         };
+
         /**
-         * display for the global messages.
-         * @param correspondenceSite
+         * @description display for the global message.
+         * @param subCorrespondenceSite
          */
-        self.displayCorrespondenceSiteGlobalMessage = function (correspondenceSite) {
+        self.displayCorrespondenceSiteGlobalMessage = function (subCorrespondenceSite) {
             toast.success(langService.get('change_global_success')
                 .change({
-                    name: correspondenceSite.getTranslatedName(),
-                    global: correspondenceSite.getTranslatedGlobal()
+                    name: subCorrespondenceSite.getTranslatedName(),
+                    global: subCorrespondenceSite.getTranslatedGlobal()
                 }));
         };
 
-        self.openSelectOUCorrespondenceSiteDialog = function (correspondenceSite) {
-            return correspondenceSite
+        self.openSelectOUCorrespondenceSiteDialog = function (subCorrespondenceSite) {
+            return subCorrespondenceSite
                 .openDialogToSelectOrganizations()
                 .then(function () {
-                    return correspondenceSite;
+                    return subCorrespondenceSite;
                 });
         };
         /**
-         * @description Change the status of selected correspondenceSite
+         * @description Change the status of selected subCorrespondenceSite
          * @param status
          */
-        self.changeBulkStatusCorrespondenceSites = function (status) {
+        self.changeBulkStatusSubCorrespondenceSites = function (status) {
             var statusCheck = (status === 'activate');
-            if (!generator.checkCollectionStatus(self.selectedCorrespondenceSites, statusCheck)) {
-                //toast.error(langService.get('the_status_already_changed'));
+            if (!generator.checkCollectionStatus(self.selectedSubCorrespondenceSites, statusCheck)) {
                 toast.success(langService.get(statusCheck ? 'success_activate_selected' : 'success_deactivate_selected'));
                 return;
             }
 
-            self.statusServices[status](self.selectedCorrespondenceSites).then(function () {
-                self.reloadCorrespondenceSites(self.grid.page).then(function () {
-                    toast.success(langService.get('selected_status_updated'));
-                });
+            self.statusServices[status](self.selectedSubCorrespondenceSites).then(function () {
+                self.reloadCorrespondenceSites(self.grid.page);
             });
         };
-        self.removeCorrespondenceSite = function (correspondenceSite, $event) {
-            if (correspondenceSite.hasOrganizations()) {
-                dialog
-                    .confirmMessage(langService.get('related_organization_confirm'), null, null, $event)
-                    .then(function () {
-                        correspondenceSite.deleteAllOUCorrespondenceSites()
-                            .then(function () {
-                                correspondenceSite.delete().then(function () {
-                                    toast.success(langService.get('delete_specific_success').change({name: correspondenceSite.getNames()}));
-                                    self.reloadCorrespondenceSites(self.grid.page);
-                                });
-                            })
-                    })
-                    .catch(function () {
-                        correspondenceSite.setIsGlobal(false);
-                    })
 
-            } else {
-                correspondenceSiteService
-                    .controllerMethod
-                    .correspondenceSiteDelete(correspondenceSite, $event)
-                    .then(function () {
-                        self.reloadCorrespondenceSites(self.grid.page);
-                    });
-            }
-        };
         /**
-         * close the popup and sent the updated parent correspondenceSites.
+         * @description search in classification.
+         * @param searchText
+         * @return {*}
+         */
+        self.searchInSubCorrespondenceSites = function (searchText) {
+            if (!searchText)
+                return;
+            self.searchMode = true;
+            return correspondenceSiteService
+                .correspondenceSiteSearch(searchText, self.mainCorrespondenceSite)
+                .then(function (result) {
+                    self.subCorrespondenceSites = result;
+                });
+        };
+
+        /**
+         * close the popup.
          */
         self.closeSubCorrespondenceSiteView = function () {
-            dialog.hide(self.parentCorrespondenceSites);
+            dialog.cancel();
         };
-        /**
-         * @description this method call when the user take action then close the popup.
-         * @param correspondenceSite
-         * @return {Promise}
-         */
-        self.behindScene = function (correspondenceSite) {
-            return correspondenceSite.repairGlobalStatus();
-        }
 
     });
 };

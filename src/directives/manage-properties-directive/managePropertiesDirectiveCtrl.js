@@ -6,7 +6,6 @@ module.exports = function (app) {
                                                               $stateParams,
                                                               organizationService,
                                                               documentTypeService,
-                                                              classificationService,
                                                               documentFileService,
                                                               $timeout,
                                                               toast,

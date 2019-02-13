@@ -345,7 +345,7 @@ module.exports = function (app) {
         /**
          * @description Handles the change status of OU
          */
-        self.onChangeOUStatus = function(){
+        self.onChangeOUStatus = function () {
             dialog.confirmMessage(langService.get('confirm_change_affect_whole_system'))
                 .then(function () {
 
@@ -702,7 +702,6 @@ module.exports = function (app) {
         };
 
         self.removeOUClassification = function (ouClassification) {
-            console.log(ouClassification);
             dialog
                 .confirmMessage(langService.get('confirm_delete').change({name: ouClassification.classification.getTranslatedName()}))
                 .then(function () {
@@ -814,34 +813,18 @@ module.exports = function (app) {
                 });
         };
 
-        self.addNewOUClassification = function () {
+        /**
+         * @description Opens popup for adding new classification and link to current OU
+         * @param $event
+         * @returns {*}
+         */
+        self.addNewOUClassification = function ($event) {
             return classificationService
                 .controllerMethod
-                .classificationAdd()
-                .then(function (classification) {
-                    self.classifications.unshift(classification);
-
-                    self.organization
-                        .assignClassifications([classification])
-                        .then(function (ouClassifications) {
-                            self.ouClassifications = self.ouClassifications.concat(ouClassifications);
-                            self.ouClassificationsCopy = angular.copy(self.ouClassifications);
-                            toast.success(langService.get('add_success').change({name: ouClassifications[0].getNames()}));
-                        });
-                })
-                .catch(function (classification) {
-                    if (!classification.id)
-                        return;
-
-                    self.classifications.unshift(classification);
-
-                    self.organization
-                        .assignClassifications([classification])
-                        .then(function (ouClassifications) {
-                            self.ouClassifications = self.ouClassifications.concat(ouClassifications);
-                            self.ouClassificationsCopy = angular.copy(self.ouClassifications);
-                            toast.success(langService.get('add_success').change({name: ouClassifications[0].getNames()}));
-                        });
+                .classificationAdd(null, self.organization, $event)
+                .then(function (ouClassification) {
+                    self.ouClassifications = self.ouClassifications.concat(ouClassification);
+                    self.ouClassificationsCopy = angular.copy(self.ouClassifications);
                 })
         };
 
@@ -1017,34 +1000,18 @@ module.exports = function (app) {
                 });
         };
 
-        self.addNewOUCorrespondenceSite = function () {
+        /**
+         * @description Opens popup for adding new correspondence site and link to current OU
+         * @param $event
+         * @returns {*}
+         */
+        self.addNewOUCorrespondenceSite = function ($event) {
             return correspondenceSiteService
                 .controllerMethod
-                .correspondenceSiteAdd()
-                .then(function (correspondenceSite) {
-                    self.correspondenceSites.unshift(correspondenceSite);
-
-                    self.organization
-                        .assignCorrespondenceSites([correspondenceSite])
-                        .then(function (ouCorrespondenceSites) {
-                            self.ouCorrespondenceSites = self.ouCorrespondenceSites.concat(ouCorrespondenceSites);
-                            self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
-                            toast.success(langService.get('add_success').change({name: ouCorrespondenceSites[0].getNames()}));
-                        });
-                })
-                .catch(function (correspondenceSite) {
-                    if (!correspondenceSite.id)
-                        return;
-
-                    self.correspondenceSites.unshift(correspondenceSite);
-
-                    self.organization
-                        .assignCorrespondenceSites([correspondenceSite])
-                        .then(function (ouCorrespondenceSites) {
-                            self.ouCorrespondenceSites = self.ouCorrespondenceSites.concat(ouCorrespondenceSites);
-                            self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
-                            toast.success(langService.get('add_success').change({name: ouCorrespondenceSites[0].getNames()}));
-                        });
+                .correspondenceSiteAdd(null, self.organization, $event)
+                .then(function (ouCorrespondenceSite) {
+                    self.ouCorrespondenceSites = self.ouCorrespondenceSites.concat(ouCorrespondenceSite);
+                    self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
                 })
         };
 

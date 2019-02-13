@@ -1,7 +1,7 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       generator, 
-                      lookupService , 
+                      lookupService ,
                       classificationService) {
         'ngInject';
         var modelName = 'UserClassificationViewPermission';

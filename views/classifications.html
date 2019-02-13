@@ -25,7 +25,7 @@
                         <md-table-container>
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedClassifications"
-                                       md-progress="ctrl.progress">
+                                       md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="7" class="table-selector-header"
@@ -86,10 +86,8 @@
                                         <td md-cell>
                                             <md-button
                                                     ng-click="ctrl.openSubClassificationDialog(classification , $event)"
-                                                    class="md-icon-button"
-                                                    tooltip="{{classification.childCount + ' ' + lang.sub_classification}}"
-                                                    ng-class="{'md-raised':classification.childCount}"
-                                                    ng-disabled="!classification.childCount">
+                                                    class="md-icon-button md-raised"
+                                                    tooltip="{{classification.childCount + ' ' + lang.sub_classification}}">
                                                 <md-icon md-svg-icon="coins"></md-icon>
                                             </md-button>
                                         </td>

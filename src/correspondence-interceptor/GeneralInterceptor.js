@@ -5,7 +5,6 @@ module.exports = function (app) {
                       lookupService,
                       LinkedObject,
                       documentTypeService,
-                      classificationService,
                       documentTagService,
                       entityTypeService,
                       attachmentService,

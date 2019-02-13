@@ -1,15 +1,16 @@
 module.exports = function (app) {
     app.service('classificationService', function (urlService,
-                                                   toast,
-                                                   cmsTemplate,
-                                                   langService,
-                                                   dialog,
-                                                   $http,
-                                                   Pair,
-                                                   $q,
-                                                   generator,
-                                                   Classification,
-                                                   _) {
+                                                      toast,
+                                                      cmsTemplate,
+                                                      langService,
+                                                      dialog,
+                                                      errorCode,
+                                                      $http,
+                                                      Pair,
+                                                      $q,
+                                                      generator,
+                                                      Classification,
+                                                      _) {
         'ngInject';
         var self = this;
         self.serviceName = 'classificationService';
@@ -34,6 +35,209 @@ module.exports = function (app) {
         self.getClassifications = function () {
             return self.classifications.length ? $q.when(self.classifications) : self.loadClassifications();
         };
+
+        /**
+         * @description load classifications with limit up to 50
+         * @param limit
+         * @return {*}
+         */
+        self.loadClassificationsWithLimit = function (limit) {
+            return $http
+                .get(urlService.entityWithlimit.replace('{entityName}', 'classification').replace('{number}', limit ? limit : 50))
+                .then(function (result) {
+                    self.classifications = generator.generateCollection(result.data.rs, Classification, self._sharedMethods);
+                    self.classifications = generator.interceptReceivedCollection('Classification', self.classifications);
+                    return self.classifications;
+                });
+        };
+
+        /**
+         * @description load sub classification by parent Id
+         * @param classification
+         * @return {*}
+         */
+        self.loadSubClassifications = function (classification) {
+            var id = classification.hasOwnProperty('id') ? classification.id : classification;
+            return $http
+                .get(urlService.childrenEntities.replace('{entityName}', 'classification').replace('{entityId}', id))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('Classification', generator.generateCollection(result.data.rs, Classification, self._sharedMethods));
+                });
+        };
+
+        /**
+         * @description get classification by classificationId
+         * @param classificationId
+         * @returns {Classification|undefined} return Classification Model or undefined if not found.
+         */
+        self.getClassificationById = function (classificationId) {
+            classificationId = classificationId instanceof Classification ? classificationId.id : classificationId;
+            return _.find(self.classifications, function (classification) {
+                return Number(classification.id) === Number(classificationId)
+            });
+        };
+
+        /**
+         * @description Filters parent classifications
+         * @param excludeClassification
+         * @return {Array}
+         */
+        self.getParentClassifications = function (excludeClassification) {
+            return _.filter(self.classifications, function (classification) {
+                if (excludeClassification)
+                    return !classification.parent && excludeClassification.id !== classification.id;
+                else
+                    return !classification.parent;
+            });
+        };
+
+        /**
+         * @description Filters the main classifications from given classifications
+         * @param classifications
+         * @returns {Array}
+         */
+        self.getMainClassifications = function (classifications) {
+            return _.filter(classifications, function (classification) {
+                return !classification.parent;
+            })
+        };
+
+        /**
+         * @description Contains methods for CRUD operations for classifications
+         */
+        self.controllerMethod = {
+            /**
+             * @description Opens popup to add new classification
+             * @param parentClassification
+             * @param defaultOU
+             * @param $event
+             */
+            classificationAdd: function (parentClassification, defaultOU, $event) {
+                var classification = new Classification({
+                    parent: parentClassification,
+                    securityLevels: parentClassification ? parentClassification.securityLevels : null,
+                    isGlobal: !(!!defaultOU),
+                    relatedOus: defaultOU ? [defaultOU] : []
+                });
+
+                return dialog
+                    .showDialog({
+                        targetEvent: $event,
+                        templateUrl: cmsTemplate.getPopup('classification'),
+                        controller: 'classificationPopCtrl',
+                        controllerAs: 'ctrl',
+                        escapeToClose: false,
+                        locals: {
+                            editMode: false,
+                            classification: classification,
+                            defaultOU: defaultOU
+                        }
+                    });
+            },
+            /**
+             * @description Opens popup to edit classification
+             * @param classification
+             * @param $event
+             */
+            classificationEdit: function (classification, $event) {
+                return dialog
+                    .showDialog({
+                        targetEvent: $event,
+                        templateUrl: cmsTemplate.getPopup('classification'),
+                        controller: 'classificationPopCtrl',
+                        controllerAs: 'ctrl',
+                        escapeToClose: false,
+                        locals: {
+                            editMode: true,
+                            classification: classification,
+                            defaultOU: null
+                        }
+                    });
+            },
+            /**
+             * @description Show confirm box and delete classification
+             * @param classification
+             * @param $event
+             */
+            classificationDelete: function (classification, $event) {
+                return dialog
+                    .confirmMessage(langService.get('confirm_delete').change({name: classification.getNames()}), null, null, $event)
+                    .then(function () {
+                        return self.deleteClassification(classification)
+                            .then(function () {
+                                toast.success(langService.get('delete_specific_success').change({name: classification.getNames()}));
+                                return true;
+                            })
+                            .catch(function (error) {
+                                return errorCode.checkIf(error, 'CAN_NOT_DELETE_LOOKUP', function () {
+                                    dialog.errorMessage(langService.get('cannot_delete_lookup').change({
+                                        lookup: langService.get('classification'),
+                                        used: langService.get('document')
+                                    }), null, null, $event);
+                                    return $q.reject('CAN_NOT_DELETE_LOOKUP');
+                                })
+                            });
+                    });
+            },
+            /**
+             * @description Show confirm box and delete bulk classifications
+             * @param classifications
+             * @param $event
+             */
+            classificationDeleteBulk: function (classifications, $event) {
+                return dialog
+                    .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event || null)
+                    .then(function () {
+                        return self.deleteBulkClassifications(classifications);
+                    });
+            },
+            /**
+             * @description view sub Classifications
+             * @param mainClassification
+             * @param $event
+             * @return {promise}
+             */
+            viewSubClassifications: function (mainClassification, $event) {
+                return dialog
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('sub-classification'),
+                        controller: 'subClassificationViewPopCtrl',
+                        controllerAs: 'ctrl',
+                        targetEvent: $event,
+                        locals: {
+                            mainClassification: mainClassification
+                        },
+                        resolve: {
+                            subClassifications: function () {
+                                'ngInject';
+                                return self.loadSubClassifications(mainClassification);
+                            }
+                        }
+                    });
+            },
+            /**
+             * @description Opens popup for adding classification to OU from organization popup
+             * @param excluded
+             * @returns {promise}
+             */
+            showClassificationSelector: function (excluded) {
+                return dialog.showDialog({
+                    templateUrl: cmsTemplate.getPopup('classifications-selector'),
+                    controller: 'classificationSelectorPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        excluded: excluded
+                    },
+                    resolve: {
+                        classifications: function () {
+                            'ngInject';
+                            return self.loadClassificationsWithLimit(100);
+                        }
+                    }
+                });
+            }
+        };
+
         /**
          * @description add new classification to service
          * @param classification
@@ -98,85 +302,7 @@ module.exports = function (app) {
                 });
             });
         };
-        /**
-         * @description create the shred method to the model.
-         * @type {{delete: generator.delete, update: generator.update}}
-         * @private
-         */
-        self._sharedMethods = generator.generateSharedMethods(self.deleteClassification, self.updateClassification);
 
-        /**
-         * @description get classification by classificationId
-         * @param classificationId
-         * @returns {Classification|undefined} return Classification Model or undefined if not found.
-         */
-        self.getClassificationById = function (classificationId) {
-            classificationId = classificationId instanceof Classification ? classificationId.id : classificationId;
-            return _.find(self.classifications, function (classification) {
-                return Number(classification.id) === Number(classificationId)
-            });
-        };
-
-        /**
-         * @description get children for parent classifications
-         * @param parents classifications to get they children
-         * @param children classifications to search in
-         * @return {Array}
-         */
-        self.getChildrenClassifications = function (parents, children) {
-            return _.map(parents, function (classification) {
-                classification.children = [];
-                if (children.hasOwnProperty(classification.id)) {
-                    classification.setChildren(children[classification.id]);
-                }
-                return classification;
-            });
-        };
-        /**
-         * @description to make separation between parents and children records
-         * @param classifications
-         * @param parents
-         * @param children
-         * @return {*}
-         */
-        self.classificationSeparator = function (classifications, parents, children) {
-            _.map(classifications, function (classification) {
-                var parent = classification.parent;
-                if (!parent) {
-                    parents.push(classification);
-                } else {
-                    if (!children.hasOwnProperty(parent)) {
-                        children[parent] = [];
-                    }
-                    children[parent].push(classification);
-                }
-            });
-            return self;
-        };
-        /**
-         * @description to create the hierarchy for the parent and child for classifications
-         * @param classifications
-         * @return {Array| Classification} array of parents classifications
-         */
-        self.createClassificationHierarchy = function (classifications) {
-            var parents = [], children = {};
-            return self
-                .classificationSeparator(classifications, parents, children)
-                .getChildrenClassifications(parents, children);
-        };
-        /**
-         * @description get parent classifications
-         * @param excludeClassification
-         * @return {Array}
-         */
-        self.getParentClassifications = function (excludeClassification) {
-            return _.filter(self.classifications, function (classification) {
-                if (excludeClassification)
-                    return !classification.parent && excludeClassification.id !== classification.id;
-                else
-                    return !classification.parent;
-            });
-        };
         /**
          * @description Activate classification
          * @param classification
@@ -209,8 +335,9 @@ module.exports = function (app) {
             var bulkIds = classifications[0].hasOwnProperty('id') ? _.map(classifications, 'id') : classifications;
             return $http
                 .put((urlService.classifications + '/activate/bulk'), bulkIds)
-                .then(function () {
-                    return classifications;
+                .then(function (result) {
+                    //return classifications;
+                    return generator.getBulkActionResponse(result, classifications, false, 'failed_activate_selected', 'success_activate_selected', 'success_activate_selected_except_following');
                 });
         };
 
@@ -222,10 +349,19 @@ module.exports = function (app) {
             var bulkIds = classifications[0].hasOwnProperty('id') ? _.map(classifications, 'id') : classifications;
             return $http
                 .put((urlService.classifications + '/deactivate/bulk'), bulkIds)
-                .then(function () {
-                    return classifications;
+                .then(function (result) {
+                    //return classifications;
+                    return generator.getBulkActionResponse(result, classifications, false, 'failed_deactivate_selected', 'success_deactivate_selected', 'success_deactivate_selected_except_following');
                 });
         };
+
+        /**
+         * @description create the shred method to the model.
+         * @type {{delete: generator.delete, update: generator.update}}
+         * @private
+         */
+        self._sharedMethods = generator.generateSharedMethods(self.deleteClassification, self.updateClassification);
+
         /**
          * @description Check if record with same name exists. Returns true if exists
          * @param classification
@@ -247,12 +383,11 @@ module.exports = function (app) {
             });
         };
 
-        self.getMainClassifications = function (classifications) {
-            return _.filter(classifications, function (classification) {
-                return !classification.parent;
-            })
-        };
-
+        /**
+         * @description Filters the sub classifications for given main classification
+         * @param mainClassification
+         * @returns {Array}
+         */
         self.getSubClassifications = function (mainClassification) {
             mainClassification = mainClassification.hasOwnProperty('id') ? mainClassification.id : mainClassification;
             return _.filter(self.classifications, function (classification) {
@@ -263,191 +398,6 @@ module.exports = function (app) {
             });
         };
 
-        /**
-         * @description Contains methods for CRUD operations for classifications
-         */
-        self.controllerMethod = {
-            /**
-             * @description Opens popup to add new classification
-             * @param parentClassification
-             * @param sub
-             * @param $event
-             */
-            classificationAdd: function (parentClassification, sub, $event) {
-                var subClassification = new Classification();
-                if (parentClassification) {
-                    subClassification.securityLevels = parentClassification.securityLevels;
-                }
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('classification'),
-                        controller: 'classificationPopCtrl',
-                        controllerAs: 'ctrl',
-                        escapeToClose: false,
-                        locals: {
-                            editMode: false,
-                            classification: subClassification,
-                            classifications: self.classifications,
-                            parent: parentClassification,
-                            sub: sub
-                        }
-                    });
-            },
-            /**
-             * @description Opens popup to edit classification
-             * @param classification
-             * @param $event
-             */
-            classificationEdit: function (classification, $event) {
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('classification'),
-                        controller: 'classificationPopCtrl',
-                        controllerAs: 'ctrl',
-                        escapeToClose: false,
-                        locals: {
-                            editMode: true,
-                            classification: classification,
-                            classifications: self.classifications,
-                            parent: classification.parent,
-                            sub: false
-                        }
-                    });
-            },
-            subClassificationEdit: function (classification, $event) {
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('classification'),
-                        controller: 'classificationPopCtrl',
-                        controllerAs: 'ctrl',
-                        escapeToClose: false,
-                        locals: {
-                            editMode: true,
-                            classification: classification,
-                            classifications: self.classifications,
-                            parent: classification.parent,
-                            sub: false
-                        }
-                    });
-            },
-            /**
-             * @description Show confirm box and delete classification
-             * @param classification
-             * @param $event
-             */
-            classificationDelete: function (classification, $event) {
-                return dialog
-                    .confirmMessage(langService.get('confirm_delete').change({name: classification.getNames()}), null, null, $event)
-                    .then(function () {
-                        return self.deleteClassification(classification)
-                            .then(function () {
-                                toast.success(langService.get('delete_specific_success').change({name: classification.getNames()}));
-                                return true;
-                            });
-                    });
-            },
-            /**
-             * @description Show confirm box and delete bulk classifications
-             * @param classifications
-             * @param $event
-             */
-            classificationDeleteBulk: function (classifications, $event) {
-                return dialog
-                    .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event || null)
-                    .then(function () {
-                        return self.deleteBulkClassifications(classifications)
-                            .then(function (result) {
-                                var response = false;
-                                if (result.length === classifications.length) {
-                                    toast.error(langService.get("failed_delete_selected"));
-                                    response = false;
-                                } else if (result.length) {
-                                    generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (classification) {
-                                        return classification.getNames();
-                                    }));
-                                    response = true;
-                                } else {
-                                    toast.success(langService.get("delete_success"));
-                                    response = true;
-                                }
-                                return response;
-                            });
-                    });
-            },
-            /**
-             * @description view sub Classifications
-             * @param classification
-             * @param $event
-             * @return {promise}
-             */
-            viewSubClassifications: function (classification, $event) {
-                return dialog
-                    .showDialog({
-                        templateUrl: cmsTemplate.getPopup('sub-classification'),
-                        controller: 'subClassificationViewPopCtrl',
-                        controllerAs: 'ctrl',
-                        targetEvent: $event,
-                        locals: {
-                            classification: classification,
-                            classifications: self.getMainClassifications(self.classifications)
-                        },
-                        resolve: {
-                            subClassifications: function () {
-                                'ngInject';
-                                return self.loadSubClassifications(classification);
-                            }
-                        }
-                    });
-            },
-            showClassificationSelector: function (excluded) {
-                return dialog.showDialog({
-                    templateUrl: cmsTemplate.getPopup('classifications-selector'),
-                    controller: 'classificationSelectorPopCtrl',
-                    controllerAs: 'ctrl',
-                    locals: {
-                        excluded: excluded
-                    },
-                    resolve: {
-                        classifications: function () {
-                            'ngInject';
-                            return self.loadClassificationsWithLimit(100);
-                        }
-                    }
-                });
-            }
-        };
-
-        /**
-         * @description load classifications with limit up to 50
-         * @param limit
-         * @return {*}
-         */
-        self.loadClassificationsWithLimit = function (limit) {
-            return $http
-                .get(urlService.entityWithlimit.replace('{entityName}', 'classification').replace('{number}', limit ? limit : 50))
-                .then(function (result) {
-                    self.classifications = generator.generateCollection(result.data.rs, Classification, self._sharedMethods);
-                    self.classifications = generator.interceptReceivedCollection('Classification', self.classifications);
-                    return self.classifications;
-                });
-        };
-
-        /**
-         * @description load sub classification by parent Id
-         * @param classification
-         * @return {*}
-         */
-        self.loadSubClassifications = function (classification) {
-            var id = classification.hasOwnProperty('id') ? classification.id : classification;
-            return $http
-                .get(urlService.childrenEntities.replace('{entityName}', 'classification').replace('{entityId}', id))
-                .then(function (result) {
-                    return generator.interceptReceivedCollection('Classification', generator.generateCollection(result.data.rs, Classification, self._sharedMethods));
-                });
-        };
         /**
          * @description search in classifications .
          * @param searchText

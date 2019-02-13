@@ -4,10 +4,9 @@ module.exports = function (app) {
                                                    classifications,
                                                    dialog,
                                                    langService,
-                                                   organizationService,
+                                                   generator,
                                                    $timeout,
                                                    toast,
-                                                   ouClassificationService,
                                                    classificationService,
                                                    contextHelpService,
                                                    gridService) {
@@ -15,10 +14,8 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'classificationCtrl';
 
-        self.progress = null;
         contextHelpService.setHelpTo('classifications');
         self.searchModel = '';
-
         self.searchMode = false;
 
         /**
@@ -34,6 +31,7 @@ module.exports = function (app) {
         self.selectedClassifications = [];
 
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.classification) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -58,20 +56,11 @@ module.exports = function (app) {
             return classificationService
                 .controllerMethod
                 .classificationAdd(null, false, $event)
-                .then(function (classification) {
-                    self.behindScene(classification)
-                        .then(function () {
-                            self.reloadClassifications(self.grid.page);
-                        });
+                .then(function (result) {
+                    self.reloadClassifications(self.grid.page);
                 })
-                .catch(function (classification) {
-                    if (!classification.id)
-                        return;
-
-                    self.behindScene(classification)
-                        .then(function () {
-                            self.reloadClassifications(self.grid.page);
-                        });
+                .catch(function (error) {
+                    self.reloadClassifications(self.grid.page);
                 });
         };
 
@@ -84,22 +73,15 @@ module.exports = function (app) {
             classificationService
                 .controllerMethod
                 .classificationEdit(classification, $event)
-                .then(function (classification) {
-                    self.behindScene(classification)
-                        .then(function (classification) {
-                            self.replaceRecordFromGrid(classification);
-                            toast.success(langService.get('edit_success').change({name: classification.getTranslatedName()}));
-                        });
+                .then(function (result) {
+                    self.reloadClassifications(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get('edit_success').change({name: result.getTranslatedName()}));
+                        })
                 })
-                .catch(function (classification) {
-                    self.replaceRecordFromGrid(classification);
+                .catch(function (error) {
+                    self.reloadClassifications(self.grid.page)
                 });
-        };
-
-        self.replaceRecordFromGrid = function (classification) {
-            self.classifications.splice(_.findIndex(self.classifications, function (item) {
-                return item.id === classification.id;
-            }), 1, classification);
         };
 
         /**
@@ -116,12 +98,9 @@ module.exports = function (app) {
          */
         self.reloadClassifications = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             self.searchMode = false;
             self.searchModel = '';
-            // return ouClassificationService
-            //     .loadOUClassifications()
-            //     .then(function () {
             return classificationService
                 .loadClassificationsWithLimit()
                 .then(function (classifications) {
@@ -142,32 +121,12 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeClassification = function (classification, $event) {
-            if (classification.hasOrganizations()) {
-                dialog
-                    .confirmMessage(langService.get('related_organization_confirm'), null, null, $event)
-                    .then(function () {
-                        classification.deleteAllOUClassifications()
-                            .then(function () {
-                                classification.delete().then(function () {
-                                    self.reloadClassifications(self.grid.page)
-                                        .then(function () {
-                                            toast.success(langService.get('delete_specific_success').change({name: classification.getNames()}));
-                                        });
-                                });
-                            })
-                    })
-                    .catch(function () {
-                        classification.setIsGlobal(false);
-                    })
-
-            } else {
-                classificationService
-                    .controllerMethod
-                    .classificationDelete(classification, $event)
-                    .then(function () {
-                        self.reloadClassifications(self.grid.page);
-                    });
-            }
+            classificationService
+                .controllerMethod
+                .classificationDelete(classification, $event)
+                .then(function () {
+                    self.reloadClassifications(self.grid.page);
+                });
         };
 
         /**
@@ -190,10 +149,7 @@ module.exports = function (app) {
         self.changeStatusClassification = function (classification) {
             classification.updateStatus()
                 .then(function () {
-                    self.reloadClassifications(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get('status_success'));
-                        })
+                    toast.success(langService.get('status_success'));
                 })
                 .catch(function () {
                     classification.status = !classification.status;
@@ -209,34 +165,20 @@ module.exports = function (app) {
                 });
         };
         /**
-         * check global status
+         * @description change global status
          * @param classification
          */
         self.changeGlobalFromFromGrid = function (classification) {
-            // if classification global and has organizations.
-            if (classification.isGlobal && classification.hasOrganizations()) {
+            if (classification.isGlobal) {
                 dialog.confirmMessage(langService.get('related_organization_confirm'))
                     .then(function () {
-                        classification
-                            .deleteAllOUClassifications()
-                            .then(function () {
-                                classification.isGlobal = true;
-                                classification.update().then(self.displayClassificationGlobalMessage);
-                            });
-                    })
-                    .catch(function () {
-                        classification.isGlobal = false;
-                    })
-            }
-            // if classification global and has not organizations.
-            if (classification.isGlobal && !classification.hasOrganizations()) {
-                classification.update().then(self.displayClassificationGlobalMessage);
-            }
-            // if classification not global and no organizations.
-            if (!classification.isGlobal && !classification.hasOrganizations()) {
-                self.openSelectOUClassificationDialog(classification)
-                    .then(function (classification) {
+                        classification.setRelatedOus([]);
                         classification.update().then(self.displayClassificationGlobalMessage);
+                    });
+            } else {
+                self.openSelectOUClassificationDialog(classification)
+                    .then(function (result) {
+                        result.update().then(self.displayClassificationGlobalMessage);
                     })
                     .catch(function () {
                         classification.setIsGlobal(true).update();
@@ -259,30 +201,17 @@ module.exports = function (app) {
          * @param status
          */
         self.changeBulkStatusClassifications = function (status) {
+            var statusCheck = (status === 'activate');
+            if (!generator.checkCollectionStatus(self.selectedClassifications, statusCheck)) {
+                toast.success(langService.get(statusCheck ? 'success_activate_selected' : 'success_deactivate_selected'));
+                return;
+            }
+
             self.statusServices[status](self.selectedClassifications).then(function () {
-                self.reloadClassifications(self.grid.page).then(function () {
-                    toast.success(langService.get('selected_status_updated'));
-                });
+                self.reloadClassifications(self.grid.page);
             });
         };
-        /**
-         * @description this method to display the sub classifications for given classification
-         * @param classification
-         * @param $event
-         */
-        self.openSubClassificationDialog = function (classification, $event) {
-            classificationService
-                .controllerMethod
-                .viewSubClassifications(classification, $event);
-        };
-        /**
-         * @description this method call when the user take action then close the popup.
-         * @param classification
-         * @return {Promise}
-         */
-        self.behindScene = function (classification) {
-            return classification.repairGlobalStatus();
-        };
+
         /**
          * @description search in classification.
          * @param searchText
@@ -297,7 +226,24 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.classifications = result;
                 })
-        }
+        };
+
+        /**
+         * @description this method to display the sub classifications for given classification
+         * @param mainClassification
+         * @param $event
+         */
+        self.openSubClassificationDialog = function (mainClassification, $event) {
+            classificationService
+                .controllerMethod
+                .viewSubClassifications(mainClassification, $event)
+                .then(function () {
+                    self.reloadClassifications(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadClassifications(self.grid.page);
+                });
+        };
 
     });
 };

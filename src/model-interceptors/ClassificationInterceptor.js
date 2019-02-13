@@ -23,7 +23,7 @@ module.exports = function (app) {
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             model.securityLevels = generator.getResultFromSelectedCollection(model.securityLevels, 'lookupKey');
             model.parent = (model.parent instanceof Classification) ? model.parent.id : model.parent;
-            model.relatedOus = [];
+            model.relatedOus = model.isGlobal ? [] : model.relatedOus;
             model.itemOrder = (model.itemOrder === '' || typeof model.itemOrder === 'undefined') ? generator.createNewID(classificationService.classifications, 'itemOrder') : model.itemOrder;
             delete model.children;
             return model;

@@ -9,7 +9,6 @@ module.exports = function (app) {
                       Attachment,
                       entityTypeService,
                       LinkedObject,
-                      classificationService,
                       documentTypeService,
                       managerService,
                       documentTagService,

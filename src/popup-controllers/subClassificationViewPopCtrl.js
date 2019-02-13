@@ -1,43 +1,38 @@
 module.exports = function (app) {
     app.controller('subClassificationViewPopCtrl', function ($q,
                                                              $filter,
+                                                             generator,
                                                              dialog,
                                                              toast,
-                                                             classification,
-                                                             classifications,
+                                                             mainClassification,
                                                              subClassifications,
                                                              classificationService,
-                                                             langService,
-                                                             ouClassificationService) {
+                                                             langService) {
         'ngInject';
         var self = this;
-        self.controllerName = 'subClassificationViewPopCtrl';
-        // current classification to view his sub classifications
-        self.classification = classification;
+        self.controllerName = 'subClassificationNewViewPopCtrl';
 
-        // self.classifications = self.classification.children;
-        self.classifications = subClassifications;
-
-        self.parentClassifications = classifications;
-
-        self.selectedClassifications = [];
+        self.mainClassification = mainClassification;
+        self.subClassifications = subClassifications;
+        self.selectedSubClassifications = [];
 
         /**
          * @description Gets the grid records by sorting
          */
         self.getSortedData = function () {
-            self.classifications = $filter('orderBy')(self.classifications, self.grid.order);
+            self.subClassifications = $filter('orderBy')(self.subClassifications, self.grid.order);
         };
 
 
         self.grid = {
+            progress: null,
             limit: 5, // default limit
             page: 1, // first page
             order: 'arName', // default sorting order
             limitOptions: [5, 10, 20, {
                 label: langService.get('all'),
                 value: function () {
-                    return (self.classifications.length + 21);
+                    return (self.subClassifications.length + 21);
                 }
             }]
         };
@@ -51,37 +46,37 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Opens dialog for add new classification
+         * @description Opens dialog for add new subClassification
          * @param $event
          */
-        self.openAddClassificationDialog = function ($event) {
+        self.openAddSubClassificationDialog = function ($event) {
             return classificationService
                 .controllerMethod
-                .classificationAdd($event)
+                .classificationAdd(self.mainClassification, false, $event)
                 .then(function () {
-                    self.reloadClassifications();
+                    self.reloadSubClassifications(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadSubClassifications(self.grid.page);
                 });
         };
 
         /**
-         * @description Opens dialog for edit classification
-         * @param classification
+         * @description Opens dialog for edit subClassification
+         * @param subClassification
          * @param $event
          */
-        self.openEditClassificationDialog = function (classification, $event) {
+        self.openEditSubClassificationDialog = function (subClassification, $event) {
             classificationService
                 .controllerMethod
-                .classificationEdit(classification, $event)
+                .classificationEdit(subClassification, $event)
                 .then(function () {
-                    self.reloadClassifications(self.grid.page).then(function () {
-                        toast.success(langService.get('edit_success').change({name: classification.getNames()}));
+                    self.reloadSubClassifications(self.grid.page).then(function () {
+                        toast.success(langService.get('edit_success').change({name: subClassification.getNames()}));
                     });
                 })
                 .catch(function (classification) {
-                    self.behindScene(classification)
-                        .then(function () {
-                            self.reloadClassifications(self.grid.page);
-                        });
+                    self.reloadSubClassifications(self.grid.page);
                 });
         };
         /**
@@ -89,118 +84,97 @@ module.exports = function (app) {
          * @param pageNumber
          * @return {*|Promise<U>}
          */
-        self.reloadClassifications = function (pageNumber) {
+        self.reloadSubClassifications = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
+            self.searchMode = false;
+            self.searchModel = '';
 
-            return ouClassificationService
-                .loadOUClassifications()
-                .then(function () {
-                    return classificationService
-                        .loadClassifications()
-                        .then(function (result) {
-                            self.parentClassifications = classificationService.getMainClassifications(result);
-                            self.classification = classificationService.getClassificationById(self.classification);
-                            self.classifications = self.classification.children;
-                            if (!self.classifications.length) {
-                                dialog.hide(self.parentClassifications);
-                            }
-
-                            self.selectedClassifications = [];
-                            defer.resolve(true);
-                            if (pageNumber)
-                                self.grid.page = pageNumber;
-                            self.getSortedData();
-                            return result;
-                        });
+            return classificationService
+                .loadSubClassifications(self.mainClassification)
+                .then(function (result) {
+                    self.subClassifications = result;
+                    self.selectedSubClassifications = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.grid.page = pageNumber;
+                    self.getSortedData();
+                    return result;
                 });
+
         };
 
         /**
          * @description Delete single classification
-         * @param classification
+         * @param subClassification
          * @param $event
          */
-        self.removeClassification = function (classification, $event) {
+        self.removeSubClassification = function (subClassification, $event) {
             classificationService
                 .controllerMethod
-                .classificationDelete(classification, $event)
+                .classificationDelete(subClassification, $event)
                 .then(function () {
-                    self.reloadClassifications(self.grid.page);
+                    self.reloadSubClassifications(self.grid.page);
                 });
         };
 
         /**
-         * @description Delete multiple selected classification
+         * @description Delete multiple selected subClassifications
          * @param $event
          */
-        self.removeBulkClassifications = function ($event) {
+        self.removeBulkSubClassifications = function ($event) {
             classificationService
                 .controllerMethod
-                .classificationDeleteBulk(self.selectedClassifications, $event)
+                .classificationDeleteBulk(self.selectedSubClassifications, $event)
                 .then(function () {
-                    self.reloadClassifications(self.grid.page);
+                    self.reloadSubClassifications(self.grid.page);
                 });
         };
 
         /**
-         * @description change the status of classification
-         * @param classification
+         * @description change the status of subClassification
+         * @param subClassification
          */
-        self.changeStatusClassification = function (classification) {
-            self.statusServices[classification.status](classification)
+        self.changeStatusSubClassification = function (subClassification) {
+            subClassification.updateStatus()
                 .then(function () {
                     toast.success(langService.get('status_success'));
                 })
                 .catch(function () {
-                    classification.status = !classification.status;
+                    subClassification.status = !subClassification.status;
                     dialog.errorMessage(langService.get('something_happened_when_update_status'));
                 })
         };
         /**
-         * @description change the status of classification
-         * @param classification
+         * @description change the status of subClassification
+         * @param subClassification
          */
-        self.changeGlobalClassification = function (classification) {
-            // if classification global and has organizations.
-            if (classification.isGlobal && classification.hasOrganizations()) {
+        self.changeGlobalSubClassification = function (subClassification) {
+            if (subClassification.isGlobal) {
                 dialog.confirmMessage(langService.get('related_organization_confirm'))
                     .then(function () {
-                        classification
-                            .deleteAllOUClassifications()
-                            .then(function () {
-                                classification.isGlobal = true;
-                                classification.update().then(self.displayClassificationGlobalMessage);
-                            });
+                        subClassification.setRelatedOus([]);
+                        subClassification.update().then(self.displayClassificationGlobalMessage);
+                    });
+            } else {
+                self.openSelectOUClassificationDialog(subClassification)
+                    .then(function (result) {
+                        result.update().then(self.displayClassificationGlobalMessage);
                     })
                     .catch(function () {
-                        classification.isGlobal = false;
-                    })
-            }
-            // if classification global and has not organizations.
-            if (classification.isGlobal && !classification.hasOrganizations()) {
-                classification.update().then(self.displayClassificationGlobalMessage);
-            }
-            // if classification not global and no organizations.
-            if (!classification.isGlobal && !classification.hasOrganizations()) {
-                self.openSelectOUClassificationDialog(classification)
-                    .then(function (classification) {
-                        classification.update().then(self.displayClassificationGlobalMessage);
-                    })
-                    .catch(function () {
-                        classification.setIsGlobal(true).update();
+                        subClassification.setIsGlobal(true).update();
                     });
             }
         };
         /**
-         * display for the global messages.
-         * @param classification
+         * @description display for the global message.
+         * @param subClassification
          */
-        self.displayClassificationGlobalMessage = function (classification) {
+        self.displayClassificationGlobalMessage = function (subClassification) {
             toast.success(langService.get('change_global_success')
                 .change({
-                    name: classification.getTranslatedName(),
-                    global: classification.getTranslatedGlobal()
+                    name: subClassification.getTranslatedName(),
+                    global: subClassification.getTranslatedGlobal()
                 }));
         };
 
@@ -212,56 +186,44 @@ module.exports = function (app) {
                 });
         };
         /**
-         * @description Change the status of selected classification
+         * @description Change the status of selected subClassifications
          * @param status
          */
-        self.changeBulkStatusClassifications = function (status) {
-            self.statusServices[status](self.selectedClassifications).then(function () {
-                self.reloadClassifications(self.grid.page).then(function () {
-                    toast.success(langService.get('selected_status_updated'));
-                });
+        self.changeBulkStatusSubClassifications = function (status) {
+            var statusCheck = (status === 'activate');
+            if (!generator.checkCollectionStatus(self.selectedSubClassifications, statusCheck)) {
+                toast.success(langService.get(statusCheck ? 'success_activate_selected' : 'success_deactivate_selected'));
+                return;
+            }
+
+            self.statusServices[status](self.selectedSubClassifications).then(function () {
+                self.reloadSubClassifications(self.grid.page);
             });
         };
-        self.removeClassification = function (classification, $event) {
-            if (classification.hasOrganizations()) {
-                dialog
-                    .confirmMessage(langService.get('related_organization_confirm'), null, null, $event)
-                    .then(function () {
-                        classification.deleteAllOUClassifications()
-                            .then(function () {
-                                classification.delete().then(function () {
-                                    toast.success(langService.get('delete_specific_success').change({name: classification.getNames()}));
-                                    self.reloadClassifications(self.grid.page);
-                                });
-                            })
-                    })
-                    .catch(function () {
-                        classification.setIsGlobal(false);
-                    })
 
-            } else {
-                classificationService
-                    .controllerMethod
-                    .classificationDelete(classification, $event)
-                    .then(function () {
-                        self.reloadClassifications(self.grid.page);
-                    });
-            }
+        /**
+         * @description search in classification.
+         * @param searchText
+         * @return {*}
+         */
+        self.searchInSubClassifications = function (searchText) {
+            if (!searchText)
+                return;
+            self.searchMode = true;
+            return classificationService
+                .classificationSearch(searchText, self.mainClassification)
+                .then(function (result) {
+                    self.subClassifications = result;
+                })
         };
+
+
         /**
          * close the popup and sent the updated parent classifications.
          */
         self.closeSubClassificationView = function () {
-            dialog.hide(self.parentClassifications);
+            dialog.cancel();
         };
-        /**
-         * @description this method call when the user take action then close the popup.
-         * @param classification
-         * @return {Promise}
-         */
-        self.behindScene = function (classification) {
-            return classification.repairGlobalStatus();
-        }
 
     });
 };
