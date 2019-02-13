@@ -157,7 +157,7 @@ module.exports = function (app) {
                         .then(function () {
                             self.contentFileExist = true;
                             self.contentFileSizeExist = true;
-                            saveCorrespondenceFinished(status, newId);
+                            saveCorrespondenceFinished(status);
                         });
                 } else {
                     self.contentFileExist = false;

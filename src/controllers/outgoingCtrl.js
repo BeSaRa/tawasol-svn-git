@@ -194,8 +194,6 @@ module.exports = function (app) {
                     self.model = angular.copy(self.outgoing);
                     self.documentInformationExist = !!angular.copy(self.documentInformation);
 
-                    var newId = self.model.vsId;
-
                     /*If content file was attached */
                     if (self.outgoing.contentFile) {
                         self.outgoing.addDocumentContentFile()
@@ -203,7 +201,7 @@ module.exports = function (app) {
                                 self.contentFileExist = !!(self.outgoing.hasOwnProperty('contentFile') && self.outgoing.contentFile);
                                 self.contentFileSizeExist = !!(self.contentFileExist && self.outgoing.contentFile.size);
 
-                                saveCorrespondenceFinished(status, newId);
+                                saveCorrespondenceFinished(status);
                             })
                     } else if (duplicateVersion && self.outgoing.hasContent() && self.outgoing.addMethod) {
                         self.outgoing
@@ -211,12 +209,12 @@ module.exports = function (app) {
                             .then(function () {
                                 self.contentFileExist = true;
                                 self.contentFileSizeExist = true;
-                                saveCorrespondenceFinished(status, newId);
+                                saveCorrespondenceFinished(status);
                             });
                     } else {
                         self.contentFileExist = false;
                         self.contentFileSizeExist = false;
-                        saveCorrespondenceFinished(status, newId);
+                        saveCorrespondenceFinished(status);
                     }
                 })
                     .catch(function (error) {
@@ -226,7 +224,7 @@ module.exports = function (app) {
             })
         };
 
-        var saveCorrespondenceFinished = function (status, newId) {
+        var saveCorrespondenceFinished = function (status) {
             counterService.loadCounters();
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             if (replyTo) {
