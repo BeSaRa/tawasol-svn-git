@@ -214,7 +214,7 @@ module.exports = function (app) {
                 return [5, 10, 20, 100, 200];
             } else if (gridName === self.grids.inbox.userInbox) {
                 return [5, 10, 20, 50, 70, 90, 100, 200];
-            } else if (gridName === self.grids.inbox.inboxFilter) {
+            } else if (gridName === self.grids.inbox.inboxFilter || gridName === self.grids.department.incoming) {
                 return [5, 10, 20, 200];
             } else if (gridName === self.grids.administration.localization) {
                 return [5, 10, 20, 40, 50, 80, 100];
