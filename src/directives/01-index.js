@@ -98,4 +98,5 @@ module.exports = function (app) {
     require('./url-parser-directive/01-index')(app);
     require('./replacement-item-draggable/replacement-item-draggable')(app);
     require('./replacement-item-droppable/replacement-item-droppable')(app);
+    require('./select-application-users-directive/01-index')(app);
 };

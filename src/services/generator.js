@@ -503,7 +503,6 @@ module.exports = function (app) {
             _.map(model, function (value, key) {
                 model[key] = defaultModel[key];
             });
-            //console.log("RESET MODEL");
         };
         /**
          * @description upper case first letter.

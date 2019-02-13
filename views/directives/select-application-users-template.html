@@ -1,0 +1,147 @@
+<div>
+    <div flex layout="row">
+        <!-- Search By -->
+        <md-input-container id="criteria-list" class="mt0">
+            <md-select aria-label="select-user" ng-change="ctrl.changeSearchBy($event)"
+                       ng-model="ctrl.searchBy">
+                <md-option md-truncate ng-value="criteria"
+                           ng-repeat="criteria in ctrl.availableSearchCriteria track by $index">
+                    {{lang.get(criteria.value)}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <!-- Organizations -->
+        <md-input-container flex class="mt0"
+                            ng-if="ctrl.searchBy && ctrl.searchBy.key === 'organizationUnit'">
+            <md-select ng-model="ctrl.selectedOrganization"
+                       aria-label="{{lang.organizations}}"
+                       ng-change="ctrl.loadUsersByOU($event)">
+                <md-option ng-repeat="organization in ctrl.organizations"
+                           ng-value="organization">
+                    {{organization.getTranslatedName()}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <!-- Search By Organization -->
+        <md-autocomplete
+                ng-disabled="!ctrl.selectedOrganization"
+                ng-if="ctrl.searchBy && ctrl.searchBy.key === 'organizationUnit'"
+                flex
+                md-no-cache="true"
+                md-selected-item="ctrl.selectedAppUser"
+                md-search-text-change="ctrl.searchUsersByOU(ctrl.searchText)"
+                md-search-text="ctrl.searchText"
+                md-selected-item-change="ctrl.applicationUserSelected(item)"
+                md-items="item in ctrl.searchUsersByOU(ctrl.searchText)"
+                md-item-text="item.domainName"
+                md-min-length="0"
+                placeholder="{{lang.select_user}}"
+                md-menu-class="application-user-custom-template">
+            <md-item-template>
+                <div layout="row" flex>
+                    <div layout="column" flex>
+                        <div layout="row" layout-align="start center" flex>
+                            <span class="key"> {{lang.domain_name}} : </span>
+                            <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig"
+                                  class="value" flex> {{item.domainName}}</span>
+                        </div>
+                        <div layout="row" layout-align="start center" flex>
+                            <span class="key"> {{lang.ar_name}} : </span>
+                            <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig"
+                                  class="value" flex> {{item.arName}}</span>
+                        </div>
+                        <div layout="row" layout-align="start center" flex>
+                            <span class="key"> {{lang.en_name}} : </span>
+                            <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig"
+                                  class="value" flex> {{item.enName}}</span>
+                        </div>
+                    </div>
+                </div>
+            </md-item-template>
+        </md-autocomplete>
+        <!-- Search Not By Organization -->
+        <md-autocomplete
+                ng-if="ctrl.searchBy && ctrl.searchBy.key !== 'organizationUnit'"
+                flex
+                md-no-cache="true"
+                md-selected-item="ctrl.selectedAppUser"
+                md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+                md-search-text="ctrl.searchText"
+                md-selected-item-change="ctrl.applicationUserSelected(item)"
+                md-items="item in ctrl.searchApplicationUsers(ctrl.searchText , ctrl.searchBy)"
+                md-item-text="item.loginName"
+                md-min-length="3"
+                placeholder="{{lang.select_user}}"
+                md-menu-class="application-user-custom-template">
+            <md-item-template>
+                <div layout="row" flex>
+                    <div layout="column" flex>
+                        <div layout="row" layout-align="start center" flex>
+                            <span class="key"> {{lang.domain_name}} : </span>
+                            <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig"
+                                  class="value" flex> {{item.domainName}}</span>
+                        </div>
+                        <!--<div layout="row" layout-align="start center" flex>
+                            <span class="key"> {{lang.organization_unit}} : </span>
+                            <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig"
+                                  class="value" flex> {{ctrl.organizationName(item)}}</span>
+                        </div>-->
+                        <div layout="row" layout-align="start center" flex>
+                            <span class="key"> {{lang.ar_name}} : </span>
+                            <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig"
+                                  class="value" flex> {{item.arFullName}}</span>
+                        </div>
+                        <div layout="row" layout-align="start center" flex>
+                            <span class="key"> {{lang.en_name}} : </span>
+                            <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig"
+                                  class="value" flex> {{item.enFullName}}</span>
+                        </div>
+                    </div>
+                </div>
+            </md-item-template>
+        </md-autocomplete>
+    </div>
+
+    <!-- Existing Users -->
+    <md-card>
+        <md-table-container>
+            <table md-table>
+                <thead md-head>
+                <tr md-row>
+                    <th md-column><span>{{lang.arabic_name}}</span></th>
+                    <th md-column><span>{{lang.english_name}}</span></th>
+                    <th md-column><span>{{lang.domain_name}}</span></th>
+                    <th md-column ng-if="ctrl.deleteCallback"><span>{{lang.actions}}</span></th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr ng-if="ctrl.existingUsers.length" md-row
+                    ng-repeat="user in ctrl.existingUsers track by $index">
+                    <td md-cell>
+                        <span>{{user.arFullName}}</span>
+                    </td>
+                    <td md-cell>
+                        <span>{{user.arFullName}}</span>
+                    </td>
+                    <td md-cell>
+                        <span>{{user.domainName}}</span>
+                    </td>
+                    <td md-cell layout="row" ng-if="ctrl.allowDelete">
+                        <md-button tooltip="{{lang.delete}}" class="md-icon-button"
+                                   ng-click="ctrl.deleteUser(user)">
+                            <md-icon md-svg-icon="delete"></md-icon>
+                        </md-button>
+                    </td>
+                </tr>
+                <tr ng-if="!ctrl.existingUsers.length" md-row>
+                    <td colspan="3">
+                                <span layout="row" layout-align="center center">
+                                    {{lang.no_users_found_to_display}}
+                                </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+    </md-card>
+</div>

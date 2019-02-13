@@ -151,25 +151,6 @@ module.exports = function (app) {
                                 return response;
                             });
                     });
-            },
-            /**
-             * @description Open dialog to add relation app users to reference plan number
-             * @param referencePlanNumber
-             * @param $event
-             */
-            referencePlanNumberSetGlobalNo: function (referencePlanNumber, $event) {
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('relation-app-user'),
-                        controller: 'relationAppUserPopCtrl',
-                        controllerAs: 'ctrl',
-                        locals: {
-                            model: referencePlanNumber,
-                            propertyToSetValue: 'isGlobal',
-                            updateMethod: self.updateReferencePlanNumber
-                        }
-                    });
             }
         };
 

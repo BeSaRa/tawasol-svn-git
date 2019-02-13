@@ -120,26 +120,7 @@ module.exports = function (app) {
                                 return response;
                          });
                     });
-            }/*,
-            /!**
-             * @description Open dialog to add relation app users to user comment
-             * @param userComment
-             * @param $event
-             *!/
-            userCommentSetGlobalNo: function(userComment, $event){
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('relation-app-user'),
-                        controller: 'relationAppUserPopCtrl',
-                        controllerAs: 'ctrl',
-                        locals: {
-                            model: userComment,
-                            propertyToSetValue: 'global',
-                            updateMethod: self.updateUserComment
-                        }
-                    });
-            }*/
+            }
         };
 
         /**

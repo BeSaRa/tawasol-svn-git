@@ -118,24 +118,37 @@ module.exports = function (app) {
                             });
                     });
             },
-            /**
-             * @description Open dialog to add relation app users to sms template
-             * @param smsTemplate
-             * @param $event
-             */
-            smsTemplateSetGlobalNo: function(smsTemplate, $event){
+            openManageSubscribersDialog: function (smsTemplate, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
                         templateUrl: cmsTemplate.getPopup('relation-app-user'),
                         controller: 'relationAppUserPopCtrl',
                         controllerAs: 'ctrl',
+                        bindToController: true,
                         locals: {
-                            model: smsTemplate,
+                            label: 'manage_sms_template_subscribers',
+                            record: angular.copy(smsTemplate),
                             propertyToSetValue: 'smstemplateSubscribers',
                             updateMethod: self.updateSmsTemplate
                         }
                     });
+            },
+            openSMSTemplateBodyDialog: function (smsTemplate, $event) {
+                dialog.showDialog({
+                    templateUrl: cmsTemplate.getPopup('message-body'),
+                    bindToController: true,
+                    escToCancel: true,
+                    targetEvent: $event,
+                    controllerAs: 'ctrl',
+                    controller: 'messageBodyPopCtrl',
+                    locals: {
+                        label: 'sms_message',
+                        record: smsTemplate,
+                        isHtml: true,
+                        bodyProperty: {arabic: 'arMessage', english: 'enMessage'}
+                    }
+                });
             }
         };
 

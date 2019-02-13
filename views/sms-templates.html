@@ -69,14 +69,14 @@
                                         <td md-cell>
                                             <md-switch aria-label="{{lang.global}}"
                                                        title="{{smsTemplate.getTranslatedGlobal()}}"
-                                                       ng-change="ctrl.changeGlobalSmsTemplate(smsTemplate)"
+                                                       ng-change="ctrl.changeGlobalSmsTemplate(smsTemplate, $event)"
                                                        ng-model="smsTemplate.isGlobal">
                                             </md-switch>
                                         </td>
                                         <td md-cell>
                                             <div flex layout="row" layout-align="start center">
                                                 <md-button class="md-icon-button" title="{{lang.view}}"
-                                                           ng-click="ctrl.showSmsTemplateContent(smsTemplate, $event)">
+                                                           ng-click="ctrl.showSmsTemplateBody(smsTemplate, $event)">
                                                     <md-icon md-svg-icon="eye"></md-icon>
                                                 </md-button>
                                                 <md-button class="md-icon-button" title="{{lang.delete}}"

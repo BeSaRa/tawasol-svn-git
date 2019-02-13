@@ -120,25 +120,6 @@ module.exports = function (app) {
                                 return response;
                             });
                     });
-            },
-            /**
-             * @description Open dialog to add relation app users to workflow action
-             * @param workflowAction
-             * @param $event
-             */
-            workflowActionSetGlobalNo: function (workflowAction, $event) {
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('relation-app-user'),
-                        controller: 'relationAppUserPopCtrl',
-                        controllerAs: 'ctrl',
-                        locals: {
-                            model: workflowAction,
-                            propertyToSetValue: 'global',
-                            updateMethod: self.updateWorkflowAction
-                        }
-                    });
             }
         };
 

@@ -1,6 +1,7 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, 
-                      applicationUserService) {
+    app.run(function (CMSModelInterceptor,
+                      applicationUserService,
+                      _) {
         'ngInject';
 
         var modelName = 'SmsTemplate';
@@ -12,8 +13,7 @@ module.exports = function (app) {
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             if (model.isGlobal) {
                 model.smstemplateSubscribers = [];
-            }
-            else {
+            } else {
                 if (model.smstemplateSubscribers) {
                     model.smstemplateSubscribers = _.map(model.smstemplateSubscribers, function (smsTemplateSubscriber) {
                         return {"applicationUserId": smsTemplateSubscriber.id};

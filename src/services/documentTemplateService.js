@@ -153,26 +153,7 @@ module.exports = function (app) {
                                 return response;
                             });
                     });
-            }/*,
-             /!**
-             * @description Open dialog to add relation app users to document template
-             * @param documentTemplate
-             * @param $event
-             *!/
-             documentTemplateSetGlobalNo: function(documentTemplate, $event){
-             return dialog
-             .showDialog({
-             targetEvent: $event,
-             templateUrl: cmsTemplate.getPopup('relation-app-user'),
-             controller: 'relationAppUserPopCtrl',
-             controllerAs: 'ctrl',
-             locals: {
-             model: documentTemplate,
-             propertyToSetValue: 'isGlobal',
-             updateMethod: self.updateDocumentTemplate
-             }
-             });
-             }*/
+            }
         };
 
         /**

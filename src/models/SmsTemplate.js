@@ -9,7 +9,8 @@ module.exports = function (app) {
             self.enName = null;
             self.status = true;
             self.isGlobal = true;
-            self.message = null;
+            self.arMessage = null;
+            self.enMessage = null;
             self.smstemplateSubscribers = [];
 
             // every model has required fields
@@ -19,7 +20,8 @@ module.exports = function (app) {
                 'enName',
                 'status',
                 'isGlobal',
-                'message',
+                'arMessage',
+                'enMessage',
                 'smstemplateSubscribers'
             ];
 

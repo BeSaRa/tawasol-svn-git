@@ -8,19 +8,19 @@ module.exports = function (app) {
                                                    generator,
                                                    dialog,
                                                    langService,
-                                                   smsTemplate,
-                                                   applicationUserService) {
+                                                   smsTemplate) {
         'ngInject';
         var self = this;
         self.controllerName = 'smsTemplatePopCtrl';
         self.editMode = editMode;
         self.smsTemplate = angular.copy(smsTemplate);
-        self.model = angular.copy(smsTemplate);
+        self.model = angular.copy(self.smsTemplate);
 
         self.validateLabels = {
             arName: 'arabic_name',
             enName: 'english_name',
-            message: 'sms_template_message',
+            arMessage: 'arabic_body_text',
+            enMessage: 'english_body_text',
             status: 'status',
             isGlobal: 'global'
         };
@@ -55,7 +55,6 @@ module.exports = function (app) {
                             self.editMode = true;
                             self.smsTemplate = angular.copy(result);
                             self.model = angular.copy(self.smsTemplate);
-                            //toast.success(langService.get('add_success').change({name: result.getTranslatedName()}));
                             toast.success(langService.get('add_success').change({name: result.getNames()}));
                         });
                 })
@@ -65,7 +64,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Edit sms template
+         * @description Update sms template
          */
         self.editSmsTemplateFromCtrl = function () {
             validationService
@@ -90,6 +89,7 @@ module.exports = function (app) {
                     smsTemplateService
                         .updateSmsTemplate(self.smsTemplate)
                         .then(function (result) {
+                            self.model = angular.copy(result);
                             toast.success(langService.get('edit_success').change({name: result.getNames()}));
                             dialog.hide(self.smsTemplate);
                         });
@@ -100,37 +100,20 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Open the popup to add sms template subscribers
-         * @param $event
-         */
-        self.selectSmsTemplateSubscribers = function ($event) {
-            self.smsTemplateSubscribersCopy = angular.copy(self.model.smstemplateSubscribers);
-            applicationUserService
-                .controllerMethod
-                .selectApplicationUsers(self.model.smstemplateSubscribers, "manage_sms_template_subscribers", $event)
-                .then(function (applicationUsers) {
-                    self.smsTemplate.smstemplateSubscribers = applicationUsers;
-                });
-        };
-
-
-        /**
          * @description Reset the form
          * @param form
          * @param $event
          */
-        self.resetModel = function(form, $event){
+        self.resetModel = function (form, $event) {
             generator.resetFields(self.smsTemplate, self.model);
-            self.smsTemplate.smstemplateSubscribers = self.model.smstemplateSubscribers = self.smsTemplateSubscribersCopy;
             form.$setUntouched();
         };
-
 
         /**
          * @description Close the popup
          */
-        self.closeSmsTemplatePopupFromCtrl = function () {
+        self.closePopup = function () {
             dialog.cancel();
-        }
+        };
     });
 };

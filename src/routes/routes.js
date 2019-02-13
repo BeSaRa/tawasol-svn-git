@@ -186,7 +186,12 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_sms_template',
                 resolve: {
-                    smsTemplates: function (smsTemplateService) {
+                    applicationUsers: function (applicationUserService) {
+                        'ngInject';
+                        return applicationUserService.loadApplicationUsers();
+                    },
+                    // load applicationUsers to use them subscribers in interceptor
+                    smsTemplates: function (smsTemplateService, applicationUsers) {
                         'ngInject';
                         return smsTemplateService.loadSmsTemplates();
                     }

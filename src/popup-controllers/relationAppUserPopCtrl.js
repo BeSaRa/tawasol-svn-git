@@ -1,39 +1,31 @@
 module.exports = function (app) {
     app.controller('relationAppUserPopCtrl', function (_,
-                                                       model,
-                                                       propertyToSetValue,
-                                                       updateMethod,
+                                                       $scope,
+                                                       LangWatcher,
                                                        generator,
-                                                       dialog,
-                                                       langService,
-                                                       applicationUserService) {
+                                                       dialog) {
         'ngInject';
         var self = this;
         self.controllerName = 'relationAppUserPopCtrl';
-        self.record = angular.copy(model);
-
-        self.selectRelationAppUsers = function ($event) {
-            applicationUserService
-                .controllerMethod
-                .selectApplicationUsers(self.record[propertyToSetValue], "manage_sms_template_subscribers", $event)
-                .then(function (applicationUsers) {
-                    self.record[propertyToSetValue] = applicationUsers;
-                });
-        };
+        LangWatcher($scope);
 
         /**
-         * @description Add new app user
+         * @description Saves the updated record
          */
-        self.addRelationAppUserFromCtrl = function () {
-            return updateMethod(self.record).then(function(result){
-                dialog.hide(result);
-            });
+        self.save = function () {
+            return self.updateMethod(self.record)
+                .then(function (result) {
+                    dialog.hide(true);
+                })
+                .catch(function (error) {
+                    dialog.cancel('serviceError');
+                });
         };
 
         /**
          * @description Close the popup
          */
-        self.closeRelationAppUserPopupFromCtrl = function () {
+        self.closePopup = function () {
             dialog.cancel();
         }
     });

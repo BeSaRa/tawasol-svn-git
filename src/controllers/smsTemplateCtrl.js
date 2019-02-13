@@ -71,10 +71,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .smsTemplateAdd($event)
                 .then(function (result) {
-                    self.reloadSmsTemplates(self.grid.page)
-                    /*.then(function () {
-                        toast.success(langService.get('add_success').change({name: result.getNames()}));
-                    });*/
+                    self.reloadSmsTemplates(self.grid.page);
                 })
                 .catch(function () {
                     self.reloadSmsTemplates(self.grid.page);
@@ -91,16 +88,19 @@ module.exports = function (app) {
                 .controllerMethod
                 .smsTemplateEdit(smsTemplate, $event)
                 .then(function (result) {
-                    self.reloadSmsTemplates(self.grid.page)
-                    /*.then(function () {
-                        toast.success(langService.get('edit_success').change({name: result.getNames()}));
-                    });*/
+                    self.reloadSmsTemplates(self.grid.page);
                 });
         };
 
-        self.showSmsTemplateContent = function (smsTemplate, $event) {
-            dialog
-                .successMessage(smsTemplate.message, null, null, $event, true);
+        /**
+         * @description Show SMS Template message body
+         * @param smsTemplate
+         * @param $event
+         */
+        self.showSmsTemplateBody = function (smsTemplate, $event) {
+            smsTemplateService
+                .controllerMethod
+                .openSMSTemplateBodyDialog(smsTemplate, $event)
         };
 
         /**
@@ -190,8 +190,9 @@ module.exports = function (app) {
         /**
          * @description Change the globalization of sms template
          * @param smsTemplate
+         * @param $event
          */
-        self.changeGlobalSmsTemplate = function (smsTemplate) {
+        self.changeGlobalSmsTemplate = function (smsTemplate, $event) {
             if (smsTemplate.isGlobal) {
                 smsTemplateService.updateSmsTemplate(smsTemplate)
                     .then(function () {
@@ -201,26 +202,22 @@ module.exports = function (app) {
                         smsTemplate.isGlobal = !smsTemplate.isGlobal;
                         dialog.errorMessage(langService.get('something_happened_when_update_global'));
                     });
-            }
-            else {
-                smsTemplateService
-                    .controllerMethod
-                    .smsTemplateSetGlobalNo(smsTemplate)
-                    .then(function () {
-                        return self.reloadSmsTemplates(self.grid.page)
+            } else {
+                smsTemplateService.controllerMethod
+                    .openManageSubscribersDialog(smsTemplate, $event)
+                    .then(function (result) {
+                        self.reloadSmsTemplates(self.grid.page)
                             .then(function () {
                                 toast.success(langService.get('globalization_success'));
                             })
-                            .catch(function () {
-                                smsTemplate.isGlobal = !smsTemplate.isGlobal;
-                                smsTemplate.smstemplateSubscribers = [];
-                                dialog.errorMessage(langService.get('something_happened_when_update_global'));
-                            });
                     })
-                    .catch(function () {
+                    .catch(function (error) {
+                        if (error && error === 'serviceError') {
+                            dialog.errorMessage(langService.get('something_happened_when_update_global'));
+                        }
                         smsTemplate.isGlobal = !smsTemplate.isGlobal;
                         smsTemplate.smstemplateSubscribers = [];
-                    });
+                    })
             }
         };
 
