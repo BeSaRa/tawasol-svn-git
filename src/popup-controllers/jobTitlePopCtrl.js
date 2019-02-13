@@ -60,7 +60,7 @@ module.exports = function (app) {
          *
          */
         self.editJobTitleFromCtrl = function () {
-            self.jobTitle.lookupStrKey = self.lookupStrKey;
+          //  self.jobTitle.lookupStrKey = self.lookupStrKey;
             validationService
                 .createValidation('EDIT_JOB_TITLE')
                 .addStep('check_required', true, generator.checkRequiredFields, self.jobTitle, function (result) {
@@ -76,7 +76,7 @@ module.exports = function (app) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
-                    toast.error(langService.get('name_duplication_message'));
+                    toast.error(langService.get('name_lookupstringkey_duplicate'));
                 })
                 .validate()
                 .then(function () {

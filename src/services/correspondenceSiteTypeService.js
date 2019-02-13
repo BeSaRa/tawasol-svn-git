@@ -86,14 +86,12 @@ module.exports = function (app) {
                             if (result.length === correspondenceSiteTypes.length) {
                                 toast.error(langService.get("failed_delete_selected"));
                                 response = false;
-                            }
-                            else if (result.length) {
+                            } else if (result.length) {
                                 generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (correspondenceSiteType) {
                                     return correspondenceSiteType.getNames();
                                 }));
                                 response = true;
-                            }
-                            else {
+                            } else {
                                 toast.success(langService.get("delete_success"));
                                 response = true;
                             }
@@ -239,13 +237,16 @@ module.exports = function (app) {
                 correspondenceSiteTypesToFilter = _.filter(correspondenceSiteTypesToFilter, function (correspondenceSiteTypeToFilter) {
                     return correspondenceSiteTypeToFilter.id !== correspondenceSiteType.id;
                 });
+                return _.some(_.map(correspondenceSiteTypesToFilter, function (existingCorrespondenceSiteType) {
+                    return existingCorrespondenceSiteType.arName === correspondenceSiteType.arName
+                        || existingCorrespondenceSiteType.enName.toLowerCase() === correspondenceSiteType.enName.toLowerCase()
+                        || (correspondenceSiteType.lookupStrKey && existingCorrespondenceSiteType.lookupStrKey  &&
+                            existingCorrespondenceSiteType.lookupStrKey.toLowerCase() === correspondenceSiteType.lookupStrKey.toLowerCase());
+                }), function (matchingResult) {
+                    return matchingResult === true;
+                });
+
             }
-            return _.some(_.map(correspondenceSiteTypesToFilter, function (existingCorrespondenceSiteType) {
-                return existingCorrespondenceSiteType.arName === correspondenceSiteType.arName
-                    || existingCorrespondenceSiteType.enName.toLowerCase() === correspondenceSiteType.enName.toLowerCase()
-            }), function (matchingResult) {
-                return matchingResult === true;
-            });
         };
         /* /!**
           * @description Check if record with same item order exists. Returns true if exists

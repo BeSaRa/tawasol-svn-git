@@ -44,7 +44,7 @@ module.exports = function (app) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
-                    toast.error(langService.get('name_duplication_message'));
+                    toast.error(langService.get('name_lookupstringkey_duplicate'));
                 })
                 .validate()
                 .then(function () {
@@ -61,7 +61,7 @@ module.exports = function (app) {
          *
          */
         self.editEntityTypeFromCtrl = function () {
-            self.entityType.lookupStrKey = self.lookupStrKey;
+           // self.entityType.lookupStrKey = self.lookupStrKey;
             validationService
                 .createValidation('ADD_DOCUMENT_TYPE')
                 .addStep('check_required', true, generator.checkRequiredFields, self.entityType, function (result) {
@@ -77,7 +77,7 @@ module.exports = function (app) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
-                    toast.error(langService.get('name_duplication_message'));
+                    toast.error(langService.get('name_lookupstringkey_duplicate'));
                 })
                 .validate()
                 .then(function () {

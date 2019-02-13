@@ -87,14 +87,12 @@ module.exports = function (app) {
                             if (result.length === entityTypes.length) {
                                 toast.error(langService.get("failed_delete_selected"));
                                 response = false;
-                            }
-                            else if (result.length) {
+                            } else if (result.length) {
                                 generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (entityType) {
                                     return entityType.getNames();
                                 }));
                                 response = true;
-                            }
-                            else {
+                            } else {
                                 toast.success(langService.get("delete_success"));
                                 response = true;
                             }
@@ -245,7 +243,10 @@ module.exports = function (app) {
             }
             return _.some(_.map(entityTypesToFilter, function (existingEntityType) {
                 return existingEntityType.arName === entityType.arName
-                    || existingEntityType.enName.toLowerCase() === entityType.enName.toLowerCase();
+                    || existingEntityType.enName.toLowerCase() === entityType.enName.toLowerCase()
+                    || (entityType.lookupStrKey && existingEntityType.lookupStrKey &&
+                        existingEntityType.lookupStrKey.toLowerCase() === entityType.lookupStrKey.toLowerCase())
+                    || entityType.canDelete();
             }), function (matchingResult) {
                 return matchingResult === true;
             });

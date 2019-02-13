@@ -41,7 +41,7 @@ module.exports = function (app) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
-                    toast.error(langService.get('name_duplication_message'));
+                    toast.error(langService.get('name_lookupstringkey_duplicate'));
                 })
                 .addStep('check_numbers', true, generator.checkNameNumbers, [self.correspondenceSiteType, ['arName', 'enName']], function (result) {
                     return !result;
@@ -69,7 +69,7 @@ module.exports = function (app) {
          *
          */
         self.editCorrespondenceSiteTypeFromCtrl = function () {
-            self.correspondenceSiteType.lookupStrKey = self.lookupStrKey;
+          // self.correspondenceSiteType.lookupStrKey = self.lookupStrKey;
             validationService
                 .createValidation('ADD_CORRESPONDENCE_TYPE')
                 .addStep('check_required', true, generator.checkRequiredFields, self.correspondenceSiteType, function (result) {
@@ -85,7 +85,7 @@ module.exports = function (app) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
-                    toast.error(langService.get('name_duplication_message'));
+                    toast.error(langService.get('name_lookupstringkey_duplicate'));
                 })
                 .addStep('check_numbers', true, generator.checkNameNumbers, [self.correspondenceSiteType, ['arName', 'enName']], function (result) {
                     return !result;

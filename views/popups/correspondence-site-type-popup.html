@@ -1,4 +1,5 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_correspondence_site_type : ctrl.model.getNames()}}">
+<md-dialog class="dialog-extend"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_correspondence_site_type : ctrl.model.getNames()}}">
     <div layout="column">
         <md-toolbar>
             <span ng-if="!ctrl.editMode" class="p20">{{lang.add_new_correspondence_site_type}}</span>
@@ -36,11 +37,12 @@
                     <div layout="row">
                         <md-input-container flex ng-disabled="true">
                             <label for="lookupStrKey">{{lang.code}}</label>
-                            <input ng-disabled="ctrl.editMode" no-space-directive name="lookupStrKey" id="lookupStrKey"
+                            <input no-space-directive name="lookupStrKey" id="lookupStrKey"
                                    maxlength="40"
                                    minlength="4"
                                    ng-model="ctrl.correspondenceSiteType.lookupStrKey"
-                                   custom-validate-directive="EN">
+                                   custom-validate-directive="EN"
+                                   ng-disabled="!ctrl.correspondenceSiteType.canDelete()">
                             <div ng-messages="doc.lookupStrKey.$error">
                                 <div ng-message="EN">{{lang.english_number}}</div>
                                 <div ng-message="minlength">{{lang.short}}</div>
@@ -61,7 +63,7 @@
                     <div layout="row">
                         <div flex class="p20">
                             <md-switch ng-model="ctrl.correspondenceSiteType.status"
-                                        ng-disabled="ctrl.editMode && !ctrl.correspondenceSiteType.canDelete()">
+                                       ng-disabled="ctrl.editMode && !ctrl.correspondenceSiteType.canDelete()">
                                 <label>{{lang.status}} : {{ctrl.correspondenceSiteType.getTranslatedStatus()}}</label>
                             </md-switch>
                         </div>
