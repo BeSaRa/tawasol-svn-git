@@ -23,7 +23,7 @@
                                                class="m0 top-switch-handler"
                                                ng-true-value="1" ng-false-value="0"
                                                ng-click="ctrl.preventPropagation($event)"
-                                               ng-change="ctrl.checkChangeInternalType($event)"
+                                               ng-change="ctrl.checkChangeInternalType()"
                                                ng-model="ctrl.internal.addMethod">{{lang.internal_document_type}} :
                                         {{ctrl.internal.getMethodTypeInternal()}}
                                     </md-switch>

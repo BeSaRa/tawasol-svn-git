@@ -97,8 +97,7 @@ module.exports = function (app) {
          * @description Handle the change of paper/electronic switch
          * @returns {*}
          */
-        self.checkChangeInternalType = function ($event) {
-            $event.preventDefault();
+        self.checkChangeInternalType = function () {
             if (self.documentInformation || self.internal.contentFile) {
                 return dialog
                     .confirmMessage(langService.get('content_will_remove_confirm'))
