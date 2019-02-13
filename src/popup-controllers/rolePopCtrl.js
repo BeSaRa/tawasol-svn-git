@@ -256,7 +256,6 @@ module.exports = function (app) {
          * @description parent checkbox
          */
         self.toggleAll = function () {
-            // debugger;
             if (self.isChecked()) {
                 self.role.customRolePermission = [];
             }

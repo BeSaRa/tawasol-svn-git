@@ -27,7 +27,7 @@ module.exports = function (app) {
         };
 
         self.preventClick = function ($event) {
-            console.log($event);
+            // console.log($event);
             $event.stopPropagation();
         }
     });

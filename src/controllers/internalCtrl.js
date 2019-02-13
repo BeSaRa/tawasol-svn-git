@@ -86,7 +86,7 @@ module.exports = function (app) {
             self.internal = duplicateVersion.metaData;
             self.documentInformation = self.internal.hasContent() ? duplicateVersion.content : null;
             self.editContent = true;
-            console.log('duplicateVersion.content', duplicateVersion.content);
+            // console.log('duplicateVersion.content', duplicateVersion.content);
         }
 
         self.preventPropagation = function ($event) {

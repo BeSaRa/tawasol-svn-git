@@ -52,7 +52,7 @@ module.exports = function (app) {
                 self.proxyMailUsers = generator.generateCollection(result.data.rs, ProxyMailUser, self._sharedMethods);
                 //self.proxyMailInboxes = generator.interceptReceivedCollection('WorkItem', self.proxyMailInboxes);
 
-                console.log(self.proxyMailUsers);
+                //console.log(self.proxyMailUsers);
                 return self.proxyMailUsers;
             });
         };

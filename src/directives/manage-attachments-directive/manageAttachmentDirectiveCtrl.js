@@ -298,7 +298,7 @@ module.exports = function (app) {
                     self.attachment = _createAttachmentFile(file);
                 })
                 .catch(function (availableExtensions) {
-                    console.log(availableExtensions);
+                    // console.log(availableExtensions);
                     dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
                 })
 

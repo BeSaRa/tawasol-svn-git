@@ -404,7 +404,7 @@ module.exports = function (app) {
          * @param organizationId
          */
         self.onRegistryChange = function (organizationId) {
-            console.log(organizationId);
+            // console.log(organizationId);
             if (!organizationId)
                 return;
 

@@ -38,7 +38,7 @@ module.exports = function (app) {
 
 
         $scope.$on('$destroy', function () {
-            console.log("Destroy");
+            // console.log("Destroy");
         });
 
     });

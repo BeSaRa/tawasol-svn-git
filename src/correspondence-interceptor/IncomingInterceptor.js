@@ -28,7 +28,6 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            // debugger;
             // model.site = model.subSiteId ? new Site({
             //     mainSiteId: model.mainSiteId,
             //     subSiteId: model.subSiteId,

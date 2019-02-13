@@ -306,8 +306,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (sentItemDepartmentInbox, $event) {
-            console.log('manage linked documents', sentItemDepartmentInbox);
-
             managerService.manageDocumentLinkedDocuments(sentItemDepartmentInbox.vsId, self.docClassName, "welcome");
         };
 
@@ -328,7 +326,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadMainDocument = function (sentItemDepartmentInbox, $event) {
-            //console.log('download main document : ', sentItemDepartmentInbox);
             downloadService.controllerMethod
                 .mainDocumentDownload(sentItemDepartmentInbox.vsId, $event);
         };
@@ -339,7 +336,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadCompositeDocument = function (sentItemDepartmentInbox, $event) {
-            // console.log('download composite document : ', sentItemDepartmentInbox);
             downloadService.controllerMethod
                 .compositeDocumentDownload(sentItemDepartmentInbox.vsId, $event);
         };

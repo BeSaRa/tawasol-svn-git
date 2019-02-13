@@ -292,7 +292,6 @@ module.exports = function (app) {
                     return self.reloadIncomingDepartmentInboxes(self.grid.page);
                 })
                 .catch(function (error) {
-                    debugger;
                     if (error !== 'exception') {
                         return self.reloadIncomingDepartmentInboxes(self.grid.page);
                     }

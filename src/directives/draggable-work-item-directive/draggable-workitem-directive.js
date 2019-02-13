@@ -5,7 +5,7 @@ module.exports = function (app) {
             restrict: 'A',
             scope: true,
             link: function (scope, element, attrs) {
-                console.log("DRAGGABLE");
+                // console.log("DRAGGABLE");
             }
         }
     }).directive('droppableWorkItemDirective', function () {
@@ -13,7 +13,7 @@ module.exports = function (app) {
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
-                console.log(element);
+                // console.log(element);
             }
         }
     })

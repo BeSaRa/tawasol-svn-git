@@ -22,7 +22,7 @@ module.exports = function (app) {
         };
 
         self.toggleHide = function (index) {
-            console.log($scope.nodeList[index]);
+            // console.log($scope.nodeList[index]);
         };
 
         self.render = function (nodes) {
