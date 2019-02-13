@@ -70,6 +70,8 @@
                                            ng-click="ctrl.checkIfTextOrientationDisabled($event)">
                                     <span>{{lang.document_security_2d}} : </span>{{ctrl.documentSecurityOutgoing.getTranslatedYesNo('status2D')}}
                                 </md-switch>
+                            </div>
+                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Security Level -->
                                 <md-input-container flex>
                                     <label for="securityLevelOutgoing">{{lang.security_levels}}</label>
@@ -89,8 +91,6 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
-                            </div>
-                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Text Watermark -->
                                 <md-input-container flex>
                                     <label for="textOrientationOutgoing">{{lang.document_security_text_watermark}}</label>
@@ -157,6 +157,8 @@
                                            ng-click="ctrl.checkIfTextOrientationDisabled($event)">
                                     <span>{{lang.document_security_2d}} : </span>{{ctrl.documentSecurityIncoming.getTranslatedYesNo('status2D')}}
                                 </md-switch>
+                            </div>
+                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Security Level -->
                                 <md-input-container flex>
                                     <label for="securityLevelIncoming">{{lang.security_levels}}</label>
@@ -176,8 +178,6 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
-                            </div>
-                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Text Watermark -->
                                 <md-input-container flex>
                                     <label for="textOrientationIncoming">{{lang.document_security_text_watermark}}</label>
@@ -244,6 +244,8 @@
                                            ng-click="ctrl.checkIfTextOrientationDisabled($event)">
                                     <span>{{lang.document_security_2d}} : </span>{{ctrl.documentSecurityInternal.getTranslatedYesNo('status2D')}}
                                 </md-switch>
+                            </div>
+                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Security Level -->
                                 <md-input-container flex>
                                     <label for="securityLevelInternal">{{lang.security_levels}}</label>
@@ -263,8 +265,6 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
-                            </div>
-                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Text Watermark -->
                                 <md-input-container flex>
                                     <label for="textOrientationInternal">{{lang.document_security_text_watermark}}</label>
@@ -331,6 +331,8 @@
                                            ng-click="ctrl.checkIfTextOrientationDisabled($event)">
                                     <span>{{lang.document_security_2d}} : </span>{{ctrl.documentSecurityTawasolAttachment.getTranslatedYesNo('status2D')}}
                                 </md-switch>
+                            </div>
+                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Security Level -->
                                 <md-input-container flex>
                                     <label for="securityLevelTawasolAttachment">{{lang.security_levels}}</label>
@@ -350,8 +352,6 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
-                            </div>
-                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Text Watermark -->
                                 <md-input-container flex>
                                     <label for="textOrientationTawasolAttachment">{{lang.document_security_text_watermark}}</label>
