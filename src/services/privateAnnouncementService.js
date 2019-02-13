@@ -153,6 +153,21 @@ module.exports = function (app) {
                             organizationsToExclude: organizationsToExclude
                         }
                     });
+            },
+            showAnnouncementMessageBody: function (privateAnnouncement, $event) {
+                dialog.showDialog({
+                    templateUrl: cmsTemplate.getPopup('message-body'),
+                    bindToController: true,
+                    escToCancel: true,
+                    targetEvent: $event,
+                    controllerAs: 'ctrl',
+                    controller: 'messageBodyPopCtrl',
+                    locals: {
+                        record: privateAnnouncement,
+                        isHtml: true,
+                        bodyProperty: {arabic: 'arBody', english: 'enBody'}
+                    }
+                });
             }
         };
 

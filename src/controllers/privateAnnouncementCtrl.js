@@ -8,7 +8,6 @@ module.exports = function (app) {
                                                         toast,
                                                         dialog,
                                                         moment,
-                                                        publicAnnouncementService,
                                                         organizations,
                                                         contextHelpService,
                                                         employeeService,
@@ -213,7 +212,7 @@ module.exports = function (app) {
         };
 
         self.openAnnouncementMessageBodyDialog = function (privateAnnouncement, $event) {
-            publicAnnouncementService
+            privateAnnouncementService
                 .controllerMethod
                 .showAnnouncementMessageBody(privateAnnouncement, $event);
         };

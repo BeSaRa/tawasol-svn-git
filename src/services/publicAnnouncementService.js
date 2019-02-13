@@ -127,16 +127,16 @@ module.exports = function (app) {
             },
             showAnnouncementMessageBody: function (publicAnnouncement, $event) {
                 dialog.showDialog({
-                    templateUrl: cmsTemplate.getPopup('announcement-message-body'),
+                    templateUrl: cmsTemplate.getPopup('message-body'),
                     bindToController: true,
                     escToCancel: true,
                     targetEvent: $event,
-                    controller: function () {
-                    },
                     controllerAs: 'ctrl',
+                    controller: 'messageBodyPopCtrl',
                     locals: {
-                        arBody: $sce.trustAsHtml(publicAnnouncement.arBody),
-                        enBody: $sce.trustAsHtml(publicAnnouncement.enBody)
+                        record: publicAnnouncement,
+                        isHtml: true,
+                        bodyProperty: {arabic: 'arBody', english: 'enBody'}
                     }
                 });
             }
@@ -179,7 +179,7 @@ module.exports = function (app) {
          */
         self.deletePublicAnnouncement = function (publicAnnouncement) {
             var id = publicAnnouncement.hasOwnProperty('id') ? publicAnnouncement.id : publicAnnouncement;
-            return $http.delete((urlService.publicAnnouncements + '/' + id)).then(function(result){
+            return $http.delete((urlService.publicAnnouncements + '/' + id)).then(function (result) {
                 return result;
             });
         };
