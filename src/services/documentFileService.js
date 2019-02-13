@@ -139,7 +139,7 @@ module.exports = function (app) {
                     .showDialog({
                         targetEvent: $event,
                         templateUrl: cmsTemplate.getPopup('document-file-child'),
-                        controller: 'documentFileChildrenNewPopCtrl',
+                        controller: 'documentFileChildrenPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
                             editMode: true,

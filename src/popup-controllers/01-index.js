@@ -100,7 +100,7 @@ module.exports = function (app) {
     require('./versionPopCtrl')(app);
     require('./duplicateOptionPopCtrl')(app);
     require('./documentFilePopCtrl')(app);
-    require('./documentFileChildrenNewPopCtrl')(app);
+    require('./documentFileChildrenPopCtrl')(app);
     require('./bulkExportOptionPopCtrl')(app);
     require('./dynamicMenuItemPopCtrl')(app);
     require('./subDynamicMenuItemPopCtrl')(app);

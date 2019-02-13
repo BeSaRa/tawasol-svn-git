@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('documentFileChildrenNewPopCtrl', function (lookupService,
+    app.controller('documentFileChildrenPopCtrl', function (lookupService,
                                                                documentFileService,
                                                                $q,
                                                                _,
@@ -14,7 +14,7 @@ module.exports = function (app) {
                                                                generator) {
         'ngInject';
         var self = this;
-        self.controllerName = 'documentFileChildrenNewPopCtrl';
+        self.controllerName = 'documentFileChildrenPopCtrl';
         self.parentDocumentFile = documentFile;
 
         /**
