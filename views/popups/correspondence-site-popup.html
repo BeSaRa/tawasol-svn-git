@@ -118,7 +118,7 @@
                                     <div flex>
                                         <md-switch ng-change="ctrl.onChangeGlobal($event)"
                                                    ng-disabled="(ctrl.editMode && ctrl.model.isGlobal) || ctrl.defaultOU"
-                                                   ng-readonly="ctrl.editMode && ctrl.model.isGlobal"
+                                                   ng-readonly="(ctrl.editMode && ctrl.model.isGlobal) || ctrl.defaultOU"
                                                    ng-model="ctrl.correspondenceSite.isGlobal"
                                                    aria-label="{{lang.global}}">
                                             <label>{{lang.global}} :
