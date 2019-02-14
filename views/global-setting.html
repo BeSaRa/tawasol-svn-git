@@ -131,8 +131,8 @@
                             <div layout="row" class="p20">
                                 <!-- File Size -->
                                 <md-input-container flex>
-                                    <label>{{lang.file_size}}</label>
-                                    <md-select name="fileSize" ng-model="ctrl.globalSetting.fileSize">
+                                    <label for="fileSize">{{lang.file_size}}</label>
+                                    <md-select id="fileSize" name="fileSize" ng-model="ctrl.globalSetting.fileSize">
                                         <md-option ng-repeat="fileSize in ctrl.fileSizes track by $index"
                                                    ng-value="fileSize.lookupKey">
                                             {{fileSize.getTranslatedName()}}
@@ -143,8 +143,8 @@
                                 </md-input-container>
                                 <!-- File Type -->
                                 <md-input-container flex>
-                                    <label>{{lang.file_type}}</label>
-                                    <md-select multiple name="fileType"
+                                    <label for="fileType">{{lang.file_type}}</label>
+                                    <md-select multiple name="fileType" id="fileType"
                                                ng-model="ctrl.globalSetting.fileType">
                                         <md-option ng-repeat="fileType in ctrl.fileTypes" ng-value="fileType.id">
                                             {{fileType.getExtension()}}
@@ -156,8 +156,8 @@
                                 </md-input-container>
                                 <!-- Thumbnail Mode -->
                                 <md-input-container flex>
-                                    <label>{{lang.thumbnail_mode}}</label>
-                                    <md-select name="thumbnailMode" required
+                                    <label for="thumbnailMode">{{lang.thumbnail_mode}}</label>
+                                    <md-select id="thumbnailMode" name="thumbnailMode" required
                                                ng-model="ctrl.globalSetting.thumbnailMode">
                                         <md-option ng-repeat="thumbnailMode in ctrl.thumbnailModes track by $index"
                                                    ng-value="thumbnailMode.lookupKey">
@@ -173,8 +173,9 @@
                             <div layout="row" class="p20">
                                 <!-- Correspondence Site Search Type -->
                                 <md-input-container flex>
-                                    <label>{{lang.correspondence_Site_search_type}}</label>
+                                    <label for="simpleCorsSiteSearch">{{lang.correspondence_Site_search_type}}</label>
                                     <md-select name="simpleCorsSiteSearch" required
+                                               id="simpleCorsSiteSearch"
                                                ng-model="ctrl.globalSetting.simpleCorsSiteSearch">
                                         <md-option ng-repeat="searchType in ctrl.correspondenceSiteSearchTypeOptions"
                                                    ng-value="searchType.value">
@@ -265,8 +266,8 @@
                             <div layout="row" class="p20">
                                 <!-- Support Phone -->
                                 <md-input-container flex>
-                                    <label>{{lang.support_phone}}</label>
-                                    <input name="supportPhoneNo"
+                                    <label for="supportPhoneNo">{{lang.support_phone}}</label>
+                                    <input name="supportPhoneNo" id="supportPhoneNo"
                                            custom-validate-directive="phone_mobile" maxlength="15"
                                            ng-model="ctrl.globalSetting.supportPhoneNo"/>
                                     <div ng-messages="globalSettingForm.supportPhoneNo.$error" role="alert">
@@ -436,7 +437,7 @@
                             <div layout="row" class="p20">
                                 <!-- Document Security Schema -->
                                 <md-input-container flex>
-                                    <label>{{lang.documents_security_schema}}</label>
+                                    <label for="securitySchema">{{lang.documents_security_schema}}</label>
                                     <!--<md-select required name="securitySchema" multiple
                                                ng-model="ctrl.globalSetting.securitySchema"
                                                ng-model-options="{trackBy: '$value.id'}">
@@ -446,7 +447,7 @@
                                             {{securitySchema.getTranslatedName()}}
                                         </md-option>
                                     </md-select>-->
-                                    <md-select required name="securitySchema"
+                                    <md-select required name="securitySchema" id="securitySchema"
                                                ng-change="ctrl.confirmChangeSecuritySchema($event)"
                                                ng-model="ctrl.globalSetting.securitySchema">
                                         <md-option
@@ -474,7 +475,7 @@
                             <div layout="row" flex class="p20">
                                 <!-- Workflow Governance Rules -->
                                 <md-input-container flex>
-                                    <label>{{lang.workflow_governance_rules}}</label>
+                                    <label for="wfsecurity">{{lang.workflow_governance_rules}}</label>
                                     <!-- <md-select multiple required name="wfsecurity"
                                                 ng-model="ctrl.globalSetting.wfsecurity"
                                                 ng-model-options="{trackBy: '$value.id'}">
@@ -483,7 +484,7 @@
                                              {{wfsecurity.getTranslatedName()}}
                                          </md-option>
                                      </md-select>-->
-                                    <md-select required name="wfsecurity"
+                                    <md-select required name="wfsecurity" id="wfsecurity"
                                                ng-model="ctrl.globalSetting.wfsecurity">
                                         <md-option ng-repeat="wfsecurity in ctrl.workFlowSecurities track by $index"
                                                    ng-value="wfsecurity.lookupKey">
@@ -569,8 +570,8 @@
                             <div layout="row" class="p20">
                                 <!-- Escalation process -->
                                 <md-input-container flex>
-                                    <label>{{$parent.lang.choose_escalation_process}}</label>
-                                    <md-select required name="escalationProcess"
+                                    <label for="escalationProcess">{{$parent.lang.choose_escalation_process}}</label>
+                                    <md-select required name="escalationProcess" id="escalationProcess"
                                                ng-model="ctrl.globalSetting.escalationProcess">
                                         <md-option tooltip="{{escalationProcess.getTranslatedName(true)}}"
                                                 ng-repeat="escalationProcess in ctrl.escalationProcesses track by $index"
