@@ -85,7 +85,7 @@ module.exports = function (app) {
                     self.reloadSubDocumentFiles(self.grid.page);
                 })
                 .catch(function (result) {
-                    self.replaceRecordFromGrid(result);
+                    self.reloadSubDocumentFiles(self.grid.page);
                 });
         };
 
@@ -195,12 +195,6 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.subDocumentFiles = result;
                 });
-        };
-
-        self.replaceRecordFromGrid = function (subDocumentFile) {
-            self.subDocumentFiles.splice(_.findIndex(self.subDocumentFiles, function (item) {
-                return item.id === subDocumentFile.id;
-            }), 1, subDocumentFile);
         };
 
     });

@@ -110,7 +110,7 @@ module.exports = function (app) {
                     self.reloadDocumentFiles(self.grid.page);
                 })
                 .catch(function (result) {
-                    self.replaceRecordFromGrid(result);
+                    self.reloadDocumentFiles(self.grid.page);
                 })
         };
 
@@ -212,12 +212,6 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.documentFiles = result;
                 });
-        };
-
-        self.replaceRecordFromGrid = function (documentFile) {
-            self.documentFiles.splice(_.findIndex(self.documentFiles, function (item) {
-                return item.id === documentFile.id;
-            }), 1, documentFile);
         };
     });
 };
