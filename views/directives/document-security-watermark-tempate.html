@@ -1,7 +1,7 @@
 <div layout="row" flex class="p20">
     <div flex layout="column">
         <ng-form name="documentSecurityForm" ng-if="ctrl.documentSecurity">
-            <div layout="column">
+            <div>
                 <!-- Show Watermark -->
                 <md-switch  ng-model="ctrl.documentSecurity.status"
                            aria-label="{{lang.apply_document_protection}}">
@@ -41,7 +41,7 @@
                         <span flex="1"></span>
                     </div>
 
-                    <md-slider-container flex>
+                    <md-slider-container flex-gt-md="flex">
                         <label for="opacity-slider">{{lang.opacity}}</label>
                         <md-slider flex min="1" max="10" step="1" ng-model="ctrl.documentSecurity.opacity"
                                    aria-label="{{lang.opacity}}" md-discrete id="opacity-slider">
