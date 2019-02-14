@@ -496,8 +496,8 @@
                                 </md-input-container>
                                 <!-- Security Level -->
                                 <md-input-container flex>
-                                    <label>{{lang.security_levels}}</label>
-                                    <md-select multiple name="securityLevels" required
+                                    <label for="securityLevels">{{lang.security_levels}}</label>
+                                    <md-select multiple id="securityLevels" name="securityLevels" required
                                                ng-model="ctrl.globalSetting.securityLevels"
                                                ng-model-options="{trackBy: '$value.id'}">
                                         <md-option ng-value="level" ng-disabled="ctrl.disableSecurityLevel(level)"
