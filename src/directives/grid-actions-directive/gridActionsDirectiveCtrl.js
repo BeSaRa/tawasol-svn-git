@@ -367,7 +367,8 @@ module.exports = function (app) {
             return !(self.model instanceof EventHistory
                 || self.model instanceof SentItemDepartmentInbox
                 || self.model instanceof G2G
-                || self.model instanceof G2GMessagingHistory);
+                || self.model instanceof G2GMessagingHistory
+                || self.model instanceof WorkItem);
         };
 
         /**
