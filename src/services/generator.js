@@ -501,7 +501,7 @@ module.exports = function (app) {
          */
         self.resetFields = function (model, defaultModel) {
             _.map(model, function (value, key) {
-                model[key] = defaultModel[key];
+                model[key] = angular.copy(defaultModel[key]);
             });
         };
         /**

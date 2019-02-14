@@ -19,8 +19,8 @@ module.exports = function (app) {
         self.controllerName = 'workflowGroupPopCtrl';
         self.editMode = editMode;
         self.isUserPreference = isUserPreference;
-        self.model = angular.copy(workflowGroup);
         self.workflowGroup = angular.copy(workflowGroup);
+        self.model = angular.copy(workflowGroup);
 
         self.availableSearchCriteria = [
             {key: 'loginName', value: 'login_name'},
@@ -49,8 +49,7 @@ module.exports = function (app) {
                         // if private wfGroup and one of arName or enName is filled, skip the property from required;
                         if ((property === 'arName' && !model['enName']) || (property === 'enName' && !model['arName']))
                             result.push(property);
-                    }
-                    else {
+                    } else {
                         result.push(property);
                     }
             });
@@ -216,26 +215,6 @@ module.exports = function (app) {
         };
 
         /**
-         * to delete group members
-         * @param property
-         */
-        self.deleteGroupMemberFrom = function (property) {
-            var message = langService.get(self.removeUserLabels[property]);
-            dialog
-                .confirmMessage(message.change({name: self.model[property].getNames()}))
-                .then(function () {
-                    self.model[property] = null;
-                });
-        };
-
-        /**
-         * @description Close the popup
-         */
-        self.closeWorkflowGroupPopupFromCtrl = function () {
-            dialog.cancel();
-        };
-
-        /**
          * @description Remove the group member
          * @param groupMember
          * @param $event
@@ -244,20 +223,23 @@ module.exports = function (app) {
             dialog
                 .confirmMessage(langService.get('confirm_delete').change({name: groupMember.applicationUser.getNames()}))
                 .then(function () {
-                    var indexToDelete = 0;
-                    var groupMemberToDelete = _.find(self.workflowGroup.groupMembers, function (member, index) {
-                        indexToDelete = index;
-                        return member.applicationUser.id === groupMember.applicationUser.id;
+                    var index = _.findIndex(self.workflowGroup.groupMembers, function (addedGroupMember) {
+                        return addedGroupMember.applicationUser.id === groupMember.applicationUser.id;
                     });
-                    if (groupMemberToDelete) {
-                        self.workflowGroup.groupMembers.splice(indexToDelete, 1);
-                        //self.editWorkflowGroupFromCtrl();
-                    }
+                    if (index > -1)
+                        self.workflowGroup.groupMembers.splice(index, 1);
                 });
         };
 
         self.resetModel = function () {
             generator.resetFields(self.workflowGroup, self.model);
+        };
+
+        /**
+         * @description Close the popup
+         */
+        self.closeWorkflowGroupPopupFromCtrl = function () {
+            dialog.cancel();
         };
 
     });
