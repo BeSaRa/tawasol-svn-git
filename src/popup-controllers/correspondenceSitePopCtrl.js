@@ -1,20 +1,20 @@
 module.exports = function (app) {
     app.controller('correspondenceSitePopCtrl', function (ouCorrespondenceSiteService,
-                                                             correspondenceSiteTypeService,
-                                                             $q,
-                                                             _,
-                                                             defaultOU,
-                                                             $filter,
-                                                             organizationService,
-                                                             toast,
-                                                             langService,
-                                                             correspondenceSiteService,
-                                                             generator,
-                                                             validationService,
-                                                             dialog,
-                                                             CorrespondenceSite,
-                                                             editMode,
-                                                             correspondenceSite) {
+                                                          correspondenceSiteTypeService,
+                                                          $q,
+                                                          _,
+                                                          defaultOU,
+                                                          $filter,
+                                                          organizationService,
+                                                          toast,
+                                                          langService,
+                                                          correspondenceSiteService,
+                                                          generator,
+                                                          validationService,
+                                                          dialog,
+                                                          CorrespondenceSite,
+                                                          editMode,
+                                                          correspondenceSite) {
         'ngInject';
         var self = this;
         self.controllerName = 'correspondenceSitePopCtrl';
@@ -120,28 +120,6 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    /*var relatedOus = angular.copy(self.correspondenceSite.relatedOus);
-                    if (self.editMode) {
-                        self.correspondenceSite.relatedOus = [];
-                    }
-                    self.correspondenceSite.save().then(function (correspondenceSite) {
-                        self.correspondenceSite = correspondenceSite;
-                        self.selectedOrganization = null;
-                        if (!self.editMode) {
-                            self.model = angular.copy(self.correspondenceSite);
-                            self.editMode = true;
-                            toast.success(langService.get('add_success').change({name: self.correspondenceSite.getNames()}));
-                            // if request comes from Organization popup, close the popup after add
-                            if (defaultOU)
-                                dialog.hide();
-
-                        } else {
-                            self.correspondenceSite.relatedOus = relatedOus;
-                            self.model = angular.copy(self.correspondenceSite);
-                            dialog.hide(self.correspondenceSite);
-                        }
-                    })*/
-
                     var relatedOus = angular.copy(self.correspondenceSite.relatedOus);
                     self.correspondenceSite.relatedOus = [];
                     self.correspondenceSite.save().then(function (correspondenceSite) {
@@ -169,7 +147,8 @@ module.exports = function (app) {
                                 self.correspondenceSite.relatedOus = relatedOus;
                                 self.model = angular.copy(self.correspondenceSite);
                                 self.editMode = true;
-                                dialog.hide(self.correspondenceSite);
+                                if (self.correspondenceSite.parent)
+                                    dialog.hide(self.correspondenceSite);
                                 toast.success(langService.get('add_success').change({name: self.correspondenceSite.getNames()}));
                             }
                         } else {
