@@ -169,6 +169,7 @@ module.exports = function (app) {
                                 self.correspondenceSite.relatedOus = relatedOus;
                                 self.model = angular.copy(self.correspondenceSite);
                                 self.editMode = true;
+                                dialog.hide(self.correspondenceSite);
                                 toast.success(langService.get('add_success').change({name: self.correspondenceSite.getNames()}));
                             }
                         } else {
