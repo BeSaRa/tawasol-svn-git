@@ -117,7 +117,7 @@ module.exports = function (app) {
                 self.distributionList.setRelatedOus([]);
                 return;
             }
-            if (self.classification.global) {
+            if (self.distributionList.global) {
                 dialog.confirmMessage(langService.get('related_organization_confirm'), null, null, $event)
                     .then(function () {
                         self.distributionList.setRelatedOus([]);
