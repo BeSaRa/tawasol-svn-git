@@ -149,7 +149,7 @@ module.exports = function (app) {
                     .deleteBulkOUClassifications(ouClassifications)
                     .then(function () {
                         var ids = _.map(ouClassifications, 'id');
-                        self.relatedOus = _.filter(self.relatedOus, function (ouClassification) {
+                        return self.relatedOus = _.filter(self.relatedOus, function (ouClassification) {
                             return ids.indexOf(ouClassification.id) === -1;
                         });
                     });

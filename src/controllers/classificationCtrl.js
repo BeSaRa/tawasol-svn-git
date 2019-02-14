@@ -164,11 +164,12 @@ module.exports = function (app) {
                     return classification;
                 });
         };
+
         /**
          * @description change global status
          * @param classification
          */
-        self.changeGlobalFromFromGrid = function (classification) {
+        self.changeGlobalFromGrid = function (classification) {
             if (classification.isGlobal) {
                 dialog.confirmMessage(langService.get('related_organization_confirm'))
                     .then(function () {
@@ -178,6 +179,7 @@ module.exports = function (app) {
             } else {
                 self.openSelectOUClassificationDialog(classification)
                     .then(function (result) {
+                        result.setRelatedOus([]);
                         result.update().then(self.displayClassificationGlobalMessage);
                     })
                     .catch(function () {

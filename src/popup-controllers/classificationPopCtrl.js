@@ -1,21 +1,21 @@
 module.exports = function (app) {
     app.controller('classificationPopCtrl', function (lookupService,
-                                                         ouClassificationService,
-                                                         $q,
-                                                         $filter,
-                                                         organizationService,
-                                                         toast,
-                                                         _,
-                                                         defaultOU,
-                                                         langService,
-                                                         classificationService,
-                                                         generator,
-                                                         validationService,
-                                                         dialog,
-                                                         Classification,
-                                                         editMode,
-                                                         classification,
-                                                         rootEntity) {
+                                                      ouClassificationService,
+                                                      $q,
+                                                      $filter,
+                                                      organizationService,
+                                                      toast,
+                                                      _,
+                                                      defaultOU,
+                                                      langService,
+                                                      classificationService,
+                                                      generator,
+                                                      validationService,
+                                                      dialog,
+                                                      Classification,
+                                                      editMode,
+                                                      classification,
+                                                      rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'classificationPopCtrl';
@@ -176,8 +176,22 @@ module.exports = function (app) {
                 self.classification
                     .addToOUClassifications(self.selectedOrganization)
                     .then(function () {
-                        toast.success(langService.get('add_success').change({name: self.selectedOrganization.getTranslatedName()}));
-                        self.selectedOrganization = null;
+                        var relatedOus = angular.copy(self.classification.relatedOus);
+                        if (self.classification.relatedOus.length === 1) {
+                            self.classification.setRelatedOus([]);
+                            self.classification.setIsGlobal(false).update()
+                                .then(function () {
+                                    self.classification.relatedOus = relatedOus;
+                                    self.model = angular.copy(self.classification);
+                                    toast.success(langService.get('add_success').change({name: self.selectedOrganization.getTranslatedName()}));
+                                    self.selectedOrganization = null;
+                                })
+                        } else {
+                            self.classification.setRelatedOus(relatedOus);
+                            self.model = angular.copy(self.classification);
+                            toast.success(langService.get('add_success').change({name: self.selectedOrganization.getTranslatedName()}));
+                            self.selectedOrganization = null;
+                        }
                     });
             }
         };
@@ -188,27 +202,37 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.deleteOUClassification = function (ouClassification) {
-            var message = 'confirm_delete',
-                ouName = (!self.editMode ? ouClassification.getNames() : ouClassification.ouid.getNames());
+            var ouName = (!self.editMode ? ouClassification.getNames() : ouClassification.ouid.getNames()),
+                message = langService.get('confirm_delete').change({name: ouName});
             if (self.editMode && self.classification.relatedOus.length === 1) {
                 message = 'last_organization_delete';
             }
-            dialog.confirmMessage(langService.get(message).change({name: ouName}))
+            dialog.confirmMessage(message)
                 .then(function () {
-                    self.deleteOUClassificationConfirmed(ouClassification);
+                    _deleteOUClassificationConfirmed(ouClassification);
                 });
         };
 
-        self.deleteOUClassificationConfirmed = function (ouClassification) {
+        /**
+         * @description Delete OUClassification confirmed
+         * @param ouClassification
+         * @private
+         */
+        var _deleteOUClassificationConfirmed = function (ouClassification) {
             if (!self.editMode) {
                 var index = _.findIndex(self.classification.relatedOus, function (ou) {
                     return ou.id === ouClassification.id;
                 });
                 if (index > -1)
                     self.classification.relatedOus.splice(index, 1);
+
+                self.selectedOrganization = null;
+                self.selectedOUClassifications = [];
             } else {
-                return ouClassificationService.deleteOUClassification(ouClassification).then(function () {
+                ouClassificationService.deleteOUClassification(ouClassification).then(function () {
                     self.selectedOrganization = null;
+                    self.selectedOUClassifications = [];
+
                     var index = _.findIndex(self.classification.relatedOus, function (ou) {
                         return ou.ouid.id === ouClassification.ouid.id;
                     });
@@ -219,6 +243,7 @@ module.exports = function (app) {
                             .then(function () {
                                 self.model = angular.copy(self.classification);
                                 toast.success(langService.get('delete_success'));
+                                self.selectedTabIndex = 0;
                             });
                     } else {
                         toast.success(langService.get('delete_success'));
@@ -231,24 +256,23 @@ module.exports = function (app) {
          * @description Delete the bulk relatedOUs (OUClassifications)
          */
         self.deleteBulkOUClassifications = function () {
-            if (self.selectedOUClassifications.length === self.classification.relatedOus.length) {
-                return dialog
-                    .confirmMessage(langService.get('last_organization_delete').change({name: self.classification.getTranslatedName()}))
-                    .then(function () {
-                        return self.removeBulkOUClassificationsConfirmed().then(function () {
-                            return self.classification
-                                .setIsGlobal(true)
-                                .update()
-                                .then(function () {
-                                    self.model = angular.copy(self.classification);
-                                });
-                        });
-                    });
+            var message = langService.get('confirm_delete_selected_multiple');
+            if (self.editMode) {
+                if (self.selectedOUClassifications.length === self.classification.relatedOus.length) {
+                    message = langService.get('last_organization_delete').change({name: self.classification.getTranslatedName()});
+                }
             }
-            return self.removeBulkOUClassificationsConfirmed();
+            return dialog
+                .confirmMessage(message)
+                .then(function () {
+                    return _removeBulkOUClassificationsConfirmed().then(function () {
+                        self.selectedOrganization = null;
+                        self.selectedOUClassifications = [];
+                    });
+                });
         };
 
-        self.removeBulkOUClassificationsConfirmed = function () {
+        var _removeBulkOUClassificationsConfirmed = function () {
             if (!self.editMode) {
                 // keep the select ouClassifications as copy to loop on all selected records
                 var ouClassification, index, selected = angular.copy(self.selectedOUClassifications);
@@ -260,14 +284,24 @@ module.exports = function (app) {
                     if (index > -1)
                         self.classification.relatedOus.splice(index, 1);
                 }
-                self.selectedOUClassifications = [];
+                return $q.resolve(true);
             } else {
                 return self.classification
                     .deleteBulkFromOUClassifications(self.selectedOUClassifications)
-                    .then(function () {
-                        self.selectedOrganization = null;
-                        self.selectedOUClassifications = [];
-                        toast.success(langService.get('related_organizations_deleted_success'));
+                    .then(function (result) {
+                        // if all related OUs(ouClassifications) are removed, change the classification to global
+                        if (!result.length) {
+                            return self.classification.setIsGlobal(true).update()
+                                .then(function () {
+                                    self.model = angular.copy(self.classification);
+                                    toast.success(langService.get('related_organizations_deleted_success'));
+                                    self.selectedTabIndex = 0;
+                                    return true;
+                                });
+                        } else {
+                            toast.success(langService.get('related_organizations_deleted_success'));
+                            return $q.resolve(true);
+                        }
                     });
             }
         };

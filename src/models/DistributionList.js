@@ -97,24 +97,11 @@ module.exports = function (app) {
 
             DistributionList.prototype.addToOUDistributionLists = function (organization) {
                 var self = this;
-                /*return ouDistributionListService
-                 .updateOUDistributionList((new OUDistributionList()).setOuId(organization).setDistributionList(this))
-                 .then(function (ouDistributionList) {
-                 return ouDistributionListService.loadOUDistributionLists().then(function (value) {
-                 var selectedOUs = _.filter(value, function (ouDis) {
-                 return ouDis.distributionList.id === self.id;
-                 });
-                 self.relatedOus = [];
-                 self.relatedOus = selectedOUs;
-                 return self.relatedOus;
-                 });
-                 });*/
-
                 return ouDistributionListService
                     .addOUDistributionList((new OUDistributionList()).setOuId(organization).setDistributionList(this))
                     .then(function (ouDistributionList) {
                         self.relatedOus.push(ouDistributionList);
-                        return self.relatedOus;
+                        return ouDistributionList;
                     });
             };
 
@@ -123,7 +110,7 @@ module.exports = function (app) {
                 return ouDistributionListService
                     .createListOUDistributionLists(organizations, self, true)
                     .then(function (ouDistributionLists) {
-                        self.relatedOus = self.relatedOus.concat(ouDistributionLists);
+                        return self.relatedOus = self.relatedOus.concat(ouDistributionLists);
                     })
             };
 
@@ -133,7 +120,7 @@ module.exports = function (app) {
                     .deleteBulkOUDistributionLists(ouDistributionLists)
                     .then(function () {
                         var ids = _.map(ouDistributionLists, 'id');
-                        self.relatedOus = _.filter(self.relatedOus, function (ouDistributionList) {
+                        return self.relatedOus = _.filter(self.relatedOus, function (ouDistributionList) {
                             return ids.indexOf(ouDistributionList.id) === -1;
                         });
                     });
@@ -164,14 +151,11 @@ module.exports = function (app) {
                 return this;
             };
 
-            DistributionList.prototype.openDialogToSelectOrganizations = function () {
-                var self = this;
-                return organizationService
-                    .controllerMethod
-                    .selectOrganizations('select_organization')
-                    .then(function (organizations) {
-                        return self.addBulkToOUDistributionLists(organizations);
-                    });
+            DistributionList.prototype.save = function () {
+                if (this.id) {
+                    return this.update();
+                }
+                return distributionListService.addDistributionList(this);
             };
 
             /*DistributionList.prototype.updateStatus = function () {

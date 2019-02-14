@@ -195,34 +195,20 @@ module.exports = function (app) {
             };
 
             /**
-             * check global status
+             * @description change global status
              * @param distributionList
              */
             self.changeGlobalFromFromGrid = function (distributionList) {
-                // if distribution global and has organizations.
-                if (distributionList.global && distributionList.hasOrganizations()) {
+                if (distributionList.global) {
                     dialog.confirmMessage(langService.get('related_organization_confirm'))
                         .then(function () {
-                            distributionList
-                                .deleteAllOUDistributionLists()
-                                .then(function () {
-                                    distributionList.global = true;
-                                    distributionList.update().then(self.displayDistributionListGlobalMessage);
-                                });
-                        })
-                        .catch(function () {
-                            distributionList.global = false;
-                        })
-                }
-                // if distributionList global and has not organizations.
-                if (distributionList.global && !distributionList.hasOrganizations()) {
-                    distributionList.update().then(self.displayDistributionListGlobalMessage);
-                }
-                // if distributionList not global and no organizations.
-                if (!distributionList.global && !distributionList.hasOrganizations()) {
-                    self.openSelectOUDistributionListDialog(distributionList)
-                        .then(function (distributionList) {
+                            distributionList.setRelatedOus([]);
                             distributionList.update().then(self.displayDistributionListGlobalMessage);
+                        });
+                } else {
+                    self.openSelectOUDistributionListDialog(distributionList)
+                        .then(function (result) {
+                            result.update().then(self.displayDistributionListGlobalMessage);
                         })
                         .catch(function () {
                             distributionList.setIsGlobal(true).update();

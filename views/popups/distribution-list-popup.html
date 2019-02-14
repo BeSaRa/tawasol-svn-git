@@ -8,8 +8,11 @@
         </md-toolbar>
         <md-content>
             <form name="distributionList_form" autocomplete="off">
-                <md-tabs md-dynamic-height>
-                    <md-tab label="{{lang.basic_info}}">
+                <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
+                    <md-tab label="{{lang.basic_info}}"
+                            md-on-select="ctrl.setCurrentTab('basic')"
+                            ng-click="ctrl.resetOUDistributionLists()"
+                            ng-if="ctrl.showTab('basic')">
                         <md-content>
                             <div layout="column" class="p20" scroll-directive>
                                 <div layout="row">
@@ -41,18 +44,17 @@
 
                                 <div layout="row">
                                     <div flex class="p20">
-                                        <md-switch ng-model="ctrl.distributionList.global"
-                                                   ng-change="ctrl.changeGlobalFromEdit()"
-                                                   ng-disabled="!ctrl.editMode"
-                                                   aria-label="{{lang.global}}">
-                                            <span>{{lang.global}} : </span>
-                                            {{ ctrl.distributionList.getTranslatedGlobal()}}
-                                        </md-switch>
-                                    </div>
-                                    <div flex class="p20">
                                         <md-switch ng-model="ctrl.distributionList.status">
                                             <span>{{lang.status}} :</span>
                                             {{ctrl.distributionList.getTranslatedStatus()}}
+                                        </md-switch>
+                                    </div>
+                                    <div flex class="p20">
+                                        <md-switch ng-model="ctrl.distributionList.global"
+                                                   ng-change="ctrl.onChangeGlobal($event)"
+                                                   aria-label="{{lang.global}}">
+                                            <span>{{lang.global}} : </span>
+                                            {{ ctrl.distributionList.getTranslatedGlobal()}}
                                         </md-switch>
                                     </div>
                                 </div>
@@ -60,7 +62,9 @@
                         </md-content>
                     </md-tab>
 
-                    <md-tab label="{{lang.group_members}}">
+                    <md-tab label="{{lang.group_members}}"
+                            md-on-select="ctrl.setCurrentTab('members')"
+                            ng-if="ctrl.showTab('members')">
                         <md-content>
                             <manage-distribution-list-directive
                                     distribution-list-members="ctrl.distributionList.distributionListMembers"
@@ -71,8 +75,10 @@
                         </md-content>
                     </md-tab>
 
-                    <md-tab ng-disabled="!ctrl.editMode || ctrl.distributionList.global"
-                            label="{{lang.organization_units}}">
+                    <md-tab md-on-select="ctrl.setCurrentTab('ou')"
+                            ng-disabled="ctrl.distributionList.global"
+                            label="{{lang.organization_units}}"
+                            ng-if="ctrl.showTab('ou')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row" layout-align="start center">
@@ -80,7 +86,7 @@
                                         <md-select aria-label="{{lang.select_organization}}"
                                                    ng-model="ctrl.selectedOrganization">
                                             <md-option
-                                                    ng-if="!ctrl.ouExists(organization)"
+                                                    ng-if="!ctrl.excludeOrganizationIfExists(organization)"
                                                     ng-value="organization"
                                                     ng-repeat="organization in ctrl.organizations track by organization.id">
                                                 {{organization.getTranslatedName()}}
@@ -93,7 +99,8 @@
                                         </md-button>
                                     </div>
                                 </div>
-                                <md-card ng-if="ctrl.distributionList.relatedOus.length" layout="column"
+                                <!-- Add Mode -->
+                                <md-card ng-if="!ctrl.editMode && ctrl.distributionList.relatedOus.length" layout="column"
                                          class="card-overlay">
                                     <md-table-container>
                                         <div flex>
@@ -115,10 +122,64 @@
                                                             </div>
                                                         </div>
                                                     </th>
-                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column>
+                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column md-order-by="ouid.arName">
                                                         <span>{{lang.arabic_name}}</span>
                                                     </th>
+                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column md-order-by="ouid.enName">
+                                                        <span>{{lang.english_name}}</span>
+                                                    </th>
                                                     <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column>
+                                                        <span>{{lang.actions}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-row md-select="ouDistributionList"
+                                                    ng-repeat="ouDistributionList in ctrl.distributionList.relatedOus|orderBy:'itemOrder' track by $index">
+                                                    <td md-cell>{{ouDistributionList.arName}}</td>
+                                                    <td md-cell>{{ouDistributionList.enName}}</td>
+                                                    <td md-cell>
+                                                        <div layout="row" layout-align="start center">
+                                                            <md-button
+                                                                    ng-click="ctrl.deleteOUDistributionList(ouDistributionList)"
+                                                                    class="md-icon-button">
+                                                                <md-icon md-svg-icon="delete"></md-icon>
+                                                            </md-button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </md-table-container>
+                                </md-card>
+                                <!-- Edit Mode -->
+                                <md-card ng-if="ctrl.editMode && ctrl.distributionList.relatedOus.length" layout="column"
+                                         class="card-overlay">
+                                    <md-table-container>
+                                        <div flex>
+                                            <table md-table
+                                                   md-row-select multiple ng-model="ctrl.selectedOUDistributionLists"
+                                                   md-progress="ctrl.progress">
+                                                <thead md-head>
+                                                <tr md-row>
+                                                    <th ng-if="ctrl.selectedOUDistributionLists.length" colspan="3"
+                                                        md-column>
+                                                        <div layout="row" layout-align="start center">
+                                                            <span>{{ctrl.selectedOUDistributionLists.length}} {{lang.items_selected}} </span>
+                                                            <span flex></span>
+                                                            <div>
+                                                                <md-button class="md-icon-button"
+                                                                           ng-click="ctrl.removeBulkOUDistributionLists($event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column md-order-by="ouid.arName">
+                                                        <span>{{lang.arabic_name}}</span>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column md-order-by="ouid.enName">
                                                         <span>{{lang.english_name}}</span>
                                                     </th>
                                                     <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column>
@@ -134,7 +195,7 @@
                                                     <td md-cell>
                                                         <div layout="row" layout-align="start center">
                                                             <md-button
-                                                                    ng-click="ctrl.deleteOUDistributionListFromCtrl(ouDistributionList)"
+                                                                    ng-click="ctrl.deleteOUDistributionList(ouDistributionList)"
                                                                     class="md-icon-button">
                                                                 <md-icon md-svg-icon="delete"></md-icon>
                                                             </md-button>
@@ -156,21 +217,25 @@
         <div>
             <div layout="row">
                 <md-button class="md-raised"
-                           ng-disabled="distributionList_form.$invalid || ctrl.distributionList.distributionListMembers.length===0"
+                           ng-disabled="distributionList_form.$invalid || !ctrl.checkValidGlobal()"
                            ng-if="!ctrl.editMode"
-                           ng-click="ctrl.addDistributionListFromCtrl()">{{lang.add}}
+                           ng-click="ctrl.saveDistributionList()">
+                    {{lang.add}}
                 </md-button>
-                <md-button class="md-raised" ng-if="ctrl.editMode"
-                           ng-disabled="distributionList_form.$invalid || ctrl.model.groupMembers.length===0 || ctrl.distributionList.distributionListMembers.length===0"
-                           ng-click="ctrl.editDistributionListFromCtrl()">{{lang.save}}
+                <md-button class="md-raised"
+                           ng-disabled="distributionList_form.$invalid || !ctrl.checkValidGlobal()"
+                           ng-if="ctrl.editMode && ctrl.selectedTabName === 'basic'"
+                           ng-click="ctrl.saveDistributionList()">
+                    {{lang.save}}
                 </md-button>
                 <span flex></span>
                 <md-button class="md-raised"
+                           ng-if="((ctrl.editMode && ctrl.selectedTabName === 'basic') || !ctrl.editMode)"
                            ng-click="ctrl.resetModel()">
                     {{lang.reset}}
                 </md-button>
                 <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeDistributionListPopupFromCtrl()">{{lang.close}}
+                <md-button class="md-raised" ng-click="ctrl.closeDistributionListPopup()">{{lang.close}}
                 </md-button>
             </div>
         </div>
