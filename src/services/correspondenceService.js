@@ -1240,10 +1240,14 @@ module.exports = function (app) {
                 .then(function (result) {
                     var documentClass = result.data.rs.metaData.classDescription;
                     result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                    if (correspondence.openInEditMode) {
+                        result.data.rs.metaData.openInEditMode = correspondence.openInEditMode;
+                    }
                     return result.data.rs;
                 })
                 .then(function (result) {
                     result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                    result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
                     generator.addPopupNumber();
                     return dialog.showDialog({
                         templateUrl: cmsTemplate.getPopup('view-correspondence'),

@@ -284,6 +284,7 @@ module.exports = function (app) {
         };
 
         self.openEditContentInEditPopup = function () {
+            self.document.openInEditMode = true;
             return correspondenceService.viewCorrespondence(self.document, [], true, true);
         };
 

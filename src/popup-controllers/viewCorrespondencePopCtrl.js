@@ -94,8 +94,10 @@ module.exports = function (app) {
             self.detailsReady = true;
             self.model = angular.copy(self.correspondence);
             // _checkIfFromEditInDesktop(self.correspondence);
-            if (self.correspondence)
+            if (self.correspondence) {
                 self.info = self.correspondence.getInfo();
+                self.correspondence.openInEditMode ? self.toggleCorrespondenceEditMode() : null;
+            }
         }, 100);
 
         self.selectedList = null;
