@@ -12,7 +12,7 @@ module.exports = function (app) {
 
         self.notifications = [];
         self.unreadNotificationsCount = 0;
-        self.notificationsRequestCount = 5;
+        self.notificationsRequestCount = 10;
         self.loadMailNotifications = function (count) {
             count = count ? count : self.notificationsRequestCount;
             return $http
