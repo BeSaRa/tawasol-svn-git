@@ -109,11 +109,15 @@ module.exports = function (app) {
                 })));
         };
 
+        self.electronicExists = function (idx) {
+            return self.globalSetting.barcodeElements.isElectronic.hasOwnProperty(idx) && self.globalSetting.barcodeElements.isElectronic[idx];
+        };
+
         self.createRowCheckBox = function (idx) {
             if (typeof self.globalSetting.barcodeElements.isElectronic[idx] === 'undefined') {
                 self.globalSetting.barcodeElements.isElectronic[idx] = true;
             }
-            return angular.element('<md-checkbox aria-label="check-box" tooltip="{{lang.electronic}}" ng-checked="ctrl.hasBarcodeLabel(' + idx + ')" ng-disabled="ctrl.hasBarcodeLabel(' + idx + ')" ng-model="ctrl.globalSetting.barcodeElements.isElectronic[' + idx + ']" class="sort-cancel check-box-with-no-padding isElectronic" ng-change="ctrl.checkRow($event)"></md-checkbox>')
+            return angular.element('<md-checkbox aria-label="check-box" tooltip="{{lang.electronic}}" ng-checked="ctrl.hasBarcodeLabel(' + idx + ') || ctrl.electronicExists(' + idx + ')" ng-disabled="ctrl.hasBarcodeLabel(' + idx + ')" ng-model="ctrl.globalSetting.barcodeElements.isElectronic[' + idx + ']" class="sort-cancel check-box-with-no-padding isElectronic" ng-change="ctrl.checkRow($event)"></md-checkbox>')
         };
 
         self.hasBarcodeLabel = function (rowIndex) {
