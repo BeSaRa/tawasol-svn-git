@@ -19,7 +19,7 @@ module.exports = function (app) {
                 model.createdOn = {From: angular.copy(model.createdFrom), To: angular.copy(model.createdTo)};
             }*/
 
-            model.FollowupStatus = (model.followupStatus) ?
+            model.FollowupStatus = (model.followupStatus && model.followupStatus.length) ?
                 angular.toJson(_.map(model.followupStatus, "lookupKey")) : null;
 
             if (model.year === 'All' && model.docDateFrom && model.docDateTo) {
@@ -67,8 +67,8 @@ module.exports = function (app) {
             // followUp status document date
             if (model.followUpFrom && model.followUpTo) {
                 model.FollowUpDate = {
-                    From: angular.copy(moment(model.refDocDateFrom).format("YYYY-MM-DD")),
-                    To: angular.copy(moment(model.refDocDateTo).format("YYYY-MM-DD"))
+                    From: angular.copy(moment(model.followUpFrom).format("YYYY-MM-DD")),
+                    To: angular.copy(moment(model.followUpTo).format("YYYY-MM-DD"))
                 };
             }
 
