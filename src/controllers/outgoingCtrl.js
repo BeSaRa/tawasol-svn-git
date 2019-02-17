@@ -228,7 +228,7 @@ module.exports = function (app) {
             counterService.loadCounters();
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             if (replyTo) {
-                userSubscriptionService.loadUserSubscriptions();
+                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             }
 
             if (self.terminateAfterCreateReply) {

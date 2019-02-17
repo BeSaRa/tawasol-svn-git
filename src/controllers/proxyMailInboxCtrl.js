@@ -565,7 +565,7 @@ module.exports = function (app) {
             //managerService.manageDocumentContent(info.vsId, info.documentClass, info.title, $event);
             workItem.manageDocumentContent($event)
                 .then(function () {
-                    userSubscriptionService.loadUserSubscriptions();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                 });
         };
 
@@ -582,7 +582,7 @@ module.exports = function (app) {
                 .finally(function () {
                     self.reloadProxyMailInboxes(self.grid.page)
                         .then(function () {
-                            userSubscriptionService.loadUserSubscriptions();
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 });
         };

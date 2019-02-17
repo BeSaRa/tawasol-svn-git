@@ -370,7 +370,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
-                            userSubscriptionService.loadUserSubscriptions();
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 });
         };
@@ -414,7 +414,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
-                            userSubscriptionService.loadUserSubscriptions();
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 });
         }
@@ -469,7 +469,7 @@ module.exports = function (app) {
                     new ResolveDefer(defer);
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
-                            userSubscriptionService.loadUserSubscriptions();
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 });
         };
@@ -520,7 +520,6 @@ module.exports = function (app) {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                            userSubscriptionService.loadUserSubscriptions();
                             new ResolveDefer(defer);
                         });
                 });
@@ -846,7 +845,7 @@ module.exports = function (app) {
         self.editContent = function (userInbox, $event) {
             userInbox.manageDocumentContent($event)
                 .then(function () {
-                    userSubscriptionService.loadUserSubscriptions();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                 });
         };
 
@@ -862,7 +861,7 @@ module.exports = function (app) {
                 .finally(function (e) {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
-                            userSubscriptionService.loadUserSubscriptions();
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
 
                 });
