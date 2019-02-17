@@ -113,11 +113,11 @@ module.exports = function (app) {
             Incoming.prototype.getSiteInformation = function () {
                 var self = this;
                 return {
-                    followupDate: self.followupDate,
-                    followupStatus: self.followupStatus,
-                    siteType: self.siteType,
-                    mainSiteId: self.mainSiteId,
-                    subSiteId: self.subSiteId
+                    followupDate: self.site.followupDate,
+                    followupStatus: self.site.followupStatus && self.site.followupStatus.hasOwnProperty('lookupKey') ? self.site.followupStatus.lookupKey : self.site.followupStatus,
+                    siteType: self.site.siteType && self.site.siteType.hasOwnProperty('lookupKey') ? self.site.siteType.lookupKey : self.site.siteType,
+                    mainSiteId: self.site.mainSiteId,
+                    subSiteId: self.site.subSiteId
                 }
             };
 
