@@ -345,6 +345,7 @@ module.exports = function (app) {
                     });
             }
         };
+        self.getOUClassifications();
 
         self.grid = {
             progress: null,
