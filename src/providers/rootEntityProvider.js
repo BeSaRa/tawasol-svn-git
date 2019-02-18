@@ -36,7 +36,7 @@ module.exports = function (app) {
             return self;
         };
 
-        self.$get = function (RootEntity, employeeService, $state, Credentials, GlobalSetting, titleService, generator, lookupService, $rootScope, $sce, errorCode, $cookies, $stateParams, $http, $location, urlService, dialog, $q) {
+        self.$get = function (RootEntity, tokenService, employeeService, $state, Credentials, GlobalSetting, titleService, generator, lookupService, $rootScope, $sce, errorCode, $cookies, $stateParams, $http, $location, urlService, dialog, $q) {
             'ngInject';
             return {
                 loadInformation: function (rootIdentifier, ignoreSSO) {
@@ -55,30 +55,28 @@ module.exports = function (app) {
                             dialog.cancel();
                             self.setRootEntity(new RootEntity(result.data.rs));
                             // single sign on
-                            rootEntity.checkSSO().then(function (authenticationService) {
-                                if (ignoreSSO || $cookies.get('SSO_LOGGED_OUT')) {
-                                    $cookies.remove('SSO_LOGGED_OUT');
-                                    return;
-                                }
-                                authenticationService
-                                    .authenticate(new Credentials({
-                                        isSSO: true
-                                    }))
-                                    .then(function (result) {
-                                        employeeService.setEmployee(result);
-                                        if (!employeeService.isAdminUser()) {
-                                            if (employeeService.hasPermissionTo('LANDING_PAGE'))
-                                                $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
-                                            else
-                                                $state.go('app.inbox.user-inbox', {identifier: rootEntity.getRootEntityIdentifier()});
-                                        } else {
-                                            $state.go('app.administration.entities', {identifier: rootEntity.getRootEntityIdentifier()});
-                                        }
-                                    })
-                                    .catch(function (reason) {
-                                        console.log("SINGLE SIGN ON FAILED !!", reason);
-                                    })
-                            });
+                            if (!tokenService.getToken()) {
+                                rootEntity.checkSSO().then(function (authenticationService) {
+                                    authenticationService
+                                        .authenticate(new Credentials({
+                                            isSSO: true
+                                        }))
+                                        .then(function (result) {
+                                            employeeService.setEmployee(result);
+                                            if (!employeeService.isAdminUser()) {
+                                                if (employeeService.hasPermissionTo('LANDING_PAGE'))
+                                                    $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
+                                                else
+                                                    $state.go('app.inbox.user-inbox', {identifier: rootEntity.getRootEntityIdentifier()});
+                                            } else {
+                                                $state.go('app.administration.entities', {identifier: rootEntity.getRootEntityIdentifier()});
+                                            }
+                                        })
+                                        .catch(function (reason) {
+                                            console.log("SINGLE SIGN ON FAILED !!", reason);
+                                        })
+                                });
+                            }
                             titleService.setTitle(self.getRootEntity().getTranslatedAppName());
                             return self.getRootEntity();
                         })
