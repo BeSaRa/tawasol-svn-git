@@ -147,7 +147,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Prevent the default dropdown behavior of keys inside the search box of workflow action dropdown
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
          * @param $event
          */
         self.preventSearchKeyDown = function ($event) {
