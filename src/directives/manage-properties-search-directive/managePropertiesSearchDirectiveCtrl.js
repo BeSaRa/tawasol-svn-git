@@ -84,6 +84,8 @@ module.exports = function (app) {
 
         // required fields for the current document class
         self.required = {};
+        // current employee
+        self.employee = employeeService.getEmployee();
 
         $timeout(function () {
             // all system organizations
@@ -124,9 +126,8 @@ module.exports = function (app) {
             };
 
             self.getYears();
+
         });
-        // current employee
-        self.employee = employeeService.getEmployee();
         // for sub organizations
         self.subOrganizations = [];
 
@@ -553,7 +554,6 @@ module.exports = function (app) {
         };
 
         self.onRegistryChanged = function () {
-
             if (!self.document.registryOU)
                 return false;
 
@@ -561,7 +561,9 @@ module.exports = function (app) {
             organizationService
                 .loadChildrenOrganizations(self.document.registryOU)
                 .then(function (result) {
-                    // self.organizations = result;
+                    if (!self.employee.hasPermissionTo('SEARCH_IN_ALL_OU') && self.employee.isInDepartment()) {
+                        result.push(angular.copy(self.employee.userOrganization));
+                    }
                     self.subOrganizations = result;
                 });
         };

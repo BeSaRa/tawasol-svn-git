@@ -281,6 +281,14 @@ module.exports = function (app) {
                 return this.userOrganization.hasRegistry ? this.getNormalizeID(this.userOrganization.id) : this.getNormalizeID(this.userOrganization.registryParentId);
             };
 
+            Employee.prototype.isInSection = function () {
+                return this.getOUID() !== this.getRegistryOUID();
+            };
+
+            Employee.prototype.isInDepartment = function () {
+                return !this.isInSection();
+            };
+
             Employee.prototype.getIntervalMin = function () {
                 return (60 * 100) * (this.inboxRefreshInterval || 1);
             };
