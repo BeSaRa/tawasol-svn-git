@@ -467,7 +467,8 @@ module.exports = function (app) {
 
                     organizationService
                         .addOrganization(self.organization)
-                        .then(function () {
+                        .then(function (result) {
+                            self.organization = angular.copy(result);
                             self.model = angular.copy(self.organization);
                             self.recreateAllNeeds(self.organization);
                             referencePlanNumberService.loadReferencePlanNumbers().then(function (result) {
