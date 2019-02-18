@@ -72,8 +72,8 @@ module.exports = function (app) {
 
         self.registryOrganizations.unshift(new Organization({
             id: null,
-            arName: langService.getKey('not_found', 'ar'),
-            enName: langService.getKey('not_found', 'en')
+            arName: langService.getKey('none', 'ar'),
+            enName: langService.getKey('none', 'en')
         }));
 
         /**
