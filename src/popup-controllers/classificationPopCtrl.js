@@ -205,7 +205,7 @@ module.exports = function (app) {
             var ouName = (!self.editMode ? ouClassification.getNames() : ouClassification.ouid.getNames()),
                 message = langService.get('confirm_delete').change({name: ouName});
             if (self.editMode && self.classification.relatedOus.length === 1) {
-                message = 'last_organization_delete';
+                message = langService.get('last_organization_delete').change({name: ouClassification.classification.getTranslatedName()});
             }
             dialog.confirmMessage(message)
                 .then(function () {
