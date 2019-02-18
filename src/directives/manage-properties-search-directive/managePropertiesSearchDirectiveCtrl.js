@@ -563,6 +563,8 @@ module.exports = function (app) {
                 .then(function (result) {
                     if (!self.employee.hasPermissionTo('SEARCH_IN_ALL_OU') && self.employee.isInDepartment()) {
                         result.push(angular.copy(self.employee.userOrganization));
+                    } else {
+                        self.document.ou = null;
                     }
                     self.subOrganizations = result;
                 });
