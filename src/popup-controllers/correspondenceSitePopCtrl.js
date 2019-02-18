@@ -198,7 +198,7 @@ module.exports = function (app) {
          */
         self.deleteOUCorrespondenceSite = function (ouCorrespondenceSite) {
             if (!self.canDeleteOUCorrespondenceSite(ouCorrespondenceSite)) {
-                toast.error('can_not_delete_ou');
+                toast.error(langService.get('can_not_delete_ou'));
                 return;
             }
             if (self.editMode && self.correspondenceSite.relatedOus.length === 1)
