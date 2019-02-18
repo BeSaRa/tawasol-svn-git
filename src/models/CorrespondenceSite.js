@@ -186,7 +186,8 @@ module.exports = function (app) {
 
             CorrespondenceSite.prototype.save = function () {
                 if (this.id) {
-                    return this.update();
+                    return correspondenceSiteService.updateCorrespondenceSite(this)
+                    //return this.update();
                 }
                 return correspondenceSiteService.addCorrespondenceSite(this);
             };

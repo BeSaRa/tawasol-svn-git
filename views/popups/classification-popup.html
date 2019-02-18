@@ -103,10 +103,11 @@
                         </md-content>
                     </md-tab>
                     <!-- Organization Units -->
-                    <md-tab ng-click="ctrl.getOUClassifications()"
+                    <md-tab ng-if="ctrl.showTab('ou')"
+                            ng-click="ctrl.getOUClassifications()"
                             md-on-select="ctrl.setCurrentTab('ou')"
                             ng-disabled="ctrl.classification.isGlobal || !ctrl.classification.status"
-                            label="{{lang.organization_units}}" ng-if="ctrl.showTab('ou')">
+                            label="{{lang.organization_units}}">
                         <md-content>
                             <div layout="column" class="p20">
                                 <!-- OU Dropdown and Add Button -->
@@ -167,12 +168,14 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row md-select="ouClassification"
-                                                    ng-repeat="ouClassification in ctrl.classification.relatedOus|orderBy:'itemOrder' track by $index">
+                                                    ng-repeat="ouClassification in ctrl.classification.relatedOus|orderBy:'itemOrder' track by $index"
+                                                    ng-disabled="!ctrl.canDeleteOUClassification(ouClassification)">
                                                     <td md-cell>{{ouClassification.arName}}</td>
                                                     <td md-cell>{{ouClassification.enName}}</td>
                                                     <td md-cell>
                                                         <div layout="row" layout-align="start center">
                                                             <md-button
+                                                                    ng-disabled="!ctrl.canDeleteOUClassification(ouClassification)"
                                                                     ng-click="ctrl.deleteOUClassification(ouClassification)"
                                                                     class="md-icon-button">
                                                                 <md-icon md-svg-icon="delete"></md-icon>
@@ -231,12 +234,14 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row md-select="ouClassification"
-                                                    ng-repeat="ouClassification in ctrl.classification.relatedOus|orderBy:'itemOrder' track by $index">
+                                                    ng-repeat="ouClassification in ctrl.classification.relatedOus|orderBy:'itemOrder' track by $index"
+                                                    ng-disabled="!ctrl.canDeleteOUClassification(ouClassification)">
                                                     <td md-cell>{{ouClassification.ouid.arName}}</td>
                                                     <td md-cell>{{ouClassification.ouid.enName}}</td>
                                                     <td md-cell>
                                                         <div layout="row" layout-align="start center">
                                                             <md-button
+                                                                    ng-disabled="!ctrl.canDeleteOUClassification(ouClassification)"
                                                                     ng-click="ctrl.deleteOUClassification(ouClassification)"
                                                                     class="md-icon-button">
                                                                 <md-icon md-svg-icon="delete"></md-icon>

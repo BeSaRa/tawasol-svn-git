@@ -72,7 +72,7 @@ module.exports = function (app) {
         self.openEditClassificationDialog = function (classification, $event) {
             classificationService
                 .controllerMethod
-                .classificationEdit(classification, $event)
+                .classificationEdit(classification, null, $event)
                 .then(function (result) {
                     self.reloadClassifications(self.grid.page)
                         .then(function () {

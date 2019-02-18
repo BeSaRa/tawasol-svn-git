@@ -20,9 +20,11 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'classificationPopCtrl';
         self.editMode = editMode;
+        self.defaultOU = angular.copy(defaultOU);
+
         self.classification = angular.copy(classification);
-        self.model = angular.copy(classification);
-        self.defaultOU = defaultOU;
+
+        self.model = angular.copy(self.classification);
 
         self.selectedTabIndex = 0;
         self.selectedTabName = "basic";
@@ -32,7 +34,10 @@ module.exports = function (app) {
         ];
 
         self.showTab = function (tabName) {
-            return self.tabsToShow.indexOf(tabName) > -1;
+            var canShow = true;
+            if (tabName === 'ou')
+                canShow = !self.defaultOU || (self.defaultOU && !self.editMode);
+            return canShow && self.tabsToShow.indexOf(tabName) > -1;
         };
         self.setCurrentTab = function (tabName) {
             self.selectedTabName = tabName;
@@ -140,7 +145,6 @@ module.exports = function (app) {
                             dialog.hide(self.classification);
                         }
                     })
-
                 });
         };
 
@@ -149,6 +153,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.onChangeGlobal = function ($event) {
+            if (defaultOU) {
+                self.classification.isGlobal = false;
+                return;
+            }
             self.selectedOrganization = null;
             if (!self.editMode) {
                 self.classification.setRelatedOus([]);
@@ -196,12 +204,25 @@ module.exports = function (app) {
             }
         };
 
+        self.canDeleteOUClassification = function (ouClassification) {
+            if (self.defaultOU) {
+                var ouId = self.editMode ? ouClassification.ouid.id : ouClassification.id;
+                return (ouId !== self.defaultOU.id)
+            }
+            return true;
+        };
+
         /**
          * @description Delete the related OU(OUClassification)
          * @param ouClassification
          * @returns {*}
          */
         self.deleteOUClassification = function (ouClassification) {
+            if (!self.canDeleteOUClassification(ouClassification)) {
+                toast.error('can_not_delete_ou');
+                return;
+            }
+
             var ouName = (!self.editMode ? ouClassification.getNames() : ouClassification.ouid.getNames()),
                 message = langService.get('confirm_delete').change({name: ouName});
             if (self.editMode && self.classification.relatedOus.length === 1) {
@@ -273,6 +294,11 @@ module.exports = function (app) {
         };
 
         var _removeBulkOUClassificationsConfirmed = function () {
+            // if defaultOU is available, skip current OU to delete
+            self.selectedOUClassifications = _.filter(self.selectedOUClassifications, function (selectedOUClassification) {
+                return self.canDeleteOUClassification(selectedOUClassification);
+            });
+
             if (!self.editMode) {
                 // keep the select ouClassifications as copy to loop on all selected records
                 var ouClassification, index, selected = angular.copy(self.selectedOUClassifications);
@@ -353,6 +379,12 @@ module.exports = function (app) {
          * @description Check if classification is global or private with relatedOus
          */
         self.checkValidGlobal = function () {
+            if (self.defaultOU) {
+                if (self.editMode)
+                    return true;
+                else
+                    return self.classification.relatedOus.length > 0;
+            }
             return (!self.classification.isGlobal && self.classification.relatedOus.length > 0)
                 || self.classification.isGlobal;
         };

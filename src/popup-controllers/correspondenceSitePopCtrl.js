@@ -21,7 +21,7 @@ module.exports = function (app) {
         self.editMode = editMode;
 
         self.correspondenceSite = angular.copy(correspondenceSite);
-        self.model = angular.copy(correspondenceSite);
+        self.model = angular.copy(self.correspondenceSite);
         self.defaultOU = defaultOU;
 
         self.selectedTabIndex = 0;
@@ -32,7 +32,10 @@ module.exports = function (app) {
         ];
 
         self.showTab = function (tabName) {
-            return self.tabsToShow.indexOf(tabName) > -1;
+            var canShow = true;
+            if (tabName === 'ou')
+                canShow = !self.defaultOU || (self.defaultOU && !self.editMode);
+            return canShow && self.tabsToShow.indexOf(tabName) > -1;
         };
         self.setCurrentTab = function (tabName) {
             self.selectedTabName = tabName;
@@ -67,6 +70,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.onChangeGlobal = function ($event) {
+            if (defaultOU) {
+                self.correspondenceSite.isGlobal = false;
+                return;
+            }
             self.selectedOrganization = null;
             if (!self.editMode) {
                 self.correspondenceSite.setRelatedOus([]);
@@ -124,7 +131,6 @@ module.exports = function (app) {
                     self.correspondenceSite.relatedOus = [];
                     self.correspondenceSite.save().then(function (correspondenceSite) {
                         self.correspondenceSite = correspondenceSite;
-
                         if (!self.editMode) {
                             if (!self.correspondenceSite.isGlobal && relatedOus.length) {
                                 self.correspondenceSite
@@ -177,12 +183,24 @@ module.exports = function (app) {
             }
         };
 
+        self.canDeleteOUCorrespondenceSite = function (ouCorrespondenceSite) {
+            if (self.defaultOU) {
+                var ouId = self.editMode ? ouCorrespondenceSite.ouid.id : ouCorrespondenceSite.id;
+                return (ouId !== self.defaultOU.id)
+            }
+            return true;
+        };
+
         /**
          * @description Deletes the relatedOU (OUCorrespondenceSite)
          * @param ouCorrespondenceSite
          * @returns {*}
          */
         self.deleteOUCorrespondenceSite = function (ouCorrespondenceSite) {
+            if (!self.canDeleteOUCorrespondenceSite(ouCorrespondenceSite)) {
+                toast.error('can_not_delete_ou');
+                return;
+            }
             if (self.editMode && self.correspondenceSite.relatedOus.length === 1)
                 return dialog.errorMessage(langService.get('can_not_delete_all_ou'));
 
@@ -213,6 +231,11 @@ module.exports = function (app) {
          * @description Delete the bulk relatedOUs (OUCorrespondenceSites)
          */
         self.deleteBulkOUCorrespondenceSites = function () {
+            // if defaultOU is available, skip current OU to delete
+            self.selectedOUCorrespondenceSites = _.filter(self.selectedOUCorrespondenceSites, function (selectedOUCorrespondenceSite) {
+                return self.canDeleteOUCorrespondenceSite(selectedOUCorrespondenceSite);
+            });
+
             if (!self.editMode) {
                 // keep the select ouCorrespondenceSites as copy to loop on all selected records
                 var ouCorrespondenceSite, index, selected = angular.copy(self.selectedOUCorrespondenceSites);
@@ -288,6 +311,13 @@ module.exports = function (app) {
          * @description Check if correspondence site is global or private with relatedOus
          */
         self.checkValidGlobal = function () {
+            if (self.defaultOU) {
+                if (self.editMode)
+                    return true;
+                else
+                    return self.correspondenceSite.relatedOus.length > 0;
+            }
+
             return (!self.correspondenceSite.isGlobal && self.correspondenceSite.relatedOus.length > 0)
                 || self.correspondenceSite.isGlobal;
         };

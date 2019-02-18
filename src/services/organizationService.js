@@ -459,7 +459,8 @@ module.exports = function (app) {
                         },
                         correspondenceSites: function (correspondenceSiteService) {
                             'ngInject';
-                            return correspondenceSiteService.loadActiveCorrespondenceSites();
+                            return correspondenceSiteService.getCorrespondenceSites();
+                            //return correspondenceSiteService.loadActiveCorrespondenceSites();
                         },
                         documentTemplates: function (documentTemplateService) {
                             'ngInject';

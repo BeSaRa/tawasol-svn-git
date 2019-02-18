@@ -130,11 +130,11 @@
                         </md-content>
                     </md-tab>
                     <!-- Organization Units -->
-                    <md-tab label="{{lang.organization_units}}"
+                    <md-tab ng-if="ctrl.showTab('ou')"
+                            label="{{lang.organization_units}}"
                             md-on-select="ctrl.setCurrentTab('ou')"
                             ng-click="ctrl.getOUCorrespondenceSites()"
-                            ng-disabled="ctrl.correspondenceSite.isGlobal || !ctrl.correspondenceSite.status"
-                            ng-if="ctrl.showTab('ou')">
+                            ng-disabled="ctrl.correspondenceSite.isGlobal || !ctrl.correspondenceSite.status">
                         <md-content>
                             <div layout="column" class="p20">
                                 <!-- OU Dropdown and Add Button -->
@@ -165,7 +165,8 @@
                                             <table md-table
                                                    md-row-select multiple ng-model="ctrl.selectedOUCorrespondenceSites"
                                                    md-progress="ctrl.grid.progress">
-                                                <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                                <thead md-head md-order="ctrl.grid.order"
+                                                       md-on-reorder="ctrl.getSortedData">
                                                 <tr md-row>
                                                     <th ng-if="ctrl.selectedOUCorrespondenceSites.length" colspan="3"
                                                         md-column>
@@ -180,10 +181,12 @@
                                                             </div>
                                                         </div>
                                                     </th>
-                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column md-order-by="arName">
+                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column
+                                                        md-order-by="arName">
                                                         <span>{{lang.arabic_name}}</span>
                                                     </th>
-                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column md-order-by="enName">
+                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column
+                                                        md-order-by="enName">
                                                         <span>{{lang.english_name}}</span>
                                                     </th>
                                                     <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
@@ -193,14 +196,16 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row md-select="ouCorrespondenceSite"
-                                                    ng-repeat="ouCorrespondenceSite in ctrl.correspondenceSite.relatedOus|orderBy:'itemOrder' track by $index">
+                                                    ng-repeat="ouCorrespondenceSite in ctrl.correspondenceSite.relatedOus|orderBy:'itemOrder' track by $index"
+                                                    ng-disabled="!ctrl.canDeleteOUCorrespondenceSite(ouCorrespondenceSite)">
                                                     <td md-cell>{{ouCorrespondenceSite.arName}}</td>
                                                     <td md-cell>{{ouCorrespondenceSite.enName}}</td>
                                                     <td md-cell>
                                                         <div layout="row" layout-align="start center">
-                                                            <md-button ng-if="!ctrl.defaultOU"
-                                                                       ng-click="ctrl.deleteOUCorrespondenceSite(ouCorrespondenceSite)"
-                                                                       class="md-icon-button">
+                                                            <md-button
+                                                                    ng-disabled="!ctrl.canDeleteOUCorrespondenceSite(ouCorrespondenceSite)"
+                                                                    ng-click="ctrl.deleteOUCorrespondenceSite(ouCorrespondenceSite)"
+                                                                    class="md-icon-button">
                                                                 <md-icon md-svg-icon="delete"></md-icon>
                                                             </md-button>
                                                         </div>
@@ -227,7 +232,8 @@
                                             <table md-table
                                                    md-row-select multiple ng-model="ctrl.selectedOUCorrespondenceSites"
                                                    md-progress="ctrl.grid.progress">
-                                                <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                                <thead md-head md-order="ctrl.grid.order"
+                                                       md-on-reorder="ctrl.getSortedData">
                                                 <tr md-row>
                                                     <th ng-if="ctrl.selectedOUCorrespondenceSites.length" colspan="3"
                                                         md-column>
@@ -242,10 +248,12 @@
                                                             </div>
                                                         </div>
                                                     </th>
-                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column md-order-by="ouid.arName">
+                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column
+                                                        md-order-by="ouid.arName">
                                                         <span>{{lang.arabic_name}}</span>
                                                     </th>
-                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column md-order-by="ouid.enName">
+                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column
+                                                        md-order-by="ouid.enName">
                                                         <span>{{lang.english_name}}</span>
                                                     </th>
                                                     <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
@@ -255,12 +263,14 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row md-select="ouCorrespondenceSite"
-                                                    ng-repeat="ouCorrespondenceSite in ctrl.correspondenceSite.relatedOus|orderBy:'itemOrder' track by $index">
+                                                    ng-repeat="ouCorrespondenceSite in ctrl.correspondenceSite.relatedOus|orderBy:'itemOrder' track by $index"
+                                                    ng-disabled="!ctrl.canDeleteOUCorrespondenceSite(ouCorrespondenceSite)">
                                                     <td md-cell>{{ouCorrespondenceSite.ouid.arName}}</td>
                                                     <td md-cell>{{ouCorrespondenceSite.ouid.enName}}</td>
                                                     <td md-cell>
                                                         <div layout="row" layout-align="start center">
                                                             <md-button
+                                                                    ng-disabled="!ctrl.canDeleteOUCorrespondenceSite(ouCorrespondenceSite)"
                                                                     ng-click="ctrl.deleteOUCorrespondenceSite(ouCorrespondenceSite)"
                                                                     class="md-icon-button">
                                                                 <md-icon md-svg-icon="delete"></md-icon>

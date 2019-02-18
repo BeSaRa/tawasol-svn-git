@@ -71,7 +71,7 @@ module.exports = function (app) {
         self.openEditSubCorrespondenceSiteDialog = function (subCorrespondenceSite, $event) {
             correspondenceSiteService
                 .controllerMethod
-                .correspondenceSiteEdit(subCorrespondenceSite, $event)
+                .correspondenceSiteEdit(subCorrespondenceSite, null, $event)
                 .then(function (result) {
                     self.reloadSubCorrespondenceSites(self.grid.page).then(function () {
                         toast.success(langService.get('edit_success').change({name: subCorrespondenceSite.getNames()}));

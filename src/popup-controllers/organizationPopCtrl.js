@@ -292,6 +292,7 @@ module.exports = function (app) {
         };
 
         self.currentOUClassifiaction = new OUClassification();
+        self.currentOUCorrespondenceSite = new OUCorrespondenceSite();
 
         self.userAdded = false;
 
@@ -655,26 +656,6 @@ module.exports = function (app) {
             });
         };
 
-        self.disableAddOUClassification = function () {
-            return generator.checkRequiredFields(self.selectedOUClassification).length;
-        };
-
-        self.updateOUClassification = function (selectedOUClassification) {
-            return self.organization.updateOUClassification(selectedOUClassification)
-                .then(function (selectedOUClassification) {
-                    toast.success(langService.get('update_success'));
-                    self.classificationEditMode = false;
-                    self.selectedOUClassification = null;
-                    self.ouClassifications = _.map(self.ouClassifications, function (ouClassification) {
-                        if (ouClassification.id === selectedOUClassification.id) {
-                            ouClassification = selectedOUClassification;
-                        }
-                        return ouClassification;
-                    });
-                    self.ouClassificationsCopy = angular.copy(self.ouClassifications);
-                });
-        };
-
         self.addSelectedOUClassification = function () {
             return validationService
                 .createValidation('OUClassification')
@@ -737,10 +718,39 @@ module.exports = function (app) {
             })
         };
 
-        self.editOUClassification = function (ouClassification) {
+        self.editOUClassification = function (ouClassification, $event) {
             self.selectedOUClassification = angular.copy(ouClassification);
             self.classificationEditMode = true;
             self.currentOUClassifiaction = angular.copy(ouClassification);
+        };
+
+        self.editOUClassificationOnly = function (ouClassification, $event) {
+            self.resetEditClassificationMode();
+            return classificationService
+                .controllerMethod
+                .classificationEdit(ouClassification, self.organization, $event)
+                .then(function (classification) {
+                    toast.success(langService.get('update_success'));
+                    ouClassification.classification = classification;
+                    self.ouClassificationsCopy = angular.copy(self.ouClassifications);
+                })
+
+        };
+
+        self.updateOUClassification = function () {
+            return self.organization.updateOUClassification(self.selectedOUClassification)
+                .then(function (result) {
+                    toast.success(langService.get('update_success'));
+                    self.classificationEditMode = false;
+                    self.selectedOUClassification = null;
+                    self.ouClassifications = _.map(self.ouClassifications, function (ouClassification) {
+                        if (ouClassification.id === result.id) {
+                            ouClassification = result;
+                        }
+                        return ouClassification;
+                    });
+                    self.ouClassificationsCopy = angular.copy(self.ouClassifications);
+                });
         };
 
         self.resetEditClassificationMode = function () {
@@ -835,7 +845,7 @@ module.exports = function (app) {
             return _.find(self.ouCorrespondenceSites, function (ouCorrespondenceSite) {
                 var id = ouCorrespondenceSite.correspondenceSite.id;
                 if (self.correspondenceSiteEditMode) {
-                    return ouCorrespondenceSite.id === correspondenceSite.id && ouCorrespondenceSite.id !== self.currentOUClassifiaction.id;
+                    return ouCorrespondenceSite.id === correspondenceSite.id && ouCorrespondenceSite.id !== self.currentOUCorrespondenceSite.id;
                 } else {
                     return id === correspondenceSite.id
                 }
@@ -924,18 +934,6 @@ module.exports = function (app) {
             })
         };
 
-        self.editOUCorrespondenceSite = function (ouCorrespondenceSite) {
-            self.selectedOUCorrespondenceSite = angular.copy(ouCorrespondenceSite);
-            self.correspondenceSiteEditMode = true;
-            self.currentOUClassifiaction = angular.copy(ouCorrespondenceSite);
-        };
-
-        self.resetEditCorrespondenceSiteMode = function () {
-            self.selectedOUCorrespondenceSite = null;
-            self.correspondenceSiteEditMode = false;
-            self.currentOUClassifiaction = null;
-        };
-
         self.changeOUCorrespondenceSiteStatus = function (ouCorrespondenceSite) {
             ouCorrespondenceSite.updateStatus().then(function () {
                 toast.success(langService.get('status_success'));
@@ -1014,6 +1012,33 @@ module.exports = function (app) {
                     self.ouCorrespondenceSites = self.ouCorrespondenceSites.concat(ouCorrespondenceSite);
                     self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
                 })
+        };
+
+
+        self.editOUCorrespondenceSite = function (ouCorrespondenceSite) {
+            self.selectedOUCorrespondenceSite = angular.copy(ouCorrespondenceSite);
+            self.correspondenceSiteEditMode = true;
+            self.currentOUCorrespondenceSite = angular.copy(ouCorrespondenceSite);
+        };
+
+        self.resetEditCorrespondenceSiteMode = function () {
+            self.selectedOUCorrespondenceSite = null;
+            self.correspondenceSiteEditMode = false;
+            self.currentOUCorrespondenceSite = null;
+        };
+
+        self.editOUCorrespondenceSiteOnly = function (ouCorrespondenceSite, $event) {
+            self.resetEditCorrespondenceSiteMode();
+
+            return correspondenceSiteService
+                .controllerMethod
+                .correspondenceSiteEdit(ouCorrespondenceSite, self.organization, $event)
+                .then(function (correspondenceSite) {
+                    toast.success(langService.get('update_success'));
+                    ouCorrespondenceSite.correspondenceSite = correspondenceSite;
+                    self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
+                })
+
         };
 
         /**

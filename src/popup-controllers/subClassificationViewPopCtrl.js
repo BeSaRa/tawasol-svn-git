@@ -69,7 +69,7 @@ module.exports = function (app) {
         self.openEditSubClassificationDialog = function (subClassification, $event) {
             classificationService
                 .controllerMethod
-                .classificationEdit(subClassification, $event)
+                .classificationEdit(subClassification, null, $event)
                 .then(function () {
                     self.reloadSubClassifications(self.grid.page).then(function () {
                         toast.success(langService.get('edit_success').change({name: subClassification.getNames()}));

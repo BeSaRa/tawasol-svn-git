@@ -154,9 +154,10 @@ module.exports = function (app) {
             /**
              * @description Opens popup to edit correspondenceSite
              * @param correspondenceSite
+             * @param defaultOU
              * @param $event
              */
-            correspondenceSiteEdit: function (correspondenceSite, $event) {
+            correspondenceSiteEdit: function (correspondenceSite, defaultOU, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -166,8 +167,8 @@ module.exports = function (app) {
                         escapeToClose: false,
                         locals: {
                             editMode: true,
-                            correspondenceSite: correspondenceSite,
-                            defaultOU: null
+                            correspondenceSite: (defaultOU ? generator.interceptReceivedInstance('CorrespondenceSite', correspondenceSite.correspondenceSite) : correspondenceSite),
+                            defaultOU: defaultOU
                         }
                     });
             },

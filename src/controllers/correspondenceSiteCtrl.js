@@ -69,7 +69,7 @@ module.exports = function (app) {
         self.openEditCorrespondenceSiteDialog = function (correspondenceSite, $event) {
             correspondenceSiteService
                 .controllerMethod
-                .correspondenceSiteEdit(correspondenceSite, $event)
+                .correspondenceSiteEdit(correspondenceSite, null, $event)
                 .then(function (result) {
                     self.reloadCorrespondenceSites(self.grid.page).then(function () {
                         toast.success(langService.get('edit_success').change({name: result.getTranslatedName()}));

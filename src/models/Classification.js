@@ -186,7 +186,8 @@ module.exports = function (app) {
 
             Classification.prototype.save = function () {
                 if (this.id) {
-                    return this.update();
+                    return classificationService.updateClassification(this);
+                    //return this.update();
                 }
                 return classificationService.addClassification(this);
             };

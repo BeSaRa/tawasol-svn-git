@@ -137,9 +137,10 @@ module.exports = function (app) {
             /**
              * @description Opens popup to edit classification
              * @param classification
+             * @param defaultOU
              * @param $event
              */
-            classificationEdit: function (classification, $event) {
+            classificationEdit: function (classification, defaultOU, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -149,8 +150,8 @@ module.exports = function (app) {
                         escapeToClose: false,
                         locals: {
                             editMode: true,
-                            classification: classification,
-                            defaultOU: null
+                            classification: (defaultOU ? classification.classification : classification),
+                            defaultOU: defaultOU
                         }
                     });
             },

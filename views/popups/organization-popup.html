@@ -728,7 +728,7 @@
                                         </md-input-container>
                                         <div>
                                             <md-button class="md-raised"
-                                                       ng-click="ctrl.updateOUClassification(ctrl.selectedOUClassification)">
+                                                       ng-click="ctrl.updateOUClassification()">
                                                 {{lang.save}}
                                             </md-button>
                                             <md-button class="md-raised"
@@ -823,6 +823,11 @@
                                                                         <md-button class="md-icon-button"
                                                                                    title="{{lang.edit}}"
                                                                                    ng-click="ctrl.editOUClassification(ouClassification, $event)">
+                                                                            <md-icon md-svg-icon="table-edit"></md-icon>
+                                                                        </md-button>
+                                                                        <md-button class="md-icon-button"
+                                                                                   title="{{lang.edit}} {{lang.classification}}"
+                                                                                   ng-click="ctrl.editOUClassificationOnly(ouClassification, $event)">
                                                                             <md-icon md-svg-icon="pencil"></md-icon>
                                                                         </md-button>
                                                                     </div>
@@ -1023,6 +1028,11 @@
                                                                         <md-button class="md-icon-button"
                                                                                    title="{{lang.edit}}"
                                                                                    ng-click="ctrl.editOUCorrespondenceSite(ouCorrespondenceSite, $event)">
+                                                                            <md-icon md-svg-icon="table-edit"></md-icon>
+                                                                        </md-button>
+                                                                        <md-button class="md-icon-button"
+                                                                                   title="{{lang.edit}} {{lang.correspondence_site}}"
+                                                                                   ng-click="ctrl.editOUCorrespondenceSiteOnly(ouCorrespondenceSite, $event)">
                                                                             <md-icon md-svg-icon="pencil"></md-icon>
                                                                         </md-button>
                                                                     </div>
