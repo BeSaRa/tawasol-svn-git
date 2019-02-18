@@ -4,7 +4,7 @@
             <table md-table ng-model="ctrl.selectedWorkflowItems"
                    md-row-select="true"
                    multiple="ctrl.multiSelect">
-                <thead md-head md-order="ctrl.grid.order">
+                <thead md-head md-order="ctrl.grid.order" md-on-reoreder="ctrl.getSortedData">
                 <tr md-row>
                     <th md-column class="no-padding" ng-if="ctrl.allowFavorites">
                         <md-button
@@ -82,7 +82,7 @@
                 </thead>
                 <tbody md-body>
                 <tr ng-if="ctrl.excludeSelected" md-row md-select="workflowItem"
-                    ng-repeat="workflowItem in ctrl.workflowItems | filter:ctrl.runItemNotExists |limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
+                    ng-repeat="workflowItem in ctrl.workflowItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
                     <td md-cell ng-if="ctrl.allowFavorites" class="no-padding">
                         <md-button ng-click="ctrl.toggleFav(workflowItem)"
                                    class="md-icon-button">

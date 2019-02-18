@@ -3,7 +3,7 @@
         <md-table-container>
             <table md-table multiple ng-model="ctrl.selectedWorkflowItems"
                    md-row-select="true">
-                <thead md-head md-order="ctrl.grid.order">
+                <thead md-head md-order="ctrl.grid.order" md-on-reoder="ctrl.getSortedData">
                 <tr md-row>
                     <th colspan="4" ng-if="ctrl.selectedWorkflowItems.length" md-column>
                         <span>{{ctrl.selectedWorkflowItems.length}} {{lang.items_selected}} </span>

@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('selectedWorkflowItemsDirectiveCtrl', function ($scope, _, rootEntity, dialog, cmsTemplate, langService, DistributionWFItem, LangWatcher) {
+    app.controller('selectedWorkflowItemsDirectiveCtrl', function ($scope, _, rootEntity, dialog, cmsTemplate, langService, DistributionWFItem, LangWatcher,$filter) {
         'ngInject';
         var self = this;
         self.controllerName = 'selectedWorkflowItemsDirectiveCtrl';
@@ -160,6 +160,14 @@ module.exports = function (app) {
             var code = $event.which || $event.keyCode;
             if (code !== 38 && code !== 40)
                 $event.stopPropagation();
+        };
+
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.workflowItems = $filter('orderBy')(self.workflowItems, self.grid.order);
         };
 
 

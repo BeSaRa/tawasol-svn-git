@@ -3,7 +3,8 @@ module.exports = function (app) {
                                                            langService,
                                                            DistributionWFItem,
                                                            rootEntity,
-                                                           LangWatcher) {
+                                                           LangWatcher,
+                                                           $filter) {
         'ngInject';
         var self = this;
         self.controllerName = 'workflowUsersDirectiveCtrl';
@@ -82,6 +83,13 @@ module.exports = function (app) {
             var code = $event.which || $event.keyCode;
             if (code !== 38 && code !== 40)
                 $event.stopPropagation();
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.gridItems = $filter('orderBy')(self.gridItems, self.grid[self.gridName].order);
         };
 
     });
