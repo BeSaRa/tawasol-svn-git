@@ -28,6 +28,7 @@
                                    ng-repeat="organization in ctrl.subOrganizations">
                             {{organization.getTranslatedName()}}
                         </md-option>
+                        <md-option ng-value="null">{{lang.none}}</md-option>
                     </md-select>
                     <div ng-messages="docSearchForm.ou.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
