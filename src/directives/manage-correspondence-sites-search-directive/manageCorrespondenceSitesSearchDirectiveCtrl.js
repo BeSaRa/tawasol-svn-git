@@ -763,6 +763,7 @@ module.exports = function (app) {
             return self.emptySubRecords;
         }, function (value) {
             if (value) {
+                self.searchByMain = false;
                 self.mainSearch = '';
                 self.subSearch = '';
                 self.selectedSiteType = null;

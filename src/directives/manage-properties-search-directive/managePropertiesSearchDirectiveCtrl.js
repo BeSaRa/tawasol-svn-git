@@ -607,7 +607,10 @@ module.exports = function (app) {
         }, function (newValue, oldValue) {
             if (newValue) {
                 self.getYears();
-                self.emptyResults = false;
+                $timeout(function () {
+                    self.emptyResults = false;
+                }, 500)
+
             }
         });
 
