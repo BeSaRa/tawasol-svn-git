@@ -245,8 +245,7 @@ module.exports = function (app) {
                 return existingEntityType.arName === entityType.arName
                     || existingEntityType.enName.toLowerCase() === entityType.enName.toLowerCase()
                     || (entityType.lookupStrKey && existingEntityType.lookupStrKey &&
-                        existingEntityType.lookupStrKey.toLowerCase() === entityType.lookupStrKey.toLowerCase())
-                    || entityType.canDelete();
+                        existingEntityType.lookupStrKey.toLowerCase() === entityType.lookupStrKey.toLowerCase());
             }), function (matchingResult) {
                 return matchingResult === true;
             });
