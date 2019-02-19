@@ -1,16 +1,16 @@
 module.exports = function (app) {
     app.service('classificationService', function (urlService,
-                                                      toast,
-                                                      cmsTemplate,
-                                                      langService,
-                                                      dialog,
-                                                      errorCode,
-                                                      $http,
-                                                      Pair,
-                                                      $q,
-                                                      generator,
-                                                      Classification,
-                                                      _) {
+                                                   toast,
+                                                   cmsTemplate,
+                                                   langService,
+                                                   dialog,
+                                                   errorCode,
+                                                   $http,
+                                                   Pair,
+                                                   $q,
+                                                   generator,
+                                                   Classification,
+                                                   _) {
         'ngInject';
         var self = this;
         self.serviceName = 'classificationService';
@@ -116,7 +116,7 @@ module.exports = function (app) {
                 var classification = new Classification({
                     parent: parentClassification,
                     securityLevels: parentClassification ? parentClassification.securityLevels : null,
-                    isGlobal: !(!!defaultOU),
+                    isGlobal: (!!defaultOU) ? false : (parentClassification ? parentClassification.isGlobal : true),
                     relatedOus: defaultOU ? [defaultOU] : []
                 });
 

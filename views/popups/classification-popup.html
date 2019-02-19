@@ -47,7 +47,7 @@
                                     <md-input-container flex>
                                         <label for="parent">{{lang.parent_classification}}</label>
                                         <md-select aria-label="{{lang.parent_classification}}" id="parent"
-                                                   ng-change="ctrl.setSecurityLevels($event)"
+                                                   ng-change="ctrl.onChangeParent($event)"
                                                    ng-model-options="{trackBy: '$value.id'}"
                                                    ng-disabled="ctrl.classification.hasChildren()"
                                                    ng-model="ctrl.classification.parent">
@@ -90,8 +90,8 @@
                                     <!-- Global -->
                                     <div flex>
                                         <md-switch ng-change="ctrl.onChangeGlobal($event)"
-                                                   ng-disabled="ctrl.defaultOU"
-                                                   ng-readonly="ctrl.defaultOU"
+                                                   ng-disabled="ctrl.defaultOU || ctrl.classification.parent"
+                                                   ng-readonly="ctrl.defaultOU || ctrl.classification.parent"
                                                    ng-model="ctrl.classification.isGlobal"
                                                    aria-label="{{lang.global}}">
                                             <label>{{lang.global}} :

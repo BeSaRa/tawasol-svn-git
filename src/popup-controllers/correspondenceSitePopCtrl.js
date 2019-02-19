@@ -44,7 +44,10 @@ module.exports = function (app) {
         self.correspondenceTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
         // get parent correspondenceSites and exclude the current from the result if in edit mode.
         self.parentCorrespondenceSites = correspondenceSiteService.getParentCorrespondenceSites(editMode ? self.correspondenceSite : false);
-
+        if (!!defaultOU)
+            self.parentCorrespondenceSites = _.filter(self.parentCorrespondenceSites, function (correspondenceSite) {
+                return !correspondenceSite.isGlobal;
+            });
         self.organizations = organizationService.organizations;
         self.selectedOrganization = null;
         self.selectedOUCorrespondenceSites = [];
@@ -62,6 +65,19 @@ module.exports = function (app) {
                 return _.find(self.correspondenceSite.relatedOus, function (ou) {
                     return ou.ouid.id === organization.id;
                 });
+            }
+        };
+
+        /**
+         * @description Set the global according to selected main classification
+         * @param $event
+         */
+        self.onChangeParent = function($event){
+            if (self.correspondenceSite.parent) {
+                self.correspondenceSite.isGlobal = angular.copy(self.correspondenceSite.parent.isGlobal);
+                if (self.correspondenceSite.isGlobal) {
+                    self.correspondenceSite.relatedOus = [];
+                }
             }
         };
 

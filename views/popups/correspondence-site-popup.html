@@ -89,6 +89,7 @@
                                     <md-input-container flex>
                                         <label for="parent">{{lang.parent_correspondence_site}}</label>
                                         <md-select aria-label="{{lang.parent_correspondence_site}}" id="parent"
+                                                   ng-change="ctrl.onChangeParent($event)"
                                                    ng-model-options="{trackBy: '$value.id'}"
                                                    ng-disabled="ctrl.correspondenceSite.hasChildren() || (ctrl.model.parent)"
                                                    ng-model="ctrl.correspondenceSite.parent">
@@ -117,8 +118,8 @@
                                     <!-- Global -->
                                     <div flex>
                                         <md-switch ng-change="ctrl.onChangeGlobal($event)"
-                                                   ng-disabled="(ctrl.editMode && ctrl.model.isGlobal) || ctrl.defaultOU"
-                                                   ng-readonly="(ctrl.editMode && ctrl.model.isGlobal) || ctrl.defaultOU"
+                                                   ng-disabled="(ctrl.editMode && ctrl.model.isGlobal) || ctrl.defaultOU || ctrl.correspondenceSite.parent"
+                                                   ng-readonly="(ctrl.editMode && ctrl.model.isGlobal) || ctrl.defaultOU || ctrl.correspondenceSite.parent"
                                                    ng-model="ctrl.correspondenceSite.isGlobal"
                                                    aria-label="{{lang.global}}">
                                             <label>{{lang.global}} :

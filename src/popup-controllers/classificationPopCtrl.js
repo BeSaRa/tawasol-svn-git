@@ -45,6 +45,11 @@ module.exports = function (app) {
 
         // get parents classifications and exclude the current from the result if in edit mode.
         self.parentClassifications = classificationService.getParentClassifications(editMode ? self.classification : false);
+        if (!!defaultOU)
+            self.parentClassifications = _.filter(self.parentClassifications, function (classification) {
+                return !classification.isGlobal;
+            });
+
         self.organizations = organizationService.organizations;
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
 
@@ -59,12 +64,16 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Set the security level according to selected main site
+         * @description Set the security level, global according to selected main site
          * @param $event
          */
-        self.setSecurityLevels = function ($event) {
+        self.onChangeParent = function ($event) {
             if (self.classification.parent) {
                 self.classification.securityLevels = self.classification.parent.securityLevels;
+                self.classification.isGlobal = angular.copy(self.classification.parent.isGlobal);
+                if (self.classification.isGlobal) {
+                    self.classification.relatedOus = [];
+                }
             } else {
                 if (!self.editMode) {
                     self.classification.securityLevels = null;
