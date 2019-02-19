@@ -348,7 +348,15 @@ module.exports = function (app) {
             }).then(function (result) {
                 self.privateAnnouncementsToShow = generator.generateCollection(result.data.rs, PrivateAnnouncement, self._sharedMethods);
                 self.privateAnnouncementsToShow = generator.interceptReceivedCollection('PrivateAnnouncement', self.privateAnnouncementsToShow);
-
+                var now = new Date().getTime();
+                self.privateAnnouncementsToShow = _.filter(self.privateAnnouncementsToShow, function (announcement) {
+                    // if startDate && endDate exists and current time is between startDate and endDate, show it
+                    // if always active, show it
+                    if (announcement.startDate && announcement.endDate)
+                        return announcement.startDate.getTime() <= now && announcement.endDate.getTime() >= now;
+                    else
+                        return true;
+                });
                 self.privateAnnouncementsToShow = _.map(self.privateAnnouncementsToShow, function (a) {
                     a.arBody = $sce.trustAsHtml(a.arBody);
                     a.enBody = $sce.trustAsHtml(a.enBody);

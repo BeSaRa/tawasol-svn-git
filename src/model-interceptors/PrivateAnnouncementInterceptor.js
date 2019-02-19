@@ -17,9 +17,9 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             if (model.startDate)
-                model.startDate = generator.getDateObjectFromTimeStamp(model.startDate, true);
+                model.startDate = generator.getDateObjectFromTimeStamp(model.startDate, true, false);
             if (model.endDate)
-                model.endDate = generator.getDateObjectFromTimeStamp(model.endDate, true);
+                model.endDate = generator.getDateObjectFromTimeStamp(model.endDate, false, true);
             return model;
         });
     })

@@ -280,6 +280,84 @@
                                         </md-select>
                                     </md-input-container>
                                 </div>
+                                <div layout="row">
+                                    <!-- Correspondence Site Type -->
+                                    <md-input-container flex>
+                                        <label for="siteType">{{ctrl.lookupNames['key_23'].getTranslatedName()}}</label>
+                                        <md-select name="siteType" id="siteType"
+                                                   ng-model="ctrl.filter.ui.key_23.value"
+                                                   md-on-close="ctrl.clearSearchText('siteType')"
+                                                   ng-change="ctrl.getMainSites(true, $event)"
+                                                   data-md-container-class="select-header-container">
+                                            <md-select-header class="select-header">
+                                                <input ng-model="ctrl.siteTypeSearchText"
+                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                            </md-select-header>
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option
+                                                    ng-repeat="option in ctrl.correspondenceSiteTypes | translatedNameFilter: ctrl.siteTypeSearchText track by $index"
+                                                    ng-value="option.lookupKey">
+                                    <span
+                                            md-highlight-text="ctrl.siteTypeSearchText"
+                                            md-highlight-flags="i">{{option.getTranslatedName()}}</span>
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="userSentItemSearchForm.selectedSiteType.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Main Site -->
+                                    <md-input-container flex>
+                                        <label for="mainSite">{{ctrl.lookupNames['key_5'].getTranslatedName()}}</label>
+                                        <md-select id="mainSite" name="mainSite"
+                                                   ng-model="ctrl.filter.ui.key_5.value"
+                                                   ng-disabled="!ctrl.filter.ui.key_23.value"
+                                                   md-on-close="ctrl.clearSearchText('mainSite')"
+                                                   ng-change="ctrl.getSubSites(true, $event)"
+                                                   data-md-container-class="select-header-container">
+                                            <md-select-header class="select-header">
+                                                <input ng-model="ctrl.mainSiteSearchText"
+                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                            </md-select-header>
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option
+                                                    ng-repeat="mainSite in ctrl.mainSites | translatedNameFilter: ctrl.mainSiteSearchText track by $index"
+                                                    ng-value="mainSite.id">
+                                    <span
+                                            md-highlight-text="ctrl.mainSiteSearchText"
+                                            md-highlight-flags="i">{{mainSite.getTranslatedName()}}</span>
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <!-- Sub Site -->
+                                    <md-input-container flex>
+                                        <label for="subSite">{{ctrl.lookupNames['key_12'].getTranslatedName()}}</label>
+                                        <md-select id="subSite" name="subSite"
+                                                   ng-model="ctrl.filter.ui.key_12.value"
+                                                   ng-disabled="!ctrl.filter.ui.key_23.value || !ctrl.filter.ui.key_5.value"
+                                                   md-on-close="ctrl.clearSearchText('subSite')"
+                                                   data-md-container-class="select-header-container">
+                                            <md-select-header class="select-header">
+                                                <input ng-model="ctrl.subSiteSearchText"
+                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                            </md-select-header>
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option
+                                                    ng-repeat="subSite in ctrl.subSites | translatedNameFilter: ctrl.subSiteSearchText track by $index"
+                                                    ng-value="subSite.id">
+                                    <span
+                                            md-highlight-text="ctrl.subSiteSearchText"
+                                            md-highlight-flags="i">{{subSite.getTranslatedName()}}</span>
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>

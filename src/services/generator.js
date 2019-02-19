@@ -471,8 +471,7 @@ module.exports = function (app) {
         self.replaceWithOriginalValues = function (record, originalRecord, fields, setNull) {
             if (typeof fields === "string") {
                 record[fields] = setNull ? null : originalRecord[fields];
-            }
-            else {
+            } else {
                 for (var i = 0; i < fields.length; i++) {
                     record[fields[i]] = setNull ? null : originalRecord[fields[i]];
                 }
@@ -624,10 +623,11 @@ module.exports = function (app) {
         /**
          * @description Gets the date in default format
          * @param timeStamp
-         * @param skipTime
+         * @param startOfDay
+         * @param endOfDay
          * @returns {Date | null }
          */
-        self.getDateObjectFromTimeStamp = function (timeStamp, skipTime) {
+        self.getDateObjectFromTimeStamp = function (timeStamp, startOfDay, endOfDay) {
             /*if (timeStamp) {
                 // in case of long numbers, they will be having L at last. so remove L and change timeStamp to moment date.
                 timeStamp = Number(timeStamp.toString().split('L')[0]);
@@ -638,7 +638,9 @@ module.exports = function (app) {
                 if (!isNaN(timeStamp)) {
                     // in case of long numbers, they will be having L at last. so remove L and change timeStamp to moment date.
                     timeStamp = Number(timeStamp.toString().split('L')[0]);
-                    if (skipTime) {
+                    if (endOfDay) {
+                        return moment(timeStamp).endOf('day').toDate();
+                    } else if (startOfDay) {
                         return moment(timeStamp).startOf('day').toDate();
                     }
                     return moment(timeStamp).toDate();
@@ -745,8 +747,7 @@ module.exports = function (app) {
                     var prop = arr.shift();
                     return self.getNestedPropertyValue(record[prop], arr.join('.'))
                 }
-            }
-            else {
+            } else {
                 if (typeof record === 'string' || typeof record === 'number')
                     return record;
                 return record[property];
