@@ -65,17 +65,16 @@ module.exports = function (app) {
             Incoming.prototype.fetchIncomingData = function () {
                 var self = this;
                 correspondenceService = this.getCorrespondenceService();
-
                 self.site = self.subSiteId ? new Site({
                     mainSiteId: self.mainSiteId,
                     subSiteId: self.subSiteId,
-                    followupStatus: new Information(self.followupStatusInfo),
-                    followupDate: self.followupDate,
-                    mainEnSiteText: self.mainSiteInfo.enName,
-                    mainArSiteText: self.mainSiteInfo.arName,
-                    subEnSiteText: self.subSiteInfo.enName,
-                    subArSiteText: self.subSiteInfo.arName,
-                    siteType: correspondenceService.getLookup('incoming', 'siteTypes', model.siteType)
+                    followupStatus: new Information(self.siteInfo.followupStatusResult),
+                    followupDate: self.siteInfo.followupDate,
+                    mainEnSiteText: self.siteInfo.mainSite ? self.siteInfo.mainSite.enName : null,
+                    mainArSiteText: self.siteInfo.mainSite ? self.siteInfo.mainSite.arName : null,
+                    subEnSiteText: self.siteInfo.subSite ? self.siteInfo.subSite.enName : null,
+                    subArSiteText: self.siteInfo.subSite ? self.siteInfo.subSite.arName : null,
+                    siteType: correspondenceService.getLookup('incoming', 'siteTypes', self.siteInfo.siteType)
                 }) : null;
 
             };
