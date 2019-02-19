@@ -540,8 +540,10 @@ module.exports = function (app) {
                             .then(function () {
                                 self.model = angular.copy(self.organization);
                                 toast.success(langService.get('edit_success').change({name: self.organization.getNames()}));
-
-                                employeeService.getEmployee().loadOrganization();
+                                if (self.organization.id === employeeService.getEmployee().getOUID()) {
+                                    employeeService.getEmployee().loadOrganization();
+                                    //employeeService.getEmployee().updateUserOrganizationInfo(self.organization);
+                                }
                                 dialog.hide(self.model);
                             })
                     }

@@ -82,7 +82,8 @@ module.exports = function (app) {
             employee.setOrganization(result.ou); // set current organization for logged in employee.
             employee.setOuList(result.ouList);
             lookupService.setPropertyConfigurations(result.propertyConfiguration);
-            employee.loadOrganization();
+            //employee.loadOrganization();
+            employee.updateUserOrganizationInfo(result.ouInfo);
             return self;
         }
 

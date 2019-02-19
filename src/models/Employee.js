@@ -161,6 +161,13 @@ module.exports = function (app) {
                 return this;
             };
 
+            Employee.prototype.updateUserOrganizationInfo = function (org) {
+                var self = this;
+                org = generator.generateInstance(org, Organization, organizationService._sharedMethods);
+                org = generator.interceptReceivedInstance('Organization', org);
+                return self.userOrganization = new Organization(org);
+            };
+
             Employee.prototype.loadOrganization = function () {
                 var self = this;
                 return organizationService.loadOrganizationById(this.organization.ouid)
