@@ -306,16 +306,6 @@ module.exports = function (app) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
         };
 
-        /*self.getSortedDataForInbox = function () {
-            self.userInboxes = $filter('orderBy')(self.userInboxes, self.grid.order);
-        };
-
-        self.getSortedDataForStarred = function () {
-            self.starredUserInboxes = $filter('orderBy')(self.starredUserInboxes, self.starredGrid.order);
-        };
-        self.getSortedDataForFilter = function () {
-            self.workItemsFilters[self.selectedFilter.index] = $filter('orderBy')(self.workItemsFilters[self.selectedFilter.index], self.filterGrid[self.selectedFilter.index].order);
-        };*/
         self.getSortedDataForInbox = function (order) {
             order = order ? order : '';
             self.userInboxes = $filter('orderBy')(self.userInboxes, order);

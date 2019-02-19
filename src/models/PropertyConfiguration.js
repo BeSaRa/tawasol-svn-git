@@ -24,9 +24,9 @@ module.exports = function (app) {
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [
                 'dataType',
-                'spName',
-                'defaultValue',
-                'spParameters',
+                //'spName',
+                //'defaultValue',
+                //'spParameters',
                 'symbolicName',
                 'defaultOperator',
                 'documentClass'
