@@ -985,9 +985,13 @@ module.exports = function (app) {
                         'ngInject';
                         return userInboxService.loadUserInboxes();
                     },
-                    userFilters: function (userFilterService) {
+                    userFilters: function (userFilterService, correspondenceSiteTypes) {
                         'ngInject';
                         return userFilterService.loadUserFilters();
+                    },
+                    correspondenceSiteTypes: function (correspondenceSiteTypeService) {
+                        'ngInject';
+                        return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
                     },
                     // just to update notifications when opening user inbox
                     notifications: function (mailNotificationService) {

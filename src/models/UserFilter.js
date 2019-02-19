@@ -1,5 +1,10 @@
 module.exports = function (app) {
-    app.factory('UserFilter', function (CMSModelInterceptor, toast, dialog, langService, _, generator) {
+    app.factory('UserFilter', function (CMSModelInterceptor,
+                                        toast,
+                                        dialog,
+                                        langService,
+                                        _,
+                                        generator) {
         'ngInject';
         return function UserFilter(model) {
             var self = this, userFilterService;
@@ -16,69 +21,94 @@ module.exports = function (app) {
             self.filterCriteria = {};
             // not related to the model.
             self.ui = {
+                // DocType equals
                 key_2: {
                     value: null
                 },
+                // DocSubject contains
                 key_3: {
                     value: null
                 },
+                // ReceivedDate greater than
                 key_4: {
                     value: null
                 },
+                // MainSite equals
                 key_5: {
                     value: null
                 },
+                // ReceivedDate less than
                 key_6: {
                     value: null
                 },
+                // Action equals
                 key_7: {
                     value: null
                 },
+                // Due date exists
                 key_8: {
                     value: null
                 },
+                // Sender equals
                 key_9: {
                     value: null
                 },
+                // Due date between
                 key_10: {
                     value1: null,
                     value2: null
                 },
+                // Received date between
                 key_11: {
                     value1: null,
                     value2: null
                 },
+                // subSite equals
                 key_12: {
                     value: null
                 },
+                // docFullSerial contains
                 key_13: {
                     value: null
                 },
+                // securityLevel equals
                 key_14: {
                     value: null
                 },
+                // priorityLevel equals
                 key_15: {
                     value: null
                 },
+                // has linkedDocsNO
                 key_16: {
                     value: null
                 },
+                // has linkedEntities
                 key_17: {
                     value: null
                 },
+                // has no linkedDocs
                 key_18: {
                     value: null
                 },
+                // has attachments
                 key_19: {
                     value: null
                 },
+                // isOpen
                 key_20: {
                     value: null
                 },
+                // has no attachments
                 key_21: {
                     value: null
                 },
+                // has no linkedEntities
                 key_22: {
+                    value: null
+                },
+                // site type
+                key_23: {
                     value: null
                 },
                 // anonymous properties - to be removed when sending
@@ -93,7 +123,7 @@ module.exports = function (app) {
                 },
             };
             // this is available keys for the current ui model
-            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -130,9 +160,6 @@ module.exports = function (app) {
                 userFilterService = service;
                 return this;
             };
-            /*UserFilter.prototype.getTranslatedDueDate = function ($event) {
-                return this.ui.key_8.value ? langService.get('yes') : langService.get('no');
-            };*/
             UserFilter.prototype.getTranslatedYesNo = function (lookupKey, $event) {
                 return this.ui[lookupKey].value ? langService.get('yes') : langService.get('no');
             };
@@ -184,19 +211,17 @@ module.exports = function (app) {
 
                 // Priority Level
                 var priorityLevel = self.ui.key_15.value;
-                if (typeof  priorityLevel === 'undefined' || priorityLevel === null && priorityLevel === '')
+                if (typeof priorityLevel === 'undefined' || priorityLevel === null && priorityLevel === '')
                     self.ui.key_15.value = null;
 
                 // Linked Docs
                 if (self.ui.key_linkedDocs.value === 16) {
                     self.ui.key_16.value = 0;
                     self.ui.key_18.value = null;
-                }
-                else if (self.ui.key_linkedDocs.value === 18) {
+                } else if (self.ui.key_linkedDocs.value === 18) {
                     self.ui.key_18.value = 0;
                     self.ui.key_16.value = null;
-                }
-                else {
+                } else {
                     self.ui.key_18.value = null;
                     self.ui.key_16.value = null;
                 }
@@ -205,12 +230,10 @@ module.exports = function (app) {
                 if (self.ui.key_linkedAttachments.value === 19) {
                     self.ui.key_19.value = 0;
                     self.ui.key_21.value = null;
-                }
-                else if (self.ui.key_linkedAttachments.value === 21) {
+                } else if (self.ui.key_linkedAttachments.value === 21) {
                     self.ui.key_21.value = 0;
                     self.ui.key_19.value = null;
-                }
-                else {
+                } else {
                     self.ui.key_21.value = null;
                     self.ui.key_19.value = null;
                 }
@@ -219,18 +242,41 @@ module.exports = function (app) {
                 if (self.ui.key_linkedEntities.value === 17) {
                     self.ui.key_17.value = 0;
                     self.ui.key_22.value = null;
-                }
-                else if (self.ui.key_linkedEntities.value === 22) {
+                } else if (self.ui.key_linkedEntities.value === 22) {
                     self.ui.key_22.value = 0;
                     self.ui.key_17.value = null;
-                }
-                else {
+                } else {
                     self.ui.key_22.value = null;
                     self.ui.key_17.value = null;
                 }
 
                 // Is Open (check for null value, because true, false, null are three values and both true and false are accepted
                 self.ui.key_20.value = (self.ui.key_20.value === null) ? null : self.ui.key_20.value;
+
+                // site type
+                if (self.ui.key_23.value) {
+                    self.ui.key_23.value = self.ui.key_23.value.hasOwnProperty('lookupKey') ? self.ui.key_23.value.lookupKey : self.ui.key_23.value;
+                } else {
+                    self.ui.key_23.value = null;
+                    // if site type is null, set main site, sub site as null
+                    self.ui.key_5.value = null;
+                }
+
+                // main site
+                if (self.ui.key_5.value) {
+                    self.ui.key_5.value = self.ui.key_5.value.hasOwnProperty('id') ? self.ui.key_5.value.id : self.ui.key_5.value;
+                } else {
+                    self.ui.key_5.value = null;
+                    // if main site is null, set sub site null
+                    self.ui.key_12.value = null;
+                }
+
+                // sub site
+                if (self.ui.key_12.value) {
+                    self.ui.key_12.value = self.ui.key_12.value.hasOwnProperty('id') ? self.ui.key_12.value.id : self.ui.key_12.value;
+                } else {
+                    self.ui.key_12.value = null;
+                }
 
                 self.filterCriteria = self.filterCriteria || {};
                 _.map(availableKeys, function (number) {

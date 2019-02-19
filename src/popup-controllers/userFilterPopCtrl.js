@@ -15,7 +15,10 @@ module.exports = function (app) {
                                                   validationService,
                                                   userFilterService,
                                                   _,
-                                                  Information) {
+                                                  Information,
+                                                  $timeout,
+                                                  correspondenceSiteTypes,
+                                                  correspondenceViewService) {
         'ngInject';
         var self = this;
         self.controllerName = 'userFilterPopCtrl';
@@ -31,7 +34,7 @@ module.exports = function (app) {
 
         self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
-
+        self.correspondenceSiteTypes = correspondenceSiteTypes;
         //console.log(lookupService.returnLookups(lookupService.inboxFilterKey));
 
         self.lookupNames = {};
@@ -156,7 +159,7 @@ module.exports = function (app) {
                 record = self.filter.ui[key];
                 // if single value key and key has value or key is for document type === 0 (outgoing, security level, priority level)
                 // adding exceptions for false/0 values
-                if (record.hasOwnProperty('value')
+                if (record && record.hasOwnProperty('value')
                     && (record.value
                         || (record.value === 0 && key === 'key_2') // doc type
                         || (record.value === 0 && key === 'key_14') // security level
@@ -201,6 +204,93 @@ module.exports = function (app) {
          */
         self.closeFilterForm = function ($event) {
             dialog.cancel();
+        };
+
+        self.siteTypeSearchText = '';
+        self.mainSiteSearchText = '';
+        self.subSiteSearchText = '';
+
+        $timeout(function () {
+            if (self.filter.ui.key_23.value) {
+                self.getMainSites(false);
+            }
+        });
+
+        /**
+         * @description Get the main sites on change of site type
+         * @param resetMainAndSub
+         * @param $event
+         */
+        self.getMainSites = function (resetMainAndSub, $event) {
+            if (self.filter.ui.key_23.value) {
+                correspondenceViewService.correspondenceSiteSearch('main', {
+                    type: self.filter.ui.key_23.value.hasOwnProperty('lookupKey') ? self.filter.ui.key_23.value.lookupKey : self.filter.ui.key_23.value,
+                    criteria: null,
+                    excludeOuSites: false
+                }).then(function (result) {
+                    self.mainSites = result;
+                    self.mainSitesCopy = angular.copy(result);
+                    self.subSites = [];
+                    if (resetMainAndSub) {
+                        self.filter.ui.key_5.value = null;
+                        self.filter.ui.key_12.value = null;
+                    }
+                    if (self.filter.ui.key_5.value) {
+                        self.getSubSites(false);
+                    }
+                });
+            }
+            else {
+                self.mainSites = [];
+                self.subSites = [];
+                self.filter.ui.key_5.value = null;
+                self.filter.ui.key_12.value = null;
+            }
+        };
+
+        /**
+         * @description Get sub sites on change of main site
+         * @param resetSub
+         * @param $event
+         */
+        self.getSubSites = function (resetSub, $event) {
+            var mainSite = self.filter.ui.key_5.value.hasOwnProperty('id') ? self.filter.ui.key_5.value.id : self.filter.ui.key_5.value;
+            if (mainSite) {
+                correspondenceViewService.correspondenceSiteSearch('sub', {
+                    type: self.filter.ui.key_23.value.hasOwnProperty('lookupKey') ? self.filter.ui.key_23.value.lookupKey : self.filter.ui.key_23.value,
+                    parent: mainSite,
+                    criteria: null,
+                    excludeOuSites: false
+                }).then(function (result) {
+                    self.subSites = result;
+                    self.subSitesCopy = angular.copy(result);
+                    if (resetSub)
+                        self.filter.ui.key_12.value = null;
+                });
+            }
+            else {
+                self.subSites = [];
+                self.filter.ui.key_12.value = null;
+            }
+        };
+
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            var code = $event.which || $event.keyCode;
+            if (code !== 38 && code !== 40)
+                $event.stopPropagation();
         };
     });
 };

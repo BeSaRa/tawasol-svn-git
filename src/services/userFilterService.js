@@ -160,6 +160,10 @@ module.exports = function (app) {
                         actions: function (workflowActionService) {
                             'ngInject';
                             return workflowActionService.loadCurrentUserWorkflowActions();
+                        },
+                        correspondenceSiteTypes: function (correspondenceSiteTypeService) {
+                            'ngInject';
+                            return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
                         }
                     },
                     locals: {
@@ -201,6 +205,10 @@ module.exports = function (app) {
                         actions: function (workflowActionService) {
                             'ngInject';
                             return workflowActionService.loadCurrentUserWorkflowActions();
+                        },
+                        correspondenceSiteTypes: function (correspondenceSiteTypeService) {
+                            'ngInject';
+                            return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
                         }
                     },
                     locals: {
