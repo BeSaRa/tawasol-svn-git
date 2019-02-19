@@ -2,7 +2,7 @@
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_correspondencesite : ctrl.model.getTranslatedName()}}">
     <div layout="column">
         <md-toolbar>
-            <span class="p20" ng-if="!ctrl.editMode && !ctrl.model.parent">{{lang.add_new_correspondencesite}}</span>
+            <span class="p20" ng-if="!ctrl.editMode">{{lang.add_new_correspondencesite}}</span>
             <span class="p20" md-truncate ng-if="ctrl.editMode">{{ctrl.model.getTranslatedName()}}</span>
             <close-dialog-directive when-close="ctrl.closeCorrespondenceSiteDialog"></close-dialog-directive>
         </md-toolbar>
