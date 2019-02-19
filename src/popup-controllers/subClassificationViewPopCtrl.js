@@ -159,6 +159,7 @@ module.exports = function (app) {
             } else {
                 self.openSelectOUClassificationDialog(subClassification)
                     .then(function (result) {
+                        result.setRelatedOus([]);
                         result.update().then(self.displayClassificationGlobalMessage);
                     })
                     .catch(function () {

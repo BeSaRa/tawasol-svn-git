@@ -7,10 +7,12 @@
         <md-content scroll-directive>
             <div class="p20">
                 <div layout="row" layout-align="start center" class="page-header small">
-                    <md-button ng-click="ctrl.openAddSubClassificationDialog($event)" class="md-icon-button" tooltip="{{lang.add}}">
+                    <md-button ng-click="ctrl.openAddSubClassificationDialog($event)" class="md-icon-button"
+                               tooltip="{{lang.add}}">
                         <md-icon md-svg-icon="plus"></md-icon>
                     </md-button>
-                    <md-button ng-click="ctrl.reloadSubClassifications()" class="md-icon-button" tooltip="{{lang.reload}}">
+                    <md-button ng-click="ctrl.reloadSubClassifications()" class="md-icon-button"
+                               tooltip="{{lang.reload}}">
                         <md-icon md-svg-icon="refresh"></md-icon>
                     </md-button>
                     <span flex></span>
@@ -79,6 +81,7 @@
                                 </td>
                                 <td md-cell>
                                     <md-switch aria-label="{{lang.global}}"
+                                               ng-disabled="subClassification.parent"
                                                title="{{subClassification.getTranslatedGlobal()}}"
                                                ng-change="ctrl.changeGlobalSubClassification(subClassification)"
                                                ng-model="subClassification.isGlobal"></md-switch>
