@@ -204,6 +204,9 @@ module.exports = function (app) {
                         .then(function () {
                             distributionList.setRelatedOus([]);
                             distributionList.update().then(self.displayDistributionListGlobalMessage);
+                        })
+                        .catch(function () {
+                            distributionList.setIsGlobal(false);
                         });
                 } else {
                     self.openSelectOUDistributionListDialog(distributionList)
