@@ -171,7 +171,9 @@ module.exports = function (app) {
             })
                 .catch(function (error) {
                     self.saveInProgress = false;
-                    toast.error(error);
+                    // don't show the error in g2g receive becouse handled by error dialog
+                    if (!self.receiveG2G)
+                        toast.error(error);
                 });
         };
 
