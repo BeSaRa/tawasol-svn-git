@@ -95,8 +95,8 @@ module.exports = function (app) {
          * @param event
          * @returns {promise}
          */
-        self.alertMessage = function (content, cancelButton, escapeToCancel, event) {
-            var dialog = prepareDialog('alert', content, cancelButton, escapeToCancel, event);
+        self.alertMessage = function (content, cancelButton, escapeToCancel, event, avoidStripEvent) {
+            var dialog = prepareDialog('alert', content, cancelButton, escapeToCancel, event, avoidStripEvent);
             return $mdDialog.show(dialog);
         };
         /**
@@ -108,8 +108,8 @@ module.exports = function (app) {
          * @param hideIcon
          * @returns {promise}
          */
-        self.successMessage = function (content, cancelButton, escapeToCancel, event, hideIcon) {
-            var dialog = prepareDialog('success', content, cancelButton, escapeToCancel, event, hideIcon);
+        self.successMessage = function (content, cancelButton, escapeToCancel, event, hideIcon, avoidStripEvent) {
+            var dialog = prepareDialog('success', content, cancelButton, escapeToCancel, event, hideIcon, avoidStripEvent);
             return $mdDialog.show(dialog);
         };
         /**
@@ -120,8 +120,8 @@ module.exports = function (app) {
          * @param event
          * @returns {promise}
          */
-        self.errorMessage = function (content, cancelButton, escapeToCancel, event) {
-            var dialog = prepareDialog('error', content, cancelButton, escapeToCancel, event);
+        self.errorMessage = function (content, cancelButton, escapeToCancel, event, avoidStripEvent) {
+            var dialog = prepareDialog('error', content, cancelButton, escapeToCancel, event, avoidStripEvent);
             return $mdDialog.show(dialog);
         };
         /**
@@ -132,8 +132,8 @@ module.exports = function (app) {
          * @param event
          * @return {promise}
          */
-        self.infoMessage = function (content, cancelButton, escapeToCancel, event) {
-            var dialog = prepareDialog('info', content, cancelButton, escapeToCancel, event);
+        self.infoMessage = function (content, cancelButton, escapeToCancel, event, avoidStripEvent) {
+            var dialog = prepareDialog('info', content, cancelButton, escapeToCancel, event, avoidStripEvent);
             return $mdDialog.show(dialog);
         };
         /**
@@ -144,8 +144,8 @@ module.exports = function (app) {
          * @param event
          * @returns {promise}
          */
-        self.confirmMessage = function (content, acceptButton, rejectButton, event) {
-            var dialog = prepareDialog('confirm', content, rejectButton, acceptButton, event);
+        self.confirmMessage = function (content, acceptButton, rejectButton, event, avoidStripEvent) {
+            var dialog = prepareDialog('confirm', content, rejectButton, acceptButton, event, avoidStripEvent);
             return $mdDialog.show(dialog);
         };
         /**
