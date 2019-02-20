@@ -2205,7 +2205,7 @@ $ta-background-transparent: transparent !important;
   }
 }
 
-.ta-text-editor {
+.ta-text-editor, #messageBody {
   .ta-bind {
     border-bottom: 1px solid rgba(0, 0, 0, 0.117647);
     min-height: 0 !important;
