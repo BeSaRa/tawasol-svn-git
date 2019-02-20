@@ -49,11 +49,15 @@ module.exports = function (app) {
          * @param escapeToCancel
          * @param event
          * @param hideIcon
+         * @param avoidStripEvent
          * @returns {{template: Object, controller: dialog.controller, locals: {content: *, cancelButton: *, acceptButton: *}, targetEvent: (*|boolean), escapeToClose: (*|boolean), controllerAs: string, bindToController: boolean, multiple: boolean}}
          */
-        function prepareDialog(type, content, cancelButton, escapeToCancel, event, hideIcon) {
+        function prepareDialog(type, content, cancelButton, escapeToCancel, event, hideIcon, avoidStripEvent) {
             // if just confirm content, acceptButton, rejectButton, escapeToCancel, event
-            content = $sce.trustAsHtml(stripScripts(content));
+            if (!avoidStripEvent)
+                content = $sce.trustAsHtml(stripScripts(content));
+            else
+                content = $sce.trustAsHtml(content);
             return {
                 template: getTemplate(type),
                 controller: function ($mdDialog) {
@@ -145,6 +149,19 @@ module.exports = function (app) {
             return $mdDialog.show(dialog);
         };
         /**
+         * plain dialog
+         * @param content
+         * @param cancelButtonText
+         * @param escapeToCancel
+         * @param event
+         * @param hideIcon
+         * @returns {promise}
+         */
+        self.plainMessage = function (content, cancelButtonText, escapeToCancel, event, hideIcon) {
+            var dialog = prepareDialog('plain', content, cancelButtonText, escapeToCancel, event, hideIcon, true);
+            return $mdDialog.show(dialog);
+        };
+        /**
          * show custom template dialog
          * @param options
          * @returns {promise}
@@ -202,7 +219,6 @@ module.exports = function (app) {
          * @return user input
          */
         self.showPrompt = function (ev, title, text, placeHolder) {
-
             var confirm = $mdDialog.prompt()
                 .title(title)
                 .textContent(text)
