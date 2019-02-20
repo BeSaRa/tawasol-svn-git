@@ -1,5 +1,5 @@
-<div>
-    <div flex layout="row">
+<div layout="column">
+    <div layout="row">
         <div ng-if="ctrl.allowUpload && !ctrl.disableEverything">
             <md-menu-bar>
                 <md-menu>
@@ -41,8 +41,10 @@
                 </div>
             </md-button>
         </div>
-        <ng-form flex layout="column" name="attachment_from">
-            <div ng-if="ctrl.attachment" flex layout="row">
+    </div>
+
+        <ng-form layout="column" name="attachment_from">
+            <div ng-if="ctrl.attachment" layout="row">
                 <md-input-container flex>
                     <label for="documentTitle">{{lang.attachment_document_title}}</label>
                     <input ng-model="ctrl.attachment.documentTitle" name="documentTitle" id="documentTitle">
@@ -129,9 +131,9 @@
                 </div>
             </div>
         </ng-form>
-    </div>
 
-    <div ng-if="!!ctrl.attachments.length" flex>
+
+    <div ng-if="!!ctrl.attachments.length">
         <md-card layout="column">
             <md-table-container>
                 <div flex scroll-directive>
