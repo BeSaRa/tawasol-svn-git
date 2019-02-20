@@ -9,6 +9,8 @@ module.exports = function (app) {
                                                                          generator,
                                                                          availableProxies,
                                                                          toast,
+                                                                         $templateCache,
+                                                                         $templateRequest,
                                                                          $q,
                                                                          $rootScope,
                                                                          cmsTemplate,
@@ -198,17 +200,28 @@ module.exports = function (app) {
                 }
             } else {
                 if (usersWhoSetYouAsProxy && usersWhoSetYouAsProxy.length) {
-                    var scope = $rootScope.$new();
 
-                    var html = cmsTemplate.getPopup('delegated-by-users-message');
-                    scope.ctrl = {
-                        outOfOfficeUsers: usersWhoSetYouAsProxy
-                    };
-                    LangWatcher(scope);
-                    html = $compile(angular.element(html))(scope);
+                    var scope = $rootScope.$new(), templateDefer = $q.defer(),
+                        templateUrl = cmsTemplate.getPopup('delegated-by-users-message'),
+                        html = $templateCache.get(templateUrl);
 
-                    $timeout(function () {
-                        dialog.confirmMessage(html[0].innerHTML)
+                    if (!html){
+                        $templateRequest(templateUrl).then(function (template) {
+                            html = template;
+                            templateDefer.resolve(html);
+                        });
+                    }else {
+                        $timeout(function () {
+                            templateDefer.resolve(html);
+                        })
+                    }
+                    templateDefer.promise.then(function (template) {
+                        scope.ctrl = {
+                            outOfOfficeUsers: usersWhoSetYouAsProxy
+                        };
+                        LangWatcher(scope);
+                        template = $compile(angular.element(template))(scope);
+                        dialog.confirmMessage(template[0].innerHTML)
                             .then(function (result) {
                                 dialog
                                     .showDialog({

@@ -5,6 +5,8 @@ module.exports = function (app) {
                                                       LangWatcher,
                                                       generator,
                                                       $timeout,
+                                                      $templateRequest,
+                                                      $templateCache,
                                                       dialog,
                                                       langService,
                                                       applicationUser,
@@ -504,47 +506,61 @@ module.exports = function (app) {
                 }
             } else {
                 if (self.currentEmployee.proxyUsers && self.currentEmployee.proxyUsers.length) {
-                    var scope = $rootScope.$new();
-
                     var outOfOfficeUsers = generator.generateCollection(self.currentEmployee.proxyUsers, ProxyInfo);
-                    var html = cmsTemplate.getPopup('delegated-by-users-message');
-                    scope.ctrl = {
-                        outOfOfficeUsers: outOfOfficeUsers
-                    };
-                    LangWatcher(scope);
-                    html = $compile(angular.element(html))(scope);
+                    var scope = $rootScope.$new(), templateDefer = $q.defer(),
+                        templateUrl = cmsTemplate.getPopup('delegated-by-users-message'),
+                        html = $templateCache.get(templateUrl);
 
-                    $timeout(function () {
-                        dialog.confirmMessage(html[0].innerHTML)
-                            .then(function (result) {
-                                dialog
-                                    .showDialog({
-                                        targetEvent: null,
-                                        templateUrl: cmsTemplate.getPopup('update-manager-proxy'),
-                                        controller: 'updateManagerProxyPopCtrl',
-                                        controllerAs: 'ctrl',
-                                        locals: {
-                                            currentUser: self.ouApplicationUser,
-                                            availableProxies: availableProxies
-                                        },
-                                        resolve: {
-                                            usersWhoSetProxy: function (ouApplicationUserService) {
-                                                'ngInject';
-                                                return ouApplicationUserService.getUsersWhoSetYouAsProxy(self.applicationUser)
+                    if (!html){
+                        $templateRequest(templateUrl).then(function (template) {
+                            html = template;
+                            templateDefer.resolve(html);
+                        });
+                    }else {
+                        $timeout(function () {
+                            templateDefer.resolve(html);
+                        })
+                    }
+                    templateDefer.promise.then(function (template) {
+
+                        scope.ctrl = {
+                            outOfOfficeUsers: outOfOfficeUsers
+                        };
+                        LangWatcher(scope);
+                        template = $compile(angular.element(template))(scope);
+
+                        $timeout(function () {
+                            dialog.confirmMessage(template[0].innerHTML)
+                                .then(function (result) {
+                                    dialog
+                                        .showDialog({
+                                            targetEvent: null,
+                                            templateUrl: cmsTemplate.getPopup('update-manager-proxy'),
+                                            controller: 'updateManagerProxyPopCtrl',
+                                            controllerAs: 'ctrl',
+                                            locals: {
+                                                currentUser: self.ouApplicationUser,
+                                                availableProxies: availableProxies
+                                            },
+                                            resolve: {
+                                                usersWhoSetProxy: function (ouApplicationUserService) {
+                                                    'ngInject';
+                                                    return ouApplicationUserService.getUsersWhoSetYouAsProxy(self.applicationUser)
+                                                }
                                             }
-                                        }
+                                        })
+                                        .then(function (result) {
+                                            form.$setUntouched();
+                                            defer.resolve(true);
+                                        }).catch(function (error) {
+                                        self.isOutOfOffice = !self.isOutOfOffice;
                                     })
-                                    .then(function (result) {
-                                        form.$setUntouched();
-                                        defer.resolve(true);
-                                    }).catch(function (error) {
-                                    self.isOutOfOffice = !self.isOutOfOffice;
-                                })
 
-                            })
-                            .catch(function () {
-                                self.isOutOfOffice = !self.isOutOfOffice;
-                            });
+                                })
+                                .catch(function () {
+                                    self.isOutOfOffice = !self.isOutOfOffice;
+                                });
+                        });
                     });
 
                 } else {
