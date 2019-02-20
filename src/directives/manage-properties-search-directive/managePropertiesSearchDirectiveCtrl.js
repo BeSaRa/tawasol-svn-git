@@ -609,7 +609,7 @@ module.exports = function (app) {
                 self.getYears();
                 $timeout(function () {
                     self.emptyResults = false;
-                }, 500)
+                })
 
             }
         });
