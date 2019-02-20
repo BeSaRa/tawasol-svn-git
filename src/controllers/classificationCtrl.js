@@ -175,6 +175,9 @@ module.exports = function (app) {
                     .then(function () {
                         classification.setRelatedOus([]);
                         classification.update().then(self.displayClassificationGlobalMessage);
+                    })
+                    .catch(function () {
+                        classification.setIsGlobal(false);
                     });
             } else {
                 self.openSelectOUClassificationDialog(classification)
