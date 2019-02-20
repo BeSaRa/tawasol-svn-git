@@ -122,7 +122,7 @@ module.exports = function (app) {
                 },
                 ol: {
                     langKey: 'wyswyg_ol',
-                    icon: 'format-list-numbers',
+                    icon: 'format-list-numbered',
                     type: buttonTypes.icon,
                     buttonText: 'OL'
                 },
