@@ -521,7 +521,7 @@ module.exports = function (app) {
          */
         self.getLink = function (searchedOutgoingDocument, $event) {
             viewDocumentService.loadDocumentViewUrlWithOutEdit(searchedOutgoingDocument.vsId).then(function (result) {
-                dialog.successMessage(langService.get('link_message').change({result: result}));
+                dialog.successMessage(langService.get('link_message').change({result: result}),null,null,null,null,true);
                 return true;
             });
         };

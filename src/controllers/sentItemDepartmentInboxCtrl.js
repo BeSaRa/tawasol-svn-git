@@ -384,7 +384,7 @@ module.exports = function (app) {
         self.getLink = function (sentItemDepartmentInbox, $event) {
             viewDocumentService.loadDocumentViewUrlWithOutEdit(sentItemDepartmentInbox.vsId).then(function (result) {
                 //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
-                dialog.successMessage(langService.get('link_message').change({result: result}));
+                dialog.successMessage(langService.get('link_message').change({result: result}),null,null,null,null,true);
                 return true;
             });
         };
