@@ -323,10 +323,10 @@ module.exports = function (app) {
             var info = userSentItem.getInfo();
             managerService.manageDocumentComments(info.vsId, info.title, $event)
                 .then(function (documentComments) {
-                    userSentItem.comments = documentComments;
+                    //userSentItem.comments = documentComments;
                 })
                 .catch(function (documentComments) {
-                    userSentItem.comments = documentComments;
+                    //userSentItem.comments = documentComments;
                 });
         };
 
