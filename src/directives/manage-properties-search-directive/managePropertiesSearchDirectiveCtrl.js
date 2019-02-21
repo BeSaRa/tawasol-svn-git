@@ -564,6 +564,7 @@ module.exports = function (app) {
                     if (!self.employee.hasPermissionTo('SEARCH_IN_ALL_OU') && self.employee.isInDepartment()) {
                         result.push(angular.copy(self.employee.userOrganization));
                     } else {
+                        result.unshift(angular.copy(organizationService.getOrganizationById(self.document.registryOU)));
                         self.document.ou = null;
                     }
                     self.subOrganizations = result;
