@@ -12,7 +12,7 @@
 <body>
 <script>
     var xhr = new XMLHttpRequest();
-    xhr.open('POST','http://100.100.3.220:9080/CMSServices/service/auth/login');
+    xhr.open('POST', 'http://win-6e33famdeje.cmsad.local:9081/CMSServices/service/auth/login');
     xhr.onreadystatechange = redirect;
     xhr.responseType = 'application/json';
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -30,10 +30,16 @@
     xhr.send(JSON.stringify(new Credentials()));
 
     function redirect() {
-        console.log('xhr.response',xhr.response);
-        if (xhr.status === 200) {
-            // window.location.href = 'http://localhost:8080/#/loading/entity/motc'
+        var token = null ;
+        if (xhr.status === 200 && xhr.readyState === xhr.DONE) {
+            token = xhr.response.rs.token;
+            document.cookie = "username=" + token + "; path=/";
+            window.location.href = 'http://localhost:8080/#/loading/entity/motc'
         }
+    }
+
+    xhr.onerror = function (ev) {
+        console.log("ERROR", ev);
     }
 
 
