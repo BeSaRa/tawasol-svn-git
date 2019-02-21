@@ -3255,48 +3255,71 @@ module.exports = function (app) {
         };
 
         self.printData = function (correspondences, headers, title) {
-            var data = self.prepareExportedData(correspondences, headers, title);
-            return $http.post(urlService.exportToPdf, data)
-                .then(function (result) {
-                    var physicalPath = result.data.rs;
-                    if (!physicalPath) {
-                        toast.error(langService.get('error_export_to_pdf'));
-                        return $q.reject(langService.get('error_export_to_pdf'))
-                    } else {
-                        return $http.get(physicalPath, {
-                            responseType: 'blob'
-                        }).then(function (result) {
-                            var defer = $q.defer();
-                            return {
-                                url: window.URL.createObjectURL(result.data),
-                                blob: result.data,
-                                physicalPath: physicalPath
-                            };
-                        });
-                    }
-                })
-                .then(function (file) {
-                    var oldIframe = document.getElementById('iframe-print');
-                    oldIframe ? oldIframe.parentNode.removeChild(oldIframe) : null;
-                    if (helper.browser.isIE()) {
-                        window.navigator.msSaveOrOpenBlob(file.blob);
-                    } else if (helper.browser.isFirefox()) {
-                        window.open(file.physicalPath, '_blank');
-                    } else {
-                        var iframe = document.createElement('iframe');
-                        iframe.id = 'iframe-print';
-                        iframe.onload = function (ev) {
-                            iframe.contentWindow.focus();
-                            iframe.contentWindow.print();
-
-                        };
-                        iframe.src = file.url;
-                        document.body.appendChild(iframe);
-                    }
-                })
-                .catch(function () {
-                    toast.error(langService.get('error_export_to_pdf'));
+            var data = self.prepareExportedData(correspondences, headers, title), defer = $q.defer();
+            dialog
+                .confirmMessage(langService.get('select_file_type_to_print_download'), 'PDF', 'EXCEL')
+                .then(function (pdf) {
+                    defer.resolve({
+                        url: urlService.exportToPdf,
+                        type: 'pdf'
+                    })
+                }, function (excel) {
+                    defer.resolve({
+                        url: urlService.exportToExcel,
+                        type: 'excel'
+                    })
                 });
+
+
+            return defer.promise.then(function (exportOption) {
+                return $http.post(exportOption.url, data)
+                    .then(function (result) {
+                        var physicalPath = result.data.rs;
+                        if (!physicalPath) {
+                            toast.error(langService.get('error_export_to_pdf'));
+                            return $q.reject(langService.get('error_export_to_pdf'))
+                        } else {
+                            return $http.get(physicalPath, {
+                                responseType: 'blob'
+                            }).then(function (result) {
+                                var defer = $q.defer();
+                                return {
+                                    url: window.URL.createObjectURL(result.data),
+                                    blob: result.data,
+                                    physicalPath: physicalPath
+                                };
+                            });
+                        }
+                    })
+                    .then(function (file) {
+                        var oldIframe = document.getElementById('iframe-print');
+                        oldIframe ? oldIframe.parentNode.removeChild(oldIframe) : null;
+
+                        if (exportOption.type === 'excel'){
+                            window.open(file.physicalPath, '_blank');
+                            return;
+                        }
+
+                        if (helper.browser.isIE()) {
+                            window.navigator.msSaveOrOpenBlob(file.blob);
+                        } else if (helper.browser.isFirefox()) {
+                            window.open(file.physicalPath, '_blank');
+                        } else {
+                            var iframe = document.createElement('iframe');
+                            iframe.id = 'iframe-print';
+                            iframe.onload = function (ev) {
+                                iframe.contentWindow.focus();
+                                iframe.contentWindow.print();
+
+                            };
+                            iframe.src = file.url;
+                            document.body.appendChild(iframe);
+                        }
+                    })
+                    .catch(function () {
+                        toast.error(langService.get('error_export_to_pdf'));
+                    });
+            });
         };
 
         self.prepareExportedData = function (correspondences, tableHeaders, title) {
