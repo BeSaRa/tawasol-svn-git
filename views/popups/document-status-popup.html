@@ -38,8 +38,9 @@
                         <md-input-container flex>
                             <label for="lookupStrKey">{{lang.label_document_class}}</label>
                             <md-select name="lookupStrKey" id="lookupStrKey" multiple
+                                       ng-model-options="{trackBy: '$value.id'}"
                                        ng-model="ctrl.documentStatus.lookupStrKey">
-                                <md-option ng-value="dc" ng-repeat="dc in ctrl.documentClasses track by $index">
+                                <md-option ng-value="dc" ng-repeat="dc in ctrl.documentClasses">
                                     {{dc.getTranslatedName()}}
                                 </md-option>
                             </md-select>
