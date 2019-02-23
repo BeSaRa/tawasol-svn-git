@@ -1008,7 +1008,7 @@ module.exports = function (app) {
                 permissionKey: 'GET_A_LINK_TO_THE_DOCUMENT',
                 callback: self.getLink,
                 class: "action-green",
-                hide: false,
+                hide: true,
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },

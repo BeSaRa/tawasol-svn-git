@@ -1163,7 +1163,7 @@ module.exports = function (app) {
                 permissionKey: 'GET_A_LINK_TO_THE_DOCUMENT',
                 callback: self.getLink,
                 class: "action-green",
-                hide: false,
+                hide: true,
                 checkShow: self.checkToShowAction
             },
             // Create Copy

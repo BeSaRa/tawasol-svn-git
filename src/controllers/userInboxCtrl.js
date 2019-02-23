@@ -1229,7 +1229,7 @@ module.exports = function (app) {
                 permissionKey: 'GET_A_LINK_TO_THE_DOCUMENT',
                 callback: self.getLink,
                 class: "action-green",
-                hide: false,
+                hide: true,
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 }
