@@ -698,7 +698,7 @@
 
                                                 <!-- Authority Levels -->
                                                 <md-input-container flex>
-                                                    <label>{{lang.authority_level}}</label>
+                                                    <label for="proxyAuthorityLevels">{{lang.authority_level}}</label>
                                                     <md-select multiple name="proxyAuthorityLevels"
                                                                ng-required="ctrl.isOutOfOffice"
                                                                ng-disabled="!ctrl.isOutOfOffice"
@@ -762,7 +762,7 @@
                                                 <!-- Out of office Message -->
                                                 <md-input-container flex
                                                                     ng-if="ctrl.ouApplicationUser.viewProxyMessage">
-                                                    <label>{{lang.out_of_office_message}}</label>
+                                                    <label for="proxyMessage">{{lang.out_of_office_message}}</label>
                                                     <textarea ng-model="ctrl.ouApplicationUser.proxyMessage"
                                                               name="proxyMessage" id="proxyMessage" minlength="2"
                                                               maxlength="265" required
@@ -793,7 +793,7 @@
                                     <div layout="row">
                                         <!-- Organization Unit -->
                                         <md-input-container flex>
-                                            <label>{{lang.organization_unit}}</label>
+                                            <label for="ouId">{{lang.organization_unit}}</label>
                                             <md-select name="ouId" id="ouId"
                                                        ng-required="ctrl.isUserCommentForm"
                                                        ng-model="ctrl.userComment.ouId">
@@ -810,7 +810,7 @@
 
                                         <!-- Item Order -->
                                         <md-input-container flex>
-                                            <label>{{lang.item_order}}</label>
+                                            <label for="itemOrder">{{lang.item_order}}</label>
                                             <input name="itemOrder" id="itemOrder" maxlength="5"
                                                    ng-required="ctrl.isUserCommentForm"
                                                    ng-model="ctrl.userComment.itemOrder"

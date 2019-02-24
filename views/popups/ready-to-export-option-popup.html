@@ -63,8 +63,8 @@
                     <div class="p20" ng-if="ctrl.canExportAnyRelatedData()">
                         <div layout="row" flex>
                             <md-input-container flex>
-                                <label>{{lang.select_export_type}}</label>
-                                <md-select ng-model="ctrl.exportType" ng-change="ctrl.onChangeExportType()">
+                                <label for="exportType">{{lang.select_export_type}}</label>
+                                <md-select id="exportType" ng-model="ctrl.exportType" ng-change="ctrl.onChangeExportType()">
                                     <md-option ng-value="type.id" ng-repeat="type in ctrl.exportTypeList">
                                         {{lang.get(type.key)}}
                                     </md-option>

@@ -145,14 +145,14 @@
                                     </md-input-container>
                                     <!-- Received Date Greater Than -->
                                     <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 4" flex>
-                                        <label>{{lang.date}}</label>
-                                        <md-datepicker ng-model="ctrl.filter.ui.key_4.value"
+                                        <label for="key_4">{{lang.date}}</label>
+                                        <md-datepicker id="key_4" ng-model="ctrl.filter.ui.key_4.value"
                                                        md-open-on-focus></md-datepicker>
                                     </md-input-container>
                                     <!-- Received Date Less Than -->
                                     <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 6" flex>
-                                        <label>{{lang.date}}</label>
-                                        <md-datepicker ng-model="ctrl.filter.ui.key_6.value"
+                                        <label for="key_6">{{lang.date}}</label>
+                                        <md-datepicker id="key_6" ng-model="ctrl.filter.ui.key_6.value"
                                                        md-open-on-focus></md-datepicker>
                                     </md-input-container>
                                 </div>
@@ -164,8 +164,8 @@
                                     <div layout="row">
                                         <!-- Received Date From -->
                                         <md-input-container flex>
-                                            <label>{{lang.user_inbox_filter_from}}</label>
-                                            <md-datepicker ng-model="ctrl.filter.ui.key_11.value1"
+                                            <label for="key_11_1">{{lang.user_inbox_filter_from}}</label>
+                                            <md-datepicker id="key_11_1" ng-model="ctrl.filter.ui.key_11.value1"
                                                            name="receivedDateStart" md-open-on-focus
                                                            ng-change="ctrl.getMinReceivedEndDate($event)"
                                                            md-max-date="ctrl.calculatedMaxReceivedStartDate"
@@ -176,8 +176,8 @@
                                         </md-input-container>
                                         <!-- Received Date To -->
                                         <md-input-container flex>
-                                            <label>{{lang.user_inbox_filter_to}}</label>
-                                            <md-datepicker ng-model="ctrl.filter.ui.key_11.value2"
+                                            <label for="key_11_2">{{lang.user_inbox_filter_to}}</label>
+                                            <md-datepicker id="key_11_2" ng-model="ctrl.filter.ui.key_11.value2"
                                                            name="receivedDateEnd" md-open-on-focus
                                                            ng-change="ctrl.getMaxReceivedStartDate($event)"
                                                            md-min-date="ctrl.calculatedMinReceivedEndDate"
@@ -195,8 +195,8 @@
                                     <div layout="row">
                                         <!-- Due Date From -->
                                         <md-input-container flex>
-                                            <label>{{lang.user_inbox_filter_from}}</label>
-                                            <md-datepicker ng-model="ctrl.filter.ui.key_10.value1"
+                                            <label for="key_10_1">{{lang.user_inbox_filter_from}}</label>
+                                            <md-datepicker id="key_10_1" ng-model="ctrl.filter.ui.key_10.value1"
                                                            name="dueDateStart" md-open-on-focus
                                                            ng-change="ctrl.getMinDueEndDate($event)"
                                                            md-max-date="ctrl.calculatedMaxDueStartDate"
@@ -207,8 +207,8 @@
                                         </md-input-container>
                                         <!-- Due Date To -->
                                         <md-input-container flex>
-                                            <label>{{lang.user_inbox_filter_to}}</label>
-                                            <md-datepicker ng-model="ctrl.filter.ui.key_10.value2"
+                                            <label for="key_10_2">{{lang.user_inbox_filter_to}}</label>
+                                            <md-datepicker id="key_10_2" ng-model="ctrl.filter.ui.key_10.value2"
                                                            name="dueDateEnd" md-open-on-focus
                                                            ng-change="ctrl.getMaxDueStartDate($event)"
                                                            md-min-date="ctrl.calculatedMinDueEndDate"

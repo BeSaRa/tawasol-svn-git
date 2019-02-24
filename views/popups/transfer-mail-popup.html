@@ -113,8 +113,8 @@
                                     <td md-cell>
                                         <div>
                                             <md-input-container>
-                                                <label>{{lang.select_user}}</label>
-                                                <md-select ng-model="workItem.domainName">
+                                                <label for="domainName">{{lang.select_user}}</label>
+                                                <md-select id="domainName" ng-model="workItem.domainName">
                                                     <md-option ng-value="user.applicationUser.domainName"
                                                                ng-repeat="user in ctrl.ouApplicationUsers">
                                                         {{user.applicationUser.getTranslatedName()}}

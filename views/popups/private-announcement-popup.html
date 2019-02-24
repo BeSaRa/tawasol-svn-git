@@ -135,8 +135,8 @@
                             <div layout="column" class="p20">
                                 <div layout="row">
                                     <md-input-container flex>
-                                        <label>{{lang.organization_unit}}</label>
-                                        <md-select ng-model="ctrl.includedOrganization">
+                                        <label for="ou">{{lang.organization_unit}}</label>
+                                        <md-select id="ou" ng-model="ctrl.includedOrganization">
                                             <md-option ng-model-options="{trackBy: '$value.id'}"
                                                        ng-repeat="organization in ctrl.organizationsHasRegistry track by $index"
                                                        ng-value="organization.id"

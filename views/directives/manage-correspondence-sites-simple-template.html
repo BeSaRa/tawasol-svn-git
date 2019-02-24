@@ -6,17 +6,20 @@
             <div scroll-directive layout="column">
                 <!-- Simple Search Box -->
                 <div layout="row" flex>
+                    <!-- Site Type -->
                     <md-input-container class="exclude-margin" flex>
-                        <label>{{lang.sites_select_site_type}}</label>
-                        <md-select ng-model="ctrl.selectedSiteType" ng-change="ctrl.onSiteTypeChange($event)">
+                        <label for="siteType">{{lang.sites_select_site_type}}</label>
+                        <md-select id="siteType" ng-model="ctrl.selectedSiteType"
+                                   ng-change="ctrl.onSiteTypeChange($event)">
                             <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
                                 {{type.getTranslatedName()}}
                             </md-option>
                         </md-select>
                     </md-input-container>
+                    <!-- Main Site -->
                     <md-input-container class="exclude-margin" flex>
-                        <label>{{lang.main_site}}</label>
-                        <md-select ng-model="ctrl.selectedMainSite"
+                        <label for="mainSite">{{lang.main_site}}</label>
+                        <md-select id="mainSite" ng-model="ctrl.selectedMainSite"
                                    ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
                                    ng-change="ctrl.getSubSites($event)">
                             <md-option ng-value="type" ng-repeat="type in ctrl.mainSites">
@@ -30,8 +33,8 @@
                 <div layout="row" flex ng-if="false">
                     <!-- Correspondence Site Type -->
                     <md-input-container flex>
-                        <label>{{lang.sites_select_site_type}}</label>
-                        <md-select ng-model="ctrl.selectedType">
+                        <label for="siteType">{{lang.sites_select_site_type}}</label>
+                        <md-select id="siteType" ng-model="ctrl.selectedType">
                             <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
                                 {{type.getTranslatedName()}}
                             </md-option>
@@ -556,8 +559,8 @@
                 <div layout="row" flex ng-if="!ctrl.disableCorrespondence">
                     <!-- Distribution Lists -->
                     <md-input-container flex>
-                        <label>{{lang.distribution_list}}</label>
-                        <md-select ng-model="ctrl.selectedDistributionList"
+                        <label for="distributionList">{{lang.distribution_list}}</label>
+                        <md-select id="distributionList" ng-model="ctrl.selectedDistributionList"
                                    ng-change="ctrl.getCorrespondenceSites_DL($event)">
                             <md-option ng-value="distributionList.distributionList"
                                        ng-repeat="distributionList in ctrl.distributionLists">

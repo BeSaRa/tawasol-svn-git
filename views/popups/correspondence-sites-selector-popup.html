@@ -8,12 +8,13 @@
         <md-content scroll-directive>
             <div class="p20" layout="row">
                 <md-input-container flex>
-                    <label>{{lang.select_correspondence_site}}</label>
-                    <md-select multiple ng-model="ctrl.correspondenceSite">
+                    <label for="correspondenceSites">{{lang.select_correspondence_site}}</label>
+                    <md-select multiple ng-model="ctrl.correspondenceSite"
+                               id="correspondenceSites">
                         <md-option
+                                ng-repeat="correspondenceSite in ctrl.correspondenceSites track by $index"
                                 ng-if="ctrl.excludeIfExists(correspondenceSite) && !correspondenceSite.isGlobal && correspondenceSite.status"
-                                ng-value="correspondenceSite"
-                                ng-repeat="correspondenceSite in ctrl.correspondenceSites track by $index">
+                                ng-value="correspondenceSite">
                             {{correspondenceSite.getTranslatedName()}}
                         </md-option>
                     </md-select>

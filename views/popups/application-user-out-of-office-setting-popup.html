@@ -79,7 +79,7 @@
 
                                 <!-- Authority Levels -->
                                 <md-input-container flex>
-                                    <label>{{lang.authority_level}}</label>
+                                    <label for="proxyAuthorityLevels">{{lang.authority_level}}</label>
                                     <md-select multiple name="proxyAuthorityLevels"
                                                ng-required="ctrl.isOutOfOffice"
                                                ng-disabled="!ctrl.isOutOfOffice"
@@ -143,7 +143,7 @@
                                 </md-switch>
                                 <!-- Out of office Message -->
                                 <md-input-container flex ng-if="ctrl.ouApplicationUser.viewProxyMessage">
-                                    <label>{{lang.out_of_office_message}}</label>
+                                    <label for="proxyMessage">{{lang.out_of_office_message}}</label>
                                     <textarea ng-model="ctrl.ouApplicationUser.proxyMessage"
                                               name="proxyMessage" id="proxyMessage" minlength="4"
                                               maxlength="265" required

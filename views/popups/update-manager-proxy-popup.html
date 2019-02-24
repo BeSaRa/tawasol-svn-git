@@ -9,12 +9,12 @@
                 <div layout="column" class="p20">
                     <div layout="row" ng-repeat="proxyManager in ctrl.proxyManagers">
                         <md-input-container flex>
-                            <label>{{lang.user}}</label>
-                            <input ng-model="proxyManager.name" ng-disabled="true" ng-readonly="true">
+                            <label for="userName">{{lang.user}}</label>
+                            <input id="userName" ng-model="proxyManager.name" ng-disabled="true" ng-readonly="true">
                         </md-input-container>
                         <!-- User On Behalf / Proxy User -->
                         <md-input-container flex>
-                            <label>{{lang.user_on_behalf}}</label>
+                            <label for="proxyUser">{{lang.user_on_behalf}}</label>
                             <md-select name="proxyUser" id="proxyUser"
                                        required
                                        ng-change="ctrl.setProxyUser(proxyManager, $event)"

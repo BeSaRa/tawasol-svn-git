@@ -18,8 +18,8 @@
                                 <div ng-if="!ctrl.rootMode && !ctrl.editMode" layout="row">
                                     <md-input-container tooltip="{{ctrl.parentOrganization.getTranslatedName(true)}}"
                                                         flex>
-                                        <label>{{lang.parent_organization}}</label>
-                                        <md-select ng-model-options="{trackBy: '$value.id'}"
+                                        <label for="parentOrganization">{{lang.parent_organization}}</label>
+                                        <md-select id="parentOrganization" ng-model-options="{trackBy: '$value.id'}"
                                                    ng-disabled="true" required name="parent"
                                                    ng-model="ctrl.parentOrganization">
                                             <md-option md-truncate ng-value="organization"
@@ -35,8 +35,9 @@
                                 <div ng-if="ctrl.editMode && !ctrl.rootMode" layout="row">
                                     <md-input-container tooltip="{{ctrl.parentOrganization.getTranslatedName(true)}}"
                                                         flex>
-                                        <label>{{lang.parent_organization}}</label>
-                                        <md-select ng-model-options="{trackBy: '$value.id'}"
+                                        <label for="parentOrganization">{{lang.parent_organization}}</label>
+                                        <md-select id="parentOrganization"
+                                                   ng-model-options="{trackBy: '$value.id'}"
                                                    ng-disabled="true" required name="parent"
                                                    ng-model="ctrl.parentOrganization">
                                             <md-option md-truncate ng-value="organization"
@@ -305,7 +306,9 @@
                                                custom-validate-directive="phone_mobile" id="mobile"
                                                ng-model="ctrl.organization.mobile">
                                         <div ng-messages="org_form.mobile.$error">
-                                            <div ng-message="phone_mobile">{{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}</div>
+                                            <div ng-message="phone_mobile">
+                                                {{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}
+                                            </div>
                                             <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
                                         </div>
                                     </md-input-container>

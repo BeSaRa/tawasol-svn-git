@@ -21,8 +21,8 @@
                                 </div>
                                 <div layout="row">
                                     <md-input-container flex>
-                                        <label>{{lang.label_document_class}}</label>
-                                        <md-select aria-label="classDescription"
+                                        <label for="docClass">{{lang.label_document_class}}</label>
+                                        <md-select id="docClass" aria-label="classDescription"
                                                    ng-model="ctrl.referencePlanItem.expressionComponents.classDescription">
                                             <md-option ng-value="documentClass.customLookupKey"
                                                        ng-repeat="documentClass in ctrl.documentClasses">
@@ -31,8 +31,8 @@
                                         </md-select>
                                     </md-input-container>
                                     <md-input-container flex>
-                                        <label>{{lang.security_level}}</label>
-                                        <md-select aria-label="securityLevel"
+                                        <label for="securityLevel">{{lang.security_level}}</label>
+                                        <md-select id="securityLevel" aria-label="securityLevel"
                                                    ng-model="ctrl.referencePlanItem.expressionComponents.securityLevel">
                                             <md-option ng-value="security.lookupKey"
                                                        ng-repeat="security in ctrl.securityLevels">
@@ -41,8 +41,8 @@
                                         </md-select>
                                     </md-input-container>
                                     <md-input-container flex>
-                                        <label>{{lang.label_document_type}}</label>
-                                        <md-select ng-model="ctrl.referencePlanItem.expressionComponents.docType">
+                                        <label for="docType">{{lang.label_document_type}}</label>
+                                        <md-select id="docType" ng-model="ctrl.referencePlanItem.expressionComponents.docType">
                                             <md-option ng-value="documentType.lookupKey"
                                                        ng-repeat="documentType in ctrl.documentTypes">
                                                 {{documentType.getTranslatedName()}}

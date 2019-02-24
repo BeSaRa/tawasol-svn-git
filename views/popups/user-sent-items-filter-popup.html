@@ -119,8 +119,8 @@
                         </md-input-container>
                         <!-- Main Site -->
                         <md-input-container flex>
-                            <label>{{lang.main_site}}</label>
-                            <md-select ng-model="ctrl.searchCriteria.selectedMainSite"
+                            <label for="mainSite">{{lang.main_site}}</label>
+                            <md-select id="mainSite" ng-model="ctrl.searchCriteria.selectedMainSite"
                                        ng-model-options="{trackBy:'$value.id'}"
                                        ng-disabled="!ctrl.searchCriteria.selectedSiteType || !ctrl.searchCriteria.selectedSiteType.id"
                                        md-on-close="ctrl.clearSearchText('mainSite')"
@@ -144,8 +144,8 @@
                         </md-input-container>
                         <!-- Sub Site -->
                         <md-input-container flex>
-                            <label>{{lang.sub_site}}</label>
-                            <md-select ng-model="ctrl.searchCriteria.selectedSubSite"
+                            <label for="subSite">{{lang.sub_site}}</label>
+                            <md-select id="subSite" ng-model="ctrl.searchCriteria.selectedSubSite"
                                        ng-model-options="{trackBy:'$value.id'}"
                                        ng-disabled="!ctrl.searchCriteria.selectedSiteType || !ctrl.searchCriteria.selectedSiteType.id || !ctrl.searchCriteria.selectedMainSite"
                                        md-on-close="ctrl.clearSearchText('subSite')"

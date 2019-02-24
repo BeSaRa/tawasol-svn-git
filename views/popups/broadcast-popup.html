@@ -27,9 +27,9 @@
                         <div layout="row" flex>
                             <!-- Organization Unit -->
                             <md-input-container flex>
-                                <label>{{lang.organizations}}</label>
+                                <label for="ouBroadcast">{{lang.organizations}}</label>
                                 <md-select ng-model-options="{trackBy: '$value.id'}"
-                                           multiple
+                                           multiple id="ouBroadcast"
                                            ng-required="!ctrl.wfGroupBroadcast.length"
                                            name="ouBroadcast" ng-model="ctrl.ouBroadcast">
                                     <md-option
@@ -45,9 +45,9 @@
                             </md-input-container>
                             <!-- Workflow Group -->
                             <md-input-container flex>
-                                <label>{{lang.workflow_groups}}</label>
+                                <label for="workflowGroupBroadcast">{{lang.workflow_groups}}</label>
                                 <md-select ng-model-options="{trackBy: '$value.id'}"
-                                           multiple
+                                           multiple id="workflowGroupBroadcast"
                                            ng-required="!ctrl.ouBroadcast.length"
                                            name="workflowGroupBroadcast" ng-model="ctrl.wfGroupBroadcast">
                                     <md-option md-truncate

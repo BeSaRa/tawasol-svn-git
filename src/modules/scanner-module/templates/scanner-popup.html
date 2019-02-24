@@ -48,8 +48,8 @@
                 <div scroll-directive>
                     <div layout="column" id="scanner-properties">
                         <md-input-container>
-                            <label>{{lang.color_format}}</label>
-                            <md-select ng-disabled="ctrl.disableProperties.colorFormat" aria-label="color format"
+                            <label for="colorFormat">{{lang.color_format}}</label>
+                            <md-select id="colorFormat" ng-disabled="ctrl.disableProperties.colorFormat" aria-label="color format"
                                        ng-model="ctrl.colorFormat"
                                        ng-change="ctrl.onColorFormatChanged(ctrl.colorFormat)">
                                 <md-option ng-value="format" ng-repeat="format in ctrl.listColorFormat">
@@ -58,8 +58,8 @@
                             </md-select>
                         </md-input-container>
                         <md-input-container>
-                            <label>{{lang.scan_mode}}</label>
-                            <md-select ng-disabled="ctrl.disableProperties.scanMode" aria-label="Scanner Mode"
+                            <label for="scanMode">{{lang.scan_mode}}</label>
+                            <md-select id="scanMode" ng-disabled="ctrl.disableProperties.scanMode" aria-label="Scanner Mode"
                                        ng-model="ctrl.scanMode"
                                        ng-change="ctrl.onScanModeChanged(ctrl.scanMode)">
                                 <md-option ng-value="mode" ng-repeat="mode in ctrl.listScanMode">
@@ -68,8 +68,8 @@
                             </md-select>
                         </md-input-container>
                         <md-input-container>
-                            <label>{{lang.paper_size}}</label>
-                            <md-select ng-disabled="ctrl.disableProperties.paperSize" aria-label="Scanner Mode"
+                            <label for="paperSize">{{lang.paper_size}}</label>
+                            <md-select id="paperSize" ng-disabled="ctrl.disableProperties.paperSize" aria-label="Scanner Mode"
                                        ng-model="ctrl.paperSize"
                                        ng-change="ctrl.onPaperSizeChanged(ctrl.paperSize)">
                                 <md-option ng-value="size" ng-repeat="size in ctrl.listPaperSize">
@@ -78,8 +78,8 @@
                             </md-select>
                         </md-input-container>
                         <md-input-container>
-                            <label>{{lang.resolution}}</label>
-                            <md-select ng-disabled="ctrl.disableProperties.resolution" aria-label="resolution Mode"
+                            <label for="resolution">{{lang.resolution}}</label>
+                            <md-select id="resolution" ng-disabled="ctrl.disableProperties.resolution" aria-label="resolution Mode"
                                        ng-model="ctrl.resolution"
                                        ng-change="ctrl.onResolutionChanged(ctrl.resolution)">
                                 <md-option ng-value="resolution" ng-repeat="resolution in ctrl.listResolution">
@@ -134,20 +134,20 @@
             <div flex id="scanner-workspace" layout="column">
                 <div layout="row" ng-if="ctrl.currentPage" id="workspace-tools">
                     <md-input-container>
-                        <label>{{lang.color_format}}</label>
-                        <md-select aria-label="color format" ng-change="ctrl.processPage()"
+                        <label for="convertMode">{{lang.color_format}}</label>
+                        <md-select id="convertMode" aria-label="color format" ng-change="ctrl.processPage()"
                                    ng-model="ctrl.convertMode">
                             <md-option ng-value="$index" ng-repeat="color in ctrl.listSelColorFormat">{{color}}
                             </md-option>
                         </md-select>
                     </md-input-container>
                     <md-input-container>
-                        <label>{{lang.brightness}}</label>
-                        <input ng-model="ctrl.brightness" ng-keypress="$event.keyCode == 13 && ctrl.onBrightness()">
+                        <label for="brightness">{{lang.brightness}}</label>
+                        <input id="brightness" ng-model="ctrl.brightness" ng-keypress="$event.keyCode == 13 && ctrl.onBrightness()">
                     </md-input-container>
                     <md-input-container>
-                        <label>{{lang.contrast}}</label>
-                        <input ng-model="ctrl.contrast" ng-keypress="$event.keyCode == 13 && ctrl.onContrast()">
+                        <label for="contrast">{{lang.contrast}}</label>
+                        <input id="contrast" ng-model="ctrl.contrast" ng-keypress="$event.keyCode == 13 && ctrl.onContrast()">
                     </md-input-container>
                     <md-input-container>
                         <md-button tooltip="{{lang.copy}}" class="md-icon-button" ng-click="ctrl.onCloneImage()">

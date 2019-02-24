@@ -39,8 +39,8 @@
                                 </div>
                                 <div layout="row">
                                     <md-input-container flex>
-                                        <label>{{lang.arabic_font_family}}</label>
-                                        <md-select required ng-model="ctrl.theme.arFontFamily"
+                                        <label for="arFontFamily">{{lang.arabic_font_family}}</label>
+                                        <md-select id="arFontFamily" required ng-model="ctrl.theme.arFontFamily"
                                                    aria-label="{{$parent.lang.arabic_font_family}}">
                                             <md-option ng-repeat="font in ctrl.theme.arFonts()" ng-value="font"><span
                                                     ng-style="{'font-family':font}">نموذج الخط</span> - {{font}}
@@ -51,8 +51,8 @@
                                         </div>
                                     </md-input-container>
                                     <md-input-container flex>
-                                        <label>{{lang.english_font_family}}</label>
-                                        <md-select required ng-model="ctrl.theme.enFontFamily"
+                                        <label for="enFontFamily">{{lang.english_font_family}}</label>
+                                        <md-select id="enFontFamily" required ng-model="ctrl.theme.enFontFamily"
                                                    aria-label="{{$parent.lang.english_font_family}}">
                                             <md-option ng-repeat="font in ctrl.theme.enFonts()" ng-value="font"><span
                                                     ng-style="{'font-family':font}">{{font}}</span></md-option>

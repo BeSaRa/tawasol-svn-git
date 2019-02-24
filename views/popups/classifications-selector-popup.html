@@ -8,12 +8,13 @@
         <md-content scroll-directive>
             <div class="p20" layout="row">
                 <md-input-container flex>
-                    <label>{{lang.select_classification}}</label>
-                    <md-select multiple ng-model="ctrl.classification">
+                    <label for="classifications">{{lang.select_classification}}</label>
+                    <md-select multiple ng-model="ctrl.classification"
+                    id="classifications">
                         <md-option
+                                ng-repeat="classification in ctrl.classifications track by $index"
                                 ng-if="ctrl.excludeIfExists(classification) && ctrl.includeIfEnabled(classification) && !classification.isGlobal"
-                                ng-value="classification"
-                                ng-repeat="classification in ctrl.classifications track by $index">
+                                ng-value="classification">
                             {{classification.getTranslatedName()}}
                         </md-option>
                     </md-select>

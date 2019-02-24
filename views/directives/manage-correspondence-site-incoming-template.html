@@ -1,18 +1,19 @@
 <div class="p20" layout="column" scroll-directive>
-
     <!-- Simple Search Box -->
     <div layout="row" flex ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
+        <!-- Site Type -->
         <md-input-container flex>
-            <label>{{lang.sites_select_site_type}}</label>
-            <md-select ng-model="ctrl.selectedSiteType" ng-change="ctrl.onSiteTypeChange($event)">
+            <label for="siteType">{{lang.sites_select_site_type}}</label>
+            <md-select id="siteType" ng-model="ctrl.selectedSiteType" ng-change="ctrl.onSiteTypeChange($event)">
                 <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
                     {{type.getTranslatedName()}}
                 </md-option>
             </md-select>
         </md-input-container>
+        <!-- Main Site -->
         <md-input-container flex>
-            <label>{{lang.main_site}}</label>
-            <md-select ng-model="ctrl.selectedMainSite"
+            <label for="mainSite">{{lang.main_site}}</label>
+            <md-select id="mainSite" ng-model="ctrl.selectedMainSite"
                        ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
                        ng-change="ctrl.getSubSites($event)">
                 <md-option ng-value="type" ng-repeat="type in ctrl.mainSites">
@@ -24,14 +25,16 @@
 
     <!-- Advanced Search-->
     <div layout="row" flex ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
+        <!-- Site Type -->
         <md-input-container flex>
-            <label>{{lang.sites_select_site_type}}</label>
-            <md-select ng-model="ctrl.selectedType">
+            <label for="siteType">{{lang.sites_select_site_type}}</label>
+            <md-select id="siteType" ng-model="ctrl.selectedType">
                 <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
                     {{type.getTranslatedName()}}
                 </md-option>
             </md-select>
         </md-input-container>
+        <!-- Main Site -->
         <md-autocomplete
                 flex
                 md-autoselect
@@ -45,6 +48,7 @@
                 md-floating-label="{{lang.sites_select_main_site}}">
             <span>{{item.getTranslatedName()}}</span>
         </md-autocomplete>
+        <!-- Sub Site -->
         <md-input-container flex>
             <label for="subSearch">{{lang.sites_select_sub_site}}</label>
             <input id="subSearch" ng-model="ctrl.subSearch" ng-enter="ctrl.onSubSearch($event)"

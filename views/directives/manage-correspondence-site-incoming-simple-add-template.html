@@ -1,15 +1,15 @@
 <div layout="column" class="p20">
     <md-input-container class="exclude-margin" flex>
-        <label>{{lang.sites_select_site_type}}</label>
-        <md-select ng-model="ctrl.selectedSiteType" ng-change="ctrl.onSiteTypeChange($event)">
+        <label for="siteType">{{lang.sites_select_site_type}}</label>
+        <md-select id="siteType" ng-model="ctrl.selectedSiteType" ng-change="ctrl.onSiteTypeChange($event)">
             <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
                 {{type.getTranslatedName()}}
             </md-option>
         </md-select>
     </md-input-container>
     <md-input-container class="exclude-margin">
-        <label>{{lang.main_site}}</label>
-        <md-select ng-model="ctrl.selectedMainSite"
+        <label for="mainSite">{{lang.main_site}}</label>
+        <md-select id="mainSite" ng-model="ctrl.selectedMainSite"
                    ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
                    ng-change="ctrl.getSubSites($event)">
             <md-option ng-value="type" ng-repeat="type in ctrl.mainSites">
