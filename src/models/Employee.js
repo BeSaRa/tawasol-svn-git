@@ -249,7 +249,8 @@ module.exports = function (app) {
                     ou: self.organization,
                     proxyUsers: self.proxyUsers,
                     permissions: self.permissions,
-                    ouList: self.ouList
+                    ouList: self.ouList,
+                    ouInfo : self.userOrganization
                 }
             };
 
