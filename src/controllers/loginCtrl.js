@@ -155,8 +155,8 @@ module.exports = function (app) {
                 })
                 .catch(function (error) {
                     self.loginStatus = false;
-                    dialog
-                        .errorMessage(langService.get('access_denied'));
+                    /*dialog
+                        .errorMessage(langService.get('access_denied'));*/
                 });
         };
         /**
