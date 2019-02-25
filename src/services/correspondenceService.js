@@ -1919,7 +1919,7 @@ module.exports = function (app) {
          */
         self.loadUserInbox = function () {
             return $http
-                .get(urlService.inboxWF + '/all-mails')
+                .get(urlService.inboxWF + '/all-mails?optional-fields=registeryOu')
                 .then(function (result) {
                     return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
                 });
@@ -1931,7 +1931,7 @@ module.exports = function (app) {
         self.loadUserInboxByFolder = function (folder) {
             var folderId = folder.hasOwnProperty('id') ? folder.id : folder;
             return $http
-                .get(urlService.inboxWF + '/folder/' + folderId)
+                .get(urlService.inboxWF + '/folder/' + folderId+ '?optional-fields=registeryOu')
                 .then(function (result) {
                     return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
                 });
@@ -2814,7 +2814,7 @@ module.exports = function (app) {
         self.loadWorkItemsByFilterID = function (filter) {
             var id = filter.hasOwnProperty('id') ? filter.id : filter;
             return $http
-                .get([urlService.inboxWF, 'filtered-mails', id].join('/'))
+                .get([urlService.inboxWF, 'filtered-mails', id].join('/') + '?optional-fields=registeryOu')
                 .then(function (result) {
                     return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
                 });
