@@ -224,7 +224,7 @@
                                 </div><!-- row -->
                                 <div layout="row" layout-align="start center">
                                     <md-switch ng-change="ctrl.centralArchiveChange(ctrl.organization.centralArchive)"
-                                               ng-model="ctrl.organization.centralArchive">
+                                               ng-model="ctrl.organization.centralArchive" ng-disabled="ctrl.editMode">
                                         {{lang.central_archive}} :
                                         {{ctrl.organization.getHasCentralArchiveTranslate()}}
                                     </md-switch>
