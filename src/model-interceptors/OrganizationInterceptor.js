@@ -35,7 +35,7 @@ module.exports = function (app) {
                 model[property] = model[property] && model[property].hasOwnProperty('id') ? model[property].id : model[property];
                 return property;
             });
-            model.correspondenceTypeId = model.correspondenceTypeId.hasOwnProperty('id') ? model.correspondenceTypeId.lookupKey : model.correspondenceTypeId;
+            model.correspondenceTypeId = (model.correspondenceTypeId && model.correspondenceTypeId.hasOwnProperty('id')) ? model.correspondenceTypeId.lookupKey : model.correspondenceTypeId;
             model.outype = model.outype.hasOwnProperty('id') ? model.outype.lookupKey : model.outype;
             model.registryParentId = model.hasRegistry ? null : (model.registryParentId && model.registryParentId.hasOwnProperty('id') ? model.registryParentId.id : model.registryParentId);
             model.securitySchema = model.securitySchema && model.securitySchema.hasOwnProperty('id') ? model.securitySchema.lookupKey : model.securitySchema;
