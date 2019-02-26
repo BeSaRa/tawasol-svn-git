@@ -163,12 +163,13 @@ module.exports = function (app) {
             return employee.id === userId && employee.organization.ouid === ouId;
         };
         /**
-         * set current Employee from Updated application User.
+         * @description set current Employee from Updated application User.
          * @param applicationUser
          */
         self.setCurrentEmployee = function (applicationUser) {
             var result = employee.getExtraFields();
             result.userInfo = applicationUser;
+            result.propertyConfiguration = angular.copy(lookupService.getAllPropertyConfigurations());
             _createEmployeeCookies(result);
         };
         /**

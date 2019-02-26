@@ -213,6 +213,19 @@ module.exports = function (app) {
             if (documentClass && self.propertyConfigurations.hasOwnProperty(documentClass))
                 return self.propertyConfigurations[documentClass];
             return self.propertyConfigurations;
-        }
+        };
+
+        /**
+         * @description Get all property configurations in array
+         * @returns {Array}
+         */
+        self.getAllPropertyConfigurations = function () {
+            var propConfigs = self.getPropertyConfigurations(), allPropertyConfigs =[];
+            _.map(Object.keys(propConfigs), function (documentClass) {
+                allPropertyConfigs = allPropertyConfigs.concat(propConfigs[documentClass]);
+                return propConfigs;
+            });
+            return allPropertyConfigs;
+        };
     });
 };
