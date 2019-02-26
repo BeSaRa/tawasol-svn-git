@@ -3255,34 +3255,78 @@ module.exports = function (app) {
         };
 
         self.printData = function (correspondences, headers, title) {
-            var data = self.prepareExportedData(correspondences, headers, title), defer = $q.defer();
-            dialog
-                .confirmMessage(langService.get('select_file_type_to_print_download'), 'PDF', 'EXCEL')
-                .then(function (pdf) {
-                    defer.resolve({
+            var data = self.prepareExportedData(correspondences, headers, title), defer = $q.defer(),
+                urlTypeMap = {
+                    pdf: {
                         url: urlService.exportToPdf,
                         type: 'pdf'
-                    })
-                }, function (excel) {
-                    defer.resolve({
+                    },
+                    excel: {
                         url: urlService.exportToExcel,
                         type: 'excel'
-                    })
+                    }
+                },
+                template = `<div layout="column" class="dialog-alert-box">
+                                <div scroll-directive class="dialog-content">
+                                    <img class="dialog-image" src="../../assets/images/question.png"/>
+                                    <div class="dialog-paragraph">{{lang.select_file_type_to_print_download}}</div>
+                                </div>
+                                <div class="dialog-footer button_message">
+                                    <button class="button radius md-raised md-button md-ink-ripple" ng-click="ctrl.exportToPdf()">PDF
+                                    </button>
+                                    <button class="button radius md-raised md-button md-ink-ripple" ng-click="ctrl.exportToExcel()">EXCEL
+                                    </button>
+                                    <button class="button radius md-raised md-button md-ink-ripple" id="dialog-close-btn" ng-click="ctrl.cancel()">
+                                        {{lang.cancel}}
+                                    </button>
+                                </div>
+                            </div>`;
+            dialog
+                .showDialog({
+                    template: template,
+                    controller: function (dialog) {
+                        'ngInject';
+                        var self = this;
+
+                        self.exportToExcel = function () {
+                            dialog.hide(urlTypeMap.excel);
+                        };
+
+                        self.exportToPdf = function () {
+                            dialog.hide(urlTypeMap.pdf);
+                        };
+
+                        self.cancel = function () {
+                            dialog.cancel();
+                        }
+                    },
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    escapeToClose: false,
+                    locals: {
+                        urlTypeMap: urlTypeMap
+                    }
+                })
+                .then(function (result) {
+                    defer.resolve(result)
+                })
+                .catch(function (error) {
+
                 });
 
 
             return defer.promise.then(function (exportOption) {
+                var errorMessage = langService.get('error_export_to_file').change({format: (exportOption.type === 'excel' ? 'EXCEL': 'PDF')});
                 return $http.post(exportOption.url, data)
                     .then(function (result) {
                         var physicalPath = result.data.rs;
                         if (!physicalPath) {
-                            toast.error(langService.get('error_export_to_pdf'));
-                            return $q.reject(langService.get('error_export_to_pdf'))
+                            toast.error(errorMessage);
+                            return $q.reject(errorMessage)
                         } else {
                             return $http.get(physicalPath, {
                                 responseType: 'blob'
                             }).then(function (result) {
-                                var defer = $q.defer();
                                 return {
                                     url: window.URL.createObjectURL(result.data),
                                     blob: result.data,
@@ -3295,7 +3339,7 @@ module.exports = function (app) {
                         var oldIframe = document.getElementById('iframe-print');
                         oldIframe ? oldIframe.parentNode.removeChild(oldIframe) : null;
 
-                        if (exportOption.type === 'excel'){
+                        if (exportOption.type === 'excel') {
                             window.open(file.physicalPath, '_blank');
                             return;
                         }
@@ -3317,7 +3361,7 @@ module.exports = function (app) {
                         }
                     })
                     .catch(function () {
-                        toast.error(langService.get('error_export_to_pdf'));
+                        toast.error(errorMessage);
                     });
             });
         };

@@ -93,6 +93,7 @@ module.exports = function (app) {
          * @param cancelButton
          * @param escapeToCancel
          * @param event
+         * @param avoidStripEvent
          * @returns {promise}
          */
         self.alertMessage = function (content, cancelButton, escapeToCancel, event, avoidStripEvent) {
@@ -106,6 +107,7 @@ module.exports = function (app) {
          * @param escapeToCancel
          * @param event
          * @param hideIcon
+         * @param avoidStripEvent
          * @returns {promise}
          */
         self.successMessage = function (content, cancelButton, escapeToCancel, event, hideIcon, avoidStripEvent) {
@@ -118,6 +120,7 @@ module.exports = function (app) {
          * @param cancelButton
          * @param escapeToCancel
          * @param event
+         * @param avoidStripEvent
          * @returns {promise}
          */
         self.errorMessage = function (content, cancelButton, escapeToCancel, event, avoidStripEvent) {
@@ -130,6 +133,7 @@ module.exports = function (app) {
          * @param cancelButton
          * @param escapeToCancel
          * @param event
+         * @param avoidStripEvent
          * @return {promise}
          */
         self.infoMessage = function (content, cancelButton, escapeToCancel, event, avoidStripEvent) {
@@ -142,6 +146,7 @@ module.exports = function (app) {
          * @param acceptButton
          * @param rejectButton
          * @param event
+         * @param avoidStripEvent
          * @returns {promise}
          */
         self.confirmMessage = function (content, acceptButton, rejectButton, event, avoidStripEvent) {
