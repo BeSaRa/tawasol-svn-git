@@ -162,6 +162,9 @@ module.exports = function (app) {
             enName: {
                 lang: 'english_name'
             },
+            correspondenceTypeId: {
+                lang: 'correspondence_site_type'
+            },
             registryParentId: {
                 lang: 'registry_parent'
             },

@@ -381,7 +381,7 @@ module.exports = function (app) {
         self.generateTabsError = function (title, fields, fieldsPositions, defaultTab) {
             var translateFields = _.map(fields, function (field) {
                 return [
-                    langService.get(fieldsPositions[field].lang),
+                    langService.get(fieldsPositions.hasOwnProperty(field) ? fieldsPositions[field].lang : 'field'),
                     (fieldsPositions[field].hasOwnProperty('tab') ? langService.get(fieldsPositions[field].tab) : defaultTab)
                 ];
             });
