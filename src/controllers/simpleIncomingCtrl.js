@@ -375,6 +375,10 @@ module.exports = function (app) {
             });
             self.emptySubSites = true;
             self.documentInformation = null;
+            self.documentAction = null;
+            self.documentInformationExist = false;
+            self.contentFileExist = false;
+            self.contentFileSizeExist = false;
             self.document_properties.$setUntouched();
 
             self.simpleViewUrl = null;
