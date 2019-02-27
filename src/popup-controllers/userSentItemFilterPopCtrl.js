@@ -57,8 +57,7 @@ module.exports = function (app) {
                         self.getSubSites(false);
                     }
                 });
-            }
-            else {
+            } else {
                 self.mainSites = [];
                 self.subSites = [];
                 self.searchCriteria.selectedMainSite = null;
@@ -84,8 +83,7 @@ module.exports = function (app) {
                     if (resetSub)
                         self.searchCriteria.selectedSubSite = null;
                 });
-            }
-            else {
+            } else {
                 self.subSites = [];
                 self.searchCriteria.selectedSubSite = null;
             }
@@ -156,5 +154,14 @@ module.exports = function (app) {
                 $event.stopPropagation();
         };
 
+        self.isFilterEmpty = function () {
+            return self.searchCriteria.docSubject ||
+                self.searchCriteria.docFullSerial ||
+                self.searchCriteria.docClassId !== null ||
+                self.searchCriteria.workflowActionId !== null ||
+                self.searchCriteria.documentStatusId  !== null ||
+                self.searchCriteria.userToId !== null ||
+                self.searchCriteria.selectedSiteType;
+        };
     });
 };
