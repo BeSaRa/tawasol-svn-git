@@ -172,7 +172,7 @@
         </md-content>
         <div>
             <div layout="row">
-                <md-button class="md-raised" ng-disabled="userSentItemSearchForm.$invalid || !ctrl.isFilterEmpty()"
+                <md-button class="md-raised" ng-disabled="ctrl.isFilterDisabled(userSentItemSearchForm)"
                            ng-click="ctrl.filterUserSentItems($event)">{{lang.filter}}
                 </md-button>
                 <span flex></span>

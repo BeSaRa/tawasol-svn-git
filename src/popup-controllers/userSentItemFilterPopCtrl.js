@@ -154,14 +154,15 @@ module.exports = function (app) {
                 $event.stopPropagation();
         };
 
-        self.isFilterEmpty = function () {
-            return self.searchCriteria.docSubject ||
+        self.isFilterDisabled = function (form) {
+            var hasValue = self.searchCriteria.docSubject ||
                 self.searchCriteria.docFullSerial ||
                 self.searchCriteria.docClassId !== null ||
                 self.searchCriteria.workflowActionId !== null ||
-                self.searchCriteria.documentStatusId  !== null ||
+                self.searchCriteria.documentStatusId !== null ||
                 self.searchCriteria.userToId !== null ||
                 self.searchCriteria.selectedSiteType;
+            return form.$invalid || !hasValue;
         };
     });
 };
