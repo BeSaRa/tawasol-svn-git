@@ -338,6 +338,26 @@
                                         </md-input-container>
                                     </div>
                                 </fieldset>
+                                <!-- maipServiceURL -->
+                                <fieldset>
+                                    <legend class="md-accent">{{lang.maip_service}}</legend>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="maipServiceURL">{{lang.maip_service_url}}</label>
+                                            <input name="maipServiceURL" id="maipServiceURL"
+                                                   ng-model="ctrl.entity.maipServiceURL" maxlength="500">
+                                            <div ng-messages="entityForm.maipServiceURL.$error">
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:500})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-switch flex ng-model="ctrl.entity.isMAIPEnabled"
+                                                   aria-label="{{lang.status}}">
+                                            <label>{{lang.status}} :
+                                                {{ctrl.entity.getTranslatedIsSSL(ctrl.entity.isMAIPEnabled)}}</label>
+                                        </md-switch>
+                                    </div>
+                                </fieldset>
                                 <!-- SMTP -->
                                 <fieldset>
                                     <legend class="md-accent">{{lang.smtp}}</legend>
