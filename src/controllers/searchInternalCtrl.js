@@ -470,7 +470,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadMainDocument = function (searchedInternalDocument, $event) {
-            //console.log('download main document for searched internal document : ', searchedInternalDocument);
             downloadService.controllerMethod
                 .mainDocumentDownload(searchedInternalDocument.vsId);
         };

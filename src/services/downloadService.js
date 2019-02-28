@@ -1,8 +1,14 @@
 module.exports = function (app) {
     app.service('downloadService', function (urlService,
                                              $http,
+                                             $q,
                                              tokenService,
                                              helper,
+                                             langService,
+                                             toast,
+                                             dialog,
+                                             cmsTemplate,
+                                             rootEntity,
                                              generator) {
         'ngInject';
         var self = this;
@@ -15,12 +21,20 @@ module.exports = function (app) {
              * @param $event
              */
             mainDocumentDownload: function (vsId, $event) {
-                vsId = typeof vsId.getInfo === 'function' ? vsId.getInfo().vsId : vsId;
-                return self.downloadMainDocument(vsId).then(function (result) {
-                    window.open(result);
-                    //generator.checkIfBrowserPopupBlocked(window);
-                    return true;
-                });
+                self.selectMAIPLabels()
+                    .then(function (selectedLabel) {
+                        var labelId = null;
+                        if (!!selectedLabel && typeof selectedLabel === 'string') {
+                            // download with labelId
+                            labelId = selectedLabel;
+                        }
+                        vsId = typeof vsId.getInfo === 'function' ? vsId.getInfo().vsId : vsId;
+                        return self.downloadMainDocument(vsId, labelId).then(function (result) {
+                            window.open(result);
+                            //generator.checkIfBrowserPopupBlocked(window);
+                            return true;
+                        });
+                    })
             },
             /**
              * @description Download Composite Document
@@ -28,11 +42,19 @@ module.exports = function (app) {
              * @param $event
              */
             compositeDocumentDownload: function (vsId, $event) {
-                vsId = typeof vsId.getInfo === 'function' ? vsId.getInfo().vsId : vsId;
-                return self.downloadCompositeDocument(vsId).then(function (result) {
-                    window.open(result);
-                    return true;
-                });
+                self.selectMAIPLabels()
+                    .then(function (selectedLabel) {
+                        var labelId = null;
+                        if (!!selectedLabel && typeof selectedLabel === 'string') {
+                            // download with labelId
+                            labelId = selectedLabel;
+                        }
+                        vsId = typeof vsId.getInfo === 'function' ? vsId.getInfo().vsId : vsId;
+                        return self.downloadCompositeDocument(vsId, labelId).then(function (result) {
+                            window.open(result);
+                            return true;
+                        });
+                    })
             },
             /**
              * @description Download Attachment
@@ -57,12 +79,105 @@ module.exports = function (app) {
             }
         };
 
+        var _isEntityMaipEnabled = function () {
+            return rootEntity.returnRootEntity().rootEntity.isMAIPEnabled;
+        };
+
+        var _generateQueryString = function (queryStringOptions) {
+            var queryString = '?', keys = Object.keys(queryStringOptions), key;
+            for (var i = 0; i < keys.length; i++) {
+                key = keys[i];
+                if (queryStringOptions[key]) {
+                    queryString += key + '=' + queryStringOptions[key] + '&';
+                }
+            }
+            return queryString.substring(0, queryString.length - 1);
+        };
+
+        /**
+         * @description Opens the dialog to select maip label
+         * @returns {promise}
+         */
+        self.selectMAIPLabels = function () {
+            var defer = $q.defer();
+            if (!_isEntityMaipEnabled()) {
+                // if entity is not using MAIP security
+                defer.resolve(true);
+            } else {
+                dialog.confirmMessage(langService.get('confirm_protect_using_maip'))
+                    .then(function () {
+                        dialog
+                            .showDialog({
+                                templateUrl: cmsTemplate.getPopup('maip-label-selector'),
+                                controller: function (dialog, maipLabels, _) {
+                                    'ngInject';
+                                    var self = this;
+                                    var chunkSize = 3;
+                                    self.maipLabelChunks = _.chunk(maipLabels, chunkSize);
+                                    self.getEmptyElements = function (chunk) {
+                                        var diff = chunkSize - chunk.length;
+                                        return (new Array(diff));
+                                    };
+
+                                    self.selectedMaipLabel = null;
+
+                                    /**
+                                     * @description Hide dialog and return the selected label
+                                     * @param $event
+                                     */
+                                    self.setProtectionLabel = function ($event) {
+                                        if (!self.selectedMaipLabel) {
+                                            toast.info("Please select one label");
+                                            return;
+                                        }
+                                        dialog.hide(self.selectedMaipLabel)
+                                    };
+
+                                    /*self.setNoProtection = function ($event) {
+                                        dialog.hide(true)
+                                    };*/
+
+                                    self.closePopup = function () {
+                                        dialog.cancel();
+                                    };
+                                },
+                                controllerAs: 'ctrl',
+                                resolve: {
+                                    maipLabels: function (MAIPLabel) {
+                                        'ngInject';
+                                        return $http.get(urlService.maipLabels)
+                                            .then(function (result) {
+                                                result = generator.generateCollection(result.data.rs, MAIPLabel);
+                                                return generator.interceptReceivedCollection('MAIPLabel', result);
+                                            })
+                                    }
+                                }
+                            })
+                            .then(function (result) {
+                                defer.resolve(result);
+                            })
+                            .catch(function (error) {
+                                defer.reject(false);
+                            })
+                    })
+                    .catch(function () {
+                        // no protection selected by user
+                        defer.resolve(true);
+                    });
+            }
+            return defer.promise;
+        };
+
         /**
          * @description download main document from server
          */
-        self.downloadMainDocument = function (vsId) {
+        self.downloadMainDocument = function (vsId, labelId) {
+            var queryString = _generateQueryString({
+                //'tawasol-auth-header': tokenService.getToken(),
+                'labelId': labelId
+            });
             return $http
-                .get(urlService.downloadDocument + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
+                .get(urlService.downloadDocument + '/' + vsId + queryString)
                 .then(function (result) {
                     return result.data.rs;
                 })
@@ -71,9 +186,13 @@ module.exports = function (app) {
         /**
          * @description download composite document from server
          */
-        self.downloadCompositeDocument = function (vsId) {
+        self.downloadCompositeDocument = function (vsId, labelId) {
+            var queryString = _generateQueryString({
+                //'tawasol-auth-header': tokenService.getToken(),
+                'labelId': labelId
+            });
             return $http
-                .get(urlService.downloadDocumentComposite + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
+                .get(urlService.downloadDocumentComposite + '/' + vsId + queryString)
                 .then(function (result) {
                     return result.data.rs;
                 })
@@ -94,40 +213,54 @@ module.exports = function (app) {
          * @description get main document email content from server
          */
         self.getMainDocumentEmailContent = function (vsId) {
-            /*return $http
-                 .get(urlService.getDocumentEmailContent + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
-                 .then(function (result) {
-                     return result.data.rs;
-                 });*/
-            $http
-                .get(urlService.getDocumentEmailContent + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
-                .then(function (result) {
-                    if (helper.browser.isFirefox()) {
-                        window.open(result.data.rs);
-                    } else {
-                        _download(result.data.rs, 'Tawasol.msg');
+            self.selectMAIPLabels()
+                .then(function (selectedLabel) {
+                    var labelId = null;
+                    if (!!selectedLabel && typeof selectedLabel === 'string') {
+                        // download with labelId
+                        labelId = selectedLabel;
                     }
-                })
+                    var queryString = _generateQueryString({
+                        //'tawasol-auth-header' : tokenService.getToken(),
+                        'labelId': labelId
+                    });
+                    $http
+                        .get(urlService.getDocumentEmailContent + '/' + vsId + queryString)
+                        .then(function (result) {
+                            if (helper.browser.isFirefox()) {
+                                window.open(result.data.rs);
+                            } else {
+                                _download(result.data.rs, 'Tawasol.msg');
+                            }
+                        })
+                });
         };
 
         /**
          * @description get composite document email content from server
          */
         self.getCompositeDocumentEmailContent = function (vsId) {
-            /*return $http
-                .get(urlService.getDocumentCompositeEmailContent + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
-                .then(function (result) {
-                   return result.data.rs;
-                })*/
-            return $http
-                .get(urlService.getDocumentCompositeEmailContent + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
-                .then(function (result) {
-                    if (helper.browser.isFirefox()) {
-                        window.open(result.data.rs);
-                    } else {
-                        _download(result.data.rs, 'Tawasol.msg');
+            self.selectMAIPLabels()
+                .then(function (selectedLabel) {
+                    var labelId = null;
+                    if (!!selectedLabel && typeof selectedLabel === 'string') {
+                        // download with labelId
+                        labelId = selectedLabel;
                     }
-                })
+                    var queryString = _generateQueryString({
+                        //'tawasol-auth-header' : tokenService.getToken(),
+                        'labelId': labelId
+                    });
+                    $http
+                        .get(urlService.getDocumentCompositeEmailContent + '/' + vsId + queryString)
+                        .then(function (result) {
+                            if (helper.browser.isFirefox()) {
+                                window.open(result.data.rs);
+                            } else {
+                                _download(result.data.rs, 'Tawasol.msg');
+                            }
+                        })
+                });
         };
 
         var _download = function (url, name) {

@@ -245,7 +245,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadMainDocument = function (searchedCorrespondenceDocument, $event) {
-            //console.log('download main document for searched outgoing document : ', searchedCorrespondenceDocument);
             downloadService.controllerMethod
                 .mainDocumentDownload(searchedCorrespondenceDocument.vsId);
         };

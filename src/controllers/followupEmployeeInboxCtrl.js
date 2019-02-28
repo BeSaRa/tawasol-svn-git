@@ -373,8 +373,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadMainDocument = function (followupEmployeeInbox, $event) {
-            //console.log('downloadFollowupEmployeeInboxMainDocument : ', followupEmployeeInbox);
-
             downloadService.controllerMethod
                 .mainDocumentDownload(followupEmployeeInbox.generalStepElm.vsId);
         };

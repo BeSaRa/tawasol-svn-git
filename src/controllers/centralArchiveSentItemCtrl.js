@@ -272,7 +272,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadMainDocument = function (centralArchiveItem, $event) {
-            //console.log('download main document : ', centralArchiveItem);
             downloadService.controllerMethod
                 .mainDocumentDownload(centralArchiveItem.vsId, $event);
         };

@@ -162,4 +162,5 @@ module.exports = function (app) {
     require('./DynamicMenuItem')(app);
     require('./UserMenuItem')(app);
     require('./EventHistoryCriteria')(app);
+    require('./MAIPLabel')(app);
 };

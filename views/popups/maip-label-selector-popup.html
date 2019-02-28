@@ -1,0 +1,37 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.select_maip_label}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.select_label}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="maipLabelSelectorForm" autocomplete="off">
+                <div class="p20">
+                    <md-radio-group ng-model="ctrl.selectedMaipLabel">
+                        <div layout="row" flex ng-repeat="maipLabelChunk in ctrl.maipLabelChunks track by $index">
+                            <md-radio-button flex ng-repeat="maipLabel in maipLabelChunk track by $index"
+                                             ng-value="maipLabel.id">
+                                {{maipLabel.getTranslatedName()}}
+                            </md-radio-button>
+                            <div flex
+                                 ng-repeat="emptyElement in ctrl.getEmptyElements(maipLabelChunk) track by $index"></div>
+                        </div>
+                    </md-radio-group>
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-disabled="maipLabelSelectorForm.$invalid || !ctrl.selectedMaipLabel"
+                           ng-click="ctrl.setProtectionLabel($event)">{{lang.set}}
+                </md-button>
+                <span flex></span>
+                <!--<md-button class="md-raised"
+                           ng-click="ctrl.setNoProtection($event)">{{lang.set}}
+                </md-button>
+                <span flex></span>-->
+                <md-button class="md-raised" ng-click="ctrl.closePopup()">{{lang.close}}</md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>
