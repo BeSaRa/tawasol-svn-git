@@ -3266,21 +3266,21 @@ module.exports = function (app) {
                         type: 'excel'
                     }
                 },
-                template = `<div layout="column" class="dialog-alert-box">
-                                <div scroll-directive class="dialog-content">
-                                    <img class="dialog-image" src="../../assets/images/question.png"/>
-                                    <div class="dialog-paragraph">{{lang.select_file_type_to_print_download}}</div>
-                                </div>
-                                <div class="dialog-footer button_message">
-                                    <button class="button radius md-raised md-button md-ink-ripple" ng-click="ctrl.exportToPdf()">PDF
-                                    </button>
-                                    <button class="button radius md-raised md-button md-ink-ripple" ng-click="ctrl.exportToExcel()">EXCEL
-                                    </button>
-                                    <button class="button radius md-raised md-button md-ink-ripple" id="dialog-close-btn" ng-click="ctrl.cancel()">
-                                        {{lang.cancel}}
-                                    </button>
-                                </div>
-                            </div>`;
+                template = '<div layout="column" class="dialog-alert-box">\n' +
+                    '    <div scroll-directive class="dialog-content">\n' +
+                    '        <img class="dialog-image" src="../../assets/images/question.png"/>\n' +
+                    '        <div class="dialog-paragraph">{{lang.select_file_type_to_print_download}}</div>\n' +
+                    '    </div>\n' +
+                    '    <div class="dialog-footer button_message">\n' +
+                    '        <button class="button radius md-raised md-button md-ink-ripple" ng-click="ctrl.exportToPdf()">PDF\n' +
+                    '        </button>\n' +
+                    '        <button class="button radius md-raised md-button md-ink-ripple" ng-click="ctrl.exportToExcel()">EXCEL\n' +
+                    '        </button>\n' +
+                    '        <button class="button radius md-raised md-button md-ink-ripple" id="dialog-close-btn" ng-click="ctrl.cancel()">\n' +
+                    '            {{lang.cancel}}\n' +
+                    '        </button>\n' +
+                    '    </div>\n' +
+                    '</div>';
             dialog
                 .showDialog({
                     template: template,
