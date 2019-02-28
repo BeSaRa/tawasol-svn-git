@@ -427,12 +427,16 @@
                                     <!-- Export outgoing with linked objects -->
                                     <md-switch ng-model="ctrl.globalSetting.exportLinkedObj"
                                                aria-label="{{lang.export_outgoing_with_linked_objects}}">
-                                        <div layout="row">
                                             <span>{{lang.export_outgoing_with_linked_objects}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('exportLinkedObj')}}
-                                        </div>
                                     </md-switch>
                                 </div>
-                                <div flex></div>
+                                <div flex>
+                                    <!-- Allow Two Ways Related Book -->
+                                    <md-switch ng-model="ctrl.globalSetting.allowTwoWaysRelatedBook"
+                                               aria-label="{{lang.allow_two_ways_related_book}}">
+                                            <span>{{lang.allow_two_ways_related_book}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('allowTwoWaysRelatedBook')}}
+                                    </md-switch>
+                                </div>
                             </div>
                             <div layout="row" class="p20">
                                 <!-- Document Security Schema -->
