@@ -321,6 +321,8 @@
                 .addToAllWithBase('childrenEntities', 'cms-entity/admin/{entityName}/childs/{entityId}')
                 // menu items
                 .addToAllWithBase('dynamicMenuItems', 'cms-entity/user/menu-item')
+                // maip labels
+                .addToAllWithBase('maipLabels', '/cms-entity/correspondence/download-document/maip/labels')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();
