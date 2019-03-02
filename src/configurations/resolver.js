@@ -517,7 +517,6 @@ module.exports = function (app) {
                 },
                 emailItem: function (workItems, langService, dialog, _, $stateParams) {
                     'ngInject';
-                    console.log(workItems[0].generalStepElm.workObjectNumber);
                     var action = $stateParams.action, source = $stateParams.source,
                         wobNumber = $stateParams['wob-num'], item;
 
