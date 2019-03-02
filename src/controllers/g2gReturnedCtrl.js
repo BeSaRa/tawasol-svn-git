@@ -273,7 +273,7 @@ module.exports = function (app) {
             // Resend
             {
                 type: 'action',
-                icon: 'check',
+                icon: 'send',
                 text: 'grid_action_resend',
                 shortcut: true,
                 callback: self.resend,
@@ -285,7 +285,7 @@ module.exports = function (app) {
             // Terminate
             {
                 type: 'action',
-                icon: 'undo-variant',
+                icon: 'stop',
                 text: 'grid_action_terminate',
                 shortcut: true,
                 callback: self.terminate,

@@ -1931,7 +1931,7 @@ module.exports = function (app) {
         self.loadUserInboxByFolder = function (folder) {
             var folderId = folder.hasOwnProperty('id') ? folder.id : folder;
             return $http
-                .get(urlService.inboxWF + '/folder/' + folderId+ '?optional-fields=registeryOu')
+                .get(urlService.inboxWF + '/folder/' + folderId + '?optional-fields=registeryOu')
                 .then(function (result) {
                     return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
                 });
@@ -3259,64 +3259,28 @@ module.exports = function (app) {
                 urlTypeMap = {
                     pdf: {
                         url: urlService.exportToPdf,
-                        type: 'pdf'
+                        type: 'pdf',
+                        text: 'PDF',
+                        id: 1
                     },
                     excel: {
                         url: urlService.exportToExcel,
-                        type: 'excel'
+                        type: 'excel',
+                        text: 'EXCEL',
+                        id: 2
                     }
-                },
-                template = '<div layout="column" class="dialog-alert-box">\n' +
-                    '    <div scroll-directive class="dialog-content">\n' +
-                    '        <img class="dialog-image" src="../../assets/images/question.png"/>\n' +
-                    '        <div class="dialog-paragraph">{{lang.select_file_type_to_print_download}}</div>\n' +
-                    '    </div>\n' +
-                    '    <div class="dialog-footer button_message">\n' +
-                    '        <button class="button radius md-raised md-button md-ink-ripple" ng-click="ctrl.exportToPdf()">PDF\n' +
-                    '        </button>\n' +
-                    '        <button class="button radius md-raised md-button md-ink-ripple" ng-click="ctrl.exportToExcel()">EXCEL\n' +
-                    '        </button>\n' +
-                    '        <button class="button radius md-raised md-button md-ink-ripple" id="dialog-close-btn" ng-click="ctrl.cancel()">\n' +
-                    '            {{lang.cancel}}\n' +
-                    '        </button>\n' +
-                    '    </div>\n' +
-                    '</div>';
-            dialog
-                .showDialog({
-                    template: template,
-                    controller: function (dialog) {
-                        'ngInject';
-                        var self = this;
+                };
 
-                        self.exportToExcel = function () {
-                            dialog.hide(urlTypeMap.excel);
-                        };
-
-                        self.exportToPdf = function () {
-                            dialog.hide(urlTypeMap.pdf);
-                        };
-
-                        self.cancel = function () {
-                            dialog.cancel();
-                        }
-                    },
-                    controllerAs: 'ctrl',
-                    bindToController: true,
-                    escapeToClose: false,
-                    locals: {
-                        urlTypeMap: urlTypeMap
-                    }
-                })
+            dialog.confirmThreeButtonMessage(langService.get('select_file_type_to_print_download'), '', urlTypeMap.pdf.text, urlTypeMap.excel.text, null, null, false)
                 .then(function (result) {
-                    defer.resolve(result)
-                })
-                .catch(function (error) {
-
+                    if (result.button === urlTypeMap.pdf.id) {
+                        defer.resolve(urlTypeMap.pdf);
+                    } else if (result.button === urlTypeMap.excel.id) {
+                        defer.resolve(urlTypeMap.excel);
+                    }
                 });
-
-
             return defer.promise.then(function (exportOption) {
-                var errorMessage = langService.get('error_export_to_file').change({format: (exportOption.type === 'excel' ? 'EXCEL': 'PDF')});
+                var errorMessage = langService.get('error_export_to_file').change({format: (exportOption.type === 'excel' ? 'EXCEL' : 'PDF')});
                 return $http.post(exportOption.url, data)
                     .then(function (result) {
                         var physicalPath = result.data.rs;

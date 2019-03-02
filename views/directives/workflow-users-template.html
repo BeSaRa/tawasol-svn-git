@@ -203,8 +203,17 @@
                                     <md-icon md-svg-icon="settings-box"></md-icon>
                                 </md-button>
                             </div>
+                            <div ng-if="!ctrl.runUserNotExists(workflowUser)">
+                                <md-button
+                                        class="md-icon-button"
+                                        ng-click="ctrl.runDeleteFromSelected(workflowUser,$event)">
+                                    <md-icon md-svg-icon="delete"></md-icon>
+                                </md-button>
+                            </div>
+
                             <vertical-menu-workflow-item-directive
                                     display="true"
+                                    ng-if="ctrl.runUserNotExists(workflowUser)"
                                     callback="ctrl.runAddSelectedUserToGrid"
                                     display-button="!workflowUser.isUserOutOfOffice()"
                                     item="workflowUser"

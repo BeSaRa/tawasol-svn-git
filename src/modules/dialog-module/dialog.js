@@ -77,6 +77,45 @@ module.exports = function (app) {
                     content: content,
                     cancelButton: cancelButton || (type !== 'confirm' ? langService.get('close') : langService.get('no')),
                     acceptButton: escapeToCancel || langService.get('yes'),
+                    hideIcon: hideIcon || false,
+                },
+                targetEvent: event || false,
+                escapeToClose: escapeToCancel || false,
+                controllerAs: 'ctrl',
+                bindToController: true,
+                multiple: true
+            }
+        }
+
+        function prepareThreeButtonDialog(type, content, cancelButtonText, escapeToCancel, event, hideIcon, avoidStripEvent, button1Text, button2Text) {
+            // if just confirm content, acceptButton, rejectButton, escapeToCancel, event
+            if (!avoidStripEvent)
+                content = $sce.trustAsHtml(stripScripts(content));
+            else
+                content = $sce.trustAsHtml(content);
+            return {
+                template: getTemplate(type),
+                controller: function ($mdDialog) {
+                    'ngInject';
+                    var self = this;
+                    self.hide = function () {
+                        $mdDialog.hide();
+                    };
+                    self.cancel = function () {
+                        $mdDialog.cancel();
+                    };
+                    self.button1Callback = function () {
+                        $mdDialog.hide({button: 1});
+                    };
+                    self.button2Callback = function () {
+                        $mdDialog.hide({button: 2});
+                    }
+                },
+                locals: {
+                    content: content,
+                    cancelButton: cancelButtonText ? cancelButtonText : langService.get('cancel'),
+                    button1Text: button1Text ? button1Text : langService.get('yes'),
+                    button2Text: button2Text,
                     hideIcon: hideIcon || false
                 },
                 targetEvent: event || false,
@@ -166,6 +205,12 @@ module.exports = function (app) {
             var dialog = prepareDialog('plain', content, cancelButtonText, escapeToCancel, event, hideIcon, true);
             return $mdDialog.show(dialog);
         };
+
+        self.confirmThreeButtonMessage = function (content, cancelButtonText, button1Text, button2Text, escapeToCancel, event, hideIcon) {
+            var dialog = prepareThreeButtonDialog('confirm-three-button', content, cancelButtonText, escapeToCancel, event, hideIcon, false, button1Text, button2Text);
+            return $mdDialog.show(dialog);
+        };
+
         /**
          * show custom template dialog
          * @param options
