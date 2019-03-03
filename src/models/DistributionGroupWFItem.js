@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('DistributionGroupWFItem', function (CMSModelInterceptor, DistributionWFItem) {
+    app.factory('DistributionGroupWFItem', function (CMSModelInterceptor, DistributionWFItem, langService) {
         'ngInject';
         return function DistributionGroupWFItem(model) {
             var self = this;
@@ -11,6 +11,22 @@ module.exports = function (app) {
 
             if (model)
                 angular.extend(this, model);
+
+            DistributionGroupWFItem.prototype.getTranslatedName = function (reverse) {
+                var name = '', naValue = 'N/A';
+                if (langService.current === 'ar') {
+                    if (reverse)
+                        name = this.enName && this.enName !== naValue ? this.enName : this.arName;
+                    else
+                        name = this.arName && this.arName !== naValue ? this.arName : this.enName;
+                } else if (langService.current === 'en') {
+                    if (reverse)
+                        name = this.arName && this.arName !== naValue ? this.arName : this.enName;
+                    else
+                        name = this.enName && this.enName !== naValue ? this.enName : this.arName;
+                }
+                return name;
+            };
 
             /**
              * get all required fields

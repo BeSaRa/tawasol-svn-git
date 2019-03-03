@@ -98,7 +98,7 @@
                 </thead>
                 <tbody md-body>
                 <tr ng-if="ctrl.excludeSelected" md-row md-select="workflowUser"
-                    ng-repeat="workflowUser in ctrl.gridItems  |limitTo: ctrl.grid[ctrl.gridName].limit: ((ctrl.grid[ctrl.gridName].page - 1) * ctrl.grid[ctrl.gridName].limit) |orderBy:ctrl.grid[ctrl.gridName].order track by $index">
+                    ng-repeat="workflowUser in ctrl.gridItems | filter:ctrl.runUserNotExists |limitTo: ctrl.grid[ctrl.gridName].limit: ((ctrl.grid[ctrl.gridName].page - 1) * ctrl.grid[ctrl.gridName].limit) |orderBy:ctrl.grid[ctrl.gridName].order track by $index">
                     <td md-cell ng-if="ctrl.allowFavorites" class="no-padding">
                         <md-button ng-click="ctrl.runToggleFav(workflowUser)"
                                    class="md-icon-button">
@@ -202,18 +202,19 @@
                                         ng-click="ctrl.runSetSettingsToDistWorkflowItem(workflowUser,$event)">
                                     <md-icon md-svg-icon="settings-box"></md-icon>
                                 </md-button>
-                            </div>
+                            </div><!--
                             <div ng-if="!ctrl.runUserNotExists(workflowUser)">
                                 <md-button
                                         class="md-icon-button"
                                         ng-click="ctrl.runDeleteFromSelected(workflowUser,$event)">
                                     <md-icon md-svg-icon="delete"></md-icon>
                                 </md-button>
-                            </div>
+                            </div>-->
 
+                            <!--ng-if="ctrl.runUserNotExists(workflowUser)"-->
                             <vertical-menu-workflow-item-directive
                                     display="true"
-                                    ng-if="ctrl.runUserNotExists(workflowUser)"
+
                                     callback="ctrl.runAddSelectedUserToGrid"
                                     display-button="!workflowUser.isUserOutOfOffice()"
                                     item="workflowUser"
@@ -222,7 +223,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr ng-if="!ctrl.excludeSelected" ng-class="{'default-theme':!ctrl.runUserNotExists(workflowUser)}"
+                <tr ng-if="!ctrl.excludeSelected" ng-class="{'background-warning':!ctrl.runUserNotExists(workflowUser)}"
                     md-row
                     md-select="workflowUser"
                     ng-repeat="workflowUser in ctrl.gridItems |limitTo: ctrl.grid[ctrl.gridName].limit: ((ctrl.grid[ctrl.gridName].page - 1) * ctrl.grid[ctrl.gridName].limit) |orderBy:ctrl.grid[ctrl.gridName].order track by $index">
