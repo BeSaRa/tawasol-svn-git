@@ -7,6 +7,11 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
+            <md-button ng-if="ctrl.userSentItems.length"
+                       ng-click="ctrl.printResult($event)" class="md-icon-button" tooltip="{{lang.print}}">
+                <md-icon md-svg-icon="printer"></md-icon>
+            </md-button>
+
             <!--<search-filter-directive model="ctrl.searchModel"></search-filter-directive>-->
             <md-button ng-click="ctrl.resetFilter($event)"
                        ng-if="ctrl.searchCriteriaUsed"

@@ -23,7 +23,8 @@ module.exports = function (app) {
                                                  ResolveDefer,
                                                  generator,
                                                  dialog,
-                                                 EventHistoryCriteria) {
+                                                 EventHistoryCriteria,
+                                                 printService) {
         'ngInject';
         var self = this;
 
@@ -974,5 +975,20 @@ module.exports = function (app) {
             }
         ];
 
+        self.printResult = function ($event) {
+            var printTitle = langService.get('menu_item_sent_items'),
+                headers = [
+                'sent_items_serial_number',
+                'label_document_class',
+                'sent_items_document_subject',
+                'sent_items_receive_date',
+                'sent_items_action',
+                'sent_items_receiver',
+                'sent_items_correspondence_site'
+            ];
+            printService
+                .printData(self.userSentItems, headers, printTitle);
+
+        };
     });
 };

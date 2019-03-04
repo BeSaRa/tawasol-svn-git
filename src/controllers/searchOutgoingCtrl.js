@@ -30,7 +30,8 @@ module.exports = function (app) {
                                                    mailNotificationService,
                                                    centralArchives,
                                                    approvers,
-                                                   userSubscriptionService) {
+                                                   userSubscriptionService,
+                                                   printService) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchOutgoingCtrl';
@@ -703,7 +704,7 @@ module.exports = function (app) {
                 'created_on',
                 'correspondence_sites'];
 
-            correspondenceService
+            printService
                 .printData(self.searchedOutgoingDocuments, headers, printTitle);
 
         };

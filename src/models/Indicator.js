@@ -201,12 +201,14 @@ module.exports = function (app) {
              * @returns {Indicator}
              */
             Indicator.prototype.getDocClassIndicator = function (docClass) {
+                var docClassCopy = docClass;
                 docClass = docClass.toLowerCase();
                 return new Indicator({
                     class: 'indicator ' + docClass,
                     text: 'indicator_' + docClass,
                     icon: self.getIndicatorIcons(docClass),
-                    tooltip: 'indicator_' + docClass
+                    tooltip: 'indicator_' + docClass,
+                    value: docClassCopy
                 });
 
 

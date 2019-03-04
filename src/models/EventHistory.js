@@ -7,7 +7,24 @@ module.exports = function (app) {
                                           managerService) {
         'ngInject';
         return function EventHistory(model) {
-            var self = this, viewDocumentService;
+            var self = this, viewDocumentService,
+                exportData = {
+                    sent_items_serial_number: 'docFullSerial',
+                    label_document_class: function () {
+                        return this.docClassIndicator.value;
+                    },
+                    sent_items_document_subject: 'docSubject',
+                    sent_items_receive_date: 'actionDate',
+                    sent_items_action: function () {
+                        return this.action.getTranslatedName();
+                    },
+                    sent_items_receiver: function () {
+                        return this.receiverInfo.getTranslatedName();
+                    },
+                    sent_items_correspondence_site: function () {
+                        return this.getTranslatedCorrespondenceSiteInfo();
+                    }
+                };
             self.id = null;
             self.documentVSID = null;
             self.documentCreationDate = null;
@@ -200,6 +217,10 @@ module.exports = function (app) {
             };
             EventHistory.prototype.duplicateSpecificVersion = function ($event) {
                 return correspondenceService.duplicateSpecificCorrespondenceVersion(this, $event);
+            };
+
+            EventHistory.prototype.getExportedData = function () {
+                return exportData;
             };
 
             // don't remove CMSModelInterceptor from last line

@@ -32,8 +32,12 @@ module.exports = function (app) {
         self.selectedType = null;
         // model for search on main correspondence sites
         self.mainSearch = '';
+        // model for search on sub correspondence sites
+        self.simpleSubSearchText = '';
         // selected mainCorrespondence sites
         self.selectedMain = null;
+        // selected subCorrespondence sites from internal search box
+        self.selectedSimpleSub = null;
         // model for search on sub correspondence sites
         self.subSearch = '';
         // sub Search result
@@ -253,6 +257,7 @@ module.exports = function (app) {
                 .then(function () {
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+                        self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
                     });
                 })
         };
@@ -377,6 +382,7 @@ module.exports = function (app) {
             }).then(function (result) {
                 self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+                self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
             });
         };
 
@@ -503,6 +509,7 @@ module.exports = function (app) {
                     self['sitesInfo' + type + 'Selected'] = [];
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+                        self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
                     });
                 });
         };
@@ -600,18 +607,43 @@ module.exports = function (app) {
         }, function (value) {
             if (value) {
                 self.subRecords = _concatCorrespondenceSites(true);
+                self.subSearchResult = [];
                 self.emptySubRecords = false;
                 self.selectedSiteType = null;
                 self.selectedMainSite = null;
                 self.selectedType = null;
                 self.mainSearch = '';
                 self.subSearch = '';
+                self.selectedSimpleSub = null;
+                self.simpleSubSearchText = '';
             }
         });
 
         self.getSortingKey = function (property, modelType) {
             generator.getColumnSortingKey(property, modelType);
-        }
+        };
+        /**
+         * @description drop down values for sub site search
+         * @param searchText
+         * @returns {Array}
+         */
+        self.getSimpleSubSearchOptions = function (searchText) {
+            if (searchText) {
+                return _.filter(self.simpleSubSiteSearchCopy, function (simpleSearchSite) {
+                    return simpleSearchSite.getTranslatedName().toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
+                });
+            }
+            return self.simpleSubSiteSearchCopy;
+        };
+        self.onSimpleSubChange = function (subSite) {
+            if (subSite) {
+                self.subSearchResult = _.filter(self.subSearchResultCopy, function (resultCopy) {
+                    return resultCopy.subSiteId === subSite.subSiteId;
+                });
+            }
+            else
+                self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+        };
 
     });
 };

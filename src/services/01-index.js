@@ -113,4 +113,5 @@ module.exports = function (app) {
 	require('./documentFileService')(app);
 	require('./singleNotifierService')(app);
 	require('./dynamicMenuItemService')(app);
+	require('./printService')(app);
 };

@@ -30,7 +30,8 @@ module.exports = function (app) {
                                                   gridService,
                                                   favoriteDocumentsService,
                                                   centralArchives,
-                                                  userSubscriptionService) {
+                                                  userSubscriptionService,
+                                                  printService) {
         'ngInject';
 
         var self = this;
@@ -258,7 +259,7 @@ module.exports = function (app) {
                 'creator',
                 'created_on'];
 
-            correspondenceService
+            printService
                 .printData(self.searchedGeneralDocuments, headers, printTitle);
 
         };

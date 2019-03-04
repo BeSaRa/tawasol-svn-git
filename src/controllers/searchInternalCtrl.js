@@ -30,7 +30,8 @@ module.exports = function (app) {
                                                    favoriteDocumentsService,
                                                    centralArchives,
                                                    approvers,
-                                                   userSubscriptionService) {
+                                                   userSubscriptionService,
+                                                   printService) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchInternalCtrl';
@@ -227,7 +228,7 @@ module.exports = function (app) {
                 'creator',
                 'created_on'];
 
-            correspondenceService
+            printService
                 .printData(self.searchedInternalDocuments, headers, printTitle);
 
         };

@@ -29,7 +29,8 @@ module.exports = function (app) {
                                                    gridService,
                                                    favoriteDocumentsService,
                                                    centralArchives,
-                                                   userSubscriptionService) {
+                                                   userSubscriptionService,
+                                                   printService) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchIncomingCtrl';
@@ -242,7 +243,7 @@ module.exports = function (app) {
                 'created_on',
                 'correspondence_sites'];
 
-            correspondenceService
+            printService
                 .printData(self.searchedIncomingDocuments, headers, printTitle);
 
         };

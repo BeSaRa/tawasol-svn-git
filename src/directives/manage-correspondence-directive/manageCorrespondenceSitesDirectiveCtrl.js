@@ -56,7 +56,7 @@ module.exports = function (app) {
         self.simpleSubSearchText = '';
         // selected mainCorrespondence sites
         self.selectedMain = null;
-        // selected subCorrespondence sites
+        // selected subCorrespondence sites from internal search box
         self.selectedSimpleSub = null;
         // model for search on sub correspondence sites
         self.subSearch = '';
@@ -813,6 +813,8 @@ module.exports = function (app) {
                 self.subSearch = '';
                 self.selectedDistributionList = null;
                 self.subSearchResult_DL = [];
+                self.selectedSimpleSub = null;
+                self.simpleSubSearchText = '';
             }
         });
 
