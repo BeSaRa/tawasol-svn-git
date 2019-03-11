@@ -76,7 +76,10 @@ module.exports = function (app) {
                     subArSiteText: self.siteInfo.subSite ? self.siteInfo.subSite.arName : null,
                     siteType: correspondenceService.getLookup('incoming', 'siteTypes', self.siteInfo.siteType)
                 }) : null;
-
+                if (self.siteInfo.hasOwnProperty('mainSite') && self.siteInfo.mainSite)
+                    self.siteInfo.mainSite = new Information(self.siteInfo.mainSite);
+                if (self.siteInfo.hasOwnProperty('subSite') && self.siteInfo.subSite)
+                    self.siteInfo.subSite = new Information(self.siteInfo.subSite);
             };
 
             var indicator = new Indicator();

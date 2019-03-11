@@ -17,24 +17,58 @@
                         </div>
                     </md-button>
                 </div>
-                <div ng-if="ctrl.allowControl && ctrl.addCallback">
+                <div ng-if="ctrl.allowControl && ctrl.displayMenu">
+                    <md-menu>
+                        <md-button ng-click="$mdMenu.open()" class="md-icon-button">
+                            <md-icon md-svg-icon="dots-vertical"></md-icon>
+                        </md-button>
+                        <md-menu-content width="2">
+                            <md-menu-item ng-if="ctrl.allowControl && ctrl.addCallback">
+                                <md-button ng-click="ctrl.addCallback(folder, $event)">
+                                    <div layout="row">
+                                        <md-icon md-svg-icon="plus"></md-icon>
+                                        <span>{{lang.add}}</span>
+                                    </div>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-if="ctrl.allowControl && ctrl.editCallback && !ctrl.sameFolder(folder)">
+                                <md-button ng-click="ctrl.editCallback(folder, $event)">
+                                    <div layout="row">
+                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                        <span>{{lang.edit}}</span>
+                                    </div>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-if="ctrl.allowControl && ctrl.deleteCallback && !ctrl.sameFolder(folder) && !ctrl.checkSelected(folder)">
+                                <md-button ng-click="ctrl.deleteCallback(folder, $event)">
+                                    <div layout="row">
+                                        <md-icon md-svg-icon="delete"></md-icon>
+                                        <span>{{lang.delete}}</span>
+                                    </div>
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
+                <div ng-if="ctrl.allowControl && ctrl.addCallback && !ctrl.displayMenu">
                     <md-button ng-click="ctrl.addCallback(folder, $event)" class="folder-button-icon md-icon-button">
                         <md-icon md-svg-icon="plus"></md-icon>
                     </md-button>
                 </div>
-                <div ng-if="ctrl.allowControl && ctrl.editCallback">
+                <div ng-if="ctrl.allowControl && ctrl.editCallback && !ctrl.displayMenu">
                     <md-button ng-click="ctrl.editCallback(folder, $event)" class="folder-button-icon md-icon-button">
                         <md-icon md-svg-icon="pencil"></md-icon>
                     </md-button>
                 </div>
-                <div ng-if="ctrl.allowControl && ctrl.deleteCallback">
+                <div ng-if="ctrl.allowControl && ctrl.deleteCallback && !ctrl.displayMenu">
                     <md-button ng-click="ctrl.deleteCallback(folder, $event)" class="folder-button-icon md-icon-button">
                         <md-icon md-svg-icon="delete"></md-icon>
                     </md-button>
                 </div>
             </div>
         </div>
-        <folders-tree-structure-directive count="ctrl.count" highlight-selected="ctrl.highlightSelected"
+        <folders-tree-structure-directive display-menu="ctrl.displayMenu" count="ctrl.count"
+                                          highlight-selected="ctrl.highlightSelected"
                                           disable-selected="ctrl.disableSelected" click-callback="ctrl.clickCallback"
                                           ng-if="folder.children.length"
                                           allow-control="ctrl.allowControl"

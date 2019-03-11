@@ -50,7 +50,7 @@ module.exports = function (app) {
             self.barcodeElements = new BarcodeSetting();
             self.deadlineReminderDays = null;
             self.thumbnailMode = null;
-            self.allowTwoWaysRelatedBook = false;
+            self.allowSendWFRelatedBook = null;
             //endregion
 
             // every model has required fields

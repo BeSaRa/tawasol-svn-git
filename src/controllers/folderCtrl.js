@@ -44,6 +44,19 @@ module.exports = function (app) {
         }).setChildren(self.folders)];
 
         /**
+         * @description prepare the folders to display it again after reload.
+         * @param folders
+         * @private
+         */
+        function __prepareFolders(folders) {
+            self.inboxFolders = [new UserFolder({
+                arName: langService.getKey('menu_item_user_inbox', 'ar'),
+                enName: langService.getKey('menu_item_user_inbox', 'en'),
+                id: 0
+            }).setChildren(folders)];
+        }
+
+        /**
          * @description
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
@@ -176,8 +189,7 @@ module.exports = function (app) {
                     if (self.selectedWorkItems.length)
                         forwardBulk(selectedItems, $event);
                 })
-            }
-            else {
+            } else {
                 forwardBulk(selectedItems, $event);
             }
         };
@@ -292,7 +304,7 @@ module.exports = function (app) {
         self.getLink = function (workItem, $event) {
             viewDocumentService.loadDocumentViewUrlWithOutEdit(workItem.generalStepElm.vsId).then(function (result) {
                 //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
-                dialog.successMessage(langService.get('link_message').change({result: result}),null,null,null,null,true);
+                dialog.successMessage(langService.get('link_message').change({result: result}), null, null, null, null, true);
                 return true;
             });
         };
@@ -579,8 +591,7 @@ module.exports = function (app) {
                     hasPermission = false;
                 else
                     hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-            }
-            else if (info.documentClass === "incoming")
+            } else if (info.documentClass === "incoming")
                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
             else if (info.documentClass === "outgoing") {
                 //If approved outgoing electronic, don't allow to edit
@@ -702,12 +713,10 @@ module.exports = function (app) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                     if (action.hasOwnProperty('checkAnyPermission')) {
                         hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
+                    } else {
                         hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
@@ -790,6 +799,57 @@ module.exports = function (app) {
 
         self.viewInDeskTop = function (workItem) {
             return correspondenceService.viewWordInDesktop(workItem);
+        };
+
+        /**
+         * @description get child records to delete
+         * @param folder
+         * @param array
+         * @returns {*}
+         */
+        function getChildIds(folder, array) {
+            for (var i = 0; i < folder.children.length; i++) {
+                array.push(folder.children[i].id);
+                getChildIds(folder.children[i], array);
+            }
+            return array;
+        }
+
+        self.reloadUserFolders = function () {
+            userFolderService
+                .getUserFoldersForApplicationUser()
+                .then(function (folders) {
+                    __prepareFolders(folders);
+                })
+        };
+
+        self.createFolder = function (folder, $event) {
+            userFolderService
+                .controllerMethod
+                .userFolderAdd((folder.id ? folder : null), $event)
+                .then(function () {
+                    self.reloadUserFolders();
+                });
+        };
+
+        self.editFolder = function (folder, $event) {
+            userFolderService
+                .controllerMethod
+                .userFolderEdit(folder, $event)
+                .then(function () {
+                    self.reloadUserFolders();
+                });
+        };
+
+        self.deleteFolder = function (folder, $event) {
+            var array = [folder.id];
+            getChildIds(folder, array);
+            userFolderService
+                .controllerMethod
+                .userFolderDeleteBulk(array.reverse(), $event)
+                .then(function () {
+                    self.reloadUserFolders();
+                });
         };
 
         /**
@@ -1423,8 +1483,7 @@ module.exports = function (app) {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
                             } else if (info.documentClass === 'incoming') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
-                            }
-                            else if (info.documentClass === 'internal') {
+                            } else if (info.documentClass === 'internal') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                             }
                             return self.checkToShowAction(action, model) && !model.isBroadcasted()

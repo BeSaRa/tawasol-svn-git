@@ -1,5 +1,6 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor) {
+    app.run(function (CMSModelInterceptor,
+                      moment) {
         'ngInject';
 
         var modelName = 'EventHistoryCriteria';
@@ -9,15 +10,6 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            // if subsite is selected, search for sub site otherwise if only main site is selected, search for it
-            /*if (model.selectedSubSite && model.selectedSubSite.id) {
-                model.sitesInfoTo = model.selectedSubSite.id.toString();
-                model.sitesInfoCC = model.selectedSubSite.id.toString();
-            }
-            else if (model.selectedMainSite && model.selectedMainSite.id) {
-                model.sitesInfoTo = model.selectedMainSite.id.toString();
-                model.sitesInfoCC = model.selectedMainSite.id.toString();
-            }*/
             model.sitesInfo = {};
             if (model.selectedSiteType && model.selectedSiteType.id) {
                 model.sitesInfo.siteType = model.selectedSiteType.lookupKey;
@@ -28,6 +20,10 @@ module.exports = function (app) {
             if (model.selectedSubSite && model.selectedSubSite.id) {
                 model.sitesInfo.subSiteId = model.selectedSubSite.id;
             }
+
+            model.fromActionTime = model.fromActionTime ? moment(model.fromActionTime).startOf("day").valueOf() : moment().subtract(3, 'months').toDate();
+            model.toActionTime = model.toActionTime ? moment(model.toActionTime).endOf("day").valueOf() : moment().endOf("day").toDate();
+
             delete model.selectedSiteType;
             delete model.selectedMainSite;
             delete model.selectedSubSite;

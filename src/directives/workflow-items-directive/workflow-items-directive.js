@@ -20,7 +20,8 @@ module.exports = function (app) {
                 callbackAllInFavorites: '=',
                 selected: '=',
                 multiSelect: '=',
-                toggleFav: '='
+                toggleFav: '=',
+                gridName: '@',
             }
         }
     })

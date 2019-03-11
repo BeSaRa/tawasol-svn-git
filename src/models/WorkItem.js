@@ -670,6 +670,11 @@ module.exports = function (app) {
                     ? new Information(this.generalStepElm.lockingInfo.lockingUserInfo)
                     : new Information();
             };
+            WorkItem.prototype.getLockingUserDateTime = function () {
+                return (this.isLocked() && this.generalStepElm.lockingInfo.lockingTime)
+                    ? generator.getDateFromTimeStamp(this.generalStepElm.lockingInfo.lockingTime, true)
+                    : '';
+            };
 
             WorkItem.prototype.getLockedWorkItemIndicator = function () {
                 return indicator.getLockedWorkItemIndicator(this);

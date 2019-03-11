@@ -24,6 +24,18 @@ module.exports = function (app) {
             DistributionOUWFItem.prototype.getTranslatedName = function () {
                 return this[langService.current + 'Name'];
             };
+            DistributionOUWFItem.prototype.getTranslatedNameRegOUSection = function () {
+                if (this.tempRegOUSection) {
+                    return this.tempRegOUSection[langService.current + 'Name']
+                }
+                return this[langService.current + 'Name'];
+            };
+            DistributionOUWFItem.prototype.getNameByLanguageRegOUSection = function (language) {
+                if (this.tempRegOUSection) {
+                    return this.tempRegOUSection[language + 'Name']
+                }
+                return this[language + 'Name'];
+            };
             DistributionOUWFItem.prototype.isDepartment = function () {
                 return true;
             };
@@ -41,7 +53,9 @@ module.exports = function (app) {
                     .setHasRegistry(organization.hasRegistry)
                     .setToOUId(organization.id)
                     .setSendSMS(organization.sendSMS)
-                    .setSendEmail(organization.sendEmail);
+                    .setSendEmail(organization.sendEmail)
+                    .setRegOuId(organization.regouId || organization.regOuId)
+                    .setTempRegOUSection(organization.tempRegOUSection);
             };
             DistributionOUWFItem.prototype.setToOUId = function (toOUId) {
                 this.toOUId = toOUId;
@@ -68,6 +82,7 @@ module.exports = function (app) {
                 delete this.actionSearchText;
                 delete this.selectedWFComment;
                 delete this.commentSearchText;
+                delete this.tempRegOUSection;
 
                 this.action = this.action.hasOwnProperty('id') ? this.action.id : this.action;
                 return this;

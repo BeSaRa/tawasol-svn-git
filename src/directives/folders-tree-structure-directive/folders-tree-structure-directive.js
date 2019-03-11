@@ -19,7 +19,8 @@ module.exports = function (app) {
                 addCallback: '=?',
                 deleteCallback: '=?',
                 editCallback: '=?',
-                count: '='
+                count: '=',
+                displayMenu:'=?'
             }
         }
     })

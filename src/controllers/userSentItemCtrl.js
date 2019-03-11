@@ -24,7 +24,8 @@ module.exports = function (app) {
                                                  generator,
                                                  dialog,
                                                  EventHistoryCriteria,
-                                                 printService) {
+                                                 printService,
+                                                 moment) {
         'ngInject';
         var self = this;
 
@@ -112,8 +113,14 @@ module.exports = function (app) {
             }
         };
 
+        var _initEventHistoryCriteria = function(){
+            self.searchCriteria = new EventHistoryCriteria({
+                fromActionTime: moment().subtract(3, 'months').toDate(),
+                toActionTime: moment().endOf("day").toDate()
+            })
+        };
 
-        self.searchCriteria = new EventHistoryCriteria();
+        _initEventHistoryCriteria();
         self.searchCriteriaUsed = false;
 
         /**
@@ -172,12 +179,11 @@ module.exports = function (app) {
                         self.totalRecords = result.result.count;
                         self.searchCriteriaUsed = true;
                         self.searchCriteria = result.criteria;
-                    }
-                    else {
+                    } else {
                         // when filter is reset, use the total count from service as total records
                         self.totalRecords = userSentItemService.totalCount;
                         self.searchCriteriaUsed = false;
-                        self.searchCriteria = new EventHistoryCriteria();
+                        _initEventHistoryCriteria();
                     }
                 })
                 .catch(function (error) {
@@ -195,7 +201,7 @@ module.exports = function (app) {
         self.resetFilter = function ($event) {
             self.grid.page = 1;
             self.grid.searchText = '';
-            self.searchCriteria = new EventHistoryCriteria();
+            _initEventHistoryCriteria();
             self.searchCriteriaUsed = false;
 
             self.userSentItems = userSentItems;
@@ -278,8 +284,7 @@ module.exports = function (app) {
                                     name: userSentItem.getTranslatedName()
                                 }));
                             });
-                    }
-                    else {
+                    } else {
                         dialog.alertMessage(langService.get(result.message));
                     }
                 });
@@ -427,7 +432,7 @@ module.exports = function (app) {
         self.getLink = function (userSentItem, $event) {
             viewDocumentService.loadDocumentViewUrlWithOutEdit(userSentItem.documentVSID).then(function (result) {
                 //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
-                dialog.successMessage(langService.get('link_message').change({result: result}),null,null,null,null,true);
+                dialog.successMessage(langService.get('link_message').change({result: result}), null, null, null, null, true);
                 return true;
             });
         };
@@ -563,12 +568,10 @@ module.exports = function (app) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                     if (action.hasOwnProperty('checkAnyPermission')) {
                         hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
+                    } else {
                         hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
@@ -978,14 +981,16 @@ module.exports = function (app) {
         self.printResult = function ($event) {
             var printTitle = langService.get('menu_item_sent_items'),
                 headers = [
-                'sent_items_serial_number',
-                'label_document_class',
-                'sent_items_document_subject',
-                'sent_items_receive_date',
-                'sent_items_action',
-                'sent_items_receiver',
-                'sent_items_correspondence_site'
-            ];
+                    'sent_items_serial_number',
+                    'label_document_class',
+                    'sent_items_document_subject',
+                    'sent_items_receive_date',
+                    'sent_items_action',
+                    'sent_items_receiver',
+                    'comment',
+                    //'sent_items_due_date',
+                    'sent_items_correspondence_site'
+                ];
             printService
                 .printData(self.userSentItems, headers, printTitle);
 

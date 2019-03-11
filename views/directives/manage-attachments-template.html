@@ -1,6 +1,6 @@
 <div layout="column">
     <div layout="row">
-        <div ng-if="ctrl.allowUpload && !ctrl.disableEverything">
+        <div ng-if="ctrl.allowUpload && !ctrl.disableEverything && !ctrl.receiveG2g">
             <md-menu-bar>
                 <md-menu>
                     <md-button class="md-raised" ng-click="$mdMenu.open()">
@@ -32,7 +32,7 @@
                 </md-menu>
             </md-menu-bar>
         </div>
-        <div ng-if="ctrl.allowScanner && !ctrl.disableEverything">
+        <div ng-if="ctrl.allowScanner && !ctrl.disableEverything && !ctrl.receiveG2g">
             <md-button ng-disabled="!ctrl.scanner" ng-click="ctrl.openScannerDialog('scanner',$event)"
                        class="md-raised">
                 <div layout="row" layout-align="start center">
@@ -174,7 +174,7 @@
                         </thead>
                         <tbody md-body>
                         <tr md-row md-select="attachment"
-                            ng-disabled="ctrl.disableEverything"
+                            ng-disabled="ctrl.disableEverything || ctrl.receiveG2g"
                             ng-repeat="attachment in ctrl.attachments  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
                             <!--<td md-cell class="indicator-td">
                                 &lt;!&ndash; Linked Exported Doc &ndash;&gt;
@@ -202,12 +202,12 @@
                                         <md-icon md-svg-icon="download"></md-icon>
                                     </md-button>
                                     <md-button class="md-icon-button" title="{{lang.attachment_edit}}"
-                                               ng-if="!ctrl.disableEverything && !ctrl.isLinkedExportedDocAttachment && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment)"
+                                               ng-if="!ctrl.disableEverything && !ctrl.isLinkedExportedDocAttachment && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment) && !ctrl.receiveG2g"
                                                ng-click="ctrl.openEditDocumentAttachment(attachment, $event)">
                                         <md-icon md-svg-icon="pencil"></md-icon>
                                     </md-button>
                                     <md-button class="md-icon-button" title="{{lang.attachment_delete}}"
-                                               ng-if="!ctrl.disableEverything && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment)"
+                                               ng-if="!ctrl.disableEverything && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment) && !ctrl.receiveG2g"
                                                ng-click="ctrl.deleteDocumentAttachment(attachment, $event)">
                                         <md-icon md-svg-icon="delete"></md-icon>
                                     </md-button>

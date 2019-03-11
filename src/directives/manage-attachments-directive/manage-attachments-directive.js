@@ -19,7 +19,8 @@ module.exports = function (app) {
                 allowUpload: '=?',
                 displayGrid: '=?',
                 disableEverything: '=?',
-                linkedExportedAttachments: '=?'
+                linkedExportedAttachments: '=?',
+                receiveG2g: '=?'
             }
         }
     });

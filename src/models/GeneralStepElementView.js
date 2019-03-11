@@ -25,7 +25,8 @@ module.exports = function (app) {
                     'registeryOu',
                     'securityLevel',
                     'senderInfo',
-                    'subClassification'
+                    'subClassification',
+                    'fromOuInfo'
                 ],
                 documentClassMap = {
                     outgoing: Outgoing,

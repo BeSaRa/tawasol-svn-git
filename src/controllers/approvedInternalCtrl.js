@@ -27,7 +27,8 @@ module.exports = function (app) {
                                           listGeneratorService,
                                           $state,
                                           mailNotificationService,
-                                          gridService) {
+                                          gridService,
+                                          generator) {
             'ngInject';
 
             var self = this;
@@ -142,7 +143,7 @@ module.exports = function (app) {
              */
             self.changeApprovedInternalStar = function (approvedInternal, $event) {
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 self.starServices[approvedInternal.generalStepElm.starred](approvedInternal)
@@ -155,8 +156,7 @@ module.exports = function (app) {
                                     else
                                         toast.success(langService.get("unstar_specific_success").change({name: approvedInternal.generalStepElm.docSubject}));
                                 });
-                        }
-                        else {
+                        } else {
                             dialog.errorMessage(langService.get('something_happened_when_update_starred'));
                         }
                     })
@@ -173,7 +173,7 @@ module.exports = function (app) {
              */
             self.terminate = function (approvedInternal, $event, defer) {
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 approvedInternalService.controllerMethod
@@ -194,7 +194,7 @@ module.exports = function (app) {
              */
             self.addToFavorite = function (approvedInternal, $event) {
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 favoriteDocumentsService.controllerMethod
@@ -207,8 +207,7 @@ module.exports = function (app) {
                                         name: approvedInternal.getTranslatedName()
                                     }));
                                 });
-                        }
-                        else {
+                        } else {
                             dialog.alertMessage(langService.get(result.message));
                         }
                     });
@@ -220,7 +219,7 @@ module.exports = function (app) {
              */
             self.getApprovedInternalLink = function (approvedInternal, $event) {
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 console.log('getApprovedInternalLink', approvedInternal);
@@ -252,7 +251,7 @@ module.exports = function (app) {
                     return;
                 }
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 approvedInternal
@@ -298,7 +297,7 @@ module.exports = function (app) {
              */
             self.viewApprovedInternalDirectLinkedDocuments = function (approvedInternal, $event) {
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 console.log('viewApprovedInternalDirectLinkedDocuments : ', approvedInternal);
@@ -311,7 +310,7 @@ module.exports = function (app) {
              */
             self.viewApprovedInternalCompleteLinkedDocuments = function (approvedInternal, $event) {
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 console.log('viewApprovedInternalCompleteLinkedDocuments : ', approvedInternal);
@@ -324,7 +323,7 @@ module.exports = function (app) {
              */
             self.sendApprovedInternalLinkToDocumentByEmail = function (approvedInternal, $event) {
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 console.log('sendApprovedInternalLinkToDocumentByEmail : ', approvedInternal);
@@ -337,7 +336,7 @@ module.exports = function (app) {
              */
             self.sendApprovedInternalCompositeDocumentAsAttachment = function (approvedInternal, $event) {
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 console.log('sendApprovedInternalCompositeDocumentAsAttachment : ', approvedInternal);
@@ -350,7 +349,7 @@ module.exports = function (app) {
              */
             self.sendApprovedInternalCompositeDocumentAsAttachmentByEmail = function (approvedInternal, $event) {
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 console.log('sendApprovedInternalCompositeDocumentAsAttachmentByEmail : ', approvedInternal);
@@ -363,7 +362,7 @@ module.exports = function (app) {
              */
             self.sendApprovedInternalMainDocumentFax = function (approvedInternal, $event) {
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 console.log('sendApprovedInternalMainDocumentFax : ', approvedInternal);
@@ -376,7 +375,7 @@ module.exports = function (app) {
              */
             self.sendApprovedInternalSMS = function (approvedInternal, $event) {
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 console.log('sendApprovedInternalSMS : ', approvedInternal);
@@ -389,7 +388,7 @@ module.exports = function (app) {
              */
             self.sendApprovedInternalMainDocumentAsAttachment = function (approvedInternal, $event) {
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 console.log('sendApprovedInternalMainDocumentAsAttachment : ', approvedInternal);
@@ -402,7 +401,7 @@ module.exports = function (app) {
              */
             self.sendApprovedInternalLink = function (approvedInternal, $event) {
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 console.log('sendApprovedInternalLink : ', approvedInternal);
@@ -426,12 +425,14 @@ module.exports = function (app) {
                     return;
                 }
                 if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                     return;
                 }
                 return correspondenceService.viewCorrespondence(approvedInternal, self.gridActions, checkIfEditPropertiesAllowed(approvedInternal, true), true, false, false, true)
                     .then(function () {
-                        return self.reloadApprovedInternals(self.grid.page);
+                        correspondenceService.unlockWorkItem(approvedInternal, true, $event).then(function () {
+                            return self.reloadApprovedInternals(self.grid.page);
+                        });
                     })
                     .catch(function (error) {
                         if (error !== 'itemLocked')
@@ -450,12 +451,14 @@ module.exports = function (app) {
                     return;
                 }
                 if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                     return;
                 }
                 workItem.viewNewApprovedInternalWorkItemDocument(self.gridActions, 'approvedInternal', $event)
                     .then(function () {
-                        self.reloadApprovedInternals(self.grid.page);
+                        correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
+                            self.reloadApprovedInternals(self.grid.page);
+                        });
                     })
                     .catch(function (error) {
                         if (error !== 'itemLocked')
@@ -471,7 +474,7 @@ module.exports = function (app) {
              */
             self.getDocumentVersions = function (workItem, $event) {
                 if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                     return;
                 }
                 return workItem
@@ -484,7 +487,7 @@ module.exports = function (app) {
              */
             self.duplicateCurrentVersion = function (workItem, $event) {
                 if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                     return;
                 }
                 var info = workItem.getInfo();
@@ -506,7 +509,7 @@ module.exports = function (app) {
              */
             self.duplicateVersion = function (workItem, $event) {
                 if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                     return;
                 }
                 var info = workItem.getInfo();
@@ -532,12 +535,10 @@ module.exports = function (app) {
                 if (action.hasOwnProperty('permissionKey')) {
                     if (typeof action.permissionKey === 'string') {
                         hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                    }
-                    else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                    } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                         if (action.hasOwnProperty('checkAnyPermission')) {
                             hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                        }
-                        else {
+                        } else {
                             hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                         }
                     }
@@ -549,7 +550,7 @@ module.exports = function (app) {
              */
             self.broadcast = function (workItem, $event, defer) {
                 if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                     return;
                 }
                 workItem
@@ -569,7 +570,7 @@ module.exports = function (app) {
              */
             self.editAfterApprove = function (model, $event) {
                 if (model.isLocked() && !model.isLockedByCurrentUser()) {
-                    dialog.infoMessage(langService.get('item_locked_by').change({name: model.getLockingUserInfo().getTranslatedName()}));
+                    dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                     return;
                 }
                 var info = model.getInfo(), list = listGeneratorService.createUnOrderList(),
@@ -635,8 +636,7 @@ module.exports = function (app) {
                         if (self.selectedApprovedInternals.length)
                             _unlockBulk(selectedItems, $event);
                     })
-                }
-                else {
+                } else {
                     _unlockBulk(selectedItems, $event);
                 }
             };

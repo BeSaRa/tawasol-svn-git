@@ -324,7 +324,7 @@ module.exports = function (app) {
                     'ngInject';
                     return organizationService.getOrganizations();
                 },
-                receive: function (correspondenceService, $stateParams, $timeout, $q, dialog, $state, langService) {
+                receive: function (correspondenceService, rootEntity, $stateParams, $timeout, $q, dialog, $state, langService) {
                     'ngInject';
                     var action = $stateParams.action, workItem = $stateParams.workItem;
                     /*, vsId = $stateParams.vsId;*/
@@ -348,8 +348,8 @@ module.exports = function (app) {
                         return response;
                     }).catch(function (error) {
                         dialog.alertMessage(langService.get('error_while_receiving_document'));
-                        $state.go('app.department-inbox.incoming');
-                        return false;
+                        $state.go('app.department-inbox.incoming', {identifier: rootEntity.getRootEntityIdentifier()});
+                        return $q.reject();
                     })
                 },
                 receiveG2G: function (correspondenceService, $stateParams, $timeout) {

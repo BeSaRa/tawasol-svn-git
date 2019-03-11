@@ -569,10 +569,10 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(searchedInternalDocument, self.gridActions, true, true)
                 .then(function () {
-                    return self.reloadSearchedInternalDocuments(self.grid.page);
+                  //  return self.reloadSearchedInternalDocuments(self.grid.page);
                 })
                 .catch(function () {
-                    return self.reloadSearchedInternalDocuments(self.grid.page);
+                  //  return self.reloadSearchedInternalDocuments(self.grid.page);
                 });
         };
 
@@ -588,10 +588,10 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'searchInternal', $event)
                 .then(function () {
-                    return self.reloadSearchedInternalDocuments(self.grid.page);
+                   // return self.reloadSearchedInternalDocuments(self.grid.page);
                 })
                 .catch(function () {
-                    return self.reloadSearchedInternalDocuments(self.grid.page);
+                  //  return self.reloadSearchedInternalDocuments(self.grid.page);
                 });
         };
 

@@ -1,5 +1,13 @@
 module.exports = function (app) {
-    app.controller('workflowItemsDirectiveCtrl', function ($scope, dialog, rootEntity, cmsTemplate, DistributionWFItem, langService, LangWatcher, $filter) {
+    app.controller('workflowItemsDirectiveCtrl', function ($scope,
+                                                           dialog,
+                                                           rootEntity,
+                                                           cmsTemplate,
+                                                           DistributionWFItem,
+                                                           langService,
+                                                           LangWatcher,
+                                                           $filter,
+                                                           $timeout) {
         'ngInject';
         var self = this;
         self.controllerName = 'workflowItemsDirectiveCtrl';
@@ -36,6 +44,14 @@ module.exports = function (app) {
                 }
             ]
         };
+        var _getGridLimit = function () {
+            if(self.gridName === 'favoriteOUs')
+                self.grid.limit = (self.workflowItems.length + 21);
+            else
+                self.grid.limit = 5;
+        };
+
+        $timeout(_getGridLimit);
 
         function _setDistWorkflowItem(distWorkflowItem, result) {
             distWorkflowItem

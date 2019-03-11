@@ -33,7 +33,7 @@
                                         source-model="ctrl.model"
                                         source-form="ctrl.document_properties"
                                         document="ctrl.incoming"
-                                        receive-g2g="ctrl.isReceiveG2G"></manage-properties-directive>
+                                        receive-g2g="!!ctrl.receiveG2G"></manage-properties-directive>
                             </accordion-content>
                         </accordion-item>
                         <accordion-item fail-when="!ctrl.incoming.site"
@@ -108,11 +108,12 @@
                             </accordion-title>
                             <accordion-content>
                                 <div layout="row">
-                                    <manage-attachment-directive
+                                    <manage-attachment-directive flex
                                             document="ctrl.incoming"
                                             attachments="ctrl.incoming.attachments"
                                             vs-id="ctrl.incoming.vsId"
-                                            document-class="ctrl.incoming.docClassName" flex>
+                                            document-class="ctrl.incoming.docClassName"
+                                            receive-g2g="!!ctrl.receiveG2G">
                                     </manage-attachment-directive>
                                 </div>
                             </accordion-content>

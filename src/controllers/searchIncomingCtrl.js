@@ -606,10 +606,10 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(searchedIncomingDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedIncomingDocument, true))
                 .then(function () {
-                    return self.reloadSearchedIncomingDocument(self.grid.page);
+                  //  return self.reloadSearchedIncomingDocument(self.grid.page);
                 })
                 .catch(function () {
-                    return self.reloadSearchedIncomingDocument(self.grid.page);
+                 //   return self.reloadSearchedIncomingDocument(self.grid.page);
                 });
         };
 
@@ -625,10 +625,10 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'searchIncoming', $event)
                 .then(function () {
-                    return self.reloadSearchedIncomingDocument(self.grid.page);
+                  //  return self.reloadSearchedIncomingDocument(self.grid.page);
                 })
                 .catch(function (error) {
-                    return self.reloadSearchedIncomingDocument(self.grid.page);
+                   // return self.reloadSearchedIncomingDocument(self.grid.page);
                 });
         };
 

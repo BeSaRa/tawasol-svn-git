@@ -1286,8 +1286,7 @@ module.exports = function (app) {
                 })
                 .catch(function (error) {
                     if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
-                        var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
-                        dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                        dialog.infoMessage(generator.getBookLockMessage(null, error));
                         return $q.reject('itemLocked');
                     }
                     return $q.reject(error);
@@ -1366,8 +1365,7 @@ module.exports = function (app) {
                 })
                 .catch(function (error) {
                     if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
-                        var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
-                        dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                        dialog.infoMessage(generator.getBookLockMessage(null, error));
                         return $q.reject('itemLocked');
                     }
                     return $q.reject(error);
@@ -1427,8 +1425,7 @@ module.exports = function (app) {
                         dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                         return $q.reject('WORK_ITEM_NOT_FOUND');
                     } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
-                        var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
-                        dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                        dialog.infoMessage(generator.getBookLockMessage(null, error));
                         return $q.reject('itemLocked');
                     }
                     return $q.reject(error);
@@ -1847,6 +1844,11 @@ module.exports = function (app) {
                         workflowActions: function (workflowActionService) {
                             'ngInject';
                             return workflowActionService.loadCurrentUserWorkflowActions()
+                        },
+                        // used to show regou name infront of section in users tab (ou dropdown)
+                        organizations: function(organizationService){
+                            'ngInject';
+                            return organizationService.getOrganizations();
                         },
                         organizationGroups: function (distributionWFService) {
                             'ngInject';
@@ -2989,15 +2991,10 @@ module.exports = function (app) {
                         dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                         return $q.reject('WORK_ITEM_NOT_FOUND');
                     } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
-                        var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
-                        dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                        dialog.infoMessage(generator.getBookLockMessage(null, error));
                         return $q.reject('itemLocked');
                     }
                     return $q.reject(error);
-                    /*return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
-                        dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
-                        return $q.reject('WORK_ITEM_NOT_FOUND');
-                    })*/
                 });
         };
 

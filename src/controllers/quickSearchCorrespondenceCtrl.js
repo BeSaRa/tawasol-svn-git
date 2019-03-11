@@ -332,10 +332,10 @@ module.exports = function (app) {
 
             correspondenceService.viewCorrespondence(searchedCorrespondenceDocument, self.gridActions, true, true)
                 .then(function () {
-                    return self.reloadQuickSearchCorrespondence(self.grid.page);
+                   // return self.reloadQuickSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    return self.reloadQuickSearchCorrespondence(self.grid.page);
+                  //  return self.reloadQuickSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -351,10 +351,10 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'quickSearch', $event)
                 .then(function () {
-                    return self.reloadQuickSearchCorrespondence(self.grid.page);
+                   // return self.reloadQuickSearchCorrespondence(self.grid.page);
                 })
                 .catch(function (error) {
-                    return self.reloadQuickSearchCorrespondence(self.grid.page);
+                   // return self.reloadQuickSearchCorrespondence(self.grid.page);
                 });
         };
 

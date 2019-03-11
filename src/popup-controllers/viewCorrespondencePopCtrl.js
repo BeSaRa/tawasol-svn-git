@@ -159,19 +159,26 @@ module.exports = function (app) {
             var method = info.needToApprove() && self.editMode ? 'saveDocumentWithContent' : 'saveDocument';
             if (method === 'saveDocumentWithContent') {
                 angular.element('iframe#iframe-main-document').remove();
+                self.disableSaveTimeout = true;
                 $timeout(function () {
                     self.correspondence[method](method === 'saveDocument' ? false : self.content)
                         .then(function () {
                             toast.success(langService.get('save_success'));
+                            self.disableSaveTimeout = false;
                             dialog.hide();
+                        })
+                        .catch(function (error) {
+                            self.disableSaveTimeout = false;
+                            return $q.reject(error);
                         });
-                }, 1000);
-            } else
+                }, 3000);
+            } else {
                 self.correspondence[method](method === 'saveDocument' ? false : self.content)
                     .then(function () {
                         toast.success(langService.get('save_success'));
                         dialog.hide();
                     });
+            }
         };
         /**
          * @description to display correspondence site accordion item.
@@ -194,11 +201,11 @@ module.exports = function (app) {
 
         self.checkDisabled = function () {
             if (self.correspondence.docClassName === 'Incoming') {
-                return !self.correspondence.site;
+                return !self.correspondence.site || self.disableSaveTimeout;
             } else if (self.correspondence.docClassName === 'Outgoing') {
-                return !(self.correspondence.sitesInfoTo && self.correspondence.sitesInfoTo.length);
+                return !(self.correspondence.sitesInfoTo && self.correspondence.sitesInfoTo.length) || self.disableSaveTimeout;
             }
-            return false;
+            return  self.disableSaveTimeout || false;
         };
 
         self.backToCorrespondence = function ($event) {

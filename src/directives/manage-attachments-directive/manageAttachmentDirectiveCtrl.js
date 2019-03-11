@@ -97,12 +97,20 @@ module.exports = function (app) {
             self.upload = true;
             self.scanner = true;
         };
+
+        function _checkReceiveG2G(){
+            return self.receiveG2g;
+        }
+
         /**
          * to display scanner dialog
          * @param buttonType
          * @param $event
          */
         self.openScannerDialog = function (buttonType, $event) {
+            if (_checkReceiveG2G()){
+                return;
+            }
             self.hideButton(buttonType);
             scannerService
                 .openScanner(true, $event)
@@ -118,6 +126,9 @@ module.exports = function (app) {
          * @description open dialog from
          */
         self.openDragDropDialog = function ($event) {
+            if (_checkReceiveG2G()){
+                return;
+            }
             attachmentService
                 .dragDropDialog(self.document, self.attachment, $event)
                 .then(function (attachments) {
@@ -217,6 +228,9 @@ module.exports = function (app) {
         };
 
         self.deleteDocumentAttachment = function (attachment, $event) {
+            if (_checkReceiveG2G()){
+                return;
+            }
             var linkedExportedAttachments = [];
             dialog
                 .confirmMessage(langService.get('confirm_delete').change({name: attachment.documentTitle}), null, null, $event)
@@ -250,6 +264,9 @@ module.exports = function (app) {
         };
 
         self.deleteBulkAttachments = function ($event) {
+            if (_checkReceiveG2G()){
+                return;
+            }
             dialog
                 .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event)
                 .then(function () {
@@ -292,6 +309,9 @@ module.exports = function (app) {
          * @param element
          */
         self.uploadAttachmentFile = function (files, element) {
+            if (_checkReceiveG2G()){
+                return;
+            }
             attachmentService
                 .validateBeforeUpload('attachmentUpload', files[0])
                 .then(function (file) {
@@ -314,6 +334,9 @@ module.exports = function (app) {
         };
 
         self.openEditDocumentAttachment = function (attachment) {
+            if (_checkReceiveG2G()){
+                return;
+            }
             var file = attachment.file;
             self.attachment = angular.copy(attachment);
             self.attachmentCopyBeforeEdit = angular.copy(attachment);

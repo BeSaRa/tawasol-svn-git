@@ -9,13 +9,25 @@
         </md-select>
     </md-input-container>
     <!-- Main Site -->
-    <md-input-container class="exclude-margin" >
+    <md-input-container class="exclude-margin">
         <label for="mainSite">{{lang.main_site}}</label>
         <md-select id="mainSite" ng-model="ctrl.selectedMainSite"
                    ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
-                   ng-change="ctrl.getSubSites($event)">
-            <md-option ng-value="type" ng-repeat="type in ctrl.mainSites">
-                {{type.getTranslatedName()}}
+                   ng-change="ctrl.getSubSites($event)"
+                   md-on-close="ctrl.clearSearchText('inlineMainSite')"
+                   data-md-container-class="select-header-container">
+            <md-select-header class="select-header">
+                <input ng-model="ctrl.inlineMainSiteSearchText"
+                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                       placeholder="{{lang.search}}"
+                       class="select-header-input">
+            </md-select-header>
+            <md-option
+                    ng-repeat="site in ctrl.mainSites | translatedNameFilter: ctrl.inlineMainSiteSearchText"
+                    ng-value="site">
+                <span
+                        md-highlight-text="ctrl.inlineMainSiteSearchText"
+                        md-highlight-flags="i">{{site.getTranslatedName()}}</span>
             </md-option>
         </md-select>
     </md-input-container>

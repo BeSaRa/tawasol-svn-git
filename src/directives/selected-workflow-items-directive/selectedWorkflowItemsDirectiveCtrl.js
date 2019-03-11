@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('selectedWorkflowItemsDirectiveCtrl', function ($scope, _, rootEntity, dialog, cmsTemplate, langService, DistributionWFItem, LangWatcher,$filter) {
+    app.controller('selectedWorkflowItemsDirectiveCtrl', function ($scope, _, rootEntity, dialog, cmsTemplate, langService, DistributionWFItem, LangWatcher, $filter) {
         'ngInject';
         var self = this;
         self.controllerName = 'selectedWorkflowItemsDirectiveCtrl';
@@ -11,6 +11,7 @@ module.exports = function (app) {
         self.selectedWorkflowItems = [];
 
         self.defaultWorkflowItemsSettings = new DistributionWFItem();
+        self.sendRelatedDocsBulk = false;
 
         self.grid = {
             limit: 5, // default limit
@@ -73,6 +74,59 @@ module.exports = function (app) {
         self.checkAllComplete = function () {
             return self.workflowItems.length && _allActionsSelected(self.workflowItems);
         };
+
+        /**
+         * @description Toggle the selection for options in dropdown
+         * @param $event
+         */
+        self.toggleAll = function ($event) {
+            if (self.documentType.lookupStrKey) {
+                if (self.documentType.lookupStrKey.length === self.documentClasses.length) {
+                    self.documentType.lookupStrKey = null;
+                } else {
+                    self.documentType.lookupStrKey = self.documentClasses;
+                }
+            } else {
+                self.documentType.lookupStrKey = self.documentClasses;
+            }
+        };
+
+        var _getWorkflowItemsWithSendRelatedDocs = function () {
+            return _.filter(self.workflowItems, function (workflowItem) {
+                return !!workflowItem.sendRelatedDocs;
+            });
+        };
+
+        var _toggleAllSendRelatedDocs = function (value) {
+            self.workflowItems = _.map(self.workflowItems, function (workflowItem) {
+                workflowItem.sendRelatedDocs = value;
+                return workflowItem;
+            });
+        };
+        /**
+         * @description Toggle the sendRelatedDocs checkbox for all added items
+         * @param $event
+         */
+        self.toggleBulkSendRelatedDocs = function ($event) {
+            if (self.sendRelatedDocsBulk) {
+                if (_getWorkflowItemsWithSendRelatedDocs().length === self.workflowItems.length) {
+                    _toggleAllSendRelatedDocs(false);
+                } else {
+                    _toggleAllSendRelatedDocs(true);
+                }
+            } else {
+                _toggleAllSendRelatedDocs(true);
+            }
+        };
+
+        self.isCheckedSendRelatedDocs = function () {
+            return !!(self.workflowItems.length && _getWorkflowItemsWithSendRelatedDocs().length === self.workflowItems.length);
+        };
+
+        self.isIndeterminateSendRelatedDocs = function () {
+            return !!(_getWorkflowItemsWithSendRelatedDocs().length && _getWorkflowItemsWithSendRelatedDocs().length < self.workflowItems.length);
+        };
+
         /**
          * delete workflowItem
          * @param workflowItem

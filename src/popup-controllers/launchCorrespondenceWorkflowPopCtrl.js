@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                                     cmsTemplate,
                                                                     errorMessage,
                                                                     _,
+                                                                    organizationService,
                                                                     replyOn,
                                                                     actionKey,
                                                                     multi,
@@ -29,11 +30,13 @@ module.exports = function (app) {
                                                                     dialog,
                                                                     correspondence,
                                                                     isDeptIncoming,
+                                                                    Information,
                                                                     generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
 
+        self.inlineUserOUSearchText = '';
 
         /**
          * get multi info in case the correspondence array.
@@ -171,7 +174,7 @@ module.exports = function (app) {
                 selected: []
             },
             favoriteUsers: {
-                limit: 5, // default limit
+                limit: (self.favoriteUsers.length + 21), // default limit
                 page: 1, // first page
                 order: '', // default sorting order
                 limitOptions: [5, 10, 20, // limit options
@@ -386,15 +389,43 @@ module.exports = function (app) {
 
 
         function _mapOrganizationByType(organizations) {
+            // filter all regOU and sort
+            var regOus = _.filter(organizations, function (item) {
+                return item.hasRegistry;
+            });
+            regOus = _.map(regOus, function (regOu) {
+                regOu.tempRegOUSection = new Information({
+                    arName: regOu.arName,
+                    enName: regOu.enName
+                });
+                return regOu;
+            });
+
+
+            // filter all sections (no registry) and sort
             var groups = _.filter(organizations, function (item) {
                 return !item.hasRegistry;
             });
-            var reg = _.filter(organizations, function (item) {
-                return item.hasRegistry;
+
+            // if needed to show regou - section, append the dummy property "tempRegOUSection"
+
+            groups = _.map(groups, function (item) {
+                // if ou is section(has no registry and has regOuId, add temporary field for regOu)
+                var regOu = _.find(organizationService.organizations, function (ou) {
+                    return ou.id === (item.regouId || item.regOuId);
+                });
+                item.tempRegOUSection = new Information({
+                    arName: regOu.arName + ' - ' + item.arName,
+                    enName: regOu.enName + ' - ' + item.enName
+                });
+                return item;
             });
+
             groups = _mapWFOrganization(groups, 'OUGroup');
-            reg = _mapWFOrganization(reg, 'OUReg');
-            return [].concat(groups, reg);
+            regOus = _mapWFOrganization(regOus, 'OUReg');
+            return _.sortBy([].concat(regOus, groups), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]);
         }
 
         function _checkFavoritesError() {
@@ -1257,5 +1288,24 @@ module.exports = function (app) {
             }
             return $q.resolve(collections);
         };
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            var code = $event.which || $event.keyCode;
+            if (code !== 38 && code !== 40)
+                $event.stopPropagation();
+        };
+
     });
 };

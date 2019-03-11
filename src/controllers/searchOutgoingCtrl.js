@@ -562,10 +562,10 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(searchedOutgoingDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedOutgoingDocument, true))
                 .then(function () {
-                    return self.reloadSearchedOutgoingDocument(self.grid.page);
+                    //return self.reloadSearchedOutgoingDocument(self.grid.page);
                 })
                 .catch(function () {
-                    return self.reloadSearchedOutgoingDocument(self.grid.page);
+                   // return self.reloadSearchedOutgoingDocument(self.grid.page);
                 });
         };
 
@@ -581,10 +581,10 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'searchOutgoing', $event)
                 .then(function () {
-                    return self.reloadSearchedOutgoingDocument(self.grid.page);
+                 //   return self.reloadSearchedOutgoingDocument(self.grid.page);
                 })
                 .catch(function () {
-                    return self.reloadSearchedOutgoingDocument(self.grid.page);
+                  //  return self.reloadSearchedOutgoingDocument(self.grid.page);
                 });
         };
 

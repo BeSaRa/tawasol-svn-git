@@ -77,7 +77,7 @@
                                         <!--<span>{{lang.action}}</span>-->
                                         <!--</th>-->
                                         <th ng-if="!ctrl.selectedWorkItems.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('senderInfo', 'SenderInfo')}}">
+                                            md-order-by="{{ctrl.getSortingKey('fromOuInfo', 'Information')}}">
                                             <span>{{lang.sender}}</span>
                                         </th>
                                         <!--<th ng-if="!ctrl.selectedWorkItems.length" md-column
@@ -135,7 +135,7 @@
                                         <!--<td md-cell>{{workItem.action.getTranslatedName()}}</td>-->
                                         <td md-cell class="td-data">
                                             <div layout="row">
-                                                <span flex>{{workItem.senderInfo.getTranslatedName()}}</span>
+                                                <span flex>{{workItem.fromOuInfo.getTranslatedName()}}</span>
                                             </div>
                                         </td>
                                         <!--<td md-cell>{{workItem.generalStepElm.dueDate}}</td>-->

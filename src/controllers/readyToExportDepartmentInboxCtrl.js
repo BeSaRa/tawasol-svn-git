@@ -213,7 +213,7 @@ module.exports = function (app) {
          */
         self.exportReadyToExport = function (readyToExport, $event, defer) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
 
@@ -299,7 +299,7 @@ module.exports = function (app) {
          */
         self.terminate = function (readyToExport, $event, defer) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             readyToExportService
@@ -325,7 +325,7 @@ module.exports = function (app) {
          */
         self.addToFavorite = function (readyToExport, $event) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             favoriteDocumentsService.controllerMethod
@@ -374,7 +374,7 @@ module.exports = function (app) {
          */
         self.manageTags = function (readyToExport, $event) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             var info = readyToExport.getInfo();
@@ -394,7 +394,7 @@ module.exports = function (app) {
          */
         self.manageComments = function (readyToExport, $event) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             var info = readyToExport.getInfo();
@@ -414,7 +414,7 @@ module.exports = function (app) {
          */
         self.manageTasks = function (readyToExport, $event) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             console.log('manageReadyToExportTasks : ', readyToExport);
@@ -427,7 +427,7 @@ module.exports = function (app) {
          */
         self.manageAttachments = function (readyToExport, $event) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             readyToExport.manageDocumentAttachments($event);
@@ -440,7 +440,7 @@ module.exports = function (app) {
          */
         self.manageLinkedDocuments = function (readyToExport, $event) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             var info = readyToExport.getInfo();
@@ -454,7 +454,7 @@ module.exports = function (app) {
          */
         self.manageLinkedEntities = function (readyToExport, $event) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             managerService
@@ -468,7 +468,7 @@ module.exports = function (app) {
          */
         self.manageDestinations = function (readyToExport, $event) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             var info = readyToExport.getInfo();
@@ -498,7 +498,7 @@ module.exports = function (app) {
          */
         self.viewReadyToExportDirectLinkedDocuments = function (readyToExport, $event) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             console.log('viewReadyToExportDirectLinkedDocuments : ', readyToExport);
@@ -511,7 +511,7 @@ module.exports = function (app) {
          */
         self.viewReadyToExportCompleteLinkedDocuments = function (readyToExport, $event) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             console.log('viewReadyToExportCompleteLinkedDocuments : ', readyToExport);
@@ -524,7 +524,7 @@ module.exports = function (app) {
          */
         self.editContent = function (readyToExport, $event) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             var info = readyToExport.getInfo();
@@ -539,7 +539,7 @@ module.exports = function (app) {
          */
         self.editProperties = function (readyToExport, $event) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             var info = readyToExport.getInfo();
@@ -557,7 +557,7 @@ module.exports = function (app) {
          */
         self.broadcast = function (readyToExport, $event) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             broadcastService
@@ -578,7 +578,7 @@ module.exports = function (app) {
          */
         self.editAfterApprove = function (model, $event) {
             if (model.isLocked() && !model.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: model.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(model, null));
                 return;
             }
             var info = model.getInfo(), list = listGeneratorService.createUnOrderList(),
@@ -610,7 +610,7 @@ module.exports = function (app) {
          */
         self.printBarcode = function (model, $event) {
             if (model.isLocked() && !model.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: model.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(model, null));
                 return;
             }
             model.barcodePrint($event);
@@ -637,12 +637,15 @@ module.exports = function (app) {
                 return;
             }
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
             correspondenceService.viewCorrespondence(readyToExport, self.gridActions, checkIfEditPropertiesAllowed(readyToExport, true), false, true, true)
                 .then(function () {
-                    self.reloadReadyToExports(self.grid.page);
+                    correspondenceService.unlockWorkItem(readyToExport, true, $event)
+                        .then(function () {
+                            self.reloadReadyToExports(self.grid.page);
+                        });
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -661,12 +664,15 @@ module.exports = function (app) {
                 return;
             }
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             workItem.viewNewDepartmentReadyToExport(self.gridActions, 'departmentReadyToExport', $event)
                 .then(function () {
-                    self.reloadReadyToExports(self.grid.page);
+                    correspondenceService.unlockWorkItem(workItem, true, $event)
+                        .then(function () {
+                             self.reloadReadyToExports(self.grid.page);
+                    });
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -682,7 +688,7 @@ module.exports = function (app) {
          */
         self.getDocumentVersions = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             return workItem
@@ -695,7 +701,7 @@ module.exports = function (app) {
          */
         self.duplicateCurrentVersion = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
@@ -717,7 +723,7 @@ module.exports = function (app) {
          */
         self.duplicateVersion = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();

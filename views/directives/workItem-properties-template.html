@@ -16,7 +16,7 @@
         </li>
         <li>
             <span class="property-key">{{lang.work_item_sender}}</span>
-            <span class="property-value">{{ctrl.item.senderInfo.getTranslatedName()}}</span>
+            <span class="property-value">{{ctrl.item.generalStepElm.exportViaCentralArchive ? ctrl.item.fromOuInfo.getTranslatedName() : ctrl.item.senderInfo.getTranslatedName()}}</span>
         </li>
         <li>
             <span class="property-key">{{lang.action_date}}</span>

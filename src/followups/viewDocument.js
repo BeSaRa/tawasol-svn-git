@@ -249,14 +249,14 @@ module.exports = function (app) {
             })
             // Department Inbox
             .getPageNameOverride('departmentIncoming', 'draftOutgoing', {
-                /*disableProperties: function (model) {
+                disableProperties: function (model) {
                     return true;
                 },
                 disableSites: function (model) {
                     return true;
-                },*/
+                },
                 disableAll: function (model) {
-                    return true;
+                    return !model.generalStepElm.isReassigned;
                 }
             })
             .getPageNameOverride('departmentReturned', 'draftOutgoing', {

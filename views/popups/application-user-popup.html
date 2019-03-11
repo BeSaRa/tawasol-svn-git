@@ -904,15 +904,26 @@
                                     <md-input-container flex ng-if="!ctrl.ouApplicationUserBeforeEdit">
                                         <label for="ouid">{{lang.organization_unit}}</label>
                                         <md-select id="ouid" name="ouid"
+                                                   ng-model-options="{trackBy : '$value.id'}"
                                                    ng-change="ctrl.getParentOrganizationsWithRegistry()"
                                                    ng-disabled="ctrl.ouApplicationUser.id"
-                                                   ng-model="ctrl.ouApplicationUser.ouid">
+                                                   ng-model="ctrl.ouApplicationUser.ouid"
+                                                   md-on-close="ctrl.clearSearchText('inlineUserOU')"
+                                                   data-md-container-class="select-header-container">
+                                            <md-select-header class="select-header">
+                                                <input ng-model="ctrl.inlineUserOUSearchText"
+                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                            </md-select-header>
                                             <md-option ng-value="organization"
                                                        ng-if="ctrl.excludeOrganizationsIfExists(organization)"
-                                                       ng-repeat="organization in ctrl.organizations track by $index"
+                                                       ng-repeat="organization in ctrl.organizationsCopy | translatedNameFilter: ctrl.inlineUserOUSearchText : 'getNameByLanguageRegOUSection'"
                                                        ng-disabled="!organization.status"
                                                        tooltip="{{(!organization.status)? lang.inactive_organization : '' }}">
-                                                {{organization.getTranslatedName()}}
+                                                <span
+                                                        md-highlight-text="ctrl.inlineUserOUSearchText"
+                                                        md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
                                             </md-option>
                                         </md-select>
                                     </md-input-container>

@@ -534,15 +534,10 @@ module.exports = function (app) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
                         } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
-                            var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
-                            dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                            dialog.infoMessage(generator.getBookLockMessage(null, error));
                             return $q.reject('itemLocked');
                         }
                         return $q.reject(error);
-                        /*return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
-                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
-                            return $q.reject('WORK_ITEM_NOT_FOUND');
-                        })*/
                     });
             };
 
@@ -679,8 +674,7 @@ module.exports = function (app) {
                     })
                     .catch(function (error) {
                         if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
-                            var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
-                            dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                            dialog.infoMessage(generator.getBookLockMessage(null, error));
                             return $q.reject('itemLocked');
                         }
                         return $q.reject(error);
@@ -814,15 +808,10 @@ module.exports = function (app) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
                         } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
-                            var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
-                            dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                            dialog.infoMessage(generator.getBookLockMessage(null, error));
                             return $q.reject('itemLocked');
                         }
                         return $q.reject(error);
-                        /*return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
-                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
-                            return $q.reject('WORK_ITEM_NOT_FOUND');
-                        })*/
                     });
             };
 
@@ -892,8 +881,7 @@ module.exports = function (app) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
                         } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
-                            var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
-                            dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                            dialog.infoMessage(generator.getBookLockMessage(null, error));
                             return $q.reject('itemLocked');
                         }
                         return $q.reject(error);
@@ -969,8 +957,7 @@ module.exports = function (app) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
                         } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
-                            var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
-                            dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                            dialog.infoMessage(generator.getBookLockMessage(null, error));
                             return $q.reject('itemLocked');
                         }
                         return $q.reject(error);
@@ -1043,15 +1030,10 @@ module.exports = function (app) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
                         } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
-                            var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
-                            dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                            dialog.infoMessage(generator.getBookLockMessage(null, error));
                             return $q.reject('itemLocked');
                         }
                         return $q.reject(error);
-                        /*return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
-                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
-                            return $q.reject('WORK_ITEM_NOT_FOUND');
-                        })*/
                     });
             };
 
@@ -1181,15 +1163,10 @@ module.exports = function (app) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
                         } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
-                            var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
-                            dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                            dialog.infoMessage(generator.getBookLockMessage(null, error));
                             return $q.reject('itemLocked');
                         }
                         return $q.reject(error);
-                        /*return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
-                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
-                            return $q.reject('WORK_ITEM_NOT_FOUND');
-                        })*/
                     });
             };
 
@@ -1285,9 +1262,9 @@ module.exports = function (app) {
              */
             self.viewG2GHistoryDocument = function (g2gItem, actions, pageName, $event) {
                 var isInternal = g2gItem.isInternalG2G();
-                g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
+                //g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
                 return $http
-                    .put(urlService.g2gInbox + 'open-sent-return/' + isInternal, g2gItem)
+                    .put(urlService.g2gInbox + 'open-sent-return/' + isInternal, generator.interceptSendInstance('G2GMessagingHistory', g2gItem))
                     .then(function (result) {
                         var metaData = result.data.rs.metaData;
                         metaData = generator.interceptReceivedInstance(['Correspondence', 'Outgoing', 'ViewOutgoing'], generator.generateInstance(metaData, Outgoing));
@@ -1310,7 +1287,6 @@ module.exports = function (app) {
                         localStorageService.set('vsid', metaData.vsId);
                         // temporary property added to correspondence(will be removed before send)
                         metaData.internalG2G = isInternal;
-
                         return result.data.rs;
                     })
                     .then(function (result) {

@@ -33,7 +33,7 @@ module.exports = function (app) {
             self.currentTab = tabName;
         };
         self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
-
+        self.inlineMainSiteSearchText = '';
         // all correspondence site types
         // self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
         self.documentClass = null;
@@ -804,5 +804,23 @@ module.exports = function (app) {
             }
         });
 
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            var code = $event.which || $event.keyCode;
+            if (code !== 38 && code !== 40)
+                $event.stopPropagation();
+        };
     });
 };

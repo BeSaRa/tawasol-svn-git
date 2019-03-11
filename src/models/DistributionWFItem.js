@@ -10,6 +10,7 @@ module.exports = function (app) {
             self.comments = null;
             self.sendSMS = false;
             self.sendEmail = false;
+            self.regOuId = null;
 
             // delete it when send to service.
             self.arName = null;
@@ -21,6 +22,7 @@ module.exports = function (app) {
             self.actionSearchText = '';
             self.selectedWFComment = null;
             self.commentSearchText = '';
+            self.tempRegOUSection = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -89,6 +91,14 @@ module.exports = function (app) {
                 this.sendEmail = sendEmail;
                 return this;
             };
+            DistributionWFItem.prototype.setRegOuId = function (regOuId) {
+                this.regOuId = regOuId || null;
+                return this;
+            };
+            DistributionWFItem.prototype.setTempRegOUSection = function (tempRegOUSection) {
+                this.tempRegOUSection = tempRegOUSection;
+                return this;
+            };
             DistributionWFItem.prototype.clearWFCommentSearchText = function () {
                 this.commentSearchText = '';
                 return this;
@@ -153,6 +163,10 @@ module.exports = function (app) {
 
             DistributionWFItem.prototype.getTranslatedName = function () {
                 return this[langService.current + 'Name'];
+            };
+
+            DistributionWFItem.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
             };
 
             DistributionWFItem.prototype.getCommentMessage = function () {

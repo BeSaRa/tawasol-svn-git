@@ -147,6 +147,20 @@ module.exports = function (app) {
                 return this[language + 'Name'];
             };
 
+            Organization.prototype.getTranslatedNameRegOUSection = function () {
+                if (this.tempRegOUSection) {
+                    return this.tempRegOUSection[langService.current + 'Name']
+                }
+                return this[langService.current + 'Name'];
+            };
+
+            Organization.prototype.getNameByLanguageRegOUSection = function (language) {
+                if (this.tempRegOUSection) {
+                    return this.tempRegOUSection[language + 'Name']
+                }
+                return this[language + 'Name'];
+            };
+
             Organization.prototype.setRegistryParentId = function (registryParentId) {
                 this.registryParentId = registryParentId;
                 return this;

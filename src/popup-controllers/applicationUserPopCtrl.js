@@ -40,7 +40,8 @@ module.exports = function (app) {
                                                        organizationService,
                                                        $q,
                                                        $filter,
-                                                       $timeout) {
+                                                       $timeout,
+                                                       Information) {
         'ngInject';
         var self = this;
         self.controllerName = 'applicationUserPopCtrl';
@@ -57,6 +58,7 @@ module.exports = function (app) {
         self.notFound = {};
 
         self.rootEntity = rootEntity;
+        self.inlineUserOUSearchText = '';
 
         self.validateLabels = {
             arFullName: 'arabic_full_name',
@@ -106,6 +108,40 @@ module.exports = function (app) {
         self.themes = themes;
         self.roles = roles;
         self.organizations = organizations;
+        self.organizationsCopy = _sortRegOusSections(angular.copy(self.organizations), true);
+
+        function _sortRegOusSections(organizations, appendRegOUSection) {
+            // filter all regOU and sort
+            var regOus = _.filter(organizations, function (item) {
+                return item.hasRegistry;
+            });
+            regOus = _.map(regOus, function (regOu) {
+                regOu.tempRegOUSection = new Information({
+                    arName: regOu.arName,
+                    enName: regOu.enName
+                });
+                return regOu;
+            });
+
+            // filter all sections (no registry) and sort
+            var groups = _.filter(organizations, function (item) {
+                return !item.hasRegistry;
+            });
+
+            groups = _.map(groups, function (item) {
+                // if ou is section(has no registry and has regOuId, add temporary field for regOu)
+                item.tempRegOUSection = new Information({
+                    arName: item.registryParentId.arName + ' - ' + item.arName,
+                    enName: item.registryParentId.enName + ' - ' + item.enName
+                });
+                return item;
+            });
+
+            return _.sortBy([].concat(regOus, groups), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]);
+        }
+
         self.classifications = classifications;
         self.permissions = permissions;
         self.viewInboxAsOptions = [
@@ -987,7 +1023,7 @@ module.exports = function (app) {
                                 permissions: permissions,
                                 userOuPermissions: userOuPermissions
                             },
-                            resolve : {
+                            resolve: {
                                 dynamicMenuItems: function (dynamicMenuItemService, UserMenuItem) {
                                     'ngInject';
                                     return dynamicMenuItemService.loadPrivateDynamicMenuItems()
@@ -1302,6 +1338,23 @@ module.exports = function (app) {
         ];
 
 
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            var code = $event.which || $event.keyCode;
+            if (code !== 38 && code !== 40)
+                $event.stopPropagation();
+        };
         /**
          * @description Close the popup
          */

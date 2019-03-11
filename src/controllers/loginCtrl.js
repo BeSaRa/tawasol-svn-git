@@ -11,6 +11,7 @@ module.exports = function (app) {
                                           $timeout,
                                           _,
                                           Idle,
+                                          errorCode,
                                           rootEntity,
                                           themeService,
                                           $sce,
@@ -155,8 +156,10 @@ module.exports = function (app) {
                 })
                 .catch(function (error) {
                     self.loginStatus = false;
-                    /*dialog
-                        .errorMessage(langService.get('access_denied'));*/
+                    // wrong password or empty password
+                    errorCode.checkIf(error, 'PASSWORD_EMPTY', function () {
+                        dialog.errorMessage(langService.get('access_denied'));
+                    });
                 });
         };
         /**

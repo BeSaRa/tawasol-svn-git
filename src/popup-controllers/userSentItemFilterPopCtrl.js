@@ -11,7 +11,8 @@ module.exports = function (app) {
                                                           workflowActions,
                                                           documentStatuses,
                                                           correspondenceSiteTypes,
-                                                          usersTo) {
+                                                          usersTo,
+                                                          moment) {
         'ngInject';
         var self = this;
         self.controllerName = 'userSentItemFilterPopCtrl';
@@ -27,6 +28,8 @@ module.exports = function (app) {
         self.siteTypeSearchText = '';
         self.mainSiteSearchText = '';
         self.subSiteSearchText = '';
+        self.fromActionTimeMinValue = moment().subtract(1, 'years').toDate();
+        self.toActionTimeMaxValue = moment().endOf("day").toDate();
 
         $timeout(function () {
             if (self.searchCriteria.selectedSiteType) {
@@ -95,21 +98,23 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.filterUserSentItems = function ($event) {
-            return userSentItemService.filterUserSentItems(null, self.searchCriteria)
-                .then(function (result) {
-                    dialog.hide({
-                        result: result,
-                        criteria: self.searchCriteria,
-                        error: null
+            if (!self.isFilterDisabled()) {
+                return userSentItemService.filterUserSentItems(null, self.searchCriteria)
+                    .then(function (result) {
+                        dialog.hide({
+                            result: result,
+                            criteria: self.searchCriteria,
+                            error: null
+                        });
+                    })
+                    .catch(function (error) {
+                        dialog.cancel({
+                            result: [],
+                            criteria: self.searchCriteria,
+                            error: error
+                        });
                     });
-                })
-                .catch(function (error) {
-                    dialog.cancel({
-                        result: [],
-                        criteria: self.searchCriteria,
-                        error: error
-                    });
-                });
+            }
         };
 
         /**
@@ -154,15 +159,16 @@ module.exports = function (app) {
                 $event.stopPropagation();
         };
 
-        self.isFilterDisabled = function (form) {
-            var hasValue = self.searchCriteria.docSubject ||
-                self.searchCriteria.docFullSerial ||
-                self.searchCriteria.docClassId !== null ||
-                self.searchCriteria.workflowActionId !== null ||
-                self.searchCriteria.documentStatusId !== null ||
-                self.searchCriteria.userToId !== null ||
-                self.searchCriteria.selectedSiteType;
-            return form.$invalid || !hasValue;
+        self.isFilterDisabled = function () {
+            var hasValue = !!self.searchCriteria.docSubject ||
+                !!self.searchCriteria.docFullSerial ||
+                !!self.searchCriteria.docClassId ||
+                !!self.searchCriteria.workflowActionId ||
+                !!self.searchCriteria.documentStatusId ||
+                !!self.searchCriteria.userToId ||
+                !!self.searchCriteria.selectedSiteType ||
+                !!(self.searchCriteria.fromActionTime && self.searchCriteria.toActionTime);
+            return !hasValue;
         };
     });
 };

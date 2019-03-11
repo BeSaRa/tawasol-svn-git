@@ -637,10 +637,10 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(searchedGeneralDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedGeneralDocument, true))
                 .then(function () {
-                    return self.reloadSearchedGeneralDocuments(self.grid.page);
+                   // return self.reloadSearchedGeneralDocuments(self.grid.page);
                 })
                 .catch(function () {
-                    return self.reloadSearchedGeneralDocuments(self.grid.page);
+                  //  return self.reloadSearchedGeneralDocuments(self.grid.page);
                 });
         };
 
@@ -656,10 +656,10 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'searchGeneral', $event)
                 .then(function () {
-                    return self.reloadSearchedGeneralDocuments(self.grid.page);
+                  //  return self.reloadSearchedGeneralDocuments(self.grid.page);
                 })
                 .catch(function (error) {
-                    return self.reloadSearchedGeneralDocuments(self.grid.page);
+                   // return self.reloadSearchedGeneralDocuments(self.grid.page);
                 });
         };
 

@@ -69,6 +69,7 @@ module.exports = function (app) {
                 delete this.actionSearchText;
                 delete this.selectedWFComment;
                 delete this.commentSearchText;
+                delete this.tempRegOUSection;
 
                 this.action = this.action.hasOwnProperty('id') ? this.action.id : this.action;
                 return this;

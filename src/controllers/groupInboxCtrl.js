@@ -74,7 +74,7 @@ module.exports = function (app) {
          */
         self.terminate = function (userInbox, $event, defer) {
             if (userInbox.isLocked() && !userInbox.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: userInbox.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(userInbox, null));
                 return;
             }
             // BeSara:  i used the same service for inbox to terminate till check with Issawi.
@@ -136,7 +136,7 @@ module.exports = function (app) {
          */
         self.createReplyIncoming = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             //console.log("createReplyIncoming" , userInbox);
@@ -153,7 +153,7 @@ module.exports = function (app) {
          */
         self.forward = function (workItem, $event, defer) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             workItem.launchWorkFlow($event, 'forward', 'favorites')
@@ -174,7 +174,7 @@ module.exports = function (app) {
          */
         self.reply = function (workItem, $event, defer) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             workItem.launchWorkFlow($event, 'reply', 'favorites')
@@ -192,7 +192,7 @@ module.exports = function (app) {
          */
         self.broadcast = function (workItem, $event, defer) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             workItem
@@ -215,7 +215,7 @@ module.exports = function (app) {
                 self.reloadGroupInbox(self.grid.page);
             });*/
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             self.starServices[workItem.generalStepElm.starred](workItem)
@@ -282,12 +282,14 @@ module.exports = function (app) {
                 return;
             }
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             correspondenceService.viewCorrespondenceGroupMail(workItem, self.gridActions, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
                 .then(function () {
-                    return self.reloadGroupInbox(self.grid.page);
+                    correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
+                        return self.reloadGroupInbox(self.grid.page);
+                    });
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -306,12 +308,14 @@ module.exports = function (app) {
                 return;
             }
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             workItem.viewNewGroupMailDocument(self.gridActions, 'groupMail', $event)
                 .then(function () {
-                    return self.reloadGroupInbox(self.grid.page);
+                    correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
+                        return self.reloadGroupInbox(self.grid.page);
+                    });
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -340,7 +344,7 @@ module.exports = function (app) {
          */
         self.manageTags = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
@@ -360,7 +364,7 @@ module.exports = function (app) {
          */
         self.manageComments = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
@@ -380,11 +384,7 @@ module.exports = function (app) {
          */
         self.manageTasks = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
-                return;
-            }
-            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             console.log('manageUserInboxTasks : ', workItem);
@@ -397,7 +397,7 @@ module.exports = function (app) {
          */
         self.manageAttachments = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             workItem.manageDocumentAttachments($event);
@@ -410,7 +410,7 @@ module.exports = function (app) {
          */
         self.manageLinkedDocuments = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
@@ -430,7 +430,7 @@ module.exports = function (app) {
          */
         self.manageLinkedEntities = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
@@ -445,7 +445,7 @@ module.exports = function (app) {
          */
         self.manageDestinations = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
@@ -460,7 +460,7 @@ module.exports = function (app) {
          */
         self.sendWorkItemToReadyToExport = function (workItem, $event, defer) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             workItem.sendToReadyToExport($event).then(function () {
@@ -500,7 +500,7 @@ module.exports = function (app) {
          */
         self.sendLinkToDocumentByEmail = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             downloadService.getMainDocumentEmailContent(workItem.getInfo().vsId);
@@ -513,7 +513,7 @@ module.exports = function (app) {
          */
         self.sendCompositeDocumentAsAttachmentByEmail = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             downloadService.getCompositeDocumentEmailContent(workItem.getInfo().vsId);
@@ -526,7 +526,7 @@ module.exports = function (app) {
          */
         self.sendSMS = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             console.log('sendSMS : ', workItem);
@@ -539,7 +539,7 @@ module.exports = function (app) {
          */
         self.sendMainDocumentFax = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             console.log('sendMainDocumentFax : ', workItem);
@@ -553,7 +553,7 @@ module.exports = function (app) {
          */
         self.getLink = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
@@ -572,7 +572,7 @@ module.exports = function (app) {
          */
         self.signESignature = function (workItem, $event, defer) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             userInboxService
@@ -601,7 +601,7 @@ module.exports = function (app) {
          */
         self.signDigitalSignature = function (workItem, $event, defer) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             console.log('signDigitalSignature : ', workItem);
@@ -614,7 +614,7 @@ module.exports = function (app) {
          */
         self.editContent = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             workItem.manageDocumentContent($event);
@@ -627,7 +627,7 @@ module.exports = function (app) {
          */
         self.editProperties = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
@@ -657,7 +657,7 @@ module.exports = function (app) {
          */
         self.markAsReadUnread = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             return workItem.markAsReadUnread($event, true)
@@ -674,7 +674,7 @@ module.exports = function (app) {
          */
         self.getDocumentVersions = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             return workItem
@@ -687,7 +687,7 @@ module.exports = function (app) {
          */
         self.duplicateCurrentVersion = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
@@ -709,7 +709,7 @@ module.exports = function (app) {
          */
         self.duplicateVersion = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();

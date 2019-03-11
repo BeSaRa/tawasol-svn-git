@@ -98,7 +98,8 @@
                                                 workflow-actions="ctrl.workflowActions"
                                                 workflow-comments="ctrl.comments"
                                                 selected="ctrl.selectedWorkflowItems"
-                                                workflow-items="ctrl.favoriteOrganizations"></workflow-items-directive>
+                                                workflow-items="ctrl.favoriteOrganizations"
+                                                grid-name="favoriteOUs"></workflow-items-directive>
                                     </div>
                                 </md-tab>
                             </md-tabs>
@@ -128,10 +129,21 @@
                                 <label for="ou">{{lang.select_organization}}</label>
                                 <md-select id="ou" name="ou"
                                            ng-change="ctrl.onSearchUsers()"
-                                           ng-model="ctrl.usersCriteria.ou">
-                                    <md-option required ng-value="organization"
-                                               ng-repeat="organization in ctrl.organizationGroups">
-                                        {{organization.getTranslatedName()}}
+                                           ng-model="ctrl.usersCriteria.ou"
+                                           md-on-close="ctrl.clearSearchText('inlineUserOU')"
+                                           data-md-container-class="select-header-container">
+                                    <md-select-header class="select-header">
+                                        <input ng-model="ctrl.inlineUserOUSearchText"
+                                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                               placeholder="{{lang.search}}"
+                                               class="select-header-input">
+                                    </md-select-header>
+                                    <md-option
+                                            ng-repeat="organization in ctrl.organizationGroups | translatedNameFilter: ctrl.inlineUserOUSearchText : 'getNameByLanguageRegOUSection'"
+                                            ng-value="organization">
+                                        <span
+                                                md-highlight-text="ctrl.inlineUserOUSearchText"
+                                                md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
                                     </md-option>
                                 </md-select>
                             </md-input-container>
@@ -351,7 +363,8 @@
                                 workflow-actions="ctrl.workflowActions"
                                 workflow-comments="ctrl.comments"
                                 selected="ctrl.selectedWorkflowItems"
-                                workflow-items="ctrl.workflowGroups"></workflow-items-directive>
+                                workflow-items="ctrl.workflowGroups"
+                                grid-name="workflowGroups"></workflow-items-directive>
                         <div>
                             <br/>
                         </div>
@@ -386,7 +399,8 @@
                                 workflow-actions="ctrl.workflowActions"
                                 workflow-comments="ctrl.comments"
                                 selected="ctrl.selectedWorkflowItems"
-                                workflow-items="ctrl.registryOrganizations"></workflow-items-directive>
+                                workflow-items="ctrl.registryOrganizations"
+                                grid-name="Ous"></workflow-items-directive>
                         <div>
                             <br/>
                         </div>

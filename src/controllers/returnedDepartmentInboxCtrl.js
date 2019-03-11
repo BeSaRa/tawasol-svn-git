@@ -136,7 +136,7 @@ module.exports = function (app) {
          */
         self.addToFavorite = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             workItem.addToFavorite().then(function () {
@@ -153,7 +153,7 @@ module.exports = function (app) {
          */
         self.terminate = function (workItem, $event, defer) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             workItem
@@ -173,7 +173,7 @@ module.exports = function (app) {
          */
         self.getLink = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
@@ -191,7 +191,7 @@ module.exports = function (app) {
          */
         self.subscribe = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             console.log('subscribe for returned department inbox : ', workItem)
@@ -218,7 +218,7 @@ module.exports = function (app) {
          */
         self.resend = function (workItem, $event, defer) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             workItem.resendWorkItem($event)
@@ -239,7 +239,7 @@ module.exports = function (app) {
          */
         self.launchNewDistributionWorkflow = function (workItem, $event, defer) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             //returnedDepartmentInbox.generalStepElm.workFlowName = Export,
@@ -263,7 +263,7 @@ module.exports = function (app) {
          */
         self.manageTags = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
@@ -284,7 +284,7 @@ module.exports = function (app) {
          */
         self.manageComments = function (returnedDepartmentInbox, $event) {
             if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
             var wfName = 'outgoing';
@@ -304,7 +304,7 @@ module.exports = function (app) {
          */
         self.manageTasks = function (returnedDepartmentInbox, $event) {
             if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
             console.log('manageTasksReturnedDepartmentInbox', returnedDepartmentInbox);
@@ -317,7 +317,7 @@ module.exports = function (app) {
          */
         self.manageAttachments = function (returnedDepartmentInbox, $event) {
             if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
             returnedDepartmentInbox.manageDocumentAttachments($event)
@@ -335,7 +335,7 @@ module.exports = function (app) {
          */
         self.manageLinkedDocuments = function (returnedDepartmentInbox, $event) {
             if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
             var info = returnedDepartmentInbox.getInfo();
@@ -354,7 +354,7 @@ module.exports = function (app) {
          */
         self.manageLinkedEntities = function (returnedDepartmentInbox, $event) {
             if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
             var wfName = 'outgoing';
@@ -389,7 +389,7 @@ module.exports = function (app) {
          */
         self.sendLinkToDocumentByEmail = function (returnedDepartmentInbox, $event) {
             if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
             downloadService.getMainDocumentEmailContent(returnedDepartmentInbox.getInfo().vsId);
@@ -402,7 +402,7 @@ module.exports = function (app) {
          */
         self.sendCompositeDocumentAsAttachmentByEmail = function (returnedDepartmentInbox, $event) {
             if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
             downloadService.getCompositeDocumentEmailContent(returnedDepartmentInbox.getInfo().vsId);
@@ -415,7 +415,7 @@ module.exports = function (app) {
          */
         self.sendSMS = function (returnedDepartmentInbox, $event) {
             if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
             console.log('sendSMS : ', returnedDepartmentInbox);
@@ -428,7 +428,7 @@ module.exports = function (app) {
          */
         self.sendMainDocumentFax = function (returnedDepartmentInbox, $event) {
             if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
             console.log('sendMainDocumentFax : ', returnedDepartmentInbox);
@@ -441,7 +441,7 @@ module.exports = function (app) {
          */
         self.editAfterExport = function (returnedDepartmentInbox, $event) {
             if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
             var info = returnedDepartmentInbox.getInfo(), list = listGeneratorService.createUnOrderList(),
@@ -478,7 +478,7 @@ module.exports = function (app) {
          */
         self.editContent = function (returnedDepartmentInbox, $event) {
             if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
             var info = returnedDepartmentInbox.getInfo();
@@ -492,7 +492,7 @@ module.exports = function (app) {
          */
         self.editProperties = function (returnedDepartmentInbox, $event) {
             if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
             var info = returnedDepartmentInbox.getInfo();
@@ -524,13 +524,15 @@ module.exports = function (app) {
                 return;
             }
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
             correspondenceService.viewCorrespondenceReturnedWorkItem(info, self.gridActions, checkIfEditPropertiesAllowed(workItem, true), true, true)
                 .then(function () {
-                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                    correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
+                        self.reloadReturnedDepartmentInboxes(self.grid.page);
+                    });
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -550,12 +552,14 @@ module.exports = function (app) {
                 return;
             }
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             workItem.viewNewDepartmentReturned(self.gridActions, 'departmentReturned', $event)
                 .then(function () {
-                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                    correspondenceService.unlockWorkItem(workItem, true, $event).then(function () {
+                        self.reloadReturnedDepartmentInboxes(self.grid.page);
+                    });
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -571,7 +575,7 @@ module.exports = function (app) {
          */
         self.getDocumentVersions = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             return workItem
@@ -584,7 +588,7 @@ module.exports = function (app) {
          */
         self.duplicateCurrentVersion = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
@@ -606,7 +610,7 @@ module.exports = function (app) {
          */
         self.duplicateVersion = function (workItem, $event) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
-                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
             var info = workItem.getInfo();
@@ -633,12 +637,10 @@ module.exports = function (app) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                     if (action.hasOwnProperty('checkAnyPermission')) {
                         hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
+                    } else {
                         hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
@@ -708,8 +710,7 @@ module.exports = function (app) {
                     if (self.selectedReturnedDepartmentInboxes.length)
                         _unlockBulk(selectedItems, $event);
                 })
-            }
-            else {
+            } else {
                 _unlockBulk(selectedItems, $event);
             }
         };

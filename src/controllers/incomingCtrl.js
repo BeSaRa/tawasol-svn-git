@@ -72,7 +72,7 @@ module.exports = function (app) {
             securityLevel: lookups.securityLevels[0]
         });
 
-        self.isReceiveG2G = false;
+        //self.isReceiveG2G = false;
 
         if (receive) {
             self.receive = true;
@@ -80,7 +80,7 @@ module.exports = function (app) {
             self.incoming = receive.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = receive.content;
-            self.isReceiveG2G = false;
+            //self.isReceiveG2G = false;
         }
         if (receiveG2G) {
             self.receiveG2G = true;
@@ -93,7 +93,7 @@ module.exports = function (app) {
             }
             self.model = angular.copy(self.incoming);
             self.documentInformation = receiveG2G.content;
-            self.isReceiveG2G = true;
+            //self.isReceiveG2G = true;
         }
 
         if (duplicateVersion) {
@@ -102,7 +102,7 @@ module.exports = function (app) {
             self.incoming = duplicateVersion.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = self.incoming.hasContent() ? duplicateVersion.content : null;
-            self.isReceiveG2G = false;
+            //self.isReceiveG2G = false;
         }
 
 
@@ -180,6 +180,9 @@ module.exports = function (app) {
         var saveCorrespondenceFinished = function (status, newId) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             counterService.loadCounters();
+            // once saved/received, don't consider the request as receive/receiveG2G
+            self.receive = false;
+            self.receiveG2G = false;
             if (status) {// || (self.incoming.contentFile)
                 toast.success(langService.get('save_success'));
                 /*$timeout(function () {
@@ -414,7 +417,9 @@ module.exports = function (app) {
             self.contentFileExist = false;
             self.contentFileSizeExist = false;
             self.document_properties.$setUntouched();
-            self.isReceiveG2G = false;
+            //self.isReceiveG2G = false;
+            self.receiveG2G = false;
+            self.receive = false;
         };
 
         /**

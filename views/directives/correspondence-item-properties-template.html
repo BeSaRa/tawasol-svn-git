@@ -41,11 +41,11 @@
         </li>
         <li ng-if="ctrl.item.hasDocumentClass('incoming')">
             <span class="property-key">{{lang.administration_topic}}</span>
-            <span class="property-value">{{ctrl.item.mainSiteInfo.getTranslatedName()}}</span>
+            <span class="property-value">{{ctrl.item.siteInfo.mainSite.getTranslatedName()}}</span>
         </li>
         <li ng-if="ctrl.item.hasDocumentClass('incoming')">
             <span class="property-key">{{lang.administration}}</span>
-            <span class="property-value">{{ctrl.item.subSiteInfo.getTranslatedName()}}</span>
+            <span class="property-value">{{ctrl.item.siteInfo.subSite.getTranslatedName()}}</span>
         </li>
         <li ng-if="ctrl.item.hasDocumentClass('outgoing')">
             <span class="property-key">{{lang.administration_topic}}</span>

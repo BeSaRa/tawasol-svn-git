@@ -515,6 +515,19 @@
                                     </div>
                                 </md-input-container>
                             </div>
+                            <div layout="row" flex class="p20">
+                                <div flex>
+                                    <!-- Allow send WF Related Books -->
+                                    <md-switch ng-model="ctrl.globalSetting.allowSendWFRelatedBook"
+                                               aria-label="{{lang.send_related_documents}}">
+                                        <span>{{lang.send_related_documents}} : </span>{{
+                                        ctrl.globalSetting.getTranslatedYesNo('allowSendWFRelatedBook')}}
+                                    </md-switch>
+                                </div>
+                                <div flex>
+
+                                </div>
+                            </div>
                         </div>
                         <br/>
                         <br/>

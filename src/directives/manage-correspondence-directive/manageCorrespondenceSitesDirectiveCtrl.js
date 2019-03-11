@@ -32,7 +32,7 @@ module.exports = function (app) {
             self.currentTab = tabName;
         };
         self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
-
+        self.inlineMainSiteSearchText = '';
         // all correspondence site types
         // self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
         self.documentClass = null;
@@ -362,8 +362,7 @@ module.exports = function (app) {
                 self.followUpStatusDate_DL = null;
                 self.followupStatus_DL = null;
                 self.subSearchSelected_DL = [];
-            }
-            else {
+            } else {
                 self.followUpStatusDate = null;
                 self.followupStatus = null;
                 self.subSearchSelected = [];
@@ -388,8 +387,7 @@ module.exports = function (app) {
                 if (sitesWithoutNeedReply.length === 0) {
                     dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
                     return;
-                }
-                else {
+                } else {
                     dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
                         .then(function () {
                             _.map(sitesWithoutNeedReply, function (site) {
@@ -398,8 +396,7 @@ module.exports = function (app) {
                             _resetSelectedData(isDistributionListRecord);
                         });
                 }
-            }
-            else {
+            } else {
                 _.map(sites, function (site) {
                     self.addSiteTo(site);
                 });
@@ -424,8 +421,7 @@ module.exports = function (app) {
                 if (sitesWithoutNeedReply.length === 0) {
                     dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
                     return;
-                }
-                else {
+                } else {
                     dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
                         .then(function () {
                             _.map(sitesWithoutNeedReply, function (site) {
@@ -434,8 +430,7 @@ module.exports = function (app) {
                             _resetSelectedData(isDistributionListRecord);
                         });
                 }
-            }
-            else {
+            } else {
                 _.map(sites, function (site) {
                     self.addSiteCC(site);
                 });
@@ -486,8 +481,7 @@ module.exports = function (app) {
                     self.mainSites = result;
                     self.selectedMainSite = null;
                 });
-            }
-            else {
+            } else {
                 self.mainSites = [];
                 self.subSearchResult = [];
                 self.subSearchResultCopy = [];
@@ -565,8 +559,7 @@ module.exports = function (app) {
                 self.subSearchResult = _.filter(self.subSearchResultCopy, function (resultCopy) {
                     return resultCopy.subSiteId === subSite.subSiteId;
                 });
-            }
-            else
+            } else
                 self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
         };
 
@@ -820,7 +813,25 @@ module.exports = function (app) {
 
         self.getSortingKey = function (property, modelType) {
             generator.getColumnSortingKey(property, modelType);
-        }
+        };
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            var code = $event.which || $event.keyCode;
+            if (code !== 38 && code !== 40)
+                $event.stopPropagation();
+        };
 
     });
 };

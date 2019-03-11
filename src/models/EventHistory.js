@@ -21,6 +21,10 @@ module.exports = function (app) {
                     sent_items_receiver: function () {
                         return this.receiverInfo.getTranslatedName();
                     },
+                    comment: 'comments',
+                    sent_items_due_date: function () {
+                        return this.getDueDate();
+                    },
                     sent_items_correspondence_site: function () {
                         return this.getTranslatedCorrespondenceSiteInfo();
                     }

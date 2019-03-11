@@ -167,12 +167,42 @@
                             </md-select>
                         </md-input-container>
                     </div>
+
+                    <div layout="row">
+                        <!-- From -->
+                        <md-input-container flex>
+                            <label for="fromActionTime">{{lang.start_date}}</label>
+                            <md-datepicker id="fromActionTime" name="fromActionTime"
+                                           ng-required="true"
+                                           md-min-date="ctrl.fromActionTimeMinValue"
+                                           ng-model="ctrl.searchCriteria.fromActionTime"
+                                           md-max-date="ctrl.searchCriteria.toActionTime"
+                            ></md-datepicker>
+                            <div ng-messages="userSentItemSearchForm.fromActionTime.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- To -->
+                        <md-input-container flex>
+                            <label for="toActionTime">{{lang.end_date}}</label>
+                            <md-datepicker id="toActionTime" name="toActionTime"
+                                           ng-required="true"
+                                           ng-model="ctrl.searchCriteria.toActionTime"
+                                           md-min-date="ctrl.searchCriteria.fromActionTime"
+                                           md-max-date="ctrl.toActionTimeMaxValue"
+                            ></md-datepicker>
+                            <!--md-min-date="ctrl.ouApplicationUser.proxyStartDate"-->
+                            <div ng-messages="userSentItemSearchForm.proxyEndDate.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
                 </div>
             </form>
         </md-content>
         <div>
             <div layout="row">
-                <md-button class="md-raised" ng-disabled="ctrl.isFilterDisabled(userSentItemSearchForm)"
+                <md-button class="md-raised" ng-disabled="userSentItemSearchForm.$invalid || ctrl.isFilterDisabled()"
                            ng-click="ctrl.filterUserSentItems($event)">{{lang.filter}}
                 </md-button>
                 <span flex></span>

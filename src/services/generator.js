@@ -764,6 +764,29 @@ module.exports = function (app) {
                 var domain = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/";
                 dialog.infoMessage("Popup is blocked. Please allow the popup in browser settings for <b>" + domain + "</b>");
             }
-        }
+        };
+
+
+        /**
+         * @description Gets the message to display for book lock
+         * @param workItem
+         * @param error
+         * @returns {*}
+         */
+        self.getBookLockMessage = function (workItem, error) {
+            var message = langService.get('book_locked_by_user_date');
+            if (!!workItem) {
+               message = message.change({
+                    user: workItem.getLockingUserInfo().getTranslatedName(),
+                    date: workItem.getLockingUserDateTime()
+                })
+            } else {
+                message =  message.change({
+                    user: error.data.eo.lockingUserInfo[langService.current + 'Name'],
+                    date: self.getDateFromTimeStamp(error.data.eo.lockingTime, true)
+                })
+            }
+            return message;
+        };
     })
 };
