@@ -323,6 +323,8 @@
                 .addToAllWithBase('dynamicMenuItems', 'cms-entity/user/menu-item')
                 // maip labels
                 .addToAllWithBase('maipLabels', '/cms-entity/correspondence/download-document/maip/labels')
+                // central archives for user
+                .addToAllWithBase('distributionWFCentralArchiveForUser', 'cms-entity/admin/ou/dist/central-archive')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

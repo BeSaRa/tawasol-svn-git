@@ -1282,7 +1282,7 @@ module.exports = function (app) {
             {
                 type: 'action',
                 icon: 'eye',
-                text: 'grid_action_view_tracking_sheet',
+                text: 'view_tracking_sheet_full_history',
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: gridService.checkToShowAction,
                 sticky: true,

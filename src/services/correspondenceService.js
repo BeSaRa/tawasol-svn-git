@@ -1865,6 +1865,14 @@ module.exports = function (app) {
                             return distributionWFService
                                 .loadSenderUserForWorkItem(correspondence);
 
+                        },
+                        centralArchiveOUs: function(distributionWFService){
+                            'ngInject';
+                            if (employeeService.hasPermissionTo('SEND_TO_CENTRAL_ARCHIVE')){
+                                return distributionWFService
+                                    .loadDistWorkflowOrganizations('centralArchivesForUser')
+                            }
+                            return [];
                         }
                     }
                 });
@@ -2674,7 +2682,7 @@ module.exports = function (app) {
          */
         self.loadCentralArchiveWorkItems = function () {
             return $http
-                .get(urlService.departmentWF + '/ready-to-export-central-archive')
+                .get(urlService.departmentWF + '/ready-to-export-central-archive?optional-fields=registeryOu')
                 .then(function (result) {
                     return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
                 });

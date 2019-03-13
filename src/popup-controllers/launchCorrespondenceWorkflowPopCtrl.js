@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                                     _,
                                                                     organizationService,
                                                                     replyOn,
+                                                                    centralArchiveOUs,
                                                                     actionKey,
                                                                     multi,
                                                                     tableGeneratorService,
@@ -35,7 +36,6 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
-
         self.inlineUserOUSearchText = '';
 
         /**
@@ -138,8 +138,8 @@ module.exports = function (app) {
         self.workflowGroups = _mapWFGroup(distributionWFService.workflowGroups);
         // all registry organizations
         self.registryOrganizations = _mapWFOrganization(distributionWFService.registryOrganizations, 'OUReg');
-        // all organizations for organization mail unit
-        self.organizationGroups = _mapOrganizationByType(distributionWFService.organizationGroups);
+        // all organizations for users tab -> organization mail unit dropdown
+        self.organizationGroups = _mapOrganizationByType(distributionWFService.organizationGroups, true);
         // users search criteria
         self.usersCriteria = new UserSearchCriteria({
             ou: self.organizationGroups.length ? _.find(self.organizationGroups, function (item) {
@@ -388,7 +388,7 @@ module.exports = function (app) {
         //_checkFavoritesError();
 
 
-        function _mapOrganizationByType(organizations) {
+        function _mapOrganizationByType(organizations, includeCentralArchive) {
             // filter all regOU and sort
             var regOus = _.filter(organizations, function (item) {
                 return item.hasRegistry;
@@ -423,6 +423,17 @@ module.exports = function (app) {
 
             groups = _mapWFOrganization(groups, 'OUGroup');
             regOus = _mapWFOrganization(regOus, 'OUReg');
+            if (includeCentralArchive) {
+                centralArchiveOUs = _.map(centralArchiveOUs, function (ou) {
+                    ou.tempRegOUSection = new Information({
+                        arName: ou.arName,
+                        enName: ou.enName
+                    });
+                    return ou;
+                });
+                centralArchiveOUs = _mapWFOrganization(centralArchiveOUs, 'OUGroup');
+                groups = groups.concat(centralArchiveOUs);
+            }
             return _.sortBy([].concat(regOus, groups), [function (ou) {
                 return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
             }]);

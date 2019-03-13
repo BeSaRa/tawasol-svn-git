@@ -26,11 +26,11 @@
                 </md-button>
                 <md-button ng-if="!ctrl.correspondence" ng-click="ctrl.returnBackCorrespondenceInformation()"
                            class="md-icon-button">
-                    <md-icon md-svg-icon="close"></md-icon>
+                    <md-icon md-svg-icon="close" class="red-text"></md-icon>
                 </md-button>
                 <md-button ng-if="ctrl.correspondence" ng-click="ctrl.closeCorrespondenceDialog()"
                            class="md-icon-button">
-                    <md-icon md-svg-icon="close"></md-icon>
+                    <md-icon md-svg-icon="close" class="red-text"></md-icon>
                 </md-button>
             </div>
         </div>
@@ -279,10 +279,10 @@
             </div>
             <span flex></span>
             <div ng-if="ctrl.correspondence">
-                <md-button class="md-raised" ng-click="ctrl.closeCorrespondenceDialog()">{{lang.close}}</md-button>
+                <md-button class="md-raised red-text" ng-click="ctrl.closeCorrespondenceDialog()">{{lang.close}}</md-button>
             </div>
             <div ng-if="!ctrl.correspondence">
-                <md-button class="md-raised" ng-click="ctrl.returnBackCorrespondenceInformation()">{{lang.close}}
+                <md-button class="md-raised red-text" ng-click="ctrl.returnBackCorrespondenceInformation()">{{lang.close}}
                 </md-button>
             </div>
         </div>

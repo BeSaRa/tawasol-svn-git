@@ -78,6 +78,10 @@ module.exports = function (app) {
             organizations: {
                 url: urlService.distributionWFOrganization,
                 property: 'organizationGroups'
+            },
+            centralArchivesForUser:{
+                url: urlService.distributionWFCentralArchiveForUser,
+                property: 'centralArchives'
             }
         };
         /**
@@ -106,7 +110,11 @@ module.exports = function (app) {
          */
         self.loadDistWorkflowOrganizations = function (name) {
             return $http.get(self.organizationsMap[name].url).then(function (result) {
-                return self[self.organizationsMap[name].property] = generator.generateCollection(result.data.rs, WFOrganization);
+                if (name === 'centralArchivesForUser' && !angular.isArray(result.data.rs)){
+                    result.data.rs = [result.data.rs];
+                }
+                self[self.organizationsMap[name].property] = generator.generateCollection(result.data.rs, WFOrganization);
+                return  self[self.organizationsMap[name].property]
             });
         };
         /**

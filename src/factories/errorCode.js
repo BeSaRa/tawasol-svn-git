@@ -5,6 +5,7 @@ module.exports = function (app) {
         var errorCodes = {
             EMPTY_RESULT: 2014,
             CAN_NOT_DELETE_LOOKUP: 3014,
+            DOCUMENT_NO_PREVIEW_UNAVAILABLE_MISSING: 2040,
             WORK_ITEM_NOT_FOUND: 2043,
             FAILED_DELETE_DOCUMENT: 2034,
             ITEM_LOCKED: 2058,
