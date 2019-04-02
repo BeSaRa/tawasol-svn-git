@@ -129,7 +129,7 @@
                         </span>
                         </div>
                         <div class="magazine-fix-actions">
-                        <span ng-repeat="quickAction in ctrl.filterActionsByProperty( workItem , ctrl.gridActions , 'sticky' , true) track by $index"
+                        <span ng-repeat="quickAction in ctrl.quickActions track by $index"
                               ng-if="ctrl.isShowQuickAction(quickAction, workItem)">
                             <md-icon md-svg-icon="{{quickAction.icon}}" class="cursor-pointer {{quickAction.class}}"
                                      tooltip="{{ctrl.getQuickActionText(quickAction, true)}}"

@@ -1,6 +1,10 @@
 .cms-virtual-repeater {
   max-height: 500px;
   height: 500px;
+
+  &.no-length {
+    height: 150px;
+  }
 }
 
 .no-tb-padding {

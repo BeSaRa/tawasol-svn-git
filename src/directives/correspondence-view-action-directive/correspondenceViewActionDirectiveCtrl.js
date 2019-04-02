@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                                       $scope,
                                                                       _,
                                                                       $timeout,
+                                                                      gridService,
                                                                       correspondenceService) {
         'ngInject';
         var self = this;
@@ -46,7 +47,7 @@ module.exports = function (app) {
          */
         self.checkDisplayAction = function (action, workItem, correspondence) {
             var actionCopy = angular.copy(action);
-            actionCopy.actionFrom = 'popup';
+            actionCopy.actionFrom = gridService.gridActionOptions.location.popup;
             return actionCopy.checkShow(actionCopy, (workItem || correspondence), actionCopy.showInViewOnly);
         };
         /**
@@ -90,7 +91,8 @@ module.exports = function (app) {
         };
 
         $timeout(function () {
-            self.getTranslationForAllActions(self.actions);
+            self.viewActions = gridService.getContextMenuActions(self.actions);
+            self.getTranslationForAllActions(self.viewActions);
         });
 
     });

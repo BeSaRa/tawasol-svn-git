@@ -468,9 +468,11 @@ module.exports = function (app) {
          * @description Add To Folder
          * @param userInbox
          * @param $event
+         * @param defer
          */
-        self.addToFolder = function (userInbox, $event) {
+        self.addToFolder = function (userInbox, $event, defer) {
             userInbox.addToFolder($event, false).then(function (result) {
+                new ResolveDefer(defer);
                 if (result)
                     self.reloadUserInboxes(self.grid.page);
             });
@@ -924,8 +926,12 @@ module.exports = function (app) {
                 })
         };
 
-        // new view document
-        self.openNewViewDocument = function (workItem, $event) {
+        // view document
+        self.viewDocument = function (workItem, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
             workItem.viewNewWorkItemDocument(self.gridActions, 'userInbox', $event)
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page);
@@ -1062,7 +1068,7 @@ module.exports = function (app) {
                         icon: 'book-open-page-variant',
                         text: 'grid_action_open',
                         shortcut: true,
-                        callback: self.openNewViewDocument,
+                        callback: self.viewDocument,
                         class: "action-green",
                         permissionKey: 'VIEW_DOCUMENT',
                         showInView: false,
@@ -1587,7 +1593,11 @@ module.exports = function (app) {
                         sticky: true,
                         permissionKey: "ELECTRONIC_SIGNATURE",
                         checkShow: function (action, model) {
-                            return true;
+                            var info = model.getInfo();
+                            return !model.isBroadcasted()
+                                && !info.isPaper
+                                && (info.documentClass !== 'incoming')
+                                && model.needApprove();
                         }
                     },
                     // Digital Signature
@@ -1600,7 +1610,11 @@ module.exports = function (app) {
                         permissionKey: "DIGITAL_SIGNATURE",
                         hide: true,
                         checkShow: function (action, model) {
-                            return true;
+                            var info = model.getInfo();
+                            return !model.isBroadcasted()
+                                && !info.isPaper
+                                && (info.documentClass !== 'incoming')
+                                && model.needApprove();
                         }
                     }
                 ]
@@ -1752,6 +1766,10 @@ module.exports = function (app) {
             }
         ];
 
+        self.shortcutActions = gridService.getShortcutActions(self.gridActions);
+        self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
+        self.stickyActions = gridService.getStickyActions(self.gridActions);
+
         /**
          * @description Mark item as read/unread
          * @param userInbox
@@ -1765,7 +1783,7 @@ module.exports = function (app) {
         };
 
         self.openEmailItem = function () {
-            emailItem ? self.openNewViewDocument(emailItem) : null;
+            emailItem ? self.viewDocument(emailItem) : null;
         };
 
         self.refreshInbox = function (time) {

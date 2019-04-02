@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                           employeeService,
                                                           cmsTemplate,
                                                           $q,
+                                                          gridService,
                                                           generator) {
         'ngInject';
         var self = this;
@@ -333,32 +334,8 @@ module.exports = function (app) {
             }
         };
 
-        /**
-         * @description Filters the action buttons for showing/hiding shortcut actions
-         * It will skip the separators
-         * @returns {Array}
-         */
-        self.filterActionsByProperty = function (model, actions, propertyKey, propertyValue, listOfActions) {
-            var stickyActions = listOfActions ? listOfActions : [];
-            if (!actions)
-                return [];
-
-            for (var i = 0; i < actions.length; i++) {
-                var mainAction = actions[i], mainActionCopy = angular.copy(mainAction);
-                mainActionCopy.actionFrom = 'sticky';
-                if (mainActionCopy.hasOwnProperty(propertyKey) && mainActionCopy[propertyKey] === propertyValue && mainActionCopy.checkShow(mainActionCopy, model)) {
-                    stickyActions.push(mainActionCopy);
-                }
-                if (mainActionCopy.hasOwnProperty('subMenu') && mainActionCopy.subMenu.length && mainActionCopy.checkShow(mainActionCopy, model)) {
-                    self.filterActionsByProperty(model, mainActionCopy.subMenu, propertyKey, propertyValue, stickyActions);
-                }
-            }
-            // the returned sticky actions for the viewer
-            return stickyActions;
-        };
-
         $timeout(function () {
-            self.stickyActions = self.filterActionsByProperty((self.workItem || self.correspondence), self.actions, 'sticky', true);
+            self.stickyActions = gridService.getStickyActions(self.actions);
         })
 
 

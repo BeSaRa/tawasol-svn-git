@@ -23,7 +23,9 @@
             <div scroll-directive>
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                        <md-virtual-repeat-container fix-head class="cms-virtual-repeater">
+                        <md-virtual-repeat-container class="cms-virtual-repeater"
+                                                     ng-class="{'no-length':!ctrl.sentItemDepartmentInboxes.length}"
+                                                     md-auto-shrink="true">
                             <md-table-container>
                                 <table md-table ng-model="ctrl.selectedSentItemDepartmentInboxes"
                                        md-progress="ctrl.progress"><!--md-row-select--><!--md-row-select-->

@@ -4,7 +4,7 @@
             <md-icon md-svg-icon="dots-vertical"></md-icon>
         </md-button>
         <md-menu-content width="4">
-            <md-menu-item ng-repeat="action in ctrl.actions"
+            <md-menu-item ng-repeat="action in ctrl.viewActions"
                           ng-if="ctrl.checkDisplayAction(action , ctrl.workItem , ctrl.correspondence) && !ctrl.hideFromView(action)">
                 <md-button ng-click="ctrl.runActionCallback(action , ctrl.workItem , ctrl.correspondence )"
                            ng-if="!action.subMenu.length && action.type ==='action'">

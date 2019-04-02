@@ -425,20 +425,18 @@ module.exports = function (app) {
                 }
                 // if permission is available for action, check where to show, otherwise return permission value only
                 if (hasPermission) {
-                    var showInViewOnly = action.hasOwnProperty('showInViewOnly') && !!action.showInViewOnly,
-                        showInView = action.hasOwnProperty('showInView') && !!action.showInView,
-                        sticky = action.hasOwnProperty('sticky') && !!action.sticky,
+                    var showInViewPopupOnly = action.hasOwnProperty('showInViewOnly') && !!action.showInViewOnly,
+                        showInViewPopup = action.hasOwnProperty('showInView') && !!action.showInView,
+                        isSticky = action.hasOwnProperty('sticky') && !!action.sticky,
                         actionFrom = action.hasOwnProperty('actionFrom') && action.actionFrom ? action.actionFrom.toLowerCase() : self.gridActionOptions.location.grid;
+
                     if (actionFrom === self.gridActionOptions.location.popup) {
-                        if (!showInView)
-                            hasPermission = false;
+                        hasPermission = showInViewPopup || showInViewPopupOnly;
                     } else if (actionFrom === self.gridActionOptions.location.grid) {
-                        if (showInViewOnly)
+                        if (showInViewPopupOnly)
                             hasPermission = false;
                     } else if (actionFrom === self.gridActionOptions.location.sticky) {
-                        // add any condition, if required later
-                        if (sticky)
-                            hasPermission = true;
+                        hasPermission = isSticky;
                     }
                 }
                 return hasPermission;
@@ -647,5 +645,32 @@ module.exports = function (app) {
                 }
             }
         }
+
+        /**
+         * @description Filters the shortcut actions for grid
+         * @param actions
+         * Set it to true if you want to display all actions as same as context menu
+         * @param listOfActions
+         * @returns {Array}
+         */
+        self.getStickyActions = function (actions, listOfActions) {
+            var stickyActions = listOfActions ? listOfActions : [], action, actionCopy;
+            if (!stickyActions)
+                return [];
+
+            for (var i = 0; i < actions.length; i++) {
+                action = actions[i];
+                actionCopy = angular.copy(action);
+                actionCopy.actionFrom = self.gridActionOptions.location.sticky;
+                if (actionCopy.hasOwnProperty('sticky') && !!actionCopy.sticky && self.checkToShowAction(actionCopy)) {
+                    stickyActions.push(actionCopy);
+                }
+                if (actionCopy.hasOwnProperty('subMenu') && actionCopy.subMenu.length) {
+                    self.getStickyActions(actionCopy.subMenu, stickyActions);
+                }
+            }
+            // the returned sticky actions for the viewer
+            return stickyActions;
+        };
     });
 };

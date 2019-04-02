@@ -27,11 +27,6 @@ module.exports = function (app) {
 
         self.page = 1;
 
-        $timeout(function () {
-            self.shortcutActions = gridService.getShortcutActions(self.gridActions);
-            self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
-        });
-
         self.paginate = function (e) {
             console.log(self.page);
         };
@@ -237,21 +232,6 @@ module.exports = function (app) {
             else {
                 action.callback(workItem, $event);
             }
-        };
-
-        self.filterActionsByProperty = function (model, actions, propertyKey, propertyValue, listOfActions) {
-            var flatActions = listOfActions ? listOfActions : [];
-            for (var i = 0; i < actions.length; i++) {
-                var mainAction = actions[i];
-                if (mainAction.hasOwnProperty(propertyKey) && mainAction[propertyKey] === propertyValue && mainAction.checkShow(mainAction, model)) {
-                    flatActions.push(mainAction);
-                }
-                if (mainAction.hasOwnProperty('subMenu') && mainAction.subMenu.length && mainAction.checkShow(mainAction, model)) {
-                    self.filterActionsByProperty(model, mainAction.subMenu, propertyKey, propertyValue, flatActions);
-                }
-            }
-            // the returned flat actions for the viewer
-            return flatActions;
         };
 
         self.showThumbnails = function ($event, workItem) {

@@ -2899,7 +2899,7 @@ module.exports = function (app) {
         /**
          * @description to view correspondence workItem
          */
-        self.viewCorrespondenceWorkItemNew = function (info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming) {
+        /*self.viewCorrespondenceWorkItemNew = function (info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming) {
             return $http.get(approvedQueue ? _createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]) : _createWorkItemSchema(info, department, readyToExport))
                 .then(function (result) {
                     return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
@@ -2951,7 +2951,7 @@ module.exports = function (app) {
                         return $q.reject('WORK_ITEM_NOT_FOUND');
                     })
                 });
-        };
+        };*/
 
         /**
          * @description to view correspondence workItem

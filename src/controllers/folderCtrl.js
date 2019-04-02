@@ -64,7 +64,7 @@ module.exports = function (app) {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.folder) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.folder, self.folders),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.folder, self.workItems),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.folder, limit);
             }
@@ -105,8 +105,9 @@ module.exports = function (app) {
         /**
          * @description Gets the grid records by sorting
          */
-        self.getSortedData = function () {
-            self.folders = $filter('orderBy')(self.folders, self.grid.order);
+        self.getSortedData = function (order) {
+            order = order ? order : '';
+            self.workItems = $filter('orderBy')(self.workItems, order);
         };
 
         /**
@@ -715,31 +716,6 @@ module.exports = function (app) {
                 })
         };
 
-        // new view document
-        self.openNewViewDocument = function (workItem) {
-            if (!workItem)
-                self.workItems[0].viewNewInboxWorkItem(self.gridActions, true, true)
-                    .then(function () {
-                        self.reloadFolders(self.grid.page);
-                    })
-                    .catch(function () {
-                        self.reloadFolders(self.grid.page);
-                    });
-
-            else
-                workItem.viewNewInboxWorkItem({
-                    gridActions: self.gridActions,
-                    viewerActions: self.magazineQuickActions
-                }, true, true)
-                    .then(function () {
-                        self.reloadFolders(self.grid.page);
-                    })
-                    .catch(function () {
-                        self.reloadFolders(self.grid.page);
-                    });
-
-        };
-
         /**
          * @description edit word doucment in desktop
          * @param workItem
@@ -747,31 +723,6 @@ module.exports = function (app) {
          */
         self.editInDesktop = function (workItem) {
             return correspondenceService.editWordInDesktop(workItem);
-        };
-
-        // new view document
-        self.openNewViewDocument = function (workItem) {
-            if (!workItem)
-                self.workItems[0].viewNewInboxWorkItem(self.gridActions, true, true)
-                    .then(function () {
-                        self.reloadFolders(self.grid.page);
-                    })
-                    .catch(function () {
-                        self.reloadFolders(self.grid.page);
-                    });
-
-            else
-                workItem.viewNewInboxWorkItem({
-                    gridActions: self.gridActions,
-                    viewerActions: self.magazineQuickActions
-                }, true, true)
-                    .then(function () {
-                        self.reloadFolders(self.grid.page);
-                    })
-                    .catch(function () {
-                        self.reloadFolders(self.grid.page);
-                    });
-
         };
 
         self.viewInDeskTop = function (workItem) {
@@ -949,6 +900,7 @@ module.exports = function (app) {
                 icon: 'stop',
                 text: 'grid_action_terminate',
                 shortcut: true,
+                sticky: true,
                 callback: self.terminate,
                 class: "action-green",
                 checkShow: function (action, model) {
@@ -1002,6 +954,7 @@ module.exports = function (app) {
                 icon: 'share',
                 text: 'grid_action_forward',
                 shortcut: true,
+                sticky: true,
                 callback: self.forward,
                 class: "action-green",
                 checkShow: function (action, model) {
@@ -1027,6 +980,7 @@ module.exports = function (app) {
                 icon: 'reply',
                 text: 'grid_action_reply',
                 shortcut: false,
+                sticky: true,
                 callback: self.reply,
                 class: "action-green",
                 checkShow: function (action, model) {
@@ -1408,9 +1362,10 @@ module.exports = function (app) {
                     // e-Signature
                     {
                         type: 'action',
-                        //icon: 'link-variant',
-                        text: 'grid_action_electronic',//e_signature
+                        icon: 'check-decagram',
+                        text: 'grid_action_electronic_approve',//e_signature
                         shortcut: false,
+                        sticky: true,
                         callback: self.signESignature,
                         class: "action-green",
                         permissionKey: "ELECTRONIC_SIGNATURE",
@@ -1579,6 +1534,7 @@ module.exports = function (app) {
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
+        self.stickyActions = gridService.getStickyActions(self.gridActions);
 
         /**
          * @description Mark item as read/unread

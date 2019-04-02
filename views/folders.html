@@ -301,11 +301,11 @@
                          ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid">
                         <magazine-layout-directive
                                 mark-as-read-unread="ctrl.markAsReadUnread"
-                                view-document="ctrl.openNewViewDocument"
+                                view-document="ctrl.viewDocument"
                                 change-user-inbox-star="ctrl.changeStar"
                                 search-model="ctrl.searchModel"
-                                grid-actions="ctrl.gridActions"
-                                quick-actions="ctrl.magazineQuickActions"
+                                context-menu-actions="ctrl.contextMenuActions"
+                                quick-actions="ctrl.stickyActions"
                                 limit-options="ctrl.grid.limitOptions"
                                 page-limit="ctrl.grid.limit"
                                 page="ctrl.grid.page"
@@ -316,7 +316,9 @@
                                 terminate-user-inbox-bulk="ctrl.terminateBulk"
                                 allow-selection="true"
                                 selected-work-items="ctrl.selectedWorkItems"
-                                work-items="ctrl.workItems">
+                                work-items="ctrl.workItems"
+                                sorting-callback="ctrl.getSortedData"
+                                sort-order="ctrl.grid.order">
                         </magazine-layout-directive>
                     </div>
                 </div>

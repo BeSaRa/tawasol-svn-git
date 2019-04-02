@@ -275,7 +275,7 @@ module.exports = function (app) {
          */
         self.addToFavorite = function (userSentItem, $event) {
             favoriteDocumentsService.controllerMethod
-                .favoriteDocumentAdd(userSentItem.documentVSID, $event)
+                .favoriteDocumentAdd(userSentItem.getInfo().vsId , $event)
                 .then(function (result) {
                     if (result.status) {
                         self.reloadUserSentItems(self.grid.page)

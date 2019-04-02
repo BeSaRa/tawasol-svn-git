@@ -329,6 +329,13 @@ module.exports = function (app) {
             WorkItem.prototype.view = function () {
                 return correspondenceService.viewCorrespondence.apply(correspondenceService, arguments);
             };
+            /**
+             * @description Opens(Preview) the viewer for work items
+             * @param actions
+             * @param editProperties
+             * @param editCorrespondence
+             * @returns {*}
+             */
             WorkItem.prototype.viewInboxWorkItem = function (actions, editProperties, editCorrespondence) {
                 var info = this.getInfo();
                 return correspondenceService.viewCorrespondenceWorkItem.apply(correspondenceService, [info, actions, editProperties, editCorrespondence, false, false, false]);
@@ -337,12 +344,12 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 return correspondenceService.viewCorrespondenceProxyWorkItem.apply(correspondenceService, [info, actions, editProperties, editCorrespondence, false, false, false]);
             };
-            WorkItem.prototype.viewNewInboxWorkItem = function (actions, editProperties, editCorrespondence) {
+            /*WorkItem.prototype.viewNewInboxWorkItem = function (actions, editProperties, editCorrespondence) {
                 var info = this.getInfo();
                 return correspondenceService.viewCorrespondenceWorkItemNew.apply(correspondenceService, [info, actions, editProperties, editCorrespondence, false, false, false]);
-            };
+            };*/
             /**
-             * @description Opens the new viewer for user inbox items
+             * @description Opens(Open) the viewer with details for work items
              * @param actions
              * @param queueName
              * @param $event
