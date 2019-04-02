@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                    ImageThumbnail,
                                                    cmsTemplate,
                                                    tokenService,
+                                                   Pair,
                                                    downloadService,
                                                    helper,
                                                    CommentModel,
@@ -1871,7 +1872,7 @@ module.exports = function (app) {
                             if (employeeService.hasPermissionTo('SEND_TO_CENTRAL_ARCHIVE')) {
                                 return distributionWFService
                                     .loadDistWorkflowOrganizations('centralArchivesForUser')
-                                    .then(function(result){
+                                    .then(function (result) {
                                         return result;
                                     })
                                     .catch(function (error) {
@@ -2883,11 +2884,17 @@ module.exports = function (app) {
         };
 
         self.partialExportCorrespondence = function (correspondence, partialExport, ignoreMessage) {
-            var info = correspondence.getInfo(),
-                details = partialExport.getDetails(),
-                url = _createUrlSchema(null, info.documentClass, ['book', info.vsId, details.url].join('/'));
+            var info = correspondence.getInfo(), partialExportSites,
+                // details = partialExport.getDetails(),
+                // url = _createUrlSchema(null, info.documentClass, ['book', info.vsId, details.url].join('/'));
+                url = _createUrlSchema(null, info.documentClass, ['vsid', info.vsId, 'partial', 'to-ready-export'].join('/'));
+            partialExportSites = generator.interceptSendInstance(['PartialExport'], partialExport);
+
             return $http
-                .put(url, generator.interceptSendInstance(['PartialExport', details.interceptor], partialExport))
+                .put(url, new Pair({
+                    first: partialExportSites.sitesToList,
+                    second: partialExportSites.sitesCCList
+                }))
                 .then(function () {
                     if (!ignoreMessage) {
                         toast.success(langService.get('export_success'));

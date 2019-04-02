@@ -982,7 +982,7 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return !info.isPaper;
+                    return !info.isPaper && info.docStatus !== 26;
                 }
             },
             // View Tracking Sheet
@@ -1230,7 +1230,8 @@ module.exports = function (app) {
                         permissionKey: "EDIT_OUTGOING_CONTENT",
                         class: "action-green",
                         checkShow: function (action, model) {
-                            return true;
+                            var info = model.getInfo();
+                            return info.docStatus !== 26;
                         }
                     },
                     // Edit properties

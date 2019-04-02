@@ -35,7 +35,7 @@ module.exports = function (app) {
         self.isSimpleCorrespondenceSiteSearchType = true;
 
         self.tabsToShow = [
-            'exportOptions',
+            // 'exportOptions',
             'correspondenceSites',
             'distributionLists'
         ];
@@ -493,7 +493,6 @@ module.exports = function (app) {
         self.onSitesInfoDeleteBulk = function (type, $event) {
             dialog.confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event)
                 .then(function () {
-                    // TODO: need to refactor .
                     var ids = _.map(self['sitesInfo' + type + 'Selected'], 'subSiteId');
                     self.partialExportList['sites' + type + 'List'] = _.filter(self.partialExportList['sites' + type + 'List'], function (site) {
                         return ids.indexOf(site.subSiteId) === -1;
@@ -543,11 +542,6 @@ module.exports = function (app) {
         };
 
         self.getCorrespondenceSites_DL = function ($event) {
-            /*return correspondenceViewService.getCorrespondenceSitesByDistributionListId(self.selectedDistributionList)
-                .then(function (result) {
-                    self.subSearchResult_DL = _.filter(_.map(result, _mapSubSites), _filterSubSites);
-                });*/
-
             var sites = _.map(self.selectedDistributionList.distributionListMembers, function (member) {
                 return member.site;
             });
