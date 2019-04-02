@@ -250,8 +250,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (centralArchiveItem, $event) {
-            console.log('manage linked documents', centralArchiveItem);
-
             managerService.manageDocumentLinkedDocuments(centralArchiveItem.vsId, self.docClassName, "welcome");
         };
 
@@ -282,7 +280,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadCompositeDocument = function (centralArchiveItem, $event) {
-            // console.log('download composite document : ', centralArchiveItem);
             downloadService.controllerMethod
                 .compositeDocumentDownload(centralArchiveItem.vsId, $event);
         };

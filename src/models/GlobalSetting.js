@@ -51,6 +51,7 @@ module.exports = function (app) {
             self.deadlineReminderDays = null;
             self.thumbnailMode = null;
             self.allowSendWFRelatedBook = null;
+            self.allowTwoWaysRelatedBook = false;
             //endregion
 
             // every model has required fields

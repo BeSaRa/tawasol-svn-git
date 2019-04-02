@@ -481,7 +481,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadCompositeDocument = function (searchedInternalDocument, $event) {
-            //console.log('download composite document for searched internal document : ', searchedInternalDocument);
             downloadService.controllerMethod.compositeDocumentDownload(searchedInternalDocument.vsId);
         };
 
