@@ -1846,7 +1846,7 @@ module.exports = function (app) {
                             return workflowActionService.loadCurrentUserWorkflowActions()
                         },
                         // used to show regou name infront of section in users tab (ou dropdown)
-                        organizations: function(organizationService){
+                        organizations: function (organizationService) {
                             'ngInject';
                             return organizationService.getOrganizations();
                         },
@@ -1866,15 +1866,15 @@ module.exports = function (app) {
                                 .loadSenderUserForWorkItem(correspondence);
 
                         },
-                        centralArchiveOUs: function(distributionWFService){
+                        centralArchiveOUs: function (distributionWFService) {
                             'ngInject';
-                            if (employeeService.hasPermissionTo('SEND_TO_CENTRAL_ARCHIVE')){
+                            if (employeeService.hasPermissionTo('SEND_TO_CENTRAL_ARCHIVE')) {
                                 return distributionWFService
                                     .loadDistWorkflowOrganizations('centralArchivesForUser')
                                     .then(function(result){
-
+                                        return result;
                                     })
-                                    .catch(function(error){
+                                    .catch(function (error) {
                                         return [];
                                     })
                             }

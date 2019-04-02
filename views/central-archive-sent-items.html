@@ -23,8 +23,10 @@
             <div>
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                        <md-table-container>
-                            <div flex overlay-scroll-bar-directive>
+                        <md-virtual-repeat-container class="cms-virtual-repeater"
+                                                     ng-class="{'no-length':!ctrl.sentItemCentralArchives.length}"
+                                                     md-auto-shrink="true">
+                            <md-table-container>
                                 <table md-table ng-model="ctrl.selectedSentItemCentralArchives"
                                        md-progress="ctrl.progress"><!--md-row-select--><!--md-row-select-->
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
@@ -93,7 +95,7 @@
                                         grid-right-click-directive="centralArchiveItem"
                                         model="centralArchiveItem"
                                         selected-length="{{ctrl.selectedSentItemCentralArchives.length ? ctrl.selectedSentItemCentralArchives.length : 0}}"
-                                        ng-repeat="centralArchiveItem in searchResults = (ctrl.sentItemCentralArchives | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        md-virtual-repeat="centralArchiveItem in searchResults = (ctrl.sentItemCentralArchives | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))">
 
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
@@ -114,7 +116,8 @@
                                                                       indicator-type="originalCopy"
                                                                       record-type="SentItemCentralArchive"></grid-indicator-directive>
                                         </td>
-                                        <td md-cell><span class="serial-td">{{centralArchiveItem.docFullSerial}}</span></td>
+                                        <td md-cell><span class="serial-td">{{centralArchiveItem.docFullSerial}}</span>
+                                        </td>
                                         <td md-cell class="indicator-td text-right"
                                             style="padding-right:0 !important; padding-left:0px !important;">
                                             <!-- Priority Level -->
@@ -184,16 +187,16 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                            <md-table-pagination
-                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                    md-limit-options="ctrl.grid.limitOptions"
-                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.sentItemCentralArchives | filter:ctrl.searchModel).length}}"
-                                    md-page-select
-                                    md-on-paginate="ctrl.grid.pagingCallback">
-                            </md-table-pagination>
-                        </md-table-container>
+                            </md-table-container>
+                        </md-virtual-repeat-container>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                md-total="{{(ctrl.sentItemCentralArchives | filter:ctrl.searchModel).length}}"
+                                md-page-select
+                                md-on-paginate="ctrl.grid.pagingCallback">
+                        </md-table-pagination>
                     </md-card>
                 </div>
             </div>

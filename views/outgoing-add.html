@@ -19,14 +19,16 @@
                                     <md-icon md-svg-icon="file-document-box"></md-icon>
                                     <span> &nbsp;{{lang.document_properties}}</span>
                                     <span flex></span>
-                                    <md-switch ng-disabled="!!ctrl.outgoing.vsId || ctrl.duplicateVersion"
-                                               class="m0 top-switch-handler"
-                                               ng-true-value="1" ng-false-value="0"
-                                               ng-click="ctrl.preventPropagation($event)"
-                                               ng-change="ctrl.checkChangeOutgoingType()"
-                                               ng-model="ctrl.outgoing.addMethod">{{lang.outgoing_document_type}} :
-                                        {{ctrl.outgoing.getMethodType()}}
-                                    </md-switch>
+                                    <div >
+                                        <md-switch ng-disabled="!!ctrl.outgoing.vsId || ctrl.duplicateVersion"
+                                                   class="m0 top-switch-handler"
+                                                   ng-true-value="1" ng-false-value="0"
+                                                   ng-click="ctrl.preventPropagation($event)"
+                                                   ng-change="ctrl.checkChangeOutgoingType()"
+                                                   ng-model="ctrl.outgoing.addMethod">{{lang.outgoing_document_type}} :
+                                            {{ctrl.outgoing.getMethodType()}}
+                                        </md-switch>
+                                    </div>
                                 </div>
                             </accordion-title>
                             <accordion-content>

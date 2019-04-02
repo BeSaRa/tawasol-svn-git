@@ -190,9 +190,18 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.isShowQuickAction = function (action, workItem) {
-            if (action.hasOwnProperty('checkAnyPermission')) {
+            /*if (action.hasOwnProperty('checkAnyPermission')) {
                 return action.checkShow(action, workItem, action.checkAnyPermission);
-            }
+            }*/
+            
+            // if sticky Action is subMenu and has parent, check if parent is allowed to show
+            // if parent is not allowed, subMenu will also be not allowed
+            var parentAllowed = true;
+            if (action.hasOwnProperty('parent'))
+                parentAllowed = action.parent.checkShow(action, workItem);
+            if (!parentAllowed)
+                return false;
+
             return action.checkShow(action, workItem);
         };
 
@@ -212,8 +221,7 @@ module.exports = function (app) {
                     langKey = action.text().shortcutText;
                 else
                     langKey = action.text().contextText;
-            }
-            else {
+            } else {
                 langKey = action.text;
             }
             return langService.get(langKey);
@@ -228,8 +236,7 @@ module.exports = function (app) {
         self.callbackQuickAction = function (action, workItem, $event) {
             if (action.hasOwnProperty('params') && action.params) {
                 action.callback(workItem, action.params, $event);
-            }
-            else {
+            } else {
                 action.callback(workItem, $event);
             }
         };
@@ -273,7 +280,7 @@ module.exports = function (app) {
             {
                 column: 'serial_asc',
                 text: function () {
-                    return langService.get('inbox_serial') + ' - '+ langService.get('ascending')
+                    return langService.get('inbox_serial') + ' - ' + langService.get('ascending')
                 },
                 value: function () {
                     return 'generalStepElm.docFullSerial'
@@ -282,7 +289,7 @@ module.exports = function (app) {
             {
                 column: 'serial_desc',
                 text: function () {
-                    return langService.get('inbox_serial') + ' - '+ langService.get('descending')
+                    return langService.get('inbox_serial') + ' - ' + langService.get('descending')
                 },
                 value: function () {
                     return '-generalStepElm.docFullSerial'
@@ -291,7 +298,7 @@ module.exports = function (app) {
             {
                 column: 'subject_asc',
                 text: function () {
-                    return langService.get('subject') + ' - '+ langService.get('ascending')
+                    return langService.get('subject') + ' - ' + langService.get('ascending')
                 },
                 value: function () {
                     return 'generalStepElm.docSubject'
@@ -300,7 +307,7 @@ module.exports = function (app) {
             {
                 column: 'subject_desc',
                 text: function () {
-                    return langService.get('subject') + ' - '+ langService.get('descending')
+                    return langService.get('subject') + ' - ' + langService.get('descending')
                 },
                 value: function () {
                     return '-generalStepElm.docSubject'
@@ -309,7 +316,7 @@ module.exports = function (app) {
             {
                 column: 'receivedDate_asc',
                 text: function () {
-                    return langService.get('received_date') + ' - '+ langService.get('ascending')
+                    return langService.get('received_date') + ' - ' + langService.get('ascending')
                 },
                 value: function () {
                     return 'generalStepElm.receivedDate'
@@ -318,7 +325,7 @@ module.exports = function (app) {
             {
                 column: 'receivedDate_desc',
                 text: function () {
-                    return langService.get('received_date') + ' - '+ langService.get('descending')
+                    return langService.get('received_date') + ' - ' + langService.get('descending')
                 },
                 value: function () {
                     return '-generalStepElm.receivedDate'
@@ -327,7 +334,7 @@ module.exports = function (app) {
             {
                 column: 'action_asc',
                 text: function () {
-                    return langService.get('action') + ' - '+ langService.get('ascending')
+                    return langService.get('action') + ' - ' + langService.get('ascending')
                 },
                 value: function () {
                     return 'generalStepElm.action'
@@ -336,7 +343,7 @@ module.exports = function (app) {
             {
                 column: 'action_desc',
                 text: function () {
-                    return langService.get('action') + ' - '+ langService.get('descending')
+                    return langService.get('action') + ' - ' + langService.get('descending')
                 },
                 value: function () {
                     return '-generalStepElm.action'
@@ -345,7 +352,7 @@ module.exports = function (app) {
             {
                 column: 'sender_asc',
                 text: function () {
-                    return langService.get('sender') + ' - '+ langService.get('ascending')
+                    return langService.get('sender') + ' - ' + langService.get('ascending')
                 },
                 value: function () {
                     return 'generalStepElm.sender'
@@ -354,7 +361,7 @@ module.exports = function (app) {
             {
                 column: 'sender_desc',
                 text: function () {
-                    return langService.get('sender') + ' - '+ langService.get('descending')
+                    return langService.get('sender') + ' - ' + langService.get('descending')
                 },
                 value: function () {
                     return '-generalStepElm.sender'
@@ -363,7 +370,7 @@ module.exports = function (app) {
             {
                 column: 'dueDate_asc',
                 text: function () {
-                    return langService.get('due_date') + ' - '+ langService.get('ascending')
+                    return langService.get('due_date') + ' - ' + langService.get('ascending')
                 },
                 value: function () {
                     return 'generalStepElm.dueDate'
@@ -372,7 +379,7 @@ module.exports = function (app) {
             {
                 column: 'dueDate_desc',
                 text: function () {
-                    return langService.get('due_date') + ' - '+ langService.get('descending')
+                    return langService.get('due_date') + ' - ' + langService.get('descending')
                 },
                 value: function () {
                     return '-generalStepElm.dueDate'
@@ -381,7 +388,7 @@ module.exports = function (app) {
             {
                 column: 'correspondenceSites_asc',
                 text: function () {
-                    return langService.get('correspondence_sites') + ' - '+ langService.get('ascending')
+                    return langService.get('correspondence_sites') + ' - ' + langService.get('ascending')
                 },
                 value: function () {
                     return self.getSortingKey('mainSiteSubSiteString', 'Information')
@@ -390,10 +397,10 @@ module.exports = function (app) {
             {
                 column: 'correspondenceSites_desc',
                 text: function () {
-                    return langService.get('correspondence_sites') + ' - '+ langService.get('descending')
+                    return langService.get('correspondence_sites') + ' - ' + langService.get('descending')
                 },
                 value: function () {
-                    return  '-' + self.getSortingKey('mainSiteSubSiteString', 'Information')
+                    return '-' + self.getSortingKey('mainSiteSubSiteString', 'Information')
                 }
             }
         ];

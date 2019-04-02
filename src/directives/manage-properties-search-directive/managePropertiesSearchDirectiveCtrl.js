@@ -609,6 +609,8 @@ module.exports = function (app) {
             if (newValue) {
                 self.getYears();
                 $timeout(function () {
+                    _getClassifications(true);
+                    _getDocumentFiles(true);
                     self.emptyResults = false;
                 })
 

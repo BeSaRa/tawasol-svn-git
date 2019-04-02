@@ -11,7 +11,7 @@ module.exports = function (app) {
                 exportData = {
                     sent_items_serial_number: 'docFullSerial',
                     label_document_class: function () {
-                        return this.docClassIndicator.value;
+                        return langService.get(this.docClassIndicator.tooltip);
                     },
                     sent_items_document_subject: 'docSubject',
                     sent_items_receive_date: 'actionDate',

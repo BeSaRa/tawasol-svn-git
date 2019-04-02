@@ -91,7 +91,7 @@ module.exports = function (app) {
         };
 
         $timeout(function () {
-            self.viewActions = gridService.getContextMenuActions(self.actions);
+            self.viewActions = gridService.getContextMenuActions(self.actions, gridService.gridActionOptions.location.popup);
             self.getTranslationForAllActions(self.viewActions);
         });
 

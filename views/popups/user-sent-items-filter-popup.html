@@ -67,7 +67,7 @@
                                        ng-model="ctrl.searchCriteria.documentStatusId">
                                 <md-option ng-value="null">{{lang.none}}</md-option>
                                 <md-option ng-repeat="option in ctrl.documentStatuses track by $index"
-                                           ng-value="option.id">
+                                           ng-value="option.lookupKey">
                                     {{option.getTranslatedName()}}
                                 </md-option>
                             </md-select>

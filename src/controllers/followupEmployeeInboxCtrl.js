@@ -194,8 +194,7 @@ module.exports = function (app) {
                                 else
                                     toast.success(langService.get("unstar_specific_success").change({name: followupEmployeeInbox.generalStepElm.docSubject}));
                             });
-                    }
-                    else {
+                    } else {
                         dialog.errorMessage(langService.get('something_happened_when_update_starred'));
                     }
                 })
@@ -233,8 +232,7 @@ module.exports = function (app) {
                                     name: followupEmployeeInbox.getTranslatedName()
                                 }));
                             });
-                    }
-                    else {
+                    } else {
                         dialog.alertMessage(langService.get(result.message));
                     }
                 });
@@ -268,7 +266,7 @@ module.exports = function (app) {
             var info = followupEmployeeInbox.getInfo();
             viewDocumentService.loadDocumentViewUrlWithOutEdit(info.vsId).then(function (result) {
                 //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
-                dialog.successMessage(langService.get('link_message').change({result: result}),null,null,null,null,true);
+                dialog.successMessage(langService.get('link_message').change({result: result}), null, null, null, null, true);
                 return true;
             });
         };
@@ -612,8 +610,8 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // view
             {
@@ -630,8 +628,8 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // Preview
                     {
@@ -701,8 +699,8 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Add To Favorite
@@ -728,8 +726,8 @@ module.exports = function (app) {
                 showInView: false,
                 showInViewOnly: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
@@ -829,8 +827,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInViewOnly: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
                     "DOWNLOAD_COMPOSITE_BOOK"
@@ -873,8 +871,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInViewOnly: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
@@ -962,8 +960,8 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             /* // Move To Folder
              {
@@ -991,8 +989,8 @@ module.exports = function (app) {
                 showInView: true,
                 showInViewOnly: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // View Tracking Sheet
             {
@@ -1002,8 +1000,8 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
             },
             // Duplicate
@@ -1014,8 +1012,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",
                     "DUPLICATE_BOOK_FROM_VERSION"

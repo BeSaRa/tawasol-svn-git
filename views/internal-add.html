@@ -19,14 +19,16 @@
                                     <md-icon md-svg-icon="file-document-box"></md-icon>
                                     <span> &nbsp;{{lang.document_properties}}</span>
                                     <span flex></span>
-                                    <md-switch ng-disabled="!!ctrl.internal.vsId || ctrl.duplicateVersion"
-                                               class="m0 top-switch-handler"
-                                               ng-true-value="1" ng-false-value="0"
-                                               ng-click="ctrl.preventPropagation($event)"
-                                               ng-change="ctrl.checkChangeInternalType()"
-                                               ng-model="ctrl.internal.addMethod">{{lang.internal_document_type}} :
-                                        {{ctrl.internal.getMethodTypeInternal()}}
-                                    </md-switch>
+                                    <div>
+                                        <md-switch ng-disabled="!!ctrl.internal.vsId || ctrl.duplicateVersion"
+                                                   class="m0 top-switch-handler"
+                                                   ng-true-value="1" ng-false-value="0"
+                                                   ng-click="ctrl.preventPropagation($event)"
+                                                   ng-change="ctrl.checkChangeInternalType()"
+                                                   ng-model="ctrl.internal.addMethod">{{lang.internal_document_type}} :
+                                            {{ctrl.internal.getMethodTypeInternal()}}
+                                        </md-switch>
+                                    </div>
                                 </div>
                             </accordion-title>
                             <accordion-content>
@@ -149,12 +151,14 @@
                             </md-button>
                         </div>
                         <div>
-                            <md-button ng-disabled="ctrl.saveInProgress" ng-click="ctrl.resetAddCorrespondence($event)" class="md-raised">
+                            <md-button ng-disabled="ctrl.saveInProgress" ng-click="ctrl.resetAddCorrespondence($event)"
+                                       class="md-raised">
                                 {{lang.internal_new}}
                             </md-button>
                         </div>
                         <div>
-                            <md-button ng-disabled="ctrl.saveInProgress" ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
+                            <md-button ng-disabled="ctrl.saveInProgress" ng-click="ctrl.cancelAddCorrespondence($event)"
+                                       class="md-raised">
                                 {{lang.internal_cancel}}
                             </md-button>
                         </div>

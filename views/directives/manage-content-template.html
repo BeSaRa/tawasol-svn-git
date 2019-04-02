@@ -35,8 +35,8 @@
             </md-button>
         </div>
 
-            <span flex ng-if="ctrl.displayPrepare && ctrl.documentInformation && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
-            <span flex ng-if="!ctrl.displayPrepare && ctrl.document.contentFile && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
+            <span ng-if="ctrl.displayPrepare && ctrl.documentInformation && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
+            <span ng-if="!ctrl.displayPrepare && ctrl.document.contentFile && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
             <!--<span flex ng-if="ctrl.document.contentFile">{{ctrl.document.contentFile.name}}</span>-->
             <!--<span flex ng-if="ctrl.displayPrepare && ctrl.template">{{ctrl.template.getSubjectTitle()}}</span>-->
 

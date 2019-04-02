@@ -231,8 +231,8 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // view
             {
@@ -248,8 +248,8 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // Preview
                     {
@@ -285,8 +285,8 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Receive
@@ -301,8 +301,8 @@ module.exports = function (app) {
                 showInView: true,
                 showInViewOnly: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Return
             {
@@ -316,8 +316,8 @@ module.exports = function (app) {
                 showInView: true,
                 //showInViewOnly: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             }
         ];
 

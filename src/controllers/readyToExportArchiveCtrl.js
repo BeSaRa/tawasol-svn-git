@@ -716,8 +716,9 @@ module.exports = function (app) {
          * @description return from ready to central archive ready to export.
          * @param readyToExport
          * @param $event
+         * @param defer
          */
-        self.returnWorkItemFromCentral = function (readyToExport, $event) {
+        self.returnWorkItemFromCentral = function (readyToExport, $event, defer) {
             if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
@@ -725,6 +726,7 @@ module.exports = function (app) {
             return readyToExport
                 .returnWorkItemFromCentralArchive($event)
                 .then(function () {
+                    new ResolveDefer(defer);
                     self.reloadReadyToExports();
                 })
         };

@@ -44,11 +44,14 @@
                                 <md-input-container flex>
                                     <label for="securityLevel">{{lang.linked_document_security_level}}</label>
                                     <md-select id="securityLevel" name="securityLevel"
-                                               ng-model="ctrl.correspondence.securityLevel">
-                                        <md-option ng-value="securityLevel.lookupKey"
+                                               ng-model="ctrl.correspondence.securityLevel"
+                                               ng-change="ctrl.onSecurityLevelChange()"
+                                               ng-model-options="{trackBy: '$value.id'}">
+                                        <md-option ng-value="securityLevel"
                                                    ng-repeat="securityLevel in ctrl.securityLevels">
                                             {{securityLevel.getTranslatedName()}}
                                         </md-option>
+                                        <md-option ng-value="null">{{lang.all}}</md-option>
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container flex>
@@ -65,10 +68,11 @@
                                                id="mainClassification"
                                                ng-model="ctrl.correspondence.mainClassification"
                                                ng-model-options="{trackBy: '$value.id'}">
-                                        <md-option ng-value="classification"
+                                        <md-option ng-value="classification.classification"
                                                    ng-repeat="classification in ctrl.classifications">
-                                            {{classification.getTranslatedName()}}
+                                            {{classification.classification.getTranslatedName()}}
                                         </md-option>
+                                        <md-option ng-value="null">{{lang.all}}</md-option>
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container flex>
@@ -90,10 +94,11 @@
                                                id="fileId"
                                                ng-model="ctrl.correspondence.fileId"
                                                ng-model-options="{trackBy: '$value.id'}">
-                                        <md-option ng-value="file"
+                                        <md-option ng-value="file.file"
                                                    ng-repeat="file in ctrl.documentFiles">
-                                            {{file.getTranslatedName()}}
+                                            {{file.file.getTranslatedName()}}
                                         </md-option>
+                                        <md-option ng-value="null">{{lang.all}}</md-option>
                                     </md-select>
                                 </md-input-container>
                             </div>

@@ -99,5 +99,4 @@ module.exports = function (app) {
     require('./replacement-item-draggable/replacement-item-draggable')(app);
     require('./replacement-item-droppable/replacement-item-droppable')(app);
     require('./select-application-users-directive/01-index')(app);
-    require('./cms-virtual-repeater-directive/cms-virtual-repeater')(app);
 };

@@ -844,7 +844,7 @@ module.exports = function (app) {
                         icon: 'book-open-page-variant',
                         text: 'grid_action_open',
                         shortcut: true,
-                        callback: self.openNewViewDocument,
+                        callback: self.viewDocument,
                         class: "action-green",
                         permissionKey: 'VIEW_DOCUMENT',
                         showInView: false,
@@ -958,7 +958,7 @@ module.exports = function (app) {
                 callback: self.forward,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return !model.isBroadcasted();
+                    return true;//!model.isBroadcasted();
                 }
             },
             // Broadcast

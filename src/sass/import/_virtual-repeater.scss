@@ -1,7 +1,6 @@
 .cms-virtual-repeater {
-  max-height: 500px;
-  height: 500px;
-
+  max-height: 450px;
+  height: 450px;
   &.no-length {
     height: 150px;
   }
@@ -10,4 +9,12 @@
 .no-tb-padding {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
+}
+
+md-virtual-repeat-container > div > div.md-virtual-repeat-offsetter > md-table-container {
+  overflow: visible !important;
+}
+
+md-virtual-repeat-container > div.md-virtual-repeat-scroller {
+  overflow: auto !important;
 }

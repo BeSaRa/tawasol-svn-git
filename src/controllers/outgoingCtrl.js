@@ -518,6 +518,7 @@ module.exports = function (app) {
             self.documentInformationExist = false;
             self.contentFileExist = false;
             self.contentFileSizeExist = false;
+            self.editContent = false;
             self.document_properties.$setUntouched();
         };
 

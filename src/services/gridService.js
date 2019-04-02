@@ -571,10 +571,10 @@ module.exports = function (app) {
          * @description Filters the action to show as context menu actions
          * @returns {Array}
          */
-        self.getContextMenuActions = function (actions) {
+        self.getContextMenuActions = function (actions, actionFrom) {
             var contextMenu, contextMenuActions = [], actionsCopy = angular.copy(actions);
             for (var i = 0; i < actionsCopy.length; i++) {
-                contextMenu = _filterContextMenuItems(actionsCopy[i]);
+                contextMenu = _filterContextMenuItems(actionsCopy[i], actionFrom);
                 if (contextMenu) {
                     angular.isArray(contextMenu) ? contextMenuActions = contextMenuActions.concat(contextMenu) : contextMenuActions.push(contextMenu);
                 }
@@ -586,11 +586,13 @@ module.exports = function (app) {
         /**
          * @description filters the context menu items
          * @param mainAction
+         * @param actionFrom
          * @returns {*}
          * @private
          */
-        function _filterContextMenuItems(mainAction) {
-            mainAction.actionFrom = self.gridActionOptions.location.grid;
+        function _filterContextMenuItems(mainAction, actionFrom) {
+            actionFrom = actionFrom || self.gridActionOptions.location.grid;
+            mainAction.actionFrom = actionFrom;
             /*
             * if main action has subMenu and subMenu has length
             * else main action doesn't have subMenu
@@ -600,7 +602,7 @@ module.exports = function (app) {
                     var subActionsToShow = [];
                     for (var j = 0; j < mainAction.subMenu.length; j++) {
                         var subAction = mainAction.subMenu[j];
-                        subAction.actionFrom = self.gridActionOptions.location.grid;
+                        subAction.actionFrom = actionFrom;
                         /*If sub menu is action, and action is allowed to show, show it
                         * If sub menu is separator and not hidden, show it
                         * If sub menu is document info, and info is allowed to show, show it
@@ -654,7 +656,7 @@ module.exports = function (app) {
          * @returns {Array}
          */
         self.getStickyActions = function (actions, listOfActions) {
-            var stickyActions = listOfActions ? listOfActions : [], action, actionCopy;
+            var stickyActions = listOfActions ? listOfActions : [], action, actionCopy, isSticky, canShow;
             if (!stickyActions)
                 return [];
 
@@ -662,10 +664,20 @@ module.exports = function (app) {
                 action = actions[i];
                 actionCopy = angular.copy(action);
                 actionCopy.actionFrom = self.gridActionOptions.location.sticky;
-                if (actionCopy.hasOwnProperty('sticky') && !!actionCopy.sticky && self.checkToShowAction(actionCopy)) {
+                isSticky = actionCopy.hasOwnProperty('sticky') && !!actionCopy.sticky;
+                canShow = self.checkToShowAction(actionCopy);
+
+                if (isSticky && canShow) {
                     stickyActions.push(actionCopy);
                 }
                 if (actionCopy.hasOwnProperty('subMenu') && actionCopy.subMenu.length) {
+                    // add dummy parent property to subMenu
+                    actionCopy.subMenu = _.map(actionCopy.subMenu, function (subMenu) {
+                        subMenu.parent = angular.copy(actionCopy);
+                        delete subMenu.parent.subMenu;
+
+                        return subMenu;
+                    });
                     self.getStickyActions(actionCopy.subMenu, stickyActions);
                 }
             }

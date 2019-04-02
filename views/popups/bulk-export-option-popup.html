@@ -31,20 +31,12 @@
                 <div layout="column" class="p020">
                     <md-card ng-repeat="workItem in ctrl.workItems"
                              ng-if="ctrl.canExportAnyRelatedData()">
-                        <span>{{workItem.getTranslatedName()}}</span>
-                        <div class="p20">
-                            <!--<div layout="row" flex>
-                                <md-input-container flex>
-                                    <label>{{lang.select_export_type}}</label>
-                                    <md-select ng-model="workItem.exportType"
-                                               ng-change="ctrl.onChangeExportType(workItem)">
-                                        <md-option ng-value="type.id" ng-repeat="type in ctrl.exportTypeList">
-                                            {{lang.get(type.key)}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>
-                            </div>-->
-                            <!-- Group selection -->
+                        <md-card-title>
+                            <md-card-title-text>
+                                <span>{{workItem.getTranslatedName()}}</span>
+                            </md-card-title-text>
+                        </md-card-title>
+                        <md-card-content>
                             <div ng-if="workItem.exportType === 1" layout="row">
                                 <div ng-repeat="option in workItem.exportOptions" flex
                                      ng-if="ctrl.canExportRelatedData(option)">
@@ -54,22 +46,7 @@
                                     </md-checkbox>
                                 </div>
                             </div>
-                            <!-- Individual selection -->
-                            <!--<div ng-if="workItem.exportType !== 1" layout="row">
-                                <div flex ng-repeat="option in workItem.exportOptions"
-                                     ng-if="ctrl.canExportRelatedData(option)"
-                                     layout="column">
-                                    <div>{{lang.get(ctrl.labels[$index])}}</div>
-                                    <br/>
-                                    <div ng-repeat="item in workItem.relatedThings[option] track by $index">
-                                        <md-checkbox aria-label="item"
-                                                     ng-click="ctrl.toggleSelectedItem(item , option, workItem)">
-                                            {{item.getTranslatedName()}}
-                                        </md-checkbox>
-                                    </div>
-                                </div>
-                            </div>-->
-                        </div>
+                        </md-card-content>
                     </md-card>
                 </div>
             </form>

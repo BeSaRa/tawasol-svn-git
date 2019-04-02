@@ -12,6 +12,8 @@ module.exports = function (app) {
                                                             correspondenceService,
                                                             classificationService,
                                                             Correspondence,
+                                                            $timeout,
+                                                            _,
                                                             employeeService) {
         'ngInject';
         var self = this;
@@ -36,11 +38,6 @@ module.exports = function (app) {
             return organization.hasRegistry;
         });
 
-        // all main classifications -> pop resolve.
-        self.classifications = classificationService.getMainClassifications(classificationService.classifications);
-        // all document Files ->pop resolve.
-        self.documentFiles = documentFileService.documentFiles;
-
         self.classesMap = {
             1: 'outgoing',
             3: 'internal',
@@ -55,6 +52,113 @@ module.exports = function (app) {
         self.correspondences = [];
 
         self.selectedIndex = 0;
+        /**
+         * @description get available documentFiles for the document by security level.
+         * @param timeout
+         * @returns {*}
+         * @private
+         */
+        function _getDocumentFiles(timeout) {
+            var docClass = self.searchType.getTranslatedName();
+            if (timeout) {
+                return $timeout(function () {
+                    self.documentFiles = angular.copy(correspondenceService.getLookup(docClass, 'documentFiles'));
+                    self.documentFiles = _displayCorrectDocumentFiles(self.documentFiles);
+                });
+            } else {
+                self.documentFiles = angular.copy(correspondenceService.getLookup(docClass, 'documentFiles'));
+                self.documentFiles = _displayCorrectDocumentFiles(self.documentFiles);
+            }
+        }
+
+        /**
+         * @description get available classifications for the document by security level.
+         * @param timeout
+         * @returns {*}
+         * @private
+         */
+        function _getClassifications(timeout) {
+            var docClass = self.searchType.getTranslatedName();
+            if (timeout) {
+                return $timeout(function () {
+                    self.classifications = angular.copy(correspondenceService.getLookup(docClass, 'classifications'));
+                    self.classifications = _displayCorrectClassifications(self.classifications);
+                });
+            } else {
+                self.classifications = angular.copy(correspondenceService.getLookup(docClass, 'classifications'));
+                self.classifications = _displayCorrectClassifications(self.classifications);
+            }
+        }
+
+        /**
+         * @description to display the correct document files
+         * @param documentFiles
+         * @returns {Array}
+         * @private
+         */
+        function _displayCorrectDocumentFiles(documentFiles) {
+            return _.filter(documentFiles, function (ouDocumentFile) {
+                return _securityLevelExist(self.correspondence.securityLevel, ouDocumentFile.file.securityLevels)
+            });
+        }
+
+        /**
+         * @description to check if the given securityLevel included or not.
+         * @param securityLevel
+         * @param securityLevels
+         * @private
+         */
+        function _securityLevelExist(securityLevel, securityLevels) {
+            var id = securityLevel && securityLevel.hasOwnProperty('id') ? securityLevel.id : securityLevel;
+            return _.find(securityLevels, function (item) {
+                return item.id === id || !id;
+            });
+        }
+
+        /**
+         * to display the correct classifications
+         * @param classifications
+         * @returns {Array}
+         * @private
+         */
+        function _displayCorrectClassifications(classifications) {
+            return _.filter(classifications, function (ouClassification) {
+                ouClassification.classification.children = _filterSubClassification(ouClassification.classification.children);
+                return _securityLevelExist(self.correspondence.securityLevel, ouClassification.classification.securityLevels)
+            });
+        }
+
+        /**
+         * @description filter the sub classifications depend on the security level for document.
+         * @param classifications
+         * @returns {Array}
+         * @private
+         */
+        function _filterSubClassification(classifications) {
+            return _.filter(classifications, function (classification) {
+                return _securityLevelExist(self.correspondence.securityLevel, classification.securityLevels);
+            });
+        }
+
+
+        /**
+         * @description on security level changed, get the classifications, document files
+         */
+        self.onSecurityLevelChange = function () {
+            if (self.correspondence.mainClassification && !_securityLevelExist(self.correspondence.securityLevel, self.correspondence.mainClassification.securityLevels)) {
+                self.correspondence.mainClassification = null;
+            }
+
+            if (self.correspondence.subClassification && !_securityLevelExist(self.correspondence.securityLevel, self.correspondence.subClassification.securityLevels)) {
+                self.correspondence.subClassification = null;
+            }
+
+            if (self.correspondence.fileId && !_securityLevelExist(self.correspondence.securityLevel, self.correspondence.fileId.securityLevels)) {
+                self.correspondence.fileId = null;
+            }
+            _getClassifications(true);
+            _getDocumentFiles(true);
+        };
 
         /**
          * @description Gets the grid records by sorting
@@ -136,6 +240,7 @@ module.exports = function (app) {
             dialog.cancel();
         }
 
-
+        _getClassifications(true);
+        _getDocumentFiles(true);
     });
 };
