@@ -163,6 +163,14 @@ module.exports = function (app) {
                 }
                 self.requestCompleted = true;
                 toast.success(langService.get(successKey));
+
+                if (centralArchives && self.incoming.hasContent()) {
+                    self.docActionLaunchDistributionWorkflow(self.incoming, false, {
+                        tab: 'registry_organizations',
+                        registryOU: self.incoming.registryOU,
+                        ou: self.incoming.ou
+                    });
+                }
             }
         };
 
@@ -235,12 +243,13 @@ module.exports = function (app) {
             document.barcodePrint(document);
         };
 
-        self.docActionLaunchDistributionWorkflow = function (document, $event) {
+        self.docActionLaunchDistributionWorkflow = function (document, $event , defaultTab) {
+            defaultTab = defaultTab ? defaultTab : 'favorites';
             if (!self.incoming.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            document.launchWorkFlow($event, 'forward', 'favorites')
+            document.launchWorkFlow($event, 'forward', defaultTab)
                 .then(function () {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);

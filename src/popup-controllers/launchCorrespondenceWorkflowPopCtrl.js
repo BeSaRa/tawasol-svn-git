@@ -95,8 +95,10 @@ module.exports = function (app) {
         self.multi ? self.multiStatus = _getMultiApproveStatus(self.info) : approvedStatus = self.info.needToApprove();
         // current correspondence or workItem
         self.correspondence = correspondence;
+        // in case if the current user in central archive and in add incoming page.
+        self.selectedOrganizationToSend = angular.isString(selectedTab) ? false : selectedTab;
         // current selected tab
-        self.selectedTab = selectedTab || 'users';
+        self.selectedTab = self.selectedOrganizationToSend ? selectedTab.tab : (selectedTab || 'users');
         // current sidebar status
         self.sidebarStatus = true;
         // full screen status
@@ -157,6 +159,22 @@ module.exports = function (app) {
             _addUserReply(self.users);
             self.textButton = 'reply';
         }
+
+        if (self.selectedOrganizationToSend) {
+            _addSelectedOrganization(self.selectedOrganizationToSend);
+        }
+
+        function _addSelectedOrganization(selected) {
+            var organization = selected.ou === selected.registryOU ? _findOrganization(selected.registryOU, null, true) : _findOrganization(selected.registryOU, selected.ou);
+            self.selectedWorkflowItems.push(organization);
+        }
+
+        function _findOrganization(regOU, ouId, justByRegOu) {
+            return _.find((justByRegOu ? self.registryOrganizations : self.organizationGroups), function (item) {
+                return item.toOUId === ouId;
+            })
+        }
+
         // grid options for all grids
         self.grid = {
             users: {
