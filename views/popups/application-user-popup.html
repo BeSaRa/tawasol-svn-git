@@ -296,7 +296,8 @@
                                         <md-select id="customRoleId" name="customRoleId" required
                                                    ng-model="ctrl.ouApplicationUser.customRoleId">
                                             <md-option ng-value="role"
-                                                       ng-repeat="role in ctrl.roles track by $index">
+                                                       ng-repeat="role in ctrl.roles track by $index"
+                                                       ng-disabled="!role.status">
                                                 {{role.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
@@ -957,8 +958,9 @@
                                         <md-select id="customRoleId" name="customRoleId"
                                                    ng-disabled="ctrl.ouApplicationUser.id"
                                                    ng-model="ctrl.ouApplicationUser.customRoleId">
-                                            <md-option ng-if="role.status" ng-value="role"
-                                                       ng-repeat="role in ctrl.roles track by $index">
+                                            <md-option ng-value="role"
+                                                       ng-repeat="role in ctrl.roles track by $index"
+                                                       ng-disabled="!role.status">
                                                 {{role.getTranslatedName()}}
                                             </md-option>
                                         </md-select>

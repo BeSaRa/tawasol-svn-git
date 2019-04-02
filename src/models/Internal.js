@@ -3,10 +3,11 @@ module.exports = function (app) {
                                       langService,
                                       generator,
                                       Correspondence,
+                                      dialog,
                                       Indicator) {
             'ngInject';
             return function Internal(model) {
-                var self = this, exportData = {
+                var self = this, correspondenceService, exportData = {
                     label_serial: 'docFullSerial',
                     subject: 'docSubject',
                     priority_level: function () {
@@ -60,6 +61,19 @@ module.exports = function (app) {
 
                 Internal.prototype.getPriorityLevelIndicator = function (priorityLevel) {
                     return indicator.getPriorityLevelIndicator(priorityLevel);
+                };
+
+
+                Internal.prototype.launchWorkFlowAndCheckApprovedInternal = function ($event, action, tab) {
+                    correspondenceService = this.getCorrespondenceService();
+                    var info = this.getInfo();
+                    if (info.documentClass.toLowerCase() === 'internal' && info.docStatus === 24) {
+                        return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
+                    } else {
+                        return correspondenceService.checkWorkFlowForVsId(info.vsId).then(function (result) {
+                            return result ? dialog.infoMessage(langService.get('cannot_launch_document_has_active_workflow')) : correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab);
+                        })
+                    }
                 };
 
 

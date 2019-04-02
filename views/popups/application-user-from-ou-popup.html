@@ -269,9 +269,11 @@
                                     <md-input-container flex>
                                         <label for="customRoleId">{{lang.role}}</label>
                                         <md-select id="customRoleId" name="customRoleId" required
+                                                   ng-disabled="ctrl.ouApplicationUser.id"
                                                    ng-model="ctrl.ouApplicationUser.customRoleId">
                                             <md-option ng-value="role"
-                                                       ng-repeat="role in ctrl.roles track by $index">
+                                                       ng-repeat="role in ctrl.roles track by $index"
+                                                       ng-disabled="!role.status">
                                                 {{role.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
@@ -327,7 +329,7 @@
                                         </div>
                                     </md-input-container>
                                     <!-- Empty Container -->
-                                    <md-input-container flex></md-input-container>
+                                    <md-input-container flex ng-if="!ctrl.editMode"></md-input-container>
                                 </div>
                                 <div layout="row">
                                     <md-input-container flex>

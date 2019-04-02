@@ -282,9 +282,11 @@ module.exports = function (app) {
                     case 'USER_DOMAIN_NAME':
                         return employeeService.getEmployee().domainName;
                     case 'ROOT_ENTITY_IDENTIFIER':
-                        return rootEntity.returnRootEntity().identifier;
+                        return rootEntity.returnRootEntity().id;
                     case 'LANGUAGE_CODE':
                         return langService.current;
+                    case 'ROOT_ENTITY_NAME':
+                        return rootEntity.returnRootEntity().identifier;
                 }
             };
 

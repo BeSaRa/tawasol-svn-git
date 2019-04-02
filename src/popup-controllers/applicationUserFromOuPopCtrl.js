@@ -108,6 +108,17 @@ module.exports = function (app) {
         self.classifications = classifications;
         self.permissions = permissions;
 
+        self.viewInboxAsOptions = [
+            {
+                key: 'view_magazine',
+                value: false
+            },
+            {
+                key: 'view_grid',
+                value: true
+            }
+        ];
+
         self.notificationProperties = [
             {
                 property: 'newsmsEmailNotify',

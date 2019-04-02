@@ -349,7 +349,7 @@ module.exports = function (app) {
                 return;
             }
 
-            searchedInternalDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
+            searchedInternalDocument.launchWorkFlowAndCheckApprovedInternal($event, null, 'favorites')
                 .then(function () {
                     self.reloadSearchedInternalDocuments(self.grid.page)
                         .then(function () {

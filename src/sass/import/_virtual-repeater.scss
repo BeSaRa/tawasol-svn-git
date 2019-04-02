@@ -2,7 +2,7 @@
   max-height: 450px;
   height: 450px;
   &.no-length {
-    height: 150px;
+    height: 200px;
   }
 }
 
@@ -17,4 +17,5 @@ md-virtual-repeat-container > div > div.md-virtual-repeat-offsetter > md-table-c
 
 md-virtual-repeat-container > div.md-virtual-repeat-scroller {
   overflow: auto !important;
+  min-height: 200px !important;
 }

@@ -30,7 +30,7 @@ module.exports = function (app) {
         self.loadApprovedInternals = function () {
             return $http.get(urlService.approvedInternal).then(function (result) {
                 self.approvedInternals = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
-                self.approvedInternals = _.sortBy(self.approvedInternals, 'generalStepElm.starred').reverse();
+                //  self.approvedInternals = _.sortBy(self.approvedInternals, 'generalStepElm.starred').reverse();
                 self.approvedInternals = generator.interceptReceivedCollection('WorkItem', self.approvedInternals);
                 return self.approvedInternals;
             });

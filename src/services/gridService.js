@@ -428,12 +428,10 @@ module.exports = function (app) {
                     var showInViewPopupOnly = action.hasOwnProperty('showInViewOnly') && !!action.showInViewOnly,
                         showInViewPopup = action.hasOwnProperty('showInView') && !!action.showInView,
                         isSticky = action.hasOwnProperty('sticky') && !!action.sticky,
-                        actionFrom = action.hasOwnProperty('actionFrom') && action.actionFrom ? action.actionFrom.toLowerCase() : self.gridActionOptions.location.grid;
+                        actionFrom = action.hasOwnProperty('actionFrom') && action.actionFrom ? action.actionFrom.toLowerCase() : undefined;
 
-                    if (actionFrom === self.gridActionOptions.location.popup) {
-                        hasPermission = showInViewPopup || showInViewPopupOnly;
-                    } else if (actionFrom === self.gridActionOptions.location.grid) {
-                        if (showInViewPopupOnly)
+                    if (actionFrom === self.gridActionOptions.location.grid) {
+                        if (showInViewPopupOnly || showInViewPopup)
                             hasPermission = false;
                     } else if (actionFrom === self.gridActionOptions.location.sticky) {
                         hasPermission = isSticky;
@@ -572,6 +570,7 @@ module.exports = function (app) {
          * @returns {Array}
          */
         self.getContextMenuActions = function (actions, actionFrom) {
+
             var contextMenu, contextMenuActions = [], actionsCopy = angular.copy(actions);
             for (var i = 0; i < actionsCopy.length; i++) {
                 contextMenu = _filterContextMenuItems(actionsCopy[i], actionFrom);
@@ -602,7 +601,7 @@ module.exports = function (app) {
                     var subActionsToShow = [];
                     for (var j = 0; j < mainAction.subMenu.length; j++) {
                         var subAction = mainAction.subMenu[j];
-                        subAction.actionFrom = actionFrom;
+                        //subAction.actionFrom = actionFrom;
                         /*If sub menu is action, and action is allowed to show, show it
                         * If sub menu is separator and not hidden, show it
                         * If sub menu is document info, and info is allowed to show, show it

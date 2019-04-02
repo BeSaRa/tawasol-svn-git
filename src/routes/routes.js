@@ -471,9 +471,7 @@ module.exports = function (app) {
                     },
                     roles: function (roleService, applicationUsers) {
                         'ngInject';
-                        return roleService.loadRoles().then(function (result) {
-                            return _.filter(result, 'status');
-                        });
+                        return roleService.loadRoles();
                     },
                     ouApplicationUsers: function (ouApplicationUserService, applicationUsers) {
                         'ngInject';

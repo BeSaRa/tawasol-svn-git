@@ -43,27 +43,27 @@
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedApprovedInternals.length" md-column
-                                            md-order-by="docSerial">
+                                            md-order-by="generalStepElm.docSerial">
                                             <span>{{lang.approved_serial}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedApprovedInternals.length" md-column
-                                            md-order-by="docSubject">
+                                            md-order-by="generalStepElm.docSubject">
                                             <span>{{lang.subject}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedApprovedInternals.length" md-column
-                                            md-order-by="receivedDate">
+                                            md-order-by="generalStepElm.receivedDate">
                                             <span>{{lang.received_date}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedApprovedInternals.length" md-column
-                                            md-order-by="sender">
+                                            md-order-by="{{ctrl.getSortingKey('sender', 'Information')}}">
                                             <span>{{lang.sender}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedApprovedInternals.length" md-column
-                                            md-order-by="dueDate">
+                                            md-order-by="generalStepElm.dueDate">
                                             <span>{{lang.due_date}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedApprovedInternals.length" md-column
-                                            md-order-by="numberOfDays">
+                                            md-order-by="generalStepElm.numberOfDays">
                                             <span>{{lang.number_of_days}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedApprovedInternals.length" md-column>
@@ -77,7 +77,7 @@
                                         grid-right-click-directive="approvedInternal"
                                         model="approvedInternal"
                                         selected-length="{{ctrl.selectedApprovedInternals.length ? ctrl.selectedApprovedInternals.length : 0}}"
-                                        ng-repeat="approvedInternal in ctrl.approvedInternals | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        ng-repeat="approvedInternal in searchResults = (ctrl.approvedInternals  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td md-cell>
                                             <span class="serial-td">{{approvedInternal.generalStepElm.docFullSerial}}</span>
                                         </td>
@@ -110,6 +110,15 @@
                                                                         model="approvedInternal">
                                                 </grid-actions-directive>
                                             </div>
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="!ctrl.approvedInternals.length">
+                                        <td md-cell colspan="7" class="red-text text-center">{{lang.no_records_found}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.approvedInternals.length && !searchResults.length">
+                                        <td md-cell colspan="7" class="red-text text-center">
+                                            {{lang.no_records_found_matching_search}}
                                         </td>
                                     </tr>
                                     </tbody>

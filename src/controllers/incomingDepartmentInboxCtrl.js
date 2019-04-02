@@ -840,7 +840,7 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.unlockWorkItem,
                 class: "action-green",
-                showInView: true,
+                // showInView: true,
                 permissionKey: '',
                 checkShow: function (action, model) {
                     return model.isLocked() && model.getLockingInfo().domainName !== employeeService.getEmployee().domainName;
