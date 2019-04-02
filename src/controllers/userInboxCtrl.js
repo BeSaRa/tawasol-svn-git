@@ -507,6 +507,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.forward = function (userInbox, $event, defer) {
+            debugger;
             userInbox.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
@@ -795,11 +796,15 @@ module.exports = function (app) {
          * @param userInbox
          * @param $event
          * @param defer
+         * @param sendAfterApprove
          */
-        self.signESignature = function (userInbox, $event, defer) {
-            userInbox
+        self.signESignature = function (userInbox, $event, defer, sendAfterApprove) {
+            return userInbox
                 .approveWorkItem($event, defer)
                 .then(function (result) {
+                    if (sendAfterApprove)
+                        return result;
+
                     userInbox
                         .launchWorkFlowCondition($event, 'reply', null, true, function () {
                             return result === 'INTERNAL_PERSONAL'
@@ -818,7 +823,26 @@ module.exports = function (app) {
                         });
                 });
         };
-
+        /**
+         * @description approve and send the document
+         * @param workItem
+         * @param $event
+         * @param defer
+         * @return {*}
+         */
+        self.signESignatureAndSend = function (workItem, $event, defer) {
+            return self
+                .signESignature(workItem, $event, defer, true)
+                .then(function (result) {
+                    // make the temp workitem fully authorized.
+                    workItem.generalStepElm.docStatus = result === 'INTERNAL_PERSONAL' ? 23 : 24;
+                    // start launch workflow.
+                    return self.forward(workItem, $event, defer);
+                })
+                .catch(function () {
+                    self.reloadUserInboxes(self.grid.page);
+                })
+        };
         /**
          * @description Sign Digital Signature
          * @param userInbox
@@ -1584,6 +1608,22 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 subMenu: [
+                    {
+                        type: 'action',
+                        icon: 'account-check',
+                        text: 'grid_action_electronic_approve_and_send',
+                        callback: self.signESignatureAndSend,
+                        class: "action-green",
+                        sticky: true,
+                        permissionKey: "ELECTRONIC_SIGNATURE",
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            return !model.isBroadcasted()
+                                && !info.isPaper
+                                && (info.documentClass !== 'incoming')
+                                && model.needApprove();
+                        }
+                    },
                     // e-Signature
                     {
                         type: 'action',
