@@ -15,7 +15,7 @@ module.exports = function (app) {
         self.serviceName = 'correspondenceSiteTypeService';
 
         self.correspondenceSiteTypes = [];
-
+        self.mapCorrespondenceSiteTypes = {};
         /**
          * @description load correspondence site types from server.
          * @returns {Promise|correspondenceSiteTypes}
@@ -24,6 +24,9 @@ module.exports = function (app) {
             return $http.get(urlService.correspondenceSiteTypes).then(function (result) {
                 self.correspondenceSiteTypes = generator.generateCollection(result.data.rs, CorrespondenceSiteType, self._sharedMethods);
                 self.correspondenceSiteTypes = generator.interceptReceivedCollection('CorrespondenceSiteType', self.correspondenceSiteTypes);
+                _.map(angular.copy(self.correspondenceSiteTypes), function (item) {
+                    self.mapCorrespondenceSiteTypes[item.lookupKey] = item;
+                });
                 return self.correspondenceSiteTypes;
             });
         };
@@ -240,7 +243,7 @@ module.exports = function (app) {
                 return _.some(_.map(correspondenceSiteTypesToFilter, function (existingCorrespondenceSiteType) {
                     return existingCorrespondenceSiteType.arName === correspondenceSiteType.arName
                         || existingCorrespondenceSiteType.enName.toLowerCase() === correspondenceSiteType.enName.toLowerCase()
-                        || (correspondenceSiteType.lookupStrKey && existingCorrespondenceSiteType.lookupStrKey  &&
+                        || (correspondenceSiteType.lookupStrKey && existingCorrespondenceSiteType.lookupStrKey &&
                             existingCorrespondenceSiteType.lookupStrKey.toLowerCase() === correspondenceSiteType.lookupStrKey.toLowerCase());
                 }), function (matchingResult) {
                     return matchingResult === true;
@@ -280,9 +283,7 @@ module.exports = function (app) {
          */
         self.getCorrespondenceSiteTypeByLookupKey = function (lookupKey) {
             lookupKey = lookupKey && lookupKey.hasOwnProperty('id') ? lookupKey.lookupKey : lookupKey;
-            return _.find(self.correspondenceSiteTypes, function (item) {
-                return Number(lookupKey) === Number(item.lookupKey);
-            }) || lookupKey;
+            return self.mapCorrespondenceSiteTypes[lookupKey];
         }
 
     });

@@ -384,30 +384,34 @@ module.exports = function (app) {
 
         /**
          * @description Launch distribution workflow for internal item
-         * @param searchedGeneralDocument
+         * @param correspondence
          * @param $event
          */
 
-        self.launchDistributionWorkflow = function (searchedGeneralDocument, $event) {
-            if (!searchedGeneralDocument.hasContent()) {
+        self.launchDistributionWorkflow = function (correspondence, $event) {
+            var promise = null;
+            if (!correspondence.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
 
             // run launch for any incoming document or other documents not in the inbox
-            if (searchedGeneralDocument.hasDocumentClass('incoming') || searchedGeneralDocument.docStatus !== 22) {
-                return searchedGeneralDocument.launchWorkFlow($event, null, 'favorites');
+            if (correspondence.hasDocumentClass('incoming') || correspondence.docStatus !== 22) {
+                promise = correspondence.launchWorkFlow($event, null, 'favorites');
+            } else {
+                if (correspondence.hasDocumentClass('internal')) {
+                    promise = correspondence.launchWorkFlowAndCheckApprovedInternal($event, null, 'favorites');
+                } else {
+                    promise = correspondence.launchWorkFlowAndCheckExists($event, null, 'favorites');
+                }
             }
 
-
-            return searchedGeneralDocument
-                .launchWorkFlowAndCheckExists($event, null, 'favorites')
-                .then(function () {
-                    self.reloadSearchedGeneralDocuments(self.grid.page)
-                        .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                        });
-                });
+            promise.then(function () {
+                self.reloadSearchedGeneralDocuments(self.grid.page)
+                    .then(function () {
+                        mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    });
+            });
         };
 
         /**

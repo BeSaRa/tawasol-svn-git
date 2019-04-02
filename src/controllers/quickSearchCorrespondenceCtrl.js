@@ -432,6 +432,7 @@ module.exports = function (app) {
 
 
         self.launchDistributionWorkflow = function (correspondence, $event, defer) {
+            var promise = null;
             if (!correspondence.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
@@ -439,18 +440,21 @@ module.exports = function (app) {
 
             // run launch for any incoming document or other documents not in the inbox
             if (correspondence.hasDocumentClass('incoming') || correspondence.docStatus !== 22) {
-                return correspondence.launchWorkFlow($event, null, 'favorites');
+                promise = correspondence.launchWorkFlow($event, null, 'favorites');
+            } else {
+                if (correspondence.hasDocumentClass('internal')) {
+                    promise = correspondence.launchWorkFlowAndCheckApprovedInternal($event, null, 'favorites');
+                } else {
+                    promise = correspondence.launchWorkFlowAndCheckExists($event, null, 'favorites');
+                }
             }
-
-
-            return correspondence.launchWorkFlowAndCheckExists($event, null, 'favorites')
-                .then(function () {
-                    self.reloadQuickSearchCorrespondence(self.grid.page)
-                        .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                            new ResolveDefer(defer);
-                        });
-                });
+            promise.then(function () {
+                self.reloadQuickSearchCorrespondence(self.grid.page)
+                    .then(function () {
+                        mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        new ResolveDefer(defer);
+                    });
+            });
         };
 
         /**

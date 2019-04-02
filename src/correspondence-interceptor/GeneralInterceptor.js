@@ -10,6 +10,7 @@ module.exports = function (app) {
                       attachmentService,
                       documentCommentService,
                       $location,
+                      correspondenceService,
                       generator) {
         'ngInject';
         var modelName = 'General';

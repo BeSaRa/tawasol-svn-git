@@ -458,29 +458,62 @@ module.exports = function (app) {
                 });
         };*/
 
+        /**
+         * @description Checks if edit properties is allowed
+         * @param model
+         * @param checkForViewPopup
+         * @returns {boolean}
+         */
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
-            return true;
+            var info = model.getInfo();
+            var hasPermission = false;
+            if (info.documentClass === "internal") {
+                //If approved internal electronic, don't allow to edit
+                if (info.docStatus >= 24 && !info.isPaper)
+                    hasPermission = false;
+                else
+                    hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+            } else if (info.documentClass === "incoming")
+                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+            else if (info.documentClass === "outgoing") {
+                //If approved outgoing electronic, don't allow to edit
+                if (info.docStatus >= 24 && !info.isPaper)
+                    hasPermission = false;
+                else
+                    hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+            }
+            if (checkForViewPopup)
+                return !hasPermission || model.isBroadcasted();
+            return hasPermission && !model.isBroadcasted();
+        };
+
+        /**
+         * @description Checks if edit correspondence sites(destinations) is allowed
+         * @param model
+         * @param checkForViewPopup
+         * @returns {*}
+         */
+        var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
+            var info = model.getInfo();
+            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+            var allowed = (hasPermission && info.documentClass !== "internal");
+            if (checkForViewPopup)
+                return !(allowed);
+            return allowed;
         };
 
         /**
          * @description Preview document
-         * @param followupEmployeeInbox
+         * @param workItem
          * @param $event
          */
-        self.previewDocument = function (followupEmployeeInbox, $event) {
+        self.previewDocument = function (workItem, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            followupEmployeeInbox.viewInboxWorkItem(self.gridActions, true, true)
+            workItem.viewProxyInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
                 .then(function () {
-                    // if (followupEmployeeInbox.getInfo().documentClass === 'incoming' && !followupEmployeeInbox.generalStepElm.isOpen) {
-                    //     self.markAsReadUnread(followupEmployeeInbox, true)
-                    //         .then(function () {
-                    //             return self.reloadFollowupEmployeeInboxes(self.grid.page);
-                    //         })
-                    // }
-                    // else
                     return self.reloadFollowupEmployeeInboxes(self.grid.page);
                 })
                 .catch(function () {
@@ -498,7 +531,8 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            workItem.viewNewWorkItemDocument(self.gridActions, 'followupEmployeeInbox', $event)
+            workItem
+                .viewNewProxyDocument(self.gridActions, 'proxyMail', $event)
                 .then(function () {
                     return self.reloadFollowupEmployeeInboxes(self.grid.page);
                 })

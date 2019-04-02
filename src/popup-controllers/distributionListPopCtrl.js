@@ -89,7 +89,6 @@ module.exports = function (app) {
                                         self.model = angular.copy(self.distributionList);
                                         self.editMode = true;
                                         toast.success(langService.get('add_success').change({name: self.distributionList.getNames()}));
-
                                     });
                             } else {
                                 self.distributionList.relatedOus = relatedOus;
@@ -100,8 +99,9 @@ module.exports = function (app) {
                         } else {
                             self.distributionList.relatedOus = relatedOus;
                             self.model = angular.copy(self.distributionList);
-                            dialog.hide(self.distributionList);
                         }
+
+                        dialog.hide(self.distributionList);
                     })
 
                 });

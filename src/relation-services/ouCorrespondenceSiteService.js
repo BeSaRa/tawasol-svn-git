@@ -11,6 +11,17 @@ module.exports = function (app) {
 
         self.ouCorrespondenceSites = [];
 
+        self.mapOuCorrespondenceSites = {};
+
+        function _generateMapOUCorrespondenceSite(ouCorrespondenceSites) {
+            _.map(ouCorrespondenceSites, function (site) {
+                if (!self.mapOuCorrespondenceSites.hasOwnProperty(site.correspondenceSite.id)) {
+                    self.mapOuCorrespondenceSites[site.correspondenceSite.id] = [];
+                }
+                self.mapOuCorrespondenceSites.push(site);
+            });
+        }
+
         self.loadOUCorrespondenceSitesByOuId = function (organization) {
             var id = organization.hasOwnProperty('id') ? organization.id : organization;
             return $http.get((urlService.ouCorrespondenceSites + '/ou/' + id))
@@ -25,6 +36,7 @@ module.exports = function (app) {
         self.loadOUCorrespondenceSites = function () {
             return $http.get(urlService.ouCorrespondenceSites).then(function (result) {
                 self.ouCorrespondenceSites = generator.generateCollection(result.data.rs, OUCorrespondenceSite, self._sharedMethods);
+                _generateMapOUCorrespondenceSite(self.ouCorrespondenceSites);
                 self.ouCorrespondenceSites = generator.interceptReceivedCollection('OUCorrespondenceSite', self.ouCorrespondenceSites);
                 return self.ouCorrespondenceSites.reverse();
             });
@@ -222,6 +234,10 @@ module.exports = function (app) {
                 .then(function (result) {
                     return generator.interceptReceivedCollection('OUCorrespondenceSite', generator.generateCollection(result.data.rs, OUCorrespondenceSite, self._sharedMethods));
                 });
+        };
+
+        self.getRelatedOUByCorrespondenceSiteId = function (correspondenceSiteId) {
+            return self.mapOuCorrespondenceSites.hasOwnProperty(correspondenceSiteId) ? self.mapOuCorrespondenceSites[correspondenceSiteId] : [];
         }
 
     });

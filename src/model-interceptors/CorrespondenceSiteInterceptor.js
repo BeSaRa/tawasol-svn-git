@@ -21,7 +21,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            model.parent = ( model.parent instanceof CorrespondenceSite ) ? model.parent.id : model.parent;
+            model.parent = (model.parent instanceof CorrespondenceSite) ? model.parent.id : model.parent;
             model.correspondenceTypeId = (model.correspondenceTypeId.hasOwnProperty('id') ? model.correspondenceTypeId.lookupKey : model.correspondenceTypeId);
             model.relatedOus = [];
             model.itemOrder = (model.itemOrder === '' || typeof model.itemOrder === 'undefined') ? generator.createNewID(correspondenceSiteService.correspondenceSites, 'itemOrder') : model.itemOrder;
@@ -30,12 +30,9 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            var relatedOus = ouCorrespondenceSiteService.ouCorrespondenceSites;
-            model.relatedOus = _.filter(relatedOus, function (OUCorrespondenceSite) {
-                return OUCorrespondenceSite.correspondenceSite.id === model.id;
-            });
+            model.relatedOus = ouCorrespondenceSiteService.getRelatedOUByCorrespondenceSiteId(model.id);
             model.parent = angular.copy(correspondenceSiteService.getCorrespondenceSiteById(model.parent));
-            if(model.parent)
+            if (model.parent)
                 delete model.parent.children;
 
             model.children = correspondenceSiteService.getSubCorrespondenceSites(model);

@@ -408,7 +408,7 @@ module.exports = function (app) {
                         },
                         correspondenceSites: function (correspondenceSiteService) {
                             'ngInject';
-                            return correspondenceSiteService.loadActiveCorrespondenceSites();
+                            return correspondenceSiteService.loadCorrespondenceSitesWithLimit(100);
                         },
                         documentTemplates: function (documentTemplateService) {
                             'ngInject';
@@ -459,12 +459,12 @@ module.exports = function (app) {
                         },
                         correspondenceSites: function (correspondenceSiteService) {
                             'ngInject';
-                            return correspondenceSiteService.getCorrespondenceSites();
-                            //return correspondenceSiteService.loadActiveCorrespondenceSites();
+                            return correspondenceSiteService.loadCorrespondenceSitesWithLimit(100);
                         },
                         documentTemplates: function (documentTemplateService) {
                             'ngInject';
-                            return documentTemplateService.loadDocumentTemplates(organization.id);
+                            return documentTemplateService
+                                .loadDocumentTemplates(organization.id);
                         },
                         allPropertyConfigurations: function (propertyConfigurationService, $q) {
                             'ngInject';

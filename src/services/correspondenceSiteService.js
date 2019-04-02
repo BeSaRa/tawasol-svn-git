@@ -1,21 +1,38 @@
 module.exports = function (app) {
     app.service('correspondenceSiteService', function (urlService,
-                                                          toast,
-                                                          errorCode,
-                                                          cmsTemplate,
-                                                          langService,
-                                                          dialog,
-                                                          $http,
-                                                          $q,
-                                                          generator,
-                                                          CorrespondenceSite,
-                                                          SearchCorrespondenceSite,
-                                                          _) {
+                                                       toast,
+                                                       errorCode,
+                                                       cmsTemplate,
+                                                       langService,
+                                                       dialog,
+                                                       $http,
+                                                       $q,
+                                                       generator,
+                                                       CorrespondenceSite,
+                                                       SearchCorrespondenceSite,
+                                                       _) {
         'ngInject';
         var self = this;
         self.serviceName = 'correspondenceSiteService';
 
         self.correspondenceSites = [];
+
+        self.subCorrespondenceSites = {};
+
+        function _getSubCorrespondenceSites(correspondenceSites) {
+            self.subCorrespondenceSites = {};
+            var length = correspondenceSites.length;
+            for (var i = 0; i < length; i++) {
+                var parent = correspondenceSites[i].parent;
+                if (!parent) {
+                    continue;
+                }
+                if (!self.subCorrespondenceSites.hasOwnProperty(parent)) {
+                    self.subCorrespondenceSites[parent] = [];
+                }
+                self.subCorrespondenceSites[parent].push(correspondenceSites[i]);
+            }
+        }
 
         /**
          * @description load correspondenceSites from server.
@@ -24,6 +41,7 @@ module.exports = function (app) {
         self.loadCorrespondenceSites = function () {
             return $http.get(urlService.correspondenceSites).then(function (result) {
                 self.correspondenceSites = generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods);
+                _getSubCorrespondenceSites(self.correspondenceSites);
                 self.correspondenceSites = generator.interceptReceivedCollection('CorrespondenceSite', self.correspondenceSites);
                 return self.correspondenceSites;
             });
@@ -43,6 +61,7 @@ module.exports = function (app) {
         self.loadActiveCorrespondenceSites = function () {
             return $http.get(urlService.correspondenceSites + '/active').then(function (result) {
                 self.activeCorrespondenceSites = generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods);
+                _getSubCorrespondenceSites(self.activeCorrespondenceSites);
                 self.activeCorrespondenceSites = generator.interceptReceivedCollection('CorrespondenceSite', self.activeCorrespondenceSites);
                 return self.activeCorrespondenceSites;
             });
@@ -65,6 +84,7 @@ module.exports = function (app) {
                 .get(urlService.entityWithlimit.replace('{entityName}', 'correspondence-site').replace('{number}', limit ? limit : 50))
                 .then(function (result) {
                     self.correspondenceSites = generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods);
+                    _getSubCorrespondenceSites(self.correspondenceSites);
                     self.correspondenceSites = generator.interceptReceivedCollection('CorrespondenceSite', self.correspondenceSites);
                     return self.correspondenceSites;
                 });
@@ -368,13 +388,8 @@ module.exports = function (app) {
          * @returns {Array}
          */
         self.getSubCorrespondenceSites = function (mainCorrespondenceSite) {
-            return _.filter(self.correspondenceSites, function (correspondenceSite) {
-                mainCorrespondenceSite = mainCorrespondenceSite.hasOwnProperty('id') ? mainCorrespondenceSite.id : mainCorrespondenceSite;
-                if (correspondenceSite.parent instanceof CorrespondenceSite)
-                    return correspondenceSite.parent.id === mainCorrespondenceSite;
-                else
-                    return correspondenceSite.parent === mainCorrespondenceSite;
-            });
+            var id = mainCorrespondenceSite.hasOwnProperty('id') ? mainCorrespondenceSite.id : mainCorrespondenceSite;
+            return self.subCorrespondenceSites.hasOwnProperty(id) ? self.subCorrespondenceSites[id] : [];
         };
 
         self.searchMainCorrespondenceSites = [];

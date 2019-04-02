@@ -22,7 +22,6 @@ module.exports = function (app) {
             if (model)
                 angular.extend(this, model);
 
-
             GeneralSearch.prototype.getTranslatedYesNo = function (fieldName) {
                 return self[fieldName] ? langService.get('yes') : langService.get('no');
             };
