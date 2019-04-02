@@ -3377,6 +3377,15 @@ module.exports = function (app) {
             return data;
         };
 
+        self.quickReceiveBulkCorrespondence = function (workItems, ignoreMessage) {
+            var wobNumbers = _.map(workItems, 'generalStepElm.workObjectNumber');
+            return $http
+                .put(urlService.departmentInboxes + '/receive-quick/bulk', wobNumbers)
+                .then(function (result) {
+                    return _bulkMessages(result, workItems, ignoreMessage, 'failed_to_receive', 'quick_received_success', '');
+                });
+        };
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);

@@ -37,6 +37,12 @@
                                                     <md-icon md-svg-icon="undo-variant" class="action-green"></md-icon>
                                                 </md-button>
                                                 <md-button class="md-icon-button"
+                                                           aria-label="{{lang.grid_action_quick_receive}}"
+                                                           tooltip="{{lang.grid_action_quick_receive}}"
+                                                           ng-click="ctrl.quickReceiveBulk($event)">
+                                                    <md-icon md-svg-icon="check-all" class="action-green"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button"
                                                            aria-label="{{lang.grid_action_unlock}}"
                                                            ng-if="false"
                                                            tooltip="{{lang.grid_action_unlock}}"

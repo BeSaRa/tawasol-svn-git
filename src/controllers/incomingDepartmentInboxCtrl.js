@@ -178,6 +178,23 @@ module.exports = function (app) {
             $state.go('app.incoming.add', {action: 'receive', workItem: info.wobNumber});
         };
 
+
+        self.quickReceiveBulk = function ($event, defer) {
+            if (!self.selectedIncomingDepartmentInboxes.length) {
+                return;
+            }
+
+            correspondenceService
+                .quickReceiveBulkCorrespondence(self.selectedIncomingDepartmentInboxes)
+                .then(function () {
+                    self.reloadIncomingDepartmentInboxes(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
         /**
          * @description Quick Accept the incoming department inbox item
          * @param incomingDepartmentInbox
@@ -550,8 +567,8 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // view
             {
@@ -568,8 +585,8 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // Preview
                     {
@@ -631,8 +648,8 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Manage
@@ -785,8 +802,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",
                     "DUPLICATE_BOOK_FROM_VERSION"
