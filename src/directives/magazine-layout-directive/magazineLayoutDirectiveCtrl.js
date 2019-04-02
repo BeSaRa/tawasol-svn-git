@@ -193,7 +193,7 @@ module.exports = function (app) {
             /*if (action.hasOwnProperty('checkAnyPermission')) {
                 return action.checkShow(action, workItem, action.checkAnyPermission);
             }*/
-            
+
             // if sticky Action is subMenu and has parent, check if parent is allowed to show
             // if parent is not allowed, subMenu will also be not allowed
             var parentAllowed = true;
@@ -209,11 +209,12 @@ module.exports = function (app) {
          * @description Get the text of action according to selected language
          * @param action
          * @param isShortcutRequest
+         * @param model
          */
-        self.getQuickActionText = function (action, isShortcutRequest) {
+        self.getQuickActionText = function (action, model, isShortcutRequest) {
             var langKey = "";
             if (action.hasOwnProperty('textCallback') && angular.isFunction(action.textCallback)) {
-                return langService.get(action.textCallback(self.model));
+                return langService.get(action.textCallback(model));
             }
 
             if (angular.isFunction(action.text)) {
