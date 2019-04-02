@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('gridRightClickDirective', function ($parse, $compile, $timeout, _, $window) {
+    app.directive('gridRightClickDirective', function ($parse, $compile, $timeout, _, $window, gridService) {
         'ngInject';
         return function (scope, element, attrs) {
             var cursorLeft, cursorTop, sideBar, sideBarVisibleInitially = false, sideBarWidth, subLeft, subTop;
@@ -18,14 +18,14 @@ module.exports = function (app) {
                 * Selected records count should be less than 2
                 * */
                 if (// If right click on td
-                ( tagName === "td"
-                    // If right click on span and it has parent with class "td-data"
-                    || (tagName === 'span' && $target.parents("td.td-data").length > 0)
-                    // If right click on anchor tag and it has parent with class "subject" or "td-data"
-                    || (tagName === 'a' && ($target.parents("td.subject").length > 0 || $target.parents("td.td-data").length > 0))
-                )
-                // Selected records count should be less than 2
-                && Number(attrs['selectedLength'] < 2)
+                    ( tagName === "td"
+                        // If right click on span and it has parent with class "td-data"
+                        || (tagName === 'span' && $target.parents("td.td-data").length > 0)
+                        // If right click on anchor tag and it has parent with class "subject" or "td-data"
+                        || (tagName === 'a' && ($target.parents("td.subject").length > 0 || $target.parents("td.td-data").length > 0))
+                    )
+                    // Selected records count should be less than 2
+                    && Number(attrs['selectedLength'] < 2)
                 ) {//scope.$parent.ctrl.selectedPrepareOutgoings.length < 2){
 
                     // If no record selected
@@ -53,10 +53,9 @@ module.exports = function (app) {
                                 cursorTop = angular.copy(event.clientY);
                             }
                             var menu = angular.element('<grid-actions-directive />', {
-                                'grid-actions': 'ctrl.gridActions',
+                                'context-actions': 'ctrl.contextMenuActions',
                                 'model': attrs.model,
-                                'shortcut': 'false',
-                                'menu-direction': 'context'
+                                'actions-direction': gridService.gridActionOptions.direction.context
                             });
                             menu.css({
                                 position: 'absolute',

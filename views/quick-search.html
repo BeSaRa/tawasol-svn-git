@@ -93,10 +93,8 @@
                                         <td md-cell ng-if="ctrl.selectedQuickSearchCorrespondence.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedQuickSearchCorrespondence.length
                                                   || ctrl.selectedQuickSearchCorrespondence.length===1 && ctrl.selectedQuickSearchCorrespondence[0].id === quickSearch.id">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="quickSearch"
-                                                                        shortcut="true">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="quickSearch">
                                                 </grid-actions-directive>
                                             </div>
                                         </td>

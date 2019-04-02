@@ -182,10 +182,8 @@
                     ng-if="ctrl.selectedWorkItems.length < 2">
                     <div layout-align="start center" flex ng-if="!ctrl.selectedWorkItems.length
                                                           || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber">
-                        <grid-actions-directive menu-direction="horizontal"
-                                                grid-actions="ctrl.gridActions"
-                                                model="userInbox"
-                                                shortcut="true">
+                        <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                model="userInbox">
                         </grid-actions-directive>
                     </div>
                 </td>

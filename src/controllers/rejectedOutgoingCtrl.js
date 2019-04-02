@@ -499,30 +499,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Check if action will be shown on grid or not
-         * @param action
-         * @param model
-         * @returns {boolean}
-         */
-        self.checkToShowAction = function (action, model) {
-            var hasPermission = true;
-            if (action.hasOwnProperty('permissionKey')) {
-                if (typeof action.permissionKey === 'string') {
-                    hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
-                    if (action.hasOwnProperty('checkAnyPermission')) {
-                        hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
-                        hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
-                    }
-                }
-            }
-            return (!action.hide) && hasPermission;
-        };
-
-        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -537,12 +513,16 @@ module.exports = function (app) {
                 subMenu: [
                     {
                         type: 'info',
-                        checkShow: self.checkToShowAction,
+                        checkShow: function (action, model) {
+                            return true;
+                        },
                         gridName: 'outgoing-rejected'
                     }
                 ],
                 class: "action-green",
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                            return true;
+                        }
             },
             // view
             {
@@ -558,7 +538,9 @@ module.exports = function (app) {
                     'VIEW_DOCUMENT_VERSION'
                 ],
                 checkAnyPermission: true,
-                checkShow: self.checkToShowAction,
+                checkShow: function (action, model) {
+                            return true;
+                        },
                 subMenu: [
                     // Preview
                     {
@@ -571,8 +553,8 @@ module.exports = function (app) {
                         showInView: false,
                         permissionKey: 'VIEW_DOCUMENT',
                         checkShow: function (action, model) {
-                            //If no content or no view document permission, hide the button
-                            return self.checkToShowAction(action, model) && model.hasContent();
+                            //If no content, hide the button
+                            return model.hasContent();
                         }
                     },
                     // Open
@@ -586,8 +568,8 @@ module.exports = function (app) {
                         showInView: false,
                         permissionKey: 'VIEW_DOCUMENT',
                         checkShow: function (action, model) {
-                            //If no content or no view document permission, hide the button
-                            return self.checkToShowAction(action, model) && model.hasContent();
+                            //If no content, hide the button
+                            return model.hasContent();
                         }
                     },
                     // show versions
@@ -600,7 +582,9 @@ module.exports = function (app) {
                         permissionKey: "VIEW_DOCUMENT_VERSION",
                         class: "action-green",
                         showInView: true,
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // viewInDeskTop
                     {
@@ -615,7 +599,7 @@ module.exports = function (app) {
                         showInView: false,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            return self.checkToShowAction(action, model) && info.needToApprove();
+                            return info.needToApprove();
                         }
                     }
                 ]
@@ -623,7 +607,9 @@ module.exports = function (app) {
             // Separator
             {
                 type: 'separator',
-                checkShow: self.checkToShowAction,
+                checkShow: function (action, model) {
+                            return true;
+                        },
                 showInView: false
             },
             // Remove
@@ -635,7 +621,9 @@ module.exports = function (app) {
                 permissionKey: "DELETE_OUTGOING",
                 callback: self.removeRejectedOutgoing,
                 class: "action-green",
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                            return true;
+                        }
             },
             /* // Edit Outgoing Properties
              {
@@ -647,7 +635,9 @@ module.exports = function (app) {
                  callback: self.editProperties,
                  class: "action-green",
                  showInView: false,
-                 checkShow: self.checkToShowAction
+                 checkShow: function (action, model) {
+                            return true;
+                        }
              },
              // Edit Outgoing Content
              {
@@ -659,7 +649,9 @@ module.exports = function (app) {
                  permissionKey: "EDIT_OUTGOING_CONTENT",
                  class: "action-green",
                  showInView: false,
-                 checkShow: self.checkToShowAction
+                 checkShow: function (action, model) {
+                            return true;
+                        }
              },*/
             // Launch Distribution Workflow
             {
@@ -670,7 +662,9 @@ module.exports = function (app) {
                 callback: self.launchDistributionWorkflow,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                            return true;
+                        }
             },
             // Archive
             {
@@ -680,7 +674,9 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.archiveOutgoing,
                 class: "action-green",
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                            return true;
+                        }
             },
             // Send To Review
             {
@@ -690,7 +686,9 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.sendToReview,
                 class: "action-green",
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                            return true;
+                        }
             },
             // Edit
             {
@@ -701,7 +699,7 @@ module.exports = function (app) {
                 showInView: false,
                 checkShow: function (action, model) {
                     var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                    return self.checkToShowAction(action, model) && hasPermission;
+                    return hasPermission;
                 },
                 permissionKey: [
                     "EDIT_OUTGOING_CONTENT",
@@ -724,7 +722,9 @@ module.exports = function (app) {
                         callback: self.editContent,
                         class: "action-green",
                         permissionKey: "EDIT_OUTGOING_CONTENT",
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // Properties
                     {
@@ -741,7 +741,9 @@ module.exports = function (app) {
                         callback: self.editProperties,
                         class: "action-green",
                         permissionKey: "EDIT_OUTGOING_PROPERTIES",
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // editInDeskTop
                     {
@@ -764,8 +766,7 @@ module.exports = function (app) {
                             else if (info.documentClass === 'internal') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                             }
-                            return self.checkToShowAction(action, model)
-                                && !info.isPaper
+                            return !info.isPaper
                                 && (info.documentClass !== 'incoming')
                                 && model.needApprove()
                                 && hasPermission;
@@ -780,8 +781,10 @@ module.exports = function (app) {
                 text: 'grid_action_view_tracking_sheet',
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
-                checkShow: self.checkToShowAction,
-                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
+                checkShow: function (action, model) {
+                            return true;
+                        },
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
             },
             // Manage
             {
@@ -790,7 +793,9 @@ module.exports = function (app) {
                 text: 'grid_action_manage',
                 shortcut: false,
                 showInView: false,
-                checkShow: self.checkToShowAction,
+                checkShow: function (action, model) {
+                            return true;
+                        },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
@@ -810,7 +815,9 @@ module.exports = function (app) {
                         permissionKey: "MANAGE_DOCUMENT’S_TAGS",
                         callback: self.manageTags,
                         class: "action-green",
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // Comments
                     {
@@ -821,7 +828,9 @@ module.exports = function (app) {
                         permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
                         callback: self.manageComments,
                         class: "action-green",
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // Attachments
                     {
@@ -832,7 +841,9 @@ module.exports = function (app) {
                         permissionKey: "MANAGE_ATTACHMENTS",
                         callback: self.manageAttachments,
                         class: "action-green",
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // Linked Entities
                     {
@@ -843,7 +854,9 @@ module.exports = function (app) {
                         callback: self.manageLinkedEntities,
                         permissionKey: "MANAGE_LINKED_ENTITIES",
                         class: "action-green",
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // Linked Documents
                     {
@@ -855,7 +868,9 @@ module.exports = function (app) {
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         //hide: true,
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // Destinations
                     {
@@ -867,7 +882,7 @@ module.exports = function (app) {
                         permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
                         checkShow: function (action, model) {
-                            return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
+                            return checkIfEditCorrespondenceSiteAllowed(model, false);
                         }
                     }
                 ]
@@ -881,7 +896,9 @@ module.exports = function (app) {
                 callback: self.security,
                 class: "action-red",
                 hide: true,
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                            return true;
+                        }
             },
             // Duplicate
             {
@@ -890,7 +907,9 @@ module.exports = function (app) {
                 text: 'grid_action_duplicate',
                 shortcut: false,
                 showInView: false,
-                checkShow: self.checkToShowAction,
+                checkShow: function (action, model) {
+                            return true;
+                        },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",
                     "DUPLICATE_BOOK_FROM_VERSION"
@@ -909,7 +928,7 @@ module.exports = function (app) {
                         showInView: true,
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            return self.checkToShowAction(action, model) && !info.isPaper;
+                            return !info.isPaper;
                         }
                     },
                     // duplicate specific version
@@ -922,10 +941,15 @@ module.exports = function (app) {
                         class: "action-green",
                         showInView: true,
                         permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     }
                 ]
             }
         ];
+
+        self.shortcutActions = gridService.getShortcutActions(self.gridActions);
+        self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
     });
 };

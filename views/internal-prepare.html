@@ -89,11 +89,9 @@
                                         <td md-cell ng-if="ctrl.selectedPrepareInternals.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedPrepareInternals.length
                                                   || ctrl.selectedPrepareInternals.length===1 && ctrl.selectedPrepareInternals[0].id === prepareInternal.id">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="prepareInternal"
-                                                                        shortcut="true"
-                                                ></grid-actions-directive>
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="prepareInternal">
+                                                </grid-actions-directive>
                                             </div>
                                         </td>
                                     </tr>

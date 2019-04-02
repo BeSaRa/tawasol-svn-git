@@ -1871,6 +1871,12 @@ module.exports = function (app) {
                             if (employeeService.hasPermissionTo('SEND_TO_CENTRAL_ARCHIVE')){
                                 return distributionWFService
                                     .loadDistWorkflowOrganizations('centralArchivesForUser')
+                                    .then(function(result){
+
+                                    })
+                                    .catch(function(error){
+                                        return [];
+                                    })
                             }
                             return [];
                         }
@@ -2682,7 +2688,7 @@ module.exports = function (app) {
          */
         self.loadCentralArchiveWorkItems = function () {
             return $http
-                .get(urlService.departmentWF + '/ready-to-export-central-archive?optional-fields=registeryOu')
+                .get(urlService.departmentWF + '/ready-to-export-central-archive?optional-fields=fromRegOU')
                 .then(function (result) {
                     return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
                 });

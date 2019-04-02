@@ -23,8 +23,8 @@
             <div scroll-directive>
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                        <md-table-container>
-                            <div flex scroll-directive>
+                        <md-virtual-repeat-container fix-head class="cms-virtual-repeater">
+                            <md-table-container>
                                 <table md-table ng-model="ctrl.selectedSentItemDepartmentInboxes"
                                        md-progress="ctrl.progress"><!--md-row-select--><!--md-row-select-->
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
@@ -99,7 +99,7 @@
                                         grid-right-click-directive="sentItemDepartmentInbox"
                                         model="sentItemDepartmentInbox"
                                         selected-length="{{ctrl.selectedSentItemDepartmentInboxes.length ? ctrl.selectedSentItemDepartmentInboxes.length : 0}}"
-                                        ng-repeat="sentItemDepartmentInbox in searchResults = (ctrl.sentItemDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        md-virtual-repeat="sentItemDepartmentInbox in searchResults = (ctrl.sentItemDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))">
 
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
@@ -120,7 +120,8 @@
                                                                       indicator-type="originalCopy"
                                                                       record-type="SentItemDepartmentInbox"></grid-indicator-directive>
                                         </td>
-                                        <td md-cell><span class="serial-td">{{sentItemDepartmentInbox.docFullSerial}}</span></td>
+                                        <td md-cell><span
+                                                class="serial-td">{{sentItemDepartmentInbox.docFullSerial}}</span></td>
                                         <td md-cell class="indicator-td text-right"
                                             style="padding-right:0 !important; padding-left:0px !important;">
                                             <!-- Priority Level -->
@@ -172,10 +173,8 @@
                                             ng-if="ctrl.selectedSentItemDepartmentInboxes.length < 2">
                                             <div layout-align="start center" flex ng-if="!ctrl.selectedSentItemDepartmentInboxes.length
                                                           || ctrl.selectedSentItemDepartmentInboxes.length===1 && ctrl.selectedSentItemDepartmentInboxes[0].workObjectNumber === sentItemDepartmentInbox.workObjectNumber">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="sentItemDepartmentInbox"
-                                                                        shortcut="true">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="sentItemDepartmentInbox">
                                                 </grid-actions-directive>
                                             </div>
                                         </td>
@@ -192,16 +191,16 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                            <md-table-pagination
-                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                    md-limit-options="ctrl.grid.limitOptions"
-                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.sentItemDepartmentInboxes | filter:ctrl.searchModel).length}}"
-                                    md-page-select
-                                    md-on-paginate="ctrl.grid.pagingCallback">
-                            </md-table-pagination>
-                        </md-table-container>
+                            </md-table-container>
+                        </md-virtual-repeat-container>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                md-total="{{(ctrl.sentItemDepartmentInboxes | filter:ctrl.searchModel).length}}"
+                                md-page-select
+                                md-on-paginate="ctrl.grid.pagingCallback">
+                        </md-table-pagination>
                     </md-card>
                 </div>
             </div>

@@ -37,10 +37,9 @@ module.exports = function (app) {
                     wrapper = angular.element('<div />', {id: 'magazine-menu-wrapper'}),
                     // the menu directive.
                     menu = angular.element('<grid-actions-directive />', {
-                        'grid-actions': 'ctrl.gridActions',
+                        'context-actions': 'ctrl.contextMenuActions',
                         'model': attrs.model,
-                        'shortcut': 'false',
-                        'menu-direction': 'context'
+                        'actions-direction': 'context'
                     });
 
                 // set the css for the wrapper.

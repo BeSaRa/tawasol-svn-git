@@ -94,10 +94,8 @@
                                         <td md-cell ng-if="ctrl.selectedReadyToSendInternals.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedReadyToSendInternals.length
                                                   || ctrl.selectedReadyToSendInternals.length===1 && ctrl.selectedReadyToSendInternals[0].id === readyToSendInternal.id">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="readyToSendInternal"
-                                                                        shortcut="true">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="readyToSendInternal">
                                                 </grid-actions-directive>
                                             </div>
                                         </td>

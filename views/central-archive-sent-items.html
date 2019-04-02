@@ -166,10 +166,8 @@
                                             ng-if="ctrl.selectedSentItemCentralArchives.length < 2">
                                             <div layout-align="start center" flex ng-if="!ctrl.selectedSentItemCentralArchives.length
                                                           || ctrl.selectedSentItemCentralArchives.length===1 && ctrl.selectedSentItemCentralArchives[0].workObjectNumber === centralArchiveItem.workObjectNumber">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="centralArchiveItem"
-                                                                        shortcut="true">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="centralArchiveItem">
                                                 </grid-actions-directive>
                                             </div>
                                         </td>

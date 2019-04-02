@@ -75,11 +75,9 @@
                                         <td md-cell ng-if="ctrl.selectedScanIncomings.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedScanIncomings.length
                                                   || ctrl.selectedScanIncomings.length===1 && ctrl.selectedScanIncomings[0].id === scanIncoming.id">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="scanIncoming"
-                                                                        shortcut="true"
-                                                ></grid-actions-directive>
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="scanIncoming">
+                                                </grid-actions-directive>
                                             </div>
                                         </td>
                                     </tr>

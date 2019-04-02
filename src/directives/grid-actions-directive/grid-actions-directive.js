@@ -1,3 +1,4 @@
+
 module.exports = function (app) {
     require('./grid-actions-directive-style.scss');
     app.directive('gridActionsDirective', function (cmsTemplate) {
@@ -9,12 +10,13 @@ module.exports = function (app) {
             controllerAs: 'ctrl',
             bindToController: true,
             scope: {
-                gridActions: '=',
-                menuDirection: '@',
+                contextActions: '=?',
+                actionsDirection: '@?',
                 model: '=',
-                shortcut: '='
+                shortcutActions: '=?'
             },
             link: function (scope, elem, attrs, controller) {
+                controller.actionsDirection = controller.actionsDirection || 'horizontal';
                 controller.gridActionsCopy = angular.copy(controller.gridActions);
             }
         }

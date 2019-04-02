@@ -21,7 +21,7 @@
             <md-icon md-menu-origin md-svg-icon="dots-vertical"></md-icon>
         </md-button>
         <md-menu-content width="4">
-            <md-menu-item ng-if="item.checkShow(item, null)" ng-repeat="item in search.availableSearchCriteria">
+            <md-menu-item ng-if="item.checkShow(item)" ng-repeat="item in search.availableSearchCriteria">
                 <md-button ng-click="search.setSelectedKey(item)">
                     {{ lang.get(item.value) }}
                 </md-button>

@@ -92,10 +92,8 @@
                                             ng-if="ctrl.selectedG2gItems.length < 2">
                                             <div layout-align="start center" flex ng-if="!ctrl.selectedG2gItems.length
                                                           || ctrl.selectedG2gItems.length===1 && ctrl.selectedG2gItems[0].generalStepElm.workObjectNumber === g2gItem.generalStepElm.workObjectNumber">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="g2gItem"
-                                                                        shortcut="true">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="g2gItem">
                                                 </grid-actions-directive>
                                             </div>
                                         </td>

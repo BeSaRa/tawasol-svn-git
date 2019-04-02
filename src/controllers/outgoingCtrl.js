@@ -35,7 +35,8 @@ module.exports = function (app) {
                                              userSubscriptionService,
                                              lookups, // new injector for all lookups can user access
                                              correspondenceService,
-                                             ResolveDefer) {
+                                             ResolveDefer,
+                                             gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'outgoingCtrl';
@@ -383,28 +384,6 @@ module.exports = function (app) {
         self.visibilityArray = [];
         self.isActionsAvailable = false;
 
-        /**
-         * @description Check if action will be shown in dropdown or not
-         * @param action
-         * @param model
-         * @returns {boolean}
-         */
-        self.checkToShowAction = function (action, model) {
-            var hasPermission = true;
-            if (action.hasOwnProperty('permissionKey')) {
-                if (typeof action.permissionKey === 'string') {
-                    hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
-                    if (action.hasOwnProperty('checkAnyPermission')) {
-                        hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    } else {
-                        hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
-                    }
-                }
-            }
-            return (!action.hide) && hasPermission;
-        };
-
         var isVisible = false;
         self.documentActions = [
             // Print Barcode
@@ -415,7 +394,7 @@ module.exports = function (app) {
                 permissionKey: "PRINT_BARCODE",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = self.checkToShowAction(action, model) && !!info.isPaper; //Don't show if its electronic outgoing
+                    isVisible = gridService.checkToShowAction(action) && !!info.isPaper; //Don't show if its electronic outgoing
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -427,7 +406,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model, index) {
-                    isVisible = self.checkToShowAction(action, model) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    isVisible = gridService.checkToShowAction(action) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -439,7 +418,7 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model, index) {
-                    isVisible = self.checkToShowAction(action, model) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    isVisible = gridService.checkToShowAction(action) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -452,7 +431,7 @@ module.exports = function (app) {
                 hide: true,
                 permissionKey: 'MANAGE_TASKS',
                 checkShow: function (action, model, index) {
-                    isVisible = self.checkToShowAction(action, model);
+                    isVisible = gridService.checkToShowAction(action);
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -464,7 +443,7 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model, index) {
-                    isVisible = self.checkToShowAction(action, model);
+                    isVisible = gridService.checkToShowAction(action);
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -477,7 +456,7 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = self.checkToShowAction(action, model) && !!info.isPaper; //Don't show if its electronic outgoing
+                    isVisible = gridService.checkToShowAction(action) && !!info.isPaper; //Don't show if its electronic outgoing
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -493,7 +472,7 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = self.checkToShowAction(action, model) && info.isPaper && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    isVisible = gridService.checkToShowAction(action) && info.isPaper && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

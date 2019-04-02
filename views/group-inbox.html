@@ -214,10 +214,8 @@
                                         <td md-cell class="p-r0" ng-if="ctrl.selectedWorkItems.length < 2">
                                             <div layout-align="start center" flex ng-if="!ctrl.selectedWorkItems.length
                                                           || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="workItem"
-                                                                        shortcut="true">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="workItem">
                                                 </grid-actions-directive>
                                             </div>
                                         </td>

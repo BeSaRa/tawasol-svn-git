@@ -357,6 +357,14 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description Search given string in records
+         * @param item
+         * @param index
+         * @param records
+         * @returns {boolean}
+         * @private
+         */
         var _searchRecords = function (item, index, records) {
             var searchTextCopy = angular.copy(self.gridToSearch.searchText.trim().toLowerCase());
             var propertyToSearch, propertyValue, result;
@@ -380,6 +388,24 @@ module.exports = function (app) {
             return result;
         };
 
+        self.gridActionOptions = {
+            direction: {
+                horizontal: 'horizontal',
+                vertical: 'vertical',
+                context: 'context'
+            },
+            location: {
+                grid: 'grid',
+                popup: 'popup',
+                sticky: 'sticky'
+            }
+        };
+
+        /**
+         * @description Check if action can be shown or not depending on permission, show in view, show in grid, sticky
+         * @param action
+         * @returns {boolean}
+         */
         self.checkToShowAction = function (action) {
             if (action.hide)
                 return false;
@@ -402,14 +428,14 @@ module.exports = function (app) {
                     var showInViewOnly = action.hasOwnProperty('showInViewOnly') && !!action.showInViewOnly,
                         showInView = action.hasOwnProperty('showInView') && !!action.showInView,
                         sticky = action.hasOwnProperty('sticky') && !!action.sticky,
-                        actionFrom = action.hasOwnProperty('actionFrom') && action.actionFrom ? action.actionFrom.toLowerCase() : 'grid';
-                    if (actionFrom === 'popup') {
+                        actionFrom = action.hasOwnProperty('actionFrom') && action.actionFrom ? action.actionFrom.toLowerCase() : self.gridActionOptions.location.grid;
+                    if (actionFrom === self.gridActionOptions.location.popup) {
                         if (!showInView)
                             hasPermission = false;
-                    } else if (actionFrom === 'grid') {
+                    } else if (actionFrom === self.gridActionOptions.location.grid) {
                         if (showInViewOnly)
                             hasPermission = false;
-                    } else if (actionFrom === 'sticky') {
+                    } else if (actionFrom === self.gridActionOptions.location.sticky) {
                         // add any condition, if required later
                         if (sticky)
                             hasPermission = true;
@@ -419,5 +445,207 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description Filters the shortcut actions for grid
+         * @param actions
+         * @param direction
+         * @param skipShortcut
+         * Set it to true if you want to display all actions as same as context menu
+         * @returns {Array}
+         */
+        self.getShortcutActions = function (actions, direction, skipShortcut) {
+            if (skipShortcut) {
+                return self.getContextMenuActions(actions);
+            }
+            var shortcutActions = [], actionsCopy = angular.copy(actions), mainAction, action;
+            direction = direction || self.gridActionOptions.direction.horizontal;
+            for (var i = 0; i < actionsCopy.length; i++) {
+                mainAction = actionsCopy[i];
+                mainAction.actionFrom = self.gridActionOptions.location.grid;
+
+                if (direction === self.gridActionOptions.direction.vertical) {
+                    action = _filterVerticalShortcuts(mainAction);
+                } else {
+                    action = _filterHorizontalShortcuts(mainAction);
+                }
+                if (action) {
+                    angular.isArray(action) ? shortcutActions = shortcutActions.concat(action) : shortcutActions.push(action);
+                }
+            }
+            return shortcutActions;
+        };
+
+        /**
+         * @description Filter the actions to be shown in horizontal direction depending on permissions and values.
+         * It will skip the separators
+         * @param mainAction
+         * @returns {*}
+         * Returns the array of actions(main or sub menu action) or false.
+         * @private
+         */
+        function _filterHorizontalShortcuts(mainAction) {
+            if (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu) && mainAction.subMenu.length) {
+                if (self.checkToShowAction(mainAction)) {
+                    var shortcutActions = [], subAction;
+                    for (var k = 0; k < mainAction.subMenu.length; k++) {
+                        subAction = mainAction.subMenu[k];
+                        subAction.actionFrom = self.gridActionOptions.location.grid;
+                        if (subAction.type.toLowerCase() === "action" && self.checkToShowAction(subAction)) {
+                            if (subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
+                                shortcutActions.push(subAction);
+                            }
+                        }
+                    }
+                    return shortcutActions;
+                }
+                return false;
+            } else {
+                if (mainAction.type.toLowerCase() === "action" && self.checkToShowAction(mainAction)) {
+                    if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
+                        return mainAction;
+                    }
+                    return false;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        /**
+         * @description Filter the actions to be shown in vertical direction depending on permissions and values.
+         * It will include the separators
+         * @param mainAction
+         * @returns {*}
+         * Returns the main action.
+         * If there is no sub menu, main action will be returned.
+         * If there is sub menu, sub menu array will be replaced with available sub menus according to permissions and values and main action will be returned;
+         * If no condition matches, return false;
+         * @private
+         */
+        function _filterVerticalShortcuts(mainAction) {
+            /*
+            * if main action has subMenu and subMenu has length
+            * else main action doesn't have subMenu
+            * */
+            if (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu) && mainAction.subMenu.length) {
+                if (self.checkToShowAction(mainAction)) {
+                    var subActionsToShow = [];
+                    for (var j = 0; j < mainAction.subMenu.length; j++) {
+                        var subAction = mainAction.subMenu[j];
+                        subAction.actionFrom = self.gridActionOptions.location.grid;
+                        /*If sub menu has separator, show it in vertical only. not in horizontal*/
+                        if (subAction.type.toLowerCase() === "action" && self.checkToShowAction(subAction)) {
+                            if (subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
+                                subActionsToShow.push(subAction);
+                            }
+                        } else if (subAction.type.toLowerCase() === "separator" && !subAction.hide) {
+                            subActionsToShow.push(subAction);
+                        }
+                    }
+                    if (subActionsToShow.length) {
+                        mainAction.subMenu = subActionsToShow;
+                        return mainAction;
+                    } else {
+                        return false;
+                    }
+                }
+                return false;
+            } else {
+                /*
+                * If main menu is of type "action", check if its allowed to show
+                * else if main menu is of type "separator", and separator is allowed to show(not hidden)
+                * else nothing(return false)
+                * */
+                if (mainAction.type.toLowerCase() === "action" && self.checkToShowAction(mainAction)) {
+                    if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
+                        return mainAction;
+                    }
+                    return false;
+                } else if (mainAction.type.toLowerCase() === 'separator' && !mainAction.hide) {
+                    return mainAction;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        /**
+         * @description Filters the action to show as context menu actions
+         * @returns {Array}
+         */
+        self.getContextMenuActions = function (actions) {
+            var contextMenu, contextMenuActions = [], actionsCopy = angular.copy(actions);
+            for (var i = 0; i < actionsCopy.length; i++) {
+                contextMenu = _filterContextMenuItems(actionsCopy[i]);
+                if (contextMenu) {
+                    angular.isArray(contextMenu) ? contextMenuActions = contextMenuActions.concat(contextMenu) : contextMenuActions.push(contextMenu);
+                }
+                //return !gridAction.hide && !(gridAction.hasOwnProperty('onlyShortcut') && gridAction.onlyShortcut);
+            }
+            return contextMenuActions;
+        };
+
+        /**
+         * @description filters the context menu items
+         * @param mainAction
+         * @returns {*}
+         * @private
+         */
+        function _filterContextMenuItems(mainAction) {
+            mainAction.actionFrom = self.gridActionOptions.location.grid;
+            /*
+            * if main action has subMenu and subMenu has length
+            * else main action doesn't have subMenu
+            * */
+            if (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu) && mainAction.subMenu.length) {
+                if (self.checkToShowAction(mainAction)) {
+                    var subActionsToShow = [];
+                    for (var j = 0; j < mainAction.subMenu.length; j++) {
+                        var subAction = mainAction.subMenu[j];
+                        subAction.actionFrom = self.gridActionOptions.location.grid;
+                        /*If sub menu is action, and action is allowed to show, show it
+                        * If sub menu is separator and not hidden, show it
+                        * If sub menu is document info, and info is allowed to show, show it
+                        * */
+                        if (subAction.type.toLowerCase() === "action" && self.checkToShowAction(subAction)) {
+                            if (!(mainAction.hasOwnProperty('onlyShortcut') && mainAction.onlyShortcut)) {
+                                subActionsToShow.push(subAction);
+                            }
+                        } else if (subAction.type.toLowerCase() === "separator" && !subAction.hide) {
+                            subActionsToShow.push(subAction);
+                        } else if (subAction.type.toLowerCase() === 'info' && self.checkToShowAction(subAction)) {
+                            subActionsToShow.push(subAction);
+                        }
+                    }
+                    if (subActionsToShow.length) {
+                        mainAction.subMenu = subActionsToShow;
+                        return mainAction;
+                    } else {
+                        return false;
+                    }
+                }
+                return false;
+            } else {
+                /*
+                * If main menu is of type "action", check if its allowed to show
+                * else if main menu is of type "separator", and separator is allowed to show(not hidden)
+                * else nothing(return false)
+                * */
+                if (mainAction.type.toLowerCase() === "action" && self.checkToShowAction(mainAction)) {
+                    /*
+                    * If onlyShortcut is true in action, this means, we need not to show action
+                    * else show action
+                    * */
+                    if (mainAction.hasOwnProperty('onlyShortcut') && mainAction.onlyShortcut) {
+                        return false;
+                    }
+                    return mainAction;
+                } else if (mainAction.type.toLowerCase() === 'separator' && !mainAction.hide) {
+                    return mainAction;
+                } else {
+                    return false;
+                }
+            }
+        }
     });
 };

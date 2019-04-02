@@ -6,6 +6,7 @@ module.exports = function (app) {
                                              helper,
                                              langService,
                                              toast,
+                                             $timeout,
                                              dialog,
                                              cmsTemplate,
                                              rootEntity,
@@ -21,7 +22,7 @@ module.exports = function (app) {
              * @param $event
              */
             mainDocumentDownload: function (vsId, $event) {
-                self.selectMAIPLabels()
+                return self.selectMAIPLabels()
                     .then(function (selectedLabel) {
                         var labelId = null;
                         if (!!selectedLabel && typeof selectedLabel === 'string') {
@@ -42,7 +43,7 @@ module.exports = function (app) {
              * @param $event
              */
             compositeDocumentDownload: function (vsId, $event) {
-                self.selectMAIPLabels()
+                return self.selectMAIPLabels()
                     .then(function (selectedLabel) {
                         var labelId = null;
                         if (!!selectedLabel && typeof selectedLabel === 'string') {
@@ -102,7 +103,9 @@ module.exports = function (app) {
             var defer = $q.defer();
             if (!_isEntityMaipEnabled()) {
                 // if entity is not using MAIP security
-                defer.resolve(true);
+                $timeout(function () {
+                    defer.resolve(true);
+                })
             } else {
                 dialog.confirmMessage(langService.get('confirm_protect_using_maip'))
                     .then(function () {

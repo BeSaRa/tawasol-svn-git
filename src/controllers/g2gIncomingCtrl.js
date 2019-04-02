@@ -210,46 +210,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Check if action will be shown on grid or not
-         * @param action
-         * @param model
-         * @param popupActionOnly
-         * @returns {boolean}
-         */
-        self.checkToShowAction = function (action, model, popupActionOnly) {
-            if (action.hasOwnProperty('permissionKey')) {
-                if (typeof action.permissionKey === 'string') {
-                    if (popupActionOnly)
-                        return (!action.hide && action.showInViewOnly) && employeeService.hasPermissionTo(action.permissionKey);
-                    return (!action.hide && !action.showInViewOnly) && employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey)) {
-                    if (!action.permissionKey.length) {
-                        if (popupActionOnly)
-                            return (!action.hide && action.showInViewOnly);
-                        return (!action.hide && !action.showInViewOnly);
-                    }
-                    else {
-                        var hasPermissions = _.map(action.permissionKey, function (key) {
-                            return employeeService.hasPermissionTo(key);
-                        });
-                        if (popupActionOnly)
-                            return (!action.hide && action.showInViewOnly) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
-
-                        return (!action.hide && !action.showInViewOnly) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
-                    }
-                }
-            }
-            if (popupActionOnly)
-                return (!action.hide) && (action.showInViewOnly);
-            return (!action.hide && !action.showInViewOnly);
-        };
-
-        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -263,12 +223,16 @@ module.exports = function (app) {
                 subMenu: [
                     {
                         type: 'info',
-                        checkShow: self.checkToShowAction,
+                        checkShow: function (action, model) {
+                            return true;
+                        },
                         gridName: 'g2g-incoming'
                     }
                 ],
                 class: "action-green",
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                            return true;
+                        }
             },
             // view
             {
@@ -283,7 +247,9 @@ module.exports = function (app) {
                     'VIEW_DOCUMENT'
                 ],
                 checkAnyPermission: true,
-                checkShow: self.checkToShowAction,
+                checkShow: function (action, model) {
+                            return true;
+                        },
                 subMenu: [
                     // Preview
                     {
@@ -295,7 +261,9 @@ module.exports = function (app) {
                         class: "action-green",
                         permissionKey: 'VIEW_DOCUMENT',
                         showInView: false,
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // Open
                     {
@@ -307,14 +275,18 @@ module.exports = function (app) {
                         class: "action-green",
                         permissionKey: 'VIEW_DOCUMENT',
                         showInView: false,
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                 ]
             },
             // Separator
             {
                 type: 'separator',
-                checkShow: self.checkToShowAction,
+                checkShow: function (action, model) {
+                            return true;
+                        },
                 showInView: false
             },
             // Receive
@@ -328,7 +300,9 @@ module.exports = function (app) {
                 //permissionKey: '',
                 showInView: true,
                 showInViewOnly: true,
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                            return true;
+                        }
             },
             // Return
             {
@@ -341,8 +315,13 @@ module.exports = function (app) {
                 //permissionKey: '',
                 showInView: true,
                 //showInViewOnly: true,
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                            return true;
+                        }
             }
         ];
+
+        self.shortcutActions = gridService.getShortcutActions(self.gridActions);
+        self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
     });
 };

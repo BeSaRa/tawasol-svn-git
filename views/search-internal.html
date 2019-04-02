@@ -177,10 +177,8 @@
                                     <td md-cell ng-if="ctrl.selectedSearchedInternalDocuments.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedSearchedInternalDocuments.length
                                                   || ctrl.selectedSearchedInternalDocuments.length===1 && ctrl.selectedSearchedInternalDocuments[0].id === searchedInternalDocument.id">
-                                            <grid-actions-directive menu-direction="horizontal"
-                                                                    grid-actions="ctrl.gridActions"
-                                                                    model="searchedInternalDocument"
-                                                                    shortcut="true">
+                                            <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                    model="searchedInternalDocument">
                                             </grid-actions-directive>
                                         </div>
                                     </td>

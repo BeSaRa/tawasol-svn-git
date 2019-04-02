@@ -104,10 +104,8 @@
                                         <td md-cell ng-if="ctrl.selectedReviewIncomings.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedReviewIncomings.length
                                                   || ctrl.selectedReviewIncomings.length===1 && ctrl.selectedReviewIncomings[0].id === reviewIncoming.id">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="reviewIncoming"
-                                                                        shortcut="true">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="reviewIncoming">
                                                 </grid-actions-directive>
                                             </div>
                                         </td>

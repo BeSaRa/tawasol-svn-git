@@ -3,7 +3,9 @@ module.exports = function (app) {
                                                            employeeService,
                                                            LangWatcher,
                                                            langService,
-                                                           generator) {
+                                                           generator,
+                                                           gridService,
+                                                           $timeout) {
         'ngInject';
         var self = this;
         self.controllerName = 'workItemInboxDirectiveCtrl';
@@ -20,5 +22,10 @@ module.exports = function (app) {
         self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
+
+        $timeout(function () {
+            self.shortcutActions = gridService.getShortcutActions(self.gridActions);
+            self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
+        })
     });
 };

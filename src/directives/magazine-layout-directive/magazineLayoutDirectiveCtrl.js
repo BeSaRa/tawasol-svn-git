@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                             LangWatcher,
                                                             $compile,
                                                             $timeout,
+                                                            gridService,
                                                             $element,
                                                             $mdMedia,
                                                             sidebarService,
@@ -25,6 +26,11 @@ module.exports = function (app) {
         self.clientPagination = true;
 
         self.page = 1;
+
+        $timeout(function () {
+            self.shortcutActions = gridService.getShortcutActions(self.gridActions);
+            self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
+        });
 
         self.paginate = function (e) {
             console.log(self.page);

@@ -79,7 +79,7 @@ module.exports = function (app) {
                 url: urlService.distributionWFOrganization,
                 property: 'organizationGroups'
             },
-            centralArchivesForUser:{
+            centralArchivesForUser: {
                 url: urlService.distributionWFCentralArchiveForUser,
                 property: 'centralArchives'
             }
@@ -110,11 +110,14 @@ module.exports = function (app) {
          */
         self.loadDistWorkflowOrganizations = function (name) {
             return $http.get(self.organizationsMap[name].url).then(function (result) {
-                if (name === 'centralArchivesForUser' && !angular.isArray(result.data.rs)){
-                    result.data.rs = [result.data.rs];
+                if (name === 'centralArchivesForUser') {
+                    if (!result.data.rs || result.data.rs.id === -1) {
+                        result.data.rs = [];
+                    } else if (!angular.isArray(result.data.rs))
+                        result.data.rs = [result.data.rs];
                 }
                 self[self.organizationsMap[name].property] = generator.generateCollection(result.data.rs, WFOrganization);
-                return  self[self.organizationsMap[name].property]
+                return self[self.organizationsMap[name].property]
             });
         };
         /**

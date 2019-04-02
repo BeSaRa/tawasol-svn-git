@@ -127,10 +127,8 @@
                                         <td md-cell ng-if="ctrl.selectedIncomingDepartmentInboxes.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedIncomingDepartmentInboxes.length
                                                       || ctrl.selectedIncomingDepartmentInboxes.length===1 && ctrl.selectedIncomingDepartmentInboxes[0].generalStepElm.workObjectNumber === incomingDepartmentInbox.generalStepElm.workObjectNumber">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="incomingDepartmentInbox"
-                                                                        shortcut="true">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="incomingDepartmentInbox">
                                                 </grid-actions-directive>
                                             </div>
                                         </td>

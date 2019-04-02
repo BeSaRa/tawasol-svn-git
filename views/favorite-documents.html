@@ -102,10 +102,8 @@
                                         <td md-cell ng-if="ctrl.selectedFavoriteDocuments.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedFavoriteDocuments.length
                                                   || ctrl.selectedFavoriteDocuments.length===1 && ctrl.selectedFavoriteDocuments[0].id === favoriteDocument.id">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="favoriteDocument"
-                                                                        shortcut="true">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="favoriteDocument">
                                                 </grid-actions-directive>
                                             </div>
                                         </td>

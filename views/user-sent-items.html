@@ -31,14 +31,14 @@
         <!-- end page-header -->
         <!-- page-content -->
         <div layout="column" flex>
-            <div scroll-directive>
-                <div class="page-padding">
-                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+            <div layout="column" class="page-padding no-tb-padding">
+                <md-card md-whiteframe="3" layout="column" flex class="card-overlay">
+                    <md-virtual-repeat-container fix-head class="cms-virtual-repeater">
                         <md-table-container>
-                            <div flex overlay-scroll-bar-directive>
-                                <table md-table ng-model="ctrl.selectedUserSentItems"
+                            <table md-table ng-model="ctrl.selectedUserSentItems"
                                        md-progress="ctrl.progress"><!-- md-row-select multiple-->
-                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                    <thead md-head md-order="ctrl.grid.order"
+                                           md-on-reorder="ctrl.getSortedData">
                                     <!--md-on-reorder="ctrl.reloadUserSentItems"-->
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedUserSentItems.length > 1 ? 9 : 10}}"
@@ -94,7 +94,8 @@
                                             md-order-by="comments">
                                             <span>{{lang.comment}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="dueDate">
+                                        <th ng-if="!ctrl.selectedUserSentItems.length" md-column
+                                            md-order-by="dueDate">
                                             <span>{{lang.sent_items_due_date}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedUserSentItems.length" md-column
@@ -110,7 +111,7 @@
                                     <tr md-row md-select="userSentItem" model="userSentItem"
                                         grid-right-click-directive="userSentItem"
                                         selected-length="{{ctrl.selectedUserSentItems.length ? ctrl.selectedUserSentItems.length : 0}}"
-                                        ng-repeat="userSentItem in searchResults = (ctrl.userSentItems) track by $index">
+                                        md-virtual-repeat="userSentItem in ctrl.userSentItems">
                                         <!-- | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) -->
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
@@ -130,17 +131,18 @@
                                                                       indicator-type="followupStatus"
                                                                       record-type="EventHistory"></grid-indicator-directive>-->
                                         </td>
-                                        <td md-cell><span class="serial-td">{{userSentItem.docFullSerial}}</span></td>
+                                        <td md-cell><span class="serial-td">{{userSentItem.docFullSerial}}</span>
+                                        </td>
                                         <td md-cell class="indicator-td text-right"
                                             style="padding-right:0 !important; padding-left:0 !important;">
                                             <!-- Priority Level -->
                                             <grid-indicator-directive record="userSentItem"
                                                                       indicator-type="priorityLevel"
                                                                       record-type="EventHistory"></grid-indicator-directive>
-                                           <!-- &lt;!&ndash; Has Attachments &ndash;&gt;
-                                            <grid-indicator-directive record="userSentItem" span-class="float-right"
-                                                                      indicator-type="hasAttachment"
-                                                                      record-type="EventHistory"></grid-indicator-directive>-->
+                                            <!-- &lt;!&ndash; Has Attachments &ndash;&gt;
+                                             <grid-indicator-directive record="userSentItem" span-class="float-right"
+                                                                       indicator-type="hasAttachment"
+                                                                       record-type="EventHistory"></grid-indicator-directive>-->
                                         </td>
                                         <td md-cell md-truncate class="subject">
                                             <a href="" class="view-doc"
@@ -166,24 +168,12 @@
                                         <td md-cell ng-if="ctrl.selectedUserSentItems.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedUserSentItems.length
                                                   || ctrl.selectedUserSentItems.length===1 && ctrl.selectedUserSentItems[0].id === userSentItem.id">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="userSentItem"
-                                                                        shortcut="true">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="userSentItem">
                                                 </grid-actions-directive>
                                             </div>
                                         </td>
                                     </tr>
-                                    <!--<tr md-row ng-if="!ctrl.userSentItems.length">
-                                        <td md-cell colspan="10" class="red-text text-center">
-                                            {{lang.no_records_found}}
-                                        </td>
-                                    </tr>
-                                    <tr md-row ng-if="ctrl.userSentItems.length && !searchResults.length">
-                                        <td md-cell colspan="10" class="red-text text-center">
-                                            {{lang.no_records_found_matching_search}}
-                                        </td>
-                                    </tr>-->
                                     <tr md-row ng-if="!ctrl.userSentItemsCopy.length">
                                         <td md-cell colspan="10" class="red-text text-center">
                                             {{lang.no_records_found}}
@@ -197,18 +187,17 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                            <md-table-pagination
-                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                    md-limit-options="ctrl.grid.limitOptions"
-                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.totalRecords}}"
-                                    md-page-select
-                                    md-on-paginate="ctrl.grid.pagingCallback">
-                            </md-table-pagination>
                         </md-table-container>
-                    </md-card>
-                </div>
+                    </md-virtual-repeat-container>
+                    <md-table-pagination
+                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                            md-limit-options="ctrl.grid.limitOptions"
+                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                            md-total="{{ctrl.totalRecords}}"
+                            md-page-select
+                            md-on-paginate="ctrl.grid.pagingCallback">
+                    </md-table-pagination>
+                </md-card>
             </div>
         </div>
         <!-- end page content -->

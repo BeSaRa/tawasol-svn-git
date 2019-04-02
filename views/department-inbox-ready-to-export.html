@@ -139,10 +139,8 @@
                                         <td md-cell ng-if="ctrl.selectedReadyToExports.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedReadyToExports.length
                                                   || ctrl.selectedReadyToExports.length===1 && ctrl.selectedReadyToExports[0].generalStepElm.workObjectNumber === readyToExport.generalStepElm.workObjectNumber">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="readyToExport"
-                                                                        shortcut="true">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="readyToExport">
                                                 </grid-actions-directive>
                                             </div>
                                         </td>

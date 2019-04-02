@@ -6,7 +6,9 @@ module.exports = function (app) {
                                                            $scope,
                                                            quickSearchCorrespondenceService,
                                                            $timeout,
-                                                           employeeService) {
+                                                           _,
+                                                           employeeService,
+                                                           gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'toolbarSearchDirectiveCtrl';
@@ -19,38 +21,12 @@ module.exports = function (app) {
 
         self.employeeService = employeeService;
 
-
-        /**
-         * @description Check if action will be shown on grid or not
-         * @param action
-         * @param model
-         * @returns {boolean}
-         */
-        self.checkToShowAction = function (action, model) {
-            var hasPermission = true;
-            if (action.hasOwnProperty('permissionKey')) {
-                if (typeof action.permissionKey === 'string') {
-                    hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
-                    if (action.hasOwnProperty('checkAnyPermission')) {
-                        hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
-                        hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
-                    }
-                }
-            }
-            return (!action.hide) && hasPermission;
-        };
-
-
         self.availableSearchCriteria = [
-            {id: 1, key: 'DocSubjectSrc', value: 'document_subject', checkShow: self.checkToShowAction},
-            {id: 2, key: 'DocFullSerial', value: 'full_serial', checkShow: self.checkToShowAction},
-            {id: 3, key: 'Barcode', value: 'barcode', checkShow: self.checkToShowAction},
-            {id: 4, key: 'Tags', value: 'tags', permissionKey: "TAG_SEARCH", checkShow: self.checkToShowAction},
-            {id: 5, key: 'Content', value: 'search_content', permissionKey: "CONTENT_SEARCH", checkShow: self.checkToShowAction}
+            {id: 1, key: 'DocSubjectSrc', value: 'document_subject', checkShow: gridService.checkToShowAction},
+            {id: 2, key: 'DocFullSerial', value: 'full_serial', checkShow: gridService.checkToShowAction},
+            {id: 3, key: 'Barcode', value: 'barcode', checkShow: gridService.checkToShowAction},
+            {id: 4, key: 'Tags', value: 'tags', permissionKey: "TAG_SEARCH", checkShow: gridService.checkToShowAction},
+            {id: 5, key: 'Content', value: 'search_content', permissionKey: "CONTENT_SEARCH", checkShow: gridService.checkToShowAction}
         ];
 
         self.showSearch = function () {

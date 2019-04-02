@@ -476,28 +476,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Check if action will be shown on grid or not
-         * @param action
-         * @param model
-         * @returns {boolean}
-         */
-        self.checkToShowAction = function (action, model) {
-            var hasPermission = true;
-            if (action.hasOwnProperty('permissionKey')) {
-                if (typeof action.permissionKey === 'string') {
-                    hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
-                    if (action.hasOwnProperty('checkAnyPermission')) {
-                        hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    } else {
-                        hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
-                    }
-                }
-            }
-            return (!action.hide) && hasPermission;
-        };
-
-        /**
          * @description View Tracking Sheet
          * @param workItem
          * @param params
@@ -564,12 +542,16 @@ module.exports = function (app) {
                 subMenu: [
                     {
                         type: 'info',
-                        checkShow: self.checkToShowAction,
+                        checkShow: function (action, model) {
+                            return true;
+                        },
                         gridName: 'department-incoming'
                     }
                 ],
                 class: "action-green",
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                            return true;
+                        }
             },
             // view
             {
@@ -585,7 +567,9 @@ module.exports = function (app) {
                     'VIEW_DOCUMENT_VERSION'
                 ],
                 checkAnyPermission: true,
-                checkShow: self.checkToShowAction,
+                checkShow: function (action, model) {
+                            return true;
+                        },
                 subMenu: [
                     // Preview
                     {
@@ -601,8 +585,8 @@ module.exports = function (app) {
                             return model.isLocked() && !model.isLockedByCurrentUser();
                         },
                         checkShow: function (action, model) {
-                            //If no content or no view document permission, hide the button
-                            return self.checkToShowAction(action, model) && model.hasContent();
+                            //If no content, hide the button
+                            return model.hasContent();
                         }
                     },
                     // Open
@@ -619,8 +603,8 @@ module.exports = function (app) {
                             return model.isLocked() && !model.isLockedByCurrentUser();
                         },
                         checkShow: function (action, model) {
-                            //If no content or no view document permission, hide the button
-                            return self.checkToShowAction(action, model) && model.hasContent();
+                            //If no content, hide the button
+                            return model.hasContent();
                         }
                     },
                     // show versions
@@ -637,14 +621,18 @@ module.exports = function (app) {
                         disabled: function (model) {
                             return model.isLocked() && !model.isLockedByCurrentUser();
                         },
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     }
                 ]
             },
             // Separator
             {
                 type: 'separator',
-                checkShow: self.checkToShowAction,
+                checkShow: function (action, model) {
+                            return true;
+                        },
                 showInView: false
             },
             // Manage
@@ -658,7 +646,7 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && model.generalStepElm.isReassigned;
+                    return model.generalStepElm.isReassigned;
                 },
                 permissionKey: [
                     "MANAGE_ATTACHMENTS",
@@ -677,7 +665,7 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             //var info = model.getInfo();
-                            return self.checkToShowAction(action, model) && model.generalStepElm.isReassigned;
+                            return model.generalStepElm.isReassigned;
                         }
                     },
                     // Linked Documents
@@ -691,7 +679,7 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             //var info = model.getInfo();
-                            return self.checkToShowAction(action, model) && model.generalStepElm.isReassigned;
+                            return model.generalStepElm.isReassigned;
                         }
                     }
                 ]
@@ -709,7 +697,7 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model) {
                     //var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
+                    return !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
             },
             // Receive
@@ -725,7 +713,7 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model) {
                     //var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
+                    return !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
             },
             // View Tracking Sheet
@@ -735,11 +723,11 @@ module.exports = function (app) {
                 text: 'grid_action_view_tracking_sheet',
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && model.generalStepElm.isReassigned;
+                    return model.generalStepElm.isReassigned;
                 },
-                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
             },
-            // View Tracking Sheet (Quick Action Only)
+            // View Tracking Sheet (Shortcut Only)
             {
                 type: 'action',
                 icon: 'eye',
@@ -749,7 +737,7 @@ module.exports = function (app) {
                 showInView: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && model.generalStepElm.isReassigned;
+                    return model.generalStepElm.isReassigned;
                 },
                 callback: self.viewTrackingSheet,
                 params: ['view_tracking_sheet', 'tabs']
@@ -769,7 +757,7 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model) {
                     //var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
+                    return !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
             },
             //Launch Distribution Workflow
@@ -786,7 +774,7 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model) {
                     //var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && model.generalStepElm.isReassigned;//!info.incomingVsId;
+                    return model.generalStepElm.isReassigned;//!info.incomingVsId;
                 }
             },
             // Duplicate
@@ -796,7 +784,9 @@ module.exports = function (app) {
                 text: 'grid_action_duplicate',
                 shortcut: false,
                 showInView: false,
-                checkShow: self.checkToShowAction,
+                checkShow: function (action, model) {
+                            return true;
+                        },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",
                     "DUPLICATE_BOOK_FROM_VERSION"
@@ -819,7 +809,7 @@ module.exports = function (app) {
                         },
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper;
+                            return (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper;
                         }
                     },
                     // duplicate specific version
@@ -836,7 +826,9 @@ module.exports = function (app) {
                             return model.isLocked() && !model.isLockedByCurrentUser();
                         },
                         permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                 ]
             },
@@ -851,10 +843,13 @@ module.exports = function (app) {
                 showInView: true,
                 permissionKey: '',
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && model.isLocked() && model.getLockingInfo().domainName !== employeeService.getEmployee().domainName;
+                    return model.isLocked() && model.getLockingInfo().domainName !== employeeService.getEmployee().domainName;
                 }
             }
         ];
+
+        self.shortcutActions = gridService.getShortcutActions(self.gridActions);
+        self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
 
         self.openEmailItem = function () {
             emailItem ? self.viewDocument(emailItem) : null;

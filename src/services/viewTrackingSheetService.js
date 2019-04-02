@@ -18,7 +18,8 @@ module.exports = function (app) {
                                                       FullHistory,
                                                       OutgoingDeliveryReport,
                                                       MergedLinkedDocumentHistory,
-                                                      downloadService) {
+                                                      downloadService,
+                                                      gridService) {
             'ngInject';
             var self = this;
             self.serviceName = 'viewTrackingSheetService';
@@ -36,15 +37,12 @@ module.exports = function (app) {
             self.mergedLinkedDocumentHistory = [];
             self.fullHistory = [];
 
-
             /**
              * @description Returns the view tracking sheet options for grid actions
-             * @param checkToShowAction
-             * @param callback
              * @param gridOrTabs
              * @returns {[]}
              */
-            self.getViewTrackingSheetOptions = function (checkToShowAction, callback, gridOrTabs) {
+            self.getViewTrackingSheetOptions = function (gridOrTabs) {
                 if (gridOrTabs === 'tabs')
                     return [];
                 return [
@@ -54,10 +52,12 @@ module.exports = function (app) {
                         icon: '',
                         text: 'view_tracking_sheet_work_flow_history',
                         shortcut: false,
-                        callback: callback,
+                        callback: self.viewTrackingSheet,
                         params: ['view_tracking_sheet_work_flow_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // Linked Documents History
                     {
@@ -65,10 +65,12 @@ module.exports = function (app) {
                         icon: '',
                         text: 'view_tracking_sheet_linked_documents_history',
                         shortcut: false,
-                        callback: callback,
+                        callback: self.viewTrackingSheet,
                         params: ['view_tracking_sheet_linked_documents_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // Attachments History
                     {
@@ -76,10 +78,12 @@ module.exports = function (app) {
                         icon: '',
                         text: 'view_tracking_sheet_attachments_history',
                         shortcut: false,
-                        callback: callback,
+                        callback: self.viewTrackingSheet,
                         params: ['view_tracking_sheet_attachments_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // Merged Linked Document History
                     {
@@ -87,10 +91,12 @@ module.exports = function (app) {
                         icon: '',
                         text: 'view_tracking_sheet_merged_linked_document_history',
                         shortcut: false,
-                        callback: callback,
+                        callback: self.viewTrackingSheet,
                         params: ['view_tracking_sheet_merged_linked_document_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // Linked Entities History
                     {
@@ -98,10 +104,12 @@ module.exports = function (app) {
                         icon: '',
                         text: 'view_tracking_sheet_linked_entities_history',
                         shortcut: false,
-                        callback: callback,
+                        callback: self.viewTrackingSheet,
                         params: ['view_tracking_sheet_linked_entities_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // Destination History
                     {
@@ -109,12 +117,12 @@ module.exports = function (app) {
                         icon: '',
                         text: 'view_tracking_sheet_destination_history',
                         shortcut: false,
-                        callback: callback,
+                        callback: self.viewTrackingSheet,
                         params: ['view_tracking_sheet_destination_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            return checkToShowAction(action, model) && info.documentClass === "outgoing";
+                            return info.documentClass === "outgoing";
                         }
                     },
                     // Content View History
@@ -123,10 +131,12 @@ module.exports = function (app) {
                         icon: '',
                         text: 'view_tracking_sheet_content_view_history',
                         shortcut: false,
-                        callback: callback,
+                        callback: self.viewTrackingSheet,
                         params: ['view_tracking_sheet_content_view_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // SMS Logs
                     {
@@ -135,10 +145,12 @@ module.exports = function (app) {
                         text: 'view_tracking_sheet_sms_logs',
                         shortcut: false,
                         hide: true,
-                        callback: callback,
+                        callback: self.viewTrackingSheet,
                         params: ['view_tracking_sheet_sms_logs', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-red",
-                        checkShow: checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     },
                     // Outgoing Delivery Reports
                     {
@@ -146,12 +158,12 @@ module.exports = function (app) {
                         icon: '',
                         text: 'view_tracking_sheet_outgoing_delivery_reports',
                         shortcut: false,
-                        callback: callback,
+                        callback: self.viewTrackingSheet,
                         params: ['view_tracking_sheet_outgoing_delivery_reports', 'grid'],
                         class: "action-green",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            return checkToShowAction(action, model) && info.documentClass === "outgoing";
+                            return info.documentClass === "outgoing";
                         }
                     },
                     // Full History
@@ -160,10 +172,12 @@ module.exports = function (app) {
                         icon: '',
                         text: 'view_tracking_sheet_full_history',
                         shortcut: false,
-                        callback: callback,
+                        callback: self.viewTrackingSheet,
                         params: ['view_tracking_sheet_full_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkToShowAction
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     }
                 ];
             };
@@ -361,6 +375,14 @@ module.exports = function (app) {
                 viewTrackingSheetPrint: function (heading, popupHeading) {
                     self.printTrackingSheet(heading, popupHeading);
                 }
+            };
+
+            self.viewTrackingSheet = function (record, params, $event) {
+                self
+                    .controllerMethod
+                    .viewTrackingSheetPopup(record, params, $event).then(function (result) {
+
+                });
             };
 
             var getVsId = function (document) {
@@ -844,8 +866,7 @@ module.exports = function (app) {
                 var exportData = self.getExportData(heading, popupHeading);
                 if (!exportData.headerNames.length) {
                     toast.info(langService.get('no_data_to_export'));
-                }
-                else {
+                } else {
                     $http.post(urlService.exportToExcel, exportData)
                     //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
                         .then(function (result) {
@@ -870,8 +891,7 @@ module.exports = function (app) {
                 var exportData = self.getExportData(heading, popupHeading);
                 if (!exportData.headerNames.length) {
                     toast.info(langService.get('no_data_to_print'));
-                }
-                else {
+                } else {
                     return $http.post(urlService.exportToPdf, exportData)
                     //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
                         .then(function (result) {

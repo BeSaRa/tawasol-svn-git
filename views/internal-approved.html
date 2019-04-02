@@ -106,10 +106,8 @@
                                         <td md-cell class="p-r0" ng-if="ctrl.selectedApprovedInternals.length < 2">
                                             <div layout-align="start center" flex ng-if="!ctrl.selectedApprovedInternals.length
                                                           || ctrl.selectedApprovedInternals.length===1 && ctrl.selectedApprovedInternals[0].generalStepElm.workObjectNumber === approvedInternal.generalStepElm.workObjectNumber">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="approvedInternal"
-                                                                        shortcut="true">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="approvedInternal">
                                                 </grid-actions-directive>
                                             </div>
                                         </td>

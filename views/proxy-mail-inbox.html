@@ -233,10 +233,8 @@
                                         <td md-cell ng-if="ctrl.selectedProxyMailInboxes.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedProxyMailInboxes.length
                                                   || ctrl.selectedProxyMailInboxes.length===1 && ctrl.selectedProxyMailInboxes[0].generalStepElm.workObjectNumber === proxyMailInbox.generalStepElm.workObjectNumber">
-                                                <grid-actions-directive menu-direction="horizontal"
-                                                                        grid-actions="ctrl.gridActions"
-                                                                        model="proxyMailInbox"
-                                                                        shortcut="true">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="proxyMailInbox">
                                                 </grid-actions-directive>
                                             </div>
                                         </td>
