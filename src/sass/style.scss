@@ -5,8 +5,8 @@
 @import "import/material-rtl";
 @import "import/media_query";
 @import "import/colors";
-@import "import/correspondence-workflow";
 @import "themes/default-theme";
+@import "import/correspondence-workflow";
 @import "import/select-header";
 @import "import/virtual-repeater";
 @import "import/simple-checkbox";
@@ -38,6 +38,7 @@ body, html, #main-view, #sub-view-wrapper {
   right: 0;
   bottom: 0;
   left: 0;
+  //background-color: rgba(0, 0, 0, .5);
   background-color: transparent;
   z-index: 100;
 }
