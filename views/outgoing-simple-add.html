@@ -115,7 +115,7 @@
                                             <md-icon md-svg-icon="format-align-justify"></md-icon>
                                             <span>{{lang.outgoing_create_content}}</span>
                                             <span flex></span>
-                                            <md-switch ng-disabled="!!ctrl.outgoing.vsId"
+                                            <md-switch ng-disabled="!!ctrl.outgoing.vsId || !ctrl.employeeService.hasPermissionTo('OUTGOING_PAPER')"
                                                        class="m0 top-switch-handler"
                                                        ng-true-value="1" ng-false-value="0"
                                                        ng-click="ctrl.preventPropagation($event)"
