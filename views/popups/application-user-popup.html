@@ -371,6 +371,15 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="defaultEditMode">{{lang.default_edit_mode}}</label>
+                                        <md-select id="defaultEditMode" name="defaultEditMode"
+                                                   ng-model="ctrl.applicationUser.defaultEditMode">
+                                            <md-option ng-value="0">{{lang.both_editor}}</md-option>
+                                            <md-option ng-value="1">{{lang.oos}}</md-option>
+                                            <md-option ng-value="2">{{lang.desktop}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
                                 </div>
                             </div>
                         </md-content>
