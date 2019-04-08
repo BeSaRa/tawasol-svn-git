@@ -439,6 +439,15 @@
                                 </div>
                             </div>
                             <div layout="row" class="p20">
+                                <div flex>
+                                    <!-- remove MAIP security -->
+                                    <md-switch ng-model="ctrl.globalSetting.removeMAIPSecurity"
+                                               aria-label="{{lang.remove_maip_security}}">
+                                        <span>{{lang.remove_maip_security}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('removeMAIPSecurity')}}
+                                    </md-switch>
+                                </div>
+                            </div>
+                            <div layout="row" class="p20">
                                 <!-- Document Security Schema -->
                                 <md-input-container flex>
                                     <label for="securitySchema">{{lang.documents_security_schema}}</label>

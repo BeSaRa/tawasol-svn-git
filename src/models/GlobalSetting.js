@@ -52,6 +52,7 @@ module.exports = function (app) {
             self.thumbnailMode = null;
             self.allowSendWFRelatedBook = null;
             self.allowTwoWaysRelatedBook = false;
+            self.removeMAIPSecurity = true;
             //endregion
 
             // every model has required fields
