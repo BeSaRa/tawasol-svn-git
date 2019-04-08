@@ -230,5 +230,27 @@ module.exports = function (app) {
                 }
             });
         };
+
+
+        self.showHelp = function ($event) {
+            dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('help'),
+                escToCancel: true,
+                targetEvent: $event,
+                bindToController: true,
+                controller: function ($sce) {
+                    'ngInject';
+                    var self = this;
+                    self.close = function () {
+                        dialog.cancel();
+                    };
+                },
+                controllerAs: 'ctrl',
+                locals: {
+                    supportEmail: $sce.trustAsHtml(rootEntity.getGlobalSettings().supportEmail),
+                    supportPhone: $sce.trustAsHtml(rootEntity.getGlobalSettings().supportPhoneNo)
+                }
+            });
+        };
     });
 };

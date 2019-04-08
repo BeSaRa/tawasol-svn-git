@@ -67,7 +67,15 @@ module.exports = function (app) {
                 Internal.prototype.launchWorkFlowAndCheckApprovedInternal = function ($event, action, tab) {
                     correspondenceService = this.getCorrespondenceService();
                     var info = this.getInfo();
-                    if (info.documentClass.toLowerCase() === 'internal' && info.docStatus === 24 || info.isPaper) {
+                    var self = this;
+
+                    // internal electronic and not approved
+                    if (info.documentClass.toLowerCase() === 'internal' && info.docStatus < 24 && !info.isPaper) {
+                        return dialog.confirmMessage(langService.get("confirm_launch_document_has_active_workflow")).then(function () {
+                             correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab);
+                        })
+                    }
+                    else if (info.isPaper) {
                         return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
                     } else {
                         return correspondenceService.checkWorkFlowForVsId(info.vsId).then(function (result) {

@@ -169,7 +169,8 @@ module.exports = function (app) {
                             dialog.hide();
                         })
                         .catch(function (error) {
-                            self.disableSaveTimeout = true;
+                            toast.error(error);
+                            self.disableSaveTimeout = false;
                             return $q.reject(error);
                         });
                 }, 3000);

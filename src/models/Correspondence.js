@@ -493,7 +493,8 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 var self = this;
 
-                if (!ignoreConformation && !info.isPaper) {
+                // electronic not approved
+                if (!ignoreConformation && info.docStatus < 24 && !info.isPaper) {
                     return dialog.confirmMessage(langService.get("confirm_launch_document_has_active_workflow")).then(function () {
                         correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab, isDeptIncoming);
                     })
