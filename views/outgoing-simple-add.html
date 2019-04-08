@@ -127,7 +127,7 @@
                                         </div>
                                     </accordion-title>
                                     <accordion-content layout="column">
-                                        <div layout-align="start center">
+                                        <div layout-align="start center" layout="=row">
                                             <manage-content-directive
                                                     edit-content="ctrl.editContent"
                                                     display-prepare="!ctrl.outgoing.addMethod"
@@ -138,6 +138,13 @@
                                                     templates="ctrl.templates"
                                                     simple-view-url="ctrl.simpleViewUrl"
                                                     is-simple-add="ctrl.simpleAdd"></manage-content-directive>
+
+                                            <md-button class="md-raised">
+                                                <md-icon md-svg-icon="attachment"></md-icon>
+                                                {{lang.attachments}}</md-button>
+                                            <md-button class="md-raised">
+                                                <md-icon md-svg-icon="note-multiple-outline"></md-icon>
+                                                {{lang.linked_documents}}</md-button>
                                         </div>
                                         <div flex layout="row">
                                             <!--document viewer editor-->

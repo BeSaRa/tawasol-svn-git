@@ -104,7 +104,7 @@
                                         <span>{{lang.incoming_create_content}}</span>
                                     </accordion-title>
                                     <accordion-content>
-                                        <div layout-align="start center">
+                                        <div layout-align="start center" layout="row">
                                             <!--display-prepare="!ctrl.incoming.addMethod"-->
                                             <manage-content-directive
                                                     edit-content="ctrl.receive"
@@ -116,7 +116,15 @@
                                                     templates="ctrl.templates"
                                                     simple-view-url="ctrl.simpleViewUrl"
                                                     is-simple-add="ctrl.simpleAdd"></manage-content-directive>
+
+                                            <md-button class="md-raised">
+                                                <md-icon md-svg-icon="attachment"></md-icon>
+                                                {{lang.attachments}}</md-button>
+                                            <md-button class="md-raised">
+                                                <md-icon md-svg-icon="note-multiple-outline"></md-icon>
+                                                {{lang.linked_documents}}</md-button>
                                         </div>
+
                                         <div layout="row">
                                             <!--document viewer editor-->
                                             <iframe class="simple-viewer-iframe" id="document-viewer"

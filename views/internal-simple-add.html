@@ -91,12 +91,13 @@
                                             <md-icon md-svg-icon="format-align-justify"></md-icon>
                                             <span>{{lang.internal_create_content}}</span>
                                             <span flex></span>
-                                            <md-switch ng-disabled="!!ctrl.internal.vsId || !ctrl.employeeService.hasPermissionTo('INTERNAL_PAPER')"
-                                                       class="m0 top-switch-handler"
-                                                       ng-true-value="1" ng-false-value="0"
-                                                       ng-click="ctrl.preventPropagation($event)"
-                                                       ng-change="ctrl.checkChangeInternalType()"
-                                                       ng-model="ctrl.internal.addMethod">
+                                            <md-switch
+                                                    ng-disabled="!!ctrl.internal.vsId || !ctrl.employeeService.hasPermissionTo('INTERNAL_PAPER')"
+                                                    class="m0 top-switch-handler"
+                                                    ng-true-value="1" ng-false-value="0"
+                                                    ng-click="ctrl.preventPropagation($event)"
+                                                    ng-change="ctrl.checkChangeInternalType()"
+                                                    ng-model="ctrl.internal.addMethod">
                                                 {{lang.internal_document_type}} :
                                                 {{ctrl.internal.getMethodTypeInternal()}}
                                             </md-switch>
@@ -105,16 +106,26 @@
                                     <accordion-content>
                                         <div layout-align="start center" layout="row">
                                             <manage-content-directive
-                                                    edit-content="ctrl.editContent"
-                                                    display-prepare="!ctrl.internal.addMethod"
-                                                    document-information="ctrl.documentInformation"
-                                                    vs-id="ctrl.internal.vsId"
-                                                    document="ctrl.internal"
-                                                    signatures-count="ctrl.internal.signaturesCount"
-                                                    templates="ctrl.templates"
-                                                    simple-view-url="ctrl.simpleViewUrl"
-                                                    is-simple-add="ctrl.simpleAdd"
-                                                    flex></manage-content-directive>
+                                                        edit-content="ctrl.editContent"
+                                                        display-prepare="!ctrl.internal.addMethod"
+                                                        document-information="ctrl.documentInformation"
+                                                        vs-id="ctrl.internal.vsId"
+                                                        document="ctrl.internal"
+                                                        signatures-count="ctrl.internal.signaturesCount"
+                                                        templates="ctrl.templates"
+                                                        simple-view-url="ctrl.simpleViewUrl"
+                                                        is-simple-add="ctrl.simpleAdd"></manage-content-directive>
+
+                                            <div flex>
+                                                <md-button class="md-raised">
+                                                    <md-icon md-svg-icon="attachment"></md-icon>
+                                                    {{lang.attachments}}
+                                                </md-button>
+                                                <md-button class="md-raised">
+                                                    <md-icon md-svg-icon="note-multiple-outline"></md-icon>
+                                                    {{lang.linked_documents}}
+                                                </md-button>
+                                            </div>
 
                                             <!--toggle Iframe-->
                                             <md-button ng-click="!ctrl.toggleDocumentViewer($event)"
