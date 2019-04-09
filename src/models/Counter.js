@@ -76,8 +76,8 @@ module.exports = function (app) {
                         'userInbox',
                         'userFavouriteDocument',
                         'foldersCount',
-                        function (currentValue, counter, employee) {
-                            currentValue = employee.inRegistry() ? currentValue : (counter.groupMail + currentValue);
+                        function (currentValue, counter, employee, property) {
+                            currentValue = employee.inRegistry() ? currentValue : (counter.groupMail[property] + currentValue);
                             return currentValue;
                         }
                     ],
@@ -87,8 +87,8 @@ module.exports = function (app) {
                     menu_item_department_inbox: [
                         'deptInbox',
                         'readyToExport',
-                        'deptReturned',
-                        'deptSendDocs'
+                        'deptReturned'
+                        // 'deptSendDocs'
                     ],
                     menu_item_dep_incoming: [
                         'deptInbox'
@@ -98,9 +98,6 @@ module.exports = function (app) {
                     ],
                     menu_item_dep_returned: [
                         'deptReturned'
-                    ],
-                    menu_item_dep_sent_items: [
-                        'deptSendDocs'
                     ],
                     menu_item_user_favorite_documents: [
                         'userFavouriteDocument'
@@ -117,7 +114,7 @@ module.exports = function (app) {
                     menu_item_folders: [
                         'foldersCount'
                     ],
-                    menu_item_g2g:[
+                    menu_item_g2g: [
                         'g2gDeptInbox',
                         'g2gDeptReturned'
                     ],
@@ -155,7 +152,6 @@ module.exports = function (app) {
             self.readyToExport = null;
             self.deptInbox = null;
             self.deptReturned = null;
-            self.deptSendDocs = null;
 
             self.userFavouriteDocument = null;
 
@@ -186,8 +182,11 @@ module.exports = function (app) {
                 return requiredFields;
             };
 
-            Counter.prototype.getCount = function (propertyName) {
-                return self.maped.hasOwnProperty(propertyName) ? self.maped[propertyName] : null;
+            Counter.prototype.getCount = function (propertyName, property) {
+                if (property === 'second' && self.maped.hasOwnProperty(propertyName) && self.maped[propertyName][property] < 0) {
+                    return false;
+                }
+                return self.maped.hasOwnProperty(propertyName) ? self.maped[propertyName][property] : null;
             };
 
             Counter.prototype.reverseMap = function () {
@@ -202,10 +201,24 @@ module.exports = function (app) {
                 var self = this;
                 self.reverseMap();
                 _.map(maps, function (items, property) {
-                    self.maped[property] = employeeService.employeeHasPermissionTo(property) ? (_.reduce(items, function (oldValue, currentValue) {
+
+                    if (!self.maped.hasOwnProperty(property)) {
+                        self.maped[property] = {
+                            first: 0,
+                            second: 0
+                        }
+                    }
+
+                    self.maped[property].first = employeeService.employeeHasPermissionTo(property) ? (_.reduce(items, function (oldValue, currentValue) {
                         var hasPermission = reversedMap.hasOwnProperty(currentValue) ? employeeService.employeeHasPermissionTo(reversedMap[currentValue]) : true;
-                        return typeof currentValue === 'function' ? currentValue(oldValue, self, employeeService.getEmployee()) : (hasPermission ? oldValue + self[currentValue] : oldValue);
+                        return typeof currentValue === 'function' ? currentValue(oldValue, self, employeeService.getEmployee(), 'first') : (hasPermission ? oldValue + self[currentValue].first : oldValue);
                     }, 0)) : 0;
+
+                    self.maped[property].second = employeeService.employeeHasPermissionTo(property) ? (_.reduce(items, function (oldValue, currentValue) {
+                        var hasPermission = reversedMap.hasOwnProperty(currentValue) ? employeeService.employeeHasPermissionTo(reversedMap[currentValue]) : true;
+                        return typeof currentValue === 'function' ? currentValue(oldValue, self, employeeService.getEmployee(), 'second') : (hasPermission ? oldValue + (self[currentValue].second === -1 ? 0 : self[currentValue].second) : oldValue);
+                    }, 0)) : 0;
+
                 });
             };
 

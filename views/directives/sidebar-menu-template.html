@@ -13,9 +13,11 @@
                ui-sref="{{item.state}}">
                 <md-icon ng-if="menu.level == 1" class="sidebar-menu-icon" md-svg-icon="{{item.icon}}"></md-icon>
                 <span class="menu-item-text" md-truncate md-highlight-flags="i" md-highlight-text="menu.search" flex>{{lang.get(item.lang_key)}}</span>
-                <span ng-if="menu.counters.counter.getCount(item.lang_key)"
+                <span ng-if="menu.counters.counter.getCount(item.lang_key,'first')"
                       ng-class="{'red':item.hasChildrenItems(),'orange':!item.hasChildrenItems()}"
-                      class="menu-counter">{{menu.counters.counter.getCount(item.lang_key)}}</span>
+                      class="menu-counter">{{menu.counters.counter.getCount(item.lang_key,'first')}}</span>
+                <span ng-if="menu.counters.counter.getCount(item.lang_key,'second')"
+                      class="menu-counter blue">{{menu.counters.counter.getCount(item.lang_key,'second')}}</span>
                 <span ng-if="item.children.length" class="arrow-down"><md-icon
                         md-svg-icon="chevron-right"></md-icon></span>
             </a>
@@ -25,9 +27,11 @@
                ui-sref="{{menu.getMenuState(item)}}">
                 <md-icon ng-if="menu.level == 1" class="sidebar-menu-icon" md-svg-icon="{{item.icon}}"></md-icon>
                 <span class="menu-item-text" md-truncate md-highlight-flags="i" md-highlight-text="menu.search" flex>{{lang.get(item.lang_key)}}</span>
-                <span ng-if="menu.counters.counter.getCount(item.lang_key)"
+                <span ng-if="menu.counters.counter.getCount(item.lang_key,'first')"
                       ng-class="{'red':item.hasChildrenItems(),'orange':!item.hasChildrenItems()}"
-                      class="menu-counter">{{menu.counters.counter.getCount(item.lang_key)}}</span>
+                      class="menu-counter">{{menu.counters.counter.getCount(item.lang_key,'first')}}</span>
+                <span ng-if="menu.counters.counter.getCount(item.lang_key,'second')"
+                      class="menu-counter blue">{{menu.counters.counter.getCount(item.lang_key,'second')}}</span>
                 <span ng-if="item.children.length" class="arrow-down"><md-icon
                         md-svg-icon="chevron-right"></md-icon></span>
             </a>

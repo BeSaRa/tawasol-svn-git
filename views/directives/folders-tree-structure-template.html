@@ -12,7 +12,7 @@
                                 <md-icon md-svg-icon="{{ctrl.icon ? ctrl.icon : 'folder'}}"></md-icon>
                             </div>
                             <div flex layout="row" layout-align="start center">{{folder.getTranslatedName()}} <span
-                                    ng-if="ctrl.count && ctrl.counterHasFolderId(folder)"> &nbsp;&nbsp; ( {{ctrl.counterService.folderCount[folder.id]}} ) &nbsp;&nbsp;</span>
+                                    ng-if="ctrl.count && ctrl.counterHasFolderId(folder)"> &nbsp;&nbsp; ( {{ctrl.counterService.folderCount[folder.id].first}} ) &nbsp;&nbsp;</span>
                             </div>
                         </div>
                     </md-button>

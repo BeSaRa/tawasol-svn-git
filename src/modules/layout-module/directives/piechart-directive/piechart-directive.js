@@ -12,7 +12,6 @@ module.exports = function (app) {
 
                 var myChart;
                 var canvas = element.find('canvas');
-                console.log(counterService.counter.getCount('menu_item_dep_incoming'));
                 var config = {
                     type: 'pie',
                     data: {
@@ -21,9 +20,9 @@ module.exports = function (app) {
                         datasets: [{
                             label: '# of Votes',
                             data: [
-                                counterService.counter.getCount('menu_item_dep_returned'),
-                                counterService.counter.getCount('menu_item_dep_incoming'),
-                                counterService.counter.getCount('menu_item_dep_ready_to_export')
+                                counterService.counter.getCount('menu_item_dep_returned', 'first'),
+                                counterService.counter.getCount('menu_item_dep_incoming', 'first'),
+                                counterService.counter.getCount('menu_item_dep_ready_to_export', 'first')
                             ],
                             backgroundColor: [
                                 'rgba(54, 162, 235, 0.7)',

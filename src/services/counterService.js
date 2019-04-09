@@ -12,8 +12,14 @@ module.exports = function (app) {
         self.serviceName = 'counterService';
         self.counter = {};
         self.folderCount = {};
-        self.g2gIncomingCount = 0;
-        self.g2gReturnedCount = 0;
+        self.g2gIncomingCount = {
+            first: 0,
+            second: 0
+        };
+        self.g2gReturnedCount = {
+            first: 0,
+            second: 0
+        };
 
         /**
          * @description load all counters for service except G2G counters
@@ -26,13 +32,21 @@ module.exports = function (app) {
                 .then(function (folder) {
                     self.folderCount = folder.data.rs;
 
-                    var folderCount = _.reduce(self.folderCount, function (oldValue, currentValue) {
-                        return oldValue + currentValue;
+                    var firstCount = _.reduce(folder.data.rs, function (oldValue, currentValue) {
+                        return oldValue + currentValue.first;
                     }, 0);
+
+                    var secondCount = _.reduce(folder.data.rs, function (oldValue, currentValue) {
+                        return oldValue + currentValue.second;
+                    }, 0);
+
                     return $http.get(urlService.counters, {
                         excludeLoading: true
                     }).then(function (result) {
-                        result.data.rs.foldersCount = folderCount;
+                        result.data.rs.foldersCount = {
+                            first: firstCount,
+                            second: secondCount
+                        };
                         // keep the g2g counters with original values unless reloaded by service after given interval
                         result.data.rs.g2gDeptInbox = angular.copy(self.g2gIncomingCount);
                         result.data.rs.g2gDeptReturned = angular.copy(self.g2gReturnedCount);

@@ -107,7 +107,7 @@ module.exports = function (app) {
 
         self.counter = {
             from: 0,
-            to: counterService.counter[currentDataSource()],
+            to: counterService.counter[currentDataSource()].first,
             update: true
         };
 

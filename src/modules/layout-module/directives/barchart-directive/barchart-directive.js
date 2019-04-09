@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('barchartDirective', function ($timeout,  counterService , langService, $window) {
+    app.directive('barchartDirective', function ($timeout, counterService, langService, $window) {
         'ngInject';
         return {
             restrict: 'E',
@@ -18,9 +18,9 @@ module.exports = function (app) {
                         datasets: [{
                             label: 'Books',
                             data: [
-                                counterService.counter.getCount('menu_item_dep_returned'),
-                                counterService.counter.getCount('menu_item_dep_incoming'),
-                                counterService.counter.getCount('menu_item_dep_ready_to_export')
+                                counterService.counter.getCount('menu_item_dep_returned','first'),
+                                counterService.counter.getCount('menu_item_dep_incoming','first'),
+                                counterService.counter.getCount('menu_item_dep_ready_to_export','first')
                             ],
                             backgroundColor: [
                                 'rgba(54, 162, 235, 0.7)',
