@@ -102,7 +102,7 @@ module.exports = function (app) {
         self.followupStatus_DL = null;
         // get the main sites for selected correspondence site type
         self.selectedDistributionList = null;
-
+        self.selectedMainSite = null;
 
         /**
          * create current date + given days if provided.
@@ -480,6 +480,13 @@ module.exports = function (app) {
                     self.subSearchResult = [];
                     self.mainSites = result;
                     self.selectedMainSite = null;
+
+                    if (self.selectedSiteType && self.selectedSiteType.lookupKey === 1) {
+                        self.selectedMainSite = _.find(result, function (site) {
+                            return site.id === 10000000;
+                        });
+                        self.selectedMainSite ? self.getSubSites() : null;
+                    }
                 });
             } else {
                 self.mainSites = [];
@@ -493,7 +500,6 @@ module.exports = function (app) {
          * @description Get sub sites on change of main site
          * @param $event
          */
-        self.selectedMainSite = null;
         self.getSubSites = function ($event) {
             correspondenceViewService.correspondenceSiteSearch('sub', {
                 type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
@@ -503,6 +509,11 @@ module.exports = function (app) {
             }).then(function (result) {
                 self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+
+                if (self.subSearchResult.length === 1) {
+                    self.subSearchSelected.push(self.subSearchResult[0]);
+                }
+
                 // bind sub site search
                 if (self.isSimpleCorrespondenceSiteSearchType) {
                     self.simpleSubSearchText = '';

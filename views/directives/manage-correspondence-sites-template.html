@@ -22,6 +22,7 @@
                     <md-input-container flex>
                         <label for="mainSite">{{lang.main_site}}</label>
                         <md-select id="mainSite" ng-model="ctrl.selectedMainSite"
+                                   ng-model-options="{trackBy: '$value.id'}"
                                    ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
                                    ng-change="ctrl.getSubSites($event)"
                                    md-on-close="ctrl.clearSearchText('inlineMainSite')"

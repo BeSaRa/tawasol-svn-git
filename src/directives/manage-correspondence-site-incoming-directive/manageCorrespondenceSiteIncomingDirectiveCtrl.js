@@ -74,6 +74,8 @@ module.exports = function (app) {
         // default sites info to followupStatusDate
         self.sitesInfoCCFollowupStatusDate = null;
 
+        self.selectedMainSite = null;
+
         /**
          * create current date + given days if provided.
          * @param days
@@ -358,6 +360,13 @@ module.exports = function (app) {
                     self.subSearchResult = [];
                     self.mainSites = result;
                     self.selectedMainSite = null;
+
+                    if (self.selectedSiteType && self.selectedSiteType.lookupKey === 1) {
+                        self.selectedMainSite = _.find(result, function (site) {
+                            return site.id === 10000000;
+                        });
+                        self.selectedMainSite ? self.getSubSites() : null;
+                    }
                 });
             }
             else {
@@ -373,7 +382,6 @@ module.exports = function (app) {
          * @description Get sub sites on change of main site
          * @param $event
          */
-        self.selectedMainSite = null;
         self.getSubSites = function ($event) {
             correspondenceViewService.correspondenceSiteSearch('sub', {
                 type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
