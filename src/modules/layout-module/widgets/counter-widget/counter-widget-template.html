@@ -47,7 +47,7 @@
     </md-button>
     <div class="counter-widget-content" layout="column">
         <div class="counter-widget-count">
-            <h4 counter-directive="ctrl.counter"></h4>
+            <a href="#" ng-click="ctrl.counterClicked($event)" class="counter-count" counter-directive="ctrl.counter"></a>
         </div>
         <div class="counter-widget-label">
             <h4 ng-if="!ctrl.hideLabel" ng-dblclick="ctrl.onHideLabel($event)">

@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                   counterService,
                                                   LayoutWidgetOption,
                                                   employeeService,
+                                                  $state,
                                                   $scope) {
         'ngInject';
         var self = this;
@@ -18,6 +19,33 @@ module.exports = function (app) {
             'bg-purple',
             'bg-green'
         ];
+        // data source permissions to check it if user has permission to run the callback later.
+        self.dataSourcePermissions = {
+            userInbox: {
+                permission: 'USER_INBOX',
+                state: 'app.inbox.user-inbox'
+            },
+            outgoingAccepted: {
+                permission: 'OUTGOING_READY_TO_SEND',
+                state: 'app.outgoing.ready-to-send'
+            },
+            outgoingDraft: {
+                permission: 'COMPLETE_DRAFT_OUTGOING_DOCUMENTS',
+                state: 'app.outgoing.draft'
+            },
+            outgoingPrepare: {
+                permission: 'PREPARE_OUTGOING_DOCUMENTS',
+                state: 'app.outgoing.prepare'
+            },
+            outgoingRejected: {
+                permission: 'OUTGOING_REJECTED',
+                state: 'app.outgoing.rejected'
+            },
+            readyToExport: {
+                permission: 'OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE',
+                state: 'app.department-inbox.ready-to-export'
+            }
+        };
 
         self.dataSources = [
             {
@@ -105,6 +133,15 @@ module.exports = function (app) {
             self.hideLabel = false;
         };
 
+        self.counterClicked = function ($event) {
+            var option = self.dataSourcePermissions[self.options.dataSource.optionValue];
+            $event.preventDefault();
+            if (self.employeeService.hasPermissionTo(option.permission)) {
+                $state.go(option.state);
+                return;
+            }
+        };
+
         self.counter = {
             from: 0,
             to: counterService.counter[currentDataSource()].first,
@@ -171,7 +208,8 @@ module.exports = function (app) {
             counterService
                 .loadCounters()
                 .then(function (result) {
-                    _setCountTo(result[self.options.dataSource.optionValue]);
+                    console.log(result);
+                    _setCountTo(result[self.options.dataSource.optionValue].first);
                 })
         };
 
