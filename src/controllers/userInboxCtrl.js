@@ -507,7 +507,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.forward = function (userInbox, $event, defer) {
-            debugger;
             userInbox.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)

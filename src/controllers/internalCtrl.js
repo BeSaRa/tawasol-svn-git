@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('internalCtrl', function (Internal,
                                              // classifications,
                                              $state,
+                                             $q,
                                              internalService,
                                              queueStatusService,
                                              organizationService,
@@ -132,43 +133,53 @@ module.exports = function (app) {
                 }
                 promise = self.internal
                     .saveDocumentWithContent(self.documentInformation);
+
+                return true;
             } else {
                 promise = self.internal
                     .saveDocument(status)
+                return  promise.then(function (result) {
+                    self.internal = result;
+                    self.model = angular.copy(self.internal);
+                    self.documentInformationExist = !!angular.copy(self.documentInformation);
+
+
+                    /*If content file was attached */
+                    if (self.internal.contentFile) {
+                        return  self.internal.addDocumentContentFile()
+                            .then(function () {
+                                self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
+                                self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
+
+                                saveCorrespondenceFinished(status);
+                            })
+                    } else if (duplicateVersion && self.internal.hasContent() && self.internal.addMethod) {
+                        return   self.internal
+                            .attacheContentUrl(self.documentInformation)
+                            .then(function () {
+                                self.contentFileExist = true;
+                                self.contentFileSizeExist = true;
+                                saveCorrespondenceFinished(status);
+                            });
+                    } else {
+                        self.contentFileExist = false;
+                        self.contentFileSizeExist = false;
+
+                        saveCorrespondenceFinished(status);
+                        return  true;
+                    }
+                }).catch(function (error) {
+                        self.saveInProgress = false;
+                        return $q.reject(error);
+                    });
             }
-            promise.then(function (result) {
-                self.internal = result;
-                self.model = angular.copy(self.internal);
-                self.documentInformationExist = !!angular.copy(self.documentInformation);
+        };
 
-
-                /*If content file was attached */
-                if (self.internal.contentFile) {
-                    self.internal.addDocumentContentFile()
-                        .then(function () {
-                            self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
-                            self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
-
-                            saveCorrespondenceFinished(status);
-                        })
-                } else if (duplicateVersion && self.internal.hasContent() && self.internal.addMethod) {
-                    self.internal
-                        .attacheContentUrl(self.documentInformation)
-                        .then(function () {
-                            self.contentFileExist = true;
-                            self.contentFileSizeExist = true;
-                            saveCorrespondenceFinished(status);
-                        });
-                } else {
-                    self.contentFileExist = false;
-                    self.contentFileSizeExist = false;
-
-                    saveCorrespondenceFinished(status);
-                }
-            })
-                .catch(function (error) {
-                    self.saveInProgress = false;
-                });
+        self.saveCorrespondenceAndPrintBarcode = function ($event) {
+          self.saveCorrespondence()
+              .then(function () {
+                  self.docActionPrintBarcode(self.internal,$event);
+              })
         };
 
         var saveCorrespondenceFinished = function (status) {

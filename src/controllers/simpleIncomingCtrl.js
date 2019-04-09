@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('simpleIncomingCtrl', function (Incoming,
                                                    // classifications,
                                                    $state,
+                                                   $q,
                                                    incomingService,
                                                    queueStatusService,
                                                    organizationService,
@@ -112,7 +113,7 @@ module.exports = function (app) {
                     .saveDocument(status);
             }
 
-            promise.then(function (result) {
+          return  promise.then(function (result) {
                 self.incoming = result;
                 self.model = angular.copy(self.incoming);
                 self.documentInformationExist = !!angular.copy(self.documentInformation);
@@ -121,7 +122,7 @@ module.exports = function (app) {
 
                 /*If content file was attached */
                 if (self.incoming.contentFile) {
-                    self.incoming.addDocumentContentFile()
+                   return  self.incoming.addDocumentContentFile()
                         .then(function () {
                             self.contentFileExist = !!(self.incoming.hasOwnProperty('contentFile') && self.incoming.contentFile);
                             self.contentFileSizeExist = !!(self.contentFileExist && self.incoming.contentFile.size);
@@ -134,11 +135,20 @@ module.exports = function (app) {
                     self.contentFileSizeExist = false;
 
                     saveCorrespondenceFinished(status, newId);
+                    return  true;
                 }
 
             }).catch(function (error) {
                 toast.error(error);
+                return $q.reject(error);
             });
+        };
+
+        self.saveCorrespondenceAndPrintBarcode = function($event){
+            self.saveCorrespondence()
+                .then(function () {
+                    self.docActionPrintBarcode(self.incoming,$event);
+                })
         };
 
         self.requestCompleted = false;

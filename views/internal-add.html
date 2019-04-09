@@ -143,6 +143,13 @@
                                 {{lang.internal_save}}
                             </md-button>
                         </div>
+                        <div ng-if="ctrl.internal.addMethod">
+                            <md-button ng-click="ctrl.saveCorrespondenceAndPrintBarcode()"
+                                       ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.internal.contentFile))"
+                                       class="md-raised">
+                                {{lang.internal_save_print_barcode}}
+                            </md-button>
+                        </div>
                         <div ng-if="!ctrl.internal.addMethod">
                             <md-button ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid
                                             || !(ctrl.documentInformation || ctrl.internal.contentFile)"

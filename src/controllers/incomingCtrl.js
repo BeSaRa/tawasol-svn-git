@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('incomingCtrl', function (Incoming,
                                              // classifications,
                                              $state,
+                                             $q,
                                              incomingService,
                                              queueStatusService,
                                              organizationService,
@@ -137,7 +138,7 @@ module.exports = function (app) {
                     .saveDocument(status);
             }
 
-            promise.then(function (result) {
+         return    promise.then(function (result) {
                 self.incoming = result;
                 self.model = angular.copy(self.incoming);
                 self.documentInformationExist = !!angular.copy(self.documentInformation);
@@ -146,7 +147,7 @@ module.exports = function (app) {
 
                 /*If content file was attached */
                 if (self.incoming.contentFile) {
-                    self.incoming.addDocumentContentFile()
+                 return self.incoming.addDocumentContentFile()
                         .then(function () {
                             self.contentFileExist = !!(self.incoming.hasOwnProperty('contentFile') && self.incoming.contentFile);
                             self.contentFileSizeExist = !!(self.contentFileExist && self.incoming.contentFile.size);
@@ -154,7 +155,7 @@ module.exports = function (app) {
                             saveCorrespondenceFinished(status, newId);
                         })
                 } else if (duplicateVersion && self.incoming.hasContent()) {
-                    self.incoming
+                  return   self.incoming
                         .attacheContentUrl(self.documentInformation)
                         .then(function () {
                             self.contentFileExist = true;
@@ -166,6 +167,7 @@ module.exports = function (app) {
                     self.contentFileSizeExist = false;
 
                     saveCorrespondenceFinished(status, newId);
+                    return  true;
                 }
 
             })
@@ -174,9 +176,19 @@ module.exports = function (app) {
                     // don't show the error in g2g receive becouse handled by error dialog
                     if (!self.receiveG2G)
                         toast.error(error);
+
+                    return $q.reject(error);
                 });
         };
 
+        
+        self.saveCorrespondenceAndPrintBarcode =function ($event) {
+            self.saveCorrespondence()
+                .then(function () {
+                    self.docActionPrintBarcode(self.incoming,$event);
+                })
+        };
+        
         var saveCorrespondenceFinished = function (status, newId) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             counterService.loadCounters();

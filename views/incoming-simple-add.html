@@ -60,6 +60,11 @@
                                             ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                         {{lang.incoming_save}}
                                     </md-button>
+                                    <md-button
+                                            ng-disabled="ctrl.document_properties.$invalid || !ctrl.incoming.site || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.incoming.contentFile))"
+                                            ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised" >
+                                        {{lang.incoming_save_print_barcode}}
+                                    </md-button>
                                     <md-button ng-click="ctrl.resetAddCorrespondence($event)" class="md-raised">
                                         {{lang.incoming_new}}
                                     </md-button>

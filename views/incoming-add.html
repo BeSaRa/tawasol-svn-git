@@ -160,6 +160,13 @@
                             </md-button>
                         </div>
                         <div>
+                            <md-button
+                                    ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid || !ctrl.incoming.site || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.incoming.contentFile))"
+                                    ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised">
+                                {{lang.incoming_save_print_barcode}}
+                            </md-button>
+                        </div>
+                        <div>
                             <md-button ng-disabled="ctrl.saveInProgress"  ng-click="ctrl.resetAddCorrespondence($event)" class="md-raised">
                                 {{lang.incoming_new}}
                             </md-button>

@@ -178,7 +178,7 @@ module.exports = function (app) {
                 self.terminateAfterCreateReply = false;
                 defer.resolve(true);
             }
-            defer.promise.then(function () {
+           return defer.promise.then(function () {
                 /*No document information(No prepare document selected)*/
                 if (self.documentInformation && !self.outgoing.addMethod) {
                     if (status) {
@@ -190,14 +190,14 @@ module.exports = function (app) {
                     promise = self.outgoing
                         .saveDocument(status)
                 }
-                promise.then(function (result) {
+               return promise.then(function (result) {
                     self.outgoing = result;
                     self.model = angular.copy(self.outgoing);
                     self.documentInformationExist = !!angular.copy(self.documentInformation);
 
                     /*If content file was attached */
                     if (self.outgoing.contentFile) {
-                        self.outgoing.addDocumentContentFile()
+                        return self.outgoing.addDocumentContentFile()
                             .then(function () {
                                 self.contentFileExist = !!(self.outgoing.hasOwnProperty('contentFile') && self.outgoing.contentFile);
                                 self.contentFileSizeExist = !!(self.contentFileExist && self.outgoing.contentFile.size);
@@ -205,7 +205,7 @@ module.exports = function (app) {
                                 saveCorrespondenceFinished(status);
                             })
                     } else if (duplicateVersion && self.outgoing.hasContent() && self.outgoing.addMethod) {
-                        self.outgoing
+                       return self.outgoing
                             .attacheContentUrl(self.documentInformation)
                             .then(function () {
                                 self.contentFileExist = true;
@@ -216,12 +216,20 @@ module.exports = function (app) {
                         self.contentFileExist = false;
                         self.contentFileSizeExist = false;
                         saveCorrespondenceFinished(status);
+                        return true;
                     }
                 })
                     .catch(function (error) {
                         self.saveInProgress = false;
                         toast.error(error);
+                        return $q.reject(error);
                     });
+            })
+        };
+
+        self.saveCorrespondenceAndPrintBarcode = function ($event) {
+            self.saveCorrespondence().then(function () {
+                self.docActionPrintBarcode(self.outgoing,$event);
             })
         };
 

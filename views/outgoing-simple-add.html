@@ -61,6 +61,12 @@
                                         <!--|| (ctrl.documentInformation || ctrl.outgoing.contentFile)-->
                                         {{lang.outgoing_save}}
                                     </md-button>
+                                    <md-button ng-disabled="ctrl.document_properties.$invalid || !ctrl.outgoing.sitesInfoTo.length ||
+                                        ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
+                                               ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised"
+                                                ng-if="ctrl.outgoing.addMethod">
+                                        {{lang.outgoing_save_print_barcode}}
+                                    </md-button>
                                     <div ng-if="!ctrl.outgoing.addMethod && !ctrl.editContent">
                                         <md-button ng-disabled="ctrl.document_properties.$invalid
                                                     || !ctrl.outgoing.sitesInfoTo.length

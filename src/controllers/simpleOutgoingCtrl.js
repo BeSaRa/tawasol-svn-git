@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                    officeWebAppService,
                                                    counterService,
                                                    generator,
+                                                   $q,
                                                    // documentFiles,
                                                    managerService,
                                                    documentTypeService,
@@ -158,7 +159,7 @@ module.exports = function (app) {
                 promise = self.outgoing
                     .saveDocument(status)
             }
-            promise.then(function (result) {
+         return promise.then(function (result) {
                 self.outgoing = result;
                 self.model = angular.copy(self.outgoing);
                 self.documentInformationExist = !!angular.copy(self.documentInformation);
@@ -167,7 +168,7 @@ module.exports = function (app) {
 
                 /*If content file was attached */
                 if (self.outgoing.contentFile) {
-                    self.outgoing.addDocumentContentFile()
+                  return   self.outgoing.addDocumentContentFile()
                         .then(function () {
                             self.contentFileExist = !!(self.outgoing.hasOwnProperty('contentFile') && self.outgoing.contentFile);
                             self.contentFileSizeExist = !!(self.contentFileExist && self.outgoing.contentFile.size);
@@ -179,10 +180,18 @@ module.exports = function (app) {
                     self.contentFileExist = false;
                     self.contentFileSizeExist = false;
                     saveCorrespondenceFinished(status, newId);
+                    return  true;
                 }
             }).catch(function (error) {
                 toast.error(error);
+                return $q.reject(error);
             });
+        };
+
+        self.saveCorrespondenceAndPrintBarcode = function ($event) {
+            self.saveCorrespondence().then(function () {
+                self.docActionPrintBarcode(self.outgoing,$event);
+            })
         };
 
         var saveCorrespondenceFinished = function (status, newId) {

@@ -107,7 +107,7 @@ module.exports = function (app) {
                 promise = self.internal
                     .saveDocument(status)
             }
-            promise.then(function (result) {
+          return   promise.then(function (result) {
                 self.internal = result;
                 self.model = angular.copy(self.internal);
                 self.documentInformationExist = !!angular.copy(self.documentInformation);
@@ -115,7 +115,7 @@ module.exports = function (app) {
 
                 /*If content file was attached */
                 if (self.internal.contentFile) {
-                    self.internal.addDocumentContentFile()
+                 return  self.internal.addDocumentContentFile()
                         .then(function () {
                             self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
                             self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
@@ -128,8 +128,16 @@ module.exports = function (app) {
                     self.contentFileSizeExist = false;
 
                     saveCorrespondenceFinished(status);
+                    return  true;
                 }
             });
+        };
+
+        self.saveCorrespondenceAndPrintBarcode = function ($event) {
+            self.saveCorrespondence()
+                .then(function () {
+                    self.docActionPrintBarcode(self.internal,$event);
+                })
         };
 
         var saveCorrespondenceFinished = function (status) {
