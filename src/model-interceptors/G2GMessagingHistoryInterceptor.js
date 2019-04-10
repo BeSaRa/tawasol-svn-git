@@ -9,6 +9,7 @@ module.exports = function (app) {
         var modelName = 'G2GMessagingHistory';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
+            model.setCorrespondenceService(correspondenceService);
             return model;
         });
 

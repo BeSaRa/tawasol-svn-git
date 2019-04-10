@@ -136,7 +136,8 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.resend = function (g2gItem, $event, defer) {
-            return g2gReturnedService.resendG2G(g2gItem)
+            return g2gItem
+                .resendG2GItem($event)
                 .then(function (result) {
                     if (result) {
                         new ResolveDefer(defer);

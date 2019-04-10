@@ -2560,9 +2560,10 @@ module.exports = function (app) {
          * @param workItem
          * @param $event
          * @param resend
+         * @param g2gData optional prameter
          * @returns {promise|*}
          */
-        self.openExportCorrespondenceDialog = function (workItem, $event, resend) {
+        self.openExportCorrespondenceDialog = function (workItem, $event, resend, g2gData) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
@@ -2571,7 +2572,8 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     locals: {
                         readyToExport: workItem,
-                        resend: resend
+                        resend: resend,
+                        g2gData: g2gData
                     },
                     resolve: {
                         sites: function (correspondenceService) {
@@ -2613,8 +2615,9 @@ module.exports = function (app) {
          * @description resend the workItem again to correspondences sites
          * @param workItem
          * @param resendOptions
+         * @param g2gData
          */
-        self.resendCorrespondenceWorkItem = function (workItem, resendOptions) {
+        self.resendCorrespondenceWorkItem = function (workItem, resendOptions, g2gData) {
             var regular = !resendOptions.isSelective();
             resendOptions = !regular ? generator.interceptSendInstance('PartialExportSelective', resendOptions) : generator.interceptSendInstance('ReadyToExportOption', resendOptions);
             var resendModel = {
@@ -2622,12 +2625,29 @@ module.exports = function (app) {
                 regularExport: regular ? resendOptions : {},
                 selectiveExport: regular ? {} : resendOptions.prepareResendModel()
             };
+            if (g2gData)
+                return self.resendG2GCorrespondence(resendModel, g2gData);
+
             var info = workItem.getInfo();
             return $http
                 .put(urlService.departmentInboxes + "/" + info.vsId + "/resend/" + info.wobNumber, resendModel)
                 .then(function () {
                     return workItem;
                 });
+        };
+        /**
+         * @description resend g2g from return queue.
+         * @param resendOptions
+         * @param g2gData
+         * @return {*}
+         */
+        self.resendG2GCorrespondence = function (resendOptions, g2gData) {
+            return $http.put(urlService.g2gInbox + 'resend/' + g2gData.isInternalG2G(), {
+                first: generator.interceptSendInstance('G2GMessagingHistory', g2gData),
+                second: resendOptions
+            }).then(function (result) {
+                return result.data.rs;
+            });
         };
         /**
          * @description resend the bulk workItems again to correspondences sites

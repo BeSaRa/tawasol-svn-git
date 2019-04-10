@@ -16,6 +16,7 @@ module.exports = function (app) {
                                                            dialog,
                                                            correspondenceService,
                                                            PartialExportCollection,
+                                                           g2gData,
                                                            WorkItem) {
         'ngInject';
         var self = this;
@@ -36,6 +37,7 @@ module.exports = function (app) {
         self.externalSites = [];
         self.g2gSites = [];
         self.privateSites = [];
+        self.g2gData = g2gData;
         self.hasExternalSite = _.find(self.correspondenceSites, function (item) {
             return item.siteCategory === 2;
         });
@@ -134,7 +136,7 @@ module.exports = function (app) {
         self.exportCorrespondenceWorkItem = function () {
             if (self.resend) {
                 return correspondenceService
-                    .resendCorrespondenceWorkItem(self.readyToExport, self.exportType === 1 ? self.validateExportOption(self.model) : self.partialExportList)
+                    .resendCorrespondenceWorkItem(self.readyToExport, self.exportType === 1 ? self.validateExportOption(self.model) : self.partialExportList , g2gData)
                     .then(function (result) {
                         dialog.hide(result);
                     })

@@ -2,11 +2,12 @@ module.exports = function (app) {
     app.factory('G2GMessagingHistory', function (CMSModelInterceptor,
                                                  Information,
                                                  viewDocumentService,
+                                                 Outgoing,
                                                  Indicator,
                                                  langService) {
         'ngInject';
         return function G2GMessagingHistory(model) {
-            var self = this;
+            var self = this, correspondenceService;
 
             self.refDocId = null;
             self.status = null;
@@ -49,6 +50,11 @@ module.exports = function (app) {
 
             if (model)
                 angular.extend(this, model);
+
+            G2GMessagingHistory.prototype.setCorrespondenceService = function (service) {
+                correspondenceService = service;
+                return this;
+            };
 
             /**
              * @description Get all required fields
@@ -117,8 +123,24 @@ module.exports = function (app) {
 
             G2GMessagingHistory.prototype.getTranslatedOriginalCopy = function () {
                 return this.type === 0
-                    ? new Information({enName: langService.getByLangKey('original', 'en'), arName: langService.getByLangKey('original', 'ar')})
-                    : new Information({enName: langService.getByLangKey('copy', 'en'), arName: langService.getByLangKey('copy', 'ar')});
+                    ? new Information({
+                        enName: langService.getByLangKey('original', 'en'),
+                        arName: langService.getByLangKey('original', 'ar')
+                    })
+                    : new Information({
+                        enName: langService.getByLangKey('copy', 'en'),
+                        arName: langService.getByLangKey('copy', 'ar')
+                    });
+            };
+
+            G2GMessagingHistory.prototype.resendG2GItem = function ($event) {
+                var correspondence = new Outgoing({
+                    docSubject: this.subject,
+                    docStatus: 24,
+                    docClassName: 'Outgoing',
+                    vsId: this.refDocId
+                });
+                return correspondenceService.openExportCorrespondenceDialog(correspondence, $event, true , this);
             };
 
             // don't remove CMSModelInterceptor from last line
