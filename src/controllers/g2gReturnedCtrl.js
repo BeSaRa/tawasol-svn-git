@@ -6,8 +6,10 @@ module.exports = function (app) {
                                                 $filter,
                                                 langService,
                                                 toast,
+                                                $state,
                                                 dialog,
                                                 ResolveDefer,
+                                                correspondenceStorageService,
                                                 contextHelpService,
                                                 counterService,
                                                 employeeService,
@@ -174,6 +176,23 @@ module.exports = function (app) {
             return viewDeliveryReportService.viewDeliveryReport(g2gItem, $event);
         };
 
+        self.g2gEditAfterReturn = function (g2gMessagingHistory, $event) {
+            var action = 'editAfterReturnFromG2G';
+
+            correspondenceService
+                .editAfterReturnFromG2G(g2gMessagingHistory)
+                .then(function (correspondence) {
+                    correspondenceStorageService.storeCorrespondence(action, correspondence);
+                    // $state.go('app.outgoing.add', {
+                    //     vsId: g2gMessagingHistory.refDocId,
+                    //     action: action
+                    // });
+                })
+                .catch(function () {
+                    dialog.errorMessage(langService.get('error_messages'));
+                });
+        };
+
         /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
@@ -196,8 +215,8 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // view
             {
@@ -213,8 +232,8 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // Preview
                     {
@@ -250,8 +269,8 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Resend
@@ -265,8 +284,8 @@ module.exports = function (app) {
                 //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Terminate
             {
@@ -279,8 +298,8 @@ module.exports = function (app) {
                 //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // View Delivery Report
             {
@@ -292,9 +311,20 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: true
+            },
+            // Terminate
+            {
+                type: 'action',
+                icon: 'stop',
+                text: 'grid_action_terminate',
+                callback: self.g2gEditAfterReturn,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return true;
+                }
             }
         ];
 

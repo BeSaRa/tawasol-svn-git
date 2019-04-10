@@ -3385,6 +3385,18 @@ module.exports = function (app) {
                     return _bulkMessages(result, workItems, ignoreMessage, 'failed_to_receive', 'quick_received_success', '');
                 });
         };
+        /**
+         * edit after return from g2g
+         * @param g2gMessagingHistory
+         * @return {Outgoing}
+         */
+        self.editAfterReturnFromG2G = function (g2gMessagingHistory) {
+            return $http
+                .put(urlService.g2gInbox + 'vsid/' + g2gMessagingHistory.refDocId + '/' + g2gMessagingHistory.isInternalG2G() + '/export/edit')
+                .then(function (result) {
+                    console.log(result.data.rs);
+                });
+        };
 
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);

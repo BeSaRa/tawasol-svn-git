@@ -230,6 +230,23 @@ module.exports = function (app) {
                 centralArchives: function ($q, organizations, employeeService, organizationService) {
                     'ngInject';
                     return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                },
+                editAfterReturnG2G: function ($q, $timeout, $stateParams, correspondenceStorageService) {
+                    'ngInject';
+                    var action = $stateParams.action;
+                    if (action !== 'editAfterReturnG2G') {
+                        return $timeout(function () {
+                            return false;
+                        });
+                    }
+
+                    return correspondenceStorageService
+                        .getCorrespondence('editAfterReturnG2G')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
                 }
             })
             .bulkResolveToState('app.outgoing.simple-add', {
