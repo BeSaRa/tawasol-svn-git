@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('piechartDirective', function ($timeout, counterService, langService, $window) {
+    app.directive('piechartDirective', function ($timeout, employeeService, $state, counterService, langService, $window) {
         'ngInject';
         return {
             restrict: 'E',
@@ -9,7 +9,11 @@ module.exports = function (app) {
                 options: '='
             },
             link: function (scope, element) {
-
+                // dataSource
+                var dataSource = {
+                    items: ['menu_item_dep_returned', 'menu_item_dep_incoming', 'menu_item_dep_ready_to_export'],
+                    stats: ['app.department-inbox.returned', 'app.department-inbox.incoming', 'app.department-inbox.ready-to-export']
+                };
                 var myChart;
                 var canvas = element.find('canvas');
                 var config = {
@@ -37,6 +41,16 @@ module.exports = function (app) {
                         }]
                     },
                     options: {
+                        onClick: function ($event) {
+                            var element = myChart.getElementAtEvent($event);
+                            if (!element.length)
+                                return;
+
+                            var index = element[0]._index;
+                            if (employeeService.employeeHasPermissionTo(dataSource.items[index])) {
+                                $state.go(dataSource.stats[index]);
+                            }
+                        },
                         animation: {
                             duration: 500,
                             easing: "easeOutQuart",
