@@ -364,7 +364,7 @@ module.exports = function (app) {
                     return defer.promise.then(function (response) {
                         return response;
                     }).catch(function (error) {
-                        dialog.alertMessage(langService.get('error_while_receiving_document'));
+                        dialog.errorMessage(langService.get('workitem_not_exists').change({workItem: workItem}));
                         $state.go('app.department-inbox.incoming', {identifier: rootEntity.getRootEntityIdentifier()});
                         return $q.reject();
                     })

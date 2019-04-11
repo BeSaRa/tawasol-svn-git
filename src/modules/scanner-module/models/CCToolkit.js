@@ -9,6 +9,7 @@ module.exports = function (app) {
                                        ajaxRequest,
                                        AsyncOperation,
                                        FileType,
+                                       configurationService,
                                        ISISWebErrorCode) {
         'ngInject';
         return function CCToolkit() {
@@ -18,8 +19,10 @@ module.exports = function (app) {
             var _servicePath = _baseServicePath + "/v2/";
             var _authServicePath = _baseServicePath + "/v2/auth/";
             var _cctSessionIdKey = "cct_session_id";
-            var _httpPortNumbers = [49732/*, 49733, 49734*/];
-            var _httpsPortNumbers = [49735, 49736, 49737];
+            // var _httpPortNumbers = [49732/*, 49733, 49734*/];
+            var _httpPortNumbers = configurationService.SCANNER_HTTP_PORTS;
+            // var _httpsPortNumbers = [49735, 49736, 49737];
+            var _httpsPortNumbers = configurationService.SCANNER_HTTPS_PORTS;
             var _attemptsNumber = 0;
             var _serviceURL = null;
             var _authServiceURL = null;
@@ -290,8 +293,8 @@ module.exports = function (app) {
 
             var _getServiceURLs = function () {
                 var address = window.location.href;
-                var protocol = (address.indexOf("https") === 0) ? "https://" : "http://";
-                var portNumbers = (protocol === "https://") ? _httpsPortNumbers : _httpPortNumbers;
+                var protocol = (address.indexOf("https") === 0 && !configurationService.IGNORE_HTTPS_FOR_SCANNER ) ? "https://" : "http://";
+                var portNumbers = (protocol === "https://" && !configurationService.IGNORE_HTTPS_FOR_SCANNER) ? _httpsPortNumbers : _httpPortNumbers;
                 var serviceURLs = [];
                 for (var i = 0; i < portNumbers.length; i++) {
                     var serviceURL = protocol + _host + portNumbers[i] + _servicePath;

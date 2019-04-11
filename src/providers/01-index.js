@@ -12,4 +12,5 @@ module.exports = function (app) {
     require('./headerProvider')(app);
     require('./themeServiceProvider')(app);
     require('./CMSActionServiceProvider')(app);
+    require('./configurationServiceProvider')(app);
 };

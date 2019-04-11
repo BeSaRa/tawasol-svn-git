@@ -62,12 +62,8 @@ module.exports = function (app) {
                     return dialog.confirmMessage(langService.get("confirm_launch_document_has_active_workflow")).then(function () {
                          correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab);
                     })
-                }   else if (info.isPaper) {
-                    return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
                 } else {
-                    return correspondenceService.checkWorkFlowForVsId(info.vsId).then(function (result) {
-                        return result ? dialog.infoMessage(langService.get('cannot_launch_document_has_active_workflow')) : correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab);
-                    });
+                    return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
                 }
             };
 
