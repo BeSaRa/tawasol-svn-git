@@ -107,7 +107,7 @@ module.exports = function (app) {
                 promise = self.internal
                     .saveDocument(status)
             }
-          return   promise.then(function (result) {
+            return promise.then(function (result) {
                 self.internal = result;
                 self.model = angular.copy(self.internal);
                 self.documentInformationExist = !!angular.copy(self.documentInformation);
@@ -115,20 +115,19 @@ module.exports = function (app) {
 
                 /*If content file was attached */
                 if (self.internal.contentFile) {
-                 return  self.internal.addDocumentContentFile()
+                    return self.internal.addDocumentContentFile()
                         .then(function () {
                             self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
                             self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
 
                             saveCorrespondenceFinished(status);
                         })
-                }
-                else {
+                } else {
                     self.contentFileExist = false;
                     self.contentFileSizeExist = false;
 
                     saveCorrespondenceFinished(status);
-                    return  true;
+                    return true;
                 }
             });
         };
@@ -136,7 +135,7 @@ module.exports = function (app) {
         self.saveCorrespondenceAndPrintBarcode = function ($event) {
             self.saveCorrespondence()
                 .then(function () {
-                    self.docActionPrintBarcode(self.internal,$event);
+                    self.docActionPrintBarcode(self.internal, $event);
                 })
         };
 
@@ -148,14 +147,12 @@ module.exports = function (app) {
                 $timeout(function () {
                     $state.go('app.internal.draft');
                 })
-            }
-            else {
+            } else {
                 var successKey = 'internal_metadata_saved_success';
                 if (self.documentInformation) {
                     self.internal.contentSize = 1;
                     successKey = 'save_success';
-                }
-                else if (self.internal.contentFile && self.internal.contentFile.size) {
+                } else if (self.internal.contentFile && self.internal.contentFile.size) {
                     self.internal.contentSize = self.internal.contentFile.size;
                     successKey = 'save_success';
                 }
@@ -401,26 +398,29 @@ module.exports = function (app) {
          * @param $event
          */
         self.resetAddCorrespondence = function ($event) {
-            //ou: self.employee.organization.ouid,
-            self.internal = new Internal({
-                ou: self.employee.getOUID(),
-                addMethod: 0,
-                createdOn: new Date(),
-                docDate: generator.convertDateToString(new Date(), self.defaultDateFormat),
-                registryOU: self.employee.getRegistryOUID(),
-                securityLevel: lookups.securityLevels[0]
-            });
+            dialog.confirmMessage(langService.get('confirm_reset_add'))
+                .then(function () {
+                    //ou: self.employee.organization.ouid,
+                    self.internal = new Internal({
+                        ou: self.employee.getOUID(),
+                        addMethod: 0,
+                        createdOn: new Date(),
+                        docDate: generator.convertDateToString(new Date(), self.defaultDateFormat),
+                        registryOU: self.employee.getRegistryOUID(),
+                        securityLevel: lookups.securityLevels[0]
+                    });
 
-            self.documentInformation = null;
+                    self.documentInformation = null;
 
-            self.documentAction = null;
-            self.documentInformationExist = false;
-            self.contentFileExist = false;
-            self.contentFileSizeExist = false;
+                    self.documentAction = null;
+                    self.documentInformationExist = false;
+                    self.contentFileExist = false;
+                    self.contentFileSizeExist = false;
 
-            self.document_properties.$setUntouched();
+                    self.document_properties.$setUntouched();
 
-            self.simpleViewUrl = null;
+                    self.simpleViewUrl = null;
+                });
         };
 
         /**

@@ -178,7 +178,7 @@ module.exports = function (app) {
                 self.terminateAfterCreateReply = false;
                 defer.resolve(true);
             }
-           return defer.promise.then(function () {
+            return defer.promise.then(function () {
                 /*No document information(No prepare document selected)*/
                 if (self.documentInformation && !self.outgoing.addMethod) {
                     if (status) {
@@ -190,7 +190,7 @@ module.exports = function (app) {
                     promise = self.outgoing
                         .saveDocument(status)
                 }
-               return promise.then(function (result) {
+                return promise.then(function (result) {
                     self.outgoing = result;
                     self.model = angular.copy(self.outgoing);
                     self.documentInformationExist = !!angular.copy(self.documentInformation);
@@ -205,7 +205,7 @@ module.exports = function (app) {
                                 saveCorrespondenceFinished(status);
                             })
                     } else if (duplicateVersion && self.outgoing.hasContent() && self.outgoing.addMethod) {
-                       return self.outgoing
+                        return self.outgoing
                             .attacheContentUrl(self.documentInformation)
                             .then(function () {
                                 self.contentFileExist = true;
@@ -229,7 +229,7 @@ module.exports = function (app) {
 
         self.saveCorrespondenceAndPrintBarcode = function ($event) {
             self.saveCorrespondence().then(function () {
-                self.docActionPrintBarcode(self.outgoing,$event);
+                self.docActionPrintBarcode(self.outgoing, $event);
             })
         };
 
@@ -506,28 +506,31 @@ module.exports = function (app) {
          * @param $event
          */
         self.resetAddCorrespondence = function ($event) {
-            self.outgoing = new Outgoing({
-                ou: self.employee.getOUID(),
-                addMethod: 0,
-                createdOn: new Date(),
-                docDate: new Date(),
-                registryOU: self.employee.getRegistryOUID(),
-                securityLevel: lookups.securityLevels[0],
-                sitesInfoTo: [],
-                sitesInfoCC: [],
-                ccSitesList: [],
-                toSitesList: []
-            });
+            dialog.confirmMessage(langService.get('confirm_reset_add'))
+                .then(function () {
+                    self.outgoing = new Outgoing({
+                        ou: self.employee.getOUID(),
+                        addMethod: 0,
+                        createdOn: new Date(),
+                        docDate: new Date(),
+                        registryOU: self.employee.getRegistryOUID(),
+                        securityLevel: lookups.securityLevels[0],
+                        sitesInfoTo: [],
+                        sitesInfoCC: [],
+                        ccSitesList: [],
+                        toSitesList: []
+                    });
 
-            self.emptySubSites = true;
-            self.emptySiteSearch = true;
-            self.documentInformation = null;
-            self.documentAction = null;
-            self.documentInformationExist = false;
-            self.contentFileExist = false;
-            self.contentFileSizeExist = false;
-            self.editContent = false;
-            self.document_properties.$setUntouched();
+                    self.emptySubSites = true;
+                    self.emptySiteSearch = true;
+                    self.documentInformation = null;
+                    self.documentAction = null;
+                    self.documentInformationExist = false;
+                    self.contentFileExist = false;
+                    self.contentFileSizeExist = false;
+                    self.editContent = false;
+                    self.document_properties.$setUntouched();
+                });
         };
 
         self.compositeChange = function () {

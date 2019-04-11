@@ -444,23 +444,26 @@ module.exports = function (app) {
          * @param $event
          */
         self.resetAddCorrespondence = function ($event) {
-            //ou: self.employee.organization.ouid,
-            self.internal = new Internal({
-                ou: self.employee.getOUID(),
-                addMethod: 0,
-                createdOn: new Date(),
-                docDate: new Date(),
-                registryOU: self.employee.getRegistryOUID(),
-                securityLevel: lookups.securityLevels[0]
-            });
+            dialog.confirmMessage(langService.get('confirm_reset_add'))
+                .then(function () {
+                    //ou: self.employee.organization.ouid,
+                    self.internal = new Internal({
+                        ou: self.employee.getOUID(),
+                        addMethod: 0,
+                        createdOn: new Date(),
+                        docDate: new Date(),
+                        registryOU: self.employee.getRegistryOUID(),
+                        securityLevel: lookups.securityLevels[0]
+                    });
 
-            self.documentInformation = null;
-            self.documentAction = null;
-            self.documentInformationExist = false;
-            self.contentFileExist = false;
-            self.contentFileSizeExist = false;
-            self.editContent = false;
-            self.document_properties.$setUntouched();
+                    self.documentInformation = null;
+                    self.documentAction = null;
+                    self.documentInformationExist = false;
+                    self.contentFileExist = false;
+                    self.contentFileSizeExist = false;
+                    self.editContent = false;
+                    self.document_properties.$setUntouched();
+                });
         };
 
         /**

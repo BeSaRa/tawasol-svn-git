@@ -358,25 +358,28 @@ module.exports = function (app) {
          * @param $event
          */
         self.resetAddCorrespondence = function ($event) {
-            self.incoming = new Incoming({
-                ou: centralArchives ? null : self.employee.getOUID(),
-                addMethod: 1,
-                createdOn: new Date(),
-                docDate: generator.convertDateToString(new Date(), self.defaultDateFormat),
-                refDocDate:generator.convertDateToString(new Date(), self.defaultDateFormat),
-                registryOU: centralArchives ? null : self.employee.getRegistryOUID(),
-                securityLevel: lookups.securityLevels[0],
-                site: null
-            });
-            self.emptySubSites = true;
-            self.documentInformation = null;
-            self.documentAction = null;
-            self.documentInformationExist = false;
-            self.contentFileExist = false;
-            self.contentFileSizeExist = false;
-            self.document_properties.$setUntouched();
+            dialog.confirmMessage(langService.get('confirm_reset_add'))
+                .then(function () {
+                    self.incoming = new Incoming({
+                        ou: centralArchives ? null : self.employee.getOUID(),
+                        addMethod: 1,
+                        createdOn: new Date(),
+                        docDate: generator.convertDateToString(new Date(), self.defaultDateFormat),
+                        refDocDate: generator.convertDateToString(new Date(), self.defaultDateFormat),
+                        registryOU: centralArchives ? null : self.employee.getRegistryOUID(),
+                        securityLevel: lookups.securityLevels[0],
+                        site: null
+                    });
+                    self.emptySubSites = true;
+                    self.documentInformation = null;
+                    self.documentAction = null;
+                    self.documentInformationExist = false;
+                    self.contentFileExist = false;
+                    self.contentFileSizeExist = false;
+                    self.document_properties.$setUntouched();
 
-            self.simpleViewUrl = null;
+                    self.simpleViewUrl = null;
+                });
         };
 
         /**
