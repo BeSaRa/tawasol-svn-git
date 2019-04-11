@@ -1819,6 +1819,7 @@ module.exports = function (app) {
             return userInbox.markAsReadUnread($event)
                 .then(function (result) {
                     self.replaceRecord(result);
+                    counterService.loadCounters();
                 })
         };
 

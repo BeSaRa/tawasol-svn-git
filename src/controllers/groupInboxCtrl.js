@@ -663,6 +663,7 @@ module.exports = function (app) {
             return workItem.markAsReadUnread($event, true)
                 .then(function (result) {
                     self.replaceRecord(result);
+                    counterService.loadCounters();
                 })
         };
 

@@ -1545,6 +1545,7 @@ module.exports = function (app) {
             return workItem.markAsReadUnread($event)
                 .then(function (result) {
                     self.replaceRecord(result);
+                    counterService.loadCounters();
                 })
         };
 
