@@ -21,7 +21,7 @@
         </md-button>
         <md-button ng-click="ctrl.closeCorrespondenceWorkflow()"
                    class="md-icon-button">
-            <md-icon md-svg-icon="close"></md-icon>
+            <md-icon md-svg-icon="close" class="red-text"></md-icon>
         </md-button>
     </div>
     <!-- Body -->
@@ -430,7 +430,7 @@
         <span layout="row" layout-align="center center"
               flex><span ng-if="ctrl.getApprovedStatus()" class="red-color">{{ctrl.multi ?  lang.get('selected_document_has_not_approved_document') : lang.get('cannot_send_to_multi')}}</span></span>
         <div>
-            <md-button class="md-raised" ng-click="ctrl.closeCorrespondenceWorkflow()">{{lang.close}}</md-button>
+            <md-button class="md-raised red-text" ng-click="ctrl.closeCorrespondenceWorkflow()">{{lang.close}}</md-button>
         </div>
     </div>
 </md-dialog>
