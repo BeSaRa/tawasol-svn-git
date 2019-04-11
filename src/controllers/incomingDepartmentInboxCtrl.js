@@ -44,6 +44,19 @@ module.exports = function (app) {
         self.selectedIncomingDepartmentInboxes = [];
 
         /**
+         * @description Mark item as read/unread
+         * @param workItem
+         * @param $event
+         */
+        self.markAsReadUnread = function (workItem, $event) {
+            return workItem.markAsReadUnread($event)
+                .then(function (result) {
+                    self.reloadIncomingDepartmentInboxes(self.grid.page);
+                    counterService.loadCounters();
+                })
+        };
+
+        /**
          * @description Contains options for grid configuration
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */

@@ -669,6 +669,20 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Mark item as read/unread
+         * @param workItem
+         * @param $event
+         */
+        self.markAsReadUnread = function (workItem, $event) {
+            return workItem.markAsReadUnread($event)
+                .then(function (result) {
+                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                    counterService.loadCounters();
+                })
+        };
+
+
+        /**
          * @description Unlocks the selected workItems
          * @param $event
          * @returns {*}

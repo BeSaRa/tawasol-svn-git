@@ -93,10 +93,14 @@
                                         <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column>
 
                                         </th>
+                                        <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column>
+                                            <!-- Read/Unread Indicator -->
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="returnedDepartmentInbox"
+                                        ng-class="!returnedDepartmentInbox.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                                         ng-disabled="returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()"
                                         grid-right-click-directive="returnedDepartmentInbox"
                                         model="returnedDepartmentInbox"
@@ -156,6 +160,17 @@
                                                 <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
                                                                         model="returnedDepartmentInbox">
                                                 </grid-actions-directive>
+                                            </div>
+                                        </td>
+                                        <td md-cell class="read-td">
+                                            <!--ng-click="ctrl.markAsReadUnread(returnedDepartmentInbox, $event)"
+                                            tooltip="{{returnedDepartmentInbox.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
+                                                 tooltip-direction="top"
+                                            -->
+                                            <div class="cursor-pointer status"
+                                                 ng-class="returnedDepartmentInbox.generalStepElm.isOpen===true? 'read' : 'unread'"
+                                                 ng-if="!ctrl.selectedReturnedDepartmentInboxes.length
+                                                          || ctrl.selectedReturnedDepartmentInboxes.length===1 && ctrl.selectedReturnedDepartmentInboxes[0].generalStepElm.workObjectNumber === returnedDepartmentInbox.generalStepElm.workObjectNumber" >
                                             </div>
                                         </td>
                                     </tr>

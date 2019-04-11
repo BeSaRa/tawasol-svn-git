@@ -95,10 +95,14 @@
                                         <th ng-if="!ctrl.selectedReadyToExports.length" md-column>
                                             <span></span>
                                         </th>
+                                        <th ng-if="!ctrl.selectedReadyToExports.length" md-column>
+                                            <!-- Read/Unread Indicator -->
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="readyToExport"
+                                        ng-class="!readyToExport.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                                         ng-disabled="readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()"
                                         grid-right-click-directive="readyToExport"
                                         selected-length="{{ctrl.selectedReadyToExports.length ? ctrl.selectedReadyToExports.length : 0}}"
@@ -142,6 +146,17 @@
                                                 <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
                                                                         model="readyToExport">
                                                 </grid-actions-directive>
+                                            </div>
+                                        </td>
+                                        <td md-cell class="read-td">
+                                            <!--ng-click="ctrl.markAsReadUnread(readyToExport, $event)"
+                                            tooltip="{{readyToExport.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
+                                                 tooltip-direction="top"
+                                            -->
+                                            <div class="cursor-pointer status"
+                                                 ng-class="readyToExport.generalStepElm.isOpen===true? 'read' : 'unread'"
+                                                 ng-if="!ctrl.selectedReadyToExports.length
+                                                          || ctrl.selectedReadyToExports.length===1 && ctrl.selectedReadyToExports[0].generalStepElm.workObjectNumber === readyToExport.generalStepElm.workObjectNumber" >
                                             </div>
                                         </td>
                                     </tr>

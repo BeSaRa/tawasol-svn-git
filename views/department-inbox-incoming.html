@@ -87,12 +87,16 @@
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column>
                                             <span></span>
                                         </th>
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column>
+                                            <!-- Read/Unread Indicator -->
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="incomingDepartmentInbox"
                                         grid-right-click-directive="incomingDepartmentInbox"
                                         model="incomingDepartmentInbox"
+                                        ng-class="!incomingDepartmentInbox.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                                         ng-disabled="incomingDepartmentInbox.isLocked() && !incomingDepartmentInbox.isLockedByCurrentUser()"
                                         selected-length="{{ctrl.selectedIncomingDepartmentInboxes.length ? ctrl.selectedIncomingDepartmentInboxes.length : 0}}"
                                         ng-repeat="incomingDepartmentInbox in searchResults = (ctrl.incomingDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
@@ -136,6 +140,15 @@
                                                 <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
                                                                         model="incomingDepartmentInbox">
                                                 </grid-actions-directive>
+                                            </div>
+                                        </td>
+                                        <td md-cell class="read-td">
+                                            <!--ng-click="ctrl.markAsReadUnread(incomingDepartmentInboxes, $event)"-->
+                                            <!--   tooltip="{{incomingDepartmentInboxes.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"-->
+                                            <div class="cursor-pointer status"
+                                                 ng-class="incomingDepartmentInbox.generalStepElm.isOpen===true? 'read' : 'unread'"
+                                                 ng-if="!ctrl.selectedIncomingDepartmentInboxes.length
+                                                      || ctrl.selectedIncomingDepartmentInboxes.length===1 && ctrl.selectedIncomingDepartmentInboxes[0].generalStepElm.workObjectNumber === incomingDepartmentInbox.generalStepElm.workObjectNumber">
                                             </div>
                                         </td>
                                     </tr>
