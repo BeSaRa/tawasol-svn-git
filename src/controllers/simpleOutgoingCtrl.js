@@ -503,5 +503,33 @@ module.exports = function (app) {
             })
         };
 
+        /**
+         * @description Manage the attachments
+         * @param $event
+         */
+        self.manageAttachments = function ($event) {
+            self.outgoing.manageDocumentAttachments($event, true)
+                .then(function (result) {
+                    self.outgoing.attachments = result;
+                })
+                .catch(function (result) {
+                    self.outgoing.attachments = result;
+                });
+        };
+
+        /**
+         * @description Manage the linked documents
+         * @param $event
+         */
+        self.manageLinkedDocuments = function ($event) {
+            self.outgoing.manageDocumentLinkedDocuments($event, true)
+                .then(function (result) {
+                    self.outgoing.linkedDocs = result;
+                })
+                .catch(function (result) {
+                    self.outgoing.linkedDocs = result;
+                });
+        }
+
     });
 };

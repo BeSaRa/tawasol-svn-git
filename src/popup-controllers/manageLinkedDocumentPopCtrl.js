@@ -6,6 +6,10 @@ module.exports = function (app) {
         self.model = angular.copy(correspondence.setLinkedDocs(linkedDocs));
 
         self.saveLinkedDocumentsFromCtrl = function () {
+            if (!self.vsId) {
+                dialog.hide(self.correspondence.linkedDocs);
+                return;
+            }
             self.correspondence
                 .saveLinkedDocuments()
                 .then(function () {
@@ -17,7 +21,7 @@ module.exports = function (app) {
         };
 
         self.closeLinkedDocuments = function () {
-            dialog.cancel(false);
+            dialog.cancel(self.correspondence.linkedDocs);
         }
     });
 };

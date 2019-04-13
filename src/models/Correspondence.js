@@ -550,13 +550,13 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 return managerService.manageDocumentComments.apply(managerService, [info.vsId, info.title, $event]);
             };
-            Correspondence.prototype.manageDocumentAttachments = function ($event) {
+            Correspondence.prototype.manageDocumentAttachments = function ($event, isSimpleAdd) {
                 var info = this.getInfo();
-                return managerService.manageDocumentAttachments.apply(managerService, [this, info.vsId, info.documentClass, info.title, $event]);
+                return managerService.manageDocumentAttachments.apply(managerService, [this, info.vsId, info.documentClass, info.title, $event, isSimpleAdd]);
             };
-            Correspondence.prototype.manageDocumentLinkedDocuments = function ($event) {
+            Correspondence.prototype.manageDocumentLinkedDocuments = function ($event, isSimpleAdd) {
                 var info = this.getInfo();
-                return managerService.manageDocumentLinkedDocuments.apply(managerService, [info.vsId, info.documentClass, info.title, $event]);
+                return managerService.manageDocumentLinkedDocuments.apply(managerService, [info.vsId, info.documentClass, info.title, $event, this, isSimpleAdd]);
             };
             Correspondence.prototype.manageDocumentEntities = function ($event) {
                 var info = this.getInfo();

@@ -5,7 +5,7 @@ module.exports = function (app) {
         self.controllerName = 'manageDocumentAttachmentsPopCtrl';
 
         self.closeDocumentAttachments = function () {
-            dialog.cancel(self.model);
+            dialog.cancel(self.attachments);
         };
 
         self.saveDocumentAttachments = function () {

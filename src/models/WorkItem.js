@@ -454,7 +454,7 @@ module.exports = function (app) {
             };
             WorkItem.prototype.manageDocumentLinkedDocuments = function ($event) {
                 var info = this.getInfo();
-                return managerService.manageDocumentLinkedDocuments.apply(managerService, [info.vsId, info.documentClass, info.title, $event]);
+                return managerService.manageDocumentLinkedDocuments.apply(managerService, [info.vsId, info.documentClass, info.title, $event, this]);
             };
             WorkItem.prototype.manageDocumentEntities = function ($event) {
                 var info = this.getInfo();

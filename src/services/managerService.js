@@ -82,8 +82,9 @@ module.exports = function (app) {
          * @param documentClass
          * @param documentSubject
          * @param $event
+         * @param isSimpleAdd
          */
-        self.manageDocumentAttachments = function (document, vsId, documentClass, documentSubject, $event) {
+        self.manageDocumentAttachments = function (document, vsId, documentClass, documentSubject, $event, isSimpleAdd) {
             var defer = $q.defer();
             var deferDoc = $q.defer();
             documentClass = _checkDocumentClass(documentClass);
@@ -104,6 +105,10 @@ module.exports = function (app) {
                 resolve: {
                     attachments: function (attachmentService) {
                         'ngInject';
+                        if (isSimpleAdd && !vsId) {
+                            defer.resolve(angular.copy(document.attachments));
+                            return angular.copy(document.attachments);
+                        }
                         return attachmentService.loadDocumentAttachments(vsId, documentClass).then(function (attachments) {
                             defer.resolve(attachments);
                             return attachments;
@@ -383,34 +388,50 @@ module.exports = function (app) {
             });
         };
 
-
-        self.manageDocumentLinkedDocuments = function (vsId, documentClass, documentSubject, $event) {
+        /**
+         * @description Manages the linked documents
+         * @param vsId
+         * @param documentClass
+         * @param documentSubject
+         * @param $event
+         * @param document
+         * @param isSimpleAdd
+         * @returns {promise}
+         */
+        self.manageDocumentLinkedDocuments = function (vsId, documentClass, documentSubject, $event, document, isSimpleAdd) {
             return dialog.showDialog({
-                templateUrl: cmsTemplate.getPopup('manage-linked-documents'),
-                controller: 'manageLinkedDocumentPopCtrl',
-                targetEvent: $event || false,
-                controllerAs: 'ctrl',
-                bindToController: true,
-                escapeToClose: false,
-                locals: {
-                    fromDialog: true,
-                    vsId: vsId,
-                    documentClass: documentClass,
-                    documentSubject: documentSubject
-                },
-                resolve: {
-                    linkedDocs: function (correspondenceService) {
-                        'ngInject';
-                        return correspondenceService
-                            .getLinkedDocumentsByVsIdClass(vsId, documentClass)
+                    templateUrl: cmsTemplate.getPopup('manage-linked-documents'),
+                    controller: 'manageLinkedDocumentPopCtrl',
+                    targetEvent: $event || false,
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    escapeToClose: false,
+                    locals: {
+                        fromDialog: true,
+                        vsId: vsId,
+                        documentClass: documentClass,
+                        documentSubject: documentSubject
                     },
-                    correspondence: function () {
-                        'ngInject';
-                        return correspondenceService
-                            .loadCorrespondenceByVsIdClass(vsId, documentClass);
+                    resolve: {
+                        linkedDocs: function (correspondenceService) {
+                            'ngInject';
+                            if (isSimpleAdd && !vsId) {
+                                return angular.copy(document.linkedDocs);
+                            }
+                            return correspondenceService
+                                .getLinkedDocumentsByVsIdClass(vsId, documentClass)
+                        },
+                        correspondence: function () {
+                            'ngInject';
+                            if (isSimpleAdd && !vsId) {
+                                return angular.copy(document);
+                            }
+                            return correspondenceService
+                                .loadCorrespondenceByVsIdClass(vsId, documentClass);
+                        }
                     }
                 }
-            });
+            );
         }
 
     });

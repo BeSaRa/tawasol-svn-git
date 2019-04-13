@@ -395,5 +395,33 @@ module.exports = function (app) {
             })
         };
 
+        /**
+         * @description Manage the attachments
+         * @param $event
+         */
+        self.manageAttachments = function ($event) {
+            self.incoming.manageDocumentAttachments($event, true)
+                .then(function (result) {
+                    self.incoming.attachments = result;
+                })
+                .catch(function (result) {
+                    self.incoming.attachments = result;
+                });
+        };
+
+        /**
+         * @description Manage the linked documents
+         * @param $event
+         */
+        self.manageLinkedDocuments = function ($event) {
+            self.incoming.manageDocumentLinkedDocuments($event, true)
+                .then(function (result) {
+                    self.incoming.linkedDocs = result;
+                })
+                .catch(function (result) {
+                    self.incoming.linkedDocs = result;
+                });
+        }
+
     });
 };

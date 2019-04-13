@@ -456,5 +456,33 @@ module.exports = function (app) {
             }
             return self.documentInformation = null;
         };
+
+        /**
+         * @description Manage the attachments
+         * @param $event
+         */
+        self.manageAttachments = function ($event) {
+            self.internal.manageDocumentAttachments($event, true)
+                .then(function (result) {
+                    self.internal.attachments = result;
+                })
+                .catch(function (result) {
+                    self.internal.attachments = result;
+                });
+        };
+
+        /**
+         * @description Manage the linked documents
+         * @param $event
+         */
+        self.manageLinkedDocuments = function ($event) {
+            self.internal.manageDocumentLinkedDocuments($event, true)
+                .then(function (result) {
+                    self.internal.linkedDocs = result;
+                })
+                .catch(function (result) {
+                    self.internal.linkedDocs = result;
+                });
+        }
     });
 };

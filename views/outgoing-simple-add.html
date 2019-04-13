@@ -145,12 +145,12 @@
                                                     simple-view-url="ctrl.simpleViewUrl"
                                                     is-simple-add="ctrl.simpleAdd"></manage-content-directive>
 
-                                            <md-button class="md-raised">
+                                            <md-button class="md-raised" ng-click="ctrl.manageAttachments($event)">
                                                 <md-icon md-svg-icon="attachment"></md-icon>
-                                                {{lang.attachments}}</md-button>
-                                            <md-button class="md-raised">
+                                                {{lang.attachments}} ({{ctrl.outgoing.attachments.length}})</md-button>
+                                            <md-button class="md-raised" ng-click="ctrl.manageLinkedDocuments($event)">
                                                 <md-icon md-svg-icon="note-multiple-outline"></md-icon>
-                                                {{lang.linked_documents}}</md-button>
+                                                {{lang.linked_documents}} ({{ctrl.outgoing.linkedDocs.length}})</md-button>
                                         </div>
                                         <div flex layout="row">
                                             <!--document viewer editor-->
