@@ -138,6 +138,7 @@ module.exports = function (app) {
                 delete this.selectedWFComment;
                 delete this.commentSearchText;
                 delete this.tempRegOUSection;
+                delete this.showCommentDropdown;
 
                 this.action = this.action.hasOwnProperty('id') ? this.action.id : this.action;
                 return this;

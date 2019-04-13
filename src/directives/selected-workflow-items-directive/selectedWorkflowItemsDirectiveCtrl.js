@@ -46,6 +46,8 @@ module.exports = function (app) {
                 .setAction(result.action)
                 .setSendEmail(result.sendEmail)
                 .setSendSMS(result.sendSMS);
+            // hide the comment dropdown
+            distWorkflowItem.showCommentDropdown = false;
         }
 
         /**
@@ -204,6 +206,25 @@ module.exports = function (app) {
          */
         self.setWFComment = function (workflowItem, $event) {
             workflowItem.setComments(workflowItem.selectedWFComment);
+        };
+
+        /**
+         * @description Toggle the dropdown and label for comment
+         * @param record
+         * @param $event
+         */
+        self.toggleCommentDropdown = function(record, $event){
+            record.showCommentDropdown = !record.showCommentDropdown;
+        };
+
+        /**
+         * @description Clear the text and toggle dropdown on close of comment dropdown
+         * @param record
+         * @param $event
+         */
+        self.onCloseCommentsDropdown = function(record, $event){
+            record.clearWFCommentSearchText();
+            self.toggleCommentDropdown(record);
         };
 
         /**

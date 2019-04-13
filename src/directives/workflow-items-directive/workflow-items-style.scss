@@ -9,3 +9,10 @@
     font-weight: bold !important;
   }
 }
+.select-wf-action-text{
+  font-weight: bold !important;
+  font-size: 14px !important;
+  &.no-value{
+    color: red;
+  }
+}

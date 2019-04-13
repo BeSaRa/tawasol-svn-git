@@ -23,6 +23,7 @@ module.exports = function (app) {
             self.selectedWFComment = null;
             self.commentSearchText = '';
             self.tempRegOUSection = null;
+            self.showCommentDropdown = false;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -81,6 +82,9 @@ module.exports = function (app) {
             DistributionWFItem.prototype.setComments = function (comments) {
                 this.comments = comments && comments.hasOwnProperty('id') ? comments.comment : comments;
                 return this;
+            };
+            DistributionWFItem.prototype.getComments = function () {
+                return this.comments;
             };
 
             DistributionWFItem.prototype.setSendSMS = function (sendSMS) {
