@@ -125,7 +125,7 @@
                               ng-class="{'no-value': !workflowItem.getComments()}"
                               ng-click="ctrl.toggleCommentDropdown(workflowItem, $event)"
                               tooltip="{{workflowItem.getComments()}}">
-                            {{workflowItem.getComments()}}
+                            {{ctrl.getCommentText(workflowItem)}}
                         </span>
                         <md-select ng-if="workflowItem.showCommentDropdown"
                                    ng-model="workflowItem.selectedWFComment"
@@ -134,7 +134,8 @@
                                    aria-label="workflow action"
                                    md-on-close="ctrl.onCloseCommentsDropdown(workflowItem)"
                                    data-md-container-class="select-header-container"
-                                   placeholder="{{workflowItem.getCommentMessage()}}">
+                                   placeholder="{{workflowItem.getCommentMessage()}}"
+                                   md-selected-text="ctrl.getCommentText(workflowItem)">
                             <md-select-header class="select-header">
                                 <input ng-model="workflowItem.commentSearchText"
                                        ng-keydown="ctrl.preventSearchKeyDown($event)"

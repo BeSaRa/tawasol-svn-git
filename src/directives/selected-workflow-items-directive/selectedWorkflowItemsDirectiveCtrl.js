@@ -228,6 +228,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Get the placeholder text for comment dropdown
+         * @param workflowItem
+         * @returns {*}
+         */
+        self.getCommentText = function(workflowItem){
+            return workflowItem.getComments() || workflowItem.getCommentMessage();
+        };
+
+        /**
          * @description Prevent the default dropdown behavior of keys inside the search box of workflow action dropdown
          * @param $event
          */
