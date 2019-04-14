@@ -201,7 +201,6 @@ module.exports = function (app) {
                 var self = this;
                 self.reverseMap();
                 _.map(maps, function (items, property) {
-
                     if (!self.maped.hasOwnProperty(property)) {
                         self.maped[property] = {
                             first: 0,

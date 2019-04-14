@@ -50,4 +50,8 @@
             {{lang.no_sites_to_display}}
         </md-not-found>
     </md-autocomplete>
+    <br/>
+    <md-button ng-disabled="!ctrl.selectedItem" ng-click="ctrl.showMore($event)" class="md-raised">
+        {{lang.extra_sites}}
+    </md-button>
 </div>

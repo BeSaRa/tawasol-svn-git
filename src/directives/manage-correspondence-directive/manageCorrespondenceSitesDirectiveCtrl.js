@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                                        Site,
                                                                        lookupService,
                                                                        CorrespondenceSiteType,
+                                                                       $interval,
                                                                        LangWatcher,
                                                                        $timeout,
                                                                        $q,
@@ -843,6 +844,5 @@ module.exports = function (app) {
             if (code !== 38 && code !== 40)
                 $event.stopPropagation();
         };
-
     });
 };
