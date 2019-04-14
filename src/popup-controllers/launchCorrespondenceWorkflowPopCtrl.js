@@ -1084,6 +1084,7 @@ module.exports = function (app) {
                 .workflowItemSettingDialog((langService.get('workflow_properties') + ' ' + distWorkflowItem.getTranslatedName()), distWorkflowItem, $event)
                 .then(function (result) {
                     _setDistWorkflowItem(distWorkflowItem, result);
+                    self.addSelectedUsersToGrid(distWorkflowItem, $event);
                 })
         };
 

@@ -120,13 +120,13 @@
                         </md-select>
                     </td>
                     <td md-cell>
-                        <span ng-if="!workflowItem.showCommentDropdown"
+                        <div md-truncate style="max-width: 100px;"  ng-if="!workflowItem.showCommentDropdown"
                               class="select-wf-action-text"
                               ng-class="{'no-value': !workflowItem.getComments()}"
                               ng-click="ctrl.toggleCommentDropdown(workflowItem, $event)"
                               tooltip="{{workflowItem.getComments()}}">
                             {{ctrl.getCommentText(workflowItem)}}
-                        </span>
+                        </div>
                         <md-select ng-if="workflowItem.showCommentDropdown"
                                    ng-model="workflowItem.selectedWFComment"
                                    class="select-wf-action" style="width: 150px !important;"

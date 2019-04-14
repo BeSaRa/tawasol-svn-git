@@ -45,7 +45,7 @@ module.exports = function (app) {
             ]
         };
         var _getGridLimit = function () {
-            if(self.gridName === 'favoriteOUs')
+            if (self.gridName === 'favoriteOUs')
                 self.grid.limit = (self.workflowItems.length + 21);
             else
                 self.grid.limit = 5;
@@ -121,6 +121,7 @@ module.exports = function (app) {
                 .workflowItemSettingDialog((langService.get('workflow_properties') + ' ' + workflowItem.getTranslatedName()), workflowItem, $event)
                 .then(function (result) {
                     _setDistWorkflowItem(workflowItem, result);
+                    self.addWorkflowItem(workflowItem, $event);
                 });
         };
         /**
