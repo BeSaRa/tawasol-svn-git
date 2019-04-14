@@ -176,18 +176,21 @@ module.exports = function (app) {
         self.viewDeliveryReport = function (g2gItem, $event) {
             return viewDeliveryReportService.viewDeliveryReport(g2gItem, $event);
         };
-
+        /**
+         * @description edit after return from g2g
+         * @param g2gMessagingHistory
+         * @param $event
+         */
         self.g2gEditAfterReturn = function (g2gMessagingHistory, $event) {
             var action = 'editAfterReturnFromG2G';
-
             correspondenceService
                 .editAfterReturnFromG2G(g2gMessagingHistory)
                 .then(function (correspondence) {
                     correspondenceStorageService.storeCorrespondence(action, correspondence);
-                    // $state.go('app.outgoing.add', {
-                    //     vsId: g2gMessagingHistory.refDocId,
-                    //     action: action
-                    // });
+                    $state.go('app.outgoing.add', {
+                        vsId: g2gMessagingHistory.refDocId,
+                        action: action
+                    });
                 })
                 .catch(function () {
                     dialog.errorMessage(langService.get('error_messages'));
@@ -319,8 +322,8 @@ module.exports = function (app) {
             // Terminate
             {
                 type: 'action',
-                icon: 'stop',
-                text: 'grid_action_terminate',
+                icon: 'circle-edit-outline',
+                text: 'grid_action_edit_after_return_g2g',
                 callback: self.g2gEditAfterReturn,
                 class: "action-green",
                 checkShow: function (action, model) {

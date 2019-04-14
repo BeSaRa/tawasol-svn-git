@@ -3411,10 +3411,12 @@ module.exports = function (app) {
          * @return {Outgoing}
          */
         self.editAfterReturnFromG2G = function (g2gMessagingHistory) {
+            var documentClass = 'outgoing';
             return $http
                 .put(urlService.g2gInbox + 'vsid/' + g2gMessagingHistory.refDocId + '/' + g2gMessagingHistory.isInternalG2G() + '/export/edit')
                 .then(function (result) {
-                    console.log(result.data.rs);
+                    result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                    return result.data.rs;
                 });
         };
 

@@ -36,6 +36,7 @@ module.exports = function (app) {
                                              lookups, // new injector for all lookups can user access
                                              correspondenceService,
                                              ResolveDefer,
+                                             editAfterReturnG2G,
                                              gridService) {
         'ngInject';
         var self = this;
@@ -53,7 +54,7 @@ module.exports = function (app) {
         // collapse from label
         self.collapse = true;
         // current mode
-        self.editMode = !!(editAfterApproved || editAfterExport || duplicateVersion);
+        self.editMode = !!(editAfterApproved || editAfterExport || duplicateVersion || editAfterReturnG2G);
         // self.editMode = false;
         // copy of the current outgoing if saved.
         // self.model = angular.copy(demoOutgoing);
@@ -64,6 +65,8 @@ module.exports = function (app) {
             self.model = angular.copy(editAfterExport.metaData);
         } else if (duplicateVersion) {
             self.model = angular.copy(duplicateVersion.metaData);
+        } else if (editAfterReturnG2G) {
+            self.model = angular.copy(editAfterReturnG2G.metaData);
         }
         self.editContent = false;
 
@@ -108,6 +111,10 @@ module.exports = function (app) {
             self.documentInformation = self.outgoing.hasContent() ? duplicateVersion.content : null;
             self.editContent = self.outgoing.hasContent();// true;
             self.duplicateVersion = true;
+        } else if (editAfterReturnG2G){
+            self.outgoing = editAfterReturnG2G.metaData;
+            self.documentInformation = editAfterReturnG2G.content;
+            self.editContent = true;
         }
 
         self.preventPropagation = function ($event) {
