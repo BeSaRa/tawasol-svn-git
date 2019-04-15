@@ -96,7 +96,7 @@ module.exports = function (app) {
         self.reloadPublicAnnouncements = function (pageNumber) {
             var defer = $q.defer();
             self.progress = defer.promise;
-            rootEntity.loadInformation();
+            rootEntity.loadInformation(rootEntity.getRootEntityIdentifier());
             return publicAnnouncementService
                 .loadPublicAnnouncements()
                 .then(function (result) {
