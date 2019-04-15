@@ -82,7 +82,7 @@ module.exports = function (app) {
             dialog.hide();
         });
 
-        $scope.bundleVersion = '2.1.2';
+        $scope.bundleVersion = '2.1.3';
         $scope.buildNumber = ' T#3737';
         app.$_privateBuildNumber = 'T#3737';
     });
