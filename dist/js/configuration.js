@@ -12,7 +12,10 @@
 
 
             configurationServiceProvider
-                .updateConfiguration('IGNORE_HTTPS_FOR_SCANNER', true);
+                //  to https connection and use HTTP instead to connect with scanner service
+                .updateConfiguration('IGNORE_HTTPS_FOR_SCANNER', true)
+                // delay before send request to backend to save the changes on content.
+                .updateConfiguration('OFFICE_ONLINE_DELAY', 5000);
 
         });
 

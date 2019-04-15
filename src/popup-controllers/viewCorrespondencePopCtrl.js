@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                           toast,
                                                           langService,
                                                           $timeout,
+                                                          configurationService,
                                                           loadingIndicatorService,
                                                           correspondenceService,
                                                           attachmentService,
@@ -191,7 +192,7 @@ module.exports = function (app) {
                             self.disableSaveTimeout = false;
                             return $q.reject(error);
                         });
-                }, 3000);
+                }, configurationService.OFFICE_ONLINE_DELAY);
             } else {
                 self.correspondence[method](method === 'saveDocument' ? false : self.content)
                     .then(function () {
@@ -225,7 +226,7 @@ module.exports = function (app) {
             } else if (self.correspondence.docClassName === 'Outgoing') {
                 return !(self.correspondence.sitesInfoTo && self.correspondence.sitesInfoTo.length) || self.disableSaveTimeout;
             }
-            return  self.disableSaveTimeout || false;
+            return self.disableSaveTimeout || false;
         };
 
         self.backToCorrespondence = function ($event) {

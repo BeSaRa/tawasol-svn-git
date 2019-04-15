@@ -1332,7 +1332,7 @@ module.exports = function (app) {
                 icon: 'pencil',
                 text: 'grid_action_edit',
                 shortcut: false,
-                showInView: false,
+                showInViewOnly: true,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     var hasPermission = false;
@@ -1405,8 +1405,6 @@ module.exports = function (app) {
                         hide: false,
                         callback: self.editInDesktop,
                         class: "action-green",
-                        showInViewOnly: true,
-                        showInView: false,
                         checkShow: function (action, model, showInViewOnly) {
                             var info = model.getInfo();
                             var hasPermission = false;
