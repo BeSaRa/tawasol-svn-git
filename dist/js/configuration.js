@@ -11,6 +11,9 @@
                 .setBaseUrl('test', 'http://eblaepm.no-ip.org:9081/CMSServices/service')
 
 
+            urlServiceProvider
+                .addSegment('desktopWord', 'http://localhost:4444') //  Edit in Desktop URL
+
             configurationServiceProvider
                 //  to https connection and use HTTP instead to connect with scanner service
                 .updateConfiguration('IGNORE_HTTPS_FOR_SCANNER', true)
