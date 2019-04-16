@@ -181,14 +181,14 @@ module.exports = function (app) {
                 });
         };
 
-        
+
         self.saveCorrespondenceAndPrintBarcode =function ($event) {
             self.saveCorrespondence()
                 .then(function () {
                     self.docActionPrintBarcode(self.incoming,$event);
                 })
         };
-        
+
         var saveCorrespondenceFinished = function (status, newId) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             counterService.loadCounters();
@@ -393,35 +393,42 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description confirm message when reset the Add Incoming form
+         * @param $event
+         */
+        self.confirmResetAddCorrespondence = function ($event) {
+            dialog.confirmMessage(langService.get('confirm_reset_add'))
+                .then(function () {
+                    self.resetAddCorrespondence($event);
+                });
+        };
 
         /**
          * @description Reset the Add Incoming form
          * @param $event
          */
         self.resetAddCorrespondence = function ($event) {
-            dialog.confirmMessage(langService.get('confirm_reset_add'))
-                .then(function () {
-                    self.incoming = new Incoming({
-                        ou: centralArchives ? null : self.employee.getOUID(),
-                        addMethod: 1,
-                        createdOn: new Date(),
-                        docDate: new Date(),
-                        refDocDate: new Date(),
-                        registryOU: centralArchives ? null : self.employee.getRegistryOUID(),
-                        securityLevel: lookups.securityLevels[0],
-                        site: null
-                    });
-                    self.emptySubSites = true;
-                    self.documentInformation = null;
-                    self.documentAction = null;
-                    self.documentInformationExist = false;
-                    self.contentFileExist = false;
-                    self.contentFileSizeExist = false;
-                    self.document_properties.$setUntouched();
-                    //self.isReceiveG2G = false;
-                    self.receiveG2G = false;
-                    self.receive = false;
-                });
+            self.incoming = new Incoming({
+                ou: centralArchives ? null : self.employee.getOUID(),
+                addMethod: 1,
+                createdOn: new Date(),
+                docDate: new Date(),
+                refDocDate: new Date(),
+                registryOU: centralArchives ? null : self.employee.getRegistryOUID(),
+                securityLevel: lookups.securityLevels[0],
+                site: null
+            });
+            self.emptySubSites = true;
+            self.documentInformation = null;
+            self.documentAction = null;
+            self.documentInformationExist = false;
+            self.contentFileExist = false;
+            self.contentFileSizeExist = false;
+            self.document_properties.$setUntouched();
+            //self.isReceiveG2G = false;
+            self.receiveG2G = false;
+            self.receive = false;
         };
 
         /**

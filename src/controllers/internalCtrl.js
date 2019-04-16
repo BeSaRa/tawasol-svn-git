@@ -438,32 +438,40 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description confirm message when reset the Add internal form
+         * @param $event
+         */
+        self.confirmResetAddCorrespondence = function ($event) {
+            dialog.confirmMessage(langService.get('confirm_reset_add'))
+                .then(function () {
+                    self.resetAddCorrespondence($event);
+                });
+        };
+
 
         /**
          * @description Reset the Add internal form
          * @param $event
          */
         self.resetAddCorrespondence = function ($event) {
-            dialog.confirmMessage(langService.get('confirm_reset_add'))
-                .then(function () {
-                    //ou: self.employee.organization.ouid,
-                    self.internal = new Internal({
-                        ou: self.employee.getOUID(),
-                        addMethod: 0,
-                        createdOn: new Date(),
-                        docDate: new Date(),
-                        registryOU: self.employee.getRegistryOUID(),
-                        securityLevel: lookups.securityLevels[0]
-                    });
+            //ou: self.employee.organization.ouid,
+            self.internal = new Internal({
+                ou: self.employee.getOUID(),
+                addMethod: 0,
+                createdOn: new Date(),
+                docDate: new Date(),
+                registryOU: self.employee.getRegistryOUID(),
+                securityLevel: lookups.securityLevels[0]
+            });
 
-                    self.documentInformation = null;
-                    self.documentAction = null;
-                    self.documentInformationExist = false;
-                    self.contentFileExist = false;
-                    self.contentFileSizeExist = false;
-                    self.editContent = false;
-                    self.document_properties.$setUntouched();
-                });
+            self.documentInformation = null;
+            self.documentAction = null;
+            self.documentInformationExist = false;
+            self.contentFileExist = false;
+            self.contentFileSizeExist = false;
+            self.editContent = false;
+            self.document_properties.$setUntouched();
         };
 
         /**
