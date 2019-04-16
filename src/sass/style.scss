@@ -2120,6 +2120,7 @@ html.rtl {
 .serial-td {
   direction: ltr !important;
   white-space: pre !important;
+  display: inline-block;
 }
 
 .block-display {
