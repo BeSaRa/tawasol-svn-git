@@ -109,7 +109,7 @@
                                         <span>{{lang.incoming_create_content}}</span>
                                     </accordion-title>
                                     <accordion-content>
-                                        <div layout-align="start center" layout="row">
+                                        <div layout-align-gt-md="start center" layout-gt-md="row" layout="column">
                                             <!--display-prepare="!ctrl.incoming.addMethod"-->
                                             <manage-content-directive
                                                     edit-content="ctrl.receive"
@@ -122,12 +122,14 @@
                                                     simple-view-url="ctrl.simpleViewUrl"
                                                     is-simple-add="ctrl.simpleAdd"></manage-content-directive>
 
+                                            <div flex>
                                             <md-button class="md-raised" ng-click="ctrl.manageAttachments($event)">
                                                 <md-icon md-svg-icon="attachment"></md-icon>
                                                 {{lang.attachments}} ({{ctrl.incoming.attachments.length}})</md-button>
                                             <md-button class="md-raised" ng-click="ctrl.manageLinkedDocuments($event)">
                                                 <md-icon md-svg-icon="note-multiple-outline"></md-icon>
                                                 {{lang.linked_documents}} ({{ctrl.incoming.linkedDocs.length}})</md-button>
+                                            </div>
                                         </div>
 
                                         <div layout="row">

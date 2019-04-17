@@ -133,7 +133,7 @@
                                         </div>
                                     </accordion-title>
                                     <accordion-content layout="column">
-                                        <div layout-align="start center" layout="=row">
+                                        <div layout-align-gt-md="start center" layout-gt-md="row" layout="column">
                                             <manage-content-directive
                                                     edit-content="ctrl.editContent"
                                                     display-prepare="!ctrl.outgoing.addMethod"
@@ -144,13 +144,14 @@
                                                     templates="ctrl.templates"
                                                     simple-view-url="ctrl.simpleViewUrl"
                                                     is-simple-add="ctrl.simpleAdd"></manage-content-directive>
-
+                                            <div flex>
                                             <md-button class="md-raised" ng-click="ctrl.manageAttachments($event)">
                                                 <md-icon md-svg-icon="attachment"></md-icon>
                                                 {{lang.attachments}} ({{ctrl.outgoing.attachments.length}})</md-button>
                                             <md-button class="md-raised" ng-click="ctrl.manageLinkedDocuments($event)">
                                                 <md-icon md-svg-icon="note-multiple-outline"></md-icon>
                                                 {{lang.linked_documents}} ({{ctrl.outgoing.linkedDocs.length}})</md-button>
+                                            </div>
                                         </div>
                                         <div flex layout="row">
                                             <!--document viewer editor-->
