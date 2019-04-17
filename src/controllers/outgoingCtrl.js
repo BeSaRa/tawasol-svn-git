@@ -42,7 +42,6 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'outgoingCtrl';
         contextHelpService.setHelpTo('add-outgoing');
-
         self.isDemoBuild = generator.isDemoBuild;
 
         self.employeeService = employeeService;
@@ -111,11 +110,12 @@ module.exports = function (app) {
             self.documentInformation = self.outgoing.hasContent() ? duplicateVersion.content : null;
             self.editContent = self.outgoing.hasContent();// true;
             self.duplicateVersion = true;
-        } else if (editAfterReturnG2G){
+        } else if (editAfterReturnG2G) {
             self.outgoing = editAfterReturnG2G.metaData;
             self.documentInformation = editAfterReturnG2G.content;
             self.editContent = true;
         }
+
 
         self.preventPropagation = function ($event) {
             $event.stopPropagation();

@@ -26,7 +26,7 @@ module.exports = function (app) {
          * @param correspondence
          */
         self.storeCorrespondence = function (key, correspondence) {
-            self.lastCorrespondence[key] = correspondence;
+            self.lastCorrespondence[key.toLowerCase()] = correspondence;
             return true;
         };
 

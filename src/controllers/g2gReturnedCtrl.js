@@ -183,7 +183,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.g2gEditAfterReturn = function (g2gMessagingHistory, $event) {
-            var action = 'editAfterReturnFromG2G';
+            var action = 'editAfterReturnG2G';
             var list = listGeneratorService.createUnOrderList(),
                 langKeys = ['signature_serial_will_removed', 'the_book_will_go_to_audit', 'serial_retained', 'exported_not_received_documents_will_be_recalled'];
             _.map(langKeys, function (item) {
