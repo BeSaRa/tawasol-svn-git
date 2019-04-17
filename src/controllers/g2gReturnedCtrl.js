@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                 $filter,
                                                 langService,
                                                 toast,
+                                                listGeneratorService,
                                                 $state,
                                                 dialog,
                                                 ResolveDefer,
@@ -183,17 +184,25 @@ module.exports = function (app) {
          */
         self.g2gEditAfterReturn = function (g2gMessagingHistory, $event) {
             var action = 'editAfterReturnFromG2G';
-            correspondenceService
-                .editAfterReturnFromG2G(g2gMessagingHistory)
-                .then(function (correspondence) {
-                    correspondenceStorageService.storeCorrespondence(action, correspondence);
-                    $state.go('app.outgoing.add', {
-                        vsId: g2gMessagingHistory.refDocId,
-                        action: action
-                    });
-                })
-                .catch(function () {
-                    dialog.errorMessage(langService.get('error_messages'));
+            var list = listGeneratorService.createUnOrderList(),
+                langKeys = ['signature_serial_will_removed', 'the_book_will_go_to_audit', 'serial_retained', 'exported_not_received_documents_will_be_recalled'];
+            _.map(langKeys, function (item) {
+                list.addItemToList(langService.get(item));
+            });
+            dialog.confirmMessage(list.getList(), null, null, $event)
+                .then(function () {
+                    correspondenceService
+                        .editAfterReturnFromG2G(g2gMessagingHistory)
+                        .then(function (correspondence) {
+                            correspondenceStorageService.storeCorrespondence(action, correspondence);
+                            $state.go('app.outgoing.add', {
+                                vsId: g2gMessagingHistory.refDocId,
+                                action: action
+                            });
+                        })
+                        .catch(function () {
+                            dialog.errorMessage(langService.get('error_messages'));
+                        });
                 });
         };
 
