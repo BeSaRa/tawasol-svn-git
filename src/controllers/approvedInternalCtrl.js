@@ -639,6 +639,19 @@ module.exports = function (app) {
                     });
             };
 
+            /**
+             * @description Mark item as read/unread
+             * @param workItem
+             * @param $event
+             */
+            self.markAsReadUnread = function (workItem, $event) {
+                return workItem.markAsReadUnread($event)
+                    .then(function (result) {
+                        self.reloadApprovedInternals(self.grid.page);
+                        counterService.loadCounters();
+                    })
+            };
+
 
             /**
              * @description Array of actions that can be performed on grid

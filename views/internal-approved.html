@@ -69,6 +69,9 @@
                                         <th ng-if="!ctrl.selectedApprovedInternals.length" md-column>
 
                                         </th>
+                                        <th ng-if="!ctrl.selectedApprovedInternals.length" md-column>
+                                            <!-- Read/Unread Indicator -->
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody md-body>
@@ -76,6 +79,7 @@
                                         ng-disabled="approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()"
                                         grid-right-click-directive="approvedInternal"
                                         model="approvedInternal"
+                                        ng-class="!approvedInternal.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                                         selected-length="{{ctrl.selectedApprovedInternals.length ? ctrl.selectedApprovedInternals.length : 0}}"
                                         ng-repeat="approvedInternal in searchResults = (ctrl.approvedInternals  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td md-cell>
@@ -109,6 +113,17 @@
                                                 <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
                                                                         model="approvedInternal">
                                                 </grid-actions-directive>
+                                            </div>
+                                        </td>
+                                        <td md-cell class="read-td">
+                                            <!--ng-click="ctrl.markAsReadUnread(approvedInternal, $event)"
+                                            tooltip="{{approvedInternal.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
+                                                 tooltip-direction="top"
+                                            -->
+                                            <div class="cursor-pointer status"
+                                                 ng-class="approvedInternal.generalStepElm.isOpen===true? 'read' : 'unread'"
+                                                 ng-if="!ctrl.selectedApprovedInternals.length
+                                                          || ctrl.selectedApprovedInternals.length===1 && ctrl.selectedApprovedInternals[0].generalStepElm.workObjectNumber === approvedInternal.generalStepElm.workObjectNumber" >
                                             </div>
                                         </td>
                                     </tr>
