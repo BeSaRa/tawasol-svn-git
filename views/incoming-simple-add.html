@@ -65,11 +65,11 @@
                                             ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised" >
                                         {{lang.incoming_save_print_barcode}}
                                     </md-button>
+                                </div>
+                                <div layout="row">
                                     <md-button ng-click="ctrl.confirmResetAddCorrespondence($event)" class="md-raised">
                                         {{lang.incoming_new}}
                                     </md-button>
-                                </div>
-                                <div layout="row">
                                     <md-button ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}" ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
                                         {{lang.incoming_cancel}}
                                     </md-button>
