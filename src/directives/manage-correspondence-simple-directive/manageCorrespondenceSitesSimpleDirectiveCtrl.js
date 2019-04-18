@@ -102,6 +102,7 @@ module.exports = function (app) {
 
         self.subRecords = _concatCorrespondenceSites(true);
 
+        self.sitesInfoLength = 0;
         /**
          * create current date + given days if provided.
          * @param days
@@ -513,6 +514,7 @@ module.exports = function (app) {
                 .manageSitesForDocument(self.correspondence)
                 .then(function (correspondence) {
                     self.correspondence = correspondence;
+                    self.sitesInfoLength = self.correspondence.sitesInfoTo.length + self.correspondence.sitesInfoCC.length - 1;
                 }));
         };
 
