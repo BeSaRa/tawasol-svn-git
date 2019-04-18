@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                         attachmentService,
                                                         generator,
                                                         dialog,
+                                                        errorCode,
                                                         langService,
                                                         documentTemplate,
                                                         documentTypes,
@@ -110,11 +111,12 @@ module.exports = function (app) {
                                 dialog.hide(self.documentTemplate);
                             });
                     })
-                    .catch(function () {
-
+                    .catch(function (error) {
+                        errorCode.checkIf(error, 'CAN_NOT_UPDATE_PROTECTED_DOCUMENT_TEMPLATE ', function () {
+                            dialog.errorMessage(langService.get('protected_template'));
+                        });
                     });
-            }
-            else {
+            } else {
                 toast.error(langService.get('file_required'));
             }
         };
@@ -146,7 +148,11 @@ module.exports = function (app) {
                         .updateDocumentTemplate(self.documentTemplate, self.docTemplateFile)
                         .then(function () {
                             dialog.hide(self.documentTemplate);
+                        }).catch(function (error) {
+                        errorCode.checkIf(error, 'CAN_NOT_UPDATE_PROTECTED_DOCUMENT_TEMPLATE ', function () {
+                            dialog.errorMessage(langService.get('protected_template'));
                         });
+                    });
                 })
                 .catch(function () {
 
