@@ -44,7 +44,8 @@ module.exports = function (app) {
             SEC_LDAP_INVALID_SERVER_ADDRESS: 13010,
             SEC_LDAP_INVALID_OP: 13011,
             SEC_ERROR_USER_UN_AUHTORIZED_FOR_SERVICE: 13012,
-            INVALID_DOC_STATUS_TO_EXPORT: 3036
+            INVALID_DOC_STATUS_TO_EXPORT: 3036,
+            MAIP_PROTECTED_TEMPLATE: 13014
             // entity connection errors end
         };
 

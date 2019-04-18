@@ -183,6 +183,9 @@ module.exports = function (app) {
                                                 return self.openPreparedTemplate(file.name, null, result);
                                         })
                                         .catch(function (error) {
+                                            errorCode.checkIf(error, 'MAIP_PROTECTED_TEMPLATE', function () {
+                                                dialog.errorMessage(langService.get('protected_template'));
+                                            });
                                             errorCode.checkIf(error, 'FILE_NOT_ALLOWED', function () {
                                                 dialog.errorMessage(langService.get('invalid_template'));
                                             })
