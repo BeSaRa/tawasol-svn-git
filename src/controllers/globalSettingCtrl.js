@@ -276,6 +276,14 @@ module.exports = function (app) {
                 });
         };
 
+        self.onChangeRemoveMAIPSecurity = function ($event) {
+            if (self.globalSetting.removeMAIPSecurity && !self.entityForGlobalSetting.maipServiceURL)
+             dialog.alertMessage(langService.get('can_not_enable_remove_maip_security')).then(function () {
+                 self.globalSetting.removeMAIPSecurity = false;
+             });
+
+        };
+
         /**
          * Save Uploaded Image File (add or edit)
          * @param modelName

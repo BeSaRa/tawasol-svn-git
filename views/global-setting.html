@@ -442,7 +442,8 @@
                                 <div flex>
                                     <!-- remove MAIP security -->
                                     <md-switch ng-model="ctrl.globalSetting.removeMAIPSecurity"
-                                               aria-label="{{lang.remove_maip_security}}">
+                                               aria-label="{{lang.remove_maip_security}}"
+                                                ng-change="ctrl.onChangeRemoveMAIPSecurity ($event)">
                                         <span>{{lang.remove_maip_security}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('removeMAIPSecurity')}}
                                     </md-switch>
                                 </div>
