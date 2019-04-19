@@ -520,6 +520,7 @@ module.exports = function (app) {
 
         self.changeSubCorrespondence = function (item) {
             if (item) {
+                _concatCorrespondenceSites(false);
                 if (_filterSubSites(item)) {
                     self.addSiteTo(item);
                 }
