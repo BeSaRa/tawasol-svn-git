@@ -799,7 +799,7 @@ module.exports = function (app) {
          */
         self.signESignature = function (userInbox, $event, defer, sendAfterApprove) {
             return userInbox
-                .approveWorkItem($event, defer)
+                .approveWorkItem($event, defer, null, sendAfterApprove)
                 .then(function (result) {
                     if (sendAfterApprove)
                         return result;

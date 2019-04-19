@@ -533,13 +533,13 @@ module.exports = function (app) {
             WorkItem.prototype.returnWorkItemFromCentralArchive = function ($event, ignoreMessage) {
                 return correspondenceService.centralArchiveReturn(this, $event, ignoreMessage)
             };
-            WorkItem.prototype.approveWorkItem = function ($event, defer, ignoreMessage) {
+            WorkItem.prototype.approveWorkItem = function ($event, defer, ignoreMessage, sendAfterApprove) {
                 var workItem = this;
                 return correspondenceService
                     .showApprovedDialog(this, $event, ignoreMessage)
                     .then(function (result) {
                         new ResolveDefer(defer);
-                        if (result === 'PARIALLY_AUTHORIZED') {
+                        if (result === 'PARIALLY_AUTHORIZED' && !sendAfterApprove) {
                             return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: workItem.getTranslatedName()}))
                                 .then(function () {
                                     return workItem.launchWorkFlow($event, 'forward', 'favorites');
