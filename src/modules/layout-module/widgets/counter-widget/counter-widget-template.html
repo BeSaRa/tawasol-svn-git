@@ -25,7 +25,7 @@
                             {{lang.counter_widget_data_source}}
                         </md-button>
                         <md-menu-content class="menu-content-no-padding" width="1">
-                            <md-menu-item ng-repeat="source in ctrl.dataSources track by $index">
+                            <md-menu-item ng-class="{selected:ctrl.isSelectedSource(source)}" ng-repeat="source in ctrl.dataSources track by $index">
                                 <md-button
                                         aria-label="{{source[lang.current]}}"
                                         ng-click="ctrl.setCurrentSelectedDataSource(source)">

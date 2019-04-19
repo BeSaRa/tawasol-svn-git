@@ -219,6 +219,10 @@ module.exports = function (app) {
                 .then(function () {
                     $($scope.widget.getWidgetTagId('#')).remove()
                 })
+        };
+
+        self.isSelectedSource = function (source) {
+            return currentDataSource() === source.value;
         }
 
     });
