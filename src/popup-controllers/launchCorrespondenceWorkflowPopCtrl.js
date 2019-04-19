@@ -162,6 +162,7 @@ module.exports = function (app) {
 
         if (self.selectedOrganizationToSend) {
             _addSelectedOrganization(self.selectedOrganizationToSend);
+            self.selectTab(self.selectedTab);
         }
 
         function _addSelectedOrganization(selected) {
