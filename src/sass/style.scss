@@ -13,6 +13,7 @@
 
 html {
   direction: ltr;
+
   body, button, select, html, textarea, input {
     font-family: Roboto, Arial, 'Noto Kufi Arabic', "Helvetica Neue", sans-serif;
     line-height: 1;
@@ -2257,4 +2258,10 @@ $ta-background-transparent: transparent !important;
   max-width: 150px;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.barcode-image-container {
+  img {
+    max-width: 100%;
+  }
 }

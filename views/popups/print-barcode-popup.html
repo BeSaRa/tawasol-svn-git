@@ -9,7 +9,9 @@
             <div class="p20" layout="column">
                 <div id="barcode-area" layout="row">
                     <span flex></span>
-                    <img ng-src="{{ctrl.barcode}}">
+                    <div flex class="barcode-image-container">
+                        <img ng-src="{{ctrl.barcode}}">
+                    </div>
                     <span flex></span>
                 </div>
                 <div layout="row">
