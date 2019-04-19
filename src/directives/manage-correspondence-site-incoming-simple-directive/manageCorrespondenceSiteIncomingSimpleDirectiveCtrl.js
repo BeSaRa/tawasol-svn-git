@@ -1,19 +1,19 @@
 module.exports = function (app) {
     app.controller('manageCorrespondenceSiteIncomingSimpleDirectiveCtrl', function (correspondenceViewService,
-                                                                              langService,
-                                                                              dialog,
-                                                                              moment,
-                                                                              $scope,
-                                                                              Site,
-                                                                              lookupService,
-                                                                              CorrespondenceSiteType,
-                                                                              LangWatcher,
-                                                                              $timeout,
-                                                                              $q,
-                                                                              _,
-                                                                              correspondenceService,
-                                                                              toast,
-                                                                              rootEntity) {
+                                                                                    langService,
+                                                                                    dialog,
+                                                                                    moment,
+                                                                                    $scope,
+                                                                                    Site,
+                                                                                    lookupService,
+                                                                                    CorrespondenceSiteType,
+                                                                                    LangWatcher,
+                                                                                    $timeout,
+                                                                                    $q,
+                                                                                    _,
+                                                                                    correspondenceService,
+                                                                                    toast,
+                                                                                    rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSiteIncomingSimpleDirectiveCtrl';
@@ -353,11 +353,19 @@ module.exports = function (app) {
                     criteria: null,
                     excludeOuSites: false
                 }).then(function (result) {
+                    self.subSearchResult = [];
                     self.mainSites = result;
+                    if (self.selectedSiteType && self.selectedSiteType.lookupKey === 1) {
+                        self.selectedMainSite = _.find(result, function (site) {
+                            return site.id === 10000000;
+                        });
+                        self.selectedMainSite ? self.getSubSites() : null;
+                    }
                 });
-            }
-            else {
-                self.mainSites = self.subSearchResult = self.subSearchResultCopy = [];
+            } else {
+                self.mainSites = [];
+                self.subSearchResult = [];
+                self.subSearchResultCopy = [];
             }
         };
 
@@ -479,8 +487,7 @@ module.exports = function (app) {
         self.onSiteFollowupStatusChange = function (status) {
             if (!self.needReply(status)) {
                 self.site.followupDate = null;
-            }
-            else {
+            } else {
                 if (self.site.followupStatus.lookupStrKey !== 'NEED_REPLY')
                     self.site.followupStatus = null;
             }
@@ -615,8 +622,7 @@ module.exports = function (app) {
         self.changeSubCorrespondence = function (item) {
             if (item) {
                 self.replaceSite(item);
-            }
-            else {
+            } else {
                 self.site = null;
                 _concatCorrespondenceSites(true).then(function () {
                     self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);

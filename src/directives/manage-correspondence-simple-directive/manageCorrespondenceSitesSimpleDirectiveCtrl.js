@@ -473,6 +473,13 @@ module.exports = function (app) {
                     self.subSearchResult = [];
                     self.mainSites = result;
                     self.selectedMainSite = null;
+
+                    if (self.selectedSiteType && self.selectedSiteType.lookupKey === 1) {
+                        self.selectedMainSite = _.find(result, function (site) {
+                            return site.id === 10000000;
+                        });
+                        self.selectedMainSite ? self.getSubSites() : null;
+                    }
                 });
             } else {
                 self.mainSites = [];
