@@ -2770,7 +2770,7 @@ module.exports = function (app) {
                 });
         };
         /**
-         * @description approv
+         * @description approve the workItem
          * @param workItem
          * @param signature
          * @param isComposite
@@ -2794,7 +2794,8 @@ module.exports = function (app) {
                 .catch(function (error) {
                     errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
                         dialog.errorMessage(langService.get('authorize_failed'))
-                    })
+                    });
+                    return $q.reject(error);
                 })
         };
         /**
