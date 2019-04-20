@@ -75,6 +75,23 @@ module.exports = function (app) {
                 }
             });
         };
+
+        /**
+         * @description Deep clone attachments.
+         * Uses the angular.copy and handles file objects as well
+         * @param attachments
+         * @returns {*}
+         * @private
+         */
+        self.deepCopyAttachments = function(attachments){
+            var attachmentFilesOnly = _.map(attachments, 'file'),
+                attachmentsCopy = angular.copy(attachments);
+            for (var i = 0; i < attachmentsCopy.length; i++) {
+                attachmentsCopy[i].file = attachmentFilesOnly[i];
+            }
+            return attachmentsCopy;
+        };
+
         /**
          * manage document attachments for given any document.
          * @param document
@@ -106,8 +123,9 @@ module.exports = function (app) {
                     attachments: function (attachmentService) {
                         'ngInject';
                         if (isSimpleAdd && !vsId) {
-                            defer.resolve(angular.copy(document.attachments));
-                            return angular.copy(document.attachments);
+                            var attachments = self.deepCopyAttachments(document.attachments);
+                            defer.resolve(attachments);
+                            return attachments;
                         }
                         return attachmentService.loadDocumentAttachments(vsId, documentClass).then(function (attachments) {
                             defer.resolve(attachments);
@@ -119,7 +137,7 @@ module.exports = function (app) {
                         'ngInject';
                         var qDefer = $q.defer();
                         defer.promise.then(function (attachments) {
-                            qDefer.resolve(angular.copy(attachments));
+                            qDefer.resolve(self.deepCopyAttachments(attachments));
                         });
                         return qDefer.promise;
                     },

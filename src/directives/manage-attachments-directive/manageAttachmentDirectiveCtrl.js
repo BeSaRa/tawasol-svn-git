@@ -18,7 +18,8 @@ module.exports = function (app) {
                                                               lookupService,
                                                               generator,
                                                               downloadService,
-                                                              _) {
+                                                              _,
+                                                              managerService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageAttachmentDirectiveCtrl';
@@ -180,7 +181,7 @@ module.exports = function (app) {
             return attachmentService.loadDocumentAttachments(self.vsId, self.documentClass)
                 .then(function (result) {
                     self.attachments = result;
-                    self.model = angular.copy(self.attachments);
+                    self.model = managerService.deepCopyAttachments(self.attachments);
                     self.selectedAttachments = [];
                     return result;
                 });
@@ -213,7 +214,7 @@ module.exports = function (app) {
                         toast.success(langService.get('add_success').change({name: attachment.documentTitle}));
                         attachment.isDeletable = self.isAttachmentDeletable(attachment);
                         self.attachments.push(attachment);
-                        self.model = angular.copy(self.attachments);
+                        self.model = managerService.deepCopyAttachments(self.attachments);
                         self.attachment = null;
                     }
                 })
@@ -254,7 +255,7 @@ module.exports = function (app) {
                         toast.success(langService.get('delete_success'));
                         self.attachments = attachments;
                         self.linkedExportedAttachments = linkedExportedAttachments;
-                        self.model = angular.copy(self.attachments);
+                        self.model = managerService.deepCopyAttachments(self.attachments);
                         self.selectedAttachments = [];
                     });
                 });
@@ -288,7 +289,7 @@ module.exports = function (app) {
                             self.attachments = attachments;
                             self.linkedExportedAttachments = linkedExportedAttachments;
                             self.selectedAttachments = [];
-                            self.model = angular.copy(self.attachments);
+                            self.model = managerService.deepCopyAttachments(self.attachments);
                         });
                 });
         };
@@ -376,7 +377,7 @@ module.exports = function (app) {
                             return existingAttachment.vsId === attachment.vsId;
                         });
                         self.attachments.splice(existingAttachmentIndex, 1, attachment);
-                        self.model = angular.copy(self.attachments);
+                        self.model = managerService.deepCopyAttachments(self.attachments);
                         self.attachment = null;
                     }
                 })
