@@ -38,6 +38,7 @@
                                                 </md-button>
                                                 <md-button class="md-icon-button"
                                                            aria-label="{{lang.grid_action_quick_receive}}"
+                                                           ng-if="ctrl.checkIfQuickReceiveBulkAvailable()"
                                                            tooltip="{{lang.grid_action_quick_receive}}"
                                                            ng-click="ctrl.quickReceiveBulk($event)">
                                                     <md-icon md-svg-icon="check-all" class="action-green"></md-icon>

@@ -125,11 +125,23 @@ module.exports = function (app) {
             return !(self.itemsWithoutReturn && self.itemsWithoutReturn.length);
         };
 
+        self.checkIfQuickReceiveBulkAvailable = function () {
+            self.itemsWithoutQuickReceive = [];
+            _.map(self.selectedIncomingDepartmentInboxes, function (workItem) {
+                if (workItem.generalStepElm.isReassigned)
+                    self.itemsWithoutQuickReceive.push(workItem.generalStepElm.vsId);
+            });
+            return !(self.itemsWithoutQuickReceive && self.itemsWithoutQuickReceive.length);
+        };
+
         /**
          * @description Return the bulk incoming department inbox items
          * @param $event
          */
         self.returnWorkItemsBulk = function ($event) {
+            if (!self.selectedIncomingDepartmentInboxes.length) {
+                return;
+            }
             var selectedItems = angular.copy(self.selectedIncomingDepartmentInboxes);
             if (!self.checkIfReturnBulkAvailable()) {
                 if (self.itemsWithoutReturn.length === selectedItems.length) {
@@ -141,14 +153,14 @@ module.exports = function (app) {
                         return self.itemsWithoutReturn.indexOf(workItem.generalStepElm.vsId) === -1;
                     });
                     if (self.selectedIncomingDepartmentInboxes.length)
-                        returnBulk(selectedItems, $event);
+                        _returnBulk(selectedItems, $event);
                 })
             } else {
-                returnBulk(selectedItems, $event);
+                _returnBulk(selectedItems, $event);
             }
         };
 
-        function returnBulk(selectedItems, $event) {
+        function _returnBulk(selectedItems, $event) {
             correspondenceService
                 .returnBulkWorkItem(selectedItems, $event)
                 .then(function () {
@@ -196,17 +208,68 @@ module.exports = function (app) {
             if (!self.selectedIncomingDepartmentInboxes.length) {
                 return;
             }
+            var selectedItems = angular.copy(self.selectedIncomingDepartmentInboxes);
+            if (!self.checkIfQuickReceiveBulkAvailable()) {
+                if (self.itemsWithoutQuickReceive.length === selectedItems.length) {
+                    dialog.alertMessage(langService.get('selected_items_can_not_be_quick_received'));
+                    return false;
+                }
+                dialog.confirmMessage(langService.get('some_items_cannot_quick_receive_skip_and_return'), null, null, $event).then(function () {
+                    self.selectedIncomingDepartmentInboxes = selectedItems = _.filter(self.selectedIncomingDepartmentInboxes, function (workItem) {
+                        return self.itemsWithoutQuickReceive.indexOf(workItem.generalStepElm.vsId) === -1;
+                    });
+                    if (self.selectedIncomingDepartmentInboxes.length)
+                        _quickReceiveBulk(selectedItems, $event);
+                })
+            } else {
+                _quickReceiveBulk(selectedItems, $event);
+            }
+        };
 
+
+        function _quickReceiveBulk(selectedItems, $event) {
             correspondenceService
                 .quickReceiveBulkCorrespondence(self.selectedIncomingDepartmentInboxes)
-                .then(function () {
-                    self.reloadIncomingDepartmentInboxes(self.grid.page)
+                .then(function (result) {
+                    var list = listGeneratorService.createUnOrderList(),
+                        langKeys = ['quick_received_success', 'not_launched_book_will_go_to_review', 'confirm_launch_distribution_workflow'];
+                    _.map(langKeys, function (item) {
+                        list.addItemToList(langService.get(item));
+                    });
+
+                    dialog.confirmMessage(list.getList(), null, null, $event)
+                        .then(function () {
+                            var correspondences = [];
+                            for (var i = 0; i < result.length; i++) {
+                                correspondences.push(new Incoming({
+                                    vsId: result[i],
+                                    docSubject: selectedItems[i].getInfo().title,
+                                    securityLevel: selectedItems[i].generalStepElm.securityLevel,
+                                    mainSiteId: true // to avoid the check correspondence sites for the document before launch it.
+                                }))
+                            }
+                            correspondenceService
+                                .launchCorrespondenceWorkflow(correspondences, $event, 'forward', 'favorites', true)
+                                .then(function () {
+                                    self.reloadIncomingDepartmentInboxes(self.grid.page)
+                                        .then(function () {
+                                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                                        });
+                                });
+                        })
+                        .catch(function () {
+                            self.reloadIncomingDepartmentInboxes(self.grid.page)
+                                .then(function () {
+                                    new ResolveDefer(defer);
+                                });
+                        });
+                    /*self.reloadIncomingDepartmentInboxes(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
-                        });
+                        });*/
                 });
-        };
+        }
 
         /**
          * @description Quick Accept the incoming department inbox item

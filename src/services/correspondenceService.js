@@ -3402,7 +3402,9 @@ module.exports = function (app) {
             return $http
                 .put(urlService.departmentInboxes + '/receive-quick/bulk', wobNumbers)
                 .then(function (result) {
-                    return _bulkMessages(result, workItems, ignoreMessage, 'failed_to_receive', 'quick_received_success', '');
+                    toast.success(langService.get("quick_received_success"));
+                    //return _bulkMessages(result, workItems, ignoreMessage, 'failed_to_receive', 'quick_received_success', 'following_records_failed_to_quick_receive');
+                    return result.data.rs;
                 });
         };
         /**
