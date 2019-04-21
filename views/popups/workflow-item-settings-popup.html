@@ -22,19 +22,22 @@
                         </md-input-container>
                         <md-input-container>
                             <label for="dueDate">{{lang.due_date}}</label>
-                            <md-datepicker id="dueDate" md-open-on-focus
+                            <md-datepicker tooltip="{{lang.due_date}}" id="dueDate" md-open-on-focus
                                            md-min-date="ctrl.minDate"
                                            ng-model="ctrl.distWorkflowItem.dueDate"></md-datepicker>
                         </md-input-container>
                     </div>
-                    <div ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification" layout="row">
+                    <div ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification"
+                         layout="row">
                         <div flex>
-                            <md-checkbox ng-disabled="!ctrl.globalSettings.enableSMSNotification" ng-model="ctrl.distWorkflowItem.sendSMS">
+                            <md-checkbox ng-disabled="!ctrl.globalSettings.enableSMSNotification"
+                                         ng-model="ctrl.distWorkflowItem.sendSMS">
                                 {{lang.sms_workflow_notification}}
                             </md-checkbox>
                         </div>
                         <div flex>
-                            <md-checkbox ng-disabled="!ctrl.globalSettings.enableEmailNotification" ng-model="ctrl.distWorkflowItem.sendEmail">
+                            <md-checkbox ng-disabled="!ctrl.globalSettings.enableEmailNotification"
+                                         ng-model="ctrl.distWorkflowItem.sendEmail">
                                 {{lang.email_workflow_notification}}
                             </md-checkbox>
                         </div>
