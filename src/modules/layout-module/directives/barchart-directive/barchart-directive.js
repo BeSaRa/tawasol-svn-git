@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('barchartDirective', function ($timeout, employeeService, counterService, $state, langService, $window) {
+    app.directive('barchartDirective', function ($timeout, employeeService, dialog, counterService, $state, langService, $window) {
         'ngInject';
         return {
             restrict: 'E',
