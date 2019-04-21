@@ -292,7 +292,6 @@ module.exports = function (app) {
                     classDescription: generator.getDocumentClassName(this.generalStepElm.docType),
                     docStatus: this.generalStepElm.docStatus,
                     vsId: this.generalStepElm.vsId,
-                    mainSiteId: true,
                     securityLevel: this.generalStepElm.securityLevel,
                     ccSitesList: [true], // just to ignore the validation while send
                     toSitesList: [true] // just to ignore the validation while send
