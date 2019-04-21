@@ -3423,12 +3423,12 @@ module.exports = function (app) {
                 });
         };
 
-        self.viewCorrespondenceSites = function (correspondences,$event) {
-            var info = correspondences.getInfo();
+        self.viewCorrespondenceSites = function (correspondence , recordType,$event) {
+            var info =  correspondence.getInfo();
             if (info.documentClass === 'internal')
                 return;
 
-            if (self.type && self.type.toLowerCase() === 'g2g') {
+            if (recordType && recordType.toLowerCase() === 'g2g') {
                 return dialog.showDialog({
                     templateUrl: cmsTemplate.getPopup('manage-grid-correspondence-sites'),
                     controller: 'manageGridCorrespondenceSitesPopCtrl',
@@ -3438,13 +3438,13 @@ module.exports = function (app) {
                     escapeToClose: false,
                     locals: {
                         documentSubject: info.title,
-                        type: self.type.toLowerCase(),
-                        correspondence: self.item.correspondence,
+                        type: recordType.toLowerCase(),
+                        correspondence: correspondence.correspondence,
                         sites: []
                     }
                 });
             }
-            else if (self.type && self.type.toLowerCase() === 'g2gmessaginghistory') {
+            else if (recordType && recordType.toLowerCase() === 'g2gmessaginghistory') {
                 return dialog.showDialog({
                     templateUrl: cmsTemplate.getPopup('manage-grid-correspondence-sites'),
                     controller: 'manageGridCorrespondenceSitesPopCtrl',
@@ -3454,8 +3454,8 @@ module.exports = function (app) {
                     escapeToClose: false,
                     locals: {
                         documentSubject: info.title,
-                        type: self.type.toLowerCase(),
-                        correspondence: self.item,
+                        type: recordType.toLowerCase(),
+                        correspondence: correspondence,
                         sites: []
                     }
                 });

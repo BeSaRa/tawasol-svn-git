@@ -12,8 +12,8 @@ module.exports = function (app) {
             return self.item.getInfo().documentClass !== 'internal';
         };
 
-        self.viewCorrespondenceSites = function($event){
-            correspondenceService.viewCorrespondenceSites(self.item,$event);
+       self.viewCorrespondenceSites = function($event){
+            correspondenceService.viewCorrespondenceSites(self.item, self.type, $event);
         }
     });
 };

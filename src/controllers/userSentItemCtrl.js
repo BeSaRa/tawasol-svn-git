@@ -581,8 +581,8 @@ module.exports = function (app) {
          * @param userSentItem
          * @param $event
          */
-        self.viewCorrespondenceSites = function (userSentItem,$event) {
-            correspondenceService.viewCorrespondenceSites(userSentItem ,$event);
+        self.viewCorrespondenceSites = function (userSentItem, $event) {
+            correspondenceService.viewCorrespondenceSites(userSentItem, null, $event);
         };
 
         /**
