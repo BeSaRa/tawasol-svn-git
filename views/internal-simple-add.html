@@ -42,7 +42,7 @@
                                     <md-button ng-click="ctrl.saveCorrespondenceAndPrintBarcode()"
                                                ng-disabled="ctrl.document_properties.$invalid || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.internal.contentFile))"
                                                class="md-raised"
-                                                ng-if="ctrl.internal.addMethod">
+                                               ng-if="ctrl.internal.addMethod">
                                         {{lang.internal_save_print_barcode}}
                                     </md-button>
                                     <div ng-if="!ctrl.internal.addMethod">
@@ -110,34 +110,43 @@
                                         </div>
                                     </accordion-title>
                                     <accordion-content>
-                                        <div layout-align-gt-md="start center" layout-gt-md="row" layout="column">
+                                        <div layout="row">
                                             <manage-content-directive
-                                                        edit-content="ctrl.editContent"
-                                                        display-prepare="!ctrl.internal.addMethod"
-                                                        document-information="ctrl.documentInformation"
-                                                        vs-id="ctrl.internal.vsId"
-                                                        document="ctrl.internal"
-                                                        signatures-count="ctrl.internal.signaturesCount"
-                                                        templates="ctrl.templates"
-                                                        simple-view-url="ctrl.simpleViewUrl"
-                                                        is-simple-add="ctrl.simpleAdd"></manage-content-directive>
+                                                    edit-content="ctrl.editContent"
+                                                    display-prepare="!ctrl.internal.addMethod"
+                                                    document-information="ctrl.documentInformation"
+                                                    vs-id="ctrl.internal.vsId"
+                                                    document="ctrl.internal"
+                                                    signatures-count="ctrl.internal.signaturesCount"
+                                                    templates="ctrl.templates"
+                                                    simple-view-url="ctrl.simpleViewUrl"
+                                                    is-simple-add="ctrl.simpleAdd"></manage-content-directive>
 
-                                            <div flex>
-                                                <md-button class="md-raised" ng-click="ctrl.manageAttachments($event)">
+                                            <span flex></span>
+                                            <div class="icon-relative">
+                                                <md-button tooltip="{{lang.attachments}}"
+                                                           class="md-raised md-icon-button"
+                                                           ng-click="ctrl.manageAttachments($event)">
                                                     <md-icon md-svg-icon="attachment"></md-icon>
-                                                    {{lang.attachments}} ({{ctrl.internal.attachments.length}})</md-button>
-                                                <md-button class="md-raised" ng-click="ctrl.manageLinkedDocuments($event)">
+                                                </md-button>
+                                                <span class="counter blue">{{ctrl.internal.attachments.length}}</span>
+                                            </div>
+                                            <div class="icon-relative">
+                                                <md-button tooltip="{{lang.linked_documents}}"
+                                                           class="md-raised md-icon-button"
+                                                           ng-click="ctrl.manageLinkedDocuments($event)">
                                                     <md-icon md-svg-icon="note-multiple-outline"></md-icon>
-                                                    {{lang.linked_documents}} ({{ctrl.internal.linkedDocs.length}})</md-button>
+                                                </md-button>
+                                                <span class="counter blue">{{ctrl.internal.linkedDocs.length}}</span>
                                             </div>
 
                                             <!--toggle Iframe-->
-                                            <md-button ng-click="!ctrl.toggleDocumentViewer($event)"
+                                          <!--  <md-button ng-click="!ctrl.toggleDocumentViewer($event)"
                                                        class="md-icon-button"
                                                        ng-if="ctrl.simpleViewUrl">
                                                 <md-icon
                                                         md-svg-icon="arrow-{{ctrl.activeDocumentViewer ?  'down' : 'up'}}-bold-circle-outline"></md-icon>
-                                            </md-button>
+                                            </md-button>-->
                                         </div>
                                         <div layout="row">
                                             <!--document viewer editor-->

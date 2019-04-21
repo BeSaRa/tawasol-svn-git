@@ -109,7 +109,7 @@
                                         <span>{{lang.incoming_create_content}}</span>
                                     </accordion-title>
                                     <accordion-content>
-                                        <div layout-align-gt-md="start center" layout-gt-md="row" layout="column">
+                                        <div layout="row">
                                             <!--display-prepare="!ctrl.incoming.addMethod"-->
                                             <manage-content-directive
                                                     edit-content="ctrl.receive"
@@ -121,14 +121,22 @@
                                                     templates="ctrl.templates"
                                                     simple-view-url="ctrl.simpleViewUrl"
                                                     is-simple-add="ctrl.simpleAdd"></manage-content-directive>
-
-                                            <div flex>
-                                            <md-button class="md-raised" ng-click="ctrl.manageAttachments($event)">
-                                                <md-icon md-svg-icon="attachment"></md-icon>
-                                                {{lang.attachments}} ({{ctrl.incoming.attachments.length}})</md-button>
-                                            <md-button class="md-raised" ng-click="ctrl.manageLinkedDocuments($event)">
-                                                <md-icon md-svg-icon="note-multiple-outline"></md-icon>
-                                                {{lang.linked_documents}} ({{ctrl.incoming.linkedDocs.length}})</md-button>
+                                            <span flex></span>
+                                            <div class="icon-relative">
+                                                <md-button tooltip="{{lang.attachments}}"
+                                                           class="md-raised md-icon-button"
+                                                           ng-click="ctrl.manageAttachments($event)">
+                                                    <md-icon md-svg-icon="attachment"></md-icon>
+                                                </md-button>
+                                                <span class="counter blue">{{ctrl.incoming.attachments.length}}</span>
+                                            </div>
+                                            <div class="icon-relative">
+                                                <md-button tooltip="{{lang.linked_documents}}"
+                                                           class="md-raised md-icon-button"
+                                                           ng-click="ctrl.manageLinkedDocuments($event)">
+                                                    <md-icon md-svg-icon="note-multiple-outline"></md-icon>
+                                                </md-button>
+                                                <span class="counter blue">{{ctrl.incoming.linkedDocs.length}}</span>
                                             </div>
                                         </div>
 

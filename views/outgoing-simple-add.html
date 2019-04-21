@@ -64,7 +64,7 @@
                                     <md-button ng-disabled="ctrl.document_properties.$invalid || !ctrl.outgoing.sitesInfoTo.length ||
                                         ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
                                                ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised"
-                                                ng-if="ctrl.outgoing.addMethod">
+                                               ng-if="ctrl.outgoing.addMethod">
                                         {{lang.outgoing_save_print_barcode}}
                                     </md-button>
                                     <div ng-if="!ctrl.outgoing.addMethod && !ctrl.editContent">
@@ -121,19 +121,20 @@
                                             <md-icon md-svg-icon="format-align-justify"></md-icon>
                                             <span>{{lang.outgoing_create_content}}</span>
                                             <span flex></span>
-                                            <md-switch ng-disabled="!!ctrl.outgoing.vsId || !ctrl.employeeService.hasPermissionTo('OUTGOING_PAPER')"
-                                                       class="m0 top-switch-handler"
-                                                       ng-true-value="1" ng-false-value="0"
-                                                       ng-click="ctrl.preventPropagation($event)"
-                                                       ng-change="ctrl.checkChangeOutgoingType()"
-                                                       ng-model="ctrl.outgoing.addMethod">
+                                            <md-switch
+                                                    ng-disabled="!!ctrl.outgoing.vsId || !ctrl.employeeService.hasPermissionTo('OUTGOING_PAPER')"
+                                                    class="m0 top-switch-handler"
+                                                    ng-true-value="1" ng-false-value="0"
+                                                    ng-click="ctrl.preventPropagation($event)"
+                                                    ng-change="ctrl.checkChangeOutgoingType()"
+                                                    ng-model="ctrl.outgoing.addMethod">
                                                 {{lang.outgoing_document_type}} :
                                                 {{ctrl.outgoing.getMethodType()}}
                                             </md-switch>
                                         </div>
                                     </accordion-title>
                                     <accordion-content layout="column">
-                                        <div layout-align-gt-md="start center" layout-gt-md="row" layout="column">
+                                        <div layout="row">
                                             <manage-content-directive
                                                     edit-content="ctrl.editContent"
                                                     display-prepare="!ctrl.outgoing.addMethod"
@@ -144,14 +145,24 @@
                                                     templates="ctrl.templates"
                                                     simple-view-url="ctrl.simpleViewUrl"
                                                     is-simple-add="ctrl.simpleAdd"></manage-content-directive>
-                                            <div flex>
-                                            <md-button class="md-raised" ng-click="ctrl.manageAttachments($event)">
-                                                <md-icon md-svg-icon="attachment"></md-icon>
-                                                {{lang.attachments}} ({{ctrl.outgoing.attachments.length}})</md-button>
-                                            <md-button class="md-raised" ng-click="ctrl.manageLinkedDocuments($event)">
-                                                <md-icon md-svg-icon="note-multiple-outline"></md-icon>
-                                                {{lang.linked_documents}} ({{ctrl.outgoing.linkedDocs.length}})</md-button>
+                                        <span flex></span>
+                                            <div class="icon-relative">
+                                                <md-button tooltip="{{lang.attachments}}"
+                                                           class="md-raised md-icon-button"
+                                                           ng-click="ctrl.manageAttachments($event)">
+                                                    <md-icon md-svg-icon="attachment"></md-icon>
+                                                </md-button>
+                                                <span class="counter blue">{{ctrl.outgoing.attachments.length}}</span>
                                             </div>
+                                            <div class="icon-relative">
+                                                <md-button tooltip="{{lang.linked_documents}}"
+                                                           class="md-raised md-icon-button"
+                                                           ng-click="ctrl.manageLinkedDocuments($event)">
+                                                    <md-icon md-svg-icon="note-multiple-outline"></md-icon>
+                                                </md-button>
+                                                <span class="counter blue">{{ctrl.outgoing.linkedDocs.length}}</span>
+                                            </div>
+
                                         </div>
                                         <div flex layout="row">
                                             <!--document viewer editor-->
