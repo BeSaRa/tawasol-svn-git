@@ -788,6 +788,7 @@ module.exports = function (app) {
         }, function (value) {
             if (value) {
                 self.subRecords = _concatCorrespondenceSites(true);
+                self.sitesInfoLength = 0;
                 self.emptySubRecords = false;
             }
         });
