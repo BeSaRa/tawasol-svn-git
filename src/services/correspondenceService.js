@@ -3423,6 +3423,83 @@ module.exports = function (app) {
                 });
         };
 
+        self.viewCorrespondenceSites = function (correspondences,$event) {
+            var info = correspondences.getInfo();
+            if (info.documentClass === 'internal')
+                return;
+
+            if (self.type && self.type.toLowerCase() === 'g2g') {
+                return dialog.showDialog({
+                    templateUrl: cmsTemplate.getPopup('manage-grid-correspondence-sites'),
+                    controller: 'manageGridCorrespondenceSitesPopCtrl',
+                    targetEvent: $event || false,
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    escapeToClose: false,
+                    locals: {
+                        documentSubject: info.title,
+                        type: self.type.toLowerCase(),
+                        correspondence: self.item.correspondence,
+                        sites: []
+                    }
+                });
+            }
+            else if (self.type && self.type.toLowerCase() === 'g2gmessaginghistory') {
+                return dialog.showDialog({
+                    templateUrl: cmsTemplate.getPopup('manage-grid-correspondence-sites'),
+                    controller: 'manageGridCorrespondenceSitesPopCtrl',
+                    targetEvent: $event || false,
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    escapeToClose: false,
+                    locals: {
+                        documentSubject: info.title,
+                        type: self.type.toLowerCase(),
+                        correspondence: self.item,
+                        sites: []
+                    }
+                });
+            }
+            else {
+                var defer = $q.defer();
+                return dialog.showDialog({
+                    templateUrl: cmsTemplate.getPopup('manage-grid-correspondence-sites'),
+                    controller: 'manageGridCorrespondenceSitesPopCtrl',
+                    targetEvent: $event || false,
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    escapeToClose: false,
+                    locals: {
+                        fromDialog: true,
+                        vsId: info.vsId,
+                        documentClass: info.documentClass,
+                        documentSubject: info.title
+                    },
+                    resolve: {
+                        correspondence: function () {
+                            'ngInject';
+                            return self
+                                .loadCorrespondenceByVsIdClass(info.vsId, info.documentClass)
+                                .then(function (correspondence) {
+                                    defer.resolve(correspondence);
+                                    return correspondence;
+                                });
+                        },
+                        sites: function () {
+                            'ngInject';
+                            if (info.documentClass.toLowerCase() === 'incoming') {
+                                return [];
+                            }
+                            return defer.promise.then(function (correspondence) {
+                                return self
+                                    .loadCorrespondenceSites(correspondence)
+                            });
+                        }
+                    }
+                });
+            }
+        };
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);

@@ -575,6 +575,16 @@ module.exports = function (app) {
 
         };
 
+
+        /**
+         * @description viewCorrespondenceSites
+         * @param userSentItem
+         * @param $event
+         */
+        self.viewCorrespondenceSites = function (userSentItem,$event) {
+            correspondenceService.viewCorrespondenceSites(userSentItem ,$event);
+        };
+
         /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
@@ -716,6 +726,18 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: function (action, model) {
                     return true;
+                }
+            },
+            // view Correspondence Sites
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'grid_action_correspondence_sites',
+                callback: self.viewCorrespondenceSites,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return info.documentClass !== "internal";
                 }
             },
             // Add To Favorite
