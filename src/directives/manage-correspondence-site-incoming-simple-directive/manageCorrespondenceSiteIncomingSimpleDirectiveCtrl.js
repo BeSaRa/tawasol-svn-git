@@ -385,6 +385,10 @@ module.exports = function (app) {
                 self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                 self.selectedItem = null;
+                if (self.subSearchResult.length === 1){
+                    self.selectedItem = self.subSearchResult[0];
+                    self.changeSubCorrespondence(self.selectedItem);
+                }
             });
         };
 
