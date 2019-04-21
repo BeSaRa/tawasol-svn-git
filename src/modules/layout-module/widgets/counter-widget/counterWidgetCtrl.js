@@ -142,7 +142,7 @@ module.exports = function (app) {
                 return;
             }
 
-            dialog.errorMessage(langService.get("access_denied"));
+            dialog.errorMessage(langService.get("no_have_permission_to_redirect_to_page"));
         };
 
         self.counter = {

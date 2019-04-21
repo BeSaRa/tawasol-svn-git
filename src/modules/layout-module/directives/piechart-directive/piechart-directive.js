@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('piechartDirective', function ($timeout, employeeService, $state, counterService, langService, $window) {
+    app.directive('piechartDirective', function ($timeout, employeeService, $state, dialog,  counterService, langService, $window) {
         'ngInject';
         return {
             restrict: 'E',
@@ -49,7 +49,10 @@ module.exports = function (app) {
                             var index = element[0]._index;
                             if (employeeService.employeeHasPermissionTo(dataSource.items[index])) {
                                 $state.go(dataSource.stats[index]);
+                                return;
                             }
+
+                            dialog.errorMessage(langService.get("no_have_permission_to_redirect_to_page"));
                         },
                         animation: {
                             duration: 500,
