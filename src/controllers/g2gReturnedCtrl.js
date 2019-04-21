@@ -181,8 +181,9 @@ module.exports = function (app) {
          * @description edit after return from g2g
          * @param g2gMessagingHistory
          * @param $event
+         * @param defer
          */
-        self.g2gEditAfterReturn = function (g2gMessagingHistory, $event) {
+        self.g2gEditAfterReturn = function (g2gMessagingHistory, $event, defer) {
             var action = 'editAfterReturnG2G';
             var list = listGeneratorService.createUnOrderList(),
                 langKeys = ['signature_serial_will_removed', 'the_book_will_go_to_audit', 'serial_retained', 'exported_not_received_documents_will_be_recalled'];
@@ -194,6 +195,7 @@ module.exports = function (app) {
                     correspondenceService
                         .editAfterReturnFromG2G(g2gMessagingHistory)
                         .then(function (correspondence) {
+                            new ResolveDefer(defer);
                             correspondenceStorageService.storeCorrespondence(action, correspondence);
                             $state.go('app.outgoing.add', {
                                 vsId: g2gMessagingHistory.refDocId,
