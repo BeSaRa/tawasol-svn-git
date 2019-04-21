@@ -20,9 +20,9 @@
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
-                        <md-input-container>
+                        <md-input-container class="cms-datepicker" flex>
                             <label for="dueDate">{{lang.due_date}}</label>
-                            <md-datepicker tooltip="{{lang.due_date}}" id="dueDate" md-open-on-focus
+                            <md-datepicker id="dueDate" md-open-on-focus
                                            md-min-date="ctrl.minDate"
                                            ng-model="ctrl.distWorkflowItem.dueDate"></md-datepicker>
                         </md-input-container>
