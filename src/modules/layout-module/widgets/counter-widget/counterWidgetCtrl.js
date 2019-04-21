@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                   counterService,
                                                   LayoutWidgetOption,
                                                   employeeService,
+                                                  dialog,
                                                   $state,
                                                   $scope) {
         'ngInject';
@@ -42,7 +43,7 @@ module.exports = function (app) {
                 state: 'app.outgoing.rejected'
             },
             readyToExport: {
-                permission: 'OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE',
+                permission: 'SEND_TO_READY_TO_EXPORT_QUEUE',
                 state: 'app.department-inbox.ready-to-export'
             }
         };
@@ -140,6 +141,8 @@ module.exports = function (app) {
                 $state.go(option.state);
                 return;
             }
+
+            dialog.errorMessage(langService.get("access_denied"));
         };
 
         self.counter = {
