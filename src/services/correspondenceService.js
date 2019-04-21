@@ -1529,9 +1529,9 @@ module.exports = function (app) {
 
         self.viewCorrespondenceG2G = function (g2gItem, actions, model, $event) {
             /*var site = null,*/
-            var url;
-            var g2gItemCopy = angular.copy(g2gItem);
-            var isInternal = g2gItem.isInternalG2G();
+            var url,
+                g2gItemCopy = angular.copy(g2gItem),
+                isInternal = g2gItem.isInternalG2G();
             if (model.toLowerCase() === 'g2g') {
                 // site = angular.copy(g2gItem.correspondence.site);
                 // intercept send instance for G2G
@@ -1549,8 +1549,11 @@ module.exports = function (app) {
                 .put(url, g2gItem)
                 .then(function (result) {
                     var metaData = result.data.rs.metaData;
-                    metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], generator.generateInstance(metaData, Incoming));
-
+                    if (model.toLowerCase() === 'g2g') {
+                        metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], generator.generateInstance(metaData, Incoming));
+                    } else {
+                        metaData = generator.interceptReceivedInstance(['Correspondence', 'Outgoing', 'ViewOutgoing'], generator.generateInstance(metaData, Outgoing));
+                    }
                     metaData.documentComments = _.map(metaData.linkedCommentsList, function (item) {
                         return generator.interceptReceivedInstance('DocumentComment', new DocumentComment(item));
                     });
@@ -3430,8 +3433,8 @@ module.exports = function (app) {
                 });
         };
 
-        self.viewCorrespondenceSites = function (correspondence , recordType,$event) {
-            var info =  correspondence.getInfo();
+        self.viewCorrespondenceSites = function (correspondence, recordType, $event) {
+            var info = correspondence.getInfo();
             if (info.documentClass === 'internal')
                 return;
 
@@ -3450,8 +3453,7 @@ module.exports = function (app) {
                         sites: []
                     }
                 });
-            }
-            else if (recordType && recordType.toLowerCase() === 'g2gmessaginghistory') {
+            } else if (recordType && recordType.toLowerCase() === 'g2gmessaginghistory') {
                 return dialog.showDialog({
                     templateUrl: cmsTemplate.getPopup('manage-grid-correspondence-sites'),
                     controller: 'manageGridCorrespondenceSitesPopCtrl',
@@ -3466,8 +3468,7 @@ module.exports = function (app) {
                         sites: []
                     }
                 });
-            }
-            else {
+            } else {
                 var defer = $q.defer();
                 return dialog.showDialog({
                     templateUrl: cmsTemplate.getPopup('manage-grid-correspondence-sites'),
