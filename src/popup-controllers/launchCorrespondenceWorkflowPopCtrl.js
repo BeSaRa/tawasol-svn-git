@@ -154,6 +154,37 @@ module.exports = function (app) {
         self.selectedWorkflowItems = [];
         self.textButton = 'send';
 
+        /**
+         * @description select clicked tab
+         * @param tab
+         */
+        self.selectTab = function (tab) {
+            distributionWFService
+                .loadTabContent(tab)
+                .then(function (result) {
+                    var gridName = null;
+                    switch (result.property) {
+                        case 'registryOrganizations':
+                            gridName = 'OUReg';
+                            break;
+                        case 'organizationGroups':
+                            gridName = 'OUGroup';
+                            break;
+                        default:
+                            gridName = null;
+                    }
+
+                    if (result.onDemand) {
+                        self[result.property] = self.tabMapper[result.property](result.data, gridName);
+                    }
+                    self.selectedTab = tab;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+        };
+
         if (replyOn) {
             self.users = _mapWFUser([replyOn]);
             _addUserReply(self.users);
@@ -854,36 +885,7 @@ module.exports = function (app) {
             organizationGroups: _mapWFOrganization,
             registryOrganizations: _mapWFOrganization
         };
-        /**
-         * @description select clicked tab
-         * @param tab
-         */
-        self.selectTab = function (tab) {
-            distributionWFService
-                .loadTabContent(tab)
-                .then(function (result) {
-                    var gridName = null;
-                    switch (result.property) {
-                        case 'registryOrganizations':
-                            gridName = 'OUReg';
-                            break;
-                        case 'organizationGroups':
-                            gridName = 'OUGroup';
-                            break;
-                        default:
-                            gridName = null;
-                    }
 
-                    if (result.onDemand) {
-                        self[result.property] = self.tabMapper[result.property](result.data, gridName);
-                    }
-                    self.selectedTab = tab;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-
-        };
         /**
          * @description delete from selected bulk correspondence by index.
          * @param $index
