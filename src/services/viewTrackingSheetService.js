@@ -834,7 +834,8 @@ module.exports = function (app) {
                             langService.get('view_tracking_sheet_action_by'),
                             langService.get('view_tracking_sheet_action_date'),
                             langService.get('view_tracking_sheet_action_by_department'),
-                            langService.get('view_tracking_sheet_action_type')
+                            langService.get('view_tracking_sheet_action_type'),
+                            langService.get('view_tracking_sheet_comments')
                         ];
                         for (i = 0; i < self.fullHistory.length; i++) {
                             record = self.fullHistory[i];
@@ -843,7 +844,8 @@ module.exports = function (app) {
                                 record.actionByInfo.getTranslatedName(),
                                 record.actionDate,
                                 record.actionByOUInfo.getTranslatedName(),
-                                record.actionTypeInfo.getTranslatedName()
+                                record.actionTypeInfo.getTranslatedName(),
+                                record.comments
                             ]);
                         }
                     }
