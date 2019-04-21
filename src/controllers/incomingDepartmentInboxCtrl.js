@@ -126,6 +126,9 @@ module.exports = function (app) {
         };
 
         self.checkIfQuickReceiveBulkAvailable = function () {
+            if(!employeeService.hasPermissionTo("QUICK_RECEIVE_INCOMING")){
+                return false;
+            }
             self.itemsWithoutQuickReceive = [];
             _.map(self.selectedIncomingDepartmentInboxes, function (workItem) {
                 if (workItem.generalStepElm.isReassigned)
