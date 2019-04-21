@@ -124,7 +124,7 @@
                               class="select-wf-action-text"
                               ng-class="{'no-value': !workflowItem.getComments()}"
                               ng-click="ctrl.toggleCommentDropdown(workflowItem, $event)"
-                              tooltip="{{workflowItem.getComments()}}">
+                              tooltip="{{ctrl.getCommentText(workflowItem)}}">
                             {{ctrl.getCommentText(workflowItem)}}
                         </div>
                         <md-select ng-if="workflowItem.showCommentDropdown"
