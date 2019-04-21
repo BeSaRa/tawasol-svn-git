@@ -33,9 +33,9 @@ module.exports = function (app) {
 
         $timeout(function () {
             // all attachments types
-            self.attachmentTypes = attachmentTypeService.returnAttachmentTypes(self.document.getInfo().documentClass);
+            self.attachmentTypes = attachmentTypeService.returnAttachmentTypes(self.documentClass);
             // all security level
-            self.securityLevel = correspondenceService.getLookup(self.document.getInfo().documentClass, 'securityLevels');
+            self.securityLevel = correspondenceService.getLookup(self.documentClass, 'securityLevels');
             self.attachmentUpdateActions = lookupService.returnLookups(lookupService.attachmentUpdateAction);
         });
 

@@ -7,7 +7,7 @@ module.exports = function (app) {
                                                  langService) {
         'ngInject';
         return function G2GMessagingHistory(model) {
-            var self = this, correspondenceService;
+            var self = this, correspondenceService, managerService;
 
             self.refDocId = null;
             self.status = null;
@@ -53,6 +53,10 @@ module.exports = function (app) {
 
             G2GMessagingHistory.prototype.setCorrespondenceService = function (service) {
                 correspondenceService = service;
+                return this;
+            };
+            G2GMessagingHistory.prototype.setManagerService = function (service) {
+                managerService = service;
                 return this;
             };
 
@@ -141,6 +145,28 @@ module.exports = function (app) {
                     vsId: this.refDocId
                 });
                 return correspondenceService.openExportCorrespondenceDialog(correspondence, $event, true , this);
+            };
+
+
+            G2GMessagingHistory.prototype.manageDocumentComments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentComments.apply(managerService, [this.refDocId, info.title, $event]);
+            };
+            G2GMessagingHistory.prototype.manageDocumentAttachments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentAttachments.apply(managerService, [this, this.refDocId, info.documentClass, info.title, $event]);
+            };
+            G2GMessagingHistory.prototype.manageDocumentLinkedDocuments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentLinkedDocuments.apply(managerService, [this.refDocId, info.documentClass, info.title, $event, this]);
+            };
+            G2GMessagingHistory.prototype.manageDocumentEntities = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentEntities.apply(managerService, [this.refDocId, info.documentClass, info.title, $event]);
+            };
+            G2GMessagingHistory.prototype.manageDocumentCorrespondence = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentCorrespondence.apply(managerService, [this.refDocId, info.documentClass, info.title, $event]);
             };
 
             // don't remove CMSModelInterceptor from last line

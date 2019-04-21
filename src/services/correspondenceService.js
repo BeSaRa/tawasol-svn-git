@@ -3420,6 +3420,13 @@ module.exports = function (app) {
                 .then(function (result) {
                     result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
                     return result.data.rs;
+                })
+                .catch(function (error) {
+                    //dialog.errorMessage(langService.get('error_messages'));
+                    errorCode.checkIf(error, 'CANNOT_EDIT_AFTER_EXPORT_DUE_TO_RECEIVED_G2G_INTERNAL_G2G_OLD_SYSTEM_CORRESPONDENCE_SITES', function () {
+                        dialog.errorMessage(langService.get('can_not_edit_after_export_due_to_received_g2g_internal_g2g_old_system_correspondence_sites'));
+                    });
+                    return $q.reject(error);
                 });
         };
 

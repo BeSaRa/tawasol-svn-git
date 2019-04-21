@@ -17,7 +17,9 @@ module.exports = function (app) {
                                                 generator,
                                                 correspondenceService,
                                                 viewDeliveryReportService,
-                                                gridService) {
+                                                gridService,
+                                                _,
+                                                managerService) {
         var self = this;
 
         self.controllerName = 'g2gReturnedCtrl';
@@ -201,10 +203,115 @@ module.exports = function (app) {
                                 vsId: g2gMessagingHistory.refDocId,
                                 action: action
                             });
-                        })
-                        .catch(function () {
-                            dialog.errorMessage(langService.get('error_messages'));
                         });
+                });
+        };
+
+
+        /**
+         * @description Manage Tags
+         * @param g2gItem
+         * @param $event
+         */
+        self.manageTags = function (g2gItem, $event) {
+            managerService.manageDocumentTags(g2gItem.refDocId, 'outgoing', g2gItem.getTranslatedName(), $event)
+                .then(function () {
+                    self.reloadG2gItems(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadG2gItems(self.grid.page);
+                });
+        };
+
+        /**
+         * @description Manage Comments
+         * @param g2gItem
+         * @param $event
+         */
+        self.manageComments = function (g2gItem, $event) {
+            //var info = g2gItem.getInfo();
+            g2gItem.manageDocumentComments($event)
+                .then(function () {
+                    self.reloadG2gItems(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadG2gItems(self.grid.page);
+                });
+        };
+
+        /**
+         * @description Manage Tasks
+         * @param g2gItem
+         * @param $event
+         */
+        self.manageTasks = function (g2gItem, $event) {
+            console.log('manageG2GTasks : ', g2gItem);
+        };
+
+        /**
+         * @description Manage Attachments
+         * @param g2gItem
+         * @param $event
+         */
+        self.manageAttachments = function (g2gItem, $event) {
+            g2gItem.manageDocumentAttachments($event)
+                .then(function () {
+                    self.reloadG2gItems(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadG2gItems(self.grid.page);
+                });
+        };
+
+
+        /**
+         * @description Manage Linked Documents
+         * @param g2gItem
+         * @param $event
+         */
+        self.manageLinkedDocuments = function (g2gItem, $event) {
+            g2gItem.manageDocumentLinkedDocuments($event)
+                .then(function () {
+                    self.reloadG2gItems(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadG2gItems(self.grid.page);
+                });
+        };
+
+        /**
+         * @description Manage Linked Entities
+         * @param g2gItem
+         * @param $event
+         */
+        self.manageLinkedEntities = function (g2gItem, $event) {
+            g2gItem
+                .manageDocumentEntities($event);
+        };
+
+        /**
+         * @description Destinations
+         * @param g2gItem
+         * @param $event
+         */
+        self.manageDestinations = function (g2gItem, $event) {
+            g2gItem.manageDocumentCorrespondence($event)
+                .then(function () {
+                    self.reloadG2gItems(self.grid.page);
+                });
+        };
+
+        /**
+         * @description Edit Properties
+         * @param g2gItem
+         * @param $event
+         */
+        self.editProperties = function (g2gItem, $event) {
+            var info = g2gItem.getInfo();
+            managerService
+                .manageDocumentProperties(g2gItem.refDocId, 'outgoing', info.title, $event)
+                .finally(function (e) {
+                    self.reloadG2gItems(self.grid.page);
                 });
         };
 
@@ -330,13 +437,136 @@ module.exports = function (app) {
                 },
                 showInView: true
             },
-            // Terminate
+            // Edit After Return
             {
                 type: 'action',
                 icon: 'circle-edit-outline',
                 text: 'grid_action_edit_after_return_g2g',
                 callback: self.g2gEditAfterReturn,
                 class: "action-green",
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            // Manage
+            {
+                type: 'action',
+                icon: 'settings',
+                text: 'grid_action_manage',
+                permissionKey: [
+                    //"MANAGE_DOCUMENT’S_TAGS",
+                    //"MANAGE_DOCUMENT’S_COMMENTS",
+                    //"MANAGE_TASKS",
+                    "MANAGE_ATTACHMENTS",
+                    "MANAGE_LINKED_DOCUMENTS",
+                    "MANAGE_LINKED_ENTITIES",
+                    "MANAGE_DESTINATIONS"
+                ],
+                checkAnyPermission: true,
+                checkShow: function (action, model) {
+                    return true;
+                },
+                showInView: false,
+                subMenu: [
+                    // Tags
+                    {
+                        type: 'action',
+                        icon: 'tag',
+                        text: 'grid_action_tags',
+                        permissionKey: "MANAGE_DOCUMENT’S_TAGS",
+                        callback: self.manageTags,
+                        class: "action-green",
+                        hide: true,
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Comments
+                    {
+                        type: 'action',
+                        icon: 'comment',
+                        text: 'grid_action_comments',
+                        permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
+                        callback: self.manageComments,
+                        class: "action-green",
+                        hide: true,
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Tasks
+                    {
+                        type: 'action',
+                        icon: 'note-multiple',
+                        text: 'grid_action_tasks',
+                        permissionKey: "MANAGE_TASKS",
+                        callback: self.manageTasks,
+                        class: "action-red",
+                        hide: true,
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Attachments
+                    {
+                        type: 'action',
+                        icon: 'attachment',
+                        text: 'grid_action_attachments',
+                        permissionKey: "MANAGE_ATTACHMENTS",
+                        callback: self.manageAttachments,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Linked Documents
+                    {
+                        type: 'action',
+                        icon: 'file-document',
+                        text: 'grid_action_linked_documents',
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
+                        callback: self.manageLinkedDocuments,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Linked Entities
+                    {
+                        type: 'action',
+                        icon: 'link-variant',
+                        text: 'grid_action_linked_entities',
+                        callback: self.manageLinkedEntities,
+                        class: "action-green",
+                        permissionKey: "MANAGE_LINKED_ENTITIES",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Destinations
+                    {
+                        type: 'action',
+                        icon: 'stop',
+                        text: 'grid_action_destinations',
+                        callback: self.manageDestinations,
+                        permissionKey: "MANAGE_DESTINATIONS",
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
+            },
+            // Edit Properties
+            {
+                type: 'action',
+                icon: 'pencil',
+                text: 'grid_action_edit_properties',
+                showInView: false,
+                class: "action-green",
+                checkAnyPermission: true,
+                permissionKey: 'EDIT_OUTGOING_PROPERTIES',
+                callback: self.editProperties,
                 checkShow: function (action, model) {
                     return true;
                 }

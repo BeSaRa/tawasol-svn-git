@@ -4,12 +4,14 @@ module.exports = function (app) {
                       generator,
                       lookupService,
                       correspondenceService,
+                      managerService,
                       g2gLookupService) {
         'ngInject';
         var modelName = 'G2GMessagingHistory';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
             model.setCorrespondenceService(correspondenceService);
+            model.setManagerService(managerService);
             return model;
         });
 
@@ -78,6 +80,7 @@ module.exports = function (app) {
             model.updateDate = generator.getDateFromTimeStamp(model.updateDate, generator.defaultDateTimeFormat);
 
             model.recordInfo = correspondenceService.getCorrespondenceInformation(model);
+            model.recordInfo.documentClass = 'outgoing';
 
             //model.statusInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.trackingActions.name, model.status, model.isInternalG2G());
             model.statusInfo = lookupService.getLookupByLookupKey(lookupService.messageStatus, model.status);
@@ -90,8 +93,7 @@ module.exports = function (app) {
             if (model.sentByOrg) {
                 if (generator.isJsonString(model.sentByOrg)) {
                     model.senderForTrackingSheet = JSON.parse(model.sentByOrg).name;
-                }
-                else {
+                } else {
                     model.senderForTrackingSheet = model.sentByOrg;
                 }
             }
