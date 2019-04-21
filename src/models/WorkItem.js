@@ -6,6 +6,7 @@ module.exports = function (app) {
                                       ResolveDefer,
                                       $sce,
                                       viewDocumentService,
+                                      Correspondence,
                                       $q,
                                       dialog,
                                       generator,
@@ -276,6 +277,26 @@ module.exports = function (app) {
              */
             WorkItem.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming);
+            };
+            /**
+             * @description send the document after approve , this is custom method , don't use it anywhere, just made to use after approve form inbox.
+             * @param $event
+             * @param action
+             * @param tab
+             * @param isDeptIncoming
+             * @return {promise|*}
+             */
+            WorkItem.prototype.launchWorkflowByVsIdAfterApprove = function ($event, action, tab, isDeptIncoming) {
+                var correspondence = new Correspondence({
+                    docClassName: generator.getDocumentClassName(this.generalStepElm.docType),
+                    classDescription: generator.getDocumentClassName(this.generalStepElm.docType),
+                    docStatus: this.generalStepElm.docStatus,
+                    vsId: this.generalStepElm.vsId,
+                    securityLevel: this.generalStepElm.securityLevel,
+                    ccSitesList: [true], // just to ignore the validation while send
+                    toSitesList: [true] // just to ignore the validation while send
+                });
+                return correspondenceService.launchCorrespondenceWorkflow(correspondence, $event, action, tab, isDeptIncoming)
             };
 
             WorkItem.prototype.launchWorkFlowCondition = function ($event, action, tab, isDeptIncoming, callback, confirmationMessage) {

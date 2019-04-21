@@ -516,6 +516,23 @@ module.exports = function (app) {
                         });
                 });
         };
+        /**
+         * @description luanch workflow from after approve.
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.launchWorkFlow = function (workItem, $event, defer) {
+            workItem
+                .launchWorkflowByVsIdAfterApprove($event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
 
         /**
          * @description Reply user inbox
@@ -836,7 +853,7 @@ module.exports = function (app) {
                     // make the temp workitem fully authorized.
                     workItem.generalStepElm.docStatus = result === 'INTERNAL_PERSONAL' ? 23 : 24;
                     // start launch workflow.
-                    return self.forward(workItem, $event, defer);
+                    return self.launchWorkFlow(workItem, $event, defer);
                 })
                 .catch(function () {
                     self.reloadUserInboxes(self.grid.page);
