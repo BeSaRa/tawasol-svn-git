@@ -114,7 +114,7 @@ module.exports = function (app) {
             }
 
           return  promise.then(function (result) {
-                self.incoming = result;
+                self.incoming.vsId = result.vsId;
                 self.model = angular.copy(self.incoming);
                 self.documentInformationExist = !!angular.copy(self.documentInformation);
 
