@@ -618,6 +618,8 @@ module.exports = function (app) {
                     .then(function (result) {
                         correspondence.vsId = result.data.rs;
                         return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                    }).catch(function (error) {
+                        return $q.reject(self.getTranslatedError(error));
                     });
             }
         };

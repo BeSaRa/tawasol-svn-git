@@ -138,7 +138,6 @@ module.exports = function (app) {
         self.requestCompleted = false;
 
         self.saveCorrespondence = function (status) {
-            debugger;
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
                 return;

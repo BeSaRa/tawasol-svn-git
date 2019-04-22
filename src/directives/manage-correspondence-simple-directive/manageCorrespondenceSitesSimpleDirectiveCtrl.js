@@ -524,7 +524,12 @@ module.exports = function (app) {
                 .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event) : (managerService
                 .manageSitesForDocument(self.correspondence)
                 .then(function (correspondence) {
-                    self.correspondence = correspondence;
+                    if(self.correspondence.hasDocumentClass('outgoing')){
+                        self.correspondence.sitesInfoTo = correspondence.sitesInfoTo;
+                        self.correspondence.sitesInfoCC = correspondence.sitesInfoCC;
+                    }else{
+                        self.correspondence = correspondence;
+                    }
                     self.sitesInfoLength = self.correspondence.sitesInfoTo.length + self.correspondence.sitesInfoCC.length - 1;
                 }));
         };
