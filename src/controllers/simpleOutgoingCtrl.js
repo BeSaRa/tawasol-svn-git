@@ -138,6 +138,7 @@ module.exports = function (app) {
         self.requestCompleted = false;
 
         self.saveCorrespondence = function (status) {
+            debugger;
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
                 return;
@@ -160,7 +161,7 @@ module.exports = function (app) {
                     .saveDocument(status)
             }
          return promise.then(function (result) {
-                self.outgoing = result;
+                self.outgoing.vsId = result.vsId;
                 self.model = angular.copy(self.outgoing);
                 self.documentInformationExist = !!angular.copy(self.documentInformation);
 
@@ -465,7 +466,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.resetAddCorrespondence($event);
                 });
-        }
+        };
 
 
         /**

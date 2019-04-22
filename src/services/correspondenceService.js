@@ -609,7 +609,6 @@ module.exports = function (app) {
         self.saveDocumentContentFile = function (correspondence) {
             if (correspondence.hasVsId()) {
                 var form = new FormData();
-                //console.log("FROM SERVICE", correspondence.contentFile);
                 form.append('content', correspondence.contentFile);
                 return $http.post(_createUrlSchema(correspondence.vsId, correspondence.docClassName, 'content'), form, {
                     headers: {
