@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                   $rootScope,
                                                   $timeout,
                                                   $state,
+                                                  versionService,
                                                   $element,
                                                   tokenService,
                                                   authenticationService,
@@ -82,8 +83,7 @@ module.exports = function (app) {
             dialog.hide();
         });
 
-        $scope.bundleVersion = '2.1.3';
-        $scope.buildNumber = ' T#3813';
-        app.$_privateBuildNumber = 'T#3813';
+        $scope.bundleVersion = versionService.getVersionNumber();
+        $scope.buildNumber = ' ' + versionService.getBuildNumber();
     });
 };

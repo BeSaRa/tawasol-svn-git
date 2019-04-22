@@ -4,6 +4,7 @@ module.exports = function (app) {
                          $urlRouterProvider,
                          $locationProvider,
                          rootEntityProvider,
+                         versionServiceProvider,
                          $mdDateLocaleProvider,
                          momentProvider) {
         'ngInject';
@@ -12,6 +13,11 @@ module.exports = function (app) {
         var templateProvider = cmsTemplateProvider;
 
         var moment = momentProvider.$get();
+
+        versionServiceProvider
+            .setVersionNumber('2.1.3')
+            .setBuildNumber('T#3813')
+            .setPrivateBuildNumber('T#3813');
 
         $urlRouterProvider.otherwise('/404');
         /**
@@ -1480,7 +1486,7 @@ module.exports = function (app) {
                     self.createLoginIframe = function () {
                         aLink = angular.element('<a />').attr('href', menuURL);
                         var loginLink = aLink[0].protocol + '//' + aLink[0].host + '/navigator/jaxrs/logon?userid={{username}}&password={{password}}';
-                        self.loginURL = $sce.trustAsResourceUrl(loginLink.replace('{{username}}',  encodeURIComponent(credentials.username)).replace('{{password}}', encodeURIComponent(credentials.password)));
+                        self.loginURL = $sce.trustAsResourceUrl(loginLink.replace('{{username}}', encodeURIComponent(credentials.username)).replace('{{password}}', encodeURIComponent(credentials.password)));
                     };
 
                     self.removeLoginIframe = function () {
