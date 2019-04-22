@@ -183,9 +183,6 @@ module.exports = function (app) {
             };
 
             Counter.prototype.getCount = function (propertyName, property) {
-                if (self.maped.hasOwnProperty(propertyName) && propertyName === 'menu_item_inbox' && property === 'second') {
-                    console.log(self.maped.hasOwnProperty(propertyName), self.maped[propertyName]);
-                }
                 if (property === 'second' && self.maped.hasOwnProperty(propertyName) && self.maped[propertyName][property] < 0) {
                     return false;
                 }
