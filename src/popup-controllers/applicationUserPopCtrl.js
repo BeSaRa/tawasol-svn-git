@@ -687,7 +687,7 @@ module.exports = function (app) {
                     img.src = self.fileUrl = url.createObjectURL(file);
 
                     img.onload = function () {
-                        if (element[0].name === 'upload-sign-app-user') {
+                        /*if (element[0].name === 'upload-sign-app-user') {
                             var width = this.naturalWidth || this.width;
                             var height = this.naturalHeight || this.height;
                             if (width > 283 && height > 283) {
@@ -695,7 +695,7 @@ module.exports = function (app) {
                                 self.enableAdd = false;
                                 return false;
                             }
-                        }
+                        }*/
                         $timeout(function () {
                             self.enableAdd = true;
                         })

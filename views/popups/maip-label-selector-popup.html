@@ -5,26 +5,16 @@
             <close-dialog-directive></close-dialog-directive>
         </md-toolbar>
         <md-content scroll-directive>
-            <form name="maipLabelSelectorForm" autocomplete="off">
-                <div class="p20">
-                    <md-radio-group ng-model="ctrl.selectedMaipLabel">
-                        <div layout="row" flex ng-repeat="maipLabelChunk in ctrl.maipLabelChunks track by $index">
-                            <md-radio-button flex ng-repeat="maipLabel in maipLabelChunk track by $index"
-                                             ng-value="maipLabel.id">
-                                {{maipLabel.getTranslatedName()}}
-                            </md-radio-button>
-                            <div flex
-                                 ng-repeat="emptyElement in ctrl.getEmptyElements(maipLabelChunk) track by $index"></div>
-                        </div>
-                    </md-radio-group>
+            <div class="p20" layout="column">
+                <div ng-repeat="label in ctrl.maipLabels" layout="row">
+                    <md-button flex class="md-raised" ng-click="ctrl.setProtectionLabel(label)">
+                        {{label.getTranslatedName()}}
+                    </md-button>
                 </div>
-            </form>
+            </div>
         </md-content>
         <div>
             <div layout="row">
-                <md-button class="md-raised" ng-disabled="maipLabelSelectorForm.$invalid || !ctrl.selectedMaipLabel"
-                           ng-click="ctrl.setProtectionLabel($event)">{{lang.set}}
-                </md-button>
                 <span flex></span>
                 <!--<md-button class="md-raised"
                            ng-click="ctrl.setNoProtection($event)">{{lang.set}}

@@ -51,11 +51,11 @@ module.exports = function (app) {
                                 input.val('');
                                 return false;
                             }
-                            else if (name === 'signatureImage' && width > 283 && height > 283) {
+                            /*else if (name === 'signatureImage' && width > 283 && height > 283) {
                                 toast.error(langService.get('image_dimensions_info')).change({width: 283, height: 283});
                                 input.val('');
                                 return false;
-                            }
+                            }*/
                         }
 
                         if (scope.selectedFileExtension) {

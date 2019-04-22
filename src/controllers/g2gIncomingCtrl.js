@@ -199,13 +199,11 @@ module.exports = function (app) {
             return g2gIncomingService.returnG2G(g2gItem)
                 .then(function (result) {
                     //new ResolveDefer(defer);
-                    if (result) {
-                        dialog.hide('return');
-                        self.reloadG2gItems(self.grid.page)
-                            .then(function () {
-                                toast.success(langService.get("return_specific_success").change({name: g2gItem.getTranslatedName()}));
-                            });
-                    }
+                    dialog.hide('return');
+                    self.reloadG2gItems(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get("return_specific_success").change({name: g2gItem.getTranslatedName()}));
+                        });
                 })
         };
 

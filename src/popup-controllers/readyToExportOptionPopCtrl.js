@@ -192,7 +192,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     downloadService
                         .controllerMethod
-                        .mainDocumentDownload(self.readyToExport)
+                        .mainDocumentDownload(self.readyToExport, null, true)
                         .then(function () {
                             toast.success(langService.get('export_success'));
                             dialog.hide(result);

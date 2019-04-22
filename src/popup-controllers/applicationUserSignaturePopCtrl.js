@@ -34,7 +34,7 @@ module.exports = function (app) {
          * @description Contains the names of disabled fields
          */
         self.disabledFields = [];
-        self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 283, width: 283});
+        //self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 283, width: 283});
         self.selectedExtension = ['png'];
         self.selectedFile = null;
         self.fileUrlCopy = self.fileUrl = angular.copy(self.applicationUserSignature.contentElementUrl ? self.applicationUserSignature.contentElementUrl : null);
@@ -60,7 +60,7 @@ module.exports = function (app) {
                     img.src = self.fileUrl = url.createObjectURL(file);
 
                     img.onload = function () {
-                        if (element[0].name === 'upload-sign') {
+                        /*if (element[0].name === 'upload-sign') {
                             var width = this.naturalWidth || this.width;
                             var height = this.naturalHeight || this.height;
                             if (width > 283 && height > 283) {
@@ -70,7 +70,7 @@ module.exports = function (app) {
                                 self.enableAdd = false;
                                 return false;
                             }
-                        }
+                        }*/
                         $timeout(function () {
                             self.enableAdd = true;
                         })

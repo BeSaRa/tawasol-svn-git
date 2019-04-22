@@ -1122,7 +1122,7 @@ module.exports = function (app) {
         self.signature = new ApplicationUserSignature();
         self.signature.appUserId = self.applicationUser.id;
         self.enableAdd = false;
-        self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 283, width: 283});
+        // self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 283, width: 283});
 
         /**
          * check validation of required fields
@@ -1286,7 +1286,7 @@ module.exports = function (app) {
                     img.src = self.fileUrl = url.createObjectURL(file);
 
                     img.onload = function () {
-                        if (element[0].name === 'add-sign') {
+                        /*if (element[0].name === 'add-sign') {
                             var width = this.naturalWidth || this.width;
                             var height = this.naturalHeight || this.height;
                             if (width > 283 && height > 283) {
@@ -1294,7 +1294,7 @@ module.exports = function (app) {
                                 self.enableAdd = false;
                                 return false;
                             }
-                        }
+                        }*/
                         $timeout(function () {
                             self.enableAdd = true;
                         })

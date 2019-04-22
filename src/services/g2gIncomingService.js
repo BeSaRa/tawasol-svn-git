@@ -106,7 +106,7 @@ module.exports = function (app) {
                             return true;
                         })
                         .catch(function (error) {
-                            errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
+                            /*errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
                                 dialog.errorMessage(langService.get('g2g_not_authenticated'));
                             });
                             errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
@@ -117,7 +117,8 @@ module.exports = function (app) {
                             });
                             errorCode.checkIf(error, 'G2G_ERROR_WHILE_RETURNING_TO_SENDER', function () {
                                 dialog.errorMessage(langService.get('g2g_error_while_returning_to_sender'));
-                            });
+                            });*/
+                            return errorCode.showErrorDialog(error);
                         });
                 });
         };

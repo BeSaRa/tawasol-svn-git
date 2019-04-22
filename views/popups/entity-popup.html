@@ -162,12 +162,12 @@
                                             </div>
                                         </md-input-container>
                                         <md-input-container flex>
-                                            <label for="password">{{lang.password}}</label>
-                                            <input type="password" name="password" id="password" no-space-directive
+                                            <label for="ldap_password">{{lang.password}}</label>
+                                            <input autocomplete="off" type="password" name="ldap_password" id="ldap_password" no-space-directive
                                                    minlength="2" ng-model="ctrl.entity.password" maxlength="50"
                                                    ng-required="ctrl.entity.serverAddress && !ctrl.entity.id"
                                                    ng-disabled="!ctrl.entity.serverAddress">
-                                            <div ng-messages="entityForm.password.$error">
+                                            <div ng-messages="entityForm.ldap_password.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                                 <div ng-message="minlength">{{lang.short}}</div>
                                                 <div ng-message="maxlength">{{lang.max_length.change({length:50})}}

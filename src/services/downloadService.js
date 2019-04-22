@@ -20,9 +20,10 @@ module.exports = function (app) {
              * @description Download the main document
              * @param vsId
              * @param $event
+             * @param ignoreMAIP
              */
-            mainDocumentDownload: function (vsId, $event) {
-                return self.selectMAIPLabels()
+            mainDocumentDownload: function (vsId, $event, ignoreMAIP) {
+                return self.selectMAIPLabels(ignoreMAIP)
                     .then(function (selectedLabel) {
                         var labelId = null;
                         if (!!selectedLabel && typeof selectedLabel === 'string') {
@@ -99,9 +100,9 @@ module.exports = function (app) {
          * @description Opens the dialog to select maip label
          * @returns {promise}
          */
-        self.selectMAIPLabels = function () {
+        self.selectMAIPLabels = function (ignoreMAIP) {
             var defer = $q.defer();
-            if (!_isEntityMaipEnabled()) {
+            if (!_isEntityMaipEnabled() || ignoreMAIP) {
                 // if entity is not using MAIP security
                 $timeout(function () {
                     defer.resolve(true);
@@ -116,24 +117,18 @@ module.exports = function (app) {
                                     'ngInject';
                                     var self = this;
                                     var chunkSize = 3;
-                                    self.maipLabelChunks = _.chunk(maipLabels, chunkSize);
-                                    self.getEmptyElements = function (chunk) {
-                                        var diff = chunkSize - chunk.length;
-                                        return (new Array(diff));
-                                    };
-
-                                    self.selectedMaipLabel = null;
-
+                                    self.maipLabels = maipLabels;
                                     /**
                                      * @description Hide dialog and return the selected label
+                                     * @param selectedLabel
                                      * @param $event
                                      */
-                                    self.setProtectionLabel = function ($event) {
-                                        if (!self.selectedMaipLabel) {
+                                    self.setProtectionLabel = function ( selectedLabel , $event) {
+                                        if (!selectedLabel) {
                                             toast.info("Please select one label");
                                             return;
                                         }
-                                        dialog.hide(self.selectedMaipLabel)
+                                        dialog.hide(selectedLabel)
                                     };
 
                                     /*self.setNoProtection = function ($event) {

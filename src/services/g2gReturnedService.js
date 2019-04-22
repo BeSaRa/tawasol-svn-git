@@ -57,7 +57,7 @@ module.exports = function (app) {
                     return $http.put((urlService.g2gInbox + 'terminate/' + isInternal), g2gItem).then(function (result) {
                         return result.data.rs;
                     }).catch(function (error) {
-                        errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
+                        /*errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
                             dialog.errorMessage(langService.get('g2g_not_authenticated'));
                         });
                         errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
@@ -71,8 +71,8 @@ module.exports = function (app) {
                         });
                         errorCode.checkIf(error, 'G2G_CANNOT_REMOVE_TRANSACTION_FOR_THIS_SITE_BECAUSE_THE_STATUS_IS_NOT_REJECTED_OR_RETURNED', function () {
                             dialog.errorMessage(langService.get('g2g_can_not_terminate_because_book_not_rejected_or_returned'));
-                        });
-                        return false;
+                        });*/
+                        return errorCode.showErrorDialog(error);
                     });
                 });
         };
@@ -83,7 +83,7 @@ module.exports = function (app) {
             return $http.put((urlService.g2gInbox + 'resend/' + isInternal), g2gItem).then(function (result) {
                 return result.data.rs;
             }).catch(function (error) {
-                errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
+                /*errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
                     dialog.errorMessage(langService.get('g2g_not_authenticated'));
                 });
                 errorCode.checkIf(error, 'G2G_ERROR_FETCH_SENT_OR_RETURN_BOOK', function () {
@@ -97,8 +97,8 @@ module.exports = function (app) {
                 });
                 errorCode.checkIf(error, 'G2G_ERROR_WHILE_SENDING', function () {
                     dialog.errorMessage(langService.get('g2g_error_while_sending'));
-                });
-                return false;
+                });*/
+                return errorCode.showErrorDialog(error);
             });
         };
 

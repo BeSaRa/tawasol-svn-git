@@ -150,12 +150,10 @@ module.exports = function (app) {
             return g2gSentItemsService.recallG2G(g2gItem, $event)
                 .then(function (result) {
                     new ResolveDefer(defer);
-                    if (result) {
-                        self.reloadG2gItems(self.grid.page)
-                            .then(function () {
-                                toast.success(langService.get('recall_success').change({name: g2gItem.getTranslatedName()}));
-                            });
-                    }
+                    self.reloadG2gItems(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get('recall_success').change({name: g2gItem.getTranslatedName()}));
+                        });
                 })
         };
 
@@ -191,8 +189,8 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // view
             {
@@ -208,8 +206,8 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // Preview
                     {
@@ -245,8 +243,8 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Recall
@@ -260,8 +258,8 @@ module.exports = function (app) {
                 //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // View Delivery Report
             {
@@ -273,8 +271,8 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: true
             }
         ];

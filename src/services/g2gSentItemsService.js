@@ -114,7 +114,7 @@ module.exports = function (app) {
                     return $http.put((urlService.g2gInbox + 'recall/' + isInternal), g2gItem).then(function (result) {
                         return result.data.rs;
                     }).catch(function (error) {
-                        errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
+                        /*errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
                             dialog.errorMessage(langService.get('g2g_not_authenticated'));
                         });
                         errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
@@ -128,8 +128,8 @@ module.exports = function (app) {
                         });
                         errorCode.checkIf(error, 'G2G_ERROR_WHILE_RECALLING', function () {
                             dialog.errorMessage(langService.get('g2g_error_occurred_while_recalling'));
-                        });
-                        return false;
+                        });*/
+                        return errorCode.showErrorDialog(error);
                     });
                 });
         };
