@@ -43,7 +43,7 @@ module.exports = function (app) {
                 state: 'app.outgoing.rejected'
             },
             readyToExport: {
-                permission: 'SEND_TO_READY_TO_EXPORT_QUEUE',
+                permission: 'OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE',
                 state: 'app.department-inbox.ready-to-export'
             }
         };
