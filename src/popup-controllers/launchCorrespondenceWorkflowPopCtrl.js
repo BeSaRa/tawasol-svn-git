@@ -173,11 +173,10 @@ module.exports = function (app) {
                         default:
                             gridName = null;
                     }
-
+                    self.selectedTab = tab;
                     if (result.onDemand) {
                         self[result.property] = self.tabMapper[result.property](result.data, gridName);
                     }
-                    self.selectedTab = tab;
                     return true;
                 })
                 .catch(function (error) {
@@ -196,11 +195,10 @@ module.exports = function (app) {
             self.selectTab(self.selectedTab).then(function () {
                 _addSelectedOrganization(self.selectedOrganizationToSend);
             });
-
         }
 
         function _addSelectedOrganization(selected) {
-            var organization = selected.ou === selected.registryOU ? _findOrganization(selected.registryOU, null, true) : _findOrganization(selected.registryOU, selected.ou);
+            var organization = selected.ou === selected.registryOU ? _findOrganization(selected.registryOU, selected.registryOU, true) : _findOrganization(selected.registryOU, selected.ou);
             self.selectedWorkflowItems.push(organization);
         }
 
