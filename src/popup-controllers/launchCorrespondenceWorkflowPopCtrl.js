@@ -159,7 +159,7 @@ module.exports = function (app) {
          * @param tab
          */
         self.selectTab = function (tab) {
-            distributionWFService
+            return distributionWFService
                 .loadTabContent(tab)
                 .then(function (result) {
                     var gridName = null;
@@ -178,6 +178,7 @@ module.exports = function (app) {
                         self[result.property] = self.tabMapper[result.property](result.data, gridName);
                     }
                     self.selectedTab = tab;
+                    return true;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -192,8 +193,10 @@ module.exports = function (app) {
         }
 
         if (self.selectedOrganizationToSend) {
-            _addSelectedOrganization(self.selectedOrganizationToSend);
-            self.selectTab(self.selectedTab);
+            self.selectTab(self.selectedTab).then(function () {
+                _addSelectedOrganization(self.selectedOrganizationToSend);
+            });
+
         }
 
         function _addSelectedOrganization(selected) {
