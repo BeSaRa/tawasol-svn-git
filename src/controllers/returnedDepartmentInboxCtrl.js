@@ -363,6 +363,18 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Destinations
+         * @param returnedDepartmentInbox
+         * @param $event
+         */
+        self.manageDestinations = function (returnedDepartmentInbox, $event) {
+            returnedDepartmentInbox.manageDocumentCorrespondence($event)
+                .then(function () {
+                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                });
+        };
+
+        /**
          * @description Download Main Document
          * @param returnedDepartmentInbox
          * @param $event
@@ -949,7 +961,8 @@ module.exports = function (app) {
                     "MANAGE_TASKS",
                     "MANAGE_ATTACHMENTS",
                     "MANAGE_LINKED_DOCUMENTS",
-                    "MANAGE_LINKED_ENTITIES"
+                    "MANAGE_LINKED_ENTITIES",
+                    "MANAGE_DESTINATIONS"
                 ],
                 checkAnyPermission: true,
                 subMenu: [
@@ -1030,6 +1043,20 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;
+                        }
+                    },
+                    // Destinations
+                    {
+                        type: 'action',
+                        icon: 'stop',
+                        text: 'grid_action_destinations',
+                        callback: self.manageDestinations,
+                        permissionKey: "MANAGE_DESTINATIONS",
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+                            return hasPermission && info.documentClass !== "internal";
                         }
                     }
                 ]
