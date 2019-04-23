@@ -19,7 +19,8 @@ module.exports = function (app) {
                 PASSWORD_EMPTY: 9017,
                 NO_USER_TO_BROADCAST: 3018,
                 PRINT_BARCODE_ERROR_NO_BARCODE_ELEMENT: 3019,
-                CANNOT_EDIT_AFTER_EXPORT_DUE_TO_RECEIVED_G2G_INTERNAL_G2G_OLD_SYSTEM_CORRESPONDENCE_SITES: 3023,
+                //CANNOT_EDIT_AFTER_EXPORT_DUE_TO_RECEIVED_G2G_INTERNAL_G2G_OLD_SYSTEM_CORRESPONDENCE_SITES: 3023,
+                CANNOT_EDIT_AFTER_EXPORT_BECAUSE_RECEIVED_BY_ONE_SITE: 3023,
                 CANNOT_RECALL_OPENED_BOOK: 3031,
                 CANNOT_RECALL_NON_EXISTING_BOOK: 2016,
                 CANNOT_ADD_SUBSCRIPTION_SAME_USER_SAME_BOOK: 3032,
@@ -44,9 +45,8 @@ module.exports = function (app) {
                 G2G_ERROR_WHILE_SENDING: 14015,
                 G2G_ERROR_WHILE_RECEIVING: 14016,
                 G2G_ERROR_WHILE_RETURNING_TO_SENDER: 14026,
-                G2G_ERROR_WHILE_RECALLING: 14027,*/
-
-                G2G_ERROR_WHILE_TERMINATE: 14028,
+                G2G_ERROR_WHILE_RECALLING: 14027,
+                G2G_ERROR_WHILE_TERMINATE: 14028,*/
                 NO_DOCUMENT_SECURITY: 13006,
                 FAIL_DUPLICATION: 2053,
                 INVALID_REFERENCE_FORMAT: 3025,
@@ -60,6 +60,7 @@ module.exports = function (app) {
                 // entity connection errors end
             },
             errorLangKeys = {
+                3023: 'can_not_edit_after_export_because_received_by_one_site',
                 14001: 'g2g_error_fetch_sent_return_book',
                 14002: 'g2g_not_authenticated',
                 14003: 'g2g_can_not_receive_recalled_document',
@@ -73,7 +74,7 @@ module.exports = function (app) {
                 14011: 'g2g_error_occurred_while_recalling',
                 14012: 'g2g_error_while_remove_transaction',
                 14013: 'g2g_error_can_not_resend_already_pending_book',
-                14028: 'g2g_error_occurred_while_terminate'
+                //14028: 'g2g_error_occurred_while_terminate'
             };
 
         return {
@@ -99,12 +100,14 @@ module.exports = function (app) {
             /**
              * @description Shows the error dialog according to the error code
              * @param error
+             * @param messageLangKey
+             * LangKey to override the error message
              */
-            showErrorDialog: function (error) {
+            showErrorDialog: function (error, messageLangKey) {
                 var code = error.hasOwnProperty('data') && error.data ? error.data.ec : error,
                     errorExists = _.values(errorCodes).indexOf(code) !== -1;
                 if (errorExists && errorLangKeys[code])
-                    dialog.errorMessage(langService.get(errorLangKeys[code]));
+                    dialog.errorMessage(langService.get(messageLangKey ? messageLangKey : errorLangKeys[code]));
                 return $q.reject(error);
             }
         }
