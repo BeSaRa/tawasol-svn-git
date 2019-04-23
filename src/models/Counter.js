@@ -5,6 +5,25 @@ module.exports = function (app) {
         'ngInject';
         return function Counter(model) {
             var self = this,
+                ignoreUnreadCounts = [
+                    'menu_item_outgoing',
+                    'menu_item_outgoing_prepare',
+                    'menu_item_outgoing_draft',
+                    'menu_item_outgoing_review',
+                    'menu_item_outgoing_ready_to_send',
+                    'menu_item_outgoing_rejected',
+                    'menu_item_incoming',
+                    'menu_item_incoming_scan',
+                    'menu_item_incoming_review',
+                    'menu_item_incoming_ready_to_send',
+                    'menu_item_incoming_rejected',
+                    'menu_item_internal_prepare',
+                    'menu_item_internal_draft',
+                    'menu_item_internal_rejected',
+                    'menu_item_internal_review',
+                    'menu_item_internal_ready_to_send',
+                    'menu_item_user_favorite_documents'
+                ],
                 maps = {
                     menu_item_outgoing: [
                         'outgoingRejected',
@@ -189,8 +208,8 @@ module.exports = function (app) {
                 return self.maped.hasOwnProperty(propertyName) ? self.maped[propertyName][property] : null;
             };
 
-            Counter.prototype.hasCounter = function (propertyName) {
-                return self.maped.hasOwnProperty(propertyName);
+            Counter.prototype.hasCounter = function (propertyName, unread) {
+                return self.maped.hasOwnProperty(propertyName) && (unread ? ignoreUnreadCounts.indexOf(propertyName) === -1 : true);
             };
 
             Counter.prototype.reverseMap = function () {

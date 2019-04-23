@@ -16,7 +16,7 @@
                 <span ng-if="menu.counters.counter.hasCounter(item.lang_key)"
                       ng-class="{'red':item.hasChildrenItems(),'orange':!item.hasChildrenItems()}"
                       class="menu-counter">{{menu.counters.counter.getCount(item.lang_key,'first')}}</span>
-                <span ng-if="menu.counters.counter.hasCounter(item.lang_key)"
+                <span ng-if="menu.counters.counter.hasCounter(item.lang_key , true)"
                       class="menu-counter blue">{{menu.counters.counter.getCount(item.lang_key,'second')}}</span>
                 <span ng-if="item.children.length" class="arrow-down"><md-icon
                         md-svg-icon="chevron-right"></md-icon></span>
@@ -30,7 +30,7 @@
                 <span ng-if="menu.counters.counter.hasCounter(item.lang_key)"
                       ng-class="{'red':item.hasChildrenItems(),'orange':!item.hasChildrenItems()}"
                       class="menu-counter">{{menu.counters.counter.getCount(item.lang_key,'first')}}</span>
-                <span ng-if="menu.counters.counter.hasCounter(item.lang_key)"
+                <span ng-if="menu.counters.counter.hasCounter(item.lang_key , true)"
                       class="menu-counter blue">{{menu.counters.counter.getCount(item.lang_key,'second')}}</span>
                 <span ng-if="item.children.length" class="arrow-down"><md-icon
                         md-svg-icon="chevron-right"></md-icon></span>
