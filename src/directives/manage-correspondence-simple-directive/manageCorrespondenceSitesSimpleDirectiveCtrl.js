@@ -504,7 +504,7 @@ module.exports = function (app) {
                 self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                 self.selectedItem = null;
-                if (self.subSearchResult.length === 1){
+                if (self.subSearchResult.length === 1) {
                     self.selectedItem = result[0];
                     self.changeSubCorrespondence(self.selectedItem);
                 }
@@ -519,19 +519,27 @@ module.exports = function (app) {
         };
 
         self.showMore = function ($event) {
-            var info = self.correspondence.getInfo();
-            return self.correspondence.hasVsId() ? managerService
-                .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event) : (managerService
-                .manageSitesForDocument(self.correspondence)
-                .then(function (correspondence) {
-                    if(self.correspondence.hasDocumentClass('outgoing')){
-                        self.correspondence.sitesInfoTo = correspondence.sitesInfoTo;
-                        self.correspondence.sitesInfoCC = correspondence.sitesInfoCC;
-                    }else{
-                        self.correspondence = correspondence;
-                    }
-                    self.sitesInfoLength = self.correspondence.sitesInfoTo.length + self.correspondence.sitesInfoCC.length - 1;
-                }));
+            var info = self.correspondence.getInfo(),
+                defer = $q.defer();
+            self.correspondence.hasVsId()
+                ? (managerService.manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
+                    .then(function (correspondence) {
+                        defer.resolve(correspondence)
+                    }))
+                : (managerService.manageSitesForDocument(self.correspondence)
+                    .then(function (correspondence) {
+                        defer.resolve(correspondence);
+                    }));
+
+            return defer.promise.then(function (correspondence) {
+                if (self.correspondence.hasDocumentClass('outgoing')) {
+                    self.correspondence.sitesInfoTo = correspondence.sitesInfoTo;
+                    self.correspondence.sitesInfoCC = correspondence.sitesInfoCC;
+                } else {
+                    self.correspondence = correspondence;
+                }
+                self.sitesInfoLength = self.correspondence.sitesInfoTo.length + self.correspondence.sitesInfoCC.length - 1;
+            })
         };
 
         self.changeSubCorrespondence = function (item) {
