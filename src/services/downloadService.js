@@ -123,12 +123,12 @@ module.exports = function (app) {
                                      * @param selectedLabel
                                      * @param $event
                                      */
-                                    self.setProtectionLabel = function ( selectedLabel , $event) {
+                                    self.setProtectionLabel = function (selectedLabel, $event) {
                                         if (!selectedLabel) {
                                             toast.info("Please select one label");
                                             return;
                                         }
-                                        dialog.hide(selectedLabel)
+                                        dialog.hide(selectedLabel.name)
                                     };
 
                                     /*self.setNoProtection = function ($event) {
