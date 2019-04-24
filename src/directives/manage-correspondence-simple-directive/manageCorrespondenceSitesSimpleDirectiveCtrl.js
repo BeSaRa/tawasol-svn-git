@@ -505,7 +505,7 @@ module.exports = function (app) {
                 self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                 self.selectedItem = null;
                 if (self.subSearchResult.length === 1) {
-                    self.selectedItem = result[0];
+                    self.selectedItem = self.subSearchResult[0];
                     self.changeSubCorrespondence(self.selectedItem);
                 }
             });
