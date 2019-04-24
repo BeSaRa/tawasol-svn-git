@@ -154,7 +154,7 @@ module.exports = function (app) {
             };
             G2GMessagingHistory.prototype.manageDocumentAttachments = function ($event) {
                 var info = this.getInfo();
-                return managerService.manageDocumentAttachments.apply(managerService, [this, this.refDocId, info.documentClass, info.title, $event]);
+                return managerService.manageDocumentAttachments.apply(managerService, [this.refDocId, info.documentClass, info.title, $event]);
             };
             G2GMessagingHistory.prototype.manageDocumentLinkedDocuments = function ($event) {
                 var info = this.getInfo();
