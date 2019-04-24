@@ -307,8 +307,8 @@ module.exports = function (app) {
          * @private
          */
         function _addSite(to, site) {
+            self['sitesInfo' + to].push(site);
             return $timeout(function () {
-                self['sitesInfo' + to].push(site);
                 return true;
             });
         }
