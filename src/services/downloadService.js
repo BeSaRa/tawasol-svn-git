@@ -128,7 +128,7 @@ module.exports = function (app) {
                                             toast.info("Please select one label");
                                             return;
                                         }
-                                        dialog.hide(selectedLabel.name)
+                                        dialog.hide(selectedLabel.id)
                                     };
 
                                     /*self.setNoProtection = function ($event) {
