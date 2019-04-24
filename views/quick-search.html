@@ -53,9 +53,9 @@
                                             md-order-by="{{ctrl.getSortingKey('docType', 'DocumentType')}}">
                                             <span>{{lang.label_document_type}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
+                                       <!-- <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
                                             md-order-by="createdBy">
-                                            <span>{{lang.created_by}}</span></th>
+                                            <span>{{lang.created_by}}</span></th>-->
                                         <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
                                             md-order-by="createdOn">
                                             <span>{{lang.created_on}}</span></th>
@@ -88,7 +88,7 @@
                                         <!--<td md-cell>{{quickSearch.securityLevel.getTranslatedName()}}</td>-->
                                         <!--<td md-cell>{{lang[quickSearch.getInfo().documentClass +"_document_class"]}}</td>-->
                                         <td md-cell>{{quickSearch.docType.getTranslatedName()}}</td>
-                                        <td md-cell>{{quickSearch.createdBy}}</td>
+                                        <!--<td md-cell>{{quickSearch.createdBy}}</td>-->
                                         <td md-cell>{{quickSearch.createdOn}}</td>
                                         <td md-cell ng-if="ctrl.selectedQuickSearchCorrespondence.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedQuickSearchCorrespondence.length

@@ -119,10 +119,10 @@
                                         md-order-by="{{ctrl.getSortingKey('docTypeForSearchGrid', 'DocumentType')}}">
                                         <span>{{lang.label_document_type}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
+                                   <!-- <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
                                         md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
                                         <span>{{lang.creator}}</span>
-                                    </th>
+                                    </th>-->
                                     <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
                                         md-order-by="createdOn">
                                         <span>{{lang.created_on}}</span>
@@ -172,7 +172,7 @@
                                     <!--<td md-cell>{{lang[searchedIncomingDocument.getInfo().documentClass +"_document_class"]}}</td>-->
                                     <td md-cell>{{searchedIncomingDocument.docTypeInfo.getTranslatedName()}}
                                     </td>
-                                    <td md-cell>{{searchedIncomingDocument.creatorInfo.getTranslatedName()}}</td>
+                                    <!--<td md-cell>{{searchedIncomingDocument.creatorInfo.getTranslatedName()}}</td>-->
                                     <td md-cell>{{searchedIncomingDocument.createdOn}}</td>
                                     <td md-cell class="td-data">
                                         <main-site-sub-site-directive
