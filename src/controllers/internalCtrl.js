@@ -137,42 +137,42 @@ module.exports = function (app) {
                 return true;
             } else {
                 promise = self.internal
-                    .saveDocument(status)
-                return  promise.then(function (result) {
-                    self.internal = result;
-                    self.model = angular.copy(self.internal);
-                    self.documentInformationExist = !!angular.copy(self.documentInformation);
-
-
-                    /*If content file was attached */
-                    if (self.internal.contentFile) {
-                        return  self.internal.addDocumentContentFile()
-                            .then(function () {
-                                self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
-                                self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
-
-                                saveCorrespondenceFinished(status);
-                            })
-                    } else if (duplicateVersion && self.internal.hasContent() && self.internal.addMethod) {
-                        return   self.internal
-                            .attacheContentUrl(self.documentInformation)
-                            .then(function () {
-                                self.contentFileExist = true;
-                                self.contentFileSizeExist = true;
-                                saveCorrespondenceFinished(status);
-                            });
-                    } else {
-                        self.contentFileExist = false;
-                        self.contentFileSizeExist = false;
-
-                        saveCorrespondenceFinished(status);
-                        return  true;
-                    }
-                }).catch(function (error) {
-                        self.saveInProgress = false;
-                        return $q.reject(error);
-                    });
+                    .saveDocument(status);
             }
+            return  promise.then(function (result) {
+                self.internal = result;
+                self.model = angular.copy(self.internal);
+                self.documentInformationExist = !!angular.copy(self.documentInformation);
+
+
+                /*If content file was attached */
+                if (self.internal.contentFile) {
+                    return  self.internal.addDocumentContentFile()
+                        .then(function () {
+                            self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
+                            self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
+
+                            saveCorrespondenceFinished(status);
+                        })
+                } else if (duplicateVersion && self.internal.hasContent() && self.internal.addMethod) {
+                    return   self.internal
+                        .attacheContentUrl(self.documentInformation)
+                        .then(function () {
+                            self.contentFileExist = true;
+                            self.contentFileSizeExist = true;
+                            saveCorrespondenceFinished(status);
+                        });
+                } else {
+                    self.contentFileExist = false;
+                    self.contentFileSizeExist = false;
+
+                    saveCorrespondenceFinished(status);
+                    return  true;
+                }
+            }).catch(function (error) {
+                self.saveInProgress = false;
+                return $q.reject(error);
+            });
         };
 
         self.saveCorrespondenceAndPrintBarcode = function ($event) {

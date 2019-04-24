@@ -195,7 +195,7 @@ module.exports = function (app) {
                         .saveDocumentWithContent(self.documentInformation);
                 } else {
                     promise = self.outgoing
-                        .saveDocument(status)
+                        .saveDocument(status);
                 }
                 return promise.then(function (result) {
                     self.outgoing = result;
@@ -517,7 +517,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.resetAddCorrespondence($event);
                 });
-        }
+        };
 
         /**
          * @description Reset the Add Outgoing form
