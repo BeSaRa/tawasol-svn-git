@@ -39,24 +39,25 @@ module.exports = function (app) {
         };
 
         self.toggleCorrespondenceEditMode = function () {
-            var  employee = self.employeeService.getEmployee();
+            var employee = self.employeeService.getEmployee();
 
             switch (employee.defaultEditMode) {
                 // application user both: desktop/web
                 case 0 :
                     _defaultBehavior();
-                break;
+                    break;
                 // Office online server
                 case 1:
                     self.editMode = true;
-                break;
+                    break;
                 // edit using desktop
                 case 2:
                     _openInDesktop();
-                break;
+                    break;
             }
 
         };
+
         function _openInDesktop() {
             self.correspondence
                 .editCorrespondenceInDesktop()
@@ -68,9 +69,15 @@ module.exports = function (app) {
                     dialog.hide('editInDesktop');
                 });
         }
-        function _defaultBehavior(){
+
+        function _defaultBehavior() {
             var message, defer = $q.defer();
             message = langService.getConcatenated(['edit_in_desktop_confirmation_1', 'edit_in_desktop_confirmation_2', 'edit_in_desktop_confirmation_3']);
+
+            if (!self.info.editByDeskTop) {
+                self.editMode = true;
+                return;
+            }
             dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('edit-in-desktop-confirm-template'),
