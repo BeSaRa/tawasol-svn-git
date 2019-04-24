@@ -133,8 +133,6 @@ module.exports = function (app) {
                 }
                 promise = self.internal
                     .saveDocumentWithContent(self.documentInformation);
-
-                return true;
             } else {
                 promise = self.internal
                     .saveDocument(status);
