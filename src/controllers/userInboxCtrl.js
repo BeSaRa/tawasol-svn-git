@@ -541,7 +541,15 @@ module.exports = function (app) {
          * @param defer
          */
         self.reply = function (userInbox, $event, defer) {
-            userInbox.launchWorkFlow($event, 'reply')
+            /*userInbox.launchWorkFlow($event, 'reply')
+                .then(function () {
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                });*/
+            userInbox.replySimple($event, 'reply')
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {

@@ -273,10 +273,20 @@ module.exports = function (app) {
              * @param action
              * @param tab
              * @param isDeptIncoming
+             * @param fromSimplePopup
              * @returns {promise|*}
              */
-            WorkItem.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming) {
-                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming);
+            WorkItem.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming, fromSimplePopup) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, null, fromSimplePopup);
+            };
+            /**
+             * @description to start simple launch workflow item.
+             * @param $event
+             * @param action
+             * @returns {promise|*}
+             */
+            WorkItem.prototype.replySimple = function ($event, action) {
+                return correspondenceService.replySimple(this, $event, action);
             };
             /**
              * @description send the document after approve , this is custom method , don't use it anywhere, just made to use after approve form inbox.

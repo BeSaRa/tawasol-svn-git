@@ -32,6 +32,7 @@ module.exports = function (app) {
                                                                     correspondence,
                                                                     isDeptIncoming,
                                                                     Information,
+                                                                    fromSimplePopup,
                                                                     generator) {
         'ngInject';
         var self = this;
@@ -186,7 +187,12 @@ module.exports = function (app) {
         };
 
         if (replyOn) {
-            self.users = _mapWFUser([replyOn]);
+            if (fromSimplePopup){
+                self.users = [fromSimplePopup];
+            }
+            else{
+                self.users = _mapWFUser([replyOn]);
+            }
             _addUserReply(self.users);
             self.textButton = 'reply';
         }

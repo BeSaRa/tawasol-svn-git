@@ -78,6 +78,7 @@ module.exports = function (app) {
     require('./contentViewHistoryViewersPopCtrl')(app);
     require('./selectOUApplicationUsersSinglePopCtrl')(app);
     require('./launchCorrespondenceWorkflowPopCtrl')(app);
+    require('./replySimplePopCtrl')(app);
     require('./workflowItemSettingPopCtrl')(app);
     require('./manageIncomingDocumentCorrespondencePopCtrl')(app);
     require('./folderTreePopCtrl')(app);

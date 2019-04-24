@@ -287,7 +287,15 @@ module.exports = function (app) {
          * @param defer
          */
         self.reply = function (workItem, $event, defer) {
-            workItem.launchWorkFlow($event, 'reply')
+            /*workItem.launchWorkFlow($event, 'reply')
+                .then(function () {
+                    self.reloadFolders(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                });*/
+            workItem.replySimple($event, 'reply')
                 .then(function () {
                     self.reloadFolders(self.grid.page)
                         .then(function () {

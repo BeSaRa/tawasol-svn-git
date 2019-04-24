@@ -177,7 +177,15 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            workItem.launchWorkFlow($event, 'reply', 'favorites')
+            /*workItem.launchWorkFlow($event, 'reply', 'favorites')
+                .then(function () {
+                    self.reloadGroupInbox(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                });*/
+            workItem.replySimple($event, 'reply')
                 .then(function () {
                     self.reloadGroupInbox(self.grid.page)
                         .then(function () {

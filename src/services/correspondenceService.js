@@ -1803,7 +1803,7 @@ module.exports = function (app) {
             });
         };
 
-        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming) {
+        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup) {
             var multi = angular.isArray(correspondence) && correspondence.length > 1;
             action = action || 'forward';
             var errorMessage = [];
@@ -1819,7 +1819,8 @@ module.exports = function (app) {
                         selectedTab: tab,
                         actionKey: action,
                         errorMessage: errorMessage,
-                        isDeptIncoming: isDeptIncoming
+                        isDeptIncoming: isDeptIncoming,
+                        fromSimplePopup: fromSimplePopup
                     },
                     resolve: {
                         favoritesUsers: function (distributionWFService) {
@@ -1897,9 +1898,10 @@ module.exports = function (app) {
          * @param $event
          * @param isDeptIncoming
          * @param isDeptSent
+         * @param fromSimplePopup
          * @returns {promise|*}
          */
-        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, isDeptSent) {
+        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup) {
             var normalCorrespondence = false;
             if (!isDeptSent) {
                 normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
@@ -1915,16 +1917,63 @@ module.exports = function (app) {
                             return managerService
                                 .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
                                 .then(function (result) {
-                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming) : null;
+                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup) : null;
                                 })
                         })
                 } else {
-                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming);
+                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup);
                 }
             }
-            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming);
+            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup);
 
         };
+
+
+        /**
+         * @description
+         * @param record
+         * @param action
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.replySimple = function (record, $event, action) {
+            action = action || 'reply';
+            var errorMessage = [];
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('reply-simple'),
+                    controller: 'replySimplePopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    locals: {
+                        record: record,
+                        actionKey: action,
+                        errorMessage: errorMessage,
+                        dialogTitle: langService.get('reply')
+                    },
+                    resolve: {
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService
+                                .getUserComments()
+                                .then(function (result) {
+                                    return _.filter(result, 'status');
+                                });
+                        },
+                        workflowActions: function (workflowActionService) {
+                            'ngInject';
+                            return workflowActionService.loadCurrentUserWorkflowActions()
+                        },
+                        replyOn: function (distributionWFService) {
+                            'ngInject';
+                            return distributionWFService
+                                .loadSenderUserForWorkItem(record);
+
+                        }
+                    }
+                });
+        };
+
         /**
          * @description load group inbox from service
          */
