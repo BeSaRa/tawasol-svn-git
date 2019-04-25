@@ -53,6 +53,10 @@
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedReadyToExports.length" md-column
+                                            md-order-by="">
+                                            <!-- Security Level Indicators -->
+                                        </th>
+                                        <th ng-if="!ctrl.selectedReadyToExports.length" md-column
                                             md-order-by="generalStepElm.docFullSerial">
                                             <span>{{lang.label_serial}}</span>
                                         </th>
@@ -108,7 +112,14 @@
                                         selected-length="{{ctrl.selectedReadyToExports.length ? ctrl.selectedReadyToExports.length : 0}}"
                                         model="readyToExport"
                                         ng-repeat="readyToExport in searchResults = (ctrl.readyToExports | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
-                                        <td md-cell ><span class="serial-td">{{readyToExport.generalStepElm.docFullSerial}}</span></td>
+                                        <td md-cell class="indicator-td">
+                                            <!-- Security Level -->
+                                            <grid-indicator-directive record="readyToExport"
+                                                                      indicator-type="securityLevel"
+                                                                      record-type="workItem"></grid-indicator-directive>
+                                        </td>
+                                        <td md-cell><span class="serial-td">{{readyToExport.generalStepElm.docFullSerial}}</span>
+                                        </td>
                                         <td md-cell class="subject">
                                             <!-- Paper/Electronic -->
                                             <grid-indicator-directive record-type="WorkItem"
