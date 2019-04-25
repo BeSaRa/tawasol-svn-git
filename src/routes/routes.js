@@ -14,6 +14,7 @@ module.exports = function (app) {
 
         var moment = momentProvider.$get();
 
+
         versionServiceProvider
             .setVersionNumber('2.1.3')
             .setBuildNumber('T#3850')
