@@ -551,6 +551,7 @@ module.exports = function (app) {
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
+                        hide: true,
                         checkShow: function (action, model) {
                             return true;
                         }
