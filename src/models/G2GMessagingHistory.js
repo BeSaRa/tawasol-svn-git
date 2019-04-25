@@ -144,7 +144,7 @@ module.exports = function (app) {
                     docClassName: 'Outgoing',
                     vsId: this.refDocId
                 });
-                return correspondenceService.openExportCorrespondenceDialog(correspondence, $event, true , this);
+                return correspondenceService.openExportCorrespondenceDialog(correspondence, $event, true, this);
             };
 
 
@@ -154,7 +154,14 @@ module.exports = function (app) {
             };
             G2GMessagingHistory.prototype.manageDocumentAttachments = function ($event) {
                 var info = this.getInfo();
-                return managerService.manageDocumentAttachments.apply(managerService, [this.refDocId, info.documentClass, info.title, $event]);
+                var correspondence = new Outgoing({
+                    docSubject: this.subject,
+                    docStatus: 24,
+                    docClassName: 'Outgoing',
+                    vsId: this.refDocId,
+                    securityLevel: this.securityLevel
+                });
+                return managerService.manageDocumentAttachments.apply(managerService, [correspondence, this.refDocId, info.documentClass, info.title, $event]);
             };
             G2GMessagingHistory.prototype.manageDocumentLinkedDocuments = function ($event) {
                 var info = this.getInfo();
