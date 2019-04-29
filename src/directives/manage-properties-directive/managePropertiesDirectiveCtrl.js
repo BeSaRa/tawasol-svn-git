@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                               organizationService,
                                                               documentTypeService,
                                                               documentFileService,
+                                                              OUDocumentFile,
                                                               $timeout,
                                                               toast,
                                                               _,
@@ -192,8 +193,8 @@ module.exports = function (app) {
                             .controllerMethod
                             .documentFileAdd(null, $event)
                             .then(function (documentFile) {
-                                toast.success(langService.get('add_success').change({name: documentFile.getNames()}));
-                                self.documentFiles.unshift(documentFile);
+                                // toast.success(langService.get('add_success').change({name: documentFile.getNames()}));
+                                self.documentFiles.unshift(new OUDocumentFile({file: documentFile}));
                                 self.document.fileId = documentFile;
                             });
                     })

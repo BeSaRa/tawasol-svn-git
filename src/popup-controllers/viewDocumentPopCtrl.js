@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                     documentUrl,
                                                     $element,
                                                     outgoing,
+                                                    OUDocumentFile,
                                                     buttonsToShow,
                                                     toast,
                                                     langService,
@@ -66,8 +67,8 @@ module.exports = function (app) {
                             .controllerMethod
                             .documentFileAdd(null, $event)
                             .then(function (documentFile) {
-                                toast.success(langService.get('add_success').change({name: documentFile.getNames()}));
-                                self.documentFiles.unshift(documentFile);
+                              //  toast.success(langService.get('add_success').change({name: documentFile.getNames()}));
+                                self.documentFiles.unshift(new OUDocumentFile({file: documentFile}));
                                 self.outgoing.fileId = documentFile;
                             });
                     })
