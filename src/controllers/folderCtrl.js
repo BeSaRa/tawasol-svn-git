@@ -1413,7 +1413,7 @@ module.exports = function (app) {
                         hasPermission = (employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
                     else if (info.documentClass === "outgoing")
                         hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                    return hasPermission && !model.isBroadcasted();
+                    return hasPermission && info.docStatus < 24 && !model.isBroadcasted();
                 },
                 subMenu: [
                     // Content
