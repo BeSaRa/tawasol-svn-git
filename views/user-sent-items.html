@@ -146,10 +146,9 @@
                                                                    indicator-type="hasAttachment"
                                                                    record-type="EventHistory"></grid-indicator-directive>-->
                                     </td>
-                                    <td md-cell md-truncate class="subject">
-                                        <a href="" class="view-doc"
-                                           title="{{userSentItem.docSubject}}"
-                                           ng-click="ctrl.viewDocument(userSentItem, $event)">{{userSentItem.docSubject}}</a>
+                                    <td md-cell class="subject">
+                                        <a href="" tooltip="{{userSentItem.docSubject}}" class="view-doc subject"
+                                           md-truncate ng-click="ctrl.viewDocument(userSentItem, $event)">{{userSentItem.docSubject}}</a>
                                     </td>
                                     <td md-cell>{{userSentItem.actionDate}}</td>
                                     <!--<td md-cell>{{userSentItem.getTranslatedAction()}}</td>-->
