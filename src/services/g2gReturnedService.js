@@ -49,12 +49,47 @@ module.exports = function (app) {
             });
         };
 
-        self.terminateG2G = function (g2gItem) {
-            return dialog.confirmMessage(langService.get('confirm_terminate').change({name: g2gItem.getTranslatedName()}))
-                .then(function () {
+        /**
+         * @description  open reason dialog
+         * @param dialogTitle
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.showReasonDialog = function (dialogTitle, $event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('reason'),
+                    controller: 'reasonPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    targetEvent: $event,
+                    locals: {
+                        title: dialogTitle
+                    },
+                    resolve: {
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.getUserComments()
+                                .then(function (result) {
+                                    return _.filter(result, 'status');
+                                });
+                        }
+                    }
+                });
+        };
+
+        self.terminateG2G = function (g2gItem,$event) {
+
+            //  return dialog.confirmMessage(langService.get('confirm_terminate').change({name: g2gItem.getTranslatedName()}))
+            return self.showReasonDialog('terminate_reason', $event)
+                .then(function (reason) {
                     var isInternal = g2gItem.isInternalG2G();
                     g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
-                    return $http.put((urlService.g2gInbox + 'terminate/' + isInternal), g2gItem).then(function (result) {
+                    return $http.put((urlService.g2gInbox + 'terminate/' + isInternal),
+                        {
+                            first: g2gItem,
+                            second: reason
+                        }).then(function (result) {
                         return result.data.rs;
                     }).catch(function (error) {
                         /*errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {

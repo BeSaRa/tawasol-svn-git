@@ -160,7 +160,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.terminate = function (g2gItem, $event, defer) {
-            return g2gReturnedService.terminateG2G(g2gItem)
+            return g2gReturnedService.terminateG2G(g2gItem, $event)
                 .then(function (result) {
                     new ResolveDefer(defer);
                     self.reloadG2gItems(self.grid.page)
