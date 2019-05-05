@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                                   $scope,
                                                                   $timeout,
                                                                   employeeService,
+                                                                  $stateParams,
                                                                   toast) {
         'ngInject';
         var self = this;
@@ -113,5 +114,13 @@ module.exports = function (app) {
                     toast.success(langService.get('delete_success'));
                 })
         };
+
+        /**
+         * @description disable delete for first linked docs when action reply
+         * @returns {boolean}
+         */
+        self.checkIfReplyToAction = function (correspondence) {
+            return !(self.linkedDocs[0].vsId === correspondence.vsId && $stateParams.hasOwnProperty('action') && $stateParams.action === 'reply');
+        }
     });
 };

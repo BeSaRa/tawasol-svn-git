@@ -104,7 +104,7 @@
                         <td md-cell>{{correspondence.getTranslatedCreator()}}</td>
                         <td md-cell>{{correspondence.createdOn}}</td>
                         <td md-cell ng-if="!ctrl.disableEverything">
-                            <md-button class="md-icon-button" ng-click="ctrl.deleteLinkedDocument(correspondence)">
+                            <md-button class="md-icon-button" ng-click="ctrl.deleteLinkedDocument(correspondence)" ng-if="ctrl.checkIfReplyToAction(correspondence)">
                                 <md-icon md-svg-icon="delete"></md-icon>
                             </md-button>
                         </td>

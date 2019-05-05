@@ -541,6 +541,25 @@ module.exports = function (app) {
         };
 
         /**
+         * @description create to replay given correspondence.
+         * @param correspondence
+         * @param workItemNum
+         * @return {Promise|Correspondence}
+         */
+        self.updateReplyCorrespondence = function (correspondence, workItemNum) {
+            return $http
+                .post(
+                    _createUrlSchema('create-reply-metadata/incoming/' + workItemNum, correspondence.docClassName, null),
+                    generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence)
+                ).then(function () {
+                    return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                }).catch(function (error) {
+                    return $q.reject(self.getTranslatedError(error));
+                });
+        };
+
+
+        /**
          * @description  add correspondence
          * @param correspondence
          * @return {Promise|Correspondence}
@@ -594,6 +613,24 @@ module.exports = function (app) {
             var book = _createCorrespondenceStructure(correspondence, information);
             // BeSaRa: just for NHRC and after that i will remove it and should make it from backend team.
             return $http.put(_createUrlSchema(null, correspondence.docClassName, 'full-with-template'), book)
+                .then(function (result) {
+                    correspondence.vsId = result.data.rs;
+                    return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                }).catch(function (error) {
+                    return $q.reject(self.getTranslatedError(error));
+                });
+        };
+
+        /**
+         *  create to reply Correspondence with content .
+         * @param correspondence
+         * @param information
+         * @param workItemNum
+         */
+        self.updateReplyCorrespondenceWithContent = function (correspondence, information,workItemNum) {
+            var book = _createCorrespondenceStructure(correspondence, information);
+
+            return $http.post(_createUrlSchema('create-reply-full/incoming/' + workItemNum, correspondence.docClassName, null), book)
                 .then(function (result) {
                     correspondence.vsId = result.data.rs;
                     return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));

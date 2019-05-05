@@ -3,6 +3,7 @@ module.exports = function (app) {
                                       generator,
                                       Site,
                                       Correspondence,
+                                      queueStatusService,
                                       Indicator) {
         'ngInject';
         return function Outgoing(model) {
@@ -93,6 +94,19 @@ module.exports = function (app) {
                 return correspondenceService.showPartialExportDialog(this, $event, ignoreMessage);
             };
 
+            Outgoing.prototype.saveReplyDocument = function (status, workItemNum) {
+                correspondenceService = this.getCorrespondenceService();
+                if (status)
+                    this.docStatus = queueStatusService.getDocumentStatus(status);
+                return correspondenceService.updateReplyCorrespondence(this, workItemNum);
+            };
+
+            Outgoing.prototype.saveReplyDocumentWithContent = function (information, workItemNum, sendToReview) {
+                correspondenceService = this.getCorrespondenceService();
+                if (sendToReview)
+                    this.docStatus = 4;
+                return correspondenceService.updateReplyCorrespondenceWithContent(this, information, workItemNum);
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

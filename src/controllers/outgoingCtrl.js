@@ -185,17 +185,27 @@ module.exports = function (app) {
                 self.terminateAfterCreateReply = false;
                 defer.resolve(true);
             }
-            return defer.promise.then(function () {
+            defer.promise.then(function () {
+                var methods = {
+                    reply: {
+                        withContent: 'saveReplyDocumentWithContent',
+                        metaData: 'saveReplyDocument'
+                    },
+                    normal: {
+                        withContent: 'saveDocumentWithContent',
+                        metaData: 'saveDocument'
+                    }
+                };
+                var method = (replyTo && !self.outgoing.vsId) ? methods.reply : methods.normal;
                 /*No document information(No prepare document selected)*/
                 if (self.documentInformation && !self.outgoing.addMethod) {
                     if (status) {
                         self.outgoing.docStatus = queueStatusService.getDocumentStatus(status);
                     }
-                    promise = self.outgoing
-                        .saveDocumentWithContent(self.documentInformation);
+                    promise = self.outgoing[method.withContent](self.documentInformation, (replyTo) ? replyTo.linkedDocs[0].vsId : false);
+
                 } else {
-                    promise = self.outgoing
-                        .saveDocument(status);
+                    promise = self.outgoing[method.metaData](status, (replyTo) ? replyTo.linkedDocs[0].vsId : false);
                 }
                 return promise.then(function (result) {
                     self.outgoing = result;
