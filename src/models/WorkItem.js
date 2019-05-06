@@ -700,7 +700,7 @@ module.exports = function (app) {
             WorkItem.prototype.isLockedByCurrentUser = function () {
                 var info = this.getLockingInfo();
                 if (!info) return false;
-                return (info && info.domainName === employeeService.getEmployee().domainName);
+                return (info && info.domainName.toLowerCase() === employeeService.getEmployee().domainName.toLowerCase());
             };
 
             WorkItem.prototype.getLockingUserInfo = function () {
