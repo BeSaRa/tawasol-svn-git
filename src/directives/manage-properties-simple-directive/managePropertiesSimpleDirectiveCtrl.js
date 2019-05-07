@@ -315,6 +315,59 @@ module.exports = function (app) {
         };
 
         /**
+         * @description make first option selected by default if dropdown required
+         * @private
+         */
+        function _selectFirstOptionForRequired() {
+            var fields = [
+                {
+                    name: 'registryOU',
+                    options: 'registryOrganizations',
+                    value: 'id'
+                },
+                {
+                    name: 'mainClassification',
+                    options: 'classifications',
+                    value: 'classification'
+                },
+                {
+                    name: 'securityLevel',
+                    options: 'securityLevels'
+                },
+                {
+                    name: 'internalDocType',
+                    options: 'typeOptions',
+                    value: 'value'
+                },
+                {
+                    name: 'priorityLevel',
+                    options: 'priorityLevels'
+                },
+                {
+                    name: 'docType',
+                    options: 'documentTypes'
+                },
+                {
+                    name: 'fileId',
+                    options: 'documentFiles',
+                    value: 'file'
+                }];
+
+            if (!self.document.hasVsId()) {
+                for (var f = 0; f < fields.length; f++) {
+                    var field = fields[f];
+                    if (self.checkMandatory(field.name) && self[field.options] && self[field.options].length) {
+                        self.document[field.name] = (field.value) ? self[field.options][0][field.value] : self[field.options][0];
+                    }
+                }
+            }
+        }
+
+        $timeout(function () {
+            _selectFirstOptionForRequired();
+        });
+
+        /**
          * @description Check if the document is approved. If yes, don't allow to change properties and correspondence sites
          * @param document
          * @returns {boolean}
