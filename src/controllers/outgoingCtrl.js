@@ -272,8 +272,16 @@ module.exports = function (app) {
                     successKey = 'save_success'
                 } else if (self.outgoing.contentFile && self.outgoing.contentFile.size) {
                     self.outgoing.contentSize = self.outgoing.contentFile.size;
-                    successKey = 'save_success'
+                    successKey = 'save_success';
                 }
+
+                if(employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
+                    dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
+                        .then(function () {
+                            self.docActionLaunchDistributionWorkflow(self.outgoing);
+                        });
+                }
+
                 self.requestCompleted = true;
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));

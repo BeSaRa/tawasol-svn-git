@@ -157,6 +157,14 @@ module.exports = function (app) {
                     successKey = 'save_success';
                 }
 
+
+                if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
+                    dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
+                        .then(function () {
+                            self.docActionLaunchDistributionWorkflow(self.internal);
+                        });
+                }
+
                 self.requestCompleted = true;
                 toast.success(langService.get(successKey));
             }

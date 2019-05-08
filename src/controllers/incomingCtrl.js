@@ -211,6 +211,14 @@ module.exports = function (app) {
                     self.incoming.contentSize = self.incoming.contentFile.size;
                     successKey = 'save_success';
                 }
+
+                if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
+                    dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
+                        .then(function () {
+                            self.docActionLaunchDistributionWorkflow(self.incoming);
+                        });
+                }
+
                 self.requestCompleted = true;
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
