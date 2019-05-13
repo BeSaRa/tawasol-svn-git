@@ -627,7 +627,7 @@ module.exports = function (app) {
          * @param information
          * @param workItemNum
          */
-        self.updateReplyCorrespondenceWithContent = function (correspondence, information,workItemNum) {
+        self.updateReplyCorrespondenceWithContent = function (correspondence, information, workItemNum) {
             var book = _createCorrespondenceStructure(correspondence, information);
 
             return $http.post(_createUrlSchema('create-reply-full/incoming/' + workItemNum, correspondence.docClassName, null), book)
@@ -2865,20 +2865,19 @@ module.exports = function (app) {
          * @param signature
          * @param isComposite
          * @param ignoreMessage
+         * @param additionalData
          */
         self.approveCorrespondence = function (workItem, signature, isComposite, ignoreMessage, additionalData) {
             var defer = $q.defer();
-            if (additionalData){
+            if (additionalData && workItem.isWorkItem()) {
                 additionalData.preApproveAction(null, true)
                     .then(function (result) {
                         defer.resolve(true);
                     })
-            }
-            else{
+            } else {
                 defer.resolve(true);
             }
-           return defer.promise.then(function (changesSaved) {
-                debugger;
+            return defer.promise.then(function (changesSaved) {
                 if (changesSaved) {
                     var info = workItem.getInfo();
                     var sign = (new SignDocumentModel()).setSignature(workItem, signature).setIsComposite(isComposite);
@@ -2908,6 +2907,7 @@ module.exports = function (app) {
          * @param workItem
          * @param $event
          * @param ignoreMessage
+         * @param additionalData
          * @returns {Promise<any>}
          */
         self.showApprovedDialog = function (workItem, $event, ignoreMessage, additionalData) {
@@ -2915,14 +2915,19 @@ module.exports = function (app) {
                 .getApplicationUserSignatures(employeeService.getEmployee().id)
                 .then(function (signatures) {
                     if (signatures && signatures.length === 1) {
-                        return workItem.isComposite() ? dialog
-                            .confirmMessage(langService.get('document_is_composite'))
-                            .then(function () {
-                                return self.approveCorrespondence(workItem, signatures[0], true, ignoreMessage, additionalData);
-                            })
-                            .catch(function () {
-                                return self.approveCorrespondence(workItem, signatures[0], false, ignoreMessage, additionalData);
-                            }) : self.approveCorrespondence(workItem, signatures[0], false, ignoreMessage, additionalData);
+                        var isComposite = workItem.isWorkItem() ? workItem.isComposite() : workItem.isCompositeSites();
+                        if (isComposite) {
+                            return dialog
+                                .confirmMessage(langService.get('document_is_composite'))
+                                .then(function () {
+                                    return self.approveCorrespondence(workItem, signatures[0], true, ignoreMessage, additionalData);
+                                })
+                                .catch(function () {
+                                    return self.approveCorrespondence(workItem, signatures[0], false, ignoreMessage, additionalData);
+                                })
+                        } else {
+                            return self.approveCorrespondence(workItem, signatures[0], false, ignoreMessage, additionalData);
+                        }
                     } else if (signatures && signatures.length > 1) {
                         return dialog
                             .showDialog({
@@ -2933,7 +2938,8 @@ module.exports = function (app) {
                                 locals: {
                                     workItem: workItem,
                                     signatures: signatures,
-                                    additionalData: additionalData
+                                    additionalData: additionalData,
+                                    ignoreMessage: ignoreMessage
                                 }
                             });
                     } else {

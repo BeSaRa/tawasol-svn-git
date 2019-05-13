@@ -330,6 +330,24 @@ module.exports = function (app) {
                 .draftInternalSendToReview(self.internal, $event);
         };
 
+        /**
+         * @description Approve the document
+         * @param model
+         * @param $event
+         * @param defer
+         * @returns {*}
+         */
+        self.docActionApprove = function (model, $event, defer) {
+            if (_hasContent()){
+                model.approveDocument($event, defer, false)
+                    .then(function (result) {
+                        counterService.loadCounters();
+                        mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        self.resetAddCorrespondence();
+                    })
+            }
+        };
+
         self.docActionManageTasks = function (document, $event) {
             console.log('manage tasks', document);
         };
@@ -346,7 +364,9 @@ module.exports = function (app) {
         self.performDocumentAction = function ($event) {
             self.documentAction.callback(self.internal, $event);
         };
-
+        var _hasContent = function () {
+            return (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+        };
         self.visibilityArray = [];
         self.isActionsAvailable = false;
 
@@ -372,7 +392,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -384,7 +404,7 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    isVisible = gridService.checkToShowAction(action) &&  _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -423,6 +443,19 @@ module.exports = function (app) {
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
                     isVisible = gridService.checkToShowAction(action) && info.isPaper; //Don't show if its electronic internal
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // Approve
+            {
+                text: langService.get('grid_action_approve'),
+                callback: self.docActionApprove,
+                class: "action-green",
+                permissionKey: "ELECTRONIC_SIGNATURE",
+                checkShow: function (action, model, index) {
+                    var info = model.getInfo();
+                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent(); //Don't show if its paper outgoing
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

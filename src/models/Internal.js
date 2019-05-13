@@ -62,6 +62,9 @@ module.exports = function (app) {
                 Internal.prototype.getPriorityLevelIndicator = function (priorityLevel) {
                     return indicator.getPriorityLevelIndicator(priorityLevel);
                 };
+                Internal.prototype.isCompositeSites = function () {
+                    return false;
+                };
 
 
                 Internal.prototype.launchWorkFlowAndCheckApprovedInternal = function ($event, action, tab) {

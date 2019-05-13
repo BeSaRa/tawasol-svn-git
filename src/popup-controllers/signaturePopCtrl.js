@@ -8,7 +8,8 @@ module.exports = function (app) {
                                                  dialog,
                                                  workItem,
                                                  signatures,
-                                                 additionalData) {
+                                                 additionalData,
+                                                 ignoreMessage) {
         'ngInject';
         var self = this;
 
@@ -78,17 +79,18 @@ module.exports = function (app) {
          * @param $event
          */
         self.signDocumentFromCtrl = function ($event) {
-            if (workItem.isComposite()) {
+            var isComposite = workItem.isWorkItem() ? workItem.isComposite() : workItem.isCompositeSites();
+            if (isComposite) {
                 return dialog
                     .confirmMessage(langService.get('document_is_composite'))
                     .then(function () {
-                        return _approveBook(workItem, self.selectedSignature, true, false, additionalData);
+                        return _approveBook(workItem, self.selectedSignature, true, ignoreMessage, additionalData);
                     })
                     .catch(function () {
-                        return _approveBook(workItem, self.selectedSignature, false, false, additionalData);
+                        return _approveBook(workItem, self.selectedSignature, false, ignoreMessage, additionalData);
                     })
             } else {
-                return _approveBook(workItem, self.selectedSignature, false, false, additionalData);
+                return _approveBook(workItem, self.selectedSignature, false, ignoreMessage, additionalData);
             }
         };
 

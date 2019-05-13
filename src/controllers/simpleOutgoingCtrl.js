@@ -34,7 +34,8 @@ module.exports = function (app) {
                                                    lookups, // new injector for all lookups can user access
                                                    correspondenceService,
                                                    ResolveDefer,
-                                                   gridService) {
+                                                   gridService,
+                                                   _) {
         'ngInject';
         var self = this;
         self.controllerName = 'simpleOutgoingCtrl';
@@ -159,7 +160,7 @@ module.exports = function (app) {
                 promise = self.outgoing
                     .saveDocument(status)
             }
-         return promise.then(function (result) {
+            return promise.then(function (result) {
                 self.outgoing.vsId = result.vsId;
                 self.model = angular.copy(self.outgoing);
                 self.documentInformationExist = !!angular.copy(self.documentInformation);
@@ -168,19 +169,18 @@ module.exports = function (app) {
 
                 /*If content file was attached */
                 if (self.outgoing.contentFile) {
-                  return   self.outgoing.addDocumentContentFile()
+                    return self.outgoing.addDocumentContentFile()
                         .then(function () {
                             self.contentFileExist = !!(self.outgoing.hasOwnProperty('contentFile') && self.outgoing.contentFile);
                             self.contentFileSizeExist = !!(self.contentFileExist && self.outgoing.contentFile.size);
 
                             saveCorrespondenceFinished(status, newId);
                         })
-                }
-                else {
+                } else {
                     self.contentFileExist = false;
                     self.contentFileSizeExist = false;
                     saveCorrespondenceFinished(status, newId);
-                    return  true;
+                    return true;
                 }
             }).catch(function (error) {
                 toast.error(error);
@@ -190,7 +190,7 @@ module.exports = function (app) {
 
         self.saveCorrespondenceAndPrintBarcode = function ($event) {
             self.saveCorrespondence().then(function () {
-                self.docActionPrintBarcode(self.outgoing,$event);
+                self.docActionPrintBarcode(self.outgoing, $event);
             })
         };
 
@@ -202,14 +202,12 @@ module.exports = function (app) {
                 $timeout(function () {
                     $state.go('app.outgoing.draft');
                 })
-            }
-            else {
+            } else {
                 var successKey = 'outgoing_metadata_saved_success';
                 if (self.documentInformation) {
                     self.outgoing.contentSize = 1;
                     successKey = 'save_success'
-                }
-                else if (self.outgoing.contentFile && self.outgoing.contentFile.size) {
+                } else if (self.outgoing.contentFile && self.outgoing.contentFile.size) {
                     self.outgoing.contentSize = self.outgoing.contentFile.size;
                     successKey = 'save_success';
                 }
@@ -334,6 +332,50 @@ module.exports = function (app) {
                     self.resetAddCorrespondence();
                 })
         };
+        /**
+         * @description Approve the document
+         * @param model
+         * @param $event
+         * @param defer
+         * @returns {*}
+         */
+        self.docActionApprove = function (model, $event, defer) {
+            if (_hasContent()) {
+                model.approveDocument($event, defer, false)
+                    .then(function (result) {
+                        counterService.loadCounters();
+                        mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        self.resetAddCorrespondence();
+                    })
+            }
+        };
+        /**
+         * @description Approve and export the document
+         * @param model
+         * @param $event
+         * @param defer
+         * @returns {*}
+         */
+        self.docActionApproveAndExport = function (model, $event, defer) {
+            if (_hasContent()) {
+                model.approveDocument($event, defer, false)
+                    .then(function (result) {
+                        if (result === 'FULLY_AUTHORIZED') {
+                            model.exportDocument($event, true)
+                                .then(function () {
+                                    new ResolveDefer(defer);
+                                    counterService.loadCounters();
+                                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                                    self.resetAddCorrespondence();
+                                })
+                                .catch(function (error) {
+                                    if (error)
+                                        toast.error(langService.get('export_failed'));
+                                });
+                        }
+                    })
+            }
+        };
 
         self.docActionManageTasks = function (document, $event) {
             console.log('manage tasks', document);
@@ -351,7 +393,9 @@ module.exports = function (app) {
         self.performDocumentAction = function ($event) {
             self.documentAction.callback(self.outgoing, $event);
         };
-
+        var _hasContent = function () {
+            return (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+        };
         self.visibilityArray = [];
         self.isActionsAvailable = false;
 
@@ -377,7 +421,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -389,7 +433,7 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -443,7 +487,36 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && info.isPaper && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    isVisible = gridService.checkToShowAction(action) && info.isPaper && _hasContent();
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // Approve
+            {
+                text: langService.get('grid_action_approve'),
+                callback: self.docActionApprove,
+                class: "action-green",
+                permissionKey: "ELECTRONIC_SIGNATURE",
+                checkShow: function (action, model, index) {
+                    var info = model.getInfo();
+                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent(); //Don't show if its paper outgoing
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // Approve and export
+            {
+                text: langService.get('grid_action_approve_and_export'),
+                callback: self.docActionApproveAndExport,
+                class: "action-green",
+                permissionKey: "ELECTRONIC_SIGNATURE",
+                checkShow: function (action, model, index) {
+                    var info = model.getInfo(),
+                        hasExternalSite = !!(_.find([].concat(model.sitesInfoTo, model.sitesInfoCC), function (item) {
+                            return _.startsWith(item.subSiteId, 2);
+                        }));
+                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && !hasExternalSite && _hasContent(); //Don't show if its paper outgoing or any site is external
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
