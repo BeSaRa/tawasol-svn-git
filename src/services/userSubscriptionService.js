@@ -24,7 +24,9 @@ module.exports = function (app) {
                 excludeLoading: true
             })
                 .then(function (result) {
-                    self.userSubscriptions = result.data.rs.second;
+                    var  subscriptions = result.data.rs.second;
+                    self.userSubscriptions = generator.interceptReceivedCollection('UserSubscription', generator.generateCollection(subscriptions,UserSubscription));
+
                     return self.userSubscriptions;
                 });
         };

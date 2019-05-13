@@ -5,6 +5,8 @@ module.exports = function (app) {
                                                      generator,
                                                      MailNotification,
                                                      userSubscriptionService,
+                                                     UserSubscription,
+                                                     Indicator,
                                                      _) {
         'ngInject';
         var self = this;
@@ -21,9 +23,11 @@ module.exports = function (app) {
                 })
                 .then(function (result) {
                     var notifications = result.data.rs.first;
+                    var subscribtions = result.data.rs.second;
+
                     self.unreadNotificationsCount = _.filter(notifications, {'isOpen': false}).length;
                     self.notifications = generator.interceptReceivedCollection('MailNotification', generator.generateCollection(notifications, MailNotification));
-                    userSubscriptionService.userSubscriptions = result.data.rs.second;
+                    userSubscriptionService.userSubscriptions = generator.interceptReceivedCollection('UserSubscription', generator.generateCollection(subscribtions,UserSubscription));
 
                     return self.notifications;
                 })

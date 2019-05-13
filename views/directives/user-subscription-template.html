@@ -24,8 +24,16 @@
                                 </a>
                             </div>
                             <div layout="column">
-                                <div class="tasks-date-text">{{ctrl.getSubscriptionEventType(item)}}</div>
+                                <div class="tasks-date-text">
+                                    <md-icon class="tasks-date-icon" md-svg-icon="{{item.docClassIndicator.icon}}"
+                                             tooltip="{{langService.get(item.docClassIndicator.tooltip)}}"></md-icon>
+                                    {{ctrl.getSubscriptionEventType(item)}}
+                                </div>
                                 <!--<div class="tasks-date-text" >{{item.docFullSerial}}</div>-->
+                            </div>
+                            <div class="tasks-date-text">
+                                <md-icon class="tasks-date-icon" md-svg-icon="update"></md-icon>
+                                {{item.actionDate}}
                             </div>
                         </div>
                     </li>
