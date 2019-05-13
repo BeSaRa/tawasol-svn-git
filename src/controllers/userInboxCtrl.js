@@ -820,11 +820,12 @@ module.exports = function (app) {
          * @param userInbox
          * @param $event
          * @param defer
+         * @param additionalData
          * @param sendAfterApprove
          */
-        self.signESignature = function (userInbox, $event, defer, sendAfterApprove) {
+        self.signESignature = function (userInbox, $event, defer, additionalData, sendAfterApprove) {
             return userInbox
-                .approveWorkItem($event, defer, null, sendAfterApprove)
+                .approveWorkItem($event, defer, null, sendAfterApprove, additionalData)
                 .then(function (result) {
                     if (sendAfterApprove)
                         return result;
@@ -852,11 +853,12 @@ module.exports = function (app) {
          * @param workItem
          * @param $event
          * @param defer
+         * @param additionalData
          * @return {*}
          */
-        self.signESignatureAndSend = function (workItem, $event, defer) {
+        self.signESignatureAndSend = function (workItem, $event, defer, additionalData) {
             return self
-                .signESignature(workItem, $event, defer, true)
+                .signESignature(workItem, $event, defer, additionalData, true)
                 .then(function (result) {
                     // make the temp workitem fully authorized.
                     workItem.generalStepElm.docStatus = result === 'INTERNAL_PERSONAL' ? 23 : 24;

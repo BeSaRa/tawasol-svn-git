@@ -564,10 +564,10 @@ module.exports = function (app) {
             WorkItem.prototype.returnWorkItemFromCentralArchive = function ($event, ignoreMessage) {
                 return correspondenceService.centralArchiveReturn(this, $event, ignoreMessage)
             };
-            WorkItem.prototype.approveWorkItem = function ($event, defer, ignoreMessage, sendAfterApprove) {
+            WorkItem.prototype.approveWorkItem = function ($event, defer, ignoreMessage, sendAfterApprove, additionalData) {
                 var workItem = this;
                 return correspondenceService
-                    .showApprovedDialog(this, $event, ignoreMessage)
+                    .showApprovedDialog(this, $event, ignoreMessage, additionalData)
                     .then(function (result) {
                         new ResolveDefer(defer);
                         if (result === 'PARIALLY_AUTHORIZED' && !sendAfterApprove) {

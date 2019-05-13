@@ -528,10 +528,11 @@ module.exports = function (app) {
          * @param workItem
          * @param $event
          * @param defer
+         * @param preActionCallback
          */
-        self.signProxyMailInboxESignature = function (workItem, $event, defer) {
+        self.signProxyMailInboxESignature = function (workItem, $event, defer, preActionCallback) {
             workItem
-                .approveWorkItem($event, defer)
+                .approveWorkItem($event, defer, null, null, preActionCallback)
                 .then(function (result) {
                     workItem
                         .launchWorkFlowCondition($event, 'reply', null, true, function () {

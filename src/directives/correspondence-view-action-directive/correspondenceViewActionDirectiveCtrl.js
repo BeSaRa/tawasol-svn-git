@@ -31,11 +31,16 @@ module.exports = function (app) {
                 }
                 dialog.cancel();
             });
-            var record = self.g2gItemCopy ? self.g2gItemCopy : (workItem || correspondence);
-            if (action.hasOwnProperty('params') && action.params) {
-                return action.callback(record, action.params, $event, defer);
+            var record = self.g2gItemCopy ? self.g2gItemCopy : (workItem || correspondence),
+                authorizeKeys = ['grid_action_electronic_approve_and_send', 'grid_action_electronic_approve'],
+                additionalData;
+            if (self.editMode && authorizeKeys.indexOf(action.text) > -1) {
+                additionalData = {preApproveAction: self.saveCorrespondenceChanges};
             }
-            return action.callback(record, $event, defer);
+            if (action.hasOwnProperty('params') && action.params) {
+                return action.callback(record, action.params, $event, defer, additionalData);
+            }
+            return action.callback(record, $event, defer, additionalData);
         };
 
 

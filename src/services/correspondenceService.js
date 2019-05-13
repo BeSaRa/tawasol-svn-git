@@ -2866,27 +2866,42 @@ module.exports = function (app) {
          * @param isComposite
          * @param ignoreMessage
          */
-        self.approveCorrespondence = function (workItem, signature, isComposite, ignoreMessage) {
-            var info = workItem.getInfo();
-            var sign = (new SignDocumentModel()).setSignature(workItem, signature).setIsComposite(isComposite);
-            return $http
-                .put(_createUrlSchema(null, info.documentClass, 'authorize'), sign)
-                .then(function (result) {
-                    if (!ignoreMessage) {
-                        if (result.data.rs) {
-                            toast.success(langService.get('sign_specific_success').change({name: workItem.getTranslatedName()}));
-                        } else {
-                            toast.error(langService.get('something_happened_when_sign'));
-                        }
-                    }
-                    return result.data.rs;
-                })
-                .catch(function (error) {
-                    errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
-                        dialog.errorMessage(langService.get('authorize_failed'))
-                    });
-                    return $q.reject(error);
-                })
+        self.approveCorrespondence = function (workItem, signature, isComposite, ignoreMessage, additionalData) {
+            var defer = $q.defer();
+            if (additionalData){
+                additionalData.preApproveAction(null, true)
+                    .then(function (result) {
+                        defer.resolve(true);
+                    })
+            }
+            else{
+                defer.resolve(true);
+            }
+           return defer.promise.then(function (changesSaved) {
+                debugger;
+                if (changesSaved) {
+                    var info = workItem.getInfo();
+                    var sign = (new SignDocumentModel()).setSignature(workItem, signature).setIsComposite(isComposite);
+                    return $http
+                        .put(_createUrlSchema(null, info.documentClass, 'authorize'), sign)
+                        .then(function (result) {
+                            if (!ignoreMessage) {
+                                if (result.data.rs) {
+                                    toast.success(langService.get('sign_specific_success').change({name: workItem.getTranslatedName()}));
+                                } else {
+                                    toast.error(langService.get('something_happened_when_sign'));
+                                }
+                            }
+                            return result.data.rs;
+                        })
+                        .catch(function (error) {
+                            errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
+                                dialog.errorMessage(langService.get('authorize_failed'))
+                            });
+                            return $q.reject(error);
+                        })
+                }
+            })
         };
         /**
          * @description to display dialog to select signature .
@@ -2895,7 +2910,7 @@ module.exports = function (app) {
          * @param ignoreMessage
          * @returns {Promise<any>}
          */
-        self.showApprovedDialog = function (workItem, $event, ignoreMessage) {
+        self.showApprovedDialog = function (workItem, $event, ignoreMessage, additionalData) {
             return applicationUserSignatureService
                 .getApplicationUserSignatures(employeeService.getEmployee().id)
                 .then(function (signatures) {
@@ -2903,11 +2918,11 @@ module.exports = function (app) {
                         return workItem.isComposite() ? dialog
                             .confirmMessage(langService.get('document_is_composite'))
                             .then(function () {
-                                return self.approveCorrespondence(workItem, signatures[0], true, ignoreMessage);
+                                return self.approveCorrespondence(workItem, signatures[0], true, ignoreMessage, additionalData);
                             })
                             .catch(function () {
-                                return self.approveCorrespondence(workItem, signatures[0], false, ignoreMessage);
-                            }) : self.approveCorrespondence(workItem, signatures[0], false, ignoreMessage);
+                                return self.approveCorrespondence(workItem, signatures[0], false, ignoreMessage, additionalData);
+                            }) : self.approveCorrespondence(workItem, signatures[0], false, ignoreMessage, additionalData);
                     } else if (signatures && signatures.length > 1) {
                         return dialog
                             .showDialog({
@@ -2917,7 +2932,8 @@ module.exports = function (app) {
                                 controllerAs: 'ctrl',
                                 locals: {
                                     workItem: workItem,
-                                    signatures: signatures
+                                    signatures: signatures,
+                                    additionalData: additionalData
                                 }
                             });
                     } else {

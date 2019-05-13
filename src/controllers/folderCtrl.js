@@ -548,10 +548,11 @@ module.exports = function (app) {
          * @param workItem
          * @param $event
          * @param defer
+         * @param preActionCallback
          */
-        self.signESignature = function (workItem, $event, defer) {
+        self.signESignature = function (workItem, $event, defer, preActionCallback) {
             workItem
-                .approveWorkItem($event, defer)
+                .approveWorkItem($event, defer, null, null, preActionCallback)
                 .then(function (result) {
                     self.reloadFolders(self.grid.page);
                 });

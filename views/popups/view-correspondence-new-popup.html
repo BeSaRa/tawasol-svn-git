@@ -7,10 +7,13 @@
                            class="md-icon-button">
                     <md-icon md-svg-icon="menu"></md-icon>
                 </md-button>
-                <correspondence-view-action-directive ng-if="ctrl.actions.length" actions="ctrl.actions"
+                <correspondence-view-action-directive ng-if="ctrl.actions.length"
+                                                      actions="ctrl.actions"
                                                       work-item="ctrl.workItem"
                                                       correspondence="ctrl.correspondence"
-                                                      g2g-item-copy="ctrl.g2gItemCopy"></correspondence-view-action-directive>
+                                                      g2g-item-copy="ctrl.g2gItemCopy"
+                                                      edit-mode="ctrl.editMode"
+                                                      save-correspondence-changes="ctrl.saveCorrespondenceChanges"></correspondence-view-action-directive>
                 <div flex layout-align="center center" layout="row">
                     <span flex>{{::ctrl.correspondence.getTranslatedName()}}</span>
                     <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
@@ -269,7 +272,7 @@
         </div>
         <div layout="row">
             <div ng-if="ctrl.correspondence && !ctrl.correspondence.viewVersion && !ctrl.g2gItemCopy &&  !ctrl.disableEverything && ( ctrl.pageName !=='departmentIncoming' || (ctrl.pageName === 'departmentIncoming' && ctrl.workItem &&  ctrl.workItem.generalStepElm.isReassigned))">
-                <md-button class="md-raised" ng-click="ctrl.saveCorrespondenceChanges()"
+                <md-button class="md-raised" ng-click="ctrl.saveCorrespondenceChanges($event, false)"
                            ng-disabled="ctrl.checkDisabled() || ctrl.document_properties.$invalid">{{lang.save}}
                 </md-button>
             </div>
@@ -279,10 +282,12 @@
             </div>
             <span flex></span>
             <div ng-if="ctrl.correspondence">
-                <md-button class="md-raised red-text" ng-click="ctrl.closeCorrespondenceDialog()">{{lang.close}}</md-button>
+                <md-button class="md-raised red-text" ng-click="ctrl.closeCorrespondenceDialog()">{{lang.close}}
+                </md-button>
             </div>
             <div ng-if="!ctrl.correspondence">
-                <md-button class="md-raised red-text" ng-click="ctrl.returnBackCorrespondenceInformation()">{{lang.close}}
+                <md-button class="md-raised red-text" ng-click="ctrl.returnBackCorrespondenceInformation()">
+                    {{lang.close}}
                 </md-button>
             </div>
         </div>

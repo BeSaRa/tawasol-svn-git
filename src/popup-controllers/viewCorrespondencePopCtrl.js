@@ -180,19 +180,24 @@ module.exports = function (app) {
         };
         /**
          * @description save correspondence Changes for content.
+         * @param $event
+         * @param ignoreMessage
+         * @returns {*}
          */
-        self.saveCorrespondenceChanges = function () {
+        self.saveCorrespondenceChanges = function ($event, ignoreMessage) {
             var info = self.correspondence.getInfo();
             var method = info.needToApprove() && self.editMode ? 'saveDocumentWithContent' : 'saveDocument';
             if (method === 'saveDocumentWithContent') {
                 angular.element('iframe#iframe-main-document').remove();
                 self.disableSaveTimeout = true;
-                $timeout(function () {
-                    self.correspondence[method](method === 'saveDocument' ? false : self.content)
+                return $timeout(function () {
+                    return self.correspondence[method](method === 'saveDocument' ? false : self.content)
                         .then(function () {
-                            toast.success(langService.get('save_success'));
+                            if (!ignoreMessage)
+                                toast.success(langService.get('save_success'));
                             self.disableSaveTimeout = false;
-                            dialog.hide();
+                            dialog.hide(true);
+                            return true;
                         })
                         .catch(function (error) {
                             toast.error(error);
@@ -201,10 +206,12 @@ module.exports = function (app) {
                         });
                 }, configurationService.OFFICE_ONLINE_DELAY);
             } else {
-                self.correspondence[method](method === 'saveDocument' ? false : self.content)
+                return self.correspondence[method](method === 'saveDocument' ? false : self.content)
                     .then(function () {
-                        toast.success(langService.get('save_success'));
-                        dialog.hide();
+                        if (!ignoreMessage)
+                            toast.success(langService.get('save_success'));
+                        dialog.hide(true);
+                        return true;
                     });
             }
         };
@@ -354,10 +361,15 @@ module.exports = function (app) {
             defer.promise.then(function () {
                 dialog.cancel();
             });
+            var authorizeKeys = ['grid_action_electronic_approve_and_send', 'grid_action_electronic_approve'],
+                additionalData;
+            if (self.editMode && authorizeKeys.indexOf(action.text) > -1) {
+                additionalData = {preApproveAction: self.saveCorrespondenceChanges};
+            }
             if (action.hasOwnProperty('params') && action.params) {
-                action.callback(self.workItem, action.params, $event, defer);
+                action.callback(self.workItem, action.params, $event, defer, additionalData);
             } else {
-                action.callback(self.workItem, $event, defer);
+                action.callback(self.workItem, $event, defer, additionalData);
             }
         };
 

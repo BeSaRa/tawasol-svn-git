@@ -12,7 +12,9 @@ module.exports = function (app) {
                 actions: '=',
                 workItem: '=',
                 correspondence: '=',
-                g2gItemCopy: '=?'
+                g2gItemCopy: '=?',
+                editMode: '=',
+                saveCorrespondenceChanges: '='
             }
         }
     })

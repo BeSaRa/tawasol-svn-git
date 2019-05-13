@@ -7,7 +7,8 @@ module.exports = function (app) {
                                                  toast,
                                                  dialog,
                                                  workItem,
-                                                 signatures) {
+                                                 signatures,
+                                                 additionalData) {
         'ngInject';
         var self = this;
 
@@ -47,7 +48,7 @@ module.exports = function (app) {
                 {
                     label: langService.get('all'),
                     value: function () {
-                        return ( self.signatures.length + 21);
+                        return (self.signatures.length + 21);
                     }
                 }
             ]
@@ -77,20 +78,25 @@ module.exports = function (app) {
          * @param $event
          */
         self.signDocumentFromCtrl = function ($event) {
-            workItem.isComposite() ? dialog
-                .confirmMessage(langService.get('document_is_composite'))
-                .then(function () {
-                    return correspondenceService.approveCorrespondence(workItem, self.selectedSignature, true).then(function (result) {
-                        dialog.hide(result);
-                    });
-                })
-                .catch(function () {
-                    return correspondenceService.approveCorrespondence(workItem, self.selectedSignature, false).then(function (result) {
-                        dialog.hide(result);
-                    });
-                }) : correspondenceService.approveCorrespondence(workItem, self.selectedSignature, false)
+            if (workItem.isComposite()) {
+                return dialog
+                    .confirmMessage(langService.get('document_is_composite'))
+                    .then(function () {
+                        return _approveBook(workItem, self.selectedSignature, true, false, additionalData);
+                    })
+                    .catch(function () {
+                        return _approveBook(workItem, self.selectedSignature, false, false, additionalData);
+                    })
+            } else {
+                return _approveBook(workItem, self.selectedSignature, false, false, additionalData);
+            }
+        };
+
+        var _approveBook = function (workItem, selectedSignature, isComposite, ignoreMessage, additionalData) {
+            return correspondenceService.approveCorrespondence(workItem, selectedSignature, isComposite, ignoreMessage, additionalData)
                 .then(function (result) {
                     dialog.hide(result);
+                    return result;
                 });
         };
 
