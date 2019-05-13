@@ -11,6 +11,8 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            model.actionDate = generator.getTimeStampFromDate(model.actionDate);
+
             delete model.docClassIndicator;
 
             return model;

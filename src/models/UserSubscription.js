@@ -16,6 +16,7 @@ module.exports = function (app) {
             self.ouId = null;
             self.updatedOn = null;
             self.docSubject = null;
+            self.actionDate = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
