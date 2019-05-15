@@ -49,8 +49,8 @@ module.exports = function (app) {
             //required
             self.barcodeElements = new BarcodeSetting();
             self.deadlineReminderDays = null;
-            self.thumbnailMode = null;
-            self.allowSendWFRelatedBook = null;
+            self.thumbnailMode = 0;
+            self.allowSendWFRelatedBook = true;
             self.allowTwoWaysRelatedBook = false;
             self.removeMAIPSecurity = true;
             //endregion
