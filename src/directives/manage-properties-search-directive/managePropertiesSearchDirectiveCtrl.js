@@ -211,7 +211,8 @@ module.exports = function (app) {
                     self.document.docDateFrom = result.dateFrom;
                     self.document.docDateTo = result.dateTo;
                     if (!(self.document.docDateFrom && self.document.docDateTo)) {
-                        self.document.year = self.selectedYear = null;
+                        self.document.year = null;
+                        self.selectedYear = null;
 
                         if (!self.required.hasOwnProperty('docDateFrom'))
                             self.required.docDateFrom = {};
@@ -222,7 +223,8 @@ module.exports = function (app) {
                     }
                     self.docDateFromLabel = result.dateFromLabel;
                     self.docDateToLabel = result.dateToLabel;
-
+                    self.selectedYear = result.dateFrom.getFullYear();
+                    self.document.year = result.dateFrom.getFullYear();
                 });
         };
 

@@ -20,8 +20,10 @@ module.exports = function (app) {
             self.setMinMaxDocDate = function (requestType, $event) {
                 if (requestType === 'default') {
                     if (self.year !== 'All') {
-                        self.minDateForFrom = new Date(self.year + '-01-01');
-                        self.maxDateForTo = new Date(self.year + '-12-31');
+                        /*self.minDateForFrom = new Date(self.year + '-01-01');
+                        self.maxDateForTo = new Date(self.year + '-12-31');*/
+                        self.minDateForFrom = new Date(self.year, 0, 1, 0, 0, 0, 0);
+                        self.maxDateForTo = new Date(self.year, 11, 31, 23, 59, 59, 999);
                     }
                     else {
                         self.minDateForFrom = null;
@@ -52,6 +54,11 @@ module.exports = function (app) {
              * @param $event
              */
             self.closeSearchDocDatePopup = function ($event) {
+                if (!self.documentCopy.docDateFrom || !self.documentCopy.docDateTo) {
+                    var currentYear = new Date().getFullYear();
+                    self.documentCopy.docDateFrom = new Date(currentYear, 0, 1, 0, 0, 0, 0);
+                    self.documentCopy.docDateTo = new Date(currentYear, 11, 31, 23, 59, 59, 999);
+                }
                 dialog.cancel({
                     dateFrom: self.documentCopy.docDateFrom,
                     dateTo: self.documentCopy.docDateTo,
