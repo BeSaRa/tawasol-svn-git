@@ -243,8 +243,12 @@
                 // .addToAllWithBase('readyToExports', 'cms-entity/correspondence/wf/outgoing/ready-to-export')
                 // new ready to export
                 .addToAllWithBase('readyToExports', 'cms-entity/user/ou-inbox/ready-to-export')
+                // export outgoing document
+                .addToAllWithBase('exportDocumentByVsId', 'cms-entity/correspondence/wf/outgoing/book/{{vsId}}/export')
                 // export ready to export outgoing
                 .addToAllWithBase('exportReadyToExports', 'cms-entity/correspondence/wf/outgoing/book/{{vsId}}/wob-num/{{wobNum}}/export')
+                // selective export by vsId
+                .addToAllWithBase('selectiveExportByVsId', 'cms-entity/correspondence/wf/outgoing/book/{{vsId}}/selective-export')
                 // selective export
                 .addToAllWithBase('selectiveExport', 'cms-entity/correspondence/wf/outgoing/book/{{vsId}}/wob-num/{{wobNum}}/selective-export')
                 // terminate single ready to export outgoing
