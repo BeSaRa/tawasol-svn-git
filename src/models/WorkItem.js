@@ -579,6 +579,23 @@ module.exports = function (app) {
                         return result;
                     });
             };
+
+            WorkItem.prototype.approveDocument = function ($event, defer, ignoreMessage) {
+                var workItem = this;
+                return correspondenceService
+                    .showApprovedDialog(this, $event, ignoreMessage)
+                    .then(function (result) {
+                        new ResolveDefer(defer);
+                        if (result === 'PARIALLY_AUTHORIZED') {
+                            return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: workItem.getTranslatedName()}))
+                                .then(function () {
+                                    return workItem.launchWorkFlow($event, 'forward', 'favorites');
+                                });
+                        }
+                        return result;
+                    });
+            };
+
             WorkItem.prototype.markAsReadUnread = function ($event, ignoreMessage, isGroupMail) {
                 return correspondenceService.workItemMarkAsReadUnreadSingle(this, $event, ignoreMessage, isGroupMail);
             };

@@ -880,6 +880,35 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Approve and export the document
+         * @param userInbox
+         * @param $event
+         * @param defer
+         * @returns {*}
+         */
+        self.docActionApproveAndExport = function (userInbox, $event, defer) {
+            userInbox.approveDocument($event, defer, false)
+                .then(function (result) {
+                    if (result !== 'FULLY_AUTHORIZED') {
+                        userInbox.exportDocument($event, true)
+                            .then(function () {
+                                new ResolveDefer(defer);
+                            })
+                            .catch(function (error) {
+                                if (error)
+                                    toast.error(langService.get('export_failed'));
+                            });
+                    }
+
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            counterService.loadCounters();
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
+                })
+        };
+
+        /**
          * @description Edit Content
          * @param userInbox
          * @param $event
@@ -1682,6 +1711,20 @@ module.exports = function (app) {
                                 && !info.isPaper
                                 && (info.documentClass !== 'incoming')
                                 && model.needApprove();
+                        }
+                    },
+                    // approve and export
+                    {
+                        type: 'action',
+                        text: 'grid_action_approve_and_export',
+                        callback: self.docActionApproveAndExport,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            return !info.isPaper
+                                && (info.documentClass === 'outgoing')
+                                && model.needApprove()
+                                && model.allInternalSites;
                         }
                     }
                 ]
