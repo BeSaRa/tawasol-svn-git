@@ -396,6 +396,15 @@ module.exports = function (app) {
         var _hasContent = function () {
             return (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
         };
+
+        var _hasSingleSignature = function(document){
+            return document.signaturesCount && document.signaturesCount === 1;
+        };
+
+        var _isPersonalSecurityLevel = function(document){
+            return document.securityLevel && document.securityLevel.lookupKey === 4;
+        };
+
         self.visibilityArray = [];
         self.isActionsAvailable = false;
 
@@ -500,7 +509,8 @@ module.exports = function (app) {
                 permissionKey: "ELECTRONIC_SIGNATURE",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent(); //Don't show if its paper outgoing
+                    //Don't show if its paper outgoing  or signatures count more than 1 or personal
+                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent()  && _hasSingleSignature(model) && !_isPersonalSecurityLevel(model);
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -516,7 +526,9 @@ module.exports = function (app) {
                         hasExternalSite = !!(_.find([].concat(model.sitesInfoTo, model.sitesInfoCC), function (item) {
                             return _.startsWith(item.subSiteId, 2);
                         }));
-                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && !hasExternalSite && _hasContent(); //Don't show if its paper outgoing or any site is external
+
+                    //Don't show if its paper outgoing or any site is external or signatures count more than 1 or personal
+                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && !hasExternalSite && _hasContent() && _hasSingleSignature(model) && !_isPersonalSecurityLevel(model);
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
