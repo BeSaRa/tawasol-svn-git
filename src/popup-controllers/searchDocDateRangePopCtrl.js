@@ -4,6 +4,7 @@ module.exports = function (app) {
             var self = this;
 
             self.controllerName = 'searchDocDateRangePopCtrl';
+            self.maxCreateDate = new Date();
 
             $timeout(function () {
                 self.documentCopy = angular.copy(self.document);
@@ -23,11 +24,10 @@ module.exports = function (app) {
                         /*self.minDateForFrom = new Date(self.year + '-01-01');
                         self.maxDateForTo = new Date(self.year + '-12-31');*/
                         self.minDateForFrom = new Date(self.year, 0, 1, 0, 0, 0, 0);
-                        self.maxDateForTo = new Date(self.year, 11, 31, 23, 59, 59, 999);
-                    }
-                    else {
+                        self.maxDateForTo = (self.maxCreateDate.getFullYear() === self.year) ? self.maxCreateDate : new Date(self.year, 11, 31, 23, 59, 59, 999);
+                    } else {
                         self.minDateForFrom = null;
-                        self.maxDateForTo = null;
+                        self.maxDateForTo = self.maxCreateDate;
                     }
                 }
                 self.maxDocDate = self.document.docDateTo;
@@ -57,7 +57,7 @@ module.exports = function (app) {
                 if (!self.documentCopy.docDateFrom || !self.documentCopy.docDateTo) {
                     var currentYear = new Date().getFullYear();
                     self.documentCopy.docDateFrom = new Date(currentYear, 0, 1, 0, 0, 0, 0);
-                    self.documentCopy.docDateTo = new Date(currentYear, 11, 31, 23, 59, 59, 999);
+                    self.documentCopy.docDateTo = self.maxCreateDate; //new Date(currentYear, 11, 31, 23, 59, 59, 999);
                 }
                 dialog.cancel({
                     dateFrom: self.documentCopy.docDateFrom,

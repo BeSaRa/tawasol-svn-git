@@ -180,7 +180,7 @@ module.exports = function (app) {
                 self.required.docDateTo.isMandatory = false;
 
                 self.document.docDateFrom = new Date(self.selectedYear, 0, 1, 0, 0, 0, 0);
-                self.document.docDateTo = new Date(self.selectedYear, 11, 31, 23, 59, 59, 999);
+                self.document.docDateTo = (self.maxCreateDate.getFullYear() === self.selectedYear)? self.maxCreateDate : new Date(self.selectedYear, 11, 31, 23, 59, 59, 999);
 
                 self.docDateFromLabel = generator.convertDateToString(self.document.docDateFrom);
                 self.docDateToLabel = generator.convertDateToString(self.document.docDateTo);
