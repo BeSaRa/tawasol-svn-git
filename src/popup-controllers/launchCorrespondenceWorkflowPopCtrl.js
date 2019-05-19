@@ -357,14 +357,14 @@ module.exports = function (app) {
             private_users: {
                 lang: 'workflow_menu_item_private_users',
                 icon: 'account-star',
-                show: _checkPermission('SEND_TO_PRIVATE_USERS') && employeeService.getEmployee().canSendToPrivate(),
+                show: employeeService.getEmployee().canSendToPrivate(), //_checkPermission('SEND_TO_PRIVATE_USERS') &&
                 disabled: false,
                 modelName: 'privateUsers'
             },
             manager_users: {
                 lang: 'workflow_menu_item_managers',
                 icon: 'account-check',
-                show: _checkPermission('SEND_TO_MANAGERS') && employeeService.getEmployee().canSendToManagers(),
+                show: employeeService.getEmployee().canSendToManagers(), // _checkPermission('SEND_TO_MANAGERS') &&
                 disabled: false,
                 modelName: 'managerUsers'
             },
