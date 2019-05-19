@@ -254,6 +254,10 @@ module.exports = function (app) {
                 return this.generalStepElm.docStatus < 24 && !this.generalStepElm.addMethod;
             };
 
+            WorkItem.prototype.hasSingleSignature = function() {
+                return this.generalStepElm.signaturesCount && this.generalStepElm.signaturesCount === 1;
+            };
+
             WorkItem.prototype.getReceivedDate = function () {
                 return this.generalStepElm.receivedDate;
             };

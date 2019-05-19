@@ -1681,6 +1681,7 @@ module.exports = function (app) {
                             return !model.isBroadcasted()
                                 && !info.isPaper
                                 && (info.documentClass !== 'incoming')
+                                && model.hasSingleSignature()
                                 && model.needApprove();
                         }
                     },
