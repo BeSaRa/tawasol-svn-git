@@ -570,8 +570,11 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey : "OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE",
                 checkShow: function (action, model, index) {
-                    var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && !!info.isPaper && _hasContent(); //Don't show if its electronic outgoing
+                    var info = model.getInfo(),
+                        hasExternalSite = !!(_.find([].concat(model.sitesInfoTo, model.sitesInfoCC), function (item) {
+                            return _.startsWith(item.subSiteId, 2);
+                        }));
+                    isVisible = gridService.checkToShowAction(action) && !!info.isPaper && _hasContent() && !hasExternalSite; //Don't show if its electronic outgoing
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
