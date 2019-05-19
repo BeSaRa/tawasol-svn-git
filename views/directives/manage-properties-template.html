@@ -117,7 +117,8 @@
                 </md-input-container>
                 <!-- Date -->
                 <md-input-container ng-if="ctrl.checkStatus('docDate')">
-                    <label for="docDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.incoming_date : lang.document_date }}</label>
+                    <label for="docDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.incoming_date :
+                        lang.document_date }}</label>
                     <md-datepicker name="docDate" id="docDate"
                                    ng-disabled="!!ctrl.disableProperties"
                                    ng-model="ctrl.document.docDate"
@@ -131,8 +132,10 @@
                     </div>
                 </md-input-container>
                 <!-- RefDocDate -->
-                <md-input-container ng-if="ctrl.checkStatus('refDocDate') && ctrl.document.hasDocumentClass('incoming')">
-                    <label for="refDocDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.document_date : lang.incoming_date }}</label>
+                <md-input-container
+                        ng-if="ctrl.checkStatus('refDocDate') && ctrl.document.hasDocumentClass('incoming')">
+                    <label for="refDocDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.document_date :
+                        lang.incoming_date }}</label>
                     <md-datepicker name="refDocDate" id="refDocDate"
                                    ng-disabled="!!ctrl.disableProperties"
                                    ng-model="ctrl.document.refDocDate"
@@ -172,7 +175,8 @@
                                ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.mainClassification"
                                ng-model-options="{trackBy: '$value.id'}"
-                               ng-required="ctrl.checkMandatory('mainClassification')">
+                               ng-required="ctrl.checkMandatory('mainClassification')"
+                               ng-change="ctrl.onChangeMainClassification($event)">
                         <md-option ng-value="classification.classification"
                                    ng-repeat="classification in ctrl.classifications">
                             {{classification.classification.getTranslatedName()}}

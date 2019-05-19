@@ -12,7 +12,8 @@ module.exports = function (app) {
                                                                     correspondenceService,
                                                                     LangWatcher,
                                                                     generator,
-                                                                    moment) {
+                                                                    moment,
+                                                                    $stateParams) {
         'ngInject';
         var self = this;
         self.controllerName = 'managePropertiesDirectiveSimpleCtrl';
@@ -241,9 +242,9 @@ module.exports = function (app) {
         });
 
         $scope.$watch(function () {
-            return  self.isNewDocument;
-        },function (newVal) {
-            if(newVal)
+            return self.isNewDocument;
+        }, function (newVal) {
+            if (newVal)
                 _selectFirstOptionForRequired();
         });
 
@@ -283,7 +284,7 @@ module.exports = function (app) {
          * @param organizationId
          */
         self.onRegistryChange = function (organizationId) {
-            if(!organizationId)
+            if (!organizationId)
                 return;
             self.subOrganizations = [];
             organizationService
@@ -308,8 +309,7 @@ module.exports = function (app) {
                 if ((docDate && docDateValid) && (refDocDate && refDocDateValid)) {
                     if (new Date(docDate).getTime() < new Date(refDocDate).getTime())
                         self.document.refDocDate = docDate;
-                }
-                else {
+                } else {
                     self.document.refDocDate = null;
                 }
             }
@@ -338,6 +338,10 @@ module.exports = function (app) {
                     value: 'classification'
                 },
                 {
+                    name: 'subClassification',
+                    options: 'document.mainClassification.children'
+                },
+                {
                     name: 'securityLevel',
                     options: 'securityLevels'
                 },
@@ -360,11 +364,14 @@ module.exports = function (app) {
                     value: 'file'
                 }];
 
-            if (!self.document.hasVsId()) {
+            if (!self.document.hasVsId() || $stateParams.action === 'editAfterApproved' || $stateParams.action === 'editAfterExport'
+                || $stateParams.action === 'reply' || $stateParams.action === 'duplicateVersion' || $stateParams.action === 'receiveg2g' || $stateParams.action === 'receive') {
                 for (var f = 0; f < fields.length; f++) {
-                    var field = fields[f];
+                    var field = fields[f], options = _.get(self, field.options);
                     if (self.checkMandatory(field.name) && self[field.options] && self[field.options].length) {
-                        self.document[field.name] = (field.value) ? self[field.options][0][field.value] : self[field.options][0];
+                        // if there is no value selected by default
+                        if (typeof self.document[field.name] === 'undefined' || self.document[field.name] === null || self.document[field.name] === '')
+                            self.document[field.name] = (field.value) ? options[0][field.value] : options[0];
                     }
                 }
             }

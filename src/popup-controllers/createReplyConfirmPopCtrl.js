@@ -25,7 +25,6 @@ module.exports = function (app) {
          */
         self.setCreateReply = function ($event) {
             var info = self.record.getInfo(),
-                isWorkItem = self.record.isWorkItem(),
                 page = self.replyType === 0 ? 'app.outgoing.add' : 'app.internal.add';
             dialog.hide();
             $state.go(page, {

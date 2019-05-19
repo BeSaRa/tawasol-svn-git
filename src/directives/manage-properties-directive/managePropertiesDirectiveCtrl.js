@@ -246,9 +246,9 @@ module.exports = function (app) {
         });
 
         $scope.$watch(function () {
-           return  self.isNewDocument;
-        },function (newVal) {
-            if(newVal)
+            return self.isNewDocument;
+        }, function (newVal) {
+            if (newVal)
                 _selectFirstOptionForRequired();
         });
 
@@ -329,8 +329,7 @@ module.exports = function (app) {
                 if (docDate && refDocDate) {
                     if (new Date(docDate).getTime() < new Date(refDocDate).getTime())
                         self.document.refDocDate = null;
-                }
-                else {
+                } else {
                     self.document.refDocDate = null;
                 }
             }
@@ -351,6 +350,10 @@ module.exports = function (app) {
                     name: 'mainClassification',
                     options: 'classifications',
                     value: 'classification'
+                },
+                {
+                    name: 'subClassification',
+                    options: 'document.mainClassification.children'
                 },
                 {
                     name: 'securityLevel',
@@ -375,21 +378,40 @@ module.exports = function (app) {
                     value: 'file'
                 }];
 
-            if (!self.document.hasVsId()) {
+            if (!self.document.hasVsId() || $stateParams.action === 'editAfterApproved' || $stateParams.action === 'editAfterExport'
+                || $stateParams.action === 'reply' || $stateParams.action === 'duplicateVersion' || $stateParams.action === 'receiveg2g' || $stateParams.action === 'receive') {
                 for (var f = 0; f < fields.length; f++) {
-                    var field = fields[f];
-                    if (self.checkStatus(field.name) && self.checkMandatory(field.name) && self[field.options] && self[field.options].length) {
-                        self.document[field.name] = (field.value) ? self[field.options][0][field.value] : self[field.options][0];
+                    var field = fields[f], options = _.get(self, field.options);
+                    if (self.checkStatus(field.name) && self.checkMandatory(field.name) && options && options.length) {
+                        // if there is no value selected by default
+                        if (typeof self.document[field.name] === 'undefined' || self.document[field.name] === null || self.document[field.name] === '')
+                            self.document[field.name] = (field.value) ? options[0][field.value] : options[0];
                     }
                 }
             }
-
             self.isNewDocument = false;
         }
 
         $timeout(function () {
             _selectFirstOptionForRequired();
         });
+
+        /**
+         * @description Set the sub classification on change of main classification
+         * @param $event
+         */
+        self.onChangeMainClassification = function ($event) {
+            if (self.document.mainClassification) {
+                if (self.document.mainClassification && self.document.mainClassification.hasOwnProperty('children')
+                    && self.document.mainClassification.children && self.document.mainClassification.children.length
+                    && self.checkStatus('subClassification') && self.checkMandatory('subClassification')
+                ) {
+                    self.document.subClassification = self.document.mainClassification.children[0];
+                }
+            } else {
+                self.document.subClassification = null;
+            }
+        };
 
 
         /**
