@@ -84,7 +84,8 @@ module.exports = function (app) {
                 return new Attachment({
                     file: file,
                     securityLevel: self.document ? securityLevel : null,
-                    updateActionStatus: self.attachmentUpdateActions[0]
+                    updateActionStatus: self.attachmentUpdateActions[0],
+                    attachmentType:  (self.attachmentTypes.length) ? self.attachmentTypes[0] : null
                 });
             }
         }
