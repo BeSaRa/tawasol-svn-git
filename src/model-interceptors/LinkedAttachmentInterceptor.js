@@ -14,6 +14,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            delete model.createReplyDisableDelete;
             return model;
         });
 

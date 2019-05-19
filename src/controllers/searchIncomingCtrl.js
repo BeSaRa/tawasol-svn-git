@@ -576,11 +576,16 @@ module.exports = function (app) {
          * @description Create Reply
          * @param correspondence
          * @param $event
+         * @param defer
          */
-        self.createReply = function (correspondence, $event) {
-            var info = correspondence.getInfo();
+        self.createReply = function (correspondence, $event, defer) {
+            correspondence.createReply($event, defer)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
+            /*var info = correspondence.getInfo();
             dialog.hide();
-            $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});
+            $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});*/
         };
 
         var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {

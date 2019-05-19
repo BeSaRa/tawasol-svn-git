@@ -125,8 +125,7 @@ module.exports = function (app) {
                         toast.success(langService.get("add_to_favorite_specific_success").change({
                             name: searchedCorrespondenceDocument.getTranslatedName()
                         }));
-                    }
-                    else {
+                    } else {
                         dialog.alertMessage(langService.get(result.message));
                     }
                 });
@@ -305,7 +304,7 @@ module.exports = function (app) {
         self.getLink = function (searchedCorrespondenceDocument, $event) {
             viewDocumentService.loadDocumentViewUrlWithOutEdit(searchedCorrespondenceDocument.vsId).then(function (result) {
                 //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
-                dialog.successMessage(langService.get('link_message').change({result: result}),null,null,null,null,true);
+                dialog.successMessage(langService.get('link_message').change({result: result}), null, null, null, null, true);
                 return true;
             });
         };
@@ -332,10 +331,10 @@ module.exports = function (app) {
 
             correspondenceService.viewCorrespondence(searchedCorrespondenceDocument, self.gridActions, true, true)
                 .then(function () {
-                   // return self.reloadQuickSearchCorrespondence(self.grid.page);
+                    // return self.reloadQuickSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                  //  return self.reloadQuickSearchCorrespondence(self.grid.page);
+                    //  return self.reloadQuickSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -351,10 +350,10 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'quickSearch', $event)
                 .then(function () {
-                   // return self.reloadQuickSearchCorrespondence(self.grid.page);
+                    // return self.reloadQuickSearchCorrespondence(self.grid.page);
                 })
                 .catch(function (error) {
-                   // return self.reloadQuickSearchCorrespondence(self.grid.page);
+                    // return self.reloadQuickSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -423,11 +422,16 @@ module.exports = function (app) {
          * @description Create Reply
          * @param correspondence
          * @param $event
+         * @param defer
          */
-        self.createReplyIncoming = function (correspondence, $event) {
-            var info = correspondence.getInfo();
+        self.createReplyIncoming = function (correspondence, $event, defer) {
+            correspondence.createReply($event)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                };
+            /*var info = correspondence.getInfo();
             dialog.hide();
-            $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});
+            $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});*/
         };
 
 
@@ -500,7 +504,7 @@ module.exports = function (app) {
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {
                     //If no content, hide the button
-                            return model.hasContent();
+                    return model.hasContent();
                 }
             },
             // Separator
@@ -576,7 +580,7 @@ module.exports = function (app) {
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {
                     //If no content, hide the button
-                            return model.hasContent();
+                    return model.hasContent();
                 }
             },
             // Create Reply
@@ -779,7 +783,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_composite_document',
-                        permissionKey:'DOWNLOAD_COMPOSITE_BOOK',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         shortcut: false,
                         callback: self.downloadCompositeDocument,
                         class: "action-green",

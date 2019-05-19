@@ -135,7 +135,8 @@ module.exports = function (app) {
                 },
                 replyTo: function ($timeout, $stateParams, correspondenceService) {
                     'ngInject';
-                    var vsId = $stateParams.vsId, workItem = $stateParams.workItem, action = $stateParams.action;
+                    var vsId = $stateParams.vsId, workItem = $stateParams.workItem, action = $stateParams.action,
+                        createAsAttachment = $stateParams.createAsAttachment === "true";
                     if (action !== 'reply')
                         return $timeout(function () {
                             return false;
@@ -143,35 +144,38 @@ module.exports = function (app) {
 
                     if (vsId) {
                         return correspondenceService
-                            .createReplyFromCorrespondence('incoming', vsId, 'outgoing', {})
+                            .createReplyFromCorrespondence('incoming', vsId, 'outgoing', {createAsAttachment: createAsAttachment})
                             .then(function (outgoing) {
-                                return correspondenceService
-                                    .loadCorrespondenceByVsIdClass(outgoing.linkedDocs[0], 'incoming')
-                                    .then(function (result) {
-                                        outgoing.linkedDocs = [result];
-                                        outgoing.docDate = new Date();
-                                        outgoing.createdOn = new Date();
-                                        outgoing.addMethod = 0;
-                                        outgoing.sitesInfoTo = [result.site];
-                                        outgoing.classDescription = 'Outgoing';
-                                        return outgoing;
-                                    });
+                                if (!createAsAttachment) {
+                                    outgoing.linkedDocs = [outgoing.linkedDocList[0]];
+                                } else {
+                                    outgoing.linkedAttachmenstList[0].createReplyDisableDelete = true;
+                                    outgoing.attachments = [outgoing.linkedAttachmenstList[0]];
+                                }
+                                outgoing.docDate = new Date();
+                                outgoing.createdOn = new Date();
+                                outgoing.addMethod = 0;
+                                outgoing.sitesInfoTo = angular.copy(outgoing.sitesToList); //[result.site];
+                                outgoing.classDescription = 'Outgoing';
+                                return outgoing;
                             })
                     } else if (workItem) {
                         return correspondenceService
-                            .createReplyFromWorkItem('incoming', workItem, 'outgoing', {})
+                            .createReplyFromWorkItem('incoming', workItem, 'outgoing', {createAsAttachment: createAsAttachment})
                             .then(function (outgoing) {
-                                return correspondenceService
-                                    .loadCorrespondenceByVsIdClass(outgoing.linkedDocs[0], 'incoming')
-                                    .then(function (result) {
-                                        outgoing.linkedDocs = [result];
-                                        outgoing.docDate = new Date();
-                                        outgoing.createdOn = new Date();
-                                        outgoing.addMethod = 0;
-                                        outgoing.sitesInfoTo = [result.site];
-                                        outgoing.classDescription = 'Outgoing';
-                                        return outgoing
-                                    });
+                                if (!createAsAttachment) {
+                                    outgoing.linkedDocs = [outgoing.linkedDocList[0]];
+                                } else {
+                                    outgoing.linkedAttachmenstList[0].createReplyDisableDelete = true;
+                                    outgoing.attachments = [outgoing.linkedAttachmenstList[0]];
+                                }
+
+                                outgoing.docDate = new Date();
+                                outgoing.createdOn = new Date();
+                                outgoing.addMethod = 0;
+                                outgoing.sitesInfoTo = angular.copy(outgoing.sitesToList); //[result.site];
+                                outgoing.classDescription = 'Outgoing';
+                                return outgoing
                             });
                     } else {
                         return $timeout(function () {
@@ -452,6 +456,54 @@ module.exports = function (app) {
                 organizations: function (organizationService) {
                     'ngInject';
                     return organizationService.getOrganizations();
+                },
+                replyTo: function ($timeout, $stateParams, correspondenceService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.workItem, action = $stateParams.action,
+                        createAsAttachment = $stateParams.createAsAttachment === "true";
+                    if (action !== 'reply')
+                        return $timeout(function () {
+                            return false;
+                        });
+
+                    if (vsId) {
+                        return correspondenceService
+                            .createReplyFromCorrespondence('incoming', vsId, 'internal', {createAsAttachment: createAsAttachment})
+                            .then(function (internal) {
+                                if (!createAsAttachment) {
+                                    internal.linkedDocs = [internal.linkedDocList[0]];
+                                } else {
+                                    internal.linkedAttachmenstList[0].createReplyDisableDelete = true;
+                                    internal.attachments = [internal.linkedAttachmenstList[0]];
+                                }
+                                internal.docDate = new Date();
+                                internal.createdOn = new Date();
+                                internal.addMethod = 0;
+                                internal.classDescription = 'Internal';
+                                return internal;
+                            })
+                    } else if (workItem) {
+                        return correspondenceService
+                            .createReplyFromWorkItem('incoming', workItem, 'internal', {createAsAttachment: createAsAttachment})
+                            .then(function (internal) {
+                                if (!createAsAttachment) {
+                                    internal.linkedDocs = [internal.linkedDocList[0]];
+                                } else {
+                                    internal.linkedAttachmenstList[0].createReplyDisableDelete = true;
+                                    internal.attachments = [internal.linkedAttachmenstList[0]];
+                                }
+
+                                internal.docDate = new Date();
+                                internal.createdOn = new Date();
+                                internal.addMethod = 0;
+                                internal.classDescription = 'Internal';
+                                return internal
+                            });
+                    } else {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
                 },
                 editAfterApproved: function ($timeout, $stateParams, correspondenceStorageService, correspondenceService) {
                     'ngInject';

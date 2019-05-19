@@ -168,6 +168,9 @@ module.exports = function (app) {
             };
 
             self.checkAttachmentIsDeletable = function (documentInfo, attachment) {
+                if (attachment.createReplyDisableDelete) {
+                    return false;
+                }
                 // if no vsId for document, means, document is not added yet. so user can edit/delete
                 if (!documentInfo.vsId) {
                     return true;

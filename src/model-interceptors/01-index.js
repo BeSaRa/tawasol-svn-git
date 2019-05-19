@@ -100,4 +100,5 @@ module.exports = function (app) {
     require('./UserMenuItemInterceptor')(app);
     require('./EventHistoryCriteriaInterceptor')(app);
     require('./UserSubscriptionInterceptor')(app);
+    require('./CreateReplyInterceptor')(app);
 };

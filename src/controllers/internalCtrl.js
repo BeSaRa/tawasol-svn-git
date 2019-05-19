@@ -29,7 +29,10 @@ module.exports = function (app) {
                                              editAfterApproved,
                                              duplicateVersion,
                                              mailNotificationService,
-                                             gridService) {
+                                             gridService,
+                                             replyTo,
+                                             $stateParams,
+                                             correspondenceService) {
         'ngInject';
         var self = this;
         self.controllerName = 'internalCtrl';
@@ -77,8 +80,15 @@ module.exports = function (app) {
                 createdOn: new Date(),
                 docDate: new Date(),
                 registryOU: self.employee.getRegistryOUID(),
-                securityLevel: lookups.securityLevels[0]
+                securityLevel: lookups.securityLevels[0],
+                linkedDocs: (replyTo && $stateParams.createAsAttachment !== "true") ? [replyTo] : [],
+                attachments: (replyTo && $stateParams.createAsAttachment === "true") ? [replyTo] : []
             });
+
+        if (replyTo) {
+            self.internal = replyTo;
+            self.replyToOriginalName = angular.copy(replyTo.getTranslatedName());
+        }
 
         if (editAfterApproved) {
             self.internal = editAfterApproved.metaData;
@@ -124,79 +134,125 @@ module.exports = function (app) {
             }
             self.saveInProgress = true;
             var promise = null;
-            //var isDocHasVsId = angular.copy(self.internal).hasVsId();
-
-            /*No document information(No prepare document selected)*/
-
-            if (self.documentInformation && !self.internal.addMethod) {
-                if (status) {
-                    self.internal.docStatus = queueStatusService.getDocumentStatus(status);
-                }
-                promise = self.internal
-                    .saveDocumentWithContent(self.documentInformation);
+            var defer = $q.defer();
+            if (replyTo && $stateParams.workItem) {
+                dialog.confirmMessage(langService.get('prompt_terminate').change({name: self.replyToOriginalName}), 'yes', 'no')
+                    .then(function () {
+                        self.terminateAfterCreateReply = true;
+                        defer.resolve(true);
+                    })
+                    .catch(function (error) {
+                        self.terminateAfterCreateReply = false;
+                        defer.resolve(true);
+                    })
             } else {
-                promise = self.internal
-                    .saveDocument(status);
+                self.terminateAfterCreateReply = false;
+                defer.resolve(true);
             }
-            return  promise.then(function (result) {
-                self.internal = result;
-                self.model = angular.copy(self.internal);
-                self.documentInformationExist = !!angular.copy(self.documentInformation);
 
-
-                /*If content file was attached */
-                if (self.internal.contentFile) {
-                    return  self.internal.addDocumentContentFile()
-                        .then(function () {
-                            self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
-                            self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
-
-                            saveCorrespondenceFinished(status);
-                        })
-                } else if (duplicateVersion && self.internal.hasContent() && self.internal.addMethod) {
-                    return   self.internal
-                        .attacheContentUrl(self.documentInformation)
-                        .then(function () {
-                            self.contentFileExist = true;
-                            self.contentFileSizeExist = true;
-                            saveCorrespondenceFinished(status);
-                        });
+            defer.promise.then(function () {
+                var methods = {
+                    reply: {
+                        withContent: 'saveReplyDocumentWithContent',
+                        metaData: 'saveReplyDocument'
+                    },
+                    normal: {
+                        withContent: 'saveDocumentWithContent',
+                        metaData: 'saveDocument'
+                    }
+                };
+                var method = (replyTo && !self.internal.vsId) ? methods.reply : methods.normal,
+                    vsId = false;
+                /*No document information(No prepare document selected)*/
+                if (self.documentInformation && !self.internal.addMethod) {
+                    if (status) {
+                        self.internal.docStatus = queueStatusService.getDocumentStatus(status);
+                    }
+                    if (replyTo) {
+                        /*if ($stateParams.createAsAttachment === "true") {
+                            vsId = replyTo.attachments[0].vsId;
+                        } else {
+                            vsId = replyTo.linkedDocs[0].vsId;
+                        }*/
+                        vsId = $stateParams.vsId;
+                    }
+                    promise = self.internal[method.withContent](self.documentInformation, vsId);
                 } else {
-                    self.contentFileExist = false;
-                    self.contentFileSizeExist = false;
-
-                    saveCorrespondenceFinished(status);
-                    return  true;
+                    if (replyTo) {
+                        /*if ($stateParams.createAsAttachment === "true") {
+                            vsId = replyTo.attachments[0].vsId;
+                        } else {
+                            vsId = replyTo.linkedDocs[0].vsId;
+                        }*/
+                        vsId = $stateParams.vsId;
+                    }
+                    promise = self.internal[method.metaData](status, vsId);
                 }
-            }).catch(function (error) {
-                self.saveInProgress = false;
-                return $q.reject(error);
-            });
+                return promise.then(function (result) {
+                    self.internal = result;
+                    self.model = angular.copy(self.internal);
+                    self.documentInformationExist = !!angular.copy(self.documentInformation);
+
+
+                    /*If content file was attached */
+                    if (self.internal.contentFile) {
+                        return self.internal.addDocumentContentFile()
+                            .then(function () {
+                                self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
+                                self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
+
+                                saveCorrespondenceFinished(status);
+                            })
+                    } else if (duplicateVersion && self.internal.hasContent() && self.internal.addMethod) {
+                        return self.internal
+                            .attacheContentUrl(self.documentInformation)
+                            .then(function () {
+                                self.contentFileExist = true;
+                                self.contentFileSizeExist = true;
+                                saveCorrespondenceFinished(status);
+                            });
+                    } else {
+                        self.contentFileExist = false;
+                        self.contentFileSizeExist = false;
+                        saveCorrespondenceFinished(status);
+                        return true;
+                    }
+                }).catch(function (error) {
+                    self.saveInProgress = false;
+                    return $q.reject(error);
+                });
+            })
         };
 
         self.saveCorrespondenceAndPrintBarcode = function ($event) {
-          self.saveCorrespondence()
-              .then(function () {
-                  self.docActionPrintBarcode(self.internal,$event);
-              })
+            self.saveCorrespondence()
+                .then(function () {
+                    self.docActionPrintBarcode(self.internal, $event);
+                })
         };
 
         var saveCorrespondenceFinished = function (status) {
             counterService.loadCounters();
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+            if (replyTo) {
+                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+            }
+
+            if (self.terminateAfterCreateReply) {
+                correspondenceService.terminateWorkItemBehindScene($stateParams.workItem, 'incoming', langService.get('terminated_after_create_reply'))
+            }
+
             if (status) {// || (self.internal.contentFile)
                 toast.success(langService.get('save_success'));
                 $timeout(function () {
                     $state.go('app.internal.draft');
                 })
-            }
-            else {
+            } else {
                 var successKey = 'internal_metadata_saved_success';
                 if (self.documentInformation) {
                     self.internal.contentSize = 1;
                     successKey = 'save_success';
-                }
-                else if (self.internal.contentFile && self.internal.contentFile.size) {
+                } else if (self.internal.contentFile && self.internal.contentFile.size) {
                     self.internal.contentSize = self.internal.contentFile.size;
                     successKey = 'save_success';
                 }
@@ -339,7 +395,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.docActionApprove = function (model, $event, defer) {
-            if (_hasContent()){
+            if (_hasContent()) {
                 model.approveDocument($event, defer, false)
                     .then(function (result) {
                         counterService.loadCounters();
@@ -405,7 +461,7 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) &&  _hasContent();
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -456,7 +512,7 @@ module.exports = function (app) {
                 permissionKey: "ELECTRONIC_SIGNATURE",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent(); //Don't show if its paper outgoing
+                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent(); //Don't show if its paper internal
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

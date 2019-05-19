@@ -90,7 +90,8 @@ module.exports = function (app) {
                 docDate: new Date(),
                 registryOU: self.employee.getRegistryOUID(),
                 securityLevel: lookups.securityLevels[0],
-                linkedDocs: replyTo ? [replyTo] : []
+                linkedDocs: (replyTo && $stateParams.createAsAttachment !== "true") ? [replyTo] : [],
+                attachments: (replyTo && $stateParams.createAsAttachment === "true") ? [replyTo] : []
             });
 
         if (replyTo) {
@@ -171,7 +172,6 @@ module.exports = function (app) {
             self.saveInProgress = true;
             var promise = null;
             var defer = $q.defer();
-            //var isDocHasVsId = angular.copy(self.outgoing).hasVsId();
             if (replyTo && $stateParams.workItem) {
                 dialog.confirmMessage(langService.get('prompt_terminate').change({name: self.replyToOriginalName}), 'yes', 'no')
                     .then(function () {
@@ -197,16 +197,33 @@ module.exports = function (app) {
                         metaData: 'saveDocument'
                     }
                 };
-                var method = (replyTo && !self.outgoing.vsId) ? methods.reply : methods.normal;
+                var method = (replyTo && !self.outgoing.vsId) ? methods.reply : methods.normal,
+                    vsId = false;
                 /*No document information(No prepare document selected)*/
                 if (self.documentInformation && !self.outgoing.addMethod) {
                     if (status) {
                         self.outgoing.docStatus = queueStatusService.getDocumentStatus(status);
                     }
-                    promise = self.outgoing[method.withContent](self.documentInformation, (replyTo) ? replyTo.linkedDocs[0].vsId : false);
+                    if (replyTo) {
+                        /*if ($stateParams.createAsAttachment === "true") {
+                            vsId = replyTo.attachments[0].vsId;
+                        } else {
+                            vsId = replyTo.linkedDocs[0].vsId;
+                        }*/
+                        vsId = $stateParams.vsId;
+                    }
+                    promise = self.outgoing[method.withContent](self.documentInformation, vsId);
 
                 } else {
-                    promise = self.outgoing[method.metaData](status, (replyTo) ? replyTo.linkedDocs[0].vsId : false);
+                    if (replyTo) {
+                        /*if ($stateParams.createAsAttachment === "true") {
+                            vsId = replyTo.attachments[0].vsId;
+                        } else {
+                            vsId = replyTo.linkedDocs[0].vsId;
+                        }*/
+                        vsId = $stateParams.vsId;
+                    }
+                    promise = self.outgoing[method.metaData](status, vsId);
                 }
                 return promise.then(function (result) {
                     self.outgoing = result;
@@ -405,7 +422,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.docActionApprove = function (model, $event, defer) {
-            if (_hasContent()){
+            if (_hasContent()) {
                 model.approveDocument($event, defer, false)
                     .then(function (result) {
                         counterService.loadCounters();

@@ -82,6 +82,13 @@ module.exports = function (app) {
                     }
                 };
 
+                Internal.prototype.saveReplyDocumentWithContent = function (information, workItemNum, sendToReview) {
+                    correspondenceService = this.getCorrespondenceService();
+                    if (sendToReview)
+                        this.docStatus = 4;
+                    return correspondenceService.updateReplyCorrespondenceWithContent(this, information, workItemNum);
+                };
+
 
                 // don't remove CMSModelInterceptor from last line
                 // should be always at last thing after all methods and properties.

@@ -108,4 +108,5 @@ module.exports = function (app) {
     require('./linkedDocsAttachmentPopCtrl')(app);
     require('./userSentItemFilterPopCtrl')(app);
     require('./messageBodyPopCtrl')(app);
+    require('./createReplyConfirmPopCtrl')(app);
 };

@@ -847,7 +847,7 @@ module.exports = function (app) {
             })
             // add-outgoing
             .state('app.outgoing.add', {
-                url: '/add?vsId?workItem?action',
+                url: '/add?vsId?workItem?action?createAsAttachment',
                 templateUrl: templateProvider.getView('outgoing-add'),
                 controller: 'outgoingCtrl',
                 controllerAs: 'ctrl',
@@ -1239,7 +1239,7 @@ module.exports = function (app) {
             })
             // add-internal
             .state('app.internal.add', {
-                url: '/add?vsId?workItem?action',
+                url: '/add?vsId?workItem?action?createAsAttachment',
                 templateUrl: templateProvider.getView('internal-add'),
                 controller: 'internalCtrl',
                 controllerAs: 'ctrl',

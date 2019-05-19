@@ -12,7 +12,8 @@ module.exports = function (app) {
                                       generator,
                                       moment,
                                       employeeService,
-                                      lookupService) {
+                                      lookupService,
+                                      cmsTemplate) {
         'ngInject';
 
         return function WorkItem(model) {
@@ -754,6 +755,21 @@ module.exports = function (app) {
 
             WorkItem.prototype.editCorrespondenceInDesktop = function () {
                 return correspondenceService.editWordInDesktop(this);
+            };
+
+            WorkItem.prototype.createReply = function ($event) {
+                if (this.getInfo().documentClass === 'incoming') {
+                    return dialog.showDialog({
+                        $event: $event || null,
+                        templateUrl: cmsTemplate.getPopup('create-reply-confirm'),
+                        controller: 'createReplyPopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        locals: {
+                            record: angular.copy(this)
+                        }
+                    });
+                }
             };
 
 

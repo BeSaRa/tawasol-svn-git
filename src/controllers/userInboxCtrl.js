@@ -493,11 +493,16 @@ module.exports = function (app) {
          * @description Create Reply
          * @param userInbox
          * @param $event
+         * @param defer
          */
-        self.createReplyIncoming = function (userInbox, $event) {
-            var info = userInbox.getInfo();
+        self.createReplyIncoming = function (userInbox, $event, defer) {
+            userInbox.createReply($event)
+                .then(function(result){
+                    new ResolveDefer(defer);
+                });
+            /*var info = userInbox.getInfo();
             dialog.hide();
-            $state.go('app.outgoing.add', {workItem: info.wobNumber, action: 'reply'});
+            $state.go('app.outgoing.add', {workItem: info.wobNumber, action: 'reply'});*/
         };
 
         /**

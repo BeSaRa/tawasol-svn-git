@@ -31,6 +31,7 @@ module.exports = function (app) {
             delete model.progress;
             delete model.isLinkedExportedDocIndicator;
             delete model.isLinkedExportedDocAttachment;
+            delete model.createReplyDisableDelete;
 
             formData.append('entity', JSON.stringify(model));
             formData.append('content', file || null);
@@ -47,9 +48,9 @@ module.exports = function (app) {
                 model.isLinkedExportedDocIndicator = model.getIsLinkedExportedDocIndicator();
                 self.isLinkedExportedDocAttachment = true;
             }
-            else
+            else {
                 model.attachmentType = attachmentTypeService.getAttachmentTypeByLookupKey(model.attachmentType);
-
+            }
             if (model.securityLevel && typeof model.securityLevel !== 'number' && !(model.securityLevel instanceof Lookup)) {
                 model.securityLevel = model.securityLevel.id;
             }
@@ -60,7 +61,7 @@ module.exports = function (app) {
                 // if no value, set FREE_TO_EDIT by default
                 model.updateActionStatus = lookupService.getLookupByLookupKey(lookupService.attachmentUpdateAction, 0);
             }
-
+            model.isDeletable = !!model.isDeletable;
             return model;
         });
 

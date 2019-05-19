@@ -5,7 +5,9 @@ module.exports = function (app) {
                                       Correspondence,
                                       Site,
                                       Information,
-                                      Indicator) {
+                                      Indicator,
+                                      cmsTemplate,
+                                      dialog) {
         'ngInject';
         return function Incoming(model) {
             var self = this, correspondenceService, exportData = {
@@ -111,6 +113,18 @@ module.exports = function (app) {
             Incoming.prototype.saveIncomingSite = function () {
                 correspondenceService = this.getCorrespondenceService();
                 return correspondenceService.saveIncomingCorrespondenceSite(this);
+            };
+            Incoming.prototype.createReply = function ($event) {
+               return dialog.showDialog({
+                    $event: $event || null,
+                    templateUrl: cmsTemplate.getPopup('create-reply-confirm'),
+                    controller: 'createReplyPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    locals: {
+                        record: angular.copy(this)
+                    }
+                });
             };
             Incoming.prototype.getSiteInformation = function () {
                 var self = this;

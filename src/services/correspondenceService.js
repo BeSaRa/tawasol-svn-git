@@ -1176,7 +1176,7 @@ module.exports = function (app) {
             return $http
                 .put(_createUrlSchema(null, documentClass, wobNumber + '/create-replay/' + fromDocumentClass.toLowerCase()), followUpStatus)
                 .then(function (result) {
-                    return generator.interceptReceivedInstance(['Correspondence', _getModelName(fromDocumentClass)], generator.generateInstance(result.data.rs, _getModel(fromDocumentClass)));
+                    return generator.interceptReceivedInstance(['Correspondence', _getModelName(fromDocumentClass), 'CreateReply'], generator.generateInstance(result.data.rs, _getModel(fromDocumentClass)));
                 });
         };
         /**
@@ -1190,7 +1190,7 @@ module.exports = function (app) {
             return $http
                 .put(_createUrlSchema(null, documentClass, vsId + '/create-replay-from-search/' + fromDocumentClass.toLowerCase()), followUpStatus)
                 .then(function (result) {
-                    return generator.interceptReceivedInstance(['Correspondence', _getModelName(fromDocumentClass)], generator.generateInstance(result.data.rs, _getModel(fromDocumentClass)));
+                    return generator.interceptReceivedInstance(['Correspondence', _getModelName(fromDocumentClass), 'CreateReply'], generator.generateInstance(result.data.rs, _getModel(fromDocumentClass)));
                 });
         };
         /**

@@ -24,6 +24,12 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            if (model.linkedAttachmenstList && model.linkedAttachmenstList.length) {
+                model.linkedAttachmenstList = _.map(model.linkedAttachmenstList, function (item) {
+                    delete item.createReplyDisableDelete;
+                    return item;
+                });
+            }
             if (angular.isArray(model.sitesInfoTo) && model.sitesInfoTo.length) {
                 model.sitesInfoTo = JSON.stringify(generator.interceptSendCollection('Site', model.sitesInfoTo));
             } else {

@@ -175,8 +175,7 @@ module.exports = function (app) {
                 var securityLevel = this.securityLevel;
                 if (securityLevel.hasOwnProperty('lookupKey')) {
                     return securityLevel;
-                }
-                else if (securityLevel.hasOwnProperty('id')) {
+                } else if (securityLevel.hasOwnProperty('id')) {
                     return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel.id);
                 }
                 return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
@@ -442,9 +441,14 @@ module.exports = function (app) {
             };
 
             Correspondence.prototype.getTranslatedCreator = function (reverse) {
-                if (!this.creatorInfo)
+                if (this.creatorInfo && !this.creatorInfo.isEmpty()) {
+                    return langService.current === 'ar' ? (reverse ? this.creatorInfo.enName : this.creatorInfo.arName) : (reverse ? this.creatorInfo.arName : this.creatorInfo.enName)
+                }
+                else if (this.createdBy) {
+                    return this.createdBy;
+                } else {
                     return null;
-                return langService.current === 'ar' ? (reverse ? this.creatorInfo.enName : this.creatorInfo.arName) : (reverse ? this.creatorInfo.arName : this.creatorInfo.enName)
+                }
             };
             /**
              * @description send correspondence to Ready to export;
