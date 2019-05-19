@@ -186,7 +186,7 @@ module.exports = function (app) {
                 self.terminateAfterCreateReply = false;
                 defer.resolve(true);
             }
-            defer.promise.then(function () {
+           return defer.promise.then(function () {
                 var methods = {
                     reply: {
                         withContent: 'saveReplyDocumentWithContent',
