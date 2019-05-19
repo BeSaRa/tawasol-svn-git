@@ -891,11 +891,11 @@ module.exports = function (app) {
          * @param defer
          * @returns {*}
          */
-        self.docActionApproveAndExport = function (userInbox, $event, defer) {
+        self.approveAndExport = function (userInbox, $event, defer) {
             userInbox.approveDocument($event, defer, false)
                 .then(function (result) {
                     if (result === 'FULLY_AUTHORIZED') {
-                        userInbox.exportDocument($event, true)
+                        userInbox.exportWorkItem($event, true)
                             .then(function () {
                                 new ResolveDefer(defer);
                             })
@@ -1722,7 +1722,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         text: 'grid_action_approve_and_export',
-                        callback: self.docActionApproveAndExport,
+                        callback: self.approveAndExport,
                         class: "action-green",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
