@@ -296,6 +296,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.onSiteTypeChange = function ($event) {
+            self.mainSites = [];
+            self.subSearchResult = [];
+            self.subSearchResultCopy = [];
+
             if (self.selectedSiteType.id) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
@@ -303,9 +307,12 @@ module.exports = function (app) {
                     excludeOuSites: false
                 }).then(function (result) {
                     self.mainSites = result;
+
+                    if (result && result.length === 1) {
+                        self.selectedMainSite = result[0];
+                        self.getSubSites($event);
+                    }
                 });
-            } else {
-                self.mainSites = self.subSearchResult = self.subSearchResultCopy = [];
             }
         };
 
