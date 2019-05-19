@@ -387,7 +387,16 @@ module.exports = function (app) {
         };
 
         self.docActionExportDocument = function (document, $event) {
-            console.log('export', document);
+            document.exportDocument($event, true)
+                .then(function () {
+                    counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    self.resetAddCorrespondence();
+                })
+                .catch(function (error) {
+                    if (error)
+                        toast.error(langService.get('export_failed'));
+                });
         };
 
         self.documentAction = null;
@@ -477,11 +486,11 @@ module.exports = function (app) {
             {
                 text: langService.get('content_action_export'),
                 callback: self.docActionExportDocument,
-                class: "action-red",
-                hide: true,
+                class: "action-green",
+                permissionKey: "OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && !!info.isPaper; //Don't show if its electronic outgoing
+                    isVisible = gridService.checkToShowAction(action) && !!info.isPaper && _hasContent(); //Don't show if its electronic outgoing
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
