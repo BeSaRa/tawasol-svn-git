@@ -425,7 +425,7 @@ module.exports = function (app) {
             if (_hasContent()) {
                 model.approveDocument($event, defer, false)
                     .then(function (result) {
-                        if (result !== 'FULLY_AUTHORIZED') {
+                        if (result === 'FULLY_AUTHORIZED') {
                             model.exportDocument($event, true)
                                 .then(function () {
                                     new ResolveDefer(defer);
