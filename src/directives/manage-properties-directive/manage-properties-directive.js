@@ -17,7 +17,8 @@ module.exports = function (app) {
                 disableProperties: '=',
                 centralArchives: '=',
                 registryOrganizations: '=?',
-                receiveG2g: '=?'
+                receiveG2g: '=?',
+                isNewDocument: '=?'
             }
         }
     })

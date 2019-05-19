@@ -60,6 +60,8 @@ module.exports = function (app) {
         self.templates = lookups.templates;
 
         self.documentInformation = null;
+        self.isNewDocument = false;
+
         //is in simple add mode
         self.simpleAdd = true;
 
@@ -396,6 +398,7 @@ module.exports = function (app) {
             self.document_properties.$setUntouched();
 
             self.simpleViewUrl = null;
+            self.isNewDocument = true;
         };
 
         /**

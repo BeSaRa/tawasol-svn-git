@@ -240,6 +240,13 @@ module.exports = function (app) {
                 self.sourceModel = newVal;
         });
 
+        $scope.$watch(function () {
+            return  self.isNewDocument;
+        },function (newVal) {
+            if(newVal)
+                _selectFirstOptionForRequired();
+        });
+
         self.typeOptions = [
             {
                 key: 'personal',
@@ -361,6 +368,8 @@ module.exports = function (app) {
                     }
                 }
             }
+
+            self.isNewDocument = false;
         }
 
         $timeout(function () {

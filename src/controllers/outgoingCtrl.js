@@ -80,7 +80,7 @@ module.exports = function (app) {
         self.templates = lookups.templates;
 
         self.documentInformation = null;
-
+        self.isNewDocument = false;
 
         self.outgoing =
             new Outgoing({
@@ -652,6 +652,8 @@ module.exports = function (app) {
             self.contentFileSizeExist = false;
             self.editContent = false;
             self.document_properties.$setUntouched();
+
+            self.isNewDocument = true;
         };
 
         self.compositeChange = function () {

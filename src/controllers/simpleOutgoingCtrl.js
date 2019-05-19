@@ -73,6 +73,7 @@ module.exports = function (app) {
         self.templates = lookups.templates;
 
         self.documentInformation = null;
+        self.isNewDocument = false;
 
         self.outgoing = /*demoOutgoing;*/
             new Outgoing({
@@ -590,6 +591,7 @@ module.exports = function (app) {
             self.document_properties.$setUntouched();
 
             self.simpleViewUrl = null;
+            self.isNewDocument = true;
         };
 
         /**

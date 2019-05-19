@@ -60,6 +60,7 @@ module.exports = function (app) {
         self.templates = lookups.templates;
 
         self.documentInformation = null;
+        self.isNewDocument = false;
 
         // internal document
         self.internal = /*demoInternal;*/
@@ -470,6 +471,7 @@ module.exports = function (app) {
             self.document_properties.$setUntouched();
 
             self.simpleViewUrl = null;
+            self.isNewDocument = true;
 
         };
 

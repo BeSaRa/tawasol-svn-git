@@ -62,7 +62,7 @@ module.exports = function (app) {
         self.templates = lookups.templates;
 
         self.documentInformation = null;
-
+        self.isNewDocument = false;
         // incoming document
         self.incoming = new Incoming({
             ou: centralArchives ? null : self.employee.getOUID(),
@@ -437,6 +437,8 @@ module.exports = function (app) {
             //self.isReceiveG2G = false;
             self.receiveG2G = false;
             self.receive = false;
+
+            self.isNewDocument = true;
         };
 
         /**
