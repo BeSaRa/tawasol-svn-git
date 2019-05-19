@@ -451,8 +451,7 @@ module.exports = function (app) {
                                     self.resetAddCorrespondence();
                                 })
                                 .catch(function (error) {
-                                    if (error)
-                                        toast.error(langService.get('export_failed'));
+                                    error === 'close' ? self.resetAddCorrespondence() : toast.error(langService.get('export_failed'));
                                 });
                         }
                     })

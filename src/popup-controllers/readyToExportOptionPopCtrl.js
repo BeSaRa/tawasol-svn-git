@@ -219,7 +219,7 @@ module.exports = function (app) {
         };
 
         self.closeExportPopupFromCtrl = function () {
-            dialog.cancel();
+            dialog.cancel('close');
         };
 
 
