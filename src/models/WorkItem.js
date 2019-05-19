@@ -36,6 +36,7 @@ module.exports = function (app) {
             self.fromRegOu = null;
             self.toRegOu = null;
             self.fromOuInfo = null;
+            self.allInternalSites = null;
             //self.firstSiteInfo = null;
 
             // not related to the workItem
