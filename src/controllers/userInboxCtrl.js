@@ -1759,7 +1759,10 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         text: 'grid_action_approve_and_export',
+                        icon: 'account-multiple-check',
                         callback: self.approveAndExport,
+                        sticky: true,
+                        showInView :true,
                         class: "action-green",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
