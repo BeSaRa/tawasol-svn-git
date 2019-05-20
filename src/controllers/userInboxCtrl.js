@@ -611,6 +611,24 @@ module.exports = function (app) {
         };
 
         /**
+         * @description export document
+         * @param userInbox
+         * @param $event
+         */
+        self.exportWorkItem = function (userInbox, $event) {
+            userInbox.exportWorkItem($event, true)
+                .then(function () {
+                    counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    self.reloadUserInboxes(self.grid.page);
+                })
+                .catch(function (error) {
+                    if (error && error !== 'close')
+                        toast.error(langService.get('export_failed'));
+                });
+        };
+
+        /**
          * @description View Tracking Sheet
          * @param userInbox
          * @param params
@@ -1352,6 +1370,24 @@ module.exports = function (app) {
                     return info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22);
                     // (model.generalStepElm.addMethod && model.generalStepElm.workFlowName.toLowerCase() !== 'internal')
                     // || model.generalStepElm.workFlowName.toLowerCase() === 'incoming';
+                }
+            },
+            // Export
+            {
+                type: 'action',
+                icon: 'export',
+                text: 'grid_action_export',
+                callback: self.exportWorkItem,
+                class: "action-green",
+                hide: true,
+                permissionKey: "OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE",
+                sticky: true,
+                shortcut: true,
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return gridService.checkToShowAction(action)
+                        && info.docStatus === 24
+                        && info.documentClass === 'outgoing';
                 }
             },
             // View Tracking Sheet (with sub menu)
