@@ -1,8 +1,8 @@
 .cms-virtual-repeater {
-  max-height: 450px;
-  height: 450px;
+  max-height: 450px !important;;
+  height: 450px !important;
   &.no-length {
-    height: 200px;
+    height: 200px !important;;
   }
 }
 
