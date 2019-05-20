@@ -568,7 +568,7 @@ module.exports = function (app) {
                     'sent_items_receiver',
                     'comment',
                     //'sent_items_due_date',
-                    'sent_items_correspondence_site'
+                   // 'sent_items_correspondence_site'
                 ];
             printService
                 .printData(self.userSentItems, headers, printTitle);
