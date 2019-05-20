@@ -39,7 +39,6 @@ module.exports = function (app) {
             }
 
             if (model.linkedDocList && model.linkedDocList.length) {
-                debugger
                 var documentClass = model.linkedDocList[0].classDescription;
                 if (model.docClassName !== "Internal") {
                     model.linkedDocList[0].siteInfo = angular.copy(model.sitesToList);

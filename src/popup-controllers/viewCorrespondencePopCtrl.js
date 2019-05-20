@@ -184,7 +184,7 @@ module.exports = function (app) {
          * @param ignoreMessage
          * @returns {*}
          */
-        self.saveCorrespondenceChanges = function ($event, ignoreMessage) {
+        self.saveCorrespondenceChanges = function ($event, ignoreMessage, saveBeforeApprove) {
             var info = self.correspondence.getInfo();
             var method = info.needToApprove() && self.editMode ? 'saveDocumentWithContent' : 'saveDocument';
             if (method === 'saveDocumentWithContent') {
@@ -196,6 +196,9 @@ module.exports = function (app) {
                             if (!ignoreMessage)
                                 toast.success(langService.get('save_success'));
                             self.disableSaveTimeout = false;
+                            if (saveBeforeApprove){
+                                return 'savedBeforeApprove';
+                            }
                             dialog.hide(true);
                             return true;
                         })

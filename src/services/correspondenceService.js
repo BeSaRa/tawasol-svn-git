@@ -2870,15 +2870,15 @@ module.exports = function (app) {
         self.approveCorrespondence = function (workItem, signature, isComposite, ignoreMessage, additionalData) {
             var defer = $q.defer();
             if (additionalData && workItem.isWorkItem()) {
-                additionalData.preApproveAction(null, true)
+                additionalData.preApproveAction(null, true, true)
                     .then(function (result) {
-                        defer.resolve(true);
+                        defer.resolve(result);
                     })
             } else {
-                defer.resolve(true);
+                defer.resolve('noSaveRequired');
             }
             return defer.promise.then(function (changesSaved) {
-                if (changesSaved) {
+                if (changesSaved === 'savedBeforeApprove' || changesSaved === 'noSaveRequired') {
                     var info = workItem.getInfo();
                     var sign = (new SignDocumentModel()).setSignature(workItem, signature).setIsComposite(isComposite);
                     return $http
