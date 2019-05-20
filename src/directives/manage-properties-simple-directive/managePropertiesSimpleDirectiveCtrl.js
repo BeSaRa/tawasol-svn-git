@@ -368,7 +368,7 @@ module.exports = function (app) {
                 || $stateParams.action === 'reply' || $stateParams.action === 'duplicateVersion' || $stateParams.action === 'receiveg2g' || $stateParams.action === 'receive') {
                 for (var f = 0; f < fields.length; f++) {
                     var field = fields[f], options = _.get(self, field.options);
-                    if (self.checkMandatory(field.name) && self[field.options] && self[field.options].length) {
+                    if (self.checkMandatory(field.name) && options && options.length) {
                         // if there is no value selected by default
                         if (typeof self.document[field.name] === 'undefined' || self.document[field.name] === null || self.document[field.name] === '')
                             self.document[field.name] = (field.value) ? options[0][field.value] : options[0];
