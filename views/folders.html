@@ -232,8 +232,10 @@
                                                                       indicator-type="hasAttachment"
                                                                       record-type="workItem"></grid-indicator-directive>
                                         </td>
-                                        <td md-cell md-truncate class="subject">
-                                            <a href="" class="view-doc" md-truncate ng-if="workItem.hasContent()"
+                                        <td md-cell class="subject">
+                                            <a href="" class="view-doc subject" md-truncate
+                                               ng-if="workItem.hasContent()"
+                                               tooltip="{{workItem.generalStepElm.docSubject}}"
                                                ng-click="ctrl.viewDocument(workItem, $event)">{{workItem.generalStepElm.docSubject}}</a>
                                             <span ng-if="!workItem.hasContent()">{{workItem.generalStepElm.docSubject}}</span>
                                         </td>

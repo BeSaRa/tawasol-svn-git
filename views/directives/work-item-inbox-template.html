@@ -155,13 +155,12 @@
                                               indicator-type="hasAttachment"
                                               record-type="workItem"></grid-indicator-directive>
                 </td>
-                <td md-cell md-truncate class="subject">
-                    <a href="" class="view-doc" md-truncate
+                <td md-cell class="subject">
+                    <a href="" class="view-doc subject" md-truncate
                        ng-if="userInbox.hasContent()"
-                       title="{{userInbox.generalStepElm.docSubject}}"
+                       tooltip="{{userInbox.generalStepElm.docSubject}}"
                        ng-click="ctrl.viewDocument(userInbox, $event)">{{userInbox.generalStepElm.docSubject}}</a>
-                    <span ng-if="!userInbox.hasContent()"
-                          title="{{userInbox.generalStepElm.docSubject}}">{{userInbox.generalStepElm.docSubject}}</span>
+                    <span ng-if="!userInbox.hasContent()">{{userInbox.generalStepElm.docSubject}}</span>
                 </td>
                 <td md-cell>{{userInbox.getReceivedDate()}}</td>
                 <td md-cell>{{userInbox.action.getTranslatedName()}}</td>
