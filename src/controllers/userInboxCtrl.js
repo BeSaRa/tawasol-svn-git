@@ -307,18 +307,19 @@ module.exports = function (app) {
         };
 
         self.getSortedDataForInbox = function (order) {
-            order = order ? order : '';
+            order = order ? order : self.grid.order;
             self.userInboxes = $filter('orderBy')(self.userInboxes, order);
         };
 
         self.getSortedDataForStarred = function (order) {
-            order = order ? order : '';
+            order = order ? order : self.starredGrid.order;
             self.starredUserInboxes = $filter('orderBy')(self.starredUserInboxes, order);
         };
         self.getSortedDataForFilter = function (order) {
-            order = order ? order : '';
-            if (self.selectedFilter)
+            if (self.selectedFilter) {
+                order = order ? order : self.filterGrid[self.selectedFilter.index].order;
                 self.workItemsFilters[self.selectedFilter.index] = $filter('orderBy')(self.workItemsFilters[self.selectedFilter.index], order);
+            }
         };
 
         /**
@@ -345,6 +346,8 @@ module.exports = function (app) {
                     if (pageNumber)
                         self.grid.page = pageNumber;
                     self.getSortedDataForInbox();
+                    self.getSortedDataForStarred();
+                    self.getSortedDataForFilter();
                     return result;
                 });
         };
