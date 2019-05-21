@@ -86,6 +86,13 @@ module.exports = function (app) {
                 return this.childCount > 0;
             };
 
+            /**
+             * @description checks if document file is empty
+             */
+            DocumentFile.prototype.isEmpty = function () {
+                return !(!!this.id && !!this.enName && !!this.arName);
+            };
+
             DocumentFile.prototype.getRelatedOUDocumentFiles = function () {
                 return this.relatedOus = _.map(ouDocumentFileService.getRelatedOUDocumentFile(this), function (item) {
                     var organization = organizationService.getOrganizationById(item.ouid);
