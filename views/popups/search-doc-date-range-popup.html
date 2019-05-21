@@ -8,6 +8,7 @@
             <form name="searchDocDateForm" autocomplete="off">
                 <div layout="column" class="p20">
                     <div layout="row">
+                        <!-- Date From -->
                         <md-input-container flex>
                             <label for="docDateFrom">{{lang.search_module_start_date}}</label>
                             <md-datepicker id="docDateFrom" name="docDateFrom" md-open-on-focus
@@ -21,6 +22,7 @@
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
+                        <!-- Date To -->
                         <md-input-container flex>
                             <label for="docDateTo">{{lang.search_module_end_date}}</label>
                             <md-datepicker id="docDateTo" name="docDateTo" md-open-on-focus

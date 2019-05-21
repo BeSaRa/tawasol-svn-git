@@ -1704,6 +1704,7 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 subMenu: [
+                    // Approve and send
                     {
                         type: 'action',
                         icon: 'account-check',
