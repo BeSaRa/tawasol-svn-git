@@ -259,8 +259,9 @@ module.exports = function (app) {
          * @description load filter content
          * @param filter
          * @param $index
+         * @param order
          */
-        self.selectFilter = function (filter, $index) {
+        self.selectFilter = function (filter, $index, order) {
             self.selectedUserInboxes = [];
             $timeout(function () {
                 self.selectedTab = ($index + self.fixedTabsCount);
@@ -277,6 +278,10 @@ module.exports = function (app) {
             } else {
                 correspondenceService.loadWorkItemsByFilterID(filter).then(function (workItems) {
                     self.workItemsFilters[$index] = workItems;
+                    if (order){
+                        self.filterGrid[self.selectedFilter.index].order = order;
+                        self.getSortedDataForFilter(order);
+                    }
                 });
             }
         };
@@ -331,7 +336,9 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.progress = defer.promise;
             if (self.selectedFilter) {
-                self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index);
+                var selectedFilterSortOrder = angular.copy(self.filterGrid[self.selectedFilter.index].order);
+                self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index, selectedFilterSortOrder);
+                return;
             }
 
             return userInboxService
@@ -340,14 +347,13 @@ module.exports = function (app) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.userInboxes = result;
-                    self.starredUserInboxes = _.filter(self.userInboxes, 'generalStepElm.starred');
+                    self.starredUserInboxes = _.filter(result, 'generalStepElm.starred');
                     self.selectedUserInboxes = [];
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
                     self.getSortedDataForInbox();
                     self.getSortedDataForStarred();
-                    self.getSortedDataForFilter();
                     return result;
                 });
         };
