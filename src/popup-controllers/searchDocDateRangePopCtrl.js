@@ -23,6 +23,7 @@ module.exports = function (app) {
                     if (self.year !== 'All') {
                         /*self.minDateForFrom = new Date(self.year + '-01-01');
                         self.maxDateForTo = new Date(self.year + '-12-31');*/
+                        self.maxDocDate = (self.maxCreateDate.getFullYear() === self.year) ? self.maxCreateDate : new Date(self.year, 11, 31, 23, 59, 59, 999);
                         self.minDateForFrom = new Date(self.year, 0, 1, 0, 0, 0, 0);
                         self.maxDateForTo = (self.maxCreateDate.getFullYear() === self.year) ? self.maxCreateDate : new Date(self.year, 11, 31, 23, 59, 59, 999);
                     } else {
