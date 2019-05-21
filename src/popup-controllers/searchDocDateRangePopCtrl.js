@@ -28,11 +28,12 @@ module.exports = function (app) {
                     } else {
                         self.minDateForFrom = null;
                         self.maxDateForTo = self.maxCreateDate;
+                        self.maxDocDate = self.maxCreateDate;
                     }
+                } else {
+                    self.maxDocDate = self.document.docDateTo;
+                    self.minDocDate = self.document.docDateFrom;
                 }
-                self.maxDocDate = self.document.docDateTo;
-                self.minDocDate = self.document.docDateFrom;
-
             };
             self.setMinMaxDocDate('default');
 
