@@ -8,6 +8,8 @@ module.exports = function (app) {
                                                               documentTypeService,
                                                               documentFileService,
                                                               OUDocumentFile,
+                                                              DocumentFile,
+                                                              DocumentType,
                                                               $timeout,
                                                               toast,
                                                               _,
@@ -173,13 +175,21 @@ module.exports = function (app) {
              * @param $event
              */
             addNewDocumentType: function ($event) {
-                documentTypeService
-                    .controllerMethod
-                    .documentTypeAdd($event)
-                    .then(function (documentType) {
-                        toast.success(langService.get('add_success').change({name: documentType.getNames()}));
-                        self.documentTypes.unshift(documentType);
-                        self.document.docType = documentType;
+                documentTypeService.getDocumentTypes()
+                    .then(function () {
+                        documentTypeService
+                            .controllerMethod
+                            .documentTypeAdd($event)
+                            .then(function (documentType) {
+                                toast.success(langService.get('add_success').change({name: documentType.getNames()}));
+                                self.documentTypes.unshift(documentType);
+                                self.document.docType = documentType;
+                            }).catch(function (catchDocumentType) {
+                            if (catchDocumentType && catchDocumentType instanceof DocumentType && !catchDocumentType.isEmpty()) {
+                                self.documentTypes.unshift(catchDocumentType);
+                                self.document.docType = catchDocumentType;
+                            }
+                        })
                     });
             },
             /**
@@ -196,7 +206,12 @@ module.exports = function (app) {
                                 // toast.success(langService.get('add_success').change({name: documentFile.getNames()}));
                                 self.documentFiles.unshift(new OUDocumentFile({file: documentFile}));
                                 self.document.fileId = documentFile;
-                            });
+                            }).catch(function (catchDocumentFile) {
+                            if (catchDocumentFile && catchDocumentFile instanceof DocumentFile && !catchDocumentFile.isEmpty()) {
+                                self.documentFiles.unshift(new OUDocumentFile({file: catchDocumentFile}));
+                                self.document.fileId = catchDocumentFile;
+                            }
+                        })
                     })
             }
         };
