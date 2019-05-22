@@ -93,9 +93,9 @@
                                         <td md-cell class="subject">
                                             <a href="" class="view-doc subject" md-truncate
                                                ng-if="favoriteDocument.hasContent()"
-                                               tooltip="{{favoriteDocument.generalStepElm.docSubject}}"
-                                               ng-click="ctrl.viewDocument(favoriteDocument, $event)">{{favoriteDocument.generalStepElm.docSubject}}</a>
-                                            <span ng-if="!favoriteDocument.hasContent()">{{favoriteDocument.generalStepElm.docSubject}}</span>
+                                               tooltip="{{favoriteDocument.docSubject}}"
+                                               ng-click="ctrl.viewDocument(favoriteDocument, $event)">{{favoriteDocument.docSubject}}</a>
+                                            <span ng-if="!favoriteDocument.hasContent()">{{favoriteDocument.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{favoriteDocument.docTypeInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{favoriteDocument.securityLevelInfo.getTranslatedName()}}</td>
