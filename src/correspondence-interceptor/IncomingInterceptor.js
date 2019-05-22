@@ -39,7 +39,7 @@ module.exports = function (app) {
             //     subArSiteText: model.subSiteInfo ? model.subSiteInfo.arName : null,
             //     siteType: correspondenceService.getLookup('incoming', 'siteTypes', model.siteType)
             // }) : null;
-            model.site = model.subSiteId ? new Site({
+            model.site = model.subSiteId && model.siteInfo ? new Site({
                 mainSiteId: model.mainSiteId,
                 subSiteId: model.subSiteId,
                 followupStatus: new Information(model.siteInfo.followupStatusResult),
