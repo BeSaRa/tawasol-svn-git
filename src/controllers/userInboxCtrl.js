@@ -1376,7 +1376,7 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     // If internal book, no export is allowed
                     // If incoming book, no addMethod will be available. So check workFlowName(if incoming) and show export button
-                    return info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22);
+                    return info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22) && !model.isPrivateSecurityLevel();
                     // (model.generalStepElm.addMethod && model.generalStepElm.workFlowName.toLowerCase() !== 'internal')
                     // || model.generalStepElm.workFlowName.toLowerCase() === 'incoming';
                 }
@@ -1396,7 +1396,8 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     return gridService.checkToShowAction(action)
                         && info.docStatus === 24
-                        && info.documentClass === 'outgoing';
+                        && info.documentClass === 'outgoing'
+                        && !model.isPrivateSecurityLevel();
                 }
             },
             // View Tracking Sheet (with sub menu)
@@ -1779,7 +1780,8 @@ module.exports = function (app) {
                             return !info.isPaper
                                 && (info.documentClass === 'outgoing')
                                 && model.needApprove()
-                                && model.allInternalSites;
+                                && model.allInternalSites
+                                && !model.isPrivateSecurityLevel();
                         }
                     }
                 ]

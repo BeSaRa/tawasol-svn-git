@@ -16,6 +16,7 @@ module.exports = function (app) {
                                             Indicator,
                                             Information,
                                             lookupService,
+                                            Lookup,
                                             ResolveDefer) {
         'ngInject';
         return function Correspondence(model) {
@@ -386,6 +387,16 @@ module.exports = function (app) {
                 return correspondenceService.getCorrespondenceInformation(this);
             };
 
+            /**
+             * @description Checks if the security level is private/personal for given document
+             * @returns {boolean}
+             */
+            Correspondence.prototype.isPrivateSecurityLevel = function () {
+                if (this.securityLevel instanceof Lookup) {
+                    return this.securityLevel.lookupKey === 4
+                }
+                return this.securityLevel === 4;
+            };
 
             Correspondence.prototype.getSecurityLevelIndicator = function (securityLevel) {
                 return indicator.getSecurityLevelIndicator(securityLevel);
@@ -443,8 +454,7 @@ module.exports = function (app) {
             Correspondence.prototype.getTranslatedCreator = function (reverse) {
                 if (this.creatorInfo && !this.creatorInfo.isEmpty()) {
                     return langService.current === 'ar' ? (reverse ? this.creatorInfo.enName : this.creatorInfo.arName) : (reverse ? this.creatorInfo.arName : this.creatorInfo.enName)
-                }
-                else if (this.createdBy) {
+                } else if (this.createdBy) {
                     return this.createdBy;
                 } else {
                     return null;

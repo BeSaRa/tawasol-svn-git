@@ -836,7 +836,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     // When document is EXPORTED or PARTIALLY_EXPORTED, show partial export button.
-                    return (info.docStatus === 25 || info.docStatus === 26) && (model.registryOU === employeeService.getEmployee().getRegistryOUID());
+                    return (info.docStatus === 25 || info.docStatus === 26) && (model.registryOU === employeeService.getEmployee().getRegistryOUID()) && !model.isPrivateSecurityLevel();
                 }
             },
             // Launch Distribution Workflow

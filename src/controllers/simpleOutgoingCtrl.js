@@ -411,10 +411,6 @@ module.exports = function (app) {
             return document.signaturesCount && document.signaturesCount === 1;
         };
 
-        var _isPersonalSecurityLevel = function (document) {
-            return document.securityLevel && document.securityLevel.lookupKey === 4;
-        };
-
         self.visibilityArray = [];
         self.isActionsAvailable = false;
 
@@ -493,7 +489,7 @@ module.exports = function (app) {
                         hasExternalSite = !!(_.find([].concat(model.sitesInfoTo, model.sitesInfoCC), function (item) {
                             return _.startsWith(item.subSiteId, 2);
                         }));
-                    isVisible = gridService.checkToShowAction(action) && !!info.isPaper && _hasContent() && !hasExternalSite; //Don't show if its electronic outgoing
+                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && !hasExternalSite; //Don't show if its electronic outgoing
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -509,7 +505,7 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && info.isPaper && _hasContent();
+                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && info.isPaper && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -522,8 +518,8 @@ module.exports = function (app) {
                 permissionKey: "ELECTRONIC_SIGNATURE",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    //Don't show if its paper outgoing  or signatures count more than 1 or personal
-                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && _hasSingleSignature(model) && !_isPersonalSecurityLevel(model);
+                    //Don't show if its paper outgoing  or signatures count more than 1 or personal/private security level
+                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && _hasSingleSignature(model) && !model.isPrivateSecurityLevel();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -540,8 +536,8 @@ module.exports = function (app) {
                             return _.startsWith(item.subSiteId, 2);
                         }));
 
-                    //Don't show if its paper outgoing or any site is external or signatures count more than 1 or personal
-                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && !hasExternalSite && _hasContent() && _hasSingleSignature(model) && !_isPersonalSecurityLevel(model);
+                    //Don't show if its paper outgoing or any site is external or signatures count more than 1 or personal/private security level
+                    isVisible = gridService.checkToShowAction(action)  && !model.isPrivateSecurityLevel() && !info.isPaper && !hasExternalSite && _hasContent() && _hasSingleSignature(model);
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

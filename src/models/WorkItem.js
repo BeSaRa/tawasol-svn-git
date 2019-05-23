@@ -13,7 +13,8 @@ module.exports = function (app) {
                                       moment,
                                       employeeService,
                                       lookupService,
-                                      cmsTemplate) {
+                                      cmsTemplate,
+                                      Lookup) {
         'ngInject';
 
         return function WorkItem(model) {
@@ -167,6 +168,18 @@ module.exports = function (app) {
                     return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel.id);
                 }
                 return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
+            };
+
+            /**
+             * @description Checks if the security level is private/personal for given document
+             * @returns {boolean}
+             */
+            WorkItem.prototype.isPrivateSecurityLevel = function () {
+                var securityLevel = this.generalStepElm.securityLevel;
+                if (securityLevel instanceof Lookup) {
+                    return securityLevel.lookupKey === 4
+                }
+                return securityLevel === 4;
             };
 
             var indicator = new Indicator();
