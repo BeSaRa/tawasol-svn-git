@@ -238,18 +238,16 @@ module.exports = function (app) {
                 escToCancel: true,
                 targetEvent: $event,
                 bindToController: true,
-                controller: function ($sce) {
+                controller: function (rootEntity, dialog) {
                     'ngInject';
                     var self = this;
+                    self.globalSettings = rootEntity.getGlobalSettings();
+
                     self.close = function () {
                         dialog.cancel();
                     };
                 },
-                controllerAs: 'ctrl',
-                locals: {
-                    supportEmail: $sce.trustAsHtml(rootEntity.getGlobalSettings().supportEmail),
-                    supportPhone: $sce.trustAsHtml(rootEntity.getGlobalSettings().supportPhoneNo)
-                }
+                controllerAs: 'ctrl'
             });
         };
     });

@@ -6,16 +6,20 @@
         </md-toolbar>
         <md-content scroll-directive layout-padding layout="column">
             <div>
-                <md-icon md-svg-icon="email"></md-icon>  <b>{{lang.support_email}}</b>
-                <span class="p20" ng-bind-html="ctrl.supportEmail">
-            </span>
+                <md-icon md-svg-icon="email"></md-icon>
+                <b>{{lang.support_email}}</b>
+                <span class="p20">{{ctrl.globalSettings.supportEmail}}</span>
             </div>
             <div>
                 <md-icon md-svg-icon="phone"></md-icon>
                 <b>{{lang.support_phone}}</b>
-                <span class="p20" ng-bind-html="ctrl.supportPhone">
-            </span>
+                <span class="p20">{{ctrl.globalSettings.supportPhoneNo}}</span>
             </div>
+            <!--<div>
+                <md-icon md-svg-icon="information-variant"></md-icon>
+                <b>{{lang.login_page_additional_content}}</b>
+                <span class="p20">{{ctrl.globalSettings.loginAdditionalContent}}</span>
+            </div>-->
         </md-content>
     </div>
 
