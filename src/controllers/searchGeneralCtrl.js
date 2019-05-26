@@ -377,14 +377,11 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.createReply = function (correspondence, $event, defer) {
+        self.createReplyIncoming = function (correspondence, $event, defer) {
             correspondence.createReply($event)
                 .then(function(result){
                     new ResolveDefer(defer);
                 });
-            /*var info = correspondence.getInfo();
-            dialog.hide();
-            $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});*/
         };
 
         /**
@@ -882,7 +879,7 @@ module.exports = function (app) {
                 text: 'grid_action_create_reply',
                 shortcut: false,
                 permissionKey: 'CREATE_REPLY',
-                callback: self.createReply,
+                callback: self.createReplyIncoming,
                 class: "action-green",
                 checkShow: function (action, model) {
                     var info = model.getInfo();

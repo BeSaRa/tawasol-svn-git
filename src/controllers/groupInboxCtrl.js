@@ -133,16 +133,17 @@ module.exports = function (app) {
          * @description Create Reply
          * @param workItem
          * @param $event
+         * @param defer
          */
-        self.createReplyIncoming = function (workItem, $event) {
+        self.createReplyIncoming = function (workItem, $event,defer) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            //console.log("createReplyIncoming" , userInbox);
-            var info = workItem.getInfo();
-            dialog.hide();
-            $state.go('app.outgoing.add', {workItem: info.wobNumber, action: 'reply'});
+            workItem.createReply($event)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
         };
 
         /**

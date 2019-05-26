@@ -509,9 +509,6 @@ module.exports = function (app) {
                 .then(function (result) {
                     new ResolveDefer(defer);
                 });
-            /*var info = userInbox.getInfo();
-            dialog.hide();
-            $state.go('app.outgoing.add', {workItem: info.wobNumber, action: 'reply'});*/
         };
 
         /**

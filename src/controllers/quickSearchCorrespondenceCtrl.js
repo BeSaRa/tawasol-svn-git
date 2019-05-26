@@ -429,9 +429,6 @@ module.exports = function (app) {
                 .then(function (result) {
                     new ResolveDefer(defer);
                 });
-            /*var info = correspondence.getInfo();
-            dialog.hide();
-            $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});*/
         };
 
 

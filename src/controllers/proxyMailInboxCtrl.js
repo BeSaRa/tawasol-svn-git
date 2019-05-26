@@ -218,11 +218,13 @@ module.exports = function (app) {
          * @description Create Reply
          * @param workItem
          * @param $event
+         * @param defer
          */
-        self.createReplyIncoming = function (workItem, $event) {
-            var info = workItem.getInfo();
-            dialog.hide();
-            $state.go('app.outgoing.add', {workItem: info.wobNumber, action: 'reply'});
+        self.createReplyIncoming = function (workItem, $event,defer) {
+                workItem.createReply($event)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
         };
 
         /**
