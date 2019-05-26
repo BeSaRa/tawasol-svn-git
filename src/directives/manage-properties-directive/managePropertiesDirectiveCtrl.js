@@ -183,7 +183,7 @@ module.exports = function (app) {
                     .then(function () {
                         documentTypeService
                             .controllerMethod
-                            .documentTypeAdd($event)
+                            .documentTypeAdd($event, self.document.docClassName)
                             .then(function (documentType) {
                                 toast.success(langService.get('add_success').change({name: documentType.getNames()}));
                                 self.documentTypes.unshift(documentType);
@@ -205,7 +205,7 @@ module.exports = function (app) {
                     .then(function () {
                         documentFileService
                             .controllerMethod
-                            .documentFileAdd(null, $event)
+                            .documentFileAdd(null, $event, self.document.docClassName)
                             .then(function (documentFile) {
                                 // toast.success(langService.get('add_success').change({name: documentFile.getNames()}));
                                 self.documentFiles.unshift(new OUDocumentFile({file: documentFile}));

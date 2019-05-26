@@ -14,7 +14,9 @@ module.exports = function (app) {
                                                     organizationService,
                                                     OUDocumentFile,
                                                     rootEntity,
-                                                    ouDocumentFileService) {
+                                                    ouDocumentFileService,
+                                                    correspondenceService,
+                                                    documentClassFromUser) {
         'ngInject';
         var self = this;
         self.controllerName = 'documentFilePopCtrl';
@@ -58,6 +60,9 @@ module.exports = function (app) {
 
 
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
+        if (documentClassFromUser){
+            self.securityLevels = correspondenceService.getLookup(documentClassFromUser, 'securityLevels');
+        }
         self.parentDocumentFiles = _.filter(documentFileService.documentFiles, function (documentFile) {
             return !documentFile.parent;
         });

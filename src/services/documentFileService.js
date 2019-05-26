@@ -86,7 +86,7 @@ module.exports = function (app) {
          * @description Contains methods for CRUD operations for document files
          */
         self.controllerMethod = {
-            documentFileAdd: function (parentDocumentFile, $event) {
+            documentFileAdd: function (parentDocumentFile, $event, documentClassFromUser) {
                 if (parentDocumentFile)
                     parentDocumentFile = parentDocumentFile.hasOwnProperty('id') ? parentDocumentFile.id : parentDocumentFile;
 
@@ -103,7 +103,8 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         locals: {
                             editMode: false,
-                            documentFile: documentFile
+                            documentFile: documentFile,
+                            documentClassFromUser: documentClassFromUser
                         }
                     });
             },

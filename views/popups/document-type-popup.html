@@ -53,7 +53,8 @@
                                               ng-click="ctrl.toggleAll($event)">{{ctrl.isChecked() ? lang.un_select_all : lang.select_all}}</span>
                                     </div>
                                 </md-select-header>
-                                <md-option ng-value="dc" ng-repeat="dc in ctrl.documentClasses track by $index">
+                                <md-option ng-value="dc" ng-repeat="dc in ctrl.documentClasses track by $index"
+                                ng-disabled="ctrl.isDefaultDocumentClass(dc)">
                                     {{dc.getTranslatedName()}}
                                 </md-option>
                             </md-select>

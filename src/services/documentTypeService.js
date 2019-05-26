@@ -8,7 +8,8 @@ module.exports = function (app) {
                                                  cmsTemplate,
                                                  _,
                                                  langService,
-                                                 toast) {
+                                                 toast,
+                                                 lookupService) {
         'ngInject';
         var self = this;
         self.serviceName = 'documentTypeService';
@@ -41,8 +42,15 @@ module.exports = function (app) {
             /**
              * @description Opens popup to add new document type
              * @param $event
+             * @param documentClassFromUser
              */
-            documentTypeAdd: function ($event) {
+            documentTypeAdd: function ($event, documentClassFromUser) {
+                var documentClassLookup;
+                if (documentClassFromUser){
+                    documentClassLookup = _.filter(lookupService.returnLookups(lookupService.documentClass), function (lookup) {
+                        return lookup.lookupStrKey.toLowerCase() === documentClassFromUser.toLowerCase();
+                    });
+                }
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -53,9 +61,11 @@ module.exports = function (app) {
                             editMode: false,
                             documentType: new DocumentType(
                                 {
-                                    itemOrder: generator.createNewID(self.documentTypes, 'itemOrder')
+                                    itemOrder: generator.createNewID(self.documentTypes, 'itemOrder'),
+                                    lookupStrKey: documentClassFromUser ? documentClassLookup : null
                                 }),
-                            documentTypes: self.documentTypes
+                            documentTypes: self.documentTypes,
+                            documentClassFromUser: documentClassLookup
                         }
                     });
             },

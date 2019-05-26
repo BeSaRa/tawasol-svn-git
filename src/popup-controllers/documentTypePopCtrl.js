@@ -9,14 +9,14 @@ module.exports = function (app) {
                                                     generator,
                                                     dialog,
                                                     langService,
-                                                    documentType) {
+                                                    documentType,
+                                                    documentClassFromUser) {
         'ngInject';
         var self = this;
         self.controllerName = 'documentTypePopCtrl';
         self.editMode = editMode;
         self.documentType = angular.copy(documentType);
         self.model = angular.copy(documentType);
-
         self.documentClasses = lookupService.returnLookups(lookupService.documentClass);
 
         self.validateLabels = {
@@ -49,9 +49,9 @@ module.exports = function (app) {
                 .notifyFailure(function () {
                     toast.error(langService.get('name_duplication_message'));
                 })
-                .addStep('checkItemOrder', true, generator.checkDuplicateItemOrder, [self.documentType, self.documentTypes, false] , function(result){
+                .addStep('checkItemOrder', true, generator.checkDuplicateItemOrder, [self.documentType, self.documentTypes, false], function (result) {
                     return !result;
-                },true)
+                }, true)
                 .notifyFailure(function () {
                     toast.error(langService.get('item_order_duplicated'));
                 })
@@ -89,9 +89,9 @@ module.exports = function (app) {
                 .notifyFailure(function () {
                     toast.error(langService.get('name_duplication_message'));
                 })
-                .addStep('checkItemOrder', true, generator.checkDuplicateItemOrder, [self.documentType, self.documentTypes, true] , function(result){
+                .addStep('checkItemOrder', true, generator.checkDuplicateItemOrder, [self.documentType, self.documentTypes, true], function (result) {
                     return !result;
-                },true)
+                }, true)
                 .notifyFailure(function () {
                     toast.error(langService.get('item_order_duplicated'));
                 })
@@ -124,19 +124,38 @@ module.exports = function (app) {
             return !!(self.documentType.lookupStrKey && self.documentType.lookupStrKey.length < self.documentClasses.length);
         };
 
+        self.isDefaultDocumentClass = function (documentClass) {
+            if (!!documentClassFromUser) {
+                var isDefault = false;
+                for (var i = 0; i < documentClassFromUser.length; i++) {
+                    isDefault = documentClassFromUser[i].lookupStrKey.toLowerCase() === documentClass.lookupStrKey.toLowerCase();
+                    if (isDefault)
+                        break;
+                }
+                return isDefault;
+            } else {
+                return false;
+            }
+        };
+
         /**
          * @description Toggle the selection for options in dropdown
          * @param $event
          */
         self.toggleAll = function ($event) {
             if (self.documentType.lookupStrKey) {
+                debugger;
                 if (self.documentType.lookupStrKey.length === self.documentClasses.length) {
-                    self.documentType.lookupStrKey = null;
+                    if (documentClassFromUser && documentClassFromUser.length) {
+                        self.documentType.lookupStrKey = angular.copy(documentClassFromUser);
+                    } else {
+                        self.documentType.lookupStrKey = null;
+                    }
                 } else {
-                    self.documentType.lookupStrKey = self.documentClasses;
+                    self.documentType.lookupStrKey = angular.copy(self.documentClasses);
                 }
             } else {
-                self.documentType.lookupStrKey = self.documentClasses;
+                self.documentType.lookupStrKey = angular.copy(self.documentClasses);
             }
         };
 
