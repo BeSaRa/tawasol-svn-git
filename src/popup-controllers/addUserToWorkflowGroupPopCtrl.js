@@ -69,8 +69,10 @@ module.exports = function (app) {
              * @returns {*}
              */
             self.getSortingKey = function (property, modelType) {
-                if (property === 'organization')
-                    return 'ou' + (langService.currentLangTitleCase) + 'Name';
+                if (property === 'organization'){
+                    return langService.current  + 'OUName';
+                    // return 'ou' + (langService.currentLangTitleCase) + 'Name';
+                }
                 return generator.getColumnSortingKey(property, modelType);
             };
 
