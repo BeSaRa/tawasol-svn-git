@@ -114,18 +114,6 @@ module.exports = function (app) {
                 correspondenceService = this.getCorrespondenceService();
                 return correspondenceService.saveIncomingCorrespondenceSite(this);
             };
-            Incoming.prototype.createReply = function ($event) {
-               return dialog.showDialog({
-                    $event: $event || null,
-                    templateUrl: cmsTemplate.getPopup('create-reply-confirm'),
-                    controller: 'createReplyPopCtrl',
-                    controllerAs: 'ctrl',
-                    bindToController: true,
-                    locals: {
-                        record: angular.copy(this)
-                    }
-                });
-            };
             Incoming.prototype.getSiteInformation = function () {
                 var self = this;
                 return {

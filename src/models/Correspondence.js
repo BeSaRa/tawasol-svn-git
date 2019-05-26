@@ -17,7 +17,8 @@ module.exports = function (app) {
                                             Information,
                                             lookupService,
                                             Lookup,
-                                            ResolveDefer) {
+                                            ResolveDefer,
+                                            cmsTemplate) {
         'ngInject';
         return function Correspondence(model) {
             var self = this,
@@ -757,6 +758,20 @@ module.exports = function (app) {
                 return correspondenceService.editWordInDesktop(this);
             };
 
+            Correspondence.prototype.createReply = function ($event) {
+                if (this.getInfo().documentClass === 'incoming') {
+                    return dialog.showDialog({
+                        $event: $event || null,
+                        templateUrl: cmsTemplate.getPopup('create-reply-confirm'),
+                        controller: 'createReplyPopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        locals: {
+                            record: angular.copy(this)
+                        }
+                    });
+                }
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

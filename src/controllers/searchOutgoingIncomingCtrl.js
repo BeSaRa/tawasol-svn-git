@@ -848,7 +848,6 @@ module.exports = function (app) {
                 permissionKey: 'CREATE_REPLY',
                 callback: self.createReply,
                 class: "action-green",
-                //hide: true, //TODO: Need service from Issawi
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return info.documentClass === 'incoming';

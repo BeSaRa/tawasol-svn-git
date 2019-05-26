@@ -1285,7 +1285,6 @@ module.exports = function (app) {
                 callback: self.createReplyIncoming,
                 class: "action-green",
                 permissionKey: 'CREATE_REPLY',
-                //hide: true,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return info.documentClass === "incoming" && !model.isBroadcasted();

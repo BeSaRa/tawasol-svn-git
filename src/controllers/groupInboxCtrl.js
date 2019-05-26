@@ -949,7 +949,6 @@ module.exports = function (app) {
                 callback: self.createReplyIncoming,
                 class: "action-green",
                 permissionKey: 'CREATE_REPLY',
-                //hide: true,
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
