@@ -250,5 +250,10 @@ module.exports = function (app) {
                 controllerAs: 'ctrl'
             });
         };
+
+        self.isHelpAvailable = function () {
+            var globalSettings = rootEntity.getGlobalSettings();
+            return !!globalSettings.supportEmail || !!globalSettings.supportPhoneNo || !!globalSettings.loginAdditionalContent;
+        }
     });
 };

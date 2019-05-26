@@ -5,21 +5,21 @@
             <close-dialog-directive></close-dialog-directive>
         </md-toolbar>
         <md-content scroll-directive layout-padding layout="column">
-            <div>
+            <div ng-if="ctrl.globalSettings.supportEmail">
                 <md-icon md-svg-icon="email"></md-icon>
                 <b>{{lang.support_email}}</b>
                 <span class="p20">{{ctrl.globalSettings.supportEmail}}</span>
             </div>
-            <div>
+            <div ng-if="ctrl.globalSettings.supportPhoneNo">
                 <md-icon md-svg-icon="phone"></md-icon>
                 <b>{{lang.support_phone}}</b>
                 <span class="p20">{{ctrl.globalSettings.supportPhoneNo}}</span>
             </div>
-            <!--<div>
+            <div ng-if="ctrl.globalSettings.loginAdditionalContent">
                 <md-icon md-svg-icon="information-variant"></md-icon>
-                <b>{{lang.login_page_additional_content}}</b>
-                <span class="p20">{{ctrl.globalSettings.loginAdditionalContent}}</span>
-            </div>-->
+                <b>{{lang.login_information}}</b>
+                <div class="p20">{{ctrl.globalSettings.loginAdditionalContent}}</div>
+            </div>
         </md-content>
     </div>
 
