@@ -51,7 +51,7 @@
                                     <md-checkbox
                                             ng-if="!ctrl.outgoing.addMethod && ctrl.employeeService.hasPermissionTo('COMPOSITE_OUTGOING')"
                                             ng-change="ctrl.compositeChange()"
-                                            ng-disabled="ctrl.outgoing.sitesInfoTo.length < 2"
+                                            ng-disabled="ctrl.outgoing.sitesInfoTo.length < 2 || ctrl.outgoing.isPrivateSecurityLevel()"
                                             ng-model="ctrl.outgoing.isComposite">
                                         {{lang.version_for_each_site}} : {{ctrl.outgoing.isComposite ? lang.yes :
                                         lang.no}}

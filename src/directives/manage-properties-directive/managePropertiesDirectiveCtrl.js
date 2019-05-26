@@ -165,6 +165,10 @@ module.exports = function (app) {
             if (self.document.fileId && !_securityLevelExist(self.document.securityLevel, self.document.fileId.securityLevels)) {
                 self.document.fileId = null;
             }
+
+            if (self.document.hasDocumentClass('outgoing') && self.document.isPrivateSecurityLevel())
+                self.document.isComposite = false;
+
             _getClassifications(false);
             _getDocumentFiles(false);
         };
