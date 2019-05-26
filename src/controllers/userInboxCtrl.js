@@ -278,7 +278,7 @@ module.exports = function (app) {
             } else {
                 correspondenceService.loadWorkItemsByFilterID(filter).then(function (workItems) {
                     self.workItemsFilters[$index] = workItems;
-                    if (order){
+                    if (order) {
                         self.filterGrid[self.selectedFilter.index].order = order;
                         self.getSortedDataForFilter(order);
                     }
@@ -506,7 +506,7 @@ module.exports = function (app) {
          */
         self.createReplyIncoming = function (userInbox, $event, defer) {
             userInbox.createReply($event)
-                .then(function(result){
+                .then(function (result) {
                     new ResolveDefer(defer);
                 });
             /*var info = userInbox.getInfo();
@@ -1771,8 +1771,8 @@ module.exports = function (app) {
                         text: 'grid_action_approve_and_export',
                         icon: 'account-multiple-check',
                         callback: self.approveAndExport,
-                        sticky: true,
-                        showInView :true,
+                        sticky: false,
+                        showInView: false,
                         class: "action-green",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
