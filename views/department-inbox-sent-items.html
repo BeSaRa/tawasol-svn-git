@@ -20,13 +20,13 @@
 
         <!-- page-content -->
         <div layout="column" flex>
-            <div scroll-directive>
-                <div class="page-padding">
-                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                        <md-virtual-repeat-container class="cms-virtual-repeater"
-                                                     ng-class="{'no-length':!ctrl.sentItemDepartmentInboxes.length}"
-                                                     md-auto-shrink="true">
-                            <md-table-container>
+            <div class="page-padding no-tb-padding">
+                <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                    <md-virtual-repeat-container class="cms-virtual-repeater"
+                                                 ng-class="{'no-length':!ctrl.sentItemDepartmentInboxes.length}"
+                                                 md-auto-shrink="true">
+                        <md-table-container>
+                            <div flex overlay-scroll-bar-directive>
                                 <table md-table ng-model="ctrl.selectedSentItemDepartmentInboxes"
                                        md-progress="ctrl.progress"><!--md-row-select--><!--md-row-select-->
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
@@ -123,7 +123,8 @@
                                                                       record-type="SentItemDepartmentInbox"></grid-indicator-directive>
                                         </td>
                                         <td md-cell><span
-                                                class="serial-td">{{sentItemDepartmentInbox.docFullSerial}}</span></td>
+                                                class="serial-td">{{sentItemDepartmentInbox.docFullSerial}}</span>
+                                        </td>
                                         <td md-cell class="indicator-td text-right"
                                             style="padding-right:0 !important; padding-left:0px !important;">
                                             <!-- Priority Level -->
@@ -170,7 +171,8 @@
                                             </div>
                                         </td>
                                         <td md-cell>{{sentItemDepartmentInbox.deliveryDate}}</td>
-                                        <td md-cell>{{sentItemDepartmentInbox.messageStatus.getTranslatedName()}}</td>
+                                        <td md-cell>{{sentItemDepartmentInbox.messageStatus.getTranslatedName()}}
+                                        </td>
                                         <td md-cell class="p-r0"
                                             ng-if="ctrl.selectedSentItemDepartmentInboxes.length < 2">
                                             <div layout-align="start center" flex ng-if="!ctrl.selectedSentItemDepartmentInboxes.length
@@ -186,25 +188,26 @@
                                             {{lang.no_records_found}}
                                         </td>
                                     </tr>
-                                    <tr md-row ng-if="ctrl.sentItemDepartmentInboxes.length && !searchResults.length">
+                                    <tr md-row
+                                        ng-if="ctrl.sentItemDepartmentInboxes.length && !searchResults.length">
                                         <td md-cell colspan="12" class="red-text text-center">
                                             {{lang.no_records_found_matching_search}}
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
-                            </md-table-container>
-                        </md-virtual-repeat-container>
-                        <md-table-pagination
-                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                md-limit-options="ctrl.grid.limitOptions"
-                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                md-total="{{(ctrl.sentItemDepartmentInboxes | filter:ctrl.searchModel).length}}"
-                                md-page-select
-                                md-on-paginate="ctrl.grid.pagingCallback">
-                        </md-table-pagination>
-                    </md-card>
-                </div>
+                            </div>
+                        </md-table-container>
+                    </md-virtual-repeat-container>
+                    <md-table-pagination
+                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                            md-limit-options="ctrl.grid.limitOptions"
+                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                            md-total="{{(ctrl.sentItemDepartmentInboxes | filter:ctrl.searchModel).length}}"
+                            md-page-select
+                            md-on-paginate="ctrl.grid.pagingCallback">
+                    </md-table-pagination>
+                </md-card>
             </div>
         </div>
         <!-- end page content -->

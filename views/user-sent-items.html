@@ -37,7 +37,8 @@
                                                  ng-class="{'no-length':!ctrl.userSentItems.length}"
                                                  md-auto-shrink="true">
                         <md-table-container>
-                            <table md-table ng-model="ctrl.selectedUserSentItems"
+                            <div flex overlay-scroll-bar-directive>
+                                <table md-table ng-model="ctrl.selectedUserSentItems"
                                    md-progress="ctrl.progress"><!-- md-row-select multiple-->
                                 <thead md-head md-order="ctrl.grid.order"
                                        md-on-reorder="ctrl.getSortedData">
@@ -189,6 +190,7 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            </div>
                         </md-table-container>
                     </md-virtual-repeat-container>
                     <md-table-pagination
