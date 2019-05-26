@@ -489,20 +489,69 @@ module.exports = function (app) {
                     return true;
                 }
             },
-            // Preview
+            // view
             {
                 type: 'action',
                 icon: 'book-open-variant',
-                text: 'grid_action_preview_document',
-                showInView: false,
-                shortcut: true,
+                text: 'grid_action_view',
+                shortcut: false,
                 callback: self.previewDocument,
                 class: "action-green",
-                permissionKey: 'VIEW_DOCUMENT',
+                showInView: false,
+                permissionKey: [
+                    'VIEW_DOCUMENT',
+                    'VIEW_DOCUMENT_VERSION'
+                ],
+                checkAnyPermission: true,
                 checkShow: function (action, model) {
-                    //If no content, hide the button
-                    return model.hasContent();
-                }
+                    return true;
+                },
+                subMenu: [
+                    // Preview
+                    {
+                        type: 'action',
+                        icon: 'book-open-variant',
+                        text: 'grid_action_preview_document',
+                        showInView: false,
+                        shortcut: true,
+                        callback: self.previewDocument,
+                        class: "action-green",
+                        permissionKey: 'VIEW_DOCUMENT',
+                        checkShow: function (action, model) {
+                            //If no content, hide the button
+                            return model.hasContent();
+                        }
+                    },
+                    // Open
+                    {
+                        type: 'action',
+                        icon: 'book-open-page-variant',
+                        text: 'grid_action_open',
+                        showInView: false,
+                        shortcut: true,
+                        callback: self.viewDocument,
+                        class: "action-green",
+                        permissionKey: 'VIEW_DOCUMENT',
+                        checkShow: function (action, model) {
+                            //If no content, hide the button
+                            return model.hasContent();
+                        }
+                    },
+                    // show versions
+                    {
+                        type: 'action',
+                        icon: 'animation',
+                        text: 'grid_action_view_specific_version',
+                        shortcut: false,
+                        callback: self.getDocumentVersions,
+                        permissionKey: "VIEW_DOCUMENT_VERSION",
+                        class: "action-green",
+                        showInView: true,
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
             },
             // Separator
             {
@@ -512,19 +561,35 @@ module.exports = function (app) {
                 },
                 showInView: false
             },
-            // Add To Favorite
+            // Add To
             {
                 type: 'action',
-                icon: 'star',
-                text: 'grid_action_add_to_favorite',
-                permissionKey: "MANAGE_FAVORITE",
-                shortcut: false,
-                callback: self.addToFavorite,
+                icon: 'plus',
+                text: 'grid_action_add_to',
                 class: "action-green",
+                permissionKey: [
+                    'MANAGE_FAVORITE'
+                ],
+                checkAnyPermission: true,
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return info.docStatus >= 22;
-                }
+                    return true;
+                },
+                subMenu: [
+                    // Add To Favorite
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_to_favorite',
+                        permissionKey: "MANAGE_FAVORITE",
+                        shortcut: false,
+                        callback: self.addToFavorite,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            return info.docStatus >= 22;
+                        }
+                    }
+                ]
             },
             // Export /*NOT NEEDED AS DISCUSSED WITH HUSSAM*/
             /* {
@@ -563,21 +628,6 @@ module.exports = function (app) {
                 hide: false,
                 checkShow: function (action, model) {
                     return !model.isBroadcasted();
-                }
-            },
-            // Open
-            {
-                type: 'action',
-                icon: 'book-open-page-variant',
-                text: 'grid_action_open',
-                showInView: false,
-                shortcut: true,
-                callback: self.viewDocument,
-                class: "action-green",
-                permissionKey: 'VIEW_DOCUMENT',
-                checkShow: function (action, model) {
-                    //If no content, hide the button
-                    return model.hasContent();
                 }
             },
             // Create Reply
@@ -890,48 +940,51 @@ module.exports = function (app) {
                     return true;
                 }
             },
-            // show versions
+            // Duplicate
             {
                 type: 'action',
-                icon: 'animation',
-                text: 'grid_action_view_specific_version',
+                icon: 'settings',
+                text: 'grid_action_duplicate',
                 shortcut: false,
-                callback: self.getDocumentVersions,
-                permissionKey: "VIEW_DOCUMENT_VERSION",
-                class: "action-green",
-                showInView: true,
+                showInView: false,
                 checkShow: function (action, model) {
                     return true;
-                }
-            },
-            // duplicate current version
-            {
-                type: 'action',
-                icon: 'content-copy',
-                text: 'grid_action_duplication_current_version',
-                shortcut: false,
-                callback: self.duplicateCurrentVersion,
-                class: "action-green",
-                permissionKey: 'DUPLICATE_BOOK_CURRENT',
-                showInView: true,
-                checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper;
-                }
-            },
-            // duplicate specific version
-            {
-                type: 'action',
-                icon: 'content-duplicate',
-                text: 'grid_action_duplication_specific_version',
-                shortcut: false,
-                callback: self.duplicateVersion,
-                class: "action-green",
-                showInView: true,
-                permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
-                checkShow: function (action, model) {
-                    return true;
-                }
+                },
+                permissionKey: [
+                    "DUPLICATE_BOOK_CURRENT",
+                    "DUPLICATE_BOOK_FROM_VERSION"
+                ],
+                checkAnyPermission: true,
+                subMenu: [
+                    // duplicate current version
+                    {
+                        type: 'action',
+                        icon: 'content-copy',
+                        text: 'grid_action_duplication_current_version',
+                        shortcut: false,
+                        callback: self.duplicateCurrentVersion,
+                        class: "action-green",
+                        permissionKey: 'DUPLICATE_BOOK_CURRENT',
+                        showInView: true,
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            return (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper;
+                        }
+                    },
+                    // duplicate specific version
+                    {
+                        type: 'action',
+                        icon: 'content-duplicate',
+                        text: 'grid_action_duplication_specific_version',
+                        shortcut: false,
+                        callback: self.duplicateVersion,
+                        class: "action-green",
+                        showInView: true,
+                        permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }]
             }
         ];
 

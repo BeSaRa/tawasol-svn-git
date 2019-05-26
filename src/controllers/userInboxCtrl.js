@@ -1239,12 +1239,16 @@ module.exports = function (app) {
                     return true;
                 }
             },
-            // Add To Folder
+            // Add To
             {
                 type: 'action',
                 icon: 'plus',
                 text: 'grid_action_add_to',
                 class: "action-green",
+                permissionKey: [
+                    'MANAGE_FAVORITE'
+                ],
+                checkAnyPermission: true,
                 checkShow: function (action, model) {
                     return true;
                 },
