@@ -587,6 +587,11 @@ module.exports = function (app) {
                 }
 
             }
+            else{
+                if (!!main){
+                    self.onSubSearch(true);
+                }
+            }
         };
         /**
          * check if need reply
@@ -726,10 +731,14 @@ module.exports = function (app) {
          * search in sub correspondence sites related to mainSites.
          * @return {*}
          */
-        self.onSubSearch = function () {
-            if (self.subSearch.length < 3) {
-                self.subSearchResult = [];
-                return;
+        self.onSubSearch = function (skipSubSiteText) {
+            if (!skipSubSiteText) {
+                if (self.subSearch.length < 3) {
+                    self.subSearchResult = [];
+                    return;
+                }
+            } else {
+                refreshDebounce();
             }
 
             if (!pendingSearch || !debounceSearch()) {
@@ -746,9 +755,11 @@ module.exports = function (app) {
                             criteria: self.subSearch,
                             includeDisabled: true
                         }).then(function (result) {
-                            if (self.subSearch.length < 3) {
-                                self.subSearchResult = [];
-                                return;
+                            if (!skipSubSiteText) {
+                                if (self.subSearch.length < 3) {
+                                    self.subSearchResult = [];
+                                    return;
+                                }
                             }
                             self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                             self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);

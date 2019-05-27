@@ -583,6 +583,8 @@ module.exports = function (app) {
         self.onMainChange = function (main) {
             if (main && !self.selectedType)
                 self.selectedType = _mapTypes(_getTypeByLookupKey(main.correspondenceSiteTypeId));
+            if (!!main)
+                self.onSubSearch(true);
         };
 
         /**
@@ -702,12 +704,15 @@ module.exports = function (app) {
          * search in sub correspondence sites related to mainSites.
          * @return {*}
          */
-        self.onSubSearch = function () {
-            if (self.subSearch.length < 3) {
-                self.subSearchResult = [];
-                return;
+        self.onSubSearch = function (skipSubSiteText) {
+            if (!skipSubSiteText) {
+                if (self.subSearch.length < 3) {
+                    self.subSearchResult = [];
+                    return;
+                }
+            } else {
+                refreshDebounce();
             }
-
             if (!pendingSearch || !debounceSearch()) {
                 cancelSearch();
 
@@ -721,9 +726,11 @@ module.exports = function (app) {
                             parent: self.selectedMain ? self.selectedMain.id : null,
                             criteria: self.subSearch
                         }).then(function (result) {
-                            if (self.subSearch.length < 3) {
-                                self.subSearchResult = [];
-                                return;
+                            if (!skipSubSiteText) {
+                                if (self.subSearch.length < 3) {
+                                    self.subSearchResult = [];
+                                    return;
+                                }
                             }
                             self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                             self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
