@@ -74,16 +74,20 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.incoming.tags.length"
-                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.incoming.attachments.length">
                             <accordion-title>
-                                <md-icon md-svg-icon="tag-multiple"></md-icon>
-                                <span>{{lang.incoming_manage_tags}}</span>
+                                <md-icon md-svg-icon="attachment"></md-icon>
+                                <span>{{lang.incoming_manage_attachments}}</span>
                             </accordion-title>
                             <accordion-content>
-                                <div>
-                                    <manage-tags-directive from-dialog="false"
-                                                           tags="ctrl.incoming.tags"></manage-tags-directive>
+                                <div layout="row">
+                                    <manage-attachment-directive flex
+                                                                 document="ctrl.incoming"
+                                                                 attachments="ctrl.incoming.attachments"
+                                                                 vs-id="ctrl.incoming.vsId"
+                                                                 document-class="ctrl.incoming.docClassName"
+                                                                 receive-g2g="!!ctrl.receiveG2G">
+                                    </manage-attachment-directive>
                                 </div>
                             </accordion-content>
                         </accordion-item>
@@ -102,20 +106,17 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.incoming.attachments.length">
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.incoming.linkedEntities.length">
                             <accordion-title>
-                                <md-icon md-svg-icon="attachment"></md-icon>
-                                <span>{{lang.incoming_manage_attachments}}</span>
+                                <md-icon md-svg-icon="vector-triangle"></md-icon>
+                                <span>{{lang.incoming_linked_entities}}</span>
                             </accordion-title>
                             <accordion-content>
-                                <div layout="row">
-                                    <manage-attachment-directive flex
-                                            document="ctrl.incoming"
-                                            attachments="ctrl.incoming.attachments"
+                                <div>
+                                    <manage-entities-directive
                                             vs-id="ctrl.incoming.vsId"
-                                            document-class="ctrl.incoming.docClassName"
-                                            receive-g2g="!!ctrl.receiveG2G">
-                                    </manage-attachment-directive>
+                                            linked-entities="ctrl.incoming.linkedEntities"
+                                            document-class="ctrl.incoming.docClassName"></manage-entities-directive>
                                 </div>
                             </accordion-content>
                         </accordion-item>
@@ -136,17 +137,16 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.incoming.linkedEntities.length">
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.incoming.tags.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">
                             <accordion-title>
-                                <md-icon md-svg-icon="vector-triangle"></md-icon>
-                                <span>{{lang.incoming_linked_entities}}</span>
+                                <md-icon md-svg-icon="tag-multiple"></md-icon>
+                                <span>{{lang.incoming_manage_tags}}</span>
                             </accordion-title>
                             <accordion-content>
                                 <div>
-                                    <manage-entities-directive
-                                            vs-id="ctrl.incoming.vsId"
-                                            linked-entities="ctrl.incoming.linkedEntities"
-                                            document-class="ctrl.incoming.docClassName"></manage-entities-directive>
+                                    <manage-tags-directive from-dialog="false"
+                                                           tags="ctrl.incoming.tags"></manage-tags-directive>
                                 </div>
                             </accordion-content>
                         </accordion-item>
