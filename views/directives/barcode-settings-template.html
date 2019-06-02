@@ -71,7 +71,7 @@
                     <md-input-container flex>
                     <label for="fontName">{{lang.font_name}}</label>
                     <md-select name="fontName" id="fontName" flex
-                               ng-model="ctrl.globalSetting.fontName">
+                               ng-model="ctrl.globalSetting.barcodeElements.fontName">
                         <md-option ng-value="fontName.value"
                                    ng-repeat="fontName in ctrl.fontNames">
                             {{fontName.text}}
@@ -80,12 +80,12 @@
                     </md-input-container>
                 </div>
                 <div layout="row">
-                    <div flex="15" layout layout-align="start center">
+                    <div  flex="20" flex-gt-md="15"  layout layout-align="start center">
                     <label for="resolution-slider">{{lang.resolution}}</label>
                     </div>
                     <md-slider-container flex>
                         <md-slider id="resolution-slider" flex min="100" max="600" step="1"
-                                   ng-model="ctrl.globalSetting.resolution"
+                                   ng-model="ctrl.globalSetting.barcodeElements.resolution"
                                    aria-label="{{lang.resolution}}" md-discrete>
                         </md-slider>
                     </md-slider-container>

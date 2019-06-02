@@ -11,6 +11,8 @@ module.exports = function (app) {
             self.barcodeLabelLoc = null;
             self.rows = [];
             self.isElectronic = [];
+            self.resolution = 100;
+            self.fontName = null;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];

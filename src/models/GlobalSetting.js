@@ -53,8 +53,6 @@ module.exports = function (app) {
             self.allowSendWFRelatedBook = true;
             self.allowTwoWaysRelatedBook = false;
             self.removeMAIPSecurity = true;
-            self.resolution = 100;
-            self.fontName = null;
             //endregion
 
             // every model has required fields
