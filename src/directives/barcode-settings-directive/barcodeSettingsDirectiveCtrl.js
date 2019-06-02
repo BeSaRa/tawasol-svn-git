@@ -41,6 +41,15 @@ module.exports = function (app) {
             })
         ];
 
+        self.fontNames = [{value: 'Courier New', text: 'Courier New'},
+            {value: 'Times New Roman', text: 'Times New Roman'},
+            {value: 'Helvetica', text: 'Helvetica'},
+            {value: 'Arial', text: 'Arial'},
+            {value: 'Verdana', text: 'Verdana'},
+            {value: 'Comic Sans MS', text: 'Comic Sans MS'},
+            {value: 'Arial Black', text: 'Arial Black'},
+            {value: 'Arabic Typesetting', text: 'Arabic Typesetting'},
+            {value: 'Traditional Arabic', text: 'Traditional Arabic'}];
 
         function _getRow(rowIdx) {
             return typeof self.globalSetting.barcodeElements.rows[rowIdx] !== 'undefined' ? rowIdx : -1;
