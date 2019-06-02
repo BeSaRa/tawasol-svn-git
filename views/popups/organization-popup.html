@@ -95,12 +95,12 @@
                                 </div><!-- row -->
                                 <div layout="row">
                                     <md-input-container flex>
-                                        <label for="code">{{lang.code}}</label>
-                                        <input id="code" name="code" maxlength="10" required
-                                               ng-model="ctrl.organization.code">
-                                        <div ng-messages="org_form.code.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="maxlength">{{lang.short}}</div>
+                                        <label for="ouLevel">{{lang.organization_level}}</label>
+                                        <input id="ouLevel" name="ouLevel"
+                                               ng-model="ctrl.organization.ouLevel"
+                                               custom-validate-directive="number">
+                                        <div ng-messages="org_form.ouLevel.$error">
+                                            <div ng-message="number">{{lang.numberonly}}</div>
                                         </div>
                                     </md-input-container>
                                     <md-input-container flex>
@@ -126,6 +126,17 @@
                                         </md-button>
                                     </md-input-container>
                                 </div><!-- row -->
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="code">{{lang.code}}</label>
+                                        <input id="code" name="code" maxlength="10" required
+                                               ng-model="ctrl.organization.code">
+                                        <div ng-messages="org_form.code.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="maxlength">{{lang.short}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
                                 <div layout="column">
                                     <div class="user-selector" layout="row" layout-align="start center">
                                         <md-icon md-svg-icon="account-star"></md-icon>
