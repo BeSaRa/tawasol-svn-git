@@ -50,8 +50,8 @@ module.exports = function (app) {
 
                 lookupService.setLookups(result.data.rs.globalLookup);
 
+                rootEntity.setRootEntityGlobalSetting(result.data.rs.globalSetting, true);
                 if (!result.data.rs.isAdminUser) {
-                    rootEntity.setRootEntityGlobalSetting(result.data.rs.globalSetting, true);
                     self.setLastLoginOrganizationId(result.data.rs.ou);
                 }
                 return result.data.rs;
