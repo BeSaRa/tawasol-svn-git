@@ -2006,6 +2006,17 @@ module.exports = function (app) {
                             return distributionWFService
                                 .loadSenderUserForWorkItem(record);
 
+                        },
+                        managers: function (employeeService, WFUser) {
+                            'ngInject';
+                            if (!employeeService.getEmployee().canSendToManagers())
+                                return [];
+
+                            return $http.get(urlService.distributionWFManagers).then(function (result) {
+                                return self['managerUsers'] = generator.generateCollection(result.data.rs, WFUser);
+                            }).catch(function (e) {
+                                return [];
+                            });
                         }
                     }
                 });

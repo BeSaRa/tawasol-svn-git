@@ -5,8 +5,11 @@ module.exports = function (app) {
                                                    record,
                                                    workflowActions,
                                                    dialogTitle,
+                                                   employeeService,
+                                                   generator,
                                                    dialog,
                                                    replyOn,
+                                                   managers,
                                                    toast,
                                                    langService,
                                                    DistributionUserWFItem,
@@ -15,6 +18,13 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'replySimplePopCtrl';
+        self.currentLangUCFirst = generator.ucFirst(langService.current);
+        self.canSendToManagers = employeeService.getEmployee().canSendToManagers();
+        // skip reply to user from managers list
+        self.managers = _.filter(managers, function (manager) {
+            return manager.id !== replyOn.id;
+        });
+
         // dialog title
         self.dialogTitle = dialogTitle || replyOn.getTranslatedName();
         // all comments
@@ -23,10 +33,14 @@ module.exports = function (app) {
         self.workflowActions = workflowActions;
         // the distWorkflowItem
         self.distWorkflowItem = angular.copy(replyOn);
+        self.replyToText = replyOn['ou' + self.currentLangUCFirst + 'Name'] + ' - ' + replyOn.getTranslatedName();
         // current date minimum date for the due date.
         self.minDate = new Date();
         // selected comment
         self.comment = _getMatchedComment(self.distWorkflowItem);
+        // selected managers
+        self.selectedManagers = [];
+
         self.record = record;
 
         self.globalSettings = rootEntity.getGlobalSettings();
@@ -53,14 +67,21 @@ module.exports = function (app) {
          */
         self.launch = function ($event) {
             var sendRelatedDocs = self.distWorkflowItem.sendRelatedDocs,
-                user = (new DistributionUserWFItem()).mapFromWFUser(self.distWorkflowItem);
+                user = (new DistributionUserWFItem()).mapFromWFUser(self.distWorkflowItem),
+                managers = _.map(self.selectedManagers, function (manager) {
+                    return (new DistributionUserWFItem()).mapFromWFUser(manager);
+                }),
+                allUsers = [],
+                distributionWF = new DistributionWF();
             user.sendRelatedDocs = sendRelatedDocs;
 
             _setDistWorkflowItem(user, self.distWorkflowItem);
-
-            var distributionWF = new DistributionWF();
-            distributionWF.setNormalUsers([user]);
-
+            allUsers = allUsers.concat([user]);
+            if (managers && managers.length) {
+                _setDistWorkflowItem(managers, self.distWorkflowItem);
+                allUsers = allUsers.concat(managers);
+            }
+            distributionWF.setNormalUsers(allUsers);
             distributionWFService.startLaunchWorkflow(distributionWF, record)
                 .then(function () {
                     toast.success(langService.get('launch_success_distribution_workflow'));
@@ -75,14 +96,30 @@ module.exports = function (app) {
         };
 
         function _setDistWorkflowItem(distWorkflowItem, result) {
-            distWorkflowItem
-                .setDueDate(result.dueDate)
-                .setComments(result.comments)
-                .setAction(result.action)
-                .setSendSMS(result.sendSMS)
-                .setSendEmail(result.sendEmail);
+            if (angular.isArray(distWorkflowItem) && distWorkflowItem.length) {
+                for (var i = 0; i < distWorkflowItem.length; i++) {
+                    distWorkflowItem[i]
+                        .setDueDate(result.dueDate)
+                        .setComments(result.comments)
+                        .setAction(result.action)
+                        .setSendSMS(result.sendSMS)
+                        .setSendEmail(result.sendEmail);
+                }
+            } else {
+                distWorkflowItem
+                    .setDueDate(result.dueDate)
+                    .setComments(result.comments)
+                    .setAction(result.action)
+                    .setSendSMS(result.sendSMS)
+                    .setSendEmail(result.sendEmail);
+            }
         }
 
+        /**
+         * @description Opens the main launch screen to reply
+         * @param $event
+         * @returns {*}
+         */
         self.advancedReply = function ($event) {
             var sendRelatedDocs = self.distWorkflowItem.sendRelatedDocs,
                 user = (new DistributionUserWFItem()).mapFromWFUser(self.distWorkflowItem);
@@ -95,6 +132,25 @@ module.exports = function (app) {
                     toast.success(langService.get('launch_success_distribution_workflow'));
                     dialog.hide();
                 })
+        };
+
+        self.resetNotifications = function(){
+            self.distWorkflowItem.sendSMS = null;
+            self.distWorkflowItem.sendEmail = null;
+        };
+
+        /**
+         * @description Gets the selected mangers text
+         * @returns {*}
+         */
+        self.getSelectedManagersText = function () {
+            if (self.selectedManagers && self.selectedManagers.length) {
+                var map = _.map(self.selectedManagers, function (manager) {
+                    return manager['ou' + self.currentLangUCFirst + 'Name'];
+                });
+                return map.join(', ');
+            }
+            return langService.get('managers');
         }
 
     });

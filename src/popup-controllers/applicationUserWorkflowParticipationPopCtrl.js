@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('applicationUserWorkflowParticipationPopCtrl', function (dialog,
+                                                                            _,
                                                                             ouApplicationUser,
                                                                             applicationUserService,
                                                                             validationService,
