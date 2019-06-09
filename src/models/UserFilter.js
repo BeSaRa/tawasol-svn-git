@@ -288,10 +288,10 @@ module.exports = function (app) {
                         self.ui.key_5.value.siteType = angular.copy(self.ui.key_siteType.value);
                     }
                     if (self.ui.key_mainSite.value) {
-                        self.ui.key_5.value.mainSite = angular.copy(self.ui.key_mainSite.value);
+                        self.ui.key_5.value.mainSiteId = angular.copy(self.ui.key_mainSite.value);
                     }
                     if (self.ui.key_subSite.value) {
-                        self.ui.key_5.value.subSite = angular.copy(self.ui.key_subSite.value);
+                        self.ui.key_5.value.subSiteId = angular.copy(self.ui.key_subSite.value);
                     }
                     self.ui.key_5.value = JSON.stringify(self.ui.key_5.value);
                 }
@@ -312,7 +312,8 @@ module.exports = function (app) {
 
             UserFilter.prototype.prepareReceivedUserFilter = function () {
                 var criteria = angular.fromJson(this.parsedExpression),
-                    self = this;
+                    self = this,
+                    extraCriteria = angular.fromJson(this.extraCriteria);
 
                 self.arName = (self.arName !== naValue) ? self.arName : null;
                 self.enName = (self.enName !== naValue) ? self.enName : null;
@@ -362,19 +363,32 @@ module.exports = function (app) {
                 else if (self.ui.key_22.value !== null)
                     self.ui.key_linkedEntities.value = 22;
 
-                // correspondence sites
-                if (self.ui.key_5.value != null) {
+                // correspondence sites (key 5 - use it from extraCriteria because parsed expression will not have full information for siteInfo)
+                if (extraCriteria && extraCriteria.hasOwnProperty('5')){
+                    var siteInfo = extraCriteria[5];
+                    //self.ui.key_5.value = JSON.parse(self.ui.key_5.value);
+                    if (siteInfo.siteType) {
+                        self.ui.key_siteType.value = siteInfo.siteType;
+                    }
+                    if (siteInfo.mainSiteId) {
+                        self.ui.key_mainSite.value = siteInfo.mainSiteId;
+                    }
+                    if (siteInfo.subSiteId) {
+                        self.ui.key_subSite.value = siteInfo.subSiteId;
+                    }
+                }
+                /*if (self.ui.key_5.value != null) {
                     self.ui.key_5.value = JSON.parse(self.ui.key_5.value);
                     if (self.ui.key_5.value.siteType) {
                         self.ui.key_siteType.value = self.ui.key_5.value.siteType;
                     }
-                    if (self.ui.key_5.value.mainSite) {
-                        self.ui.key_mainSite.value = self.ui.key_5.value.mainSite;
+                    if (self.ui.key_5.value.mainSiteId) {
+                        self.ui.key_mainSite.value = self.ui.key_5.value.mainSiteId;
                     }
-                    if (self.ui.key_5.value.subSite) {
-                        self.ui.key_subSite.value = self.ui.key_5.value.subSite;
+                    if (self.ui.key_5.value.subSiteId) {
+                        self.ui.key_subSite.value = self.ui.key_5.value.subSiteId;
                     }
-                }
+                }*/
 
                 return this;
             };
