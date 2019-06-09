@@ -33,7 +33,7 @@ module.exports = function (app) {
                 key_4: {
                     value: null
                 },
-                // MainSite equals
+                // Site Info equals
                 key_5: {
                     value: null
                 },
@@ -62,10 +62,6 @@ module.exports = function (app) {
                 key_11: {
                     value1: null,
                     value2: null
-                },
-                // subSite equals
-                key_12: {
-                    value: null
                 },
                 // docFullSerial contains
                 key_13: {
@@ -107,10 +103,6 @@ module.exports = function (app) {
                 key_22: {
                     value: null
                 },
-                // site type
-                key_23: {
-                    value: null
-                },
                 // anonymous properties - to be removed when sending
                 key_linkedAttachments: {
                     value: null
@@ -121,9 +113,18 @@ module.exports = function (app) {
                 key_linkedEntities: {
                     value: null
                 },
+                key_siteType: {
+                    value: null
+                },
+                key_mainSite: {
+                    value: null
+                },
+                key_subSite: {
+                    value: null
+                }
             };
             // this is available keys for the current ui model
-            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -253,29 +254,46 @@ module.exports = function (app) {
                 // Is Open (check for null value, because true, false, null are three values and both true and false are accepted
                 self.ui.key_20.value = (self.ui.key_20.value === null) ? null : self.ui.key_20.value;
 
+                self.ui.key_5.value = null;
                 // site type
-                if (self.ui.key_23.value) {
-                    self.ui.key_23.value = self.ui.key_23.value.hasOwnProperty('lookupKey') ? self.ui.key_23.value.lookupKey : self.ui.key_23.value;
+                if (self.ui.key_siteType.value) {
+                    self.ui.key_siteType.value = self.ui.key_siteType.value.hasOwnProperty('lookupKey') ? self.ui.key_siteType.value.lookupKey : self.ui.key_siteType.value;
                 } else {
-                    self.ui.key_23.value = null;
+                    self.ui.key_siteType.value = null;
                     // if site type is null, set main site, sub site as null
-                    self.ui.key_5.value = null;
+                    self.ui.key_mainSite.value = null;
+                    self.ui.key_subSite.value = null;
                 }
 
                 // main site
-                if (self.ui.key_5.value) {
-                    self.ui.key_5.value = self.ui.key_5.value.hasOwnProperty('id') ? self.ui.key_5.value.id : self.ui.key_5.value;
+                if (self.ui.key_mainSite.value) {
+                    self.ui.key_mainSite.value = self.ui.key_mainSite.value.hasOwnProperty('id') ? self.ui.key_mainSite.value.id : self.ui.key_mainSite.value;
                 } else {
-                    self.ui.key_5.value = null;
+                    self.ui.key_mainSite.value = null;
                     // if main site is null, set sub site null
-                    self.ui.key_12.value = null;
+                    self.ui.key_subSite.value = null;
                 }
 
                 // sub site
-                if (self.ui.key_12.value) {
-                    self.ui.key_12.value = self.ui.key_12.value.hasOwnProperty('id') ? self.ui.key_12.value.id : self.ui.key_12.value;
+                if (self.ui.key_subSite.value) {
+                    self.ui.key_subSite.value = self.ui.key_subSite.value.hasOwnProperty('id') ? self.ui.key_subSite.value.id : self.ui.key_subSite.value;
                 } else {
-                    self.ui.key_12.value = null;
+                    self.ui.key_subSite.value = null;
+                }
+
+                // correspondence sites
+                if (self.ui.key_siteType.value != null || self.ui.key_mainSite.value != null || self.ui.key_subSite.value != null) {
+                    self.ui.key_5.value = {};
+                    if (self.ui.key_siteType.value) {
+                        self.ui.key_5.value.siteType = angular.copy(self.ui.key_siteType.value);
+                    }
+                    if (self.ui.key_mainSite.value) {
+                        self.ui.key_5.value.mainSite = angular.copy(self.ui.key_mainSite.value);
+                    }
+                    if (self.ui.key_subSite.value) {
+                        self.ui.key_5.value.subSite = angular.copy(self.ui.key_subSite.value);
+                    }
+                    self.ui.key_5.value = JSON.stringify(self.ui.key_5.value);
                 }
 
                 self.filterCriteria = self.filterCriteria || {};
@@ -343,6 +361,20 @@ module.exports = function (app) {
                     self.ui.key_linkedEntities.value = 17;
                 else if (self.ui.key_22.value !== null)
                     self.ui.key_linkedEntities.value = 22;
+
+                // correspondence sites
+                if (self.ui.key_5.value != null) {
+                    self.ui.key_5.value = JSON.parse(self.ui.key_5.value);
+                    if (self.ui.key_5.value.siteType) {
+                        self.ui.key_siteType.value = self.ui.key_5.value.siteType;
+                    }
+                    if (self.ui.key_5.value.mainSite) {
+                        self.ui.key_mainSite.value = self.ui.key_5.value.mainSite;
+                    }
+                    if (self.ui.key_5.value.subSite) {
+                        self.ui.key_subSite.value = self.ui.key_5.value.subSite;
+                    }
+                }
 
                 return this;
             };

@@ -280,12 +280,12 @@
                                         </md-select>
                                     </md-input-container>
                                 </div>
-                                <!--<div layout="row">
-                                    &lt;!&ndash; Correspondence Site Type &ndash;&gt;
+                                <div layout="row">
+                                    <!-- Correspondence Site Type -->
                                     <md-input-container flex>
-                                        <label for="siteType">{{ctrl.lookupNames['key_23'].getTranslatedName()}}</label>
+                                        <label for="siteType">{{ctrl.lookupNames['key_siteType'].getTranslatedName()}}</label>
                                         <md-select name="siteType" id="siteType"
-                                                   ng-model="ctrl.filter.ui.key_23.value"
+                                                   ng-model="ctrl.filter.ui.key_siteType.value"
                                                    md-on-close="ctrl.clearSearchText('siteType')"
                                                    ng-change="ctrl.getMainSites(true, $event)"
                                                    data-md-container-class="select-header-container">
@@ -305,12 +305,12 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
-                                    &lt;!&ndash; Main Site &ndash;&gt;
+                                    <!-- Main Site -->
                                     <md-input-container flex>
-                                        <label for="mainSite">{{ctrl.lookupNames['key_5'].getTranslatedName()}}</label>
+                                        <label for="mainSite">{{ctrl.lookupNames['key_mainSite'].getTranslatedName()}}</label>
                                         <md-select id="mainSite" name="mainSite"
-                                                   ng-model="ctrl.filter.ui.key_5.value"
-                                                   ng-disabled="!ctrl.filter.ui.key_23.value"
+                                                   ng-model="ctrl.filter.ui.key_mainSite.value"
+                                                   ng-disabled="!ctrl.filter.ui.key_siteType.value"
                                                    md-on-close="ctrl.clearSearchText('mainSite')"
                                                    ng-change="ctrl.getSubSites(true, $event)"
                                                    data-md-container-class="select-header-container">
@@ -330,12 +330,12 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
-                                    &lt;!&ndash; Sub Site &ndash;&gt;
+                                    <!-- Sub Site -->
                                     <md-input-container flex>
-                                        <label for="subSite">{{ctrl.lookupNames['key_12'].getTranslatedName()}}</label>
+                                        <label for="subSite">{{ctrl.lookupNames['key_subSite'].getTranslatedName()}}</label>
                                         <md-select id="subSite" name="subSite"
-                                                   ng-model="ctrl.filter.ui.key_12.value"
-                                                   ng-disabled="!ctrl.filter.ui.key_23.value || !ctrl.filter.ui.key_5.value"
+                                                   ng-model="ctrl.filter.ui.key_subSite.value"
+                                                   ng-disabled="!ctrl.filter.ui.key_siteType.value || !ctrl.filter.ui.key_mainSite.value"
                                                    md-on-close="ctrl.clearSearchText('subSite')"
                                                    data-md-container-class="select-header-container">
                                             <md-select-header class="select-header">
@@ -354,7 +354,7 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
-                                </div>-->
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>

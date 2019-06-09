@@ -35,6 +35,11 @@ module.exports = function (app) {
         self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.correspondenceSiteTypes = correspondenceSiteTypes;
+        self.selectedSiteType = null;
+        self.selectedMainSite = null;
+        self.selectedSubSite = null;
+
+        
         //console.log(lookupService.returnLookups(lookupService.inboxFilterKey));
 
         self.lookupNames = {};
@@ -43,6 +48,18 @@ module.exports = function (app) {
                 arName: lookup.defaultArName,
                 enName: lookup.defaultEnName,
                 id: lookup.lookupKey
+            });
+            self.lookupNames['key_siteType']  = new Information({
+                arName: langService.getByLangKey('correspondence_site_type', 'ar'),
+                enName: langService.getByLangKey('correspondence_site_type', 'en')
+            });
+            self.lookupNames['key_mainSite']  = new Information({
+                arName: langService.getByLangKey('main_site', 'ar'),
+                enName: langService.getByLangKey('main_site', 'en')
+            });
+            self.lookupNames['key_subSite']  = new Information({
+                arName: langService.getByLangKey('sub_site', 'ar'),
+                enName: langService.getByLangKey('sub_site', 'en')
             });
             return lookup;
         });
@@ -211,7 +228,7 @@ module.exports = function (app) {
         self.subSiteSearchText = '';
 
         $timeout(function () {
-            if (self.filter.ui.key_23.value) {
+            if (self.filter.ui.key_siteType.value) {
                 self.getMainSites(false);
             }
         });
@@ -222,9 +239,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.getMainSites = function (resetMainAndSub, $event) {
-            if (self.filter.ui.key_23.value) {
+            if (self.filter.ui.key_siteType.value) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
-                    type: self.filter.ui.key_23.value.hasOwnProperty('lookupKey') ? self.filter.ui.key_23.value.lookupKey : self.filter.ui.key_23.value,
+                    type: self.filter.ui.key_siteType.value.hasOwnProperty('lookupKey') ? self.filter.ui.key_siteType.value.lookupKey : self.filter.ui.key_siteType.value,
                     criteria: null,
                     excludeOuSites: false
                 }).then(function (result) {
@@ -232,10 +249,10 @@ module.exports = function (app) {
                     self.mainSitesCopy = angular.copy(result);
                     self.subSites = [];
                     if (resetMainAndSub) {
-                        self.filter.ui.key_5.value = null;
-                        self.filter.ui.key_12.value = null;
+                        self.filter.ui.key_mainSite.value = null;
+                        self.filter.ui.key_subSite.value = null;
                     }
-                    if (self.filter.ui.key_5.value) {
+                    if (self.filter.ui.key_mainSite.value) {
                         self.getSubSites(false);
                     }
                 });
@@ -243,8 +260,8 @@ module.exports = function (app) {
             else {
                 self.mainSites = [];
                 self.subSites = [];
-                self.filter.ui.key_5.value = null;
-                self.filter.ui.key_12.value = null;
+                self.filter.ui.key_mainSite.value = null;
+                self.filter.ui.key_subSite.value = null;
             }
         };
 
@@ -254,10 +271,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.getSubSites = function (resetSub, $event) {
-            var mainSite = self.filter.ui.key_5.value.hasOwnProperty('id') ? self.filter.ui.key_5.value.id : self.filter.ui.key_5.value;
+            var mainSite = self.filter.ui.key_mainSite.value.hasOwnProperty('id') ? self.filter.ui.key_mainSite.value.id : self.filter.ui.key_mainSite.value;
             if (mainSite) {
                 correspondenceViewService.correspondenceSiteSearch('sub', {
-                    type: self.filter.ui.key_23.value.hasOwnProperty('lookupKey') ? self.filter.ui.key_23.value.lookupKey : self.filter.ui.key_23.value,
+                    type: self.filter.ui.key_siteType.value.hasOwnProperty('lookupKey') ? self.filter.ui.key_siteType.value.lookupKey : self.filter.ui.key_siteType.value,
                     parent: mainSite,
                     criteria: null,
                     excludeOuSites: false
@@ -265,12 +282,12 @@ module.exports = function (app) {
                     self.subSites = result;
                     self.subSitesCopy = angular.copy(result);
                     if (resetSub)
-                        self.filter.ui.key_12.value = null;
+                        self.filter.ui.key_subSite.value = null;
                 });
             }
             else {
                 self.subSites = [];
-                self.filter.ui.key_12.value = null;
+                self.filter.ui.key_subSite.value = null;
             }
         };
 
