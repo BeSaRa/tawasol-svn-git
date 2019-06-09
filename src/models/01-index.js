@@ -163,4 +163,6 @@ module.exports = function (app) {
     require('./UserMenuItem')(app);
     require('./EventHistoryCriteria')(app);
     require('./MAIPLabel')(app);
+    require('./Task')(app);
+    require('./TaskParticipant')(app);
 };

@@ -114,4 +114,5 @@ module.exports = function (app) {
 	require('./singleNotifierService')(app);
 	require('./dynamicMenuItemService')(app);
 	require('./printService')(app);
+	require('./taskService')(app);
 };
