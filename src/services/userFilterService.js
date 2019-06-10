@@ -109,7 +109,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     result = generator.generateInstance(result.data.rs, UserFilter);
                     result = generator.interceptReceivedInstance('UserFilter', result);
-                    var index = _.findIndex(function (filter) {
+                    var index = _.findIndex(self.userFilters, function (filter) {
                         return (self.userFilters.id === filter.id);
                     });
                     self.userFilters[index] = result;
