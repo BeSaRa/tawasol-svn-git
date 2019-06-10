@@ -152,12 +152,22 @@ module.exports = function (app) {
                 }
             }
 
+            if (model.exportDateFrom && model.exportDateTo) {
+                var exportDate = {
+                    From: angular.copy(moment(model.exportDateFrom).format("YYYY-MM-DD")),
+                    To: angular.copy(moment(model.exportDateTo).format("YYYY-MM-DD"))
+                };
+                model.exportDate = angular.toJson(exportDate);
+            }
+
 
             delete model.selectedEntityType;
             delete model.docStatus;
             delete model.approvedBy;
             delete model.approveDateFrom;
             delete model.approveDateTo;
+            delete model.exportDateFrom;
+            delete model.exportDateTo;
 
             delete model.serialNoFrom;
             delete model.serialNoTo;

@@ -20,7 +20,8 @@ module.exports = function (app) {
 
             self.serialNoFrom = null;
             self.serialNoTo = null;
-
+            self.fromRegOUId = null;
+            self.toRegOUId = null;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
