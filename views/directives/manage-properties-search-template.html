@@ -575,7 +575,7 @@
                                aria-label="{{lang.from_reg_ou}}"
                                ng-model="ctrl.document.fromRegOUId">
                         <md-option ng-value="ou.id" ng-repeat="ou in ctrl.organizations track by $index"
-                                   ng-if="ou.id !== ctrl.document.toRegOUId">
+                                   ng-if="ou.id !== ctrl.document.toRegOUId && ou.hasRegistry">
                             {{ou.getTranslatedName()}}
                         </md-option>
                     </md-select>
@@ -586,7 +586,7 @@
                                aria-label="{{lang.to_reg_ou}}"
                                ng-model="ctrl.document.toRegOUId">
                         <md-option ng-value="ou.id" ng-repeat="ou in ctrl.organizations track by $index"
-                                   ng-if="ou.id !== ctrl.document.fromRegOUId">
+                                   ng-if="ou.id !== ctrl.document.fromRegOUId && ou.hasRegistry">
                             {{ou.getTranslatedName()}}
                         </md-option>
                     </md-select>
