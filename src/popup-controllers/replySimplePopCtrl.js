@@ -135,8 +135,13 @@ module.exports = function (app) {
         };
 
         self.resetNotifications = function(){
-            self.distWorkflowItem.sendSMS = null;
-            self.distWorkflowItem.sendEmail = null;
+            if (!self.selectedManagers || !self.selectedManagers.length){
+                self.distWorkflowItem.sendSMS = replyOn.sendSMS;
+                self.distWorkflowItem.sendEmail = replyOn.sendEmail;
+            } else {
+                self.distWorkflowItem.sendSMS = null;
+                self.distWorkflowItem.sendEmail = null;
+            }
         };
 
         /**
