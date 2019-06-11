@@ -53,6 +53,7 @@ module.exports = function (app) {
             self.allowSendWFRelatedBook = true;
             self.allowTwoWaysRelatedBook = false;
             self.removeMAIPSecurity = true;
+            self.separateActionOnTransfer = false;
             //endregion
 
             // every model has required fields

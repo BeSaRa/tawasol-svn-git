@@ -447,6 +447,13 @@
                                         <span>{{lang.remove_maip_security}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('removeMAIPSecurity')}}
                                     </md-switch>
                                 </div>
+                                <div flex>
+                                    <!-- Separate Actions While Transferring Between Departments -->
+                                    <md-switch ng-model="ctrl.globalSetting.separateActionOnTransfer"
+                                               aria-label="{{lang.allow_separate_ations_on_transfer}}">
+                                        <span>{{lang.allow_separate_ations_on_transfer}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('separateActionOnTransfer')}}
+                                    </md-switch>
+                                </div>
                             </div>
                             <div layout="row" class="p20">
                                 <!-- Document Security Schema -->
