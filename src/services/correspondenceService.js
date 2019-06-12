@@ -677,13 +677,19 @@ module.exports = function (app) {
         /**
          * correspondence search for any document Type.
          * @param correspondence
+         * @param isAdminSearch
          */
-        self.correspondenceSearch = function (correspondence) {
-            var info = correspondence.getInfo(), criteria;
+        self.correspondenceSearch = function (correspondence, isAdminSearch) {
+            var info = correspondence.getInfo(),
+                url = urlService.correspondence + '/search/' + info.documentClass,
+                criteria;
             criteria = generator.interceptSendInstance('Search' + _getModelName(info.documentClass), correspondence);
             criteria = _checkPropertyConfiguration(criteria, lookupService.getPropertyConfigurations(info.documentClass));
+            if (isAdminSearch) {
+                url = url + '?isAdmin=' + isAdminSearch
+            }
             return $http
-                .post(urlService.correspondence + '/search/' + info.documentClass, generator.interceptSendInstance('SearchCriteria', criteria))
+                .post(url, generator.interceptSendInstance('SearchCriteria', criteria))
                 .then(function (result) {
                     return generator.interceptReceivedCollection(['Correspondence', _getModelName(info.documentClass)], generator.generateCollection(result.data.rs, _getModel(info.documentClass)))
                 });
@@ -841,7 +847,7 @@ module.exports = function (app) {
                 children = _.filter(lookups[key + 'Flat'], function (model) {
                     return !!(model[value.property].parent);
                 });
-                // get children for lookups
+                // set children for lookups
                 lookups[key] = _.map(lookups[key], function (model) {
                     model[value.property].children = _.map(_.filter(children, function (child) {
                         var parentId = child[value.property].parent.hasOwnProperty('id') ? child[value.property].parent.id : child[value.property].parent;

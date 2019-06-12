@@ -14,7 +14,8 @@ module.exports = function (app) {
                                                             Correspondence,
                                                             $timeout,
                                                             _,
-                                                            employeeService) {
+                                                            employeeService,
+                                                            isAdminSearch) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchLinkedDocumentPopCtrl';
@@ -27,6 +28,7 @@ module.exports = function (app) {
         });
 
         self.excludeVsId = excludeVsId;
+        self.isAdminSearch = isAdminSearch;
 
         // all security levels
         //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
@@ -201,7 +203,7 @@ module.exports = function (app) {
         self.searchLinkedDocuments = function () {
             var vsIds = self.excludeVsId ? [self.excludeVsId] : [];
             correspondenceService
-                .correspondenceSearch(self.correspondence.setDocClassName(self.searchType.getStringKeyValue()))
+                .correspondenceSearch(self.correspondence.setDocClassName(self.searchType.getStringKeyValue()), isAdminSearch)
                 .then(function (result) {
                     self.correspondences = _.filter(result, function (item) {
                         return vsIds.indexOf(item.getInfo().vsId) === -1;
@@ -238,7 +240,7 @@ module.exports = function (app) {
          */
         self.closeLinkedDocuments = function () {
             dialog.cancel();
-        }
+        };
 
         _getClassifications(true);
         _getDocumentFiles(true);

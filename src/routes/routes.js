@@ -828,6 +828,14 @@ module.exports = function (app) {
                     }
                 }
             })
+            // Viewers Log
+            .state('app.search.viewers-log', {
+                url: '/viewers-log',
+                templateUrl: templateProvider.getView('search-viewers-log'),
+                controller: 'searchViewerLogsCtrl',
+                controllerAs: 'ctrl',
+
+            })
             // outgoing
             .state('app.outgoing', {
                 abstract: true,

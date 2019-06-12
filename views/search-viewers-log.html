@@ -1,0 +1,154 @@
+<div background-directive="short" color="blue" flex class="page-content">
+    <div layout="column" class="content">
+        <div layout="row" layout-align="start center" class="page-header nmb padding-header small">
+            <span>{{lang.menu_item_search_viewers_log}}</span>
+        </div>
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <div layout="row">
+                        <!-- Search Area -->
+                        <md-card flex="30">
+                            <form class="white-bg" flex layout="column" autocomplete="off">
+                                <!-- Search Box and button -->
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="watermarkSearchText">{{lang.watermark}}</label>
+                                        <input ng-model="ctrl.watermarkSearchText"
+                                               id="watermarkSearchText" name="watermarkSearchText">
+                                    </md-input-container>
+                                    <md-button ng-click="ctrl.searchDocumentByWatermark($event)"
+                                               ng-disabled="!ctrl.watermarkSearchText"
+                                               class="md-icon-button" tooltip="{{lang.search}}">
+                                        <md-icon md-svg-icon="magnify"></md-icon>
+                                    </md-button>
+                                    <md-button ng-click="ctrl.showSearchDocumentDialog($event)"
+                                               class="md-icon-button" tooltip="{{lang.document_search}}">
+                                        <md-icon md-svg-icon="file-document-box-multiple"></md-icon>
+                                    </md-button>
+                                </div>
+
+                                <!-- Searched Documents -->
+                                <div layout="row">
+                                    <md-list class="md-dense" flex ng-if="ctrl.allSearchableRecords.length">
+                                        <md-subheader class="md-no-sticky">
+                                            <div class="cms-subheader-text">{{lang.lbl_correspondence}}</div>
+                                        </md-subheader>
+
+                                        <md-list-item class="md-2-line" ng-repeat="record in ctrl.allSearchableRecords"
+                                                      ng-click="ctrl.showViewerLog(record, $event)"
+                                                      ng-class="{'background-warning' : (ctrl.selectedDocument.getInfo().vsId === record.getInfo().vsId)}">
+                                            <div class="md-list-item-text" layout="column">
+                                                <a href=""
+                                                   ng-click="ctrl.showViewerLog(record, $event, true)"
+                                                   tooltip="{{record.getTranslatedName()}}" md-truncate>
+                                                    {{record.getTranslatedName()}}
+                                                </a>
+                                                <div layout="row">
+                                                    <h3>{{record.createdOn}}</h3>
+                                                    <span flex=""></span>
+                                                    <h3>{{record.docFullSerial}}</h3>
+                                                </div>
+                                            </div>
+                                            <md-icon md-svg-icon="delete" title="{{lang.remove}}"
+                                                     class="md-secondary"
+                                                     aria-label="{{lang.remove}}"
+                                                     ng-click="ctrl.removeCorrespondence(record, $event)"></md-icon>
+                                            <md-icon md-svg-icon="book-open-variant" title="{{lang.view}}"
+                                                     class="md-secondary"
+                                                     aria-label="{{lang.view}}"
+                                                     ng-click="ctrl.viewCorrespondence(record, $event)"></md-icon>
+                                        </md-list-item>
+
+                                        <!--<md-list-item ng-repeat="record in ctrl.allSearchableRecords">
+                                            <md-checkbox ng-model="record.selected"
+                                                         ng-change="ctrl.toggleSelected(record)"
+                                                         aria-label="correspondence"></md-checkbox>
+                                            <div flex md-truncate>
+                                                <a href=""
+                                                   ng-click="ctrl.viewCorrespondence(record, $event, true)"
+                                                   tooltip="{{record.getTranslatedName()}}" class="subject">
+                                                    {{record.getTranslatedName()}}
+                                                </a>
+                                            </div>
+                                            <md-icon class="md-secondary" title="{{lang.remove}}"
+                                                     ng-click="ctrl.removeCorrespondence(record, $event)"
+                                                     aria-label="{{lang.remove}}"
+                                                     md-svg-icon="delete"></md-icon>
+                                        </md-list-item>-->
+                                    </md-list>
+                                </div>
+                            </form>
+                        </md-card>
+                        <!-- Viewers Log -->
+                        <md-card flex>
+                            <md-subheader class="md-no-sticky">
+                                <div class="cms-subheader-text">{{lang.menu_item_search_viewers_log}} <span
+                                        ng-if="ctrl.selectedDocument"> - {{ctrl.selectedDocument.getTranslatedName()}}</span>
+                                </div>
+                                <!--<md-icon md-svg-icon="file-excel" ng-if="ctrl.selectedDocument"
+                                         title="{{lang.export_to_excel}}"
+                                         aria-label="{{lang.export_to_excel}}"
+                                         ng-click="ctrl.exportViewerLogToExcel($event)"></md-icon>
+                                <md-icon md-svg-icon="printer" ng-if="ctrl.selectedDocument"
+                                         title="{{lang.print}}"
+                                         aria-label="{{lang.print}}"
+                                         ng-click="ctrl.exportViewerLogToPDF($event)"></md-icon>-->
+                            </md-subheader>
+                            <md-table-container>
+                                <div flex scroll-directive>
+                                    <table md-table ng-model="ctrl.selectedLogs"
+                                           md-progress="ctrl.progress"><!-- md-row-select multiple-->
+                                        <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                        <tr md-row>
+                                            <th ng-if="ctrl.selectedLogs.length" md-column
+                                                colspan="7">
+                                                <div layout="row" layout-align="start center">
+                                                    <span>{{ctrl.selectedLogs.length}} {{lang.items_selected}} </span>
+                                                    <span flex></span>
+                                                </div>
+                                            </th>
+                                            <th md-column ng-if="!ctrl.selectedLogs.length"
+                                                md-order-by="{{ctrl.getSortingKey('userInfo', 'Information')}}">
+                                                <span>{{lang.view_tracking_sheet_viewers}}</span>
+                                            </th>
+                                            <th md-column ng-if="!ctrl.selectedLogs.length"
+                                                md-order-by="{{ctrl.getSortingKey('itemTypeInfo', 'Information')}}">
+                                                <span>{{lang.action}}</span>
+                                            </th>
+                                            <th md-column ng-if="!ctrl.selectedLogs.length"
+                                                md-order-by="key">
+                                                <span>{{lang.watermark}}</span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-row md-select="log" model="log" grid-right-click-directive="log"
+                                            selected-length="{{ctrl.selectedLogs.length ? ctrl.selectedLogs.length : 0}}"
+                                            ng-repeat="log in ctrl.viewerLogs | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                            <td md-cell>{{log.userInfo.getTranslatedName()}}</td>
+                                            <td md-cell>{{log.itemTypeInfo.getTranslatedName()}}</td>
+                                            <td md-cell>{{log.key}}</td>
+                                        </tr>
+                                        <tr md-row ng-if="!ctrl.viewerLogs.length">
+                                            <td md-cell colspan="12" class="red-text text-center">
+                                                {{lang.no_records_found}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <md-table-pagination
+                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                        md-limit-options="ctrl.grid.limitOptions"
+                                        md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                        md-total="{{ctrl.viewerLogs.length}}" md-page-select>
+                                </md-table-pagination>
+                            </md-table-container>
+                        </md-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

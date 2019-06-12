@@ -101,4 +101,5 @@ module.exports = function (app) {
     require('./EventHistoryCriteriaInterceptor')(app);
     require('./UserSubscriptionInterceptor')(app);
     require('./CreateReplyInterceptor')(app);
+    require('./ViewerLogInterceptor')(app);
 };

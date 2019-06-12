@@ -165,4 +165,5 @@ module.exports = function (app) {
     require('./MAIPLabel')(app);
     require('./Task')(app);
     require('./TaskParticipant')(app);
+    require('./ViewerLog')(app);
 };

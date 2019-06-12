@@ -78,7 +78,8 @@ module.exports = function (app) {
                     locals: {
                         linkedDocs: self.linkedDocs,
                         viewCallback: self.viewCorrespondence,
-                        excludeVsId: self.vsId
+                        excludeVsId: self.vsId,
+                        isAdminSearch: false
                     }
                 })
                 .then(function (correspondences) {
