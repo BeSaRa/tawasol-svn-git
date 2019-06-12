@@ -91,6 +91,10 @@ module.exports = function (app) {
                 this.sendSMS = sendSMS;
                 return this;
             };
+            DistributionWFItem.prototype.setSecureAction = function (isSecureAction) {
+                this.isSecureAction = isSecureAction;
+                return this;
+            };
             DistributionWFItem.prototype.setSendEmail = function (sendEmail) {
                 this.sendEmail = sendEmail;
                 return this;
@@ -125,7 +129,7 @@ module.exports = function (app) {
                 return this;
             };
             DistributionWFItem.prototype.isWFComplete = function () {
-                return !!this.action;
+                return (this.hasOwnProperty('isSecureAction') && this.isSecureAction)? !!this.action && this.comments : !!this.action;
             };
             DistributionWFItem.prototype.setGridName = function (gridName) {
                 this.gridName = gridName;

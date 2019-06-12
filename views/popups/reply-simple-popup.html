@@ -72,11 +72,22 @@
                                 {{lang.email_workflow_notification}}
                             </md-checkbox>
                         </div>
+                    </div>
+                    <div layout="row">
                         <!-- Send Related Documents -->
-                        <div flex>
+                        <div flex
+                             ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification">
                             <md-checkbox ng-if="ctrl.globalSettings.allowSendWFRelatedBook"
                                          ng-model="ctrl.distWorkflowItem.sendRelatedDocs">
                                 {{lang.send_related_documents}}
+                            </md-checkbox>
+                        </div>
+                        <div flex>
+                            <!-- Secure comment -->
+                            <md-checkbox
+                                    ng-model="ctrl.distWorkflowItem.isSecureAction"
+                                    aria-label="{{lang.secure_action}}">
+                                {{lang.secure_action}}
                             </md-checkbox>
                         </div>
                     </div>
@@ -96,7 +107,11 @@
                         <md-input-container flex>
                             <label for="comments"> {{lang.type_your_comment}}</label>
                             <textarea rows="5" id="comments" name="comments"
-                                      ng-model="ctrl.distWorkflowItem.comments"></textarea>
+                                      ng-model="ctrl.distWorkflowItem.comments"
+                                      ng-required="ctrl.distWorkflowItem.isSecureAction"></textarea>
+                            <div ng-messages="distWorkflowItem_form.comments.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
                         </md-input-container>
                     </div>
                 </form>

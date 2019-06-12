@@ -21,6 +21,9 @@
                     <th ng-if="!ctrl.selectedWorkflowItems.length" md-column>
                         {{lang.comment}}
                     </th>
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length">
+                        {{lang.secure_action}}
+                    </th>
                     <th md-column
                         ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification">
                         <md-menu>
@@ -120,11 +123,11 @@
                         </md-select>
                     </td>
                     <td md-cell>
-                        <div md-truncate style="max-width: 100px;"  ng-if="!workflowItem.showCommentDropdown"
-                              class="select-wf-action-text"
-                              ng-class="{'no-value': !workflowItem.getComments()}"
-                              ng-click="ctrl.toggleCommentDropdown(workflowItem, $event)"
-                              tooltip="{{ctrl.getCommentText(workflowItem)}}">
+                        <div md-truncate style="max-width: 100px;" ng-if="!workflowItem.showCommentDropdown"
+                             class="select-wf-action-text"
+                             ng-class="{'no-value': !workflowItem.getComments()}"
+                             ng-click="ctrl.toggleCommentDropdown(workflowItem, $event)"
+                             tooltip="{{ctrl.getCommentText(workflowItem)}}">
                             {{ctrl.getCommentText(workflowItem)}}
                         </div>
                         <md-select ng-if="workflowItem.showCommentDropdown"
@@ -150,6 +153,15 @@
                                         md-highlight-flags="i">{{comment.getCommentTitle()}}</span>
                             </md-option>
                         </md-select>
+                    </td>
+                    <td md-cell>
+                        <div ng-if="workflowItem.isUser()" flex>
+                            <md-checkbox
+                                    ng-model="workflowItem.isSecureAction"
+                                    tooltip="{{lang.secure_action}}"
+                                    aria-label="{{lang.secure_action}}">
+                            </md-checkbox>
+                        </div>
                     </td>
                     <td md-cell
                         ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification">

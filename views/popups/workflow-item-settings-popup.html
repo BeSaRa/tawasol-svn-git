@@ -42,6 +42,17 @@
                             </md-checkbox>
                         </div>
                     </div>
+                    <div>
+                        <div flex>
+                            <!-- Secure Action -->
+                            <md-checkbox
+                                    ng-model="ctrl.distWorkflowItem.isSecureAction"
+                                    aria-label="{{lang.secure_action}}">
+                                {{lang.secure_action}}
+                            </md-checkbox>
+                            <div class="help-text-div">{{lang.secure_action_note}}</div>
+                        </div>
+                    </div>
                     <div layout="row">
                         <md-input-container flex>
                             <label for="comment">{{lang.select_comment}}</label>
@@ -57,7 +68,11 @@
                         <md-input-container flex>
                             <label for="comments"> {{lang.type_your_comment}}</label>
                             <textarea rows="5" id="comments" name="comments"
-                                      ng-model="ctrl.distWorkflowItem.comments"></textarea>
+                                      ng-model="ctrl.distWorkflowItem.comments"
+                                      ng-required="ctrl.distWorkflowItem.isSecureAction"></textarea>
+                            <div ng-messages="distWorkflowItem_form.comments.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
                         </md-input-container>
                     </div>
                 </form>

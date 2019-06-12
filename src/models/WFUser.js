@@ -14,6 +14,7 @@ module.exports = function (app) {
             self.parent = null;
             self.parentId = null;
             self.proxyInfo = null;
+            self.isSecureAction = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];

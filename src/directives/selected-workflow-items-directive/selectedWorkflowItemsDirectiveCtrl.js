@@ -45,7 +45,8 @@ module.exports = function (app) {
                 .setComments(result.comments)
                 .setAction(result.action)
                 .setSendEmail(result.sendEmail)
-                .setSendSMS(result.sendSMS);
+                .setSendSMS(result.sendSMS)
+                .setSecureAction(result.isSecureAction);
             // hide the comment dropdown
             distWorkflowItem.showCommentDropdown = false;
         }

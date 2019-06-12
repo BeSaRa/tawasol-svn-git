@@ -103,7 +103,8 @@ module.exports = function (app) {
                         .setComments(result.comments)
                         .setAction(result.action)
                         .setSendSMS(result.sendSMS)
-                        .setSendEmail(result.sendEmail);
+                        .setSendEmail(result.sendEmail)
+                        .setSecureAction(result.isSecureAction);
                 }
             } else {
                 distWorkflowItem
@@ -111,7 +112,8 @@ module.exports = function (app) {
                     .setComments(result.comments)
                     .setAction(result.action)
                     .setSendSMS(result.sendSMS)
-                    .setSendEmail(result.sendEmail);
+                    .setSendEmail(result.sendEmail)
+                    .setSecureAction(result.isSecureAction);
             }
         }
 
