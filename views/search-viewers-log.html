@@ -39,15 +39,15 @@
                                                       ng-click="ctrl.showViewerLog(record, $event)"
                                                       ng-class="{'background-warning' : (ctrl.selectedDocument.getInfo().vsId === record.getInfo().vsId)}">
                                             <div class="md-list-item-text" layout="column">
-                                                <a href=""
+                                                <a href="" class="font-bold"
                                                    ng-click="ctrl.showViewerLog(record, $event, true)"
                                                    tooltip="{{record.getTranslatedName()}}" md-truncate>
                                                     {{record.getTranslatedName()}}
                                                 </a>
                                                 <div layout="row">
-                                                    <h3>{{record.createdOn}}</h3>
+                                                    <h3 class="font-bold">{{record.createdOn}}</h3>
                                                     <span flex=""></span>
-                                                    <h3>{{record.docFullSerial}}</h3>
+                                                    <h3 class="font-bold">{{record.docFullSerial}}</h3>
                                                 </div>
                                             </div>
                                             <md-icon md-svg-icon="delete" title="{{lang.remove}}"
