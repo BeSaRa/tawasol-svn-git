@@ -117,6 +117,10 @@
                                                 <span>{{lang.action}}</span>
                                             </th>
                                             <th md-column ng-if="!ctrl.selectedLogs.length"
+                                                md-order-by="updatedOn">
+                                                <span>{{lang.action_date}}</span>
+                                            </th>
+                                            <th md-column ng-if="!ctrl.selectedLogs.length"
                                                 md-order-by="key">
                                                 <span>{{lang.watermark}}</span>
                                             </th>
@@ -128,6 +132,7 @@
                                             ng-repeat="log in ctrl.viewerLogs | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                             <td md-cell>{{log.userInfo.getTranslatedName()}}</td>
                                             <td md-cell>{{log.itemTypeInfo.getTranslatedName()}}</td>
+                                            <td md-cell>{{log.updatedOnString}}</td>
                                             <td md-cell>{{log.key}}</td>
                                         </tr>
                                         <tr md-row ng-if="!ctrl.viewerLogs.length">

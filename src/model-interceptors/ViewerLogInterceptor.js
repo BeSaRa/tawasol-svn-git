@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
-                      Information) {
+                      Information,
+                      generator) {
         'ngInject';
 
         var modelName = 'ViewerLog';
@@ -10,6 +11,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            delete model.updatedOnString;
             return model;
         });
 
@@ -17,6 +19,7 @@ module.exports = function (app) {
             model.userInfo = new Information(model.userInfo);
             model.itemTypeInfo = new Information(model.itemTypeInfo);
             model.documentTypeInfo = new Information(model.documentTypeInfo);
+            model.updatedOnString = generator.getDateFromTimeStamp(model.updatedOn, true);
             return model;
         });
 
