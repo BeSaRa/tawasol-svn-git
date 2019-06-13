@@ -109,17 +109,20 @@ module.exports = function (app) {
                 classifications: {
                     model: OUClassification,
                     merge: 'ouClassifications',
-                    property: 'classification'
+                    property: 'classification',
+                    actualModel: Classification
                 },
                 documentFiles: {
                     model: OUDocumentFile,
                     merge: 'ouDocumentFiles',
-                    property: 'file'
+                    property: 'file',
+                    actualModel: DocumentFile
                 },
                 distributionList: {
                     model: OUDistributionList,
                     merge: 'ouDistributionList',
-                    property: 'distributionList'
+                    property: 'distributionList',
+                    actualModel: DistributionList
                 }
             },
             defaultEntityTypes = ['COMPANY', 'EMPLOYEE', 'EXTERNAL_USER']; // default entity types.
@@ -830,7 +833,7 @@ module.exports = function (app) {
          * @param lookups
          * @returns {*}
          */
-        self.prepareLookupHierarchy = function (lookups) {
+        self.prepareLookupHierarchy = function (lookups, parentLookup) {
             // change model structure
             var children;
 
@@ -847,6 +850,15 @@ module.exports = function (app) {
                 children = _.filter(lookups[key + 'Flat'], function (model) {
                     return !!(model[value.property].parent);
                 });
+
+                // if parent is empty and children exists
+                // parentLookup is used just to initialize new model array to make a parent array
+                if (!lookups[key].length && children.length && parentLookup) {
+                    parentLookup = parentLookup.hasOwnProperty('id') ? parentLookup.id : parentLookup;
+                    var mappedModel = {};
+                    mappedModel[value.property] = new value.actualModel({id: parentLookup});
+                    lookups[key] = [new value.model(mappedModel)];
+                }
                 // set children for lookups
                 lookups[key] = _.map(lookups[key], function (model) {
                     model[value.property].children = _.map(_.filter(children, function (child) {

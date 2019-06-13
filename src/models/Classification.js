@@ -67,6 +67,14 @@ module.exports = function (app) {
             Classification.prototype.getTranslatedName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            Classification.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
+            };
             Classification.prototype.appendChild = function (classification) {
                 this.children.push(classification);
                 return this;

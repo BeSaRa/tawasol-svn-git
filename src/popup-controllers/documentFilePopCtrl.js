@@ -49,8 +49,7 @@ module.exports = function (app) {
                             defer.resolve(true)
                         })
                 })
-            }
-            else {
+            } else {
                 defer.resolve(true);
             }
             return defer.promise.then(function () {
@@ -60,7 +59,7 @@ module.exports = function (app) {
 
 
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
-        if (documentClassFromUser){
+        if (documentClassFromUser) {
             self.securityLevels = correspondenceService.getLookup(documentClassFromUser, 'securityLevels');
         }
         self.parentDocumentFiles = _.filter(documentFileService.documentFiles, function (documentFile) {
@@ -188,8 +187,7 @@ module.exports = function (app) {
                                 toast.success(langService.get('save_success'));
                                 self.toggleRelatedOuForm();
                             })
-                    }
-                    else {
+                    } else {
                         self.model = angular.copy(self.documentFile);
                         toast.success(langService.get('save_success'));
                         self.toggleRelatedOuForm();
@@ -216,8 +214,7 @@ module.exports = function (app) {
                             self.model = angular.copy(self.documentFile);
                             toast.success(langService.get('delete_success'));
                         });
-                    }
-                    else {
+                    } else {
                         // update the model so that the reset will work on latest values
                         self.model = angular.copy(self.documentFile);
                         toast.success(langService.get('delete_success'));

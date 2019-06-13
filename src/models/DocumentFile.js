@@ -39,6 +39,14 @@ module.exports = function (app) {
             DocumentFile.prototype.getTranslatedName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            DocumentFile.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
+            };
 
             /**
              * @description Get the globalization of sms template as Yes or No instead of true or false.

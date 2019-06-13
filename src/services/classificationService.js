@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                    $q,
                                                    generator,
                                                    Classification,
+                                                   OUClassification,
                                                    _) {
         'ngInject';
         var self = this;
@@ -49,6 +50,40 @@ module.exports = function (app) {
                     self.classifications = generator.interceptReceivedCollection('Classification', self.classifications);
                     return self.classifications;
                 });
+        };
+
+        /**
+         * @description load classifications(global and private to current OU) with searchText
+         * @param searchText
+         * @param securityLevel
+         * @param parent
+         * @return {*}
+         */
+        self.loadClassificationsPairBySearchText = function (searchText, securityLevel, parent) {
+            if (typeof securityLevel === 'undefined') {
+                securityLevel = null;
+            } else {
+                if (securityLevel !== null && securityLevel.hasOwnProperty('lookupKey'))
+                    securityLevel = securityLevel.lookupKey;
+            }
+            if (typeof parent === 'undefined' || parent == null) {
+                parent = null;
+            } else {
+                if (parent.hasOwnProperty('id'))
+                    parent = parent.id;
+            }
+            return $http.get(urlService.entityBySearchText.replace('{entityName}', 'classification'), {
+                params: {
+                    criteria: searchText,
+                    parent: parent,
+                    securityLevel: securityLevel
+                }
+            }).then(function (result) {
+                result = result.data.rs;
+                result.first = generator.interceptReceivedCollection('Classification', generator.generateCollection(result.first, Classification, self._sharedMethods));
+                result.second = generator.interceptReceivedCollection('OUClassification', generator.generateCollection(result.second, OUClassification));
+                return result;
+            });
         };
 
         /**

@@ -46,7 +46,7 @@ module.exports = function (app) {
              */
             documentTypeAdd: function ($event, documentClassFromUser) {
                 var documentClassLookup;
-                if (documentClassFromUser){
+                if (documentClassFromUser) {
                     documentClassLookup = _.filter(lookupService.returnLookups(lookupService.documentClass), function (lookup) {
                         return lookup.lookupStrKey.toLowerCase() === documentClassFromUser.toLowerCase();
                     });
@@ -84,7 +84,8 @@ module.exports = function (app) {
                         locals: {
                             editMode: true,
                             documentType: documentType,
-                            documentTypes: self.documentTypes
+                            documentTypes: self.documentTypes,
+                            documentClassFromUser: null
                         }
                     });
             },

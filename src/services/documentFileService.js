@@ -1,14 +1,15 @@
 module.exports = function (app) {
     app.service('documentFileService', function (urlService,
-                                                    $http,
-                                                    $q,
-                                                    generator,
-                                                    DocumentFile,
-                                                    _,
-                                                    dialog,
-                                                    langService,
-                                                    toast,
-                                                    cmsTemplate) {
+                                                 $http,
+                                                 $q,
+                                                 generator,
+                                                 DocumentFile,
+                                                 _,
+                                                 dialog,
+                                                 langService,
+                                                 toast,
+                                                 cmsTemplate,
+                                                 OUDocumentFile) {
         'ngInject';
         var self = this;
         self.serviceName = 'documentFileService';
@@ -20,7 +21,6 @@ module.exports = function (app) {
          */
         self.loadDocumentFiles = function () {
             return $http.get(urlService.documentFiles).then(function (result) {
-                //console.log('load response', angular.copy(result.data.rs));
                 self.documentFiles = generator.generateCollection(result.data.rs, DocumentFile, self._sharedMethods);
                 self.documentFiles = generator.interceptReceivedCollection('DocumentFile', self.documentFiles);
                 return self.documentFiles;
@@ -35,7 +35,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description search in classifications .
+         * @description search in document files .
          * @param searchText
          * @param parent
          * @return {*}
@@ -83,6 +83,40 @@ module.exports = function (app) {
         };
 
         /**
+         * @description load document files(global and private to current OU) with searchText
+         * @param searchText
+         * @param securityLevel
+         * @param parent
+         * @return {*}
+         */
+        self.loadDocumentFilesBySearchText = function (searchText, securityLevel, parent) {
+            if (typeof securityLevel === 'undefined' || securityLevel == null) {
+                securityLevel = null;
+            } else {
+                if (securityLevel.hasOwnProperty('lookupKey'))
+                    securityLevel = securityLevel.lookupKey;
+            }
+            if (typeof parent === 'undefined' || parent == null) {
+                parent = null;
+            } else {
+                if (parent.hasOwnProperty('id'))
+                    parent = parent.id;
+            }
+            return $http.get(urlService.entityBySearchText.replace('{entityName}', 'document-file'), {
+                params: {
+                    criteria: searchText,
+                    parent: parent,
+                    securityLevel: securityLevel
+                }
+            }).then(function (result) {
+                result = result.data.rs;
+                result.first = generator.interceptReceivedCollection('DocumentFile', generator.generateCollection(result.first, DocumentFile, self._sharedMethods));
+                result.second = generator.interceptReceivedCollection('OUDocumentFile', generator.generateCollection(result.second, OUDocumentFile));
+                return result;
+            });
+        };
+
+        /**
          * @description Contains methods for CRUD operations for document files
          */
         self.controllerMethod = {
@@ -104,7 +138,7 @@ module.exports = function (app) {
                         locals: {
                             editMode: false,
                             documentFile: documentFile,
-                            documentClassFromUser: documentClassFromUser
+                            documentClassFromUser: documentClassFromUser || null
                         }
                     });
             },
@@ -117,7 +151,8 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         locals: {
                             editMode: true,
-                            documentFile: documentFile
+                            documentFile: documentFile,
+                            documentClassFromUser: null
                         }
                     });
             },
@@ -353,8 +388,7 @@ module.exports = function (app) {
             return _.filter(self.documentFiles, function (documentFile) {
                 if ((typeof documentFile.parent) === 'number') {
                     return Number(documentFile.parent) === Number(parentID);
-                }
-                else {
+                } else {
                     return Number(documentFile.parent ? documentFile.parent.id : null) === Number(parentID);
                 }
             });
@@ -386,7 +420,6 @@ module.exports = function (app) {
                 return Number(parentId) === Number(fileId);
             });
         };
-
 
 
         /**

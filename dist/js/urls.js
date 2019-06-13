@@ -319,8 +319,10 @@
                 .addToAllWithBase('g2gInbox', '/g2g/')
                 // document security in global settings
                 .addToAllWithBase('documentSecurity', 'cms-entity/admin/documentsecurity')
-                // url for pagination for the users.
+                // load entity/lookups with limit
                 .addToAllWithBase('entityWithlimit', 'cms-entity/admin/{entityName}/limit/{number}')
+                // load entity/lookups with search text
+                .addToAllWithBase('entityBySearchText', 'cms-entity/admin/{entityName}/lookup/criteria')
                 // get children for the mainEntities
                 .addToAllWithBase('childrenEntities', 'cms-entity/admin/{entityName}/childs/{entityId}')
                 // menu items
