@@ -87,9 +87,10 @@ module.exports = function (app) {
          * @param searchText
          * @param securityLevel
          * @param parent
+         * @param ignoreStatus
          * @return {*}
          */
-        self.loadDocumentFilesBySearchText = function (searchText, securityLevel, parent) {
+        self.loadDocumentFilesBySearchText = function (searchText, securityLevel, parent, ignoreStatus) {
             if (typeof securityLevel === 'undefined' || securityLevel == null) {
                 securityLevel = null;
             } else {
@@ -106,7 +107,8 @@ module.exports = function (app) {
                 params: {
                     criteria: searchText,
                     parent: parent,
-                    securityLevel: securityLevel
+                    securityLevel: securityLevel,
+                    ignoreStatus: ignoreStatus
                 }
             }).then(function (result) {
                 result = result.data.rs;

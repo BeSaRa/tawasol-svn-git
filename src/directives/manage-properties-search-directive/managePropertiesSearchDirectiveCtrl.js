@@ -658,7 +658,7 @@ module.exports = function (app) {
                 self.classifications = searchResult;
             } else {
                 if (self.mainClassificationSearchText) {
-                    classificationService.loadClassificationsPairBySearchText(self.mainClassificationSearchText, self.document.securityLevel, null)
+                    classificationService.loadClassificationsPairBySearchText(self.mainClassificationSearchText, self.document.securityLevel, null, true)
                         .then(function (result) {
                             if (result.first.length || result.second.length) {
                                 var lookups = {classifications: result.first, ouClassifications: result.second},
@@ -696,7 +696,7 @@ module.exports = function (app) {
                     self.document.mainClassification.children = searchResult;
                 } else {
                     if (self.subClassificationSearchText) {
-                        classificationService.loadClassificationsPairBySearchText(self.subClassificationSearchText, self.document.securityLevel, self.document.mainClassification)
+                        classificationService.loadClassificationsPairBySearchText(self.subClassificationSearchText, self.document.securityLevel, self.document.mainClassification, true)
                             .then(function (result) {
                                 var lookups = {classifications: result.first, ouClassifications: result.second},
                                     classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups, self.document.mainClassification).classifications,
@@ -735,7 +735,7 @@ module.exports = function (app) {
                 self.documentFiles = searchResult;
             } else {
                 if (self.documentFileSearchText) {
-                    documentFileService.loadDocumentFilesBySearchText(self.documentFileSearchText, self.document.securityLevel)
+                    documentFileService.loadDocumentFilesBySearchText(self.documentFileSearchText, self.document.securityLevel, null, true)
                         .then(function (result) {
                             var lookups = {documentFiles: result.first, ouDocumentFiles: result.second},
                                 documentFilesUnion = correspondenceService.prepareLookupHierarchy(lookups).documentFiles;
