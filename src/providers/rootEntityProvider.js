@@ -142,7 +142,8 @@ module.exports = function (app) {
                     return this.returnRootEntity().settings;
                 },
                 setRootEntityGlobalSetting: function (globalSetting, interceptReceived) {
-                    rootEntity.setGlobalSetting(interceptReceived ? generator.interceptReceivedInstance('GlobalSetting', new GlobalSetting(globalSetting)) : globalSetting);
+                    if (globalSetting)
+                        rootEntity.setGlobalSetting(interceptReceived ? generator.interceptReceivedInstance('GlobalSetting', new GlobalSetting(globalSetting)) : globalSetting);
                 },
                 setFileTypesHashMap: function (map) {
                     rootEntity.setFileTypesHashMapToGlobalSettings(map);
