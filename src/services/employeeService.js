@@ -63,7 +63,9 @@ module.exports = function (app) {
                     enFullName: 'SuperAdmin',
                     isAdmin: true,
                     defaultDisplayLang: 1,
-                    isCloudAdmin: result.isCloudAdmin
+                    isCloudAdmin: result.isCloudAdmin,
+                    isSuperAdmin: result.isSuperAdmin,
+                    isSubAdmin: result.isSuperAdmin
                 });
                 if (result.isAdminUser) {
                     employee.setPermissions(result.permissions); // set permissions
@@ -71,6 +73,10 @@ module.exports = function (app) {
                 }
             } else {
                 employee = generator.interceptReceivedInstance('ApplicationUser', new Employee(result.userInfo));
+                employee.isCloudAdmin = result.isCloudAdmin;
+                employee.isSuperAdmin = result.isSuperAdmin;
+                employee.isSubAdmin = result.isSuperAdmin;
+                employee.isAdmin = result.isAdminUser;
             }
             // set globalSetting for root entity
             if (result.hasOwnProperty('globalSetting') && result.globalSetting)
@@ -181,15 +187,35 @@ module.exports = function (app) {
             return employee ? employee.hasPermissionTo.apply(employee, arguments) : false;
         };
         /**
-         * if the current employee is admin.
+         * @description Checks if the current employee is admin.
          * @returns {boolean}
          */
         self.isAdminUser = function () {
             return employee && employee.isAdmin;
         };
 
+        /**
+         * @description Checks if the current employee is cloud-admin.
+         * @returns {boolean}
+         */
         self.isCloudUser = function () {
             return employee && employee.isCloudAdmin;
+        };
+
+        /**
+         * @description Checks if the current employee is super-admin.
+         * @returns {boolean}
+         */
+        self.isSuperAdminUser = function () {
+            return employee && employee.isSuperAdmin;
+        };
+
+        /**
+         * @description Checks if the current employee is sub-admin.
+         * @returns {boolean}
+         */
+        self.isSubAdminUser = function () {
+            return employee && employee.isSubAdmin;
         };
         /**
          * @description if the current employee has proxy user.

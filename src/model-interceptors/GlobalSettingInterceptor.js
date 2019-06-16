@@ -4,7 +4,8 @@ module.exports = function (app) {
                       generator,
                       BarcodeSetting,
                       applicationUserService,
-                      themeService) {
+                      themeService,
+                      _) {
         'ngInject';
 
         var modelName = 'GlobalSetting';
