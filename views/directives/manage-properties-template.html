@@ -176,10 +176,21 @@
                                ng-model="ctrl.document.mainClassification"
                                ng-model-options="{trackBy: '$value.id'}"
                                ng-required="ctrl.checkMandatory('mainClassification')"
-                               ng-change="ctrl.onChangeMainClassification($event)">
+                               ng-change="ctrl.onChangeMainClassification($event)"
+                               md-on-close="ctrl.clearSearchText('mainClassification')"
+                               data-md-container-class="select-header-container">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.mainClassificationSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   ng-change="ctrl.filterDropdownRecords($event, 'mainClassification')"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
                         <md-option ng-value="classification.classification"
                                    ng-repeat="classification in ctrl.classifications">
-                            {{classification.classification.getTranslatedName()}}
+                            <span
+                                    md-highlight-text="ctrl.mainClassificationSearchText"
+                                    md-highlight-flags="i">{{classification.classification.getTranslatedName()}}</span>
                         </md-option>
                     </md-select>
                     <div ng-messages="outgoing_properties.mainClassification.$error">
@@ -195,10 +206,21 @@
                             id="subClassification"
                             ng-model-options="{trackBy: '$value.id'}"
                             ng-model="ctrl.document.subClassification"
-                            ng-required="ctrl.checkMandatory('subClassification')">
+                            ng-required="ctrl.checkMandatory('subClassification')"
+                            md-on-close="ctrl.clearSearchText('subClassification')"
+                            data-md-container-class="select-header-container">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.subClassificationSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   ng-change="ctrl.filterDropdownRecords($event, 'subClassification')"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
                         <md-option ng-value="classification"
                                    ng-repeat="classification in ctrl.document.mainClassification.children">
-                            {{classification.getTranslatedName()}}
+                            <span
+                                    md-highlight-text="ctrl.subClassificationSearchText"
+                                    md-highlight-flags="i">{{classification.getTranslatedName()}}</span>
                         </md-option>
                     </md-select>
                     <div ng-messages="outgoing_properties.subClassification.$error">
@@ -263,10 +285,21 @@
                                ng-model="ctrl.document.fileId"
                                ng-disabled="!!ctrl.disableProperties"
                                ng-model-options="{trackBy: '$value.id'}"
-                               ng-required="ctrl.checkMandatory('fileId')">
+                               ng-required="ctrl.checkMandatory('fileId')"
+                               md-on-close="ctrl.clearSearchText('documentFile')"
+                               data-md-container-class="select-header-container">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.documentFileSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   ng-change="ctrl.filterDropdownRecords($event, 'documentFile')"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
                         <md-option ng-value="file.file"
                                    ng-repeat="file in ctrl.documentFiles">
-                            {{file.file.getTranslatedName()}}
+                            <span
+                                    md-highlight-text="ctrl.documentFileSearchText"
+                                    md-highlight-flags="i">{{file.file.getTranslatedName()}}</span>
                         </md-option>
                     </md-select>
                     <div ng-messages="outgoing_properties.fileId.$error">

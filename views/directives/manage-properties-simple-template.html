@@ -143,7 +143,8 @@
             <div layout="row">
                 <!-- Date -->
                 <md-input-container flex>
-                    <label for="docDate">{{ctrl.document.hasDocumentClass('outgoing') ? lang.document_date : lang.incoming_date }} ({{ctrl.defaultDateFormat}})</label>
+                    <label for="docDate">{{ctrl.document.hasDocumentClass('outgoing') ? lang.document_date :
+                        lang.incoming_date }} ({{ctrl.defaultDateFormat}})</label>
                     <input aria-label="docDate" id="docDate"
                            tooltip="{{lang.document_date}}"
                            type="text" name="docDate"
@@ -170,7 +171,8 @@
             <div layout="row" ng-if="ctrl.document.hasDocumentClass('incoming')">
                 <!-- refDocDate (date of referenced document) -->
                 <md-input-container flex>
-                    <label for="refDocDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.document_date : lang.incoming_date }} ({{ctrl.defaultDateFormat}})</label>
+                    <label for="refDocDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.document_date :
+                        lang.incoming_date }} ({{ctrl.defaultDateFormat}})</label>
                     <input aria-label="refDocDate" id="refDocDate"
                            tooltip="{{lang.incoming_date}}"
                            type="text" name="refDocDate"
@@ -203,10 +205,21 @@
                                ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.mainClassification"
                                ng-model-options="{trackBy: '$value.id'}"
-                               ng-required="ctrl.checkMandatory('mainClassification')">
+                               ng-required="ctrl.checkMandatory('mainClassification')"
+                               md-on-close="ctrl.clearSearchText('mainClassification')"
+                               data-md-container-class="select-header-container">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.mainClassificationSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   ng-change="ctrl.filterDropdownRecords($event, 'mainClassification')"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
                         <md-option ng-value="classification.classification"
                                    ng-repeat="classification in ctrl.classifications">
-                            {{classification.classification.getTranslatedName()}}
+                            <span
+                                    md-highlight-text="ctrl.mainClassificationSearchText"
+                                    md-highlight-flags="i">{{classification.classification.getTranslatedName()}}</span>
                         </md-option>
                     </md-select>
                     <div ng-messages="outgoing_properties.mainClassification.$error">
@@ -222,10 +235,21 @@
                             id="subClassification"
                             ng-model-options="{trackBy: '$value.id'}"
                             ng-model="ctrl.document.subClassification"
-                            ng-required="ctrl.checkMandatory('subClassification')">
+                            ng-required="ctrl.checkMandatory('subClassification')"
+                            md-on-close="ctrl.clearSearchText('subClassification')"
+                            data-md-container-class="select-header-container">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.subClassificationSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   ng-change="ctrl.filterDropdownRecords($event, 'subClassification')"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
                         <md-option ng-value="classification"
                                    ng-repeat="classification in ctrl.document.mainClassification.children">
-                            {{classification.getTranslatedName()}}
+                            <span
+                                    md-highlight-text="ctrl.subClassificationSearchText"
+                                    md-highlight-flags="i">{{classification.getTranslatedName()}}</span>
                         </md-option>
                     </md-select>
                     <div ng-messages="outgoing_properties.subClassification.$error">

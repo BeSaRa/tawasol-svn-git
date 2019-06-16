@@ -671,6 +671,9 @@ module.exports = function (app) {
                                 self.classifications = [];
                             }
                         })
+                        .catch(function (error) {
+                            self.classifications = angular.copy(self.classificationsCopy);
+                        })
                 }
             }
         };
@@ -717,6 +720,9 @@ module.exports = function (app) {
                                     self.document.mainClassification.children = [];
                                 }
                             })
+                            .catch(function (error) {
+                                self.document.mainClassification.children = angular.copy(subClassificationsCopy);
+                            })
                     }
                 }
             }
@@ -746,6 +752,9 @@ module.exports = function (app) {
                             } else {
                                 self.documentFiles = [];
                             }
+                        })
+                        .catch(function (error) {
+                            self.documentFiles = angular.copy(self.documentFilesCopy);
                         })
                 }
             }

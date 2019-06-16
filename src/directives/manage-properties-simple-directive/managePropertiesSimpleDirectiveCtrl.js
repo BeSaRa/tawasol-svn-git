@@ -13,7 +13,10 @@ module.exports = function (app) {
                                                                     LangWatcher,
                                                                     generator,
                                                                     moment,
-                                                                    $stateParams) {
+                                                                    $stateParams,
+                                                                    classificationService,
+                                                                    gridService,
+                                                                    _) {
         'ngInject';
         var self = this;
         self.controllerName = 'managePropertiesDirectiveSimpleCtrl';
@@ -27,7 +30,9 @@ module.exports = function (app) {
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.documentFiles = [];
         self.classifications = [];
-        var required = {};
+
+        self.mainClassificationSearchText = '';
+        self.subClassificationSearchText = '';
 
         $timeout(function () {
             // all system organizations
@@ -84,10 +89,12 @@ module.exports = function (app) {
                 return $timeout(function () {
                     self.documentFiles = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'documentFiles'));
                     self.documentFiles = _displayCorrectDocumentFiles(self.documentFiles);
+                    self.documentFilesCopy = angular.copy(self.documentFiles);
                 });
             } else {
                 self.documentFiles = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'documentFiles'));
                 self.documentFiles = _displayCorrectDocumentFiles(self.documentFiles);
+                self.documentFilesCopy = angular.copy(self.documentFiles);
             }
         }
 
@@ -102,10 +109,12 @@ module.exports = function (app) {
                 return $timeout(function () {
                     self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
                     self.classifications = _displayCorrectClassifications(self.classifications);
+                    self.classificationsCopy = angular.copy(self.classifications);
                 });
             } else {
                 self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
                 self.classifications = _displayCorrectClassifications(self.classifications);
+                self.classificationsCopy = angular.copy(self.classifications);
             }
 
         }
@@ -419,5 +428,132 @@ module.exports = function (app) {
             return (isApproved && hasPermission);
             //return (isApproved && ((info.documentClass === "outgoing" || info.documentClass === "internal") && !info.isPaper) && hasPermission);
         };*/
+
+
+
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+            $timeout(function () {
+                if (fieldType === 'mainClassification' || fieldType === 'subClassification') {
+                    self.classifications = angular.copy(self.classificationsCopy);
+                }
+            })
+        };
+
+
+        var _filterSearchMainClassifications = function () {
+            var searchResult = gridService.searchGridData({
+                searchText: self.mainClassificationSearchText,
+                searchColumns: {
+                    arName: langService.current === 'ar' ? 'classification.arName' : '',
+                    enName: langService.current === 'en' ? 'classification.enName' : '',
+                }
+            }, self.classificationsCopy);
+            if (searchResult && searchResult.length) {
+                self.classifications = searchResult;
+            } else {
+                if (self.mainClassificationSearchText) {
+                    classificationService.loadClassificationsPairBySearchText(self.mainClassificationSearchText, self.document.securityLevel, null, false)
+                        .then(function (result) {
+                            if (result.first.length || result.second.length) {
+                                var lookups = {classifications: result.first, ouClassifications: result.second},
+                                    classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups).classifications;
+
+                                self.classifications = self.classifications.concat(classificationsUnion);
+                                self.classificationsCopy = self.classificationsCopy.concat(classificationsUnion);
+                                self.filterDropdownRecords(null, 'mainClassification', true);
+                            } else {
+                                self.classifications = [];
+                            }
+                        })
+                        .catch(function (error) {
+                            self.classifications = angular.copy(self.classificationsCopy);
+                        })
+                }
+            }
+        };
+
+        var _filterSearchSubClassifications = function () {
+            if (self.document.mainClassification) {
+                var mainClassification = _.find(self.classifications, function (classification) {
+                        return classification.classification.id === self.document.mainClassification.id;
+                    }).classification,
+                    mainClassificationCopy = _.find(self.classificationsCopy, function (classification) {
+                        return classification.classification.id === self.document.mainClassification.id;
+                    }).classification,
+                    subClassificationsCopy = mainClassificationCopy.children;
+
+                var searchResult = gridService.searchGridData({
+                    searchText: self.subClassificationSearchText,
+                    searchColumns: {
+                        arName: langService.current === 'ar' ? 'arName' : '',
+                        enName: langService.current === 'en' ? 'enName' : '',
+                    }
+                }, subClassificationsCopy);
+                if (searchResult && searchResult.length) {
+                    self.document.mainClassification.children = searchResult;
+                } else {
+                    if (self.subClassificationSearchText) {
+                        classificationService.loadClassificationsPairBySearchText(self.subClassificationSearchText, self.document.securityLevel, self.document.mainClassification, false)
+                            .then(function (result) {
+                                var lookups = {classifications: result.first, ouClassifications: result.second},
+                                    classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups, self.document.mainClassification).classifications,
+                                    subClassifications = [];
+
+                                _.map(classificationsUnion, function (ouClassification) {
+                                    subClassifications = subClassifications.concat(ouClassification.classification.children);
+                                    return ouClassification;
+                                });
+
+                                if (subClassifications && subClassifications.length) {
+                                    self.document.mainClassification.children = self.document.mainClassification.children.concat(subClassifications);
+                                    mainClassification.children = mainClassification.children.concat(subClassifications);
+
+                                    self.classificationsCopy = angular.copy(self.classifications);
+                                    self.filterDropdownRecords(null, 'subClassification');
+                                } else {
+                                    self.document.mainClassification.children = [];
+                                }
+                            })
+                            .catch(function (error) {
+                                self.document.mainClassification.children = angular.copy(subClassificationsCopy);
+                            })
+                    }
+                }
+            }
+        };
+
+
+        /**
+         * @description filter the dropdown with searchText or request service if searched record not found
+         * @param $event
+         * @param fieldType
+         */
+        self.filterDropdownRecords = function ($event, fieldType) {
+            $timeout(function () {
+                if (fieldType === 'mainClassification') {
+                    _filterSearchMainClassifications();
+                } else if (fieldType === 'subClassification') {
+                    _filterSearchSubClassifications()
+                }
+            })
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of selecting option on keydown inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
+        };
     });
 };
