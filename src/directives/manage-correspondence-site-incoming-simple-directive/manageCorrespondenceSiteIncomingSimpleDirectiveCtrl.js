@@ -13,20 +13,20 @@ module.exports = function (app) {
                                                                                     _,
                                                                                     correspondenceService,
                                                                                     toast,
-                                                                                    rootEntity) {
+                                                                                    rootEntity,
+                                                                                    gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSiteIncomingSimpleDirectiveCtrl';
         self.documentClass = 'incoming';
         self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
-        self.correspondenceSiteTypes.push(new CorrespondenceSiteType({
-            id: null,
-            arName: langService.getKey('not_found', 'ar'),
-            enName: langService.getKey('not_found', 'en')
-        }));
+
+        self.mainSites = [];
+        self.mainSitesCopy = angular.copy(self.mainSites);
+        debugger;
 
         self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
-        self.inlineMainSiteSearchText = '';
+        self.mainSiteSearchText = '';
 
         // model to search on correspondence sites type
         self.typeSearch = '';
@@ -347,7 +347,7 @@ module.exports = function (app) {
             self.selectedMainSite = null;
             self.selectedItem = null;
 
-            if (self.selectedSiteType.id) {
+            if (self.selectedSiteType) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                     criteria: null,
@@ -355,12 +355,7 @@ module.exports = function (app) {
                 }).then(function (result) {
                     self.subSearchResult = [];
                     self.mainSites = result;
-                    if (self.selectedSiteType && self.selectedSiteType.lookupKey === 1) {
-                        self.selectedMainSite = _.find(result, function (site) {
-                            return site.id === 10000000;
-                        });
-                        self.selectedMainSite ? self.getSubSites() : null;
-                    }
+                    _selectDefaultMainSiteAndGetSubSites();
                 });
             } else {
                 self.mainSites = [];
@@ -666,5 +661,63 @@ module.exports = function (app) {
             if (code !== 38 && code !== 40)
                 $event.stopPropagation();
         };
+
+
+        /**
+         * @description filter the dropdown with searchText or request service if searched record not found
+         * @param $event
+         * @param fieldType
+         */
+        self.filterDropdownRecords = function ($event, fieldType) {
+            $timeout(function () {
+                if (fieldType === 'mainSite') {
+                    _filterSearchMainSites();
+                }
+            })
+        };
+
+        var _filterSearchMainSites = function () {
+            var searchResult = gridService.searchGridData({
+                searchText: self.mainSiteSearchText,
+                searchColumns: {
+                    arName: langService.current === 'ar' ? 'arName' : '',
+                    enName: langService.current === 'en' ? 'enName' : '',
+                }
+            }, self.mainSitesCopy);
+            if (searchResult && searchResult.length) {
+                self.mainSites = searchResult;
+                _selectDefaultMainSiteAndGetSubSites();
+            } else {
+                if (self.mainSiteSearchText) {
+                    var siteType = self.selectedSiteType ? (self.selectedSiteType.hasOwnProperty('lookupKey') ? self.selectedSiteType.lookupKey : self.selectedSiteType) : null;
+                    correspondenceViewService.correspondenceSiteSearch('main', {
+                        type: siteType,
+                        criteria: self.mainSiteSearchText,
+                        excludeOuSites: false
+                    }).then(function (result) {
+                        if (result.length) {
+                            self.subSearchResult = [];
+                            self.mainSites = self.mainSites.concat(result);
+                            self.mainSitesCopy = angular.copy(self.mainSites);
+                            _selectDefaultMainSiteAndGetSubSites();
+                        } else {
+                            self.mainSites = [];
+                        }
+                    }).catch(function (error) {
+                        self.mainSites = angular.copy(self.mainSitesCopy);
+                    });
+                }
+            }
+        };
+
+        var _selectDefaultMainSiteAndGetSubSites = function () {
+            if (self.selectedSiteType && self.selectedSiteType.lookupKey === 1) {
+                self.selectedMainSite = _.find(self.mainSites, function (site) {
+                    return site.id === 10000000;
+                });
+                self.selectedMainSite ? self.getSubSites() : null;
+            }
+        };
+
     });
 };

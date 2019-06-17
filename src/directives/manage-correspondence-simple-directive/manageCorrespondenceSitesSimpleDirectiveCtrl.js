@@ -16,7 +16,8 @@ module.exports = function (app) {
                                                                              generator,
                                                                              SiteView,
                                                                              rootEntity,
-                                                                             toast) {
+                                                                             toast,
+                                                                             gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSitesSimpleDirectiveCtrl';
@@ -33,17 +34,15 @@ module.exports = function (app) {
             self.currentTab = tabName;
         };
         self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
-        self.inlineMainSiteSearchText = '';
-        // all correspondence site types
-        // self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
+        self.mainSiteSearchText = '';
+
         self.documentClass = null;
         $timeout(function () {
             self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
-            self.correspondenceSiteTypes.push(new CorrespondenceSiteType({
-                id: null,
-                arName: langService.getKey('not_found', 'ar'),
-                enName: langService.getKey('not_found', 'en')
-            }));
+            self.correspondenceSiteTypesCopy = angular.copy(self.correspondenceSiteTypes);
+
+            self.mainSites = [];
+            self.mainSitesCopy = angular.copy(self.mainSite);
 
             self.distributionLists = angular.copy(correspondenceService.getLookup(self.documentClass, 'distributionList'));
         });
@@ -103,6 +102,7 @@ module.exports = function (app) {
         self.subRecords = _concatCorrespondenceSites(true);
 
         self.sitesInfoLength = 0;
+
         /**
          * create current date + given days if provided.
          * @param days
@@ -464,7 +464,7 @@ module.exports = function (app) {
         self.onSiteTypeChange = function ($event) {
             self.selectedItem = null;
 
-            if (self.selectedSiteType.id) {
+            if (self.selectedSiteType) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                     criteria: null,
@@ -472,19 +472,16 @@ module.exports = function (app) {
                 }).then(function (result) {
                     self.subSearchResult = [];
                     self.mainSites = result;
+                    self.mainSitesCopy = angular.copy(self.mainSites);
                     self.selectedMainSite = null;
 
-                    if (self.selectedSiteType && self.selectedSiteType.lookupKey === 1) {
-                        self.selectedMainSite = _.find(result, function (site) {
-                            return site.id === 10000000;
-                        });
-                        self.selectedMainSite ? self.getSubSites() : null;
-                    }
+                    _selectDefaultMainSiteAndGetSubSites()
                 });
             } else {
                 self.mainSites = [];
+                self.mainSitesCopy = angular.copy(self.mainSites);
                 self.subSearchResult = [];
-                self.subSearchResultCopy = [];
+                self.subSearchResultCopy = angular.copy(self.subSearchResult);
                 self.selectedMainSite = null;
             }
         };
@@ -834,6 +831,11 @@ module.exports = function (app) {
          */
         self.clearSearchText = function (fieldType) {
             self[fieldType + 'SearchText'] = '';
+            $timeout(function () {
+                if (fieldType === 'mainSite') {
+                    self.mainSites = angular.copy(self.mainSitesCopy);
+                }
+            })
         };
 
         /**
@@ -841,10 +843,69 @@ module.exports = function (app) {
          * @param $event
          */
         self.preventSearchKeyDown = function ($event) {
-            var code = $event.which || $event.keyCode;
-            if (code !== 38 && code !== 40)
-                $event.stopPropagation();
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
         };
 
+
+        /**
+         * @description filter the dropdown with searchText or request service if searched record not found
+         * @param $event
+         * @param fieldType
+         */
+        self.filterDropdownRecords = function ($event, fieldType) {
+            $timeout(function () {
+                if (fieldType === 'mainSite') {
+                    _filterSearchMainSites();
+                }
+            })
+        };
+
+        var _filterSearchMainSites = function () {
+            var searchResult = gridService.searchGridData({
+                searchText: self.mainSiteSearchText,
+                searchColumns: {
+                    arName: langService.current === 'ar' ? 'arName' : '',
+                    enName: langService.current === 'en' ? 'enName' : '',
+                }
+            }, self.mainSitesCopy);
+            if (searchResult && searchResult.length) {
+                self.mainSites = searchResult;
+                _selectDefaultMainSiteAndGetSubSites();
+            } else {
+                if (self.mainSiteSearchText) {
+                    var siteType = self.selectedSiteType ? (self.selectedSiteType.hasOwnProperty('lookupKey') ? self.selectedSiteType.lookupKey : self.selectedSiteType) : null;
+                    correspondenceViewService.correspondenceSiteSearch('main', {
+                        type: siteType,
+                        criteria: self.mainSiteSearchText,
+                        excludeOuSites: false
+                    }).then(function (result) {
+                        if (result.length) {
+                            self.subSearchResult = [];
+                            self.mainSites = self.mainSites.concat(result);
+                            self.mainSitesCopy = angular.copy(self.mainSites);
+                            console.log('after search', self.mainSites);
+                            _selectDefaultMainSiteAndGetSubSites();
+                        } else {
+                            self.mainSites = [];
+                        }
+                    }).catch(function (error) {
+                        self.mainSites = angular.copy(self.mainSitesCopy);
+                    });
+                }
+            }
+        };
+
+        var _selectDefaultMainSiteAndGetSubSites = function () {
+            if (self.selectedSiteType && self.selectedSiteType.lookupKey === 1) {
+                self.selectedMainSite = _.find(self.mainSites, function (site) {
+                    return site.id === 10000000;
+                });
+                self.selectedMainSite ? self.getSubSites() : null;
+            }
+        };
     });
 };

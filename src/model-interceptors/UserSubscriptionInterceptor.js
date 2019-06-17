@@ -20,7 +20,8 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.actionDate = generator.getDateFromTimeStamp(model.actionDate, true);
-            model.docClassIndicator = new Indicator().getDocClassIndicator(generator.getDocumentClassName(model.docClassId));
+            if (model.hasOwnProperty("docClassId"))
+                model.docClassIndicator = new Indicator().getDocClassIndicator(generator.getDocumentClassName(model.docClassId));
             return model;
         });
 
