@@ -98,9 +98,12 @@
                                         <label for="ouLevel">{{lang.organization_level}}</label>
                                         <input id="ouLevel" name="ouLevel"
                                                ng-model="ctrl.organization.ouLevel"
+                                               min="1"
+                                               min-max-number-directive
                                                custom-validate-directive="number">
                                         <div ng-messages="org_form.ouLevel.$error">
                                             <div ng-message="number">{{lang.numberonly}}</div>
+                                            <div ng-message="min">{{lang.min_number.change({number:0})}}</div>
                                         </div>
                                     </md-input-container>
                                     <md-input-container flex>

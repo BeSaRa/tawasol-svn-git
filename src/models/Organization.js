@@ -59,7 +59,7 @@ module.exports = function (app) {
             self.parentId = null; // add by default must removed when i send the object
             self.g2gId = null;
             self.internalG2gId = null;
-            self.ouLevel = 0;
+            self.ouLevel = 1;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
