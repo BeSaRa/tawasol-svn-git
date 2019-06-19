@@ -149,8 +149,7 @@ module.exports = function (app) {
                                                 if (viceManager)
                                                     return ouApplicationUserResult.applicationUser.id !== viceManager.id;
                                                 return ouApplicationUserResult;
-                                            }
-                                            else if (property === 'viceManagerId') {
+                                            } else if (property === 'viceManagerId') {
                                                 var manager = organization.managerId;
                                                 if (manager)
                                                     return ouApplicationUserResult.applicationUser.id !== manager.id;
@@ -598,11 +597,14 @@ module.exports = function (app) {
         /**
          * @description search for ouApplicationUser by criteria.
          * @param criteria
+         * @param ignoreInterceptor to ignore interception for result
          */
-        self.searchByCriteria = function (criteria) {
+        self.searchByCriteria = function (criteria, ignoreInterceptor) {
             return $http
                 .post(urlService.ouApplicationUsers + '/search', criteria)
                 .then(function (result) {
+                    if (ignoreInterceptor)
+                        return result.data.rs;
                     return generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
                 });
         };

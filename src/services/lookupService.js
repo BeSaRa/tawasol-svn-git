@@ -33,6 +33,7 @@ module.exports = function (app) {
         self.attachmentUpdateAction = 'attachmentUpdateAction';
         self.menuItemType = 'menuItemType';
         self.menuItemParam = 'menuItemParam';
+        self.taskState = 'taskState';
 
         // this propertyConfiguration related to the property configurations Service.
         self.propertyConfigurations = {

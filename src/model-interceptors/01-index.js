@@ -102,4 +102,6 @@ module.exports = function (app) {
     require('./UserSubscriptionInterceptor')(app);
     require('./CreateReplyInterceptor')(app);
     require('./ViewerLogInterceptor')(app);
+    require('./TaskInterceptor')(app);
+    require('./TaskParticipantInterceptor')(app);
 };

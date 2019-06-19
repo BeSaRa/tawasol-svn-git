@@ -1,0 +1,27 @@
+<!-- start of view -->
+<div background-directive="tall" flex class="page-content">
+    <div layout="column" class="content">
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_my_tasks}}</span>
+            <md-button ng-click="ctrl.openAddTaskDialog($event)" class="md-icon-button"
+                       tooltip="{{lang.add_new_task}}">
+                <md-icon md-svg-icon="plus"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.reloadTasks()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+        </div><!-- page-header -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <tasks-calender-directive></tasks-calender-directive>
+                    </md-card>
+                </div>
+            </div>
+
+        </div><!-- page-content-->
+    </div>
+</div>
+<!-- end of view -->

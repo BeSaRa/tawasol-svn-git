@@ -1,10 +1,41 @@
 module.exports = function (app) {
-    app.service('taskService', function (urlService, $http , $q , generator, Task , _) {
+    app.service('taskService', function (urlService, $timeout, moment, configurationService, ouApplicationUserService, TaskParticipant, cmsTemplate, employeeService, dialog, $http, $q, generator, Task, _) {
         'ngInject';
         var self = this;
         self.serviceName = 'taskService';
 
         self.tasks = [];
+
+        self.calender = null;
+
+        self.classes = ['task-pending', 'task-canceled', 'task-in-progress', 'task-completed', 'task-undefined-state'];
+
+        self.gridActions = {};
+
+
+        self.hasGridActions = function (documentClass, callback) {
+            if (!self.gridActions.hasOwnProperty(documentClass)) {
+                self.gridActions[documentClass] = callback();
+            }
+        };
+
+        self.setCalender = function (calender) {
+            self.calender = calender;
+        };
+
+        self.getCalender = function () {
+            return $timeout(function () {
+                return self.calender;
+            });
+        };
+
+        self.reloadCalender = function () {
+            return self.loadEvents(self.calender.view.activeStart, self.calender.view.activeEnd)
+                .then(function () {
+                    return self.calender.refetchEvents();
+                });
+        };
+
 
         /**
          * @description load tasks from server.
@@ -31,9 +62,13 @@ module.exports = function (app) {
          */
         self.addTask = function (task) {
             return $http
-                .post(urlService.tasks,
+                .post(urlService.tasks + '/add-task',
                     generator.interceptSendInstance('Task', task))
-                .then(function () {
+                .then(function (result) {
+                    task.id = result.data.rs.id;
+                    _.map(task.taskParticipants, function (participant, index) {
+                        task.taskParticipants[index].id = result.data.rs.taskParticipants[index].id;
+                    });
                     return task;
                 });
         };
@@ -77,6 +112,152 @@ module.exports = function (app) {
             return _.find(self.tasks, function (task) {
                 return Number(task.id) === Number(taskId);
             });
+        };
+        /**
+         * @description get available user for current login user by his REG OU.
+         * @return {TaskParticipant[]}
+         */
+        self.getAvailableUsers = function () {
+            return ouApplicationUserService
+                .searchByCriteria({
+                    regOu: employeeService.getEmployee().getRegistryOUID(),
+                    includeChildOus: true,
+                    outOfOffice: false
+                }, true)
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('TaskParticipant', _.map(result, function (user) {
+                        return (new TaskParticipant()).generateFromOUApplicationUser(user);
+                    }));
+                })
+        };
+
+        self.deleteTaskParticipant = function (task, taskParticipant) {
+            return $http
+                .delete()
+                .then(function () {
+
+                });
+        };
+
+        self.saveTaskParticipant = function (task, taskParticipant) {
+            return $http
+                .post('asdad', generator.interceptSendInstance('TaskParticipant', taskParticipant))
+                .then(function (result) {
+                    taskParticipant.id = result;
+                    return taskParticipant;
+                });
+        };
+
+        self.changeTaskParticipantDuration = function (taskId, taskParticipant) {
+            return $http
+                .put(urlService.tasks + '/update-task-participant/task-id/' + taskId, generator.interceptSendInstance('TaskParticipant', taskParticipant));
+        };
+
+        self.loadEvents = function (fromDate, toDate) {
+            return $http.get(urlService.tasks + '/calender', {
+                params: {
+                    fromDate: generator.getTimeStampFromDate(fromDate),
+                    toDate: generator.getTimeStampFromDate(toDate)
+                }
+            }).then(function (result) {
+                return _.map(result.data.rs, function (event) {
+                    event.title = event.taskTitle;
+                    event.start = event.participantStartDate ? event.participantStartDate : event.taskStartDate;
+                    event.end = event.participantDueDate ? event.participantDueDate : event.taskDueDate;
+                    event.editable = (event.creator && event.taskState !== 3);
+                    event.classNames = (event.participantTaskState !== null) ? self.classes[event.participantTaskState] : self.classes[event.taskState];
+                    return event;
+                });
+            });
+        };
+
+        self.openSettingForParticipant = function (taskParticipant, task, editMode) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('task-participant-setting'),
+                    controller: 'taskParticipantSettingPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        editMode: editMode,
+                        taskParticipant: taskParticipant,
+                        task: task
+                    }
+                })
+        };
+
+        self.completeTask = function (taskId) {
+            return $http.put(urlService.tasks + '/complete/task-id/' + taskId, {});
+        };
+
+        self.completeTaskParticipant = function (taskId, taskParticipantId) {
+            return $http.put(urlService.tasks + '/complete/task-id/' + taskId + '/participant-id/' + taskParticipantId, {});
+        };
+
+        self.sendReminderForAllTaskParticipants = function (taskId) {
+            return $http.put(urlService.tasks + '/task-id/' + taskId + '/send-reminder', {});
+        };
+
+        self.findTaskById = function (taskId) {
+            console.log("taskId", taskId);
+            taskId = taskId.hasOwnProperty('id') ? taskId.id : taskId;
+            return $http
+                .get(urlService.tasks + '/' + taskId)
+                .then(function (result) {
+                    return generator.interceptReceivedInstance('Task', generator.generateInstance(result.data.rs, Task));
+                });
+        };
+
+        self.viewCalenderTask = function (task, $event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('view-task-calender'),
+                    controller: 'viewTaskCalenderPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        taskItem: task
+                    },
+                    resolve: {
+                        task: function () {
+                            'ngInject';
+                            return self.findTaskById(task.taskId);
+                        }
+                    }
+                })
+        };
+
+        self.controllerMethod = {
+            taskAdd: function (startDate, dueDate, allDay) {
+                var employee = employeeService.getEmployee();
+                return dialog
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('task'),
+                        controller: 'taskPopupCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            task: new Task({
+                                allDay: allDay,
+                                userId: employee.id,
+                                ouId: employee.getOUID(),
+                                startDate: startDate ? startDate : new Date(),
+                                dueDate: dueDate ? dueDate : null,
+                                priorityLevel: 0, // normal
+                                taskState: 2, // inProgress
+                                startTime: allDay ? null : (startDate ? moment(startDate).format('HH:mm') : configurationService.DEFAULT_START_TASK_TIME),
+                                endTime: allDay ? null : (dueDate ? moment(dueDate).format('HH:mm') : null)
+                            }),
+                            editMode: false
+                        },
+                        resolve: {
+                            availableUsers: function () {
+                                'ngInject';
+                                return self.getAvailableUsers();
+                            }
+                        }
+                    });
+            },
+            taskEdit: function (taskId) {
+
+            }
         };
 
     });

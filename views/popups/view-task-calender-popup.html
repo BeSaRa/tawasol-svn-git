@@ -1,0 +1,104 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.tasks}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{ctrl.task.taskTitle}} {{ctrl.task.taskDescription.length ? '-' + ctrl.task.taskDescription : ''}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content class="p20">
+            <div layout="column">
+                <div layout="row">
+                    <table md-whiteframe="2" flex class="task-management-attendance-table">
+                        <thead>
+                        <tr>
+                            <th><span>{{lang.task_creator}}</span></th>
+                            <th><span>{{lang.department}}</span></th>
+                            <th><span>{{lang.task_due_date}}</span></th>
+                            <th><span>{{lang.task_state}}</span></th>
+                            <th><span>{{lang.actions}}</span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                {{ctrl.task.userId.getTranslatedName()}}
+                            </td>
+                            <td>{{ctrl.task.ouId.getTranslatedName()}}</td>
+                            <td>{{ctrl.participant.dueDate|date:'y-MM-dd'}}</td>
+                            <td>{{ctrl.participant.completionDate|date:'y-MM-dd'}}</td>
+                            <td>{{ctrl.taskStatesMap[participant.taskState].getTranslatedName()}}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="5">{{lang.creator_comment}}</th>
+                        </tr>
+                        <tr>
+                            <th colspan="5"></th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div layout="row">
+                    <md-card flex>
+                        <md-table-container>
+                            <table md-table>
+                                <thead md-head>
+                                <tr md-row>
+                                    <th md-column>
+                                        <!-- Indicators -->
+                                    </th>
+                                    <th md-column md-order-by="docSubject">
+                                        <span>{{lang.subject}}</span>
+                                    </th>
+                                    <th md-column md-order-by="priorityLevel">
+                                        <span>{{lang.priority_level}}</span>
+                                    </th>
+                                    <th md-column md-order-by="securityLevel">
+                                        <span>{{lang.security_level}}</span>
+                                    </th>
+                                    <th md-column md-order-by="createdBy">
+                                        <span>{{lang.creator}}</span>
+                                    </th>
+                                    <th md-column md-order-by="createdOn">
+                                        <span>{{lang.created_on}}</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row>
+                                    <td md-cell class="indicator-td">
+                                        <!-- Document Class (Outgoing/Incoming/Internal) -->
+                                        <grid-indicator-directive record="ctrl.task.correspondence"
+                                                                  indicator-type="docClass"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Paper/Electronic-->
+                                        <grid-indicator-directive record="ctrl.task.correspondence"
+                                                                  ng-if="ctrl.task.correspondence.getInfo().documentClass !== 'incoming'"
+                                                                  indicator-type="paperElectronic"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Has Attachments -->
+                                        <grid-indicator-directive record="ctrl.task.correspondence"
+                                                                  indicator-type="hasAttachment"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Linked Documents -->
+                                        <grid-indicator-directive record="ctrl.task.correspondence"
+                                                                  indicator-type="hasLinkedDocuments"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                    </td>
+                                    <td md-cell class="td-data">
+                                        <a href="" ng-if="ctrl.task.correspondence.hasContent()" class="view-doc"
+                                           ng-click="ctrl.viewDocument(ctrl.task.correspondence, $event)">{{ctrl.task.correspondence.docSubject}}</a>
+                                        <span ng-if="!ctrl.task.correspondence.hasContent()">{{ctrl.task.correspondence.docSubject}}</span>
+                                    </td>
+                                    <td md-cell>{{ctrl.task.correspondence.priorityLevel.getTranslatedName()}}</td>
+                                    <td md-cell>{{ctrl.task.correspondence.securityLevel.getTranslatedName()}}</td>
+                                    <td md-cell>{{ctrl.task.correspondence.getTranslatedCreator()}}</td>
+                                    <td md-cell>{{ctrl.task.correspondence.createdOn}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </md-content>
+    </div>
+</md-dialog>

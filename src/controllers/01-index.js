@@ -74,4 +74,5 @@ module.exports = function (app) {
     require('./dynamicMenuItemCtrl')(app);
     require('./centralArchiveSentItemCtrl')(app);
     require('./searchViewerLogsCtrl')(app);
+    require('./taskCtrl')(app);
 };

@@ -232,4 +232,15 @@ module.exports = (function () {
     require('rangy/lib/rangy-selectionsaverestore.js');
     require('textangular/dist/textAngular-sanitize.min.js');
     require('textangular/dist/textAngular.min.js');
+    // calender
+
+    require('@fullcalendar/core/main.css');
+    require('@fullcalendar/daygrid/main.css');
+    require('@fullcalendar/timegrid/main.css');
+    window.FullCalendarLocales = {};
+    window.FullCalendar = require('@fullcalendar/core');
+    window.FullCalendarLocales.ar = require('@fullcalendar/core/locales/ar');
+    window.FullCalendarDayGrid = require('@fullcalendar/daygrid');
+    window.FullCalendarTimeGrid = require('@fullcalendar/timegrid');
+    window.FullCalendarInteraction = require('@fullcalendar/interaction')
 })();

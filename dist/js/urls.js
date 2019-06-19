@@ -331,6 +331,8 @@
                 .addToAllWithBase('maipLabels', '/cms-entity/correspondence/download-document/maip/labels')
                 // central archives for user
                 .addToAllWithBase('distributionWFCentralArchiveForUser', 'cms-entity/admin/ou/dist/central-archive')
+                // task management
+                .addToAllWithBase('tasks', 'cms-entity/user/tasks')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

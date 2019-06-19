@@ -1,0 +1,195 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.tasks}}">
+    <div layout="column">
+        <md-toolbar>
+            <span ng-if="!ctrl.editMode" class="p20">{{lang.add_new_task}}</span>
+            <span ng-if="ctrl.editMode" class="p20">{{lang.edit_task}} : {{ctrl.model.taskTitle}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form autocomplete="off" name="task_form">
+                <md-tabs md-dynamic-height>
+                    <md-tab label="{{lang.basic_info}}">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label>{{lang.task_title}}</label>
+                                        <input required name="taskTitle" minlength="3" id="taskTitle"
+                                               ng-model="ctrl.task.taskTitle"/>
+                                        <div ng-messages="task_form.arName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <!--<div ng-message="maxlength">{{lang.max_length.change({length:3})}}</div>-->
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <md-switch ng-model="ctrl.task.allDay">
+                                            {{lang.task_all_day}}
+                                        </md-switch>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <div layout="row" flex>
+                                        <div layout="row" flex>
+                                            <md-input-container flex class="cms-datepicker">
+                                                <label>{{lang.task_start_date}}</label>
+                                                <md-datepicker ng-change="ctrl.startDateChange()" required
+                                                               ng-model="ctrl.task.startDate"></md-datepicker>
+                                                <div ng-messages="task_form.startDate.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                        <div ng-if="!ctrl.task.allDay">
+                                            <md-input-container flex>
+                                                <label>{{lang.time}}</label>
+                                                <md-select ng-change="ctrl.timeChange('startTime','StartTime')"
+                                                           name="startTime"
+                                                           ng-model="ctrl.task.startTime">
+                                                    <md-option ng-value="hour.value"
+                                                               ng-repeat="hour in ctrl.calenderHours">
+                                                        {{hour.label}}
+                                                    </md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div layout="row" flex>
+                                        <div flex layout="row">
+                                            <md-input-container flex class="cms-datepicker">
+                                                <label>{{lang.task_end_date}}</label>
+                                                <md-datepicker md-min-date="ctrl.task.startDate" required
+                                                               ng-model="ctrl.task.dueDate"></md-datepicker>
+                                                <div ng-messages="task_form.dueDate.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                        <div ng-if="!ctrl.task.allDay">
+                                            <md-input-container flex>
+                                                <label>{{lang.time}}</label>
+                                                <md-select ng-change="ctrl.timeChange('endTime','EndTime')"
+                                                           ng-disabled="!ctrl.task.dueDate"
+                                                           ng-model="ctrl.task.endTime">
+                                                    <md-option ng-disabled="ctrl.lessThanStartTime(hour)"
+                                                               ng-value="hour.value"
+                                                               ng-repeat="hour in ctrl.calenderHours">
+                                                        {{hour.label}}
+                                                    </md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label>{{lang.priority_level}}</label>
+                                        <md-select name="priorityLevel" id="priorityLevel"
+                                                   ng-model="ctrl.task.priorityLevel">
+                                            <md-option ng-value="priorityLevel.lookupKey"
+                                                       ng-repeat="priorityLevel in ctrl.priorityLevels">
+                                                {{priorityLevel.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label>{{lang.task_state}}</label>
+                                        <md-select name="taskState" id="taskState"
+                                                   ng-model="ctrl.task.taskState">
+                                            <md-option ng-value="state.lookupKey" ng-repeat="state in ctrl.taskStates">
+                                                {{state.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label>{{lang.task_description}}</label>
+                                        <textarea rows="3" name="taskDescription" id="taskDescription"
+                                                  ng-model="ctrl.task.taskDescription"></textarea>
+                                    </md-input-container>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="{{lang.task_linked}}"
+                            ng-disabled="!ctrl.task.startDate || !ctrl.task.dueDate || !ctrl.task.taskTitle.length">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <div layout="row">
+                                    <md-autocomplete
+                                            flex
+                                            md-no-cache="true"
+                                            md-selected-item="ctrl.selectedParticipant"
+                                            md-search-text="ctrl.participantSearchText"
+                                            md-selected-item-change="ctrl.selectedItemChange(item)"
+                                            md-items="item in ctrl.personQuerySearch(ctrl.participantSearchText)"
+                                            md-item-text="item.display"
+                                            md-min-length="0"
+                                            placeholder="{{lang.search}}">
+                                        <md-item-template>
+                                            <span md-highlight-text="ctrl.personSearchText" md-highlight-flags="^i">{{item.display}}</span>
+                                        </md-item-template>
+                                    </md-autocomplete>
+                                </div>
+                                <div layout="row">
+                                    <table md-whiteframe="2" flex class="task-management-attendance-table">
+                                        <thead>
+                                        <tr>
+                                            <th><span>{{lang.name}} / {{lang.department}}</span></th>
+                                            <th><span>{{lang.task_due_date}}</span></th>
+                                            <th><span>{{lang.task_completion_date}}</span></th>
+                                            <th><span>{{lang.task_state}}</span></th>
+                                            <th><span>{{lang.actions}}</span></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="participant in ctrl.task.taskParticipants track by $index">
+                                            <td>
+                                                <div class="attendance-titles">
+                                                    <span class="attendance-name">{{participant.userId.getTranslatedName()}}</span>
+                                                    <span class="attendance-department">{{participant.ouId.getTranslatedName()}}</span>
+                                                </div>
+                                            </td>
+                                            <td>{{participant.dueDate|date:'y-MM-dd'}}</td>
+                                            <td>{{participant.completionDate|date:'y-MM-dd'}}</td>
+                                            <td>{{ctrl.taskStatesMap[participant.taskState].getTranslatedName()}}</td>
+                                            <td>
+                                                <div flex layout="row">
+                                                    <md-button ng-click="ctrl.editTaskParticipantFromCtrl(participant)"
+                                                               tooltip="{{lang.edit}}" class="md-icon-button">
+                                                        <md-icon md-svg-icon="account-edit"></md-icon>
+                                                    </md-button>
+                                                    <md-button ng-click="ctrl.removeTaskParticipant(participant)"
+                                                               tooltip="{{lang.delete}}" class="md-icon-button">
+                                                        <md-icon md-svg-icon="account-remove"></md-icon>
+                                                    </md-button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised"
+                           ng-disabled="task_form.$invalid"
+                           ng-if="!ctrl.editMode"
+                           ng-click="ctrl.addTaskFromCtrl()">{{lang.add}}
+                </md-button>
+                <md-button class="md-raised" ng-if="ctrl.editMode"
+                           ng-disabled="task_form.$invalid|| ctrl.workflowGroup.groupMembers.length===0"
+                           ng-click="ctrl.editTaskFromCtrl()">{{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeTaskPopupFromCtrl()">{{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

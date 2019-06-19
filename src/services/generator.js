@@ -33,6 +33,40 @@ module.exports = function (app) {
 
         self.defaultDateFormat = 'YYYY-MM-DD';
         self.defaultDateTimeFormat = 'YYYY-MM-DD hh:mm:ss A';
+
+
+        self.dayHours = _.range(0, 24);
+        self.calenderHours = [];
+
+        _.map(self.dayHours, function (hour) {
+            var h = hour.toString().length === 1 ? '0' + hour : "" + hour;
+            var hh = h + ':30';
+            var remainingHour = (hour === 0 || hour > 12) ? (12 - hour) : hour;
+            var AMPM = null;
+            var hourValue = Math.abs(remainingHour);
+            if (remainingHour < 0) {
+                AMPM = ' PM';
+            } else {
+                AMPM = ' AM'
+            }
+            self.calenderHours.push({
+                hour: hour,
+                min: 0,
+                label: hourValue + ":00" + AMPM,
+                value: h + ':00',
+                compareValue: self.calenderHours.length
+            });
+
+            self.calenderHours.push({
+                hour: hour,
+                min: 30,
+                label: hourValue + ":30" + AMPM,
+                value: hh,
+                compareValue: self.calenderHours.length
+            });
+
+        });
+
         self.months = [
             {
                 text: 'january',
@@ -776,12 +810,12 @@ module.exports = function (app) {
         self.getBookLockMessage = function (workItem, error) {
             var message = langService.get('book_locked_by_user_date');
             if (!!workItem) {
-               message = message.change({
+                message = message.change({
                     user: workItem.getLockingUserInfo().getTranslatedName(),
                     date: workItem.getLockingUserDateTime()
                 })
             } else {
-                message =  message.change({
+                message = message.change({
                     user: error.data.eo.lockingUserInfo[langService.current + 'Name'],
                     date: self.getDateFromTimeStamp(error.data.eo.lockingTime, true)
                 })

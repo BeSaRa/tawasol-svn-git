@@ -1596,5 +1596,11 @@ module.exports = function (app) {
                 isDynamic: true,
                 controllerAs: 'ctrl'
             })
+            .state('app.inbox.tasks', {
+                url: '/tasks',
+                templateUrl: cmsTemplateProvider.getView('tasks'),
+                controller: 'taskCtrl',
+                controllerAs: 'ctrl'
+            })
     });
 };
