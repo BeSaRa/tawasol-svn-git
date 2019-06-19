@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('DistributionUserWFItem', function (CMSModelInterceptor, ProxyInfo, moment, cmsTemplate, dialog, langService, DistributionWFItem) {
+    app.factory('DistributionUserWFItem', function (CMSModelInterceptor, ProxyInfo, moment, cmsTemplate, dialog, langService, DistributionWFItem, rootEntity) {
         'ngInject';
         return function DistributionUserWFItem(model) {
             var self = this;
@@ -11,6 +11,7 @@ module.exports = function (app) {
             self.arOUName = null;
             self.enOUName = null;
             self.proxyInfo = null;
+            self.sendRelatedDocs = rootEntity.getGlobalSettings().allowSendWFRelatedBook;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

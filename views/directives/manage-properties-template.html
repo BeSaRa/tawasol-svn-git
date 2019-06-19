@@ -332,7 +332,7 @@
                 <!-- File Serial -->
                 <md-input-container flex ng-if="ctrl.checkStatus('fileSerial')">
                     <label for="fileSerial">{{lang.outgoing_file_serial}}</label>
-                    <input name="fileSerial" custom-validate-directive="number"
+                    <input name="fileSerial"
                            id="fileSerial"
                            ng-disabled="!!ctrl.disableProperties"
                            ng-model="ctrl.document.fileSerial"

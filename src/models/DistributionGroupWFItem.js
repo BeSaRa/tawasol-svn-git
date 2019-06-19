@@ -1,10 +1,11 @@
 module.exports = function (app) {
-    app.factory('DistributionGroupWFItem', function (CMSModelInterceptor, DistributionWFItem, langService) {
+    app.factory('DistributionGroupWFItem', function (CMSModelInterceptor, DistributionWFItem, langService, rootEntity) {
         'ngInject';
         return function DistributionGroupWFItem(model) {
             var self = this;
             DistributionWFItem.call(this);
             self.wfGroupId = null;
+            self.sendRelatedDocs = rootEntity.getGlobalSettings().allowSendWFRelatedBook;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
