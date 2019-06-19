@@ -18,7 +18,7 @@
                                          placeholder="{{lang.filter_organizations}}">
                             <md-item-template>
                                 <span md-highlight-text="ctrl.searchText"
-                                      md-highlight-flags="^i">{{item.getTranslatedName()}}</span>
+                                      md-highlight-flags="i">{{item.getTranslatedName()}}</span>
                             </md-item-template>
                             <md-not-found>
                                 {{lang['no_matching_organizations_found'].change({searchText: ctrl.searchText})}}
