@@ -331,8 +331,7 @@ module.exports = function (app) {
                     self.selectedMainSiteSimple = null;
                     _selectDefaultMainSiteAndGetSubSites();
                 });
-            }
-            else {
+            } else {
                 self.mainSites = [];
                 self.mainSitesCopy = angular.copy(self.mainSites);
                 self.subSearchResult = [];
@@ -342,12 +341,26 @@ module.exports = function (app) {
         };
 
         self.onSiteTypeChangeAdvanced = function ($event) {
-            console.log(self.selectedSiteTypeAdvanced);
             var siteType = self.selectedSiteTypeAdvanced && self.selectedSiteTypeAdvanced.hasOwnProperty('lookupKey')
                 ? self.selectedSiteTypeAdvanced.lookupKey
                 : self.selectedSiteTypeAdvanced;
             if (typeof siteType !== 'undefined' && siteType !== null && siteType === 1) {
-
+                correspondenceViewService.correspondenceSiteSearch('main', {
+                    type: siteType,
+                    criteria: null,
+                    excludeOuSites: false
+                }).then(function (result) {
+                    self.subSearchResult = [];
+                    self.mainSites = result;
+                    self.mainSitesCopy = angular.copy(self.mainSites);
+                    self.selectedMainSiteAdvanced = null;
+                    //_selectDefaultMainSiteAndGetSubSites();
+                });
+            } else {
+                self.subSearchResult = [];
+                self.mainSites = [];
+                self.mainSitesCopy = angular.copy(self.mainSites);
+                self.selectedMainSiteAdvanced = null;
             }
         };
 
@@ -378,46 +391,15 @@ module.exports = function (app) {
         };
 
         /**
-         * search in MainCorrespondenceSites and retrieve the filtered result.
-         * @return {Array}
-         * @param mainSiteAdvancedSearchText
-         */
-        self.onMainSiteSearchAdvanced = function (mainSiteAdvancedSearchText) {
-            if (!pendingSearch || !debounceSearch()) {
-                cancelSearch();
-                if (self.mainSiteAdvancedSearchText.trim().length < 2)
-                    return [];
-
-                return pendingSearch = $q(function (resolve, reject) {
-                    cancelSearch = reject;
-
-                    $timeout(function () {
-                        refreshDebounce();
-                        correspondenceViewService.correspondenceSiteSearch('main', {
-                            type: self.selectedSiteTypeAdvanced ? self.selectedSiteTypeAdvanced.lookupKey : null,
-                            criteria: mainSiteAdvancedSearchText
-                        }).then(function (result) {
-                            resolve(_.map(result, _mapSite));
-                        });
-                    }, 500);
-                });
-            }
-            return pendingSearch;
-        };
-        /**
          * @description set selected type when not selected after select main site.
          */
         self.onMainSiteChangeAdvanced = function () {
-            if (!!self.selectedMainSiteAdvanced){
-                if (!self.selectedSiteTypeAdvanced){
-                    self.selectedSiteTypeAdvanced = _mapTypes(_getTypeByLookupKey(self.selectedMainSiteAdvanced.correspondenceSiteTypeId));
-                }
+            if (!!self.selectedMainSiteAdvanced) {
+                //if (!self.selectedSiteTypeAdvanced){
+                self.selectedSiteTypeAdvanced = _mapTypes(_getTypeByLookupKey(self.selectedMainSiteAdvanced.correspondenceSiteTypeId));
+                //}
                 self.onSubSiteSearchAdvanced(true);
             }
-            /*if (self.selectedMainSiteAdvanced && !self.selectedSiteTypeAdvanced)
-                self.selectedSiteTypeAdvanced = _mapTypes(_getTypeByLookupKey(self.selectedMainSiteAdvanced.correspondenceSiteTypeId));
-            if (!!self.selectedMainSiteAdvanced)
-                self.onSubSiteSearchAdvanced(true);*/
         };
 
         /**
@@ -484,8 +466,7 @@ module.exports = function (app) {
         self.onSiteFollowupStatusChange = function (status) {
             if (!self.needReply(status)) {
                 self.site.followupDate = null;
-            }
-            else {
+            } else {
                 if (self.site.followupStatus.lookupStrKey !== 'NEED_REPLY')
                     self.site.followupStatus = null;
             }
@@ -645,8 +626,7 @@ module.exports = function (app) {
                 self.subSearchResult = _.filter(self.subSearchResultCopy, function (resultCopy) {
                     return resultCopy.subSiteId === subSite.subSiteId;
                 });
-            }
-            else
+            } else
                 self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
         };
 
@@ -668,7 +648,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.preventSearchKeyDown = function ($event) {
-            if ($event){
+            if ($event) {
                 var code = $event.which || $event.keyCode;
                 if (code !== 38 && code !== 40)
                     $event.stopPropagation();

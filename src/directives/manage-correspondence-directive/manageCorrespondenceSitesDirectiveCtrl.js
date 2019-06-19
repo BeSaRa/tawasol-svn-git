@@ -515,15 +515,11 @@ module.exports = function (app) {
          */
         self.onMainSiteChangeAdvanced = function () {
             if (!!self.selectedMainSiteAdvanced){
-                if (!self.selectedSiteTypeAdvanced){
+                //if (!self.selectedSiteTypeAdvanced){
                     self.selectedSiteTypeAdvanced = _mapTypes(_getTypeByLookupKey(self.selectedMainSiteAdvanced.correspondenceSiteTypeId));
-                }
+                //}
                 self.onSubSiteSearchAdvanced(true);
             }
-            /*if (self.selectedMainSiteAdvanced && !self.selectedSiteTypeAdvanced)
-                self.selectedSiteTypeAdvanced = _mapTypes(_getTypeByLookupKey(self.selectedMainSiteAdvanced.correspondenceSiteTypeId));
-            if (!!self.selectedMainSiteAdvanced)
-                self.onSubSiteSearchAdvanced(true);*/
         };
 
         /**
