@@ -78,7 +78,8 @@ module.exports = function (app) {
                 internal: 'searchInt',
                 general: 'searchGen',
                 quick: 'searchQuick',
-                outgoingIncoming: 'searchOutInc'
+                outgoingIncoming: 'searchOutInc',
+                viewersLog: 'viewersLog'
             },
             administration: {
                 entity: 'entity',

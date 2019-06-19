@@ -1144,7 +1144,7 @@
         "lang_key": "menu_item_search_viewers_log",
         "icon": "magnify",
         "parent": 47,
-        "link": "",
+        "link": "#viewers-log",
         "state": "app.search.viewers-log",
         "icon_type": "font",
         "sort_order": 0,
