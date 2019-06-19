@@ -106,7 +106,8 @@ module.exports = function (app) {
                 documentFile: 'docFile',
                 documentTemplate: 'docTemplate',
                 attachmentType: 'attachType',
-                dynamicMenuItem: 'dynamicMenu'
+                dynamicMenuItem: 'dynamicMenu',
+                administrators: 'administrators'
             }
         };
 

@@ -1162,5 +1162,17 @@
         "sort_order": 1,
         "active": true,
         "sort_value": 1
+    },
+    {
+        "ID": 111,
+        "lang_key": "menu_item_administrators",
+        "icon": "account-supervisor-circle",
+        "parent": 8,
+        "link": "#administrators",
+        "state": "app.administration.administrators",
+        "icon_type": "font",
+        "sort_order": 1,
+        "active": true,
+        "sort_value": 0
     }
 ]

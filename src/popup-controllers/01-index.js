@@ -113,4 +113,6 @@ module.exports = function (app) {
     require('./taskParticipantSettingPopCtrl')(app);
     require('./taskOptionPopCtrl')(app);
     require('./viewTaskCalenderPopCtrl')(app);
+    require('./administratorPopCtrl')(app);
+    require('./administratorOusListPopCtrl')(app);
 };

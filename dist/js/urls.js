@@ -333,6 +333,8 @@
                 .addToAllWithBase('distributionWFCentralArchiveForUser', 'cms-entity/admin/ou/dist/central-archive')
                 // task management
                 .addToAllWithBase('tasks', 'cms-entity/user/tasks')
+                // user admin list
+                .addToAllWithBase('userAdminList', 'cms-entity/admin/user-admin-list')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

@@ -104,4 +104,5 @@ module.exports = function (app) {
     require('./ViewerLogInterceptor')(app);
     require('./TaskInterceptor')(app);
     require('./TaskParticipantInterceptor')(app);
+    require('./AdministratorInterceptor')(app);
 };

@@ -115,4 +115,5 @@ module.exports = function (app) {
 	require('./dynamicMenuItemService')(app);
 	require('./printService')(app);
 	require('./taskService')(app);
+	require('./administratorService')(app);
 };

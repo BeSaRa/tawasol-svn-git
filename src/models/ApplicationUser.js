@@ -122,6 +122,15 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            ApplicationUser.prototype.getNameByLanguage = function (language) {
+                return this[language + 'FullName'];
+            };
+
+            /**
              * @description Get the translated true/false as active/inactive or yes/no
              * @param fieldName
              * * @returns {*}

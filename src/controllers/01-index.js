@@ -75,4 +75,5 @@ module.exports = function (app) {
     require('./centralArchiveSentItemCtrl')(app);
     require('./searchViewerLogsCtrl')(app);
     require('./taskCtrl')(app);
+    require('./administratorsCtrl')(app);
 };

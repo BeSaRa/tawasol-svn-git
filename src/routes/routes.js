@@ -1602,5 +1602,27 @@ module.exports = function (app) {
                 controller: 'taskCtrl',
                 controllerAs: 'ctrl'
             })
+            //administrators(super admins, admins, sub admins)
+            .state('app.administration.administrators', {
+                url: '/administrators',
+                templateUrl: templateProvider.getView('administrators'),
+                controller: 'administratorsCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    administrators: function (administratorService) {
+                        'ngInject';
+                        return administratorService.loadAllAdministrators();
+                    },
+                    applicationUsers: function (applicationUserService) {
+                        'ngInject';
+                        return applicationUserService.getApplicationUsers();
+                    },
+                    // organizations are loaded to get allRegOus from organizations list
+                    organizations: function (organizationService) {
+                        'ngInject';
+                        return organizationService.loadOrganizations();
+                    }
+                }
+            })
     });
 };

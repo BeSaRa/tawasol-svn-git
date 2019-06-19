@@ -35,6 +35,9 @@ module.exports = function (app) {
                 return false;
             })
             .addMenuPermissions('menu_item_localization', ['MANAGE_GLOBAL_LOCALIZATION'])
+            .addMenuPermissions('menu_item_administrators', function (employee) {
+                return employee.isSuperAdmin;
+            })
             .end()
             // department inbox
             .addMenuPermissionGroup('menu_item_department_inbox')

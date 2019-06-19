@@ -166,4 +166,5 @@ module.exports = function (app) {
     require('./Task')(app);
     require('./TaskParticipant')(app);
     require('./ViewerLog')(app);
+    require('./Administrator')(app);
 };

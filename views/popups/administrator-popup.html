@@ -1,0 +1,86 @@
+<md-dialog class="dialog-extend"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_administrator : ctrl.model.getNames()}}">
+    <div layout="column">
+        <md-toolbar>
+            <span ng-if="!ctrl.editMode" class="p20">{{lang.add_new_administrator}}</span>
+            <span ng-if="ctrl.editMode" class="p20">{{ctrl.model.getNames()}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="administratorForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <div flex class="p20">
+                            <md-switch ng-model="ctrl.administrator.isSuperAdmin"
+                                       ng-change="ctrl.onChangeSuperAdmin($event)">
+                                <label>{{lang.super_admin}} :
+                                    {{ctrl.administrator.getTranslatedYesNo('isSuperAdmin')}}</label>
+                            </md-switch>
+                        </div>
+                        <!-- User -->
+                        <md-input-container flex>
+                            <label for="userId">{{lang.user}}</label>
+                            <md-select id="userId" ng-model="ctrl.administrator.userId"
+                                       ng-model-options="{trackBy: '$value'}"
+                                       ng-disabled="ctrl.editMode"
+                                       ng-change="ctrl.onChangeUser($event)"
+                                       md-on-close="ctrl.clearSearchText('applicationUser')"
+                                       data-md-container-class="select-header-container">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.applicationUserSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option
+                                        ng-repeat="option in ctrl.applicationUsers | translatedNameFilter:ctrl.applicationUserSearchText"
+                                        ng-value="option.id">
+                                    <span md-highlight-text="ctrl.applicationUserSearchText"
+                                          md-highlight-flags="i">{{option.getTranslatedName()}}</span>
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" ng-if="!ctrl.administrator.isSuperAdmin">
+                        <!-- RegOus -->
+                        <md-input-container flex>
+                            <label for="adminOnRegOUList">{{lang.organization_unit}}</label>
+                            <md-select id="adminOnRegOUList" ng-model="ctrl.administrator.adminOnRegOUList"
+                                       name="adminOnRegOUList" multiple
+                                       ng-model-options="{trackBy: '$value'}"
+                                       ng-disabled="ctrl.administrator.isSuperAdmin || !ctrl.administrator.userId"
+                                       ng-required="!ctrl.administrator.isSuperAdmin && ctrl.administrator.userId"
+                                       md-on-close="ctrl.clearSearchText('regOu')"
+                                       data-md-container-class="select-header-container">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.regOuSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option
+                                        ng-repeat="option in ctrl.allRegOus"
+                                        ng-value="option.id">
+                                    <span md-highlight-text="ctrl.regOuSearchText"
+                                          md-highlight-flags="i">{{option.getTranslatedName()}}</span>
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="administratorForm.adminOnRegOUList.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-disabled="administratorForm.$invalid"
+                           ng-click="ctrl.saveAdministrator($event)">{{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closePopup($event)">{{lang.close}}</md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>
