@@ -613,6 +613,7 @@
                                    ng-if="ou.id !== ctrl.document.toRegOUId && ou.hasRegistry">
                             {{ou.getTranslatedName()}}
                         </md-option>
+                        <md-option ng-value="null">{{lang.none}}</md-option>
                     </md-select>
                 </md-input-container>
                 <md-input-container flex>
@@ -624,6 +625,7 @@
                                    ng-if="ou.id !== ctrl.document.fromRegOUId && ou.hasRegistry">
                             {{ou.getTranslatedName()}}
                         </md-option>
+                        <md-option ng-value="null">{{lang.none}}</md-option>
                     </md-select>
                 </md-input-container>
             </div>
