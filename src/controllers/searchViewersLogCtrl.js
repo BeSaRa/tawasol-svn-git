@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('searchViewerLogsCtrl', function (lookupService,
+    app.controller('searchViewersLogCtrl', function (lookupService,
                                                      langService,
                                                      ResolveDefer,
                                                      $q,
@@ -20,8 +20,8 @@ module.exports = function (app) {
                                                      documentSecurityService) {
         'ngInject';
         var self = this;
-        self.controllerName = 'searchViewerLogsCtrl';
-        contextHelpService.setHelpTo('search-viewer-logs');
+        self.controllerName = 'searchViewersLogCtrl';
+        contextHelpService.setHelpTo('search-viewers-log');
 
         self.watermarkSearchText = '';
         self.allSearchableRecords = [];

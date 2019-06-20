@@ -316,6 +316,7 @@ module.exports = function (app) {
          * load children organization for given organization.
          * @param organization
          * @param type
+         * If available, it will exclude regOus from response
          */
         self.loadOrganizationChildren = function (organization, type) {
             var id = organization.hasOwnProperty('id') ? organization.id : organization;

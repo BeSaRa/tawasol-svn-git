@@ -832,7 +832,7 @@ module.exports = function (app) {
             .state('app.search.viewers-log', {
                 url: '/viewers-log',
                 templateUrl: templateProvider.getView('search-viewers-log'),
-                controller: 'searchViewerLogsCtrl',
+                controller: 'searchViewersLogCtrl',
                 controllerAs: 'ctrl',
 
             })
