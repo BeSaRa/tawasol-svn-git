@@ -49,12 +49,18 @@ module.exports = function (app) {
         };
         /**
          * @description get all registry organizations
-         * @return {Array}
+         * @param returnPromise
+         * If true, returns array of regOus in promise
+         * @returns {Array}
          */
-        self.getAllRegistryOrganizations = function () {
-            return _.filter(self.organizations, function (organization) {
+        self.getAllRegistryOrganizations = function (returnPromise) {
+            var regOus = _.filter(self.organizations, function (organization) {
                 return organization.hasRegistry;
             });
+            if (returnPromise) {
+                return $q.resolve(regOus);
+            }
+            return regOus;
         };
         /**
          * @description get organizations from self.organizations if found and if not load it from server again.

@@ -50,7 +50,8 @@ module.exports = function (app) {
                 return !classification.isGlobal;
             });
 
-        self.organizations = organizationService.organizations;
+        // self.organizations = organizationService.organizations;
+        self.organizations = organizationService.getAllRegistryOrganizations();
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
 
         self.selectedOrganization = null;

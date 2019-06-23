@@ -40,7 +40,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             if (tabName === 'security') {
                 self.toggleRelatedOuForm();
-                organizationService.getOrganizations().then(function (organizations) {
+                organizationService.getAllRegistryOrganizations(true).then(function (organizations) {
                     self.organizations = organizations;
 
                     ouDocumentFileService.loadOUDocumentFilesByDocumentFileId(self.documentFile)

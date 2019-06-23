@@ -48,7 +48,8 @@ module.exports = function (app) {
             self.parentCorrespondenceSites = _.filter(self.parentCorrespondenceSites, function (correspondenceSite) {
                 return !correspondenceSite.isGlobal;
             });
-        self.organizations = organizationService.organizations;
+        // self.organizations = organizationService.organizations;
+        self.organizations = organizationService.getAllRegistryOrganizations();
         self.selectedOrganization = null;
         self.selectedOUCorrespondenceSites = [];
 
