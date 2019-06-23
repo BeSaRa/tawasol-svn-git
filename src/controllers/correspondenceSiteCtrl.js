@@ -9,11 +9,15 @@ module.exports = function (app) {
                                                        toast,
                                                        contextHelpService,
                                                        correspondenceSiteService,
-                                                       gridService) {
+                                                       gridService,
+                                                       employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'correspondenceSiteCtrl';
         contextHelpService.setHelpTo('correspondence-sites');
+
+        self.employeeService = employeeService;
+
         /**
          * @description All correspondenceSites
          * @type {*}
@@ -147,6 +151,11 @@ module.exports = function (app) {
          * @param correspondenceSite
          */
         self.changeGlobalFromFromGrid = function (correspondenceSite) {
+            if (!employeeService.isSuperAdminUser()){
+                correspondenceSite.isGlobal = !correspondenceSite.isGlobal;
+                return false;
+            }
+
             //If correspondenceSite is not global(after change), its not allowed. Show alert to user
             if (!correspondenceSite.isGlobal) {
                 correspondenceSite.isGlobal = true;

@@ -77,8 +77,8 @@
                                         </td>
                                         <td md-cell>
                                             <md-switch aria-label="{{lang.global}}"
-                                                       ng-disabled="correspondenceSite.isGlobal"
-                                                       ng-readonly="correspondenceSite.isGlobal"
+                                                       ng-disabled="correspondenceSite.isGlobal || !ctrl.employeeService.isSuperAdminUser()"
+                                                       ng-readonly="correspondenceSite.isGlobal || !ctrl.employeeService.isSuperAdminUser()"
                                                        tooltip="{{correspondenceSite.getTranslatedGlobal()}}"
                                                        ng-change="ctrl.changeGlobalFromFromGrid(correspondenceSite)"
                                                        ng-model="correspondenceSite.isGlobal"></md-switch>

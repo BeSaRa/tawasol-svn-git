@@ -90,8 +90,8 @@
                                     <!-- Global -->
                                     <div flex>
                                         <md-switch ng-change="ctrl.onChangeGlobal($event)"
-                                                   ng-disabled="ctrl.defaultOU || ctrl.classification.parent"
-                                                   ng-readonly="ctrl.defaultOU || ctrl.classification.parent"
+                                                   ng-disabled="ctrl.defaultOU || ctrl.classification.parent || !ctrl.employeeService.isSuperAdminUser()"
+                                                   ng-readonly="ctrl.defaultOU || ctrl.classification.parent || !ctrl.employeeService.isSuperAdminUser()"
                                                    ng-model="ctrl.classification.isGlobal"
                                                    aria-label="{{lang.global}}">
                                             <label>{{lang.global}} :

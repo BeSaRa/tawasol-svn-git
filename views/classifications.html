@@ -80,7 +80,9 @@
                                             <md-switch aria-label="{{lang.global}}"
                                                        tooltip="{{classification.getTranslatedGlobal()}}"
                                                        ng-change="ctrl.changeGlobalFromGrid(classification)"
-                                                       ng-model="classification.isGlobal"></md-switch>
+                                                       ng-model="classification.isGlobal"
+                                                       ng-disabled="!ctrl.employeeService.isSuperAdminUser()"
+                                                       ng-readonly="!ctrl.employeeService.isSuperAdminUser()"></md-switch>
                                         </td>
                                         <td md-cell>{{classification.getSecurityLevels()}}</td>
                                         <td md-cell>

@@ -9,10 +9,12 @@ module.exports = function (app) {
                                                    toast,
                                                    classificationService,
                                                    contextHelpService,
-                                                   gridService) {
+                                                   gridService,
+                                                   employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'classificationCtrl';
+        self.employeeService = employeeService;
 
         contextHelpService.setHelpTo('classifications');
         self.searchModel = '';
@@ -170,6 +172,11 @@ module.exports = function (app) {
          * @param classification
          */
         self.changeGlobalFromGrid = function (classification) {
+            if (!employeeService.isSuperAdminUser()){
+                classification.isGlobal = !classification.isGlobal;
+                return false;
+            }
+
             if (classification.isGlobal) {
                 dialog.confirmMessage(langService.get('related_organization_confirm'))
                     .then(function () {

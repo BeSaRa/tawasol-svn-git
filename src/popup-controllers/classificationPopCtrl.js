@@ -15,7 +15,8 @@ module.exports = function (app) {
                                                       Classification,
                                                       editMode,
                                                       classification,
-                                                      rootEntity) {
+                                                      rootEntity,
+                                                      employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'classificationPopCtrl';
@@ -25,6 +26,8 @@ module.exports = function (app) {
         self.classification = angular.copy(classification);
 
         self.model = angular.copy(self.classification);
+
+        self.employeeService = employeeService;
 
         self.selectedTabIndex = 0;
         self.selectedTabName = "basic";
@@ -163,6 +166,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.onChangeGlobal = function ($event) {
+            if (!employeeService.isSuperAdminUser()) {
+                self.classification.isGlobal = !self.classification.isGlobal;
+                return false;
+            }
+
             if (defaultOU) {
                 self.classification.isGlobal = false;
                 return;

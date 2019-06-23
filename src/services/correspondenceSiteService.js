@@ -10,7 +10,8 @@ module.exports = function (app) {
                                                        generator,
                                                        CorrespondenceSite,
                                                        SearchCorrespondenceSite,
-                                                       _) {
+                                                       _,
+                                                       employeeService) {
         'ngInject';
         var self = this;
         self.serviceName = 'correspondenceSiteService';
@@ -154,7 +155,7 @@ module.exports = function (app) {
                 var correspondenceSite = new CorrespondenceSite({
                     parent: parentCorrespondenceSite,
                     correspondenceTypeId: parentCorrespondenceSite ? parentCorrespondenceSite.correspondenceTypeId : null,
-                    isGlobal: (!!defaultOU) ? false : (parentCorrespondenceSite ? parentCorrespondenceSite.isGlobal : true),
+                    isGlobal: (!!defaultOU || !employeeService.isSuperAdminUser()) ? false : (parentCorrespondenceSite ? parentCorrespondenceSite.isGlobal : true),
                     relatedOus: defaultOU ? [defaultOU] : []
                 });
                 return dialog

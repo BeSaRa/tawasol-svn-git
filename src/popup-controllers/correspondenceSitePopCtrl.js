@@ -14,7 +14,8 @@ module.exports = function (app) {
                                                           dialog,
                                                           CorrespondenceSite,
                                                           editMode,
-                                                          correspondenceSite) {
+                                                          correspondenceSite,
+                                                          employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'correspondenceSitePopCtrl';
@@ -22,6 +23,9 @@ module.exports = function (app) {
 
         self.correspondenceSite = angular.copy(correspondenceSite);
         self.model = angular.copy(self.correspondenceSite);
+
+        self.employeeService = employeeService;
+
         self.defaultOU = defaultOU;
 
         self.selectedTabIndex = 0;
@@ -87,6 +91,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.onChangeGlobal = function ($event) {
+            if (!employeeService.isSuperAdminUser()){
+                self.correspondenceSite.isGlobal = !self.correspondenceSite.isGlobal;
+                return false;
+            }
+
             if (defaultOU) {
                 self.correspondenceSite.isGlobal = false;
                 return;

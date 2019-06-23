@@ -11,7 +11,8 @@ module.exports = function (app) {
                                                    generator,
                                                    Classification,
                                                    OUClassification,
-                                                   _) {
+                                                   _,
+                                                   employeeService) {
         'ngInject';
         var self = this;
         self.serviceName = 'classificationService';
@@ -153,7 +154,7 @@ module.exports = function (app) {
                 var classification = new Classification({
                     parent: parentClassification,
                     securityLevels: parentClassification ? parentClassification.securityLevels : null,
-                    isGlobal: (!!defaultOU) ? false : (parentClassification ? parentClassification.isGlobal : true),
+                    isGlobal: (!!defaultOU || !employeeService.isSuperAdminUser()) ? false : (parentClassification ? parentClassification.isGlobal : true),
                     relatedOus: defaultOU ? [defaultOU] : []
                 });
 
