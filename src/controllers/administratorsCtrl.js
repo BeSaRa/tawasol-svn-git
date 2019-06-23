@@ -80,12 +80,12 @@ module.exports = function (app) {
                 .loadAllAdministrators()
                 .then(function (result) {
                     self.administratorsCopy = angular.copy(result);
-                    self.filterRecords();
+                    self.filterAdministratorRecords();
                     self.selectedAdministrators = [];
-                    defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
                     self.getSortedData();
+                    defer.resolve(true);
                     return result;
                 });
         };
