@@ -11,6 +11,8 @@ module.exports = function (app) {
                                                             documentCommentService,
                                                             DocumentComment,
                                                             $scope,
+                                                            cmsTemplate,
+                                                            $filter,
                                                             _) {
         'ngInject';
         var self = this;
@@ -27,7 +29,6 @@ module.exports = function (app) {
         // current employee
         self.employee = employeeService.getEmployee();
         self.employeeService = employeeService;
-        self.currentPrivacy = true;
 
         self.includedIDs = null;
         self.excludedIDs = null;
@@ -40,6 +41,20 @@ module.exports = function (app) {
 
         self.document = null;
 
+        self.commentPrivacies = [
+            {
+                text: langService.get('comments_global'),
+                value: 'isGlobal'
+            },
+            {
+                text: langService.get('comments_private'),
+                value: 'isPrivate'
+            },
+            {
+                text: langService.get('comments_customize'),
+                value: 'isCustomize'
+            }
+        ];
 
         // placeholders
         self.properties = {
@@ -52,6 +67,15 @@ module.exports = function (app) {
                 reverse: 'includedIDs'
             }
         };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function (property) {
+            self.documentComment[property] = $filter('orderBy')(self.documentComment[property], self.grid[property].order);
+        };
+
+
         // for all grids in the directive.
         self.grid = {
             includedIDs: {
@@ -199,30 +223,73 @@ module.exports = function (app) {
                     self.closeDocumentComment();
                 });
         };
+
+        /*
+      @description change name to comment privacy
+       */
+        self.onCommentPrivacyChange = function () {
+            self.checkCommentPrivacy();
+            _setCommentPrivacy();
+        };
+
+        var _setCommentPrivacy = function () {
+            switch (self.commentPrivacy) {
+                case 'isGlobal':
+                    self.documentComment.isGlobal = true;
+                    self.documentComment.isPrivate = false;
+                    break;
+                case 'isPrivate':
+                    self.documentComment.isGlobal = false;
+                    self.documentComment.isPrivate = true;
+                    break;
+                default:
+                    self.documentComment.isGlobal = false;
+                    self.documentComment.isPrivate = false;
+                    break;
+            }
+        };
+
+
         /**
-         * @description toggle privacy for comment
+         * @description check change of privacy for comment
          */
-        self.toggleCommentPrivacy = function () {
-            if (self.documentComment.isPrivate && (self.documentComment.includedIDs.length || self.documentComment.excludedIDs.length)) {
+        self.checkCommentPrivacy = function () {
+            if (self.commentPrivacy === 'isPrivate' && (self.documentComment.includedIDs.length || self.documentComment.excludedIDs.length)) {
                 dialog
                     .confirmMessage(langService.get('comments_confirm_include_exclude_remove'))
                     .then(function () {
                         self.documentComment.includedIDs = [];
                         self.documentComment.excludedIDs = [];
+                        self.commentPrivacyCopy = self.commentPrivacy;
                     })
                     .catch(function () {
-                        self.documentComment.isPrivate = !self.documentComment.isPrivate;
+                        self.commentPrivacy = self.commentPrivacyCopy;
+                        _setCommentPrivacy();
                     })
-            } else if (self.documentComment.isGlobal && self.documentComment.includedIDs.length) {
+            } else if (self.commentPrivacy === 'isGlobal' && self.documentComment.includedIDs.length) {
                 dialog
                     .confirmMessage(langService.get('comments_confirm_include_remove'))
                     .then(function () {
                         self.documentComment.includedIDs = [];
+                        self.commentPrivacyCopy = self.commentPrivacy;
                     })
                     .catch(function () {
-                        self.documentComment.isPrivate = !self.documentComment.isPrivate;
+                        self.commentPrivacy = self.commentPrivacyCopy;
+                        _setCommentPrivacy();
                     })
-            }
+            } else if (self.documentComment.withSubOUs && self.commentPrivacy === 'isCustomize' && self.documentComment.excludedIDs.length) {
+                dialog
+                    .confirmMessage(langService.get('comments_confirm_exclude_remove'))
+                    .then(function () {
+                        self.documentComment.excludedIDs = [];
+                        self.commentPrivacyCopy = self.commentPrivacy;
+                    })
+                    .catch(function () {
+                        self.commentPrivacy = self.commentPrivacyCopy;
+                        _setCommentPrivacy();
+                    })
+            } else
+                self.commentPrivacyCopy = self.commentPrivacy;
         };
         /**
          * @description toggle commentPerOu
@@ -244,6 +311,25 @@ module.exports = function (app) {
                     self.documentComment.isPerOU = !self.documentComment.isPerOU;
                 });
         };
+
+        /**
+         * @description toggle withSubOus
+         * @param $event
+         */
+        self.toggleCommentWithSubOUs = function ($event) {
+            if (!self.documentComment.excludedIDs.length || self.commentPrivacy !== 'isCustomize') {
+                return;
+            }
+            dialog
+                .confirmMessage(langService.get('comments_confirm_exclude_remove'), null, null, $event)
+                .then(function () {
+                    self.documentComment.excludedIDs = [];
+                })
+                .catch(function () {
+                    self.documentComment.withSubOUs = !self.documentComment.withSubOUs;
+                });
+        };
+
         /**
          * @description to check if current document comment can include (organization|users) or not.
          * @return {boolean}
@@ -271,13 +357,15 @@ module.exports = function (app) {
         self.canExclude = function () {
             return (
                 // if not private comment and isPerOU and withSubOUs active
-                (!self.documentComment.commentPrivate() && self.documentComment.isPerOU && self.documentComment.withSubOUs) ||
+                // (!self.documentComment.commentPrivate() && self.documentComment.isPerOU && self.documentComment.withSubOUs) ||
                 // if ig Global
                 (self.documentComment.commentGlobal()) ||
                 // if not global and not private and not pe ou
                 (!self.documentComment.commentGlobal() && !self.documentComment.commentPrivate() && !self.documentComment.isPerOU) ||
                 // if not global and not private
-                (!self.documentComment.commentGlobal() && !self.documentComment.commentPrivate())
+                (!self.documentComment.commentGlobal() && !self.documentComment.commentPrivate() && !self.documentComment.withSubOUs) ||
+                // if not private and not global and not with subOUs selected and excludedIDs have length
+                (self.documentComment.commentCustomize() && self.documentComment.excludedIDs.length && self.documentComment.withSubOUs)
             );
         };
         /**
@@ -347,15 +435,45 @@ module.exports = function (app) {
          * @description remove include (user|organization)
          * @param property
          * @param $index
+         * @param selected
          * @param $event
          */
-        self.removeInclude = function (property, $index, $event) {
-            dialog
-                .confirmMessage(langService.get('confirm_delete').change({name: self.documentComment[property][$index].display}), null, null, $event)
-                .then(function () {
-                    self.documentComment[property].splice($index, 1);
-                });
+        self.removeInclude = function (property, $index, selected, $event) {
+            if (self.documentComment.commentCustomize() && property === 'includedIDs' && self.documentComment.isPerOU && self.documentComment.withSubOUs &&
+                self.documentComment.excludedIDs.length) {
+
+                dialog
+                    .confirmMessage(langService.get('confirm_delete_selected_with_excluded_sub_ou'), null, null, $event)
+                    .then(function () {
+                        _removeInclude(property, selected, $event);
+                    });
+            } else {
+                dialog
+                    .confirmMessage(langService.get('confirm_delete').change({name: self.documentComment[property][$index].display}), null, null, $event)
+                    .then(function () {
+                        self.documentComment[property] = _.filter(self.documentComment[property], function (item) {
+                            return item.id !== selected.id;
+                        });
+                    });
+            }
         };
+
+        var _removeInclude = function (property, selected, $event) {
+            self.selectedOuChildren = organizationService.getChildren(selected);
+            //get added ous in the excluded
+            self.selectedExcludedIDs = _.filter(self.selectedOuChildren, function (ouChild) {
+                return _.map(self.documentComment.excludedIDs, 'id').indexOf(ouChild.id) > -1;
+            });
+
+            // delete all children from excluded
+            _removeBulkSelected("excludedIDs", "selectedExcludedIDs", $event);
+
+            // remove selected
+            self.documentComment[property] = _.filter(self.documentComment[property], function (item) {
+                return item.id !== selected.id;
+            });
+        };
+
         /**
          * @description remove bulk (organizations|users) from (includes|excludes)
          * @param property
@@ -366,13 +484,27 @@ module.exports = function (app) {
             dialog
                 .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event)
                 .then(function () {
-                    var ids = _.map(self[selected], 'id');
-                    self.documentComment[property] = _.filter(self.documentComment[property], function (item) {
-                        return ids.indexOf(item.id) === -1;
-                    });
-                    self[selected] = [];
+                    _removeBulkSelected(property, selected, $event);
+                    if (self.documentComment.commentCustomize() && property === 'includedIDs' && self.documentComment.isPerOU && self.documentComment.withSubOUs &&
+                        self.documentComment.excludedIDs.length) {
+
+                        _.map(self.documentComment[property],function (item) {
+                            _removeInclude(property,item);
+                        })
+                    } else {
+                        _removeBulkSelected(property, selected, $event);
+                    }
                 });
         };
+
+        var _removeBulkSelected = function (property, selected, $event) {
+            var ids = _.map(self[selected], 'id');
+            self.documentComment[property] = _.filter(self.documentComment[property], function (item) {
+                return ids.indexOf(item.id) === -1;
+            });
+            self[selected] = [];
+        };
+
         /**
          * @description delete single documentComment.
          * @param documentComment
@@ -430,8 +562,7 @@ module.exports = function (app) {
                         self.selectedDocumentComments = [];
                         toast.success(langService.get('delete_success'));
                         self.model = angular.copy(self.documentComments);
-                    }
-                    else {
+                    } else {
                         documentCommentService
                             .deleteBulkDocumentComments(self.selectedDocumentComments)
                             .then(function () {
@@ -446,6 +577,54 @@ module.exports = function (app) {
                     }
                 });
         };
+
+        /**
+         * @description exclude sub ou
+         * @param organization
+         * @param $event
+         */
+        self.excludeSubOus = function (organization, $event) {
+            self.openExcludesDialog(organization, $event)
+                .then(function (excludedSubOus) {
+                    // remove old items for open dialog organization
+                    self.documentComment.excludedIDs = _.filter(self.documentComment.excludedIDs, function (item) {
+                        return _.map(self.excludedIDsCopy, 'id').indexOf(item.id) === -1;
+                    });
+
+                    self.documentComment.excludedIDs = self.documentComment.excludedIDs.concat(excludedSubOus);
+                }).catch(function () {
+            });
+        };
+
+        /**
+         * @description open dialog to exclude sub organizations from selected include
+         * @param organization
+         * @param $event
+         * @returns {promise}
+         */
+        self.openExcludesDialog = function (organization, $event) {
+            self.selectedOuChildren = organizationService.getChildren(organization);
+            var _excludedIDsCopy = _.filter(self.selectedOuChildren, function (ouChild) {
+                return _.map(self.documentComment.excludedIDs, 'id').indexOf(ouChild.id) > -1;
+            });
+
+            self.excludedIDsCopy = angular.copy(_excludedIDsCopy);
+
+            return dialog.showDialog({
+                $event: $event,
+                templateUrl: cmsTemplate.getPopup('manage-excluded-sub-organizations-comment'),
+                controller: 'manageExcludedSubOrganizationsCommentPopCtrl',
+                controllerAs: 'ctrl',
+                bindToController: true,
+                locals: {
+                    organization: organization,
+                    excludedIDs: self.excludedIDsCopy
+                    // includedIDs: self.documentComment.includedIDs
+                }
+            });
+        };
+
+
         /**
          * @description to show documentCommentForm.
          */
@@ -453,6 +632,8 @@ module.exports = function (app) {
             self.showCommentForm = true;
             self.selectedDocumentComments = [];
             self.editMode = false;
+            self.commentPrivacy = 'isGlobal';
+            self.commentPrivacyCopy = self.commentPrivacy;
             self.documentComment = (new DocumentComment()).setVsId(self.vsId).setCreationDate();
             if (self.documentComment) {
                 return;
@@ -551,12 +732,10 @@ module.exports = function (app) {
         self.validateComment = function () {
             if (self.documentComment.isPrivate) {
                 return true;
-            }
-            else {
+            } else {
                 if (self.documentComment.isGlobal) {
                     return true;
-                }
-                else {
+                } else {
                     return !!self.documentComment.includedIDs.length;
                 }
             }

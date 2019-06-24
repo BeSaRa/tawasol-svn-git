@@ -1,0 +1,96 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.comments_excludes}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.comments_excludes}} {{lang.from}} {{ctrl.organization.getTranslatedName()}}</span>
+            <close-dialog-directive when-close="ctrl.closePopup"></close-dialog-directive>
+        </md-toolbar>
+
+        <md-content scroll-directive>
+            <div class="p20">
+                <div layout="row" class="page-header small">
+                    <md-autocomplete
+                            flex
+                            md-no-cache="true"
+                            md-selected-item-change="ctrl.onOrganizationSelected(item)"
+                            md-selected-item="ctrl.selectedOu"
+                            md-search-text="ctrl.searchText"
+                            md-items="item in ctrl.querySearch(ctrl.searchText)"
+                            md-item-text="item.display"
+                            md-min-length="3"
+                            placeholder="{{lang.comments_search_in_organizations}}">
+                        <span>{{ item.display }}</span>
+                    </md-autocomplete>
+                </div>
+                <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                    <md-table-container scroll-directive>
+                        <table md-table md-row-select multiple
+                               ng-model="ctrl.selectedExcludedSubOUs"
+                               md-progress="ctrl.progress">
+                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                            <tr md-row>
+                                <th class="table-selector-header"
+                                    colspan="2"
+                                    ng-if="ctrl.selectedExcludedSubOUs.length" md-column>
+                                    <div layout="row" layout-align="start center">
+                                        <span>{{ctrl.selectedExcludedSubOUs.length}} {{lang.items_selected}} </span>
+                                    </div>
+                                </th>
+                                <th ng-if="!ctrl.selectedExcludedSubOUs.length"
+                                    md-column md-order-by="arName">
+                                    {{lang.arabic_name}}
+                                </th>
+                                <th ng-if="!ctrl.selectedExcludedSubOUs.length"
+                                    md-column md-order-by="enName">
+                                    {{lang.english_name}}
+                                </th>
+                                <th md-column>
+                                    <span ng-if="!ctrl.selectedExcludedSubOUs.length">{{lang.actions}}</span>
+                                    <md-button ng-if="ctrl.selectedExcludedSubOUs.length"
+                                               class="md-icon-button"
+                                               ng-click="ctrl.removeBulkSelected($event)">
+                                        <md-icon md-svg-icon="delete"></md-icon>
+                                    </md-button>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row md-select="excluded" ng-repeat="excluded in ctrl.excludedSubOUs">
+                                <td md-cell>{{excluded.arName}}</td>
+                                <td md-cell>{{excluded.enName}}</td>
+                                <td md-cell>
+                                    <div flex layout="row" layout-align="start center">
+                                        <md-button class="md-icon-button"
+                                                   title="{{lang.delete}}"
+                                                   ng-click="ctrl.removeExcluded($index , $event)">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit"
+                                md-page="ctrl.grid.page"
+                                md-total="{{ctrl.excludedSubOUs.length}}"
+                                md-page-select>
+                        </md-table-pagination>
+                    </md-table-container>
+                </md-card>
+            </div>
+        </md-content>
+
+        <div layout="row">
+            <md-button class="md-raised"
+                       ng-click="ctrl.addExcludedSubOus()">
+                {{lang.save}}
+            </md-button>
+            <span flex></span>
+            <md-button class="md-raised" ng-click="ctrl.closePopup()">
+                {{lang.close}}
+            </md-button>
+        </div>
+    </div>
+</md-dialog>

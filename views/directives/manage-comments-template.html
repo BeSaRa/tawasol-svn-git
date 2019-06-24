@@ -13,259 +13,254 @@
     <div layout="column" ng-if="ctrl.showCommentForm">
         <md-content scroll-directive>
             <md-card ng-class="{'remove-shadows':ctrl.fromDialog}">
-                <md-tabs class="content" md-dynamic-height>
-                    <md-tab label="{{lang.comments_comment}}">
-                        <md-content>
-                            <form novalidate name="ctrl.documentCommentForm">
-                                <div layout="column" class="p20">
-                                    <div layout="row">
-                                        <md-input-container flex>
-                                            <label for="shortDescription">{{lang.comments_short_description}}</label>
-                                            <input id="shortDescription" minlength="3" name="shortDescription"
-                                                   required
-                                                   ng-model="ctrl.documentComment.shortDescription">
-                                            <div ng-messages="ctrl.documentCommentForm.shortDescription.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                                <div ng-message="minlength">{{lang.short}}</div>
-                                            </div>
-                                        </md-input-container>
+                <div>
+                    <form novalidate name="ctrl.documentCommentForm">
+                        <div layout="column" class="p20">
+                            <div layout="row">
+                                <md-input-container flex>
+                                    <label for="shortDescription">{{lang.comments_short_description}}</label>
+                                    <input id="shortDescription" minlength="3" name="shortDescription"
+                                           required
+                                           ng-model="ctrl.documentComment.shortDescription">
+                                    <div ng-messages="ctrl.documentCommentForm.shortDescription.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                        <div ng-message="minlength">{{lang.short}}</div>
                                     </div>
-                                    <div layout="row">
-                                        <md-input-container flex>
-                                            <label for="description">{{lang.comments_description}}</label>
-                                            <textarea required minlength="5" rows="3" name="description"
-                                                      id="description"
-                                                      ng-model="ctrl.documentComment.description"></textarea>
-                                            <div ng-messages="ctrl.documentCommentForm.description.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                                <div ng-message="minlength">{{lang.short}}</div>
-                                            </div>
-                                        </md-input-container>
+                                </md-input-container>
+                                <md-input-container flex="20">
+                                    <label for="commentPrivacy">{{lang.comments_privacy}}</label>
+                                    <md-select name="commentPrivacy" id="commentPrivacy"
+                                               ng-model="ctrl.commentPrivacy"
+                                               ng-change="ctrl.onCommentPrivacyChange()">
+                                        <md-option md-truncate ng-value="cPrivacy.value"
+                                                   ng-repeat="cPrivacy in ctrl.commentPrivacies">
+                                            {{cPrivacy.text}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <div layout="row">
+                                <md-input-container flex>
+                                    <label for="description">{{lang.comments_description}}</label>
+                                    <textarea required minlength="5" rows="3" name="description"
+                                              id="description"
+                                              ng-model="ctrl.documentComment.description"></textarea>
+                                    <div ng-messages="ctrl.documentCommentForm.description.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                        <div ng-message="minlength">{{lang.short}}</div>
                                     </div>
-                                    <div layout="row">
-                                        <div flex>
-                                            <md-switch ng-true-value="true"
-                                                       ng-disabled="ctrl.documentComment.commentGlobal() || !ctrl.employeeService.hasPermissionTo('VIEW_COMMENT')"
-                                                       ng-false-value="false"
-                                                       ng-change="ctrl.toggleCommentPrivacy()"
-                                                       ng-model="ctrl.documentComment.isPrivate">
-                                                <span>{{lang.comments_private}} : </span>
-                                                <span>{{ctrl.documentComment.getPrivacyStatus()}}</span>
-                                            </md-switch>
-                                        </div>
-                                        <div flex>
-                                            <md-switch
-                                                    ng-disabled="ctrl.documentComment.commentPrivate() || !ctrl.employeeService.hasPermissionTo('VIEW_COMMENT')"
-                                                    ng-true-value="true"
-                                                    ng-false-value="false"
-                                                    ng-change="ctrl.toggleCommentPrivacy()"
-                                                    ng-model="ctrl.documentComment.isGlobal">
-                                                <span>{{lang.comments_global}} : </span>
-                                                <span>{{ctrl.documentComment.getGlobalizationStatus()}}</span>
-                                            </md-switch>
-                                        </div>
-                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout="row" ng-if="!(!ctrl.documentComment.isGlobal && ctrl.documentComment.isPrivate)">
+                                <div flex layout="row">
+                                    <md-switch ng-change="ctrl.toggleCommentPerOUStatus($event)"
+                                               ng-true-value="true"
+                                               ng-false-value="false"
+                                               ng-model="ctrl.documentComment.isPerOU">
+                                        <span>{{lang.comments_includes}} : </span>
+                                        <span class="switch-width">{{ctrl.documentComment.getPerOUStatus()}}</span>
+                                    </md-switch>
                                 </div>
-                            </form>
-                        </md-content>
-                    </md-tab>
-                    <md-tab ng-disabled="!ctrl.canInclude()" label="{{lang.comments_includes}}">
-                        <md-content>
-                            <div layout="column" class="p20">
-                                <div layout="row">
-                                    <md-autocomplete
-                                            flex
-                                            md-no-cache="true"
-                                            md-selected-item-change="ctrl.selectItem('includedIDs',item)"
-                                            md-selected-item="ctrl.includedIDs"
-                                            md-search-text="ctrl.includedIDsSearch"
-                                            md-items="item in ctrl.querySearchIncludes( 'includedIDs')"
-                                            md-item-text="item.display"
-                                            md-min-length="3"
-                                            md-menu-class="include-exclude-custom-template"
-                                            placeholder="{{lang[ctrl.currentSearchKey()]}}">
-                                        <span md-highlight-text="ctrl.includedIDsSearch">{{item.display}}</span>
-                                    </md-autocomplete>
-                                </div>
-                                <div layout="row">
-                                    <div flex layout="row">
-                                        <md-switch ng-change="ctrl.toggleCommentPerOUStatus($event)"
-                                                   ng-true-value="true"
-                                                   ng-false-value="false"
-                                                   ng-model="ctrl.documentComment.isPerOU">
-                                            <span>{{lang.comments_includes}} : </span>
-                                            <span class="switch-width">{{ctrl.documentComment.getPerOUStatus()}}</span>
-                                        </md-switch>
-                                    </div>
-                                    <div flex layout="row">
-                                        <md-switch ng-if="ctrl.documentComment.isPerOU"
-                                                   ng-true-value="true"
-                                                   ng-false-value="false"
-                                                   ng-model="ctrl.documentComment.withSubOUs">
-                                            <span>{{lang.comments_includes}} : </span>
-                                            <span class="switch-width">{{lang.comments_with_sub_organizations}}</span>
-                                        </md-switch>
-                                    </div>
-                                </div>
-                                <div ng-if="ctrl.documentComment.includedIDs.length" layout="row">
-                                    <md-card flex>
-                                        <md-table-container>
-                                            <div flex scroll-directive>
-                                                <table md-table md-row-select multiple
-                                                       ng-model="ctrl.selectedIncludedIDs"
-                                                       md-progress="ctrl.progress">
-                                                    <thead md-head md-order="ctrl.grid.order">
-                                                    <tr md-row>
-                                                        <th class="table-selector-header"
-                                                            ng-if="ctrl.selectedIncludedIDs.length" md-column>
-                                                            <div layout="row" layout-align="start center">
-                                                                <span>{{ctrl.selectedIncludedIDs.length}} {{lang.items_selected}} </span>
-                                                            </div>
-                                                        </th>
-                                                        <th ng-if="!ctrl.selectedIncludedIDs.length" md-column
-                                                            md-order-by="arName">
-                                                            <span>{{lang.name}}</span>
-                                                        </th>
-                                                        <th md-column>
-                                                            <span ng-if="!ctrl.selectedIncludedIDs.length">{{lang.actions}}</span>
-                                                            <md-button ng-if="ctrl.selectedIncludedIDs.length"
-                                                                       class="md-icon-button"
-                                                                       ng-click="ctrl.removeBulkSelected('includedIDs','selectedIncludedIDs',$event)">
-                                                                <md-icon md-svg-icon="delete"></md-icon>
-                                                            </md-button>
-                                                        </th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody md-body>
-                                                    <tr md-row md-select="include"
-                                                        ng-repeat="include in ctrl.documentComment.includedIDs  | filter:ctrl.searchModel | limitTo: ctrl.grid.includedIDs.limit: ((ctrl.grid.includedIDs.page - 1) * ctrl.grid.includedIDs.limit) |orderBy:ctrl.grid.includedIDs.order  track by $index">
-                                                        <td md-cell>{{include.display}}</td>
-                                                        <td md-cell>
-                                                            <div flex layout="row" layout-align="start center">
-                                                                <md-button class="md-icon-button"
-                                                                           title="{{lang.delete}}"
-                                                                           ng-click="ctrl.removeInclude('includedIDs', $index , $event)">
-                                                                    <md-icon md-svg-icon="delete"></md-icon>
-                                                                </md-button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <md-table-pagination
-                                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                    md-limit-options="ctrl.grid.includedIDs.limitOptions"
-                                                    md-limit="ctrl.grid.includedIDs.limit"
-                                                    md-page="ctrl.grid.includedIDs.page"
-                                                    md-total="{{ctrl.documentComment.includedIDs.length}}"
-                                                    md-page-select>
-                                            </md-table-pagination>
-                                        </md-table-container>
-                                    </md-card>
+                                <div flex layout="row">
+                                    <md-switch ng-if="ctrl.documentComment.isPerOU"
+                                               ng-true-value="true"
+                                               ng-false-value="false"
+                                               ng-model="ctrl.documentComment.withSubOUs"
+                                               ng-change="ctrl.toggleCommentWithSubOUs ($event)">
+                                        <span>{{lang.comments_includes}} : </span>
+                                        <span class="switch-width">{{lang.comments_with_sub_organizations}}</span>
+                                    </md-switch>
                                 </div>
                             </div>
-                        </md-content>
-                    </md-tab>
-                    <md-tab ng-disabled="!ctrl.canExclude()" label="{{lang.comments_excludes}}">
-                        <md-content>
-                            <div layout="column" class="p20">
-                                <div layout="row">
-                                    <md-autocomplete
-                                            flex
-                                            md-no-cache="true"
-                                            md-selected-item-change="ctrl.selectItem('excludedIDs',item)"
-                                            md-selected-item="ctrl.excludedIDs"
-                                            md-search-text="ctrl.excludedIDsSearch"
-                                            md-items="item in ctrl.querySearchExcludes('excludedIDs')"
-                                            md-item-text="item.display"
-                                            md-min-length="3"
-                                            placeholder="{{lang[ctrl.currentSearchKey()]}}">
-                                        <span>{{ item.display }}</span>
-                                    </md-autocomplete>
-                                </div>
-                                <div layout="row">
-                                    <div flex layout="row">
-                                        <md-switch ng-change="ctrl.toggleCommentPerOUStatus($event)"
-                                                   ng-true-value="true"
-                                                   ng-false-value="false"
-                                                   ng-model="ctrl.documentComment.isPerOU">
-                                            <span>{{lang.comments_excludes}} : </span>
-                                            <span class="switch-width">{{ctrl.documentComment.getPerOUStatus()}}</span>
-                                        </md-switch>
-                                    </div>
-                                    <div flex layout="row">
-                                        <md-switch ng-if="ctrl.documentComment.isPerOU"
-                                                   ng-true-value="true"
-                                                   ng-false-value="false"
-                                                   ng-model="ctrl.documentComment.withSubOUs">
-                                            <span>{{lang.comments_includes}} : </span>
-                                            <span class="switch-width">{{lang.comments_with_sub_organizations}}</span>
-                                        </md-switch>
-                                    </div>
-                                </div>
+                        </div>
+                    </form>
+                </div>
 
-                                <div ng-if="ctrl.documentComment.excludedIDs.length" layout="row">
-                                    <md-card flex>
-                                        <md-table-container>
-                                            <div flex scroll-directive>
-                                                <table md-table md-row-select multiple
-                                                       ng-model="ctrl.selectedIncludedIDs"
-                                                       md-progress="ctrl.progress">
-                                                    <thead md-head md-order="ctrl.grid.order">
-                                                    <tr md-row>
-                                                        <th class="table-selector-header"
-                                                            ng-if="ctrl.selectedIncludedIDs.length" md-column>
-                                                            <div layout="row" layout-align="start center">
-                                                                <span>{{ctrl.selectedIncludedIDs.length}} {{lang.items_selected}} </span>
-                                                            </div>
-                                                        </th>
-                                                        <th ng-if="!ctrl.selectedIncludedIDs.length" md-column
-                                                            md-order-by="arName">
-                                                            <span>{{lang.name}}</span>
-                                                        </th>
-                                                        <th md-column>
-                                                            <span ng-if="!ctrl.selectedIncludedIDs.length">{{lang.actions}}</span>
-                                                            <md-button ng-if="ctrl.selectedIncludedIDs.length"
-                                                                       class="md-icon-button"
-                                                                       ng-click="ctrl.removeBulkSelected('excludedIDs','selectedIncludedIDs',$event)">
-                                                                <md-icon md-svg-icon="delete"></md-icon>
-                                                            </md-button>
-                                                        </th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody md-body>
-                                                    <tr md-row md-select="include"
-                                                        ng-repeat="include in ctrl.documentComment.excludedIDs  | filter:ctrl.searchModel | limitTo: ctrl.grid.excludedIDs.limit: ((ctrl.grid.excludedIDs.page - 1) * ctrl.grid.excludedIDs.limit) |orderBy:ctrl.grid.excludedIDs.order  track by $index">
-                                                        <td md-cell>{{include.display}}</td>
-                                                        <td md-cell>
-                                                            <div flex layout="row" layout-align="start center">
-                                                                <md-button class="md-icon-button"
-                                                                           title="{{lang.delete}}"
-                                                                           ng-click="ctrl.removeInclude('excludedIDs', $index , $event)">
-                                                                    <md-icon md-svg-icon="delete"></md-icon>
-                                                                </md-button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <md-table-pagination
-                                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                    md-limit-options="ctrl.grid.excludedIDs.limitOptions"
-                                                    md-limit="ctrl.grid.excludedIDs.limit"
-                                                    md-page="ctrl.grid.excludedIDs.page"
-                                                    md-total="{{ctrl.documentComment.excludedIDs.length}}"
-                                                    md-page-select>
-                                            </md-table-pagination>
-                                        </md-table-container>
-                                    </md-card>
-                                </div>
-                            </div>
-                        </md-content>
-                    </md-tab>
-                </md-tabs>
+                <div ng-if="ctrl.canInclude()" layout="column" class="p20">
+                    <fieldset flex layout-padding>
+                        <legend class="md-accent">{{lang.comments_includes}}</legend>
+                        <div layout="row">
+                            <md-autocomplete
+                                    flex
+                                    md-no-cache="true"
+                                    md-selected-item-change="ctrl.selectItem('includedIDs',item)"
+                                    md-selected-item="ctrl.includedIDs"
+                                    md-search-text="ctrl.includedIDsSearch"
+                                    md-items="item in ctrl.querySearchIncludes('includedIDs')"
+                                    md-item-text="item.display"
+                                    md-min-length="3"
+                                    md-menu-class="include-exclude-custom-template"
+                                    placeholder="{{lang[ctrl.currentSearchKey()]}}">
+                                <span md-highlight-text="ctrl.includedIDsSearch">{{item.display}}</span>
+                            </md-autocomplete>
+                        </div>
+
+                        <div ng-if="ctrl.documentComment.includedIDs.length" layout="row">
+                            <md-card flex>
+                                <md-table-container>
+                                    <div flex scroll-directive>
+                                        <table md-table md-row-select multiple
+                                               ng-model="ctrl.selectedIncludedIDs"
+                                               md-progress="ctrl.progress">
+                                            <thead md-head md-order="ctrl.grid.includedIDs.order"
+                                                   md-on-reorder="ctrl.getSortedData('includedIDs')">
+                                            <tr md-row>
+                                                <th class="table-selector-header"
+                                                    colspan="3"
+                                                    ng-if="ctrl.selectedIncludedIDs.length" md-column>
+                                                    <div layout="row" layout-align="start center">
+                                                        <span>{{ctrl.selectedIncludedIDs.length}} {{lang.items_selected}} </span>
+                                                    </div>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedIncludedIDs.length" md-column
+                                                    md-order-by="{{ctrl.documentComment.isPerOU ? 'arName': 'arFullName'}}">
+                                                    <span>{{lang.arabic_name}}</span>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedIncludedIDs.length" md-column
+                                                    md-order-by="{{ctrl.documentComment.isPerOU ? 'enName': 'enFullName'}}">
+                                                    <span>{{lang.english_name}}</span>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedIncludedIDs.length" md-column md-order-by="">
+                                                    <!-- exclude subOus -->
+                                                </th>
+                                                <th md-column>
+                                                    <span ng-if="!ctrl.selectedIncludedIDs.length">{{lang.actions}}</span>
+                                                    <md-button ng-if="ctrl.selectedIncludedIDs.length"
+                                                               class="md-icon-button"
+                                                               ng-click="ctrl.removeBulkSelected('includedIDs','selectedIncludedIDs',$event)">
+                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                    </md-button>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody md-body>
+                                            <tr md-row md-select="include"
+                                                ng-repeat="include in ctrl.documentComment.includedIDs  | filter:ctrl.searchModel | limitTo: ctrl.grid.includedIDs.limit: ((ctrl.grid.includedIDs.page - 1) * ctrl.grid.includedIDs.limit) |orderBy:ctrl.grid.includedIDs.order  track by $index">
+                                                <td md-cell>{{include.getNameByLanguage('ar')}}</td>
+                                                <td md-cell>{{include.getNameByLanguage('en')}}</td>
+                                                <td md-cell>
+                                                    <div flex layout="row" layout-align="start center">
+                                                        <md-button ng-if="ctrl.documentComment.isPerOU"
+                                                                   ng-disabled="!ctrl.documentComment.withSubOUs"
+                                                                   ng-click="ctrl.excludeSubOus(include,$event)">
+                                                            <span>{{lang.comments_excludes}}</span>
+                                                        </md-button>
+                                                    </div>
+                                                </td>
+                                                <td md-cell>
+                                                    <div flex layout="row" layout-align="start center">
+                                                        <md-button class="md-icon-button"
+                                                                   title="{{lang.delete}}"
+                                                                   ng-click="ctrl.removeInclude('includedIDs', $index ,include ,$event)">
+                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                        </md-button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <md-table-pagination
+                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                            md-limit-options="ctrl.grid.includedIDs.limitOptions"
+                                            md-limit="ctrl.grid.includedIDs.limit"
+                                            md-page="ctrl.grid.includedIDs.page"
+                                            md-total="{{ctrl.documentComment.includedIDs.length}}"
+                                            md-page-select>
+                                    </md-table-pagination>
+                                </md-table-container>
+                            </md-card>
+                        </div>
+                    </fieldset>
+
+                </div>
+
+                <div ng-if="ctrl.canExclude()" layout="column" class="p20">
+                    <fieldset flex layout-padding>
+                        <legend class="md-accent">{{lang.comments_excludes}}</legend>
+                        <div layout="row"
+                             ng-if="!(ctrl.documentComment.withSubOUs && ctrl.documentComment.commentCustomize())">
+                            <md-autocomplete
+                                    flex
+                                    md-no-cache="true"
+                                    md-selected-item-change="ctrl.selectItem('excludedIDs',item)"
+                                    md-selected-item="ctrl.excludedIDs"
+                                    md-search-text="ctrl.excludedIDsSearch"
+                                    md-items="item in ctrl.querySearchExcludes('excludedIDs')"
+                                    md-item-text="item.display"
+                                    md-min-length="3"
+                                    placeholder="{{lang[ctrl.currentSearchKey()]}}">
+                                <span>{{ item.display }}</span>
+                            </md-autocomplete>
+                        </div>
+
+                        <div layout="row">
+                            <md-card flex>
+                                <md-table-container>
+                                    <div flex scroll-directive>
+                                        <table md-table md-row-select multiple
+                                               ng-model="ctrl.selectedExcludedIDs"
+                                               md-progress="ctrl.progress">
+                                            <thead md-head md-order="ctrl.grid.excludedIDs.order"
+                                                   md-on-reorder="ctrl.getSortedData('excludedIDs')">
+                                            <tr md-row>
+                                                <th class="table-selector-header"
+                                                    colspan="2"
+                                                    ng-if="ctrl.selectedExcludedIDs.length" md-column>
+                                                    <div layout="row" layout-align="start center">
+                                                        <span>{{ctrl.selectedExcludedIDs.length}} {{lang.items_selected}} </span>
+                                                    </div>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedExcludedIDs.length" md-column
+                                                    md-order-by="{{ctrl.documentComment.isPerOU ? 'arName' : 'arFullName'}}">
+                                                    <span>{{lang.arabic_name}}</span>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedExcludedIDs.length" md-column
+                                                    md-order-by="{{ctrl.documentComment.isPerOU ? 'enName' : 'enFullName'}}">
+                                                    <span>{{lang.english_name}}</span>
+                                                </th>
+                                                <th md-column>
+                                                    <span ng-if="!ctrl.selectedExcludedIDs.length">{{lang.actions}}</span>
+                                                    <md-button ng-if="ctrl.selectedExcludedIDs.length"
+                                                               class="md-icon-button"
+                                                               ng-click="ctrl.removeBulkSelected('excludedIDs','selectedExcludedIDs',$event)">
+                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                    </md-button>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody md-body>
+                                            <tr md-row md-select="exclude"
+                                                ng-repeat="exclude in ctrl.documentComment.excludedIDs  | filter:ctrl.searchModel | limitTo: ctrl.grid.excludedIDs.limit: ((ctrl.grid.excludedIDs.page - 1) * ctrl.grid.excludedIDs.limit) |orderBy:ctrl.grid.excludedIDs.order  track by $index">
+                                                <td md-cell>{{exclude.getNameByLanguage('ar')}}</td>
+                                                <td md-cell>{{exclude.getNameByLanguage('en')}}</td>
+                                                <td md-cell>
+                                                    <div flex layout="row" layout-align="start center">
+                                                        <md-button class="md-icon-button"
+                                                                   title="{{lang.delete}}"
+                                                                   ng-click="ctrl.removeInclude('excludedIDs', $index ,exclude ,$event)">
+                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                        </md-button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <md-table-pagination
+                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                            md-limit-options="ctrl.grid.excludedIDs.limitOptions"
+                                            md-limit="ctrl.grid.excludedIDs.limit"
+                                            md-page="ctrl.grid.excludedIDs.page"
+                                            md-total="{{ctrl.documentComment.excludedIDs.length}}"
+                                            md-page-select>
+                                    </md-table-pagination>
+                                </md-table-container>
+                            </md-card>
+                        </div>
+                    </fieldset>
+                </div>
+
             </md-card>
         </md-content>
         <div ng-if="!ctrl.fromDialog">

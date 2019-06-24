@@ -318,6 +318,39 @@ module.exports = function (app) {
                 );
             });
         };
+
+        self.findOrganizationChildrenByText = function (searchText, searchKey, ou) {
+            // service-request: need service to return collection of users from backend-team based on search text.
+            searchText = searchText.toLowerCase().trim();
+            return self.loadOrganizationChildren(ou).then(function (result) {
+                return _.filter(result, function (organization) {
+                        var properties = [
+                            'arName',
+                            'description',
+                            'email',
+                            'enName',
+                            'mobile',
+                            'code'];
+
+                        if (!searchKey) {
+                            var found = false;
+                            var value = "";
+                            for (var i = 0; i < properties.length; i++) {
+                                value = ('' + organization[properties[i]]).toString().toLowerCase().trim();
+                                if (value.indexOf(searchText) !== -1) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            return found;
+                        }
+
+                        return (Number(organization[searchKey.key]) === Number(searchText));
+                    }
+                );
+            });
+        };
+
         /**
          * load children organization for given organization.
          * @param organization
@@ -542,7 +575,7 @@ module.exports = function (app) {
 
         self.exportOrganizations = function () {
             return $http
-                .post(urlService.organizations + "/exportExcel", null)
+                .get(urlService.organizations + "/export/excel", null)
                 .then(function (result) {
                     return result;
                 });

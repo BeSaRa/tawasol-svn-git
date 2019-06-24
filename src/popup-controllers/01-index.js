@@ -115,4 +115,5 @@ module.exports = function (app) {
     require('./viewTaskCalenderPopCtrl')(app);
     require('./administratorPopCtrl')(app);
     require('./administratorOusListPopCtrl')(app);
+    require('./manageExcludedSubOrganizationsCommentPopCtrl')(app);
 };

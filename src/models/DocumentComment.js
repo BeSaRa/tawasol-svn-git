@@ -59,6 +59,10 @@ module.exports = function (app) {
                 return this.isGlobal;
             };
 
+            DocumentComment.prototype.commentCustomize = function(){
+                return !this.isPrivate && !this.isGlobal;
+            };
+
             // DocumentComment.prototype.setPrivacy = function (privacy) {
             //     var properties = ['isGlobal', 'isPrivate'];
             //     var self = this;
