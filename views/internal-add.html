@@ -20,12 +20,13 @@
                                     <span> &nbsp;{{lang.document_properties}}</span>
                                     <span flex></span>
                                     <div>
-                                        <md-switch ng-disabled="!!ctrl.internal.vsId || ctrl.duplicateVersion || !ctrl.employeeService.hasPermissionTo('INTERNAL_PAPER')"
-                                                   class="m0 top-switch-handler"
-                                                   ng-true-value="1" ng-false-value="0"
-                                                   ng-click="ctrl.preventPropagation($event)"
-                                                   ng-change="ctrl.checkChangeInternalType()"
-                                                   ng-model="ctrl.internal.addMethod">{{lang.internal_document_type}} :
+                                        <md-switch
+                                                ng-disabled="!!ctrl.internal.vsId || ctrl.duplicateVersion || !ctrl.employeeService.hasPermissionTo('INTERNAL_PAPER')"
+                                                class="m0 top-switch-handler"
+                                                ng-true-value="1" ng-false-value="0"
+                                                ng-click="ctrl.preventPropagation($event)"
+                                                ng-change="ctrl.checkChangeInternalType()"
+                                                ng-model="ctrl.internal.addMethod">{{lang.internal_document_type}} :
                                             {{ctrl.internal.getMethodTypeInternal()}}
                                         </md-switch>
                                     </div>
@@ -36,7 +37,8 @@
                                         source-model="ctrl.model"
                                         source-form="ctrl.document_properties"
                                         document="ctrl.internal"
-                                        is-new-document="ctrl.isNewDocument"></manage-properties-directive>
+                                        is-new-document="ctrl.isNewDocument"
+                                        action="ctrl.action"></manage-properties-directive>
                             </accordion-content>
                         </accordion-item>
                         <accordion-item pass-when="ctrl.documentInformation || ctrl.internal.contentFile">
@@ -159,7 +161,8 @@
                             </md-button>
                         </div>
                         <div>
-                            <md-button ng-disabled="ctrl.saveInProgress" ng-click="ctrl.confirmResetAddCorrespondence($event)"
+                            <md-button ng-disabled="ctrl.saveInProgress"
+                                       ng-click="ctrl.confirmResetAddCorrespondence($event)"
                                        class="md-raised">
                                 {{lang.internal_new}}
                             </md-button>

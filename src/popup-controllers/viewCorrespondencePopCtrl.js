@@ -14,6 +14,7 @@ module.exports = function (app) {
                                                           cmsTemplate,
                                                           $q,
                                                           gridService,
+                                                          $state,
                                                           generator) {
         'ngInject';
         var self = this;
@@ -120,6 +121,8 @@ module.exports = function (app) {
         $timeout(function () {
             self.detailsReady = true;
             self.model = angular.copy(self.correspondence);
+            // set action to review will enable edit of security level
+            self.action = ($state.current.name.indexOf('review') !== -1) ? 'review' : null;
             // _checkIfFromEditInDesktop(self.correspondence);
             if (self.correspondence) {
                 self.info = self.correspondence.getInfo();

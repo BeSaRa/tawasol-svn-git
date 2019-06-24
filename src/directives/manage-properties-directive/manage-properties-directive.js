@@ -18,7 +18,8 @@ module.exports = function (app) {
                 centralArchives: '=',
                 registryOrganizations: '=?',
                 receiveG2g: '=?',
-                isNewDocument: '=?'
+                isNewDocument: '=?',
+                action: '=?'
             }
         }
     })

@@ -71,7 +71,7 @@ module.exports = function (app) {
 
         self.documentInformation = null;
         self.isNewDocument = false;
-
+        self.action = null;
         // internal document
         self.internal = /*demoInternal;*/
             new Internal({
@@ -88,16 +88,19 @@ module.exports = function (app) {
         if (replyTo) {
             self.internal = replyTo;
             self.replyToOriginalName = angular.copy(replyTo.getTranslatedName());
+            self.action = 'replyTo';
         }
 
         if (editAfterApproved) {
             self.internal = editAfterApproved.metaData;
             self.documentInformation = editAfterApproved.content;
             self.editContent = true;
+            self.action = 'editAfterApproved';
         } else if (duplicateVersion) {
             self.internal = duplicateVersion.metaData;
             self.documentInformation = self.internal.hasContent() ? duplicateVersion.content : null;
             self.editContent = true;
+            self.action = 'duplicateVersion';
             // console.log('duplicateVersion.content', duplicateVersion.content);
         }
 

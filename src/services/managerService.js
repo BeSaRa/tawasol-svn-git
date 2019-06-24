@@ -6,6 +6,7 @@ module.exports = function (app) {
                                             generator,
                                             correspondenceService,
                                             outgoingService,
+                                            $state,
                                             Attachment) {
         'ngInject';
         var self = this;
@@ -83,7 +84,7 @@ module.exports = function (app) {
          * @returns {*}
          * @private
          */
-        self.deepCopyAttachments = function(attachments){
+        self.deepCopyAttachments = function (attachments) {
             var attachmentFilesOnly = _.map(attachments, 'file'),
                 attachmentsCopy = angular.copy(attachments);
             for (var i = 0; i < attachmentsCopy.length; i++) {
@@ -205,6 +206,8 @@ module.exports = function (app) {
         self.manageDocumentProperties = function (vsId, documentClass, documentSubject, $event) {
             var defer = $q.defer(), deferCorrespondence = $q.defer();
             var document = null;
+
+            var action = ($state.current.name.indexOf('review') !== -1) ? 'review' : null;
             //var firstDefer = $q.defer();
             documentClass = _checkDocumentClass(documentClass);
             return dialog
@@ -216,7 +219,8 @@ module.exports = function (app) {
                     escapeToClose: false,
                     bindToController: true,
                     locals: {
-                        fromDialog: true
+                        fromDialog: true,
+                        action: action
                     },
                     resolve: {
                         documentProperties: function () {

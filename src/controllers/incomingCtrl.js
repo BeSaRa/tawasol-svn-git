@@ -63,6 +63,7 @@ module.exports = function (app) {
 
         self.documentInformation = null;
         self.isNewDocument = false;
+        self.action = null;
         // incoming document
         self.incoming = new Incoming({
             ou: centralArchives ? null : self.employee.getOUID(),
@@ -78,6 +79,7 @@ module.exports = function (app) {
         if (receive) {
             self.receive = true;
             self.receiveG2G = false;
+            self.action = 'receive';
             self.incoming = receive.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = receive.content;
@@ -86,6 +88,7 @@ module.exports = function (app) {
         if (receiveG2G) {
             self.receiveG2G = true;
             self.receive = false;
+            self.action = 'receiveG2G';
             self.incoming = receiveG2G.metaData;
             // depend on our discussion with Ahmed Abu Al Nasser.
             if (centralArchives) {
@@ -100,6 +103,7 @@ module.exports = function (app) {
         if (duplicateVersion) {
             self.receiveG2G = false;
             self.receive = false;
+            self.action = 'duplicateVersion';
             self.incoming = duplicateVersion.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = self.incoming.hasContent() ? duplicateVersion.content : null;

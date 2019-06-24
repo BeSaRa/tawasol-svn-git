@@ -33,6 +33,8 @@ module.exports = function (app) {
         self.mainClassificationSearchText = '';
         self.subClassificationSearchText = '';
         self.documentFileSearchText = '';
+        self.isSecurityLevelEnabled = false;
+
 
         $timeout(function () {
             // all system organizations
@@ -425,6 +427,17 @@ module.exports = function (app) {
             _selectFirstOptionForRequired();
         });
 
+
+        /**
+         * enable edit security level when its on action list
+         * @returns {*|boolean}
+         */
+        self.enabledSecurityLevel = function () {
+            var actions = ["editafterexport", "duplicateversion", "receive", "review"];
+
+            return self.action && actions.indexOf(self.action.toLowerCase()) !== -1;
+        };
+
         /**
          * @description Set the sub classification on change of main classification
          * @param $event
@@ -475,7 +488,6 @@ module.exports = function (app) {
             return (isApproved && hasPermission);
             //return (isApproved && ((info.documentClass === "outgoing" || info.documentClass === "internal") && !info.isPaper) && hasPermission);
         };*/
-
 
 
         /**
@@ -625,6 +637,11 @@ module.exports = function (app) {
                 }
             })
         };
+
+        self.getTranslatedEnableDisableSecurityLevel = function(){
+            return self.isSecurityLevelEnabled ? langService.get('disable_security_level') : langService.get('enable_security_level');
+        };
+
 
         /**
          * @description Prevent the default dropdown behavior of selecting option on keydown inside the search box of dropdown

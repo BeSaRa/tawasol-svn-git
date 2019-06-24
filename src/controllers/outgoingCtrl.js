@@ -81,7 +81,7 @@ module.exports = function (app) {
 
         self.documentInformation = null;
         self.isNewDocument = false;
-
+        self.action = null;
         self.outgoing =
             new Outgoing({
                 ou: self.employee.getOUID(),
@@ -103,19 +103,23 @@ module.exports = function (app) {
             self.outgoing = editAfterApproved.metaData;
             self.documentInformation = editAfterApproved.content;
             self.editContent = true;
+            self.action = 'editAfterApproved';
         } else if (editAfterExport) {
             self.outgoing = editAfterExport.metaData;
             self.documentInformation = editAfterExport.content;
             self.editContent = true;
+            self.action = 'editAfterExport';
         } else if (duplicateVersion) {
             self.outgoing = duplicateVersion.metaData;
             self.documentInformation = self.outgoing.hasContent() ? duplicateVersion.content : null;
             self.editContent = self.outgoing.hasContent();// true;
             self.duplicateVersion = true;
+            self.action = 'duplicateVersion';
         } else if (editAfterReturnG2G) {
             self.outgoing = editAfterReturnG2G.metaData;
             self.documentInformation = editAfterReturnG2G.content;
             self.editContent = true;
+            self.action = 'editAfterReturnG2G';
         }
 
 
