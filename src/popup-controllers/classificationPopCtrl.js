@@ -227,6 +227,9 @@ module.exports = function (app) {
                 var ouId = self.editMode ? ouClassification.ouid.id : ouClassification.id;
                 return (ouId !== self.defaultOU.id)
             }
+            else if(!employeeService.isSuperAdminUser() && self.classification.relatedOus.length === 1) {
+                return false;
+            }
             return true;
         };
 
@@ -244,6 +247,11 @@ module.exports = function (app) {
             var ouName = (!self.editMode ? ouClassification.getNames() : ouClassification.ouid.getNames()),
                 message = langService.get('confirm_delete').change({name: ouName});
             if (self.editMode && self.classification.relatedOus.length === 1) {
+                if (!employeeService.isSuperAdminUser()) {
+                    // this will change correspondenceSite to global and sub admin can't change private to global
+                    dialog.errorMessage(langService.get('last_ou_can_not_be_removed'));
+                    return false;
+                }
                 message = langService.get('last_organization_delete').change({name: ouClassification.classification.getTranslatedName()});
             }
             dialog.confirmMessage(message)

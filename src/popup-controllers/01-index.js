@@ -116,4 +116,5 @@ module.exports = function (app) {
     require('./administratorPopCtrl')(app);
     require('./administratorOusListPopCtrl')(app);
     require('./manageExcludedSubOrganizationsCommentPopCtrl')(app);
+    require('./documentFileSelectRelatedOUPopCtrl')(app);
 };

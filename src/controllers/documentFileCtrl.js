@@ -1,22 +1,24 @@
 module.exports = function (app) {
     app.controller('documentFileCtrl', function (lookupService,
-                                                    documentFileService,
-                                                    documentFiles,
-                                                    $q,
-                                                    $filter,
-                                                    DocumentFile,
-                                                    langService,
-                                                    toast,
-                                                    dialog,
-                                                    organizations,
-                                                    ouDocumentFileService,
-                                                    contextHelpService,
-                                                    gridService,
-                                                    generator) {
+                                                 documentFileService,
+                                                 documentFiles,
+                                                 $q,
+                                                 $filter,
+                                                 DocumentFile,
+                                                 langService,
+                                                 toast,
+                                                 dialog,
+                                                 organizations,
+                                                 ouDocumentFileService,
+                                                 contextHelpService,
+                                                 gridService,
+                                                 generator,
+                                                 employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'documentFileCtrl';
         contextHelpService.setHelpTo('document-files');
+        self.employeeService = employeeService;
 
         self.documentFiles = documentFileService.getParentDocumentFiles(documentFiles);
         self.organizations = organizations;
@@ -107,7 +109,10 @@ module.exports = function (app) {
                 .controllerMethod
                 .documentFileEdit(documentFile, null, $event)
                 .then(function (result) {
-                    self.reloadDocumentFiles(self.grid.page);
+                    self.reloadDocumentFiles(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get('edit_success').change({name: result.getTranslatedName()}));
+                        });
                 })
                 .catch(function (result) {
                     self.reloadDocumentFiles(self.grid.page);
@@ -166,6 +171,56 @@ module.exports = function (app) {
             self.statusServices[status](self.selectedDocumentFiles).then(function () {
                 self.reloadDocumentFiles(self.grid.page);
             });
+        };
+
+        self.openSelectOUDocumentFileDialog = function (documentFile) {
+            return documentFile
+                .openDialogToSelectOrganizations()
+                .then(function () {
+                    return documentFile;
+                });
+        };
+
+        /**
+         * @description change global status
+         * @param documentFile
+         */
+        self.changeGlobalFromGrid = function (documentFile) {
+            if (!employeeService.isSuperAdminUser()) {
+                documentFile.global = !documentFile.global;
+                return false;
+            }
+
+            if (documentFile.global) {
+                dialog.confirmMessage(langService.get('related_organization_confirm'))
+                    .then(function () {
+                        documentFile.setRelatedOus([]);
+                        documentFile.update().then(self.displayDocumentFileGlobalMessage);
+                    })
+                    .catch(function () {
+                        documentFile.setIsGlobal(false);
+                    });
+            } else {
+                self.openSelectOUDocumentFileDialog(documentFile)
+                    .then(function (result) {
+                        result.setRelatedOus([]);
+                        result.update().then(self.displayDocumentFileGlobalMessage);
+                    })
+                    .catch(function () {
+                        documentFile.setIsGlobal(true).update();
+                    });
+            }
+        };
+        /**
+         * display for the global messages.
+         * @param documentFile
+         */
+        self.displayDocumentFileGlobalMessage = function (documentFile) {
+            toast.success(langService.get('change_global_success')
+                .change({
+                    name: documentFile.getTranslatedName(),
+                    global: documentFile.getTranslatedGlobal()
+                }));
         };
 
         /**

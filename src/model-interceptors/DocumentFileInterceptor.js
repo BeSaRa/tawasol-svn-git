@@ -22,18 +22,21 @@ module.exports = function (app) {
             if (model.global)
                 model.relatedOus = [];
 
-            /*if (model.parent) {
-                model.parent = model.parent.id;
-            }*/
+            model.parent = (model.parent && model.parent.hasOwnProperty('id')) ? model.parent.id : model.parent;
             delete model.relatedOus;
             delete model.children;
             return model;
         });
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            //model.getRelatedOUDocumentFiles();
             model.securityLevels = generator.getSelectedCollectionFromResult(lookupService.returnLookups(lookupService.securityLevel), model.securityLevels, 'lookupKey');
+            if (model.global){
+                model.relatedOus = [];
+            }
             model.getChildren();
             //model.parent = documentFileService.getDocumentFileById(model.parent);
+            model.parent = angular.copy(documentFileService.getDocumentFileById(model.parent)) || model.parent;
+            /*if (model.parent)
+                delete model.parent.children;*/
             return model;
         });
     })

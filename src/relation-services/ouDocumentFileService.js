@@ -43,6 +43,26 @@ module.exports = function (app) {
                     return generator.interceptReceivedInstance('OUDocumentFile', generator.generateInstance(ouDocumentFile, OUDocumentFile, self._sharedMethods));
                 });
         };
+
+        /**
+         * @description add bulk ouClassifications
+         * @param ouDocumentFiles
+         * @returns {Promise|[OUClassification]}
+         */
+        self.addBulkOUDocumentFiles = function (ouDocumentFiles) {
+            return $http
+                .post((urlService.ouDocumentFiles + '/bulk'),
+                    generator.interceptSendCollection('OUDocumentFile', ouDocumentFiles))
+                .then(function (result) {
+                    result = result.data.rs;
+                    ouDocumentFiles = _.map(ouDocumentFiles, function (ouDocumentFile, index) {
+                        ouDocumentFile.id = result[index];
+                        return ouDocumentFile;
+                    });
+                    return ouDocumentFiles;
+                });
+        };
+
         /**
          * @description make an update for given ouDocumentFile.
          * @param ouDocumentFile

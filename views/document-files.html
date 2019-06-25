@@ -47,6 +47,9 @@
                                         <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by="status">
                                             <span>{{lang.status}}</span>
                                         </th>
+                                        <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by="global">
+                                            <span>{{lang.global}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.security_levels}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.children}}</span>
@@ -65,6 +68,14 @@
                                                        ng-model="documentFile.status"
                                                        title="{{documentFile.getTranslatedStatus()}}"
                                                        ng-change="ctrl.changeStatusDocumentFile(documentFile)"></md-switch>
+                                        </td>
+                                        <td md-cell>
+                                            <md-switch aria-label="{{lang.global}}"
+                                                       tooltip="{{documentFile.getTranslatedGlobal()}}"
+                                                       ng-change="ctrl.changeGlobalFromGrid(documentFile)"
+                                                       ng-model="documentFile.global"
+                                                       ng-disabled="!ctrl.employeeService.isSuperAdminUser()"
+                                                       ng-readonly="!ctrl.employeeService.isSuperAdminUser()"></md-switch>
                                         </td>
                                         <td md-cell>{{documentFile.getSecurityLevels(documentFile)}}</td>
                                         <td md-cell>

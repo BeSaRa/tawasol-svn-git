@@ -9,7 +9,8 @@ module.exports = function (app) {
                                                  langService,
                                                  toast,
                                                  cmsTemplate,
-                                                 OUDocumentFile) {
+                                                 OUDocumentFile,
+                                                 employeeService) {
         'ngInject';
         var self = this;
         self.serviceName = 'documentFileService';
@@ -123,12 +124,11 @@ module.exports = function (app) {
          */
         self.controllerMethod = {
             documentFileAdd: function (parentDocumentFile, $event, documentClassFromUser) {
-                if (parentDocumentFile)
-                    parentDocumentFile = parentDocumentFile.hasOwnProperty('id') ? parentDocumentFile.id : parentDocumentFile;
-
                 var documentFile = new DocumentFile({
                     itemOrder: generator.createNewID(self.documentFiles, 'itemOrder'),
-                    parent: parentDocumentFile
+                    securityLevels: parentDocumentFile ? parentDocumentFile.securityLevels : null,
+                    parent: parentDocumentFile,
+                    global: (!!documentClassFromUser || !employeeService.isSuperAdminUser() ? false : (parentDocumentFile ? parentDocumentFile.global : true))
                 });
 
                 return dialog
@@ -155,6 +155,30 @@ module.exports = function (app) {
                             editMode: true,
                             documentFile: documentFile,
                             documentClassFromUser: null
+                        },
+                        resolve: {
+                            ouDocumentFiles: function (ouDocumentFileService) {
+                                'ngInject';
+                                if (documentFile.id && !documentFile.global) {
+                                    return ouDocumentFileService.loadOUDocumentFilesByDocumentFileId(documentFile)
+                                        .then(function (result) {
+                                            documentFile.relatedOus = result;
+                                        })
+                                }
+                                return [];
+                            }
+                        }
+                    });
+            },
+            openSelectOrganizationPopup: function (documentFile, $event) {
+                return dialog
+                    .showDialog({
+                        targetEvent: $event,
+                        templateUrl: cmsTemplate.getPopup('document-file-select-related-ou'),
+                        controller: 'documentFileSelectRelatedOUPopCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            documentFile: angular.copy(documentFile)
                         }
                     });
             },
@@ -269,7 +293,7 @@ module.exports = function (app) {
          */
         self.getDocumentFileById = function (documentFileId) {
             documentFileId = documentFileId instanceof DocumentFile ? documentFileId.id : documentFileId;
-            return _.find(self.documentFilesCopy, function (documentFile) {
+            return _.find(self.documentFiles, function (documentFile) {
                 return Number(documentFile.id) === Number(documentFileId)
             });
         };
@@ -280,7 +304,7 @@ module.exports = function (app) {
          */
         self.getDocumentFileByLookupKey = function (lookupKey) {
             lookupKey = lookupKey instanceof DocumentFile ? lookupKey.lookupKey : lookupKey;
-            return _.find(self.documentFilesCopy, function (documentFile) {
+            return _.find(self.documentFiles, function (documentFile) {
                 return Number(documentFile.lookupKey) === Number(lookupKey)
             });
         };

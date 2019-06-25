@@ -109,6 +109,48 @@ module.exports = function (app) {
                 });
             };
 
+            DocumentFile.prototype.addToOUDocumentFile = function (ouDocumentFile) {
+                var self = this;
+                return ouDocumentFileService
+                    .addOUDocumentFile(ouDocumentFile)
+                    .then(function (ouDocumentFile) {
+                        self.relatedOus.push(ouDocumentFile);
+                        return ouDocumentFile;
+                    });
+            };
+            DocumentFile.prototype.setIsGlobal = function (status) {
+                this.global = status;
+                return this;
+            };
+            DocumentFile.prototype.setRelatedOus = function (relatedOus) {
+                this.relatedOus = relatedOus;
+                return this;
+            };
+
+            DocumentFile.prototype.addBulkToDocumentFiles = function (ouDocumentFiles) {
+                var self = this;
+                return ouDocumentFileService
+                    .addBulkOUDocumentFiles(ouDocumentFiles)
+                    .then(function (result) {
+                        return self.relatedOus = self.relatedOus.concat(result);
+                    })
+            };
+            DocumentFile.prototype.save = function () {
+                if (this.id) {
+                    return documentFileService.updateDocumentFile(this);
+                    //return this.update();
+                }
+                return documentFileService.addDocumentFile(this);
+            };
+            DocumentFile.prototype.openDialogToSelectOrganizations = function () {
+                var self = this;
+                return documentFileService
+                    .controllerMethod
+                    .openSelectOrganizationPopup(this, null)
+                    .then(function (ouDocumentFiles) {
+                        return self.addBulkToDocumentFiles(ouDocumentFiles);
+                    });
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

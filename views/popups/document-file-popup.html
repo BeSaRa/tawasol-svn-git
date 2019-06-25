@@ -4,11 +4,12 @@
         <md-toolbar layout="row" layout-align="start center">
             <span class="p20" ng-if="!ctrl.editMode">{{lang.add_new_document_file}}</span>
             <span class="p20" ng-if="ctrl.editMode">{{ctrl.model.getNames()}}</span>
-            <close-dialog-directive when-close="ctrl.closeDocumentFilePopupFromCtrl"></close-dialog-directive>
+            <close-dialog-directive when-close="ctrl.closePopup"></close-dialog-directive>
         </md-toolbar>
         <md-content scroll-directive>
             <form name="documentFileForm" autocomplete="off">
                 <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
+                    <!-- Basic -->
                     <md-tab label="{{lang.basic_info}}" ng-if="ctrl.showTab('basic')"
                             md-on-select="ctrl.setCurrentTab('basic')">
                         <md-content>
@@ -41,10 +42,32 @@
                                 </div>
                                 <div layout="row">
                                     <md-input-container flex>
+                                        <label for="parent">{{lang.parent}}</label>
+                                        <!-- disable parent dropdown if record has children or add mode and parent is already available. means adding sub file from sub files popup-->
+                                        <md-select id="parent"
+                                                   ng-disabled="ctrl.model.hasChildren() || (ctrl.model.parent && !ctrl.editMode)"
+                                                   ng-change="ctrl.onChangeParent($event)"
+                                                   ng-model-options="{trackBy: '$value.id'}"
+                                                   ng-model="ctrl.documentFile.parent">
+                                            <md-option ng-value="">{{lang.no_parent}}</md-option>
+                                            <md-option
+                                                    ng-repeat="documentFile in ctrl.parentDocumentFiles track by $index"
+                                                    ng-value="documentFile"
+                                                    ng-if="documentFile.id !== ctrl.documentFile.id">
+                                                {{documentFile.getNames()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="documentFile.parent.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="number">{{lang.positive_number_only}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
                                         <label for="securityLevels">{{lang.security_level}}</label>
                                         <md-select id="securityLevels" name="securityLevels"
                                                    ng-model-options="{trackBy:'$value.lookupKey'}"
                                                    multiple required
+                                                   ng-disabled="ctrl.documentFile.parent"
                                                    ng-model="ctrl.documentFile.securityLevels">
                                             <md-option ng-value="option"
                                                        ng-repeat="option in ctrl.securityLevels track by $index">
@@ -53,25 +76,6 @@
                                         </md-select>
                                         <div ng-messages="documentFileForm.securityLevels.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                        </div>
-                                    </md-input-container>
-                                    <md-input-container flex>
-                                        <label for="parent">{{lang.parent}}</label>
-                                        <!-- disable parent dropdown if record has children or add mode and parent is already available. means adding sub file from sub files popup-->
-                                        <md-select id="parent"
-                                                   ng-disabled="ctrl.model.hasChildren() || (ctrl.model.parent && !ctrl.editMode)"
-                                                   ng-model="ctrl.documentFile.parent">
-                                            <md-option ng-value="">{{lang.no_parent}}</md-option>
-                                            <md-option
-                                                    ng-repeat="documentFile in ctrl.parentDocumentFiles track by $index"
-                                                    ng-value="documentFile.id"
-                                                    ng-if="documentFile.id !== ctrl.documentFile.id">
-                                                {{documentFile.getNames()}}
-                                            </md-option>
-                                        </md-select>
-                                        <div ng-messages="documentFile.parent.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="number">{{lang.positive_number_only}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
@@ -83,7 +87,9 @@
                                     </div>
                                     <div flex class="p20">
                                         <md-switch ng-model="ctrl.documentFile.global" aria-label="{{lang.global}}"
-                                                   ng-disabled="!ctrl.editMode">
+                                                   ng-change="ctrl.onChangeGlobal($event)"
+                                                   ng-disabled="ctrl.documentClassFromUser || ctrl.documentFile.parent || !ctrl.employeeService.isSuperAdminUser()"
+                                                   ng-readonly="ctrl.documentClassFromUser || ctrl.documentFile.parent || !ctrl.employeeService.isSuperAdminUser()">
                                             <span>{{lang.global}} : </span>{{ctrl.documentFile.getTranslatedGlobal()}}
                                         </md-switch>
                                     </div>
@@ -91,9 +97,12 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <md-tab ng-if="ctrl.showTab('security')" md-on-select="ctrl.setCurrentTab('security')"
+                    <!-- Security -->
+                    <md-tab ng-if="ctrl.showTab('security')"
+                            ng-click="ctrl.getOUDocumentFiles()"
+                            md-on-select="ctrl.setCurrentTab('security')"
                             label="{{lang.security}}"
-                            ng-disabled="ctrl.documentFile.global || !ctrl.editMode">
+                            ng-disabled="ctrl.documentFile.global">
                         <div layout="row" layout-align="center center" ng-if="!ctrl.showRelatedOUForm">
                             <md-button class="md-raised" ng-click="ctrl.toggleRelatedOuForm(true)">
                                 <div layout="row" layout-align="center center">
@@ -112,7 +121,7 @@
                                                        ng-model-options="{trackBy: '$value.id'}"
                                                        ng-value="organization"
                                                        tooltip="{{organization.getTranslatedName(true)}}"
-                                                       ng-if="ctrl.isOrganizationAvailable(organization)">
+                                                       ng-if="!ctrl.excludeOrganizationIfExists(organization)">
                                                 {{ organization.getTranslatedName() }}
                                             </md-option>
                                         </md-select>
@@ -198,6 +207,7 @@
                                                         <td md-cell>{{ouDocumentFile.getOUTranslate('en')}}</td>
                                                         <td md-cell>
                                                             <md-button
+                                                                    ng-disabled="!ctrl.canDeleteOUDocumentFile(ouDocumentFile)"
                                                                     tooltip="{{lang.delete}}"
                                                                     ng-click="ctrl.removeOuDocumentFile(ouDocumentFile)"
                                                                     aria-label="Delete"
@@ -221,22 +231,22 @@
         <div>
             <div layout="row">
                 <md-button class="md-raised" ng-if="!ctrl.editMode && !ctrl.showRelatedOUForm"
-                           ng-disabled="documentFileForm.$invalid"
-                           ng-click="ctrl.addDocumentFileFromCtrl($event)">{{lang.add}}
+                           ng-disabled="documentFileForm.$invalid || !ctrl.checkValidGlobal()"
+                           ng-click="ctrl.saveDocumentFile($event)">{{lang.add}}
                 </md-button>
                 <md-button class="md-raised"
-                           ng-if="ctrl.editMode && ctrl.selectedTab =='basic' && !ctrl.showRelatedOUForm"
-                           ng-disabled="documentFileForm.$invalid || (!ctrl.documentFile.global && !ctrl.documentFile.relatedOus.length)"
-                           ng-click="ctrl.updateDocumentFileFromCtrl($event)">{{lang.save}}
+                           ng-if="ctrl.editMode && ctrl.selectedTab === 'basic' && !ctrl.showRelatedOUForm"
+                           ng-disabled="documentFileForm.$invalid || !ctrl.checkValidGlobal()"
+                           ng-click="ctrl.saveDocumentFile($event)">{{lang.save}}
                 </md-button>
                 <span flex=""></span>
-                <md-button class="md-raised" ng-if="!ctrl.showRelatedOUForm"
+                <md-button class="md-raised" ng-if="ctrl.selectedTab === 'basic'"
                            ng-click="ctrl.resetModel()">
                     {{lang.reset}}
                 </md-button>
                 <span flex></span>
                 <md-button class="md-raised" ng-if="!ctrl.showRelatedOUForm"
-                           ng-click="ctrl.closeDocumentFilePopupFromCtrl()">
+                           ng-click="ctrl.closePopup()">
                     {{lang.close}}
                 </md-button>
             </div>

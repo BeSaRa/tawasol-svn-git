@@ -214,6 +214,9 @@ module.exports = function (app) {
                 var ouId = self.editMode ? ouCorrespondenceSite.ouid.id : ouCorrespondenceSite.id;
                 return (ouId !== self.defaultOU.id)
             }
+            else if(!employeeService.isSuperAdminUser() && self.correspondenceSite.relatedOus.length === 1) {
+                return false;
+            }
             return true;
         };
 
@@ -227,8 +230,14 @@ module.exports = function (app) {
                 toast.error(langService.get('can_not_delete_ou'));
                 return;
             }
-            if (self.editMode && self.correspondenceSite.relatedOus.length === 1)
+            if (self.editMode && self.correspondenceSite.relatedOus.length === 1) {
+                if (!employeeService.isSuperAdminUser()) {
+                    // this will change correspondenceSite to global and sub admin can't change private to global
+                    dialog.errorMessage(langService.get('last_ou_can_not_be_removed'));
+                    return false;
+                }
                 return dialog.errorMessage(langService.get('can_not_delete_all_ou'));
+            }
 
             dialog.confirmMessage(langService.get('confirm_delete').change({name: (!self.editMode ? ouCorrespondenceSite.getNames() : ouCorrespondenceSite.ouid.getNames())}))
                 .then(function () {

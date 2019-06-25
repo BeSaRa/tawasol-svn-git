@@ -24,6 +24,22 @@ module.exports = function (app) {
                 return this.status ? langService.get('active') : langService.get('inactive');
             };
 
+            OUDocumentFile.prototype.setOuId = function (ouId) {
+                return this.ouid = ouId;
+            };
+            OUDocumentFile.prototype.setCode = function (code) {
+                return this.code = code;
+            };
+            OUDocumentFile.prototype.setItemOrder = function (itemOrder) {
+                return this.itemOrder = itemOrder;
+            };
+            OUDocumentFile.prototype.setSerial = function (serial) {
+                return this.serial = serial;
+            };
+            OUDocumentFile.prototype.setDocumentFile = function (documentFile) {
+                return this.file = documentFile;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('OUDocumentFile', 'init', this);
