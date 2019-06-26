@@ -144,7 +144,6 @@ module.exports = function (app) {
          */
         self.toggleAll = function ($event) {
             if (self.documentType.lookupStrKey) {
-                debugger;
                 if (self.documentType.lookupStrKey.length === self.documentClasses.length) {
                     if (documentClassFromUser && documentClassFromUser.length) {
                         self.documentType.lookupStrKey = angular.copy(documentClassFromUser);

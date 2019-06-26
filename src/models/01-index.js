@@ -167,4 +167,5 @@ module.exports = function (app) {
     require('./TaskParticipant')(app);
     require('./ViewerLog')(app);
     require('./Administrator')(app);
+    require('./FollowupOrganization')(app);
 };

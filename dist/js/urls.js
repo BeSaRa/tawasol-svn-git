@@ -82,6 +82,8 @@
                 .addToAllWithBase('userClassificationViewPermissions', 'cms-entity/admin/user-classification-permission')
                 //organization unit application users
                 .addToAllWithBase('ouApplicationUsers', 'cms-entity/admin/ou-application-user')
+                // followup user organization
+                .addToAllWithBase('followupOrganization', 'cms-entity/admin/user-follow-up')
                 //ou application users by application id
                 .addToAllWithBase('ouApplicationUsersByUserId', 'cms-entity/admin/ou-application-user/userid/:userId')
                 // related application user

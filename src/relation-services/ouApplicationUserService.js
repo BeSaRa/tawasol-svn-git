@@ -14,12 +14,14 @@ module.exports = function (app) {
                                                       UserOuPermission,
                                                       organizationService,
                                                       ApplicationUser,
+                                                      FollowupOrganization,
                                                       ProxyInfo) {
         'ngInject';
         var self = this;
         self.serviceName = 'ouApplicationUserService';
 
         self.ouApplicationUsers = [];
+        self.followupOrganizations = [];
         self.unAssignedUsers = [];
         /**
          * @description load unrelated ApplicationUsers from server.
@@ -708,6 +710,38 @@ module.exports = function (app) {
             return isArray ? proxyUsers : proxyUsers[0];
         };
 
+        /**
+         * @description load followup user organization
+         * @returns {*}
+         */
+        self.loadFollowupUserOrganization = function (ouApplicationUser) {
+            var ouId = ouApplicationUser.hasOwnProperty('ouid') ? ouApplicationUser.ouid.id : ouApplicationUser.ouid;
+            var path = ('/criteria?userId={userId}&ouId={ouId}').replace('{userId}', ouApplicationUser.applicationUser.id).replace('{ouId}', ouId);
+
+            return $http.get(urlService.followupOrganization + path).then(function (result) {
+                self.followupOrganizations = generator.generateCollection(result.data.rs, FollowupOrganization, self._sharedMethods);
+                self.followupOrganizations = generator.interceptReceivedCollection('FollowupOrganization', self.followupOrganizations);
+                return self.followupOrganizations;
+            });
+        };
+
+        /**
+         * @description add followup user organization
+         * @param followupOrganizations
+         * @param userId
+         * @param ouId
+         * @returns {*}
+         */
+        self.addFollowupUserOrganizations = function (followupOrganizations, userId, ouId) {
+            ouId = ouId && ouId.hasOwnProperty('id') ? ouId.id : ouId;
+            userId = userId && userId.hasOwnProperty('id') ? userId.id : userId;
+
+            return $http.post(urlService.followupOrganization + '/add-bulk/user/' + userId + '/ou/' + ouId,
+                generator.interceptSendCollection('FollowupOrganization', followupOrganizations)
+            ).then(function (result) {
+                return generator.interceptReceivedCollection('FollowupOrganization', generator.generateInstance(result.data.rs, FollowupOrganization, self._sharedMethods));
+            })
+        }
 
     });
 };

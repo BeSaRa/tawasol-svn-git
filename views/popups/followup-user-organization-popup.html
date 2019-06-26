@@ -1,0 +1,140 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.followup_organization}}">
+    <div layout="column">
+        <md-toolbar layout="row" layout-align="start center">
+            <span class="p20">{{lang.followup_organization}} : {{ctrl.ouApplicationUser.ouid.getTranslatedName()}} - {{ ctrl.ouApplicationUser.applicationUser.getTranslatedName()}} </span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+
+
+        <md-content scroll-directive>
+            <form name="followupOrganizationForm" autocomplete="off">
+                <md-content>
+                    <div layout="column" class="p20">
+                        <div layout="row">
+                            <!-- Organizations Dropdown-->
+                            <md-input-container flex>
+                                <label for="ouid">{{lang.organization_unit}}</label>
+                                <md-select id="ouid" name="ouid"
+                                           ng-model-options="{trackBy : '$value.id'}"
+                                           ng-model="ctrl.followupOrganization.followeeOUId"
+                                           md-on-close="ctrl.clearSearchText('inlineUserOU')"
+                                           data-md-container-class="select-header-container">
+                                    <md-select-header class="select-header">
+                                        <input ng-model="ctrl.inlineUserOUSearchText"
+                                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                               placeholder="{{lang.search}}"
+                                               class="select-header-input">
+                                    </md-select-header>
+                                    <md-option ng-value="organization"
+                                               ng-if="ctrl.includeOrganizationsIfNotExists(organization)" -
+                                               ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.inlineUserOUSearchText : 'getNameByLanguageRegOUSection'"
+                                               ng-disabled="!organization.status"
+                                               tooltip="{{(!organization.status)? lang.inactive_organization : '' }}">
+                                                <span
+                                                        md-highlight-text="ctrl.inlineUserOUSearchText"
+                                                        md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-switch aria-label="{{lang.with_subs_ou}}"
+                                       ng-model="ctrl.followupOrganization.withSubs"
+                                       layout-align="center center">
+                                <label for="ouid">{{ctrl.getTranslatedWithSubs(ctrl.followupOrganization)}}</label>
+                            </md-switch>
+
+                            <div class="p020">
+                                <md-button class="md-raised"
+                                           ng-disabled="!ctrl.followupOrganization.followeeOUId"
+                                           ng-click="ctrl.addFollowupOrganizationFromCtrl($event)">
+                                    {{lang.add}}
+                                </md-button>
+                            </div>
+                        </div>
+
+                        <div layout="row">
+                            <md-card md-whiteframe="3" layout="column" class="card-overlay" flex>
+                                <md-table-container>
+                                    <div flex scroll-directive>
+                                        <table md-table md-row-select multiple
+                                               ng-model="ctrl.selectedFollowupOrganizations"
+                                               md-progress="ctrl.grid.progress">
+                                            <thead md-head md-order="ctrl.grid.order"
+                                                   md-on-reorder="ctrl.getSortedData">
+                                            <tr md-row>
+                                                <th colspan="4" class="table-selector-header"
+                                                    ng-if="ctrl.selectedFollowupOrganizations.length" md-column>
+                                                    <div layout="row" layout-align="start center">
+                                                        <span>{{ctrl.selectedFollowupOrganizations.length}} {{lang.items_selected}} </span>
+                                                        <span flex></span>
+                                                        <table-status-directive
+                                                                when-close="ctrl.changeWithSubsBulkOrganizations"></table-status-directive>
+                                                        <md-button class="md-icon-button"
+                                                                   ng-click="ctrl.removeBulkFollowupEmployee($event)">
+                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                        </md-button>
+                                                    </div>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedFollowupOrganizations.length" md-column
+                                                    md-order-by="followeeOUId.arName"><span>{{lang.arabic_name}}</span>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedFollowupOrganizations.length" md-column
+                                                    md-order-by="followeeOUId.enName"><span>{{lang.english_name}}</span>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedFollowupOrganizations.length" md-column
+                                                    md-order-by="withSubs"><span>{{lang.with_subs_ou}}</span>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody md-body>
+                                            <tr md-select="followupOu" md-row
+                                                ng-repeat="followupOu in ctrl.followupOrganizations | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                                <td md-cell>{{followupOu.followeeOUId.arName}}</td>
+                                                <td md-cell>{{followupOu.followeeOUId.enName}}</td>
+                                                <td md-cell>
+                                                    <md-switch aria-label="{{lang.with_subs_ou}}"
+                                                               ng-model="followupOu.withSubs"
+                                                               title="{{ctrl.getTranslatedWithSubs(followupOu)}}"></md-switch>
+                                                </td>
+                                                <td md-cell>
+                                                    <div flex layout="row" layout-align="start center">
+                                                        <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                                   ng-click="ctrl.removeFollowupEmployee(followupOu,$index ,$event)">
+                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                        </md-button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <md-table-pagination
+                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                            md-limit-options="ctrl.grid.limitOptions"
+                                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                            md-total="{{(ctrl.followupOrganizations | filter:ctrl.searchModel).length}}"
+                                            md-page-select>
+                                    </md-table-pagination>
+                                </md-table-container>
+                            </md-card>
+                        </div>
+                    </div>
+
+            </form>
+        </md-content>
+
+
+        <div>
+            <div layout="row">
+                <md-button class="md-raised"
+                           ng-disabled="followupOrganizationForm.$invalid"
+                           ng-click="ctrl.saveFollowupOrganizationFromCtrl()">{{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeFollowupUserOrganizationPopup()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

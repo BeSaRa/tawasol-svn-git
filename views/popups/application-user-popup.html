@@ -1084,6 +1084,12 @@
                                                                             {{lang.grid_action_out_of_office_settings}}
                                                                         </md-button>
                                                                     </md-menu-item>
+                                                                    <md-menu-item>
+                                                                        <md-button
+                                                                                ng-click="ctrl.openFollowupOrganizationDialog(ouApplicationUser, $event , $index)">
+                                                                            {{lang.followup_organization}}
+                                                                        </md-button>
+                                                                    </md-menu-item>
                                                                     <md-menu-divider
                                                                             ng-if="!ctrl.currentOrganization"></md-menu-divider>
                                                                     <md-menu-item ng-if="!ctrl.currentOrganization">

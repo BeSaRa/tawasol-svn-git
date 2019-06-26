@@ -1121,6 +1121,32 @@ module.exports = function (app) {
                     self.ouApplicationUsers.splice($index, 1, result);
                 });
         };
+
+        /**
+         * @description open follow up organization dialog
+         */
+        self.openFollowupOrganizationDialog = function (ouApplicationUser, $event) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    templateUrl: cmsTemplate.getPopup('followup-user-organization'),
+                    controller: 'followupUserOrganizationPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        ouApplicationUser: ouApplicationUser
+                    },
+                    resolve: {
+                        followupOrganizations: function () {
+                            'ngInject';
+                            return ouApplicationUserService.loadFollowupUserOrganization(ouApplicationUser);
+                        }
+                    }
+                })
+                .then(function (result) {
+
+                });
+        };
+
         /**
          * @description Opens dialog for add new job title
          * @param $event
