@@ -529,18 +529,38 @@ module.exports = function (app) {
         /**
          * @description make an update for given correspondence.
          * @param correspondence
+         * @param withOutCheck
          * @return {Promise|Correspondence}
          */
-        self.updateCorrespondence = function (correspondence) {
-            return $http
-                .put(
-                    _createUrlSchema(null, correspondence.docClassName, 'metadata'),
+        var saveDefer = $q.defer();
+        self.updateCorrespondence = function (correspondence, withOutCheck) {
+            var route = 'metadata';
+            var info = correspondence.getInfo();
+
+            // to check weather incoming reference no already exists
+            if (!withOutCheck && info.documentClass === 'incoming') {
+                route += '?with-check=true';
+            }
+
+            $http
+                .put(_createUrlSchema(null, correspondence.docClassName, route),
                     generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence)
-                ).then(function () {
-                    return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                )
+                .then(function () {
+                    saveDefer.resolve(generator.generateInstance(correspondence, _getModel(correspondence.docClassName)));
                 }).catch(function (error) {
-                    return $q.reject(self.getTranslatedError(error));
-                });
+                if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
+                    dialog.confirmMessage(self.getTranslatedError(error) + "<br/>" + langService.get('confirm_continue_message'))
+                        .then(function () {
+                            self.updateCorrespondence(correspondence, true);
+                        }).catch(function () {
+                        saveDefer.reject();
+                    })
+                } else {
+                    saveDefer.reject(self.getTranslatedError(error));
+                }
+            });
+            return saveDefer.promise;
         };
 
         /**
@@ -567,24 +587,40 @@ module.exports = function (app) {
          * @param correspondence
          * @return {Promise|Correspondence}
          */
-        self.createCorrespondence = function (correspondence) {
+        self.createCorrespondence = function (correspondence, withOutCheck) {
             var route = correspondence.docStatus === 3 ? 'draft' : 'metadata';
+            var info = correspondence.getInfo();
             if (correspondence.contentFile) {
                 //route = 'draft';
                 if (correspondence.addMethod === 0)
                     correspondence.signaturesCount = 1;
             }
 
-            return $http
+            // to check weather incoming reference no already exists
+            if (!withOutCheck && info.documentClass === 'incoming') {
+                route += '?with-check=true';
+            }
+            $http
                 .post(_createUrlSchema(correspondence.vsId, correspondence.docClassName, route),
                     generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence)
                 )
                 .then(function (result) {
                     correspondence.vsId = result.data.rs;
-                    return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                    saveDefer.resolve(generator.generateInstance(correspondence, _getModel(correspondence.docClassName)));
+                    //return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
                 }).catch(function (error) {
-                    return $q.reject(self.getTranslatedError(error));
-                });
+                if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
+                    dialog.confirmMessage(self.getTranslatedError(error) + "<br/>" + langService.get('confirm_continue_message'))
+                        .then(function () {
+                            self.createCorrespondence(correspondence, true);
+                        }).catch(function () {
+                        saveDefer.reject();
+                    })
+                } else {
+                    saveDefer.reject(self.getTranslatedError(error));
+                }
+            });
+            return saveDefer.promise;
         };
         /**
          * add Correspondence with the full-template

@@ -56,7 +56,8 @@ module.exports = function (app) {
                 SEC_LDAP_INVALID_SERVER_ADDRESS: 13010,
                 SEC_LDAP_INVALID_OP: 13011,
                 SEC_ERROR_USER_UN_AUHTORIZED_FOR_SERVICE: 13012,
-                INVALID_DOC_STATUS_TO_EXPORT: 3036
+                INVALID_DOC_STATUS_TO_EXPORT: 3036,
+                ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER:2059
                 // entity connection errors end
             },
             errorLangKeys = {

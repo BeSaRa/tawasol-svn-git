@@ -178,7 +178,7 @@ module.exports = function (app) {
                 .catch(function (error) {
                     self.saveInProgress = false;
                     // don't show the error in g2g receive becouse handled by error dialog
-                    if (!self.receiveG2G)
+                    if (error && !self.receiveG2G)
                         toast.error(error);
 
                     return $q.reject(error);

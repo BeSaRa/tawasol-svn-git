@@ -106,16 +106,14 @@ module.exports = function (app) {
             //var isDocHasVsId = angular.copy(self.incoming).hasVsId();
             if (self.receive) {
                 promise = self.incoming.receiveDocument($stateParams.workItem);
-            }
-            else if (self.receiveG2G) {
+            } else if (self.receiveG2G) {
                 promise = self.incoming.receiveG2GDocument($stateParams.vsId);
-            }
-            else {
+            } else {
                 promise = self.incoming
                     .saveDocument(status);
             }
 
-          return  promise.then(function (result) {
+            return promise.then(function (result) {
                 self.incoming.vsId = result.vsId;
                 self.model = angular.copy(self.incoming);
                 self.documentInformationExist = !!angular.copy(self.documentInformation);
@@ -124,32 +122,33 @@ module.exports = function (app) {
 
                 /*If content file was attached */
                 if (self.incoming.contentFile) {
-                   return  self.incoming.addDocumentContentFile()
+                    return self.incoming.addDocumentContentFile()
                         .then(function () {
                             self.contentFileExist = !!(self.incoming.hasOwnProperty('contentFile') && self.incoming.contentFile);
                             self.contentFileSizeExist = !!(self.contentFileExist && self.incoming.contentFile.size);
 
                             saveCorrespondenceFinished(status, newId);
                         })
-                }
-                else {
+                } else {
                     self.contentFileExist = false;
                     self.contentFileSizeExist = false;
 
                     saveCorrespondenceFinished(status, newId);
-                    return  true;
+                    return true;
                 }
 
             }).catch(function (error) {
-                toast.error(error);
+                if (error)
+                    toast.error(error);
+
                 return $q.reject(error);
             });
         };
 
-        self.saveCorrespondenceAndPrintBarcode = function($event){
+        self.saveCorrespondenceAndPrintBarcode = function ($event) {
             self.saveCorrespondence()
                 .then(function () {
-                    self.docActionPrintBarcode(self.incoming,$event);
+                    self.docActionPrintBarcode(self.incoming, $event);
                 })
         };
 
@@ -162,14 +161,12 @@ module.exports = function (app) {
                 /*$timeout(function () {
                     $state.go('app.incoming.draft');
                 })*/
-            }
-            else {
+            } else {
                 var successKey = 'incoming_metadata_saved_success';
                 if (self.documentInformation) {
                     self.incoming.contentSize = 1;
                     successKey = 'save_success';
-                }
-                else if (self.incoming.contentFile && self.incoming.contentFile.size) {
+                } else if (self.incoming.contentFile && self.incoming.contentFile.size) {
                     self.incoming.contentSize = self.incoming.contentFile.size;
                     successKey = 'save_success';
                 }
@@ -263,7 +260,7 @@ module.exports = function (app) {
             document.barcodePrint(document);
         };
 
-        self.docActionLaunchDistributionWorkflow = function (document, $event , defaultTab) {
+        self.docActionLaunchDistributionWorkflow = function (document, $event, defaultTab) {
             defaultTab = defaultTab ? defaultTab : 'favorites';
             if (!self.incoming.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
