@@ -489,7 +489,9 @@ module.exports = function (app) {
             var defer = $q.defer();
             if (!self.isOutOfOffice) {
                 if (self.ouApplicationUserCopy.proxyUser) {
-                    self.ouApplicationUser.proxyUser = self.selectedProxyUser = null;
+                    self.selectedProxyUser = null;
+                    self.ouApplicationUser.proxyUser = null;
+                    self.ouApplicationUser.proxyOUId = null;
                     self.ouApplicationUser.proxyStartDate = null;
                     self.ouApplicationUser.proxyEndDate = null;
                     self.ouApplicationUser.proxyAuthorityLevels = null;
@@ -511,12 +513,12 @@ module.exports = function (app) {
                         templateUrl = cmsTemplate.getPopup('delegated-by-users-message'),
                         html = $templateCache.get(templateUrl);
 
-                    if (!html){
+                    if (!html) {
                         $templateRequest(templateUrl).then(function (template) {
                             html = template;
                             templateDefer.resolve(html);
                         });
-                    }else {
+                    } else {
                         $timeout(function () {
                             templateDefer.resolve(html);
                         })
