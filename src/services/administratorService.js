@@ -8,7 +8,8 @@ module.exports = function (app) {
                                                   cmsTemplate,
                                                   dialog,
                                                   langService,
-                                                  toast) {
+                                                  toast,
+                                                  employeeService) {
         'ngInject';
         var self = this;
         self.serviceName = 'administratorService';
@@ -118,6 +119,30 @@ module.exports = function (app) {
                         }
                     });
             },
+            /**
+             * @description Show confirm box and delete administrator
+             * @param administrator
+             * @param $event
+             */
+            deleteAdministrator: function (administrator, $event) {
+                if (administrator.userId === employeeService.getEmployee().id) {
+                    toast.info(langService.get('can_not_delete_current_user'));
+                    return false;
+                }
+                return dialog.confirmMessage(langService.get('confirm_delete').change({name: administrator.getNames()}), null, null, $event)
+                    .then(function () {
+                        return self.confirmDeleteAdministrator(administrator).then(function () {
+                            toast.success(langService.get("delete_specific_success").change({name: administrator.getNames()}));
+                            return true;
+                        })
+                    });
+            },
+            /**
+             * @description Show the list of organizations in which the user is sub-admin
+             * @param administrator
+             * @param $event
+             * @returns {promise}
+             */
             openAdminOrganizationsDialog: function (administrator, $event) {
                 if (administrator.isSuperAdmin) return;
                 return dialog
@@ -150,5 +175,14 @@ module.exports = function (app) {
                     return result;
                 });
         };
+
+        /**
+         * @description Delete the administrator
+         * @param administratorUserId
+         */
+        self.confirmDeleteAdministrator = function (administratorUserId) {
+            administratorUserId = administratorUserId.hasOwnProperty('userId') ? administratorUserId.userId : administratorUserId;
+            return $http.delete(urlService.userAdminList + '/user-id/' + administratorUserId);
+        }
     });
 };

@@ -61,6 +61,10 @@ module.exports = function (app) {
                 return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
+            Administrator.prototype.getAdministratorUserId = function(){
+                return this.userId;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Administrator', 'init', this);

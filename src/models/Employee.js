@@ -143,6 +143,18 @@ module.exports = function (app) {
                 this.proxyUsers = proxyUsers;
                 return this;
             };
+            Employee.prototype.setIsSubAdmin = function (isSubAdmin) {
+                this.isSubAdmin = isSubAdmin;
+                return this;
+            };
+            Employee.prototype.setIsSuperAdmin = function (isSuperAdmin) {
+                this.isSuperAdmin = isSuperAdmin;
+                return this;
+            };
+            Employee.prototype.setIsAdmin = function (isAdmin) {
+                this.isAdmin = isAdmin;
+                return this;
+            };
 
             Employee.prototype.setOuList = function (ouList) {
                 this.ouList = generator.generateCollection(ouList, Organization);

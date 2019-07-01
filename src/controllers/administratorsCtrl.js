@@ -13,6 +13,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'administratorsCtrl';
         contextHelpService.setHelpTo('administrators');
+        self.currentEmployee = employeeService.getEmployee();
 
         self.administrators = administratorService.administrators;
         self.administratorsCopy = angular.copy(self.administrators);
@@ -114,6 +115,7 @@ module.exports = function (app) {
             return administratorService.controllerMethod
                 .openEditDialog(record, $event)
                 .then(function (result) {
+                    _updateEmployeeValue(record);
                     return self.reloadAdministrators(self.grid.page)
                         .then(function () {
                             toast.success(langService.get('save_success'));
@@ -129,12 +131,16 @@ module.exports = function (app) {
          * @param $event
          */
         self.onChangeIsSuperAdmin = function (record, $event) {
+            if (self.currentEmployee.id === record.userId) {
+                return;
+            }
             // on change from admin to super admin
             if (record.isSuperAdmin) {
                 dialog.confirmMessage(langService.get('confirm_change_admin_to_super_admin'))
                     .then(function (result) {
                         administratorService.saveAdministrator(record)
                             .then(function () {
+                                _updateEmployeeValue(record);
                                 toast.success(langService.get('save_success'));
                             });
                     })
@@ -145,6 +151,9 @@ module.exports = function (app) {
             } else {
                 // on change from super admin to admin
                 self.openEditAdministratorDialog(record, $event)
+                    .then(function () {
+                        _updateEmployeeValue(record);
+                    })
                     .catch(function () {
                         record.isSuperAdmin = true;
                         return false;
@@ -156,5 +165,30 @@ module.exports = function (app) {
             administratorService.controllerMethod
                 .openAdminOrganizationsDialog(record);
         };
+
+        /**
+         * @description Removes the given user from administrators list
+         * @param record
+         * @param $event
+         */
+        self.removeAdministrator = function (record, $event) {
+            administratorService.controllerMethod
+                .deleteAdministrator(record, $event)
+                .then(function (result) {
+                    return self.reloadAdministrators(self.grid.page);
+                });
+        };
+
+        var _updateEmployeeValue = function (administrator) {
+            var employee = employeeService.getEmployee();
+            //console.log('before update', employeeService.getEmployee());
+            if (employee.id === administrator.getAdministratorUserId()) {
+                employee
+                    .setIsSuperAdmin(administrator.isSuperAdmin)
+                    .setIsSubAdmin(!administrator.isSuperAdmin);
+                //console.log('after update', employeeService.getEmployee());
+            }
+        };
+
     });
 };

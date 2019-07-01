@@ -71,6 +71,7 @@
                                             <md-switch aria-label="{{lang.super_admin}}"
                                                        tooltip="{{record.isSuperAdminText}}"
                                                        ng-model="record.isSuperAdmin"
+                                                       ng-disabled="ctrl.currentEmployee.id === record.getAdministratorUserId()"
                                                        ng-change="ctrl.onChangeIsSuperAdmin(record, $event)"></md-switch>
                                         </td>
                                         <td md-cell>
@@ -83,8 +84,14 @@
                                         </td>
                                         <td md-cell>
                                             <div flex layout="row" layout-align="start center">
+                                                <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                           ng-if="ctrl.currentEmployee.id != record.getAdministratorUserId()"
+                                                           ng-click="ctrl.removeAdministrator(record, $event)">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
                                                 <md-button
                                                         class="md-icon-button" title="{{lang.edit}}"
+                                                        ng-if="ctrl.currentEmployee.id != record.getAdministratorUserId()"
                                                         ng-click="ctrl.openEditAdministratorDialog(record, $event)">
                                                     <md-icon md-svg-icon="pencil"></md-icon>
                                                 </md-button>
