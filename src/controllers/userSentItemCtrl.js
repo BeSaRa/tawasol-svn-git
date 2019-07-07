@@ -275,7 +275,7 @@ module.exports = function (app) {
          */
         self.addToFavorite = function (userSentItem, $event) {
             favoriteDocumentsService.controllerMethod
-                .favoriteDocumentAdd(userSentItem.getInfo().vsId , $event)
+                .favoriteDocumentAdd(userSentItem.getInfo().vsId, $event)
                 .then(function (result) {
                     if (result.status) {
                         self.reloadUserSentItems(self.grid.page)
@@ -559,19 +559,29 @@ module.exports = function (app) {
 
         self.printResult = function ($event) {
             var printTitle = langService.get('menu_item_sent_items'),
-                headers = [
-                    'sent_items_serial_number',
-                    'label_document_class',
-                    'sent_items_document_subject',
-                    'sent_items_receive_date',
-                    'sent_items_action',
-                    'sent_items_receiver',
-                    'comment',
-                    //'sent_items_due_date',
-                   // 'sent_items_correspondence_site'
-                ];
+                table = {
+                    headers:
+                        [
+                            'sent_items_serial_number',
+                            'label_document_class',
+                            'sent_items_document_subject',
+                            'sent_items_receive_date',
+                            'sent_items_action',
+                            'sent_items_receiver',
+                            'comment'
+                        ],
+                    columns: [
+                        'docFullSerial',
+                        'docClassName',
+                        'docSubject',
+                        'actionDate',
+                        'workflowActionInfo',
+                        'userToInfo',
+                        'comments'
+                    ]
+                };
             printService
-                .printData(self.userSentItems, headers, printTitle);
+                .printData(self.userSentItems, table, printTitle, self.searchCriteria);
 
         };
 

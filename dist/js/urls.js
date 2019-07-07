@@ -277,6 +277,8 @@
                 .addToAllWithBase('proxyMailInbox', 'cms-entity/user/inbox/manager-inbox/')
                 // user sent items
                 .addToAllWithBase('userInboxSentItems', 'cms-entity/user/inbox/user-sent-items')
+                //
+                .addToAllWithBase('departmentSentItems','cms-entity/user/ou-inbox/dept-sent-items')
                 // broadcast
                 .addToAllWithBase('broadcast', 'cms-entity/correspondence/wf/outgoing/vsid/{{VSID}}/broadcast')
                 // correspondence workFlow
@@ -345,6 +347,8 @@
                 .addToAllWithBase('userAdminList', 'cms-entity/admin/user-admin-list')
                 // user view ou permission
                 .addToAllWithBase('ouViewPermission', 'cms-entity/admin/user-view-ou-permission')
+                // linked entities: hr employee integration
+                .addToAllWithBase('hrEmployeeIntegration', 'cms-entity/admin/employee/criteria')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

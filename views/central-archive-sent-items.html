@@ -14,6 +14,10 @@
                        tooltip="{{lang.select_month_and_year}}">
                 <md-icon md-svg-icon="calendar"></md-icon>
             </md-button>
+            <md-button ng-if="ctrl.sentItemCentralArchives.length"
+                       ng-click="ctrl.printResult($event)" class="md-icon-button" tooltip="{{lang.print}}">
+                <md-icon md-svg-icon="printer"></md-icon>
+            </md-button>
             <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
         </div>
         <!-- end page-header -->

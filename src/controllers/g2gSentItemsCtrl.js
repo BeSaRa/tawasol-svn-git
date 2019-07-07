@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                  contextHelpService,
                                                  correspondenceService,
                                                  viewDeliveryReportService,
+                                                 printService,
                                                  gridService) {
         var self = this;
 
@@ -165,6 +166,22 @@ module.exports = function (app) {
          */
         self.viewDeliveryReport = function (g2gItem, $event) {
             return viewDeliveryReportService.viewDeliveryReport(g2gItem, $event);
+        };
+
+        self.printResult = function ($event) {
+            var printTitle = langService.get('menu_item_sent_items'),
+                headers = [
+                    'sent_items_document_subject',
+                    'type',
+                    'security_level',
+                    'sent_date',
+                    'document_number',
+                    'sent_items_receive_date',
+                    'status'
+                ];
+            printService
+                .printData(self.g2gItems, headers, printTitle);
+
         };
 
         /**

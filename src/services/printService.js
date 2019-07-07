@@ -5,6 +5,8 @@ module.exports = function (app) {
                                           helper,
                                           langService,
                                           urlService,
+                                          EventHistoryCriteria,
+                                          generator,
                                           toast) {
         'ngInject';
         var self = this;
@@ -39,17 +41,50 @@ module.exports = function (app) {
             return data;
         };
 
-        self.printData = function (records, headers, title) {
-            var data = _prepareExportedData(records, headers, title), defer = $q.defer(),
+        var _prepareExportedDataWithCriteria = function (table, title, exportType, criteria) {
+            var data = {
+                    //to check whether department/central or user sent items
+                    criteria: (criteria && criteria instanceof EventHistoryCriteria) ?
+                        generator.interceptSendInstance('EventHistoryCriteria', criteria) : //department/central
+                        criteria, // user sent items
+                    headerNames: [],
+                    headerText: title ? title : '',
+                    columnNames: table.columns,
+                    exportType: exportType
+                },
+                headersCount = table.headers.length;
+
+            for (var i = 0; i < headersCount; i++) {
+                var exportedLabel = table.headers[i];
+
+                // to put the column header
+                data.headerNames.push(langService.get(exportedLabel));
+            }
+
+            return data;
+        };
+
+        self.printData = function (records, table, title, criteria) {
+            var headers = table.hasOwnProperty('headers') ? table.headers : table,
+                urlPdf = (table.hasOwnProperty('columns')) ?
+                    //to check whether department/central or user sent items otherwise its normal print from existing records
+                    ((criteria && criteria instanceof EventHistoryCriteria) ? urlService.userInboxSentItems : urlService.departmentSentItems) + "/print"
+                    : urlService.exportToPdf,
+                urlExel = (table.hasOwnProperty('columns')) ?
+                    //to check whether department/central or user sent items otherwise its normal print from existing records
+                    ((criteria && criteria instanceof EventHistoryCriteria) ? urlService.userInboxSentItems : urlService.departmentSentItems) + "/print"
+                    : urlService.exportToExcel;
+
+            var defer = $q.defer(),
                 urlTypeMap = {
                     pdf: {
-                        url: urlService.exportToPdf,
+                        url: urlPdf,
                         type: 'pdf',
                         text: 'PDF',
                         id: 1
                     },
                     excel: {
-                        url: urlService.exportToExcel,
+                        url: urlExel,
                         type: 'excel',
                         text: 'EXCEL',
                         id: 2
@@ -65,6 +100,11 @@ module.exports = function (app) {
                     }
                 });
             return defer.promise.then(function (exportOption) {
+
+                var data = (table.hasOwnProperty('columns')) ?
+                    _prepareExportedDataWithCriteria(table, title, exportOption.type, criteria) :
+                    _prepareExportedData(records, headers, title);
+
                 var errorMessage = langService.get('error_export_to_file').change({format: (exportOption.type === 'excel' ? 'EXCEL' : 'PDF')});
                 return $http.post(exportOption.url, data)
                     .then(function (result) {
