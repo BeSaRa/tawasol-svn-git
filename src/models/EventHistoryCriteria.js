@@ -17,7 +17,8 @@ module.exports = function (app) {
             self.docClassId = null;
             self.fromActionTime = null;
             self.toActionTime = null;
-
+            self.userId = null;
+            self.ouId = null;
 
             // temporary property. to be removed before sending to backend
             self.selectedSiteType = null;

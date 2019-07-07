@@ -15,6 +15,7 @@ module.exports = function (app) {
                                                       organizationService,
                                                       ApplicationUser,
                                                       FollowupOrganization,
+                                                      OUViewPermission,
                                                       ProxyInfo) {
         'ngInject';
         var self = this;
@@ -23,6 +24,8 @@ module.exports = function (app) {
         self.ouApplicationUsers = [];
         self.followupOrganizations = [];
         self.unAssignedUsers = [];
+        self.ouViewPermissions = [];
+
         /**
          * @description load unrelated ApplicationUsers from server.
          * @returns {Promise|ouApplicationUsers}
@@ -741,6 +744,58 @@ module.exports = function (app) {
             ).then(function (result) {
                 return generator.interceptReceivedCollection('FollowupOrganization', generator.generateInstance(result.data.rs, FollowupOrganization, self._sharedMethods));
             })
+        };
+
+        /**
+         * @description get ou view permission
+         * @param userId
+         * @returns {*}
+         */
+        self.getOUsViewPermissionForUser = function (userId) {
+            userId = userId && userId.hasOwnProperty('id') ? userId : userId;
+
+            return $http.get(urlService.ouViewPermission + '/user-id/' + userId).then(function (result) {
+                self.ouViewPermissions = generator.generateCollection(result.data.rs, OUViewPermission, self._sharedMethods);
+                self.ouViewPermissions = generator.interceptReceivedCollection('OUViewPermission', self.ouViewPermissions);
+                return self.ouViewPermissions;
+            });
+        };
+
+        /***
+         * @description add ou view permission
+         * @param ouViewPermissions
+         * @param userId
+         * @returns {*}
+         */
+        self.addOuViewPermissionForUser = function (ouViewPermissions, userId) {
+            userId = userId && userId.hasOwnProperty('id') ? userId : userId;
+
+            return $http.post(urlService.ouViewPermission + '/add-bulk/user-id/' + userId,
+                generator.interceptSendCollection('OUViewPermission', ouViewPermissions))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('OUViewPermission', generator.generateInstance(result.data.rs, OUViewPermission, self._sharedMethods));
+                })
+        };
+
+        /**
+         * @description remove bulk ou view permission
+         * @param ouViewPermissions
+         */
+        self.removeBulkOuViewPermissionsForUser = function (ouViewPermissions) {
+            if (!angular.isArray(ouViewPermissions)) {
+                // for single delete
+                ouViewPermissions = [ouViewPermissions];
+            }
+            return $http({
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                url: urlService.ouViewPermission + '/delete-bulk',
+                data: generator.interceptSendCollection('OUViewPermission', ouViewPermissions)
+            }).then(function (result) {
+                return result;
+            });
         }
 
     });

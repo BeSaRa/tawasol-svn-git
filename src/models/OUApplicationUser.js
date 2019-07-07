@@ -27,10 +27,9 @@ module.exports = function (app) {
             self.permissionList = null;
             self.ouViewPermissionList = null;
             self.proxyOUId = null;
-
             self.ouInfo = null;
-
             self.wfsecurity = null;
+            self.ouViewPermissionList = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

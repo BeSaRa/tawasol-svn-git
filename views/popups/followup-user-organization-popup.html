@@ -26,7 +26,7 @@
                                                class="select-header-input">
                                     </md-select-header>
                                     <md-option ng-value="organization"
-                                               ng-if="ctrl.includeOrganizationsIfNotExists(organization)" -
+                                               ng-if="ctrl.includeOrganizationsIfNotExists(organization)"
                                                ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.inlineUserOUSearchText : 'getNameByLanguageRegOUSection'"
                                                ng-disabled="!organization.status"
                                                tooltip="{{(!organization.status)? lang.inactive_organization : '' }}">

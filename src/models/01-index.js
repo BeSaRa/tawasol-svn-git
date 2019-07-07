@@ -168,4 +168,5 @@ module.exports = function (app) {
     require('./ViewerLog')(app);
     require('./Administrator')(app);
     require('./FollowupOrganization')(app);
+    require('./OUViewPermission')(app);
 };

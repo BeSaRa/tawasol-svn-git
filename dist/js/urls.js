@@ -337,6 +337,8 @@
                 .addToAllWithBase('tasks', 'cms-entity/user/tasks')
                 // user admin list
                 .addToAllWithBase('userAdminList', 'cms-entity/admin/user-admin-list')
+                // user view ou permission
+                .addToAllWithBase('ouViewPermission', 'cms-entity/admin/user-view-ou-permission')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

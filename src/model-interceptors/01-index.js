@@ -106,4 +106,5 @@ module.exports = function (app) {
     require('./TaskParticipantInterceptor')(app);
     require('./AdministratorInterceptor')(app);
     require('./FollowupOrganizationInterceptor')(app);
+    require('./OUViewPermissionInterceptor')(app);
 };

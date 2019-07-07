@@ -19,6 +19,8 @@ module.exports = function (app) {
                                                        lookupService,
                                                        userClassificationViewPermissionService,
                                                        UserClassificationViewPermission,
+                                                       OUViewPermission,
+                                                       ouViewPermissions,
                                                        themes,
                                                        userClassificationViewPermissions,
                                                        roles,
@@ -59,6 +61,7 @@ module.exports = function (app) {
 
         self.rootEntity = rootEntity;
         self.inlineUserOUSearchText = '';
+        self.inlineOuSearchText = '';
 
         self.validateLabels = {
             arFullName: 'arabic_full_name',
@@ -1312,6 +1315,99 @@ module.exports = function (app) {
                 .catch(function () {
 
                 });
+        };
+
+
+        //
+        self.ouViewPermissions = ouViewPermissions;
+        self.selectedOUViewPermissions = [];
+        var _resetOUViewPermissionModel = function () {
+            self.ouViewPermission = new OUViewPermission({
+                userId: self.ouApplicationUser.applicationUser.id
+            });
+        };
+        _resetOUViewPermissionModel();
+
+
+        self.addOuViewPermissionFromCtrl = function () {
+            var ouViewPermissionCopy = angular.copy(self.ouViewPermissions);
+            ouViewPermissionCopy.push(self.ouViewPermission);
+
+            ouApplicationUserService.addOuViewPermissionForUser(ouViewPermissionCopy, self.ouApplicationUser.applicationUser.id)
+                .then(function (result) {
+                    ouApplicationUserService.getOUsViewPermissionForUser(self.ouApplicationUser.applicationUser.id).then(function (result) {
+                        self.ouViewPermissions = result;
+                        self.selectedOUViewPermissions = [];
+                        toast.success(langService.get('add_success').change({name: new Information(self.ouViewPermission.ouId).getTranslatedName()}));
+                        _resetOUViewPermissionModel();
+                    })
+                }).catch(function () {
+
+            })
+        };
+
+
+        /**
+         * @description remove OU view Permission
+         * @param ouViewPermission
+         * @param $event
+         */
+        self.removeOUViewPermission = function (ouViewPermission, $event) {
+            return dialog
+                .confirmMessage(langService.get('confirm_remove').change({name: ouViewPermission.ouInfo.getTranslatedName()}), null, null, $event)
+                .then(function () {
+                    ouApplicationUserService.removeBulkOuViewPermissionsForUser(ouViewPermission)
+                        .then(function (result) {
+                            ouApplicationUserService.getOUsViewPermissionForUser(self.ouApplicationUser.applicationUser.id).then(function (result) {
+                                self.ouViewPermissions = result;
+                                self.selectedOUViewPermissions = [];
+                                toast.success(langService.get('delete_success'));
+                            })
+                        })
+                });
+        };
+
+        /**
+         * @description remove B ulk OU View Permission
+         * @param $event
+         */
+        self.removeBulkOUViewPermissions = function ($event) {
+            return dialog
+                .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event)
+                .then(function () {
+                    ouApplicationUserService.removeBulkOuViewPermissionsForUser(self.selectedOUViewPermissions)
+                        .then(function (result) {
+                            ouApplicationUserService.getOUsViewPermissionForUser(self.ouApplicationUser.applicationUser.id).then(function (result) {
+                                self.ouViewPermissions = result;
+                                toast.success(langService.get('delete_success'));
+                            })
+                        })
+                });
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataOUViewPermissions = function () {
+            self.ouViewPermissions = $filter('orderBy')(self.ouViewPermissions, self.ouViewPermissionsGrid.order);
+        };
+
+        self.excludeOuViewPermissionIfExists = function (organization) {
+            return _.map(self.ouViewPermissions, 'ouId').indexOf(organization.id) === -1 ||
+                self.excludedOrganizations.indexOf(organization.id) === -1;
+        };
+
+        self.ouViewPermissionsGrid = {
+            limit: 5, // default limit
+            page: 1, // first page
+            //order: 'arName', // default sorting order
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, {
+                label: langService.get('all'),
+                value: function () {
+                    return (self.ouViewPermissions.length + 21);
+                }
+            }]
         };
 
         /**

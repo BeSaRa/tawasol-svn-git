@@ -129,6 +129,10 @@ module.exports = function (app) {
                                 'ngInject';
                                 return ouApplicationUserService.loadOUApplicationUsersByUserId(applicationUser.id);
                             },
+                            ouViewPermissions: function (ouApplicationUserService) {
+                                'ngInject';
+                                return ouApplicationUserService.getOUsViewPermissionForUser(applicationUser.id);
+                            }
                             /* // by BeSaRa to resolve the signature if found
                              signature: function (applicationUserSignatureService, $q) {
                                  'ngInject';
