@@ -13,11 +13,12 @@ module.exports = function (app) {
                 if (!scope.announcements)
                     return;
 
-                function startOwl() {
+                function startOwl(currentLang) {
+                    dieOwl();
                     $(element)
                         .owlCarousel({
                             items: 1,
-                            rtl: true,
+                            rtl: currentLang === 'ar',
                             autoplay: true
                         });
                 }
@@ -29,6 +30,9 @@ module.exports = function (app) {
                 $timeout(function () {
                     startOwl(langService.current);
                 }, 1000);
+
+
+                langService.listeningToChange(startOwl);
 
             }
         };
