@@ -73,10 +73,18 @@
                                         model="readyToSendIncoming"
                                         selected-length="{{ctrl.selectedReadyToSendIncomings.length ? ctrl.selectedReadyToSendIncomings.length : 0}}"
                                         ng-repeat="readyToSendIncoming in searchResults = (ctrl.readyToSendIncomings | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
-                                        <td md-cell class="td-data">
-                                            <a href="" ng-if="readyToSendIncoming.hasContent()" class="view-doc"
+                                        <td md-cell class="subject">
+                                            <!--<grid-document-subject-directive record="readyToSendIncoming"
+                                                                             plain-text-only="!readyToSendIncoming.hasContent()"
+                                                                             click-callback="ctrl.viewDocument">
+                                            </grid-document-subject-directive>-->
+                                            <a href="" ng-if="readyToSendIncoming.hasContent()"
+                                               class="view-doc subject-internal" md-truncate
+                                               tooltip="{{readyToSendIncoming.docSubject}}"
                                                ng-click="ctrl.viewDocument(readyToSendIncoming, $event)">{{readyToSendIncoming.docSubject}}</a>
-                                            <span ng-if="!readyToSendIncoming.hasContent()">{{readyToSendIncoming.docSubject}}</span>
+                                            <span ng-if="!readyToSendIncoming.hasContent()"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{readyToSendIncoming.docSubject}}">{{readyToSendIncoming.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{readyToSendIncoming.priorityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{readyToSendIncoming.securityLevel.getTranslatedName()}}</td>

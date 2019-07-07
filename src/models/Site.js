@@ -19,6 +19,11 @@ module.exports = function (app) {
                     subArSiteText: 'arName',
                     subEnSiteText: 'enName',
                     siteType: 'correspondenceSiteTypeId'
+                },
+                exportWayMap = {
+                    1: 'export_electronic',
+                    2: 'export_manual',
+                    3: 'export_fax'
                 };
             self.followupDate = null;
             self.followupStatus = null;
@@ -120,6 +125,10 @@ module.exports = function (app) {
 
             Site.prototype.getExportType = function () {
                 return langService.get(exportTypes[this.siteCategory]);
+            };
+
+            Site.prototype.getExportWayText = function () {
+                return langService.get(exportWayMap[this.exportWay]);
             };
 
             Site.prototype.getVersionType = function () {

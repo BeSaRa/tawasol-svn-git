@@ -115,7 +115,9 @@ module.exports = function (app) {
                         var organization = _.find(organizations, {id: ouId});
                         return {
                             organization: organization,
-                            manager: _.find(applicationUsers, {'id': organization.managerId})
+                            manager: _.find(applicationUsers, function (appUser) {
+                                return appUser.id === organization.managerId
+                            })
                         };
                     })
                 }

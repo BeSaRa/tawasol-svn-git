@@ -11,28 +11,20 @@
                                ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.registryOU"
-                               ng-required="ctrl.checkMandatory('registryOU')">
+                               ng-required="ctrl.checkMandatory('registryOU')"
+                               md-on-close="ctrl.clearSearchText('registryOU')"
+                               data-md-container-class="select-header-container">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.registryOUSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
                         <md-option ng-value="organization.id"
-                                   ng-repeat="organization in ctrl.registryOrganizations">
-                            {{organization.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="outgoing_properties.ou.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
-                <!-- OU (If not show registry unit) -->
-                <md-input-container ng-if="!ctrl.showRegistryUnit() && ctrl.checkStatus('ou')" flex>
-                    <label for="ou">{{lang.organization_unit}}</label>
-                    <md-select name="ou"
-                               id="ou"
-                               ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
-                               ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
-                               ng-model="ctrl.document.ou"
-                               ng-required="ctrl.checkMandatory('ou')">
-                        <md-option ng-value="organization.id"
-                                   ng-repeat="organization in ctrl.organizations">
-                            {{organization.getTranslatedName()}}
+                                   ng-repeat="organization in ctrl.registryOrganizations | translatedNameFilter: ctrl.registryOUSearchText">
+                            <span
+                                    md-highlight-text="ctrl.registryOUSearchText"
+                                    md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
                         </md-option>
                     </md-select>
                     <div ng-messages="outgoing_properties.ou.$error">
@@ -47,10 +39,48 @@
                                ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.ou"
-                               ng-required="ctrl.checkMandatory('ou')">
+                               ng-required="ctrl.checkMandatory('ou')"
+                               md-on-close="ctrl.clearSearchText('registrySection')"
+                               data-md-container-class="select-header-container">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.registrySectionSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
                         <md-option ng-value="organization.id"
-                                   ng-repeat="organization in ctrl.subOrganizations">
-                            {{organization.getTranslatedName()}}
+                                   ng-repeat="organization in ctrl.subOrganizations | translatedNameFilter: ctrl.registrySectionSearchText">
+                            <span
+                                    md-highlight-text="ctrl.registrySectionSearchText"
+                                    md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="outgoing_properties.ou.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <!-- OU (If not show registry unit) -->
+                <md-input-container ng-if="!ctrl.showRegistryUnit() && ctrl.checkStatus('ou')" flex>
+                    <label for="ou">{{lang.organization_unit}}</label>
+                    <md-select name="ou"
+                               id="ou"
+                               ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
+                               ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
+                               ng-model="ctrl.document.ou"
+                               ng-required="ctrl.checkMandatory('ou')"
+                               md-on-close="ctrl.clearSearchText('ou')"
+                               data-md-container-class="select-header-container">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.ouSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
+                        <md-option ng-value="organization.id"
+                                   ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.ouSearchText">
+                            <span
+                                    md-highlight-text="ctrl.ouSearchText"
+                                    md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
                         </md-option>
                     </md-select>
                     <div ng-messages="outgoing_properties.ou.$error">

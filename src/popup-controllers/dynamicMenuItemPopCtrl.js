@@ -19,7 +19,7 @@ module.exports = function (app) {
         self.editMode = editMode;
         self.dynamicMenuItem = angular.copy(dynamicMenuItem);
         self.model = angular.copy(dynamicMenuItem);
-        self.fullScreen = false;
+
         // selected children
         self.selectedChildrenDynamicMenuItems = [];
 
@@ -142,12 +142,6 @@ module.exports = function (app) {
         };
         self.resetModel = function () {
             generator.resetFields(self.dynamicMenuItem, self.model);
-        };
-        /**
-         * @description toggle full screen button.
-         */
-        self.fullScreenToggle = function () {
-            self.fullScreen = !self.fullScreen;
         };
         /**
          * @description load sub menu items

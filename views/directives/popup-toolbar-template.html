@@ -1,0 +1,13 @@
+<md-toolbar>
+    <div class="md-toolbar-tools">
+        <span md-truncate ng-if="ctrl.headerText" tooltip="{{ctrl.showTooltip ? ctrl.headerText : ''}}">{{ctrl.headerText}}</span>
+        <span flex></span>
+        <div ng-if="ctrl.fullScreenButton">
+            <md-button class="md-icon-button" ng-click="ctrl.toggleFullScreen()">
+                <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen' }}"></md-icon>
+            </md-button>
+        </div>
+        <cms-close-dialog-directive ng-if="!ctrl.hideClose"
+                                    when-close="ctrl.closeCallback"></cms-close-dialog-directive>
+    </div>
+</md-toolbar>

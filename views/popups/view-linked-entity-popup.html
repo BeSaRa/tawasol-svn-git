@@ -1,10 +1,9 @@
-<md-dialog class="dialog-extend" id="view-tracking-sheet-dialog"
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="view-tracking-sheet-dialog"
            aria-label="{{lang[ctrl.linkedEntity.getTranslatedName()]}}">
     <div layout="column">
-        <md-toolbar layout="row" layout-align="start center">
-            <span class="p20">{{ctrl.linkedEntity.getTranslatedName()}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{ctrl.linkedEntity.getTranslatedName()}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <div class="p20">
                 <form name="linkedEntityForm" autocomplete="off" layout="column">

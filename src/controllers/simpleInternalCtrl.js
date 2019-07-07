@@ -413,7 +413,7 @@ module.exports = function (app) {
                 permissionKey: "ELECTRONIC_SIGNATURE",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && !model.isPrivateSecurityLevel(); //Don't show if its paper outgoing
+                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && !model.isPrivateSecurityLevel() && !model.isInternalPersonal(); //Don't show if its paper outgoing
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

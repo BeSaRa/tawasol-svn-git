@@ -170,18 +170,6 @@ module.exports = function (app) {
                         }
                     });
             },
-            openSelectOrganizationPopup: function (documentFile, $event) {
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('document-file-select-related-ou'),
-                        controller: 'documentFileSelectRelatedOUPopCtrl',
-                        controllerAs: 'ctrl',
-                        locals: {
-                            documentFile: angular.copy(documentFile)
-                        }
-                    });
-            },
             openOrganizationPopup: function (organizations, documentFile, $event) {
                 return dialog
                     .showDialog({

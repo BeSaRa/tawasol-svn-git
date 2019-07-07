@@ -81,7 +81,14 @@
                                                                       indicator-type="paperElectronic"
                                                                       record-type="internal"></grid-indicator-directive>
                                         </td>
-                                        <td md-cell>{{prepareInternal.docSubject}}</td>
+                                        <td md-cell class="subject">
+                                            <!--<grid-document-subject-directive record="prepareInternal"
+                                                                             plain-text-only="true">
+                                            </grid-document-subject-directive>-->
+                                            <span ng-if="!prepareInternal.hasContent()"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{prepareInternal.docSubject}}">{{prepareInternal.docSubject}}</span>
+                                        </td>
                                         <td md-cell>{{prepareInternal.priorityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{prepareInternal.securityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{prepareInternal.creatorInfo.getTranslatedName()}}</td>

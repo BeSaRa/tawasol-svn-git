@@ -67,7 +67,14 @@
                                     <tr md-row md-select="scanIncoming" grid-right-click-directive model="scanIncoming"
                                         selected-length="{{ctrl.selectedScanIncomings.length ? ctrl.selectedScanIncomings.length : 0}}"
                                         ng-repeat="scanIncoming in searchResults = (ctrl.scanIncomings | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))  track by $index">
-                                        <td md-cell>{{scanIncoming.docSubject}}</td>
+                                        <td md-cell class="subject">
+                                            <!--<grid-document-subject-directive record="scanIncoming"
+                                                                             plain-text-only="true">
+                                            </grid-document-subject-directive>-->
+                                            <span
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{scanIncoming.docSubject}}">{{scanIncoming.docSubject}}</span>
+                                        </td>
                                         <td md-cell>{{scanIncoming.priorityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{scanIncoming.securityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{scanIncoming.creatorInfo.getTranslatedName()}}</td>

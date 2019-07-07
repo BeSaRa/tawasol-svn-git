@@ -147,36 +147,6 @@
                                                                    callback="ctrl.changeFollowupEmployeeInboxStar"
                                                                    selected-records="ctrl.selectedFollowupEmployeeInboxes"
                                             ></star-unstar-directive>
-                                            <!--<md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
-                                                     ng-if="followupEmployeeInbox.generalStepElm.starred && (!ctrl.selectedFollowupEmployeeInboxes.length
-                                                     || ctrl.selectedFollowupEmployeeInboxes.length===1 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber === followupEmployeeInbox.generalStepElm.workObjectNumber)"
-                                                     md-svg-icon="star"
-                                                     ng-click="ctrl.changeFollowupEmployeeInboxStar(followupEmployeeInbox, $event)"
-                                            ></md-icon>
-                                            &lt;!&ndash;tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"&ndash;&gt;
-                                            <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
-                                                     ng-if="followupEmployeeInbox.generalStepElm.starred
-                                                     && ((ctrl.selectedFollowupEmployeeInboxes.length === 1
-                                                     && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber != followupEmployeeInbox.generalStepElm.workObjectNumber)
-                                                        || ctrl.selectedFollowupEmployeeInboxes.length > 1)"
-                                                     md-svg-icon="star"
-                                            ></md-icon>
-                                            &lt;!&ndash;tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"&ndash;&gt;
-                                            <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
-                                                     ng-if="!followupEmployeeInbox.generalStepElm.starred && (!ctrl.selectedFollowupEmployeeInboxes.length
-                                                      || ctrl.selectedFollowupEmployeeInboxes.length===1 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber === followupEmployeeInbox.generalStepElm.workObjectNumber)"
-                                                     md-svg-icon="star-outline"
-                                                     ng-click="ctrl.changeFollowupEmployeeInboxStar(followupEmployeeInbox, $event)"
-                                            ></md-icon>
-                                            &lt;!&ndash;tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"&ndash;&gt;
-                                            <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
-                                                     ng-if="!followupEmployeeInbox.generalStepElm.starred
-                                                     && ((ctrl.selectedFollowupEmployeeInboxes.length === 1
-                                                     && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber != followupEmployeeInbox.generalStepElm.workObjectNumber)
-                                                        || ctrl.selectedFollowupEmployeeInboxes.length > 1)"
-                                                     md-svg-icon="star-outline"
-                                            ></md-icon>
-                                            &lt;!&ndash;tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"&ndash;&gt; -->
                                         </td>
                                         <td md-cell>
                                             <span class="serial-td">{{followupEmployeeInbox.generalStepElm.docFullSerial}}</span>
@@ -193,14 +163,18 @@
                                                                       indicator-type="hasAttachment"
                                                                       record-type="workItem"></grid-indicator-directive>
                                         </td>
-                                        <td md-cell md-truncate class="subject">
-                                            <a href="" class="view-doc" md-truncate
-                                               ng-if="followupEmployeeInbox.hasContent()"
-                                               title="{{followupEmployeeInbox.generalStepElm.docSubject}}"
-                                               ng-click="ctrl.viewDocument(followupEmployeeInbox, $event)">
-                                                {{followupEmployeeInbox.generalStepElm.docSubject}}
-                                            </a>
-                                            <span ng-if="!followupEmployeeInbox.hasContent()">{{followupEmployeeInbox.generalStepElm.docSubject}}</span>
+                                        <td md-cell class="subject">
+                                            <!--<grid-document-subject-directive record="followupEmployeeInbox"
+                                                                             plain-text-only="!followupEmployeeInbox.hasContent()"
+                                                                             click-callback="ctrl.viewDocument">
+                                            </grid-document-subject-directive>-->
+                                            <a href="" ng-if="followupEmployeeInbox.hasContent()"
+                                               class="view-doc subject-internal" md-truncate
+                                               tooltip="{{followupEmployeeInbox.generalStepElm.docSubject}}"
+                                               ng-click="ctrl.viewDocument(followupEmployeeInbox, $event)">{{followupEmployeeInbox.generalStepElm.docSubject}}</a>
+                                            <span ng-if="!followupEmployeeInbox.hasContent()"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{followupEmployeeInbox.generalStepElm.docSubject}}">{{followupEmployeeInbox.generalStepElm.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{followupEmployeeInbox.generalStepElm.receivedDate}}</td>
                                         <td md-cell>{{followupEmployeeInbox.action.getTranslatedName()}}</td>

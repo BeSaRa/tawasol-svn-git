@@ -6,7 +6,8 @@
                        class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
-            <md-button ng-if="ctrl.searchedIncomingDocuments.length" ng-click="ctrl.printResult($event)" class="md-icon-button" tooltip="{{lang.print}}">
+            <md-button ng-if="ctrl.searchedIncomingDocuments.length" ng-click="ctrl.printResult($event)"
+                       class="md-icon-button" tooltip="{{lang.print}}">
                 <md-icon md-svg-icon="printer"></md-icon>
             </md-button>
         </div>
@@ -111,10 +112,6 @@
                                         md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
-                                    <!--<th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
-                                        <span>{{lang.security_level}}</span>
-                                    </th>-->
                                     <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
                                         md-order-by="{{ctrl.getSortingKey('docTypeForSearchGrid', 'DocumentType')}}">
                                         <span>{{lang.label_document_type}}</span>
@@ -162,16 +159,21 @@
                                     </td>
                                     <td md-cell>
                                         <span class="serial-td">{{searchedIncomingDocument.docFullSerial}}</span></td>
-                                    <td md-cell class="td-data">
-                                        <a href="" ng-if="searchedIncomingDocument.hasContent()" class="view-doc"
+                                    <td md-cell class="subject">
+                                        <!--<grid-document-subject-directive record="searchedIncomingDocument"
+                                                                         plain-text-only="!searchedIncomingDocument.hasContent()"
+                                                                         click-callback="ctrl.viewDocument">
+                                        </grid-document-subject-directive>-->
+                                        <a href="" ng-if="searchedIncomingDocument.hasContent()"
+                                           class="view-doc subject-internal" md-truncate
+                                           tooltip="{{searchedIncomingDocument.docSubject}}"
                                            ng-click="ctrl.viewDocument(searchedIncomingDocument, $event)">{{searchedIncomingDocument.docSubject}}</a>
-                                        <span ng-if="!searchedIncomingDocument.hasContent()">{{searchedIncomingDocument.docSubject}}</span>
+                                        <span ng-if="!searchedIncomingDocument.hasContent()"
+                                              class="view-doc subject-internal" md-truncate
+                                              tooltip="{{searchedIncomingDocument.docSubject}}">{{searchedIncomingDocument.docSubject}}</span>
                                     </td>
                                     <td md-cell>{{searchedIncomingDocument.priorityLevel.getTranslatedName()}}</td>
-                                    <!--<td md-cell>{{searchedIncomingDocument.securityLevel.getTranslatedName()}}</td>-->
-                                    <!--<td md-cell>{{lang[searchedIncomingDocument.getInfo().documentClass +"_document_class"]}}</td>-->
-                                    <td md-cell>{{searchedIncomingDocument.docTypeInfo.getTranslatedName()}}
-                                    </td>
+                                    <td md-cell>{{searchedIncomingDocument.docTypeInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{searchedIncomingDocument.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{searchedIncomingDocument.createdOn}}</td>
                                     <td md-cell class="td-data">

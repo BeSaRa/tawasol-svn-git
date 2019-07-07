@@ -31,7 +31,7 @@ module.exports = function (app) {
             self.ouApplicationUserSelected = self.ouApplicationUser ? _.filter(self.ouApplicationUsers, function (ouAppUser) {
                 return ouAppUser.applicationUser.id === self.ouApplicationUser.id
             }) : [];
-
+            self.isAddManagerToAllUsersEnabled = false;
 
             /**
              * @description Get the sorting key for information or lookup model
@@ -84,7 +84,13 @@ module.exports = function (app) {
             self.saveSelectedOuUser = function () {
                 if (self.checkUserSelected())
                     return;
-                dialog.hide(self.ouApplicationUserSelected[0].applicationUser);
+
+                var applicationUser = {
+                    applicationUser: self.ouApplicationUserSelected[0].applicationUser,
+                    isAddManagerToAllUsersEnabled: self.isAddManagerToAllUsersEnabled
+                };
+
+                dialog.hide(applicationUser);
 
             };
             /**

@@ -16,6 +16,18 @@ module.exports = function (app) {
         self.smsTemplate = angular.copy(smsTemplate);
         self.model = angular.copy(self.smsTemplate);
 
+        self.smsVariables = [
+            'DocumentSubject',
+            'CurrentDate',
+            'DocumentCreationDate',
+            'DocumentApprovalDate',
+            'EntityName',
+            'EntityAddress',
+            'DocumentFullSerial',
+            'EntityAddress',
+            'PriorityLevel'
+        ];
+
         self.validateLabels = {
             arName: 'arabic_name',
             enName: 'english_name',

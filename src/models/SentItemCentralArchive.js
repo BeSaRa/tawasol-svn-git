@@ -66,6 +66,10 @@ module.exports = function (app) {
                 return this.docSubject;
             };
 
+            SentItemCentralArchive.prototype.getSubject = function () {
+                return this.docSubject;
+            };
+
             SentItemCentralArchive.prototype.getTranslatedType = function () {
                 return this.type === 0 ? langService.get('original') : langService.get('copy');
             };

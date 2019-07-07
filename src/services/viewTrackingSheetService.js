@@ -40,9 +40,10 @@ module.exports = function (app) {
             /**
              * @description Returns the view tracking sheet options for grid actions
              * @param gridOrTabs
+             * @param parentGridName
              * @returns {[]}
              */
-            self.getViewTrackingSheetOptions = function (gridOrTabs) {
+            self.getViewTrackingSheetOptions = function (gridOrTabs, parentGridName) {
                 if (gridOrTabs === 'tabs')
                     return [];
                 return [
@@ -145,12 +146,20 @@ module.exports = function (app) {
                         icon: '',
                         text: 'view_tracking_sheet_sms_logs',
                         shortcut: false,
-                        hide: true,
+                        //hide: true,
                         callback: self.viewTrackingSheet,
                         params: ['view_tracking_sheet_sms_logs', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: function (action, model) {
-                            return true;
+                            return (parentGridName === gridService.grids.inbox.userInbox
+                                || parentGridName === gridService.grids.inbox.group
+                                || parentGridName === gridService.grids.inbox.favorite
+                                || parentGridName === gridService.grids.search.outgoing
+                                || parentGridName === gridService.grids.search.incoming
+                                || parentGridName === gridService.grids.search.internal
+                                || parentGridName === gridService.grids.search.general
+                                || parentGridName === gridService.grids.search.outgoingIncoming
+                                || parentGridName === gridService.grids.search.quick);
                         }
                     },
                     // Outgoing Delivery Reports
@@ -270,13 +279,31 @@ module.exports = function (app) {
                                             return [];
                                         }) : [];
                             },
-                            smsLogRecords: function () {
+                            smsLogRecords: function (organizationService, applicationUserService) {
                                 'ngInject';
-                                return [];/*(heading === 'view_tracking_sheet_sms_logs' || gridType === 'tabs')
-                                    ? self.loadSmsLogs(document)
-                                        .then(function (result) {
+                                if (heading === 'view_tracking_sheet_sms_logs' || gridType === 'tabs') {
+                                    var appUserDefer = $q.defer();
+                                    organizationService.getOrganizations().then(function () {
+                                        applicationUserService.getApplicationUsers().then(function (result) {
+                                            appUserDefer.resolve(result);
+                                        });
+                                    });
+                                    return appUserDefer.promise.then(function () {
+                                        return self.loadSmsLogs(document).then(function (result) {
                                             return result;
-                                        }) : [];*/
+                                        })
+                                    });
+                                } else {
+                                    return [];
+                                }
+
+                                /*return appUserDefer.promise.then(function () {
+                                    return (heading === 'view_tracking_sheet_sms_logs' || gridType === 'tabs')
+                                        ? self.loadSmsLogs(document)
+                                            .then(function (result) {
+                                                return result;
+                                            }) : [];
+                                })*/
                             },
                             outgoingDeliveryReportRecords: function () {
                                 'ngInject';
@@ -296,7 +323,7 @@ module.exports = function (app) {
                                         }).catch(function (error) {
                                             return [];
                                         }) : [];
-                            },
+                            }
                             /*docUpdateHistoryRecords: function () {
                              'ngInject';
                              return (heading === 'view_tracking_sheet_doc_update_history' || gridType === 'tabs')
@@ -771,28 +798,25 @@ module.exports = function (app) {
                             ]);
                         }
                     }
+                } else if (heading === 'view_tracking_sheet_sms_logs') {
+                    if (self.smsLogs.length) {
+                        headerNames = [
+                            langService.get('view_tracking_sheet_action_by'),
+                            langService.get('organization'),
+                            langService.get('view_tracking_sheet_action_date'),
+                            langService.get('sms_message')
+                        ];
+                        for (var i = 0; i < self.smsLogs.length; i++) {
+                            record = self.smsLogs[i];
+                            data.push([
+                                record.user.getTranslatedName(),
+                                record.organization.getTranslatedName(),
+                                record.actionDate_vts,
+                                record.message
+                            ]);
+                        }
+                    }
                 }
-                /*else if (heading === 'view_tracking_sheet_sms_logs') {
-                 if (self.smsLogs.length) {
-                 headerNames = [
-                 langService.get('sms_message'),
-                 langService.get('sms_template'),
-                 langService.get('organizations'),
-                 langService.get('username'),
-                 langService.get('view_tracking_sheet_action_date')
-                 ];
-                 for (var i = 0; i < self.smsLogs.length; i++) {
-                 record = self.smsLogs[i];
-                 data.push([
-                 record.message,
-                 record.smsTemplateId,
-                 record.ouId,
-                 record.actionBy,
-                 record.actionDate
-                 ]);
-                 }
-                 }
-                 }*/
                 /* Outgoing Delivery Reports / Messaging History */
                 else if (heading === 'view_tracking_sheet_outgoing_delivery_reports') {
                     if (self.outgoingDeliveryReports.length) {

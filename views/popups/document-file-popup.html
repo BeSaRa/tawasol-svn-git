@@ -1,11 +1,11 @@
 <md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_document_file : ctrl.model.getNames()}}">
     <div layout="column">
-        <md-toolbar layout="row" layout-align="start center">
-            <span class="p20" ng-if="!ctrl.editMode">{{lang.add_new_document_file}}</span>
-            <span class="p20" ng-if="ctrl.editMode">{{ctrl.model.getNames()}}</span>
-            <close-dialog-directive when-close="ctrl.closePopup"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_document_file}}"
+                                 close-callback="ctrl.closeDocumentFilePopupFromCtrl"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getNames()}}"
+                                 close-callback="ctrl.closeDocumentFilePopupFromCtrl"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="documentFileForm" autocomplete="off">
                 <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">

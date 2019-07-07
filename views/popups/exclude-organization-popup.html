@@ -1,11 +1,8 @@
-<md-dialog class="dialog-extend">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}">
     <div layout="column">
-        <md-toolbar>
-                <span class="p20">{{lang.select_organizations_to_exclude}}</span>
-                <span flex></span>
-                <close-dialog-directive
-                        when-close="ctrl.closeExcludeOrganizationPopupFromCtrl"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.select_organizations_to_exclude}}"
+                                 close-callback="ctrl.closeExcludeOrganizationPopupFromCtrl"></popup-toolbar-directive>
         <md-content scroll-directive>
             <md-table-container>
                 <table md-table

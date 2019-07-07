@@ -823,7 +823,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendSMS = function (userInbox, $event) {
-            console.log('sendUserInboxSMS : ', userInbox);
+            userInbox.openSendSMSDialog($event);
         };
 
         /**
@@ -1409,7 +1409,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return true;
                 },
-                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid', gridService.grids.inbox.userInbox)
             },
             // View Tracking Sheet (Sticky Only)
             {
@@ -1678,10 +1678,9 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'message',
                         text: 'grid_action_send_sms',
-                        hide: true,
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: function (action, model) {
                             return true;
                         }
@@ -1781,6 +1780,7 @@ module.exports = function (app) {
                                 && (info.documentClass === 'outgoing')
                                 && model.needApprove()
                                 && model.allInternalSites
+                                && model.hasSingleSignature()
                                 && !model.isPrivateSecurityLevel();
                         }
                     }

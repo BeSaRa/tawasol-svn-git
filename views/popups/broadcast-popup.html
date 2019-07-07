@@ -1,9 +1,8 @@
-<md-dialog id="broadcastDialog" class="dialog-extend" ng-attr-aria-label="{{lang.broadcast}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="broadcastDialog" ng-attr-aria-label="{{lang.broadcast}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.broadcast}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.broadcast}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <div layout="column">
                 <form name="broadcast_form" autocomplete="off">

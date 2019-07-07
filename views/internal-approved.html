@@ -85,17 +85,23 @@
                                         <td md-cell>
                                             <span class="serial-td">{{approvedInternal.generalStepElm.docFullSerial}}</span>
                                         </td>
-                                        <td md-cell md-truncate class="subject">
+                                        <td md-cell class="subject">
                                             <grid-indicator-directive record-type="WorkItem"
                                                                       record="approvedInternal"
                                                                       indicator-type="isLockedWorkItem"
                                                                       callback="ctrl.unlockWorkItem">
                                             </grid-indicator-directive>
-                                            <a href="" class="view-doc" md-truncate
-                                               ng-click="ctrl.viewDocument(approvedInternal, $event)">
-                                                <!--tooltip="{{approvedInternal.generalStepElm.docSubject}}"-->
-                                                {{approvedInternal.generalStepElm.docSubject}}
-                                            </a>
+                                            <!--<grid-document-subject-directive record="approvedInternal"
+                                                                             plain-text-only="!approvedInternal.hasContent()"
+                                                                             click-callback="ctrl.viewDocument">
+                                            </grid-document-subject-directive>-->
+                                            <a href="" ng-if="approvedInternal.hasContent()"
+                                               class="view-doc subject-internal" md-truncate
+                                               tooltip="{{approvedInternal.generalStepElm.docSubject}}"
+                                               ng-click="ctrl.viewDocument(approvedInternal, $event)">{{approvedInternal.generalStepElm.docSubject}}</a>
+                                            <span ng-if="!approvedInternal.hasContent()"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{approvedInternal.generalStepElm.docSubject}}">{{approvedInternal.generalStepElm.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{approvedInternal.generalStepElm.receivedDate}}</td>
                                         <td md-cell class="td-data">

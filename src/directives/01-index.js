@@ -100,4 +100,7 @@ module.exports = function (app) {
     require('./replacement-item-droppable/replacement-item-droppable')(app);
     require('./select-application-users-directive/01-index')(app);
     require('./tasks-calander-directive/01-index')(app);
+    require('./cms-close-dialog-directive/cms-close-dialog-directive')(app);
+    require('./popup-toolbar-directive/01-index')(app);
+    require('./grid-document-subject-directive/01-index')(app);
 };

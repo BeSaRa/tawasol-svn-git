@@ -1,9 +1,8 @@
-<md-dialog id="distributionWorkflowDialog" class="dialog-extend" ng-attr-aria-label="{{lang.distribution_workflow}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="distributionWorkflowDialog" ng-attr-aria-label="{{lang.distribution_workflow}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.distribution_workflow}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.distribution_workflow}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <md-tabs md-dynamic-height>
                 <!-- USERS -->
@@ -71,7 +70,8 @@
                                     <md-table-container flex scroll-directive style="max-height:200px !important;">
                                         <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}" md-row-select
                                                ng-model="ctrl.selectedAppUsers">
-                                            <thead md-head md-order="ctrl.gridAllUser.order" md-on-reorder="ctrl.getSortedDataAllUser">
+                                            <thead md-head md-order="ctrl.gridAllUser.order"
+                                                   md-on-reorder="ctrl.getSortedDataAllUser">
                                             <tr md-row>
                                                 <th md-column>
                                                     <md-button class="md-icon-button"
@@ -219,7 +219,8 @@
                                                 <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}"
                                                        md-row-select
                                                        ng-model="ctrl.selectedFavoriteUsers">
-                                                    <thead md-head md-order="ctrl.gridFavoriteUser.order" md-on-reorder="ctrl.getSortedDataFavoriteUser">
+                                                    <thead md-head md-order="ctrl.gridFavoriteUser.order"
+                                                           md-on-reorder="ctrl.getSortedDataFavoriteUser">
                                                     <tr md-row>
                                                         <th md-column>
                                                             <md-button class="md-icon-button"
@@ -276,7 +277,8 @@
                                                 <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}"
                                                        md-row-select
                                                        ng-model="ctrl.selectedFavoriteOUs">
-                                                    <thead md-head md-order="ctrl.gridFavoriteOU.order" md-on-reorder="ctrl.getSortedDataFavoriteOU">
+                                                    <thead md-head md-order="ctrl.gridFavoriteOU.order"
+                                                           md-on-reorder="ctrl.getSortedDataFavoriteOU">
                                                     <tr md-row>
                                                         <th md-column>
                                                             <md-button class="md-icon-button"
@@ -424,7 +426,8 @@
                                     <md-table-container flex scroll-directive style="max-height:200px !important;">
                                         <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}" md-row-select
                                                ng-model="ctrl.selectedManagers">
-                                            <thead md-head md-order="ctrl.gridAllManager.order" md-on-reorder="ctrl.getSortedDataAllManager">
+                                            <thead md-head md-order="ctrl.gridAllManager.order"
+                                                   md-on-reorder="ctrl.getSortedDataAllManager">
                                             <tr md-row>
                                                 <th md-column>
                                                     <md-button class="md-icon-button"
@@ -583,7 +586,8 @@
                                     <md-table-container flex scroll-directive style="max-height:200px !important;">
                                         <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}" md-row-select
                                                ng-model="ctrl.selectedOUGroups">
-                                            <thead md-head md-order="ctrl.gridOUGroup.order" md-on-reorder="ctrl.getSortedDataOUGroup">
+                                            <thead md-head md-order="ctrl.gridOUGroup.order"
+                                                   md-on-reorder="ctrl.getSortedDataOUGroup">
                                             <tr md-row>
                                                 <th md-column>
                                                     <md-button class="md-icon-button"
@@ -731,7 +735,8 @@
                                     <md-table-container flex scroll-directive style="max-height:200px !important;">
                                         <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}" md-row-select
                                                ng-model="ctrl.selectedWorkflowMembers">
-                                            <thead md-head md-order="ctrl.gridWorkflowGroupMember.order" md-on-reorder="ctrl.getSortedDataWorkflowGroupMemeber">
+                                            <thead md-head md-order="ctrl.gridWorkflowGroupMember.order"
+                                                   md-on-reorder="ctrl.getSortedDataWorkflowGroupMemeber">
                                             <tr md-row>
                                                 <th md-column md-order-by="arName">{{lang.arabic_name}}</th>
                                                 <th md-column md-order-by="enName">{{lang.english_name}}</th>
@@ -864,7 +869,8 @@
                                     <md-table-container flex scroll-directive style="max-height:200px !important;">
                                         <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}" md-row-select
                                                ng-model="ctrl.selectedPrivateUsers">
-                                            <thead md-head md-order="ctrl.gridPrivateUser.order" md-on-reorder="ctrl.getSortedDataPrivateUser">
+                                            <thead md-head md-order="ctrl.gridPrivateUser.order"
+                                                   md-on-reorder="ctrl.getSortedDataPrivateUser">
                                             <tr md-row>
                                                 <th md-column>
                                                     <md-button class="md-icon-button"
@@ -1000,7 +1006,8 @@
                                     <md-table-container flex scroll-directive style="max-height:200px !important;">
                                         <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}" md-row-select
                                                ng-model="ctrl.selectedGovernmentEntities">
-                                            <thead md-head md-order="ctrl.gridGE.order" md-on-reorder="ctrl.getSortedDataGE">
+                                            <thead md-head md-order="ctrl.gridGE.order"
+                                                   md-on-reorder="ctrl.getSortedDataGE">
                                             <tr md-row>
                                                 <th md-column md-order-by="arName">{{lang.arabic_name}}</th>
                                                 <th md-column md-order-by="enName">{{lang.english_name}}</th>

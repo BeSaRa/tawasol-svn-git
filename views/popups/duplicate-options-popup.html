@@ -1,9 +1,9 @@
-<md-dialog aria-label="Duplicate Correspondnce" class="dialog-extend">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           aria-label="Duplicate Correspondence" >
     <div layout="column">
-        <md-toolbar>
-            <span class="p20" ng-if="!ctrl.model.id">{{lang.duplicate_options}} : {{ctrl.correspondence.getTranslatedName()}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.model.id"
+                                 header-text="{{lang.duplicate_options}} : {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
         <md-content class="p20" scroll-directive>
             <div ng-repeat="rowValue in ctrl.keyRows track by $index" layout="row">
                 <div flex ng-repeat="key  in rowValue track by $index" layout="row">

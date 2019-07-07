@@ -94,18 +94,18 @@ module.exports = function (app) {
                 return correspondenceService.showPartialExportDialog(this, $event, ignoreMessage);
             };
 
-            Outgoing.prototype.saveReplyDocument = function (status, workItemNum) {
+            Outgoing.prototype.saveCreateReplyDocument = function (status, workItemNum) {
                 correspondenceService = this.getCorrespondenceService();
                 if (status)
                     this.docStatus = queueStatusService.getDocumentStatus(status);
-                return correspondenceService.updateReplyCorrespondence(this, workItemNum);
+                return correspondenceService.addCreateReplyCorrespondence(this, workItemNum);
             };
 
-            Outgoing.prototype.saveReplyDocumentWithContent = function (information, workItemNum, sendToReview) {
+            Outgoing.prototype.saveCreateReplyDocumentWithContent = function (information, workItemNum, sendToReview) {
                 correspondenceService = this.getCorrespondenceService();
                 if (sendToReview)
                     this.docStatus = 4;
-                return correspondenceService.updateReplyCorrespondenceWithContent(this, information, workItemNum);
+                return correspondenceService.addCreateReplyCorrespondenceWithContent(this, information, workItemNum);
             };
 
             Outgoing.prototype.isCompositeSites = function () {

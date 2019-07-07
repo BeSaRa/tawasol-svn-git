@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.linked_document_manage}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.linked_document_manage}}">
     <div layout="column">
-        <md-toolbar layout="row" layout-align="start center">
-            <span class="p20">{{lang.linked_document_manage}} : {{ctrl.model.getTranslatedName()}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive
+                header-text="{{lang.linked_document_manage}} : {{ctrl.model.getTranslatedName()}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <div class="p20">
                 <div layout="row" ng-if="ctrl.linkedDocs.length">

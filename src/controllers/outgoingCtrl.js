@@ -190,18 +190,18 @@ module.exports = function (app) {
                 self.terminateAfterCreateReply = false;
                 defer.resolve(true);
             }
-           return defer.promise.then(function () {
+            return defer.promise.then(function () {
                 var methods = {
-                    reply: {
-                        withContent: 'saveReplyDocumentWithContent',
-                        metaData: 'saveReplyDocument'
+                    createReply: {
+                        withContent: 'saveCreateReplyDocumentWithContent',
+                        metaData: 'saveCreateReplyDocument'
                     },
                     normal: {
                         withContent: 'saveDocumentWithContent',
                         metaData: 'saveDocument'
                     }
                 };
-                var method = (replyTo && !self.outgoing.vsId) ? methods.reply : methods.normal,
+                var method = (replyTo && !self.outgoing.vsId) ? methods.createReply : methods.normal,
                     vsId = false;
                 /*No document information(No prepare document selected)*/
                 if (self.documentInformation && !self.outgoing.addMethod) {
@@ -277,6 +277,7 @@ module.exports = function (app) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             if (replyTo) {
                 mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                replyTo = false;
             }
 
             if (self.terminateAfterCreateReply) {
@@ -405,18 +406,19 @@ module.exports = function (app) {
         };
 
         self.docActionSendToReadyToExport = function (model, $event, defer) {
-            if (model.fromCentralArchiveWhileAdd(employeeService.getEmployee().getOUID()))
-                return model.sendToCentralArchive(false, $event).then(function () {
-                    new ResolveDefer(defer);
-                    self.resetAddCorrespondence();
-                });
-
             model.sendToReadyToExport($event)
                 .then(function () {
                     toast.success(langService.get('export_success'));
                     new ResolveDefer(defer);
                     self.resetAddCorrespondence();
                 })
+        };
+
+        self.docActionCentralArchiveSendToReadyToExport = function (model, $event, defer) {
+            return model.sendToCentralArchive(false, $event).then(function () {
+                new ResolveDefer(defer);
+                self.resetAddCorrespondence();
+            });
         };
         /**
          * @description Approve the document
@@ -492,8 +494,14 @@ module.exports = function (app) {
             return (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
         };
 
-        var _hasSingleSignature = function(document){
+        var _hasSingleSignature = function (document) {
             return document.signaturesCount && document.signaturesCount === 1;
+        };
+
+        var _hasExternalOrG2GSite = function (model) {
+            return !!(_.find([].concat(model.sitesInfoTo, model.sitesInfoCC), function (item) {
+                return _.startsWith(item.subSiteId.toString(), '2') || _.startsWith(item.subSiteId.toString(), '3');
+            }))
         };
 
         self.visibilityArray = [];
@@ -568,29 +576,39 @@ module.exports = function (app) {
                 text: langService.get('content_action_export'),
                 callback: self.docActionExportDocument,
                 class: "action-green",
-                permissionKey : "OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE",
+                permissionKey: "OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE",
                 checkShow: function (action, model, index) {
-                    var info = model.getInfo(),
-                        hasExternalSite = !!(_.find([].concat(model.sitesInfoTo, model.sitesInfoCC), function (item) {
-                            return _.startsWith(item.subSiteId, 2);
-                        }));
-                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && !hasExternalSite; //Don't show if its electronic outgoing
+                    var info = model.getInfo();
+                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !!info.isPaper && _hasContent() && !_hasExternalOrG2GSite(model); //Don't show if its electronic outgoing
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
             },
-            // Export (Send to ready to export)
+            // Send to ready to export
             {
                 text: langService.get('grid_action_send_to_ready_to_export'),
                 callback: self.docActionSendToReadyToExport,
                 class: "action-green",
                 permissionKey: 'SEND_TO_READY_TO_EXPORT_QUEUE',
-                textCallback: function (model) {
-                    return model.fromCentralArchiveWhileAdd(employeeService.getEmployee().getOUID()) ? 'grid_action_send_to_central_archive' : 'grid_action_send_to_ready_to_export';
-                },
                 checkShow: function (action, model, index) {
+                    // paper, not private security level, has content
                     var info = model.getInfo();
                     isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && info.isPaper && _hasContent();
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // Send to central archive ready to export
+            {
+                text: langService.get('grid_action_send_to_central_archive'),
+                callback: self.docActionCentralArchiveSendToReadyToExport,
+                class: "action-green",
+                permissionKey: 'SEND_TO_READY_TO_EXPORT_QUEUE',
+                checkShow: function (action, model, index) {
+                    // paper, not private security level, has content, (has external or g2g site), in central archive
+                    var info = model.getInfo();
+                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel()
+                        && info.isPaper && _hasContent() && _hasExternalOrG2GSite(model) && employeeService.getEmployee().inCentralArchive();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -604,7 +622,7 @@ module.exports = function (app) {
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
                     //Don't show if its paper outgoing  or signatures count more than 1 or personal/private security level
-                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent()  && _hasSingleSignature(model) && !model.isPrivateSecurityLevel();
+                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && _hasSingleSignature(model) && !model.isPrivateSecurityLevel();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -616,12 +634,9 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: "ELECTRONIC_SIGNATURE",
                 checkShow: function (action, model, index) {
-                    var info = model.getInfo(),
-                        hasExternalSite = !!(_.find([].concat(model.sitesInfoTo, model.sitesInfoCC), function (item) {
-                            return _.startsWith(item.subSiteId, 2);
-                        }));
-                    //Don't show if its paper outgoing or any site is external or signatures count more than 1 or personal/private security level
-                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !info.isPaper && !hasExternalSite && _hasContent() && _hasSingleSignature(model);
+                    var info = model.getInfo();
+                    //Don't show if its paper outgoing or any site is external/g2g or signatures count more than 1 or personal/private security level
+                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !info.isPaper && !_hasExternalOrG2GSite(model) && _hasContent() && _hasSingleSignature(model);
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

@@ -1,9 +1,8 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.add_signature}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.add_signature}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20" ng-if="!ctrl.model.id">{{lang.add_signature}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.model.id" header-text="{{lang.add_signature}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="signaturesForm" id="signature-form" autocomplete="off">
                 <div class="p20">
@@ -15,7 +14,8 @@
                                  ng-class="{'selected': ctrl.isSignatureSelected(signature)}"
                                  ng-click="ctrl.setSelectedSignature(signature, $event)"
                                  width="100" height="100">
-                            <div flex ng-repeat="emptySignature in ctrl.getEmptySigns(signatureChunk) track by $index"></div>
+                            <div flex
+                                 ng-repeat="emptySignature in ctrl.getEmptySigns(signatureChunk) track by $index"></div>
                         </div>
                     </div>
                 </div>

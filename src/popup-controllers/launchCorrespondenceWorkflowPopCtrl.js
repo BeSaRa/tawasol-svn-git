@@ -187,10 +187,9 @@ module.exports = function (app) {
         };
 
         if (replyOn) {
-            if (fromSimplePopup){
+            if (fromSimplePopup) {
                 self.users = [fromSimplePopup];
-            }
-            else{
+            } else {
                 self.users = _mapWFUser([replyOn]);
             }
             _addUserReply(self.users);
@@ -204,8 +203,11 @@ module.exports = function (app) {
         }
 
         function _addSelectedOrganization(selected) {
-            var organization = selected.ou === selected.registryOU ? _findOrganization(selected.registryOU, selected.registryOU, true) : _findOrganization(selected.registryOU, selected.ou);
-            self.selectedWorkflowItems.push(organization);
+            var organization = (selected.ou === selected.registryOU)
+                ? _findOrganization(selected.registryOU, selected.registryOU, true)
+                : _findOrganization(selected.registryOU, selected.ou);
+            if (!!organization)
+                self.selectedWorkflowItems.push(organization);
         }
 
         function _findOrganization(regOU, ouId, justByRegOu) {
@@ -446,7 +448,7 @@ module.exports = function (app) {
 
 
         function _mapOrganizationByType(organizations, includeCentralArchive) {
-            // filter all regOU and sort
+            // filter all regOU
             var regOus = _.filter(organizations, function (item) {
                 return item.hasRegistry;
             });
@@ -459,7 +461,7 @@ module.exports = function (app) {
             });
 
 
-            // filter all sections (no registry) and sort
+            // filter all sections (no registry)
             var groups = _.filter(organizations, function (item) {
                 return !item.hasRegistry;
             });

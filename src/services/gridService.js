@@ -454,6 +454,7 @@ module.exports = function (app) {
          * @returns {Array}
          */
         self.getShortcutActions = function (actions, direction, skipShortcut) {
+            actions = actions || [];
             if (skipShortcut) {
                 return self.getContextMenuActions(actions);
             }
@@ -574,7 +575,7 @@ module.exports = function (app) {
          * @returns {Array}
          */
         self.getContextMenuActions = function (actions, actionFrom) {
-
+            actions = actions || [];
             var contextMenu, contextMenuActions = [], actionsCopy = angular.copy(actions);
             for (var i = 0; i < actionsCopy.length; i++) {
                 contextMenu = _filterContextMenuItems(actionsCopy[i], actionFrom);
@@ -659,6 +660,7 @@ module.exports = function (app) {
          * @returns {Array}
          */
         self.getStickyActions = function (actions, listOfActions) {
+            actions = actions || [];
             var stickyActions = listOfActions ? listOfActions : [], action, actionCopy, isSticky, canShow;
             if (!stickyActions)
                 return [];

@@ -6,7 +6,7 @@ module.exports = function (app) {
                                                 $q,
                                                 $filter,
                                                 langService,
-                                                $scope,
+                                                //$scope,
                                                 toast,
                                                 contextHelpService,
                                                 dialog,
@@ -19,12 +19,12 @@ module.exports = function (app) {
         self.progress = null;
         contextHelpService.setHelpTo('sms-templates');
 
-        $scope.smsVariables = [
+        /*$scope.smsVariables = [
             'DocumentFile',
             'DocumentType',
             'EntityName',
             'OrganizationName'
-        ];
+        ];*/
 
         /**
          * @description All sms templates

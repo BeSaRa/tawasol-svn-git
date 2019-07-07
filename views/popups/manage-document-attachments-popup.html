@@ -1,9 +1,10 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.attachments_manage_document_attachments}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.attachments_manage_document_attachments}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.attachments_manage_document_attachments}} : {{ctrl.documentSubject}}</span>
-            <close-dialog-directive when-close="ctrl.closeDocumentAttachments"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive
+                header-text="{{lang.attachments_manage_document_attachments}} : {{ctrl.documentSubject}}"
+                close-callback="ctrl.closeDocumentAttachments"></popup-toolbar-directive>
         <md-content scroll-directive>
             <div>
                 <manage-attachment-directive

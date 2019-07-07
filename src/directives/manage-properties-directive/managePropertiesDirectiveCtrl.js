@@ -25,10 +25,13 @@ module.exports = function (app) {
         self.document = null;
         self.maxCreateDate = new Date();
 
-        // all security level
+        // all priority level
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.documentFiles = [];
         self.classifications = [];
+        self.registryOUSearchText = '';
+        self.registrySectionSearchText = '';
+        self.ouSearchText = '';
 
         self.mainClassificationSearchText = '';
         self.subClassificationSearchText = '';
@@ -345,6 +348,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     // self.organizations = result;
                     self.subOrganizations = result;
+                    self.document.ou = null;
                 });
         };
 
@@ -417,6 +421,10 @@ module.exports = function (app) {
                         // if there is no value selected by default
                         if (typeof self.document[field.name] === 'undefined' || self.document[field.name] === null || self.document[field.name] === '')
                             self.document[field.name] = (field.value) ? options[0][field.value] : options[0];
+
+                        if (field.name === 'registryOU') {
+                            self.onRegistryChange(self.document.registryOU);
+                        }
                     }
                 }
             }

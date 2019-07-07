@@ -1,10 +1,8 @@
-<md-dialog id="ready-to-export-options" class="dialog-extend" ng-attr-aria-label="{{lang.export_message}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="ready-to-export-options" ng-attr-aria-label="{{lang.export_message}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.export_message}}</span>
-            <!--<span ng-if="ctrl.resend" class="p20">{{lang.resend_message}}</span>-->
-            <close-dialog-directive when-close="ctrl.closeExportPopupFromCtrl"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.export_message}}" close-callback="ctrl.closeExportPopupFromCtrl"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="readyToExportOptionsForm" autocomplete="off">
                 <div layout="column" class="p20">
@@ -49,7 +47,7 @@
                                             </td>
                                             <td md-cell>
                                                 <div flex layout="column">
-                                                    <span class="span-column">{{site.getExportType()}}</span>
+                                                    <span class="span-column">{{site.getExportWayText()}}</span>
                                                 </div>
                                             </td>
                                         </tr>
@@ -62,6 +60,10 @@
 
                     <div class="p20" ng-if="ctrl.canExportAnyRelatedData()">
                         <div layout="row" flex>
+                            <md-input-container flex ng-if="ctrl.isFaxExport()">
+                                <label for="exportTypeMain">{{lang.export_type}}</label>
+                                <input id="exportTypeMain" ng-model="ctrl.exportWayTextMain" ng-disabled="true" ng-readonly="true">
+                            </md-input-container>
                             <md-input-container flex>
                                 <label for="exportType">{{lang.select_export_type}}</label>
                                 <md-select id="exportType" ng-model="ctrl.exportType" ng-change="ctrl.onChangeExportType()">
@@ -111,12 +113,22 @@
         <div>
             <div layout="row">
                 <md-button class="md-raised" ng-click="ctrl.exportCorrespondenceWorkItem()"
-                           ng-if="!ctrl.hasExternalSite"
+                           ng-if="ctrl.resend"
                            ng-disabled="!ctrl.correspondenceSites.length">
-                    {{ctrl.resend ? lang.resend : lang.export}}
+                    {{lang.resend}}
                 </md-button>
-                <span ng-if="!ctrl.hasExternalSite && !ctrl.resend" flex></span>
-                <md-button ng-if="ctrl.hasExternalSite && !ctrl.resend" class="md-raised"
+                <md-button class="md-raised" ng-click="ctrl.exportCorrespondenceWorkItem()"
+                           ng-if="!ctrl.resend && ctrl.isElectronicExport()"
+                           ng-disabled="!ctrl.correspondenceSites.length">
+                    {{lang.export}}
+                </md-button>
+                <md-button class="md-raised" ng-click="ctrl.exportCorrespondenceWorkItem()"
+                           ng-if="!ctrl.resend && ctrl.isFaxExport()"
+                           ng-disabled="!ctrl.correspondenceSites.length">
+                    {{ctrl.fax_export}}
+                </md-button>
+                <span ng-if="!ctrl.resend && (ctrl.isElectronicExport() || ctrl.isFaxExport())" flex></span>
+                <md-button ng-if="!ctrl.resend && ctrl.isManualExport()" class="md-raised"
                            ng-click="ctrl.printWithTerminate()">
                     {{lang.print_with_terminate}}
                 </md-button>

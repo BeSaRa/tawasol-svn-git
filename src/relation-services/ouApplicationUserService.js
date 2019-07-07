@@ -60,10 +60,24 @@ module.exports = function (app) {
         self.loadRelatedOUApplicationUsers = function (organization) {
             organization = organization.hasOwnProperty('id') ? organization.id : organization;
             return $http.get(urlService.relatedApplicationUsersByOUId.change({OUId: organization})).then(function (result) {
-                self.ouApplicationUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
-                self.ouApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', self.ouApplicationUsers);
-                return self.ouApplicationUsers;
+                return organizationService.getOrganizations()
+                    .then(function () {
+                        self.ouApplicationUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
+                        self.ouApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', self.ouApplicationUsers);
+                        return self.ouApplicationUsers;
+                    })
             });
+        };
+
+        self.loadOuApplicationUserByRegOu = function (regOuId) {
+            regOuId = regOuId.hasOwnProperty('id') ? regOuId.id : regOuId;
+
+            return $http.get(urlService.ouApplicationUsers + '/reg-ou/' + regOuId)
+                .then(function (result) {
+                    result = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
+                    result = generator.interceptReceivedCollection('OUApplicationUser', result);
+                    return result;
+                })
         };
 
         /**
@@ -146,6 +160,12 @@ module.exports = function (app) {
                         resolve: {
                             ouApplicationUsers: function () {
                                 'ngInject';
+                                return self.loadOuApplicationUserByRegOu(organization.getRegistryOUID()).then(function (result) {
+                                    return _.uniqBy(result, 'applicationUser.id');
+                                })
+                            }
+                            /*  ouApplicationUsers: function () {
+                                'ngInject';
                                 return self.loadRelatedOUApplicationUsers(organization)
                                     .then(function (result) {
                                         return _.filter(result, function (ouApplicationUserResult) {
@@ -163,7 +183,7 @@ module.exports = function (app) {
                                             return ouApplicationUserResult;
                                         })
                                     });
-                            }
+                            }*/
                         }
                     });
             },

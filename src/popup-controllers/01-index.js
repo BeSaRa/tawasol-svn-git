@@ -109,6 +109,7 @@ module.exports = function (app) {
     require('./userSentItemFilterPopCtrl')(app);
     require('./messageBodyPopCtrl')(app);
     require('./createReplyConfirmPopCtrl')(app);
+    require('./sendSmsPopCtrl')(app);
     require('./taskPopupCtrl')(app);
     require('./taskParticipantSettingPopCtrl')(app);
     require('./taskOptionPopCtrl')(app);

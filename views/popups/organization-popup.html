@@ -1,12 +1,12 @@
-<md-dialog id="organization-dialog"
-           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_organization : ctrl.model.getTranslatedName()}}"
-           class="dialog-extend">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="organization-dialog"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_organization : ctrl.model.getTranslatedName()}}">
     <div layout="column">
-        <md-toolbar layout="row" layout-align="start center">
-            <span class="p20" ng-if="!ctrl.editMode" flex>{{lang.add_new_organization}}</span>
-            <span class="p20" ng-if="ctrl.editMode" flex>{{ctrl.model.getTranslatedName()}}</span>
-            <close-dialog-directive when-close="ctrl.closeOrganizationDialog"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_organization}}"
+                                 close-callback="ctrl.closeOrganizationDialog"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getTranslatedName()}}"
+                                 close-callback="ctrl.closeOrganizationDialog"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="org_form" novalidate autocomplete="off">
                 <md-tabs md-dynamic-height>
@@ -146,6 +146,9 @@
                                         <span class="user-selector-span" flex layout-align="start center" layout="row">
                                 <span>{{lang.manager}}</span>
                                 <span flex></span>
+                                <span class="user-selector-span">
+
+                                </span>
                                 <span class="user-tag" md-truncate ng-if="ctrl.organization.managerId">
                                     <span tooltip="{{ctrl.organization.managerId.getNames()}}">{{ctrl.organization.managerId.loginName}}</span>
                                     <md-icon ng-click="ctrl.deleteUserFrom('managerId')"

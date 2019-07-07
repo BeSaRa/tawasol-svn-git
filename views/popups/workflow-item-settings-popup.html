@@ -1,9 +1,8 @@
-<md-dialog class="dialog-extend" aria-label="{{ctrl.dialogTitle}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           aria-label="{{ctrl.dialogTitle}}">
     <div layout="column">
-        <md-toolbar>
-            <div class="p20">{{ctrl.dialogTitle}}</div>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{ctrl.dialogTitle}}"></popup-toolbar-directive>
         <md-content scroll-directive="">
             <div class="p20" layout="column">
                 <form name="distWorkflowItem_form">
@@ -11,9 +10,20 @@
                         <md-input-container flex>
                             <label for="action">{{lang.select_action}}</label>
                             <md-select required id="action" ng-model-options="{trackBy:'$value.id'}" name="action"
-                                       ng-model="ctrl.distWorkflowItem.action">
-                                <md-option ng-value="action" ng-repeat="action in ctrl.workflowActions">
-                                    {{action.getTranslatedName()}}
+                                       ng-model="ctrl.distWorkflowItem.action"
+                                       md-on-close="ctrl.clearSearchText('action')"
+                                       data-md-container-class="select-header-container">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.actionSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option ng-value="action"
+                                           ng-repeat="action in ctrl.workflowActions | translatedNameFilter: ctrl.actionSearchText">
+                                    <span
+                                            md-highlight-text="ctrl.actionSearchText"
+                                            md-highlight-flags="i">{{action.getTranslatedName()}}</span>
                                 </md-option>
                             </md-select>
                             <div ng-messages="distWorkflowItem_form.action.$error">
@@ -57,9 +67,20 @@
                         <md-input-container flex>
                             <label for="comment">{{lang.select_comment}}</label>
                             <md-select id="comment" name="comment" ng-change="ctrl.onCommentChange()"
-                                       ng-model="ctrl.comment">
-                                <md-option ng-value="comment" ng-repeat="comment in ctrl.comments">
-                                    {{comment.getCommentTitle()}}
+                                       ng-model="ctrl.comment"
+                                       md-on-close="ctrl.clearSearchText('comment')"
+                                       data-md-container-class="select-header-container">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.commentSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option ng-value="comment"
+                                           ng-repeat="comment in ctrl.comments | translatedNameFilter: ctrl.commentSearchText">
+                                    <span
+                                            md-highlight-text="ctrl.commentSearchText"
+                                            md-highlight-flags="i">{{comment.getCommentTitle()}}</span>
                                 </md-option>
                             </md-select>
                         </md-input-container>

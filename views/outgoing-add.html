@@ -4,7 +4,10 @@
         <!-- page-header -->
         <div layout="row" layout-align="start center" class="page-header padding-header small">
             <span ng-if="!ctrl.outgoing.vsId">{{lang.menu_item_outgoing}} - {{lang.add_new}}</span>
-            <span ng-if="ctrl.outgoing.vsId">{{lang.menu_item_outgoing}} - {{ctrl.model.docSubject}}</span>
+            <span ng-if="ctrl.outgoing.vsId" md-truncate
+                  tooltip="{{ctrl.model.docSubject}}" tooltip-direction="bottom">
+                {{lang.menu_item_outgoing}} - {{ctrl.model.docSubject}}
+            </span>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -19,13 +22,14 @@
                                     <md-icon md-svg-icon="file-document-box"></md-icon>
                                     <span> &nbsp;{{lang.document_properties}}</span>
                                     <span flex></span>
-                                    <div >
-                                        <md-switch ng-disabled="!!ctrl.outgoing.vsId || ctrl.duplicateVersion || !ctrl.employeeService.hasPermissionTo('OUTGOING_PAPER')"
-                                                   class="m0 top-switch-handler"
-                                                   ng-true-value="1" ng-false-value="0"
-                                                   ng-click="ctrl.preventPropagation($event)"
-                                                   ng-change="ctrl.checkChangeOutgoingType()"
-                                                   ng-model="ctrl.outgoing.addMethod">{{lang.outgoing_document_type}} :
+                                    <div>
+                                        <md-switch
+                                                ng-disabled="!!ctrl.outgoing.vsId || ctrl.duplicateVersion || !ctrl.employeeService.hasPermissionTo('OUTGOING_PAPER')"
+                                                class="m0 top-switch-handler"
+                                                ng-true-value="1" ng-false-value="0"
+                                                ng-click="ctrl.preventPropagation($event)"
+                                                ng-change="ctrl.checkChangeOutgoingType()"
+                                                ng-model="ctrl.outgoing.addMethod">{{lang.outgoing_document_type}} :
                                             {{ctrl.outgoing.getMethodType()}}
                                         </md-switch>
                                     </div>

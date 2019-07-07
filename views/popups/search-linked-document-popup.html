@@ -1,9 +1,8 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.document_search}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.document_search}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.document_search}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.document_search}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <md-tabs md-selected="ctrl.selectedIndex" md-dynamic-height>
                 <!-- Basic Info Tab -->
@@ -128,7 +127,8 @@
                                     <div flex scroll-directive>
                                         <table md-table md-row-select multiple ng-model="ctrl.selectedCorrespondences"
                                                md-progress="ctrl.progress">
-                                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                            <thead md-head md-order="ctrl.grid.order"
+                                                   md-on-reorder="ctrl.getSortedData">
                                             <tr md-row>
                                                 <th ng-if="ctrl.selectedCorrespondences.length" md-column
                                                     colspan="7">

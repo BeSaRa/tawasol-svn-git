@@ -160,6 +160,9 @@ module.exports = function (app) {
                 return this.docSubject;
             };
 
+            Correspondence.prototype.getSubject = function () {
+                return this.docSubject;
+            };
 
             /**
              * get all required fields
@@ -756,6 +759,10 @@ module.exports = function (app) {
 
             Correspondence.prototype.editCorrespondenceInDesktop = function () {
                 return correspondenceService.editWordInDesktop(this);
+            };
+
+            Correspondence.prototype.openSendSMSDialog = function ($event) {
+                return correspondenceService.openSendSMSDialog(this, $event);
             };
 
             Correspondence.prototype.createReply = function ($event) {

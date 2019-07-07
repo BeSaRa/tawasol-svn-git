@@ -4,9 +4,6 @@
         <!-- page-header start -->
         <div layout="row" layout-align="start center" class="page-header padding-header small">
             <span>{{lang.menu_item_outgoing_rejected}}</span>
-            <!--<md-button ng-click="ctrl.openAddRejectedOutgoingDialog($event)" class="md-icon-button" tooltip="{{lang.add}}">
-                <md-icon md-svg-icon="plus"></md-icon>
-            </md-button>-->
             <md-button ng-click="ctrl.reloadRejectedOutgoings()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
@@ -96,10 +93,18 @@
                                                                       indicator-type="paperElectronic"
                                                                       record-type="outgoing"></grid-indicator-directive>
                                         </td>
-                                        <td md-cell class="td-data">
-                                            <a href="" class="view-doc" ng-if="rejectedOutgoing.hasContent()"
+                                        <td md-cell class="subject">
+                                            <!--<grid-document-subject-directive record="rejectedOutgoing"
+                                                                             plain-text-only="!rejectedOutgoing.hasContent()"
+                                                                             click-callback="ctrl.viewDocument">
+                                            </grid-document-subject-directive>-->
+                                            <a href="" ng-if="rejectedOutgoing.hasContent()"
+                                               class="view-doc subject-internal" md-truncate
+                                               tooltip="{{rejectedOutgoing.docSubject}}"
                                                ng-click="ctrl.viewDocument(rejectedOutgoing, $event)">{{rejectedOutgoing.docSubject}}</a>
-                                            <span ng-if="!rejectedOutgoing.hasContent()">{{rejectedOutgoing.docSubject}}</span>
+                                            <span ng-if="!rejectedOutgoing.hasContent()"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{rejectedOutgoing.docSubject}}">{{rejectedOutgoing.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{rejectedOutgoing.priorityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{rejectedOutgoing.securityLevel.getTranslatedName()}}</td>

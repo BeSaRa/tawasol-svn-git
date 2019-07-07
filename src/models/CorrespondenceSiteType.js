@@ -50,7 +50,7 @@ module.exports = function (app) {
             };
 
             CorrespondenceSiteType.prototype.canDelete = function () {
-                var defaultValues = [1, 3, 5]; // 1 - internal, 3 - g2g, 5 - old system
+                var defaultValues = [1, 3, 5]; // 1 - internal, 3 - g2g, 5 - old system, 2 - external
                 return defaultValues.indexOf(this.lookupKey) === -1;
             };
 

@@ -4,7 +4,10 @@
         <!-- page-header -->
         <div layout="row" layout-align="start center" class="page-header padding-header small">
             <span ng-if="!ctrl.incoming.vsId">{{lang.menu_item_incoming}} - {{lang.add_new}}</span>
-            <span ng-if="ctrl.incoming.vsId">{{lang.menu_item_incoming}} - {{ctrl.model.docSubject}}</span>
+            <span ng-if="ctrl.incoming.vsId" md-truncate
+                  tooltip="{{ctrl.model.docSubject}}" tooltip-direction="bottom">
+                {{lang.menu_item_incoming}} - {{ctrl.model.docSubject}}
+            </span>
         </div>
         <!-- end page-header -->
         <!-- page-content -->

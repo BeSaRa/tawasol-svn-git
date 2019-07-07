@@ -1,9 +1,11 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{ctrl.label || lang.select_user}}">
-    <md-toolbar layout="row" layout-align="start center">
-        <span class="p20" flex ng-if="ctrl.label">{{lang.get(ctrl.label) ? lang.get(ctrl.label) : ctrl.label }}</span>
-        <span class="p20" flex ng-if="!ctrl.label">{{lang.select_user}}</span>
-        <close-dialog-directive when-close="ctrl.close"></close-dialog-directive>
-    </md-toolbar>
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{ctrl.label || lang.select_user}}">
+    <popup-toolbar-directive ng-if="ctrl.label"
+                             header-text="{{lang.get(ctrl.label) ? lang.get(ctrl.label) : ctrl.label }}"
+                             close-callback="ctrl.close"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="!ctrl.label" header-text="{{lang.select_user}}"
+                             close-callback="ctrl.close"></popup-toolbar-directive>
     <md-content scroll-directive class="p20" layout="column">
         <div flex layout="row">
             <md-input-container id="criteria-list" class="mt0">

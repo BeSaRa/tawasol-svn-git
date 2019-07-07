@@ -4,7 +4,10 @@
         <!-- page-header -->
         <div layout="row" layout-align="start center" class="page-header padding-header small">
             <span ng-if="!ctrl.outgoing.vsId">{{lang.menu_item_outgoing}} - {{lang.add_new}}</span>
-            <span ng-if="ctrl.outgoing.vsId">{{lang.menu_item_outgoing}} - {{ctrl.model.docSubject}}</span>
+            <span ng-if="ctrl.outgoing.vsId" md-truncate
+                  tooltip="{{ctrl.model.docSubject}}" tooltip-direction="bottom">
+                {{lang.menu_item_outgoing}} - {{ctrl.model.docSubject}}
+            </span>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -146,7 +149,7 @@
                                                     templates="ctrl.templates"
                                                     simple-view-url="ctrl.simpleViewUrl"
                                                     is-simple-add="ctrl.simpleAdd"></manage-content-directive>
-                                        <span flex></span>
+                                            <span flex></span>
                                             <div class="icon-relative">
                                                 <md-button tooltip="{{lang.attachments}}"
                                                            class="md-raised md-icon-button"

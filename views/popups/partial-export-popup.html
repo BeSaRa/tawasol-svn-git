@@ -1,9 +1,9 @@
-<md-dialog id="partial-export" class="dialog-extend" ng-attr-aria-label="{{lang.partial_export}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="partial-export" ng-attr-aria-label="{{lang.partial_export}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.partial_export}} : {{ctrl.correspondence.getTranslatedName()}} </span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive
+                header-text="{{lang.partial_export}} : {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
         <md-content scroll-directive>
 
             <md-tabs class="content white-bg" md-dynamic-height>
@@ -13,7 +13,8 @@
                             <div layout="row" flex>
                                 <md-input-container flex>
                                     <label for="exportType">{{lang.select_export_type}}</label>
-                                    <md-select id="exportType" ng-model="ctrl.exportType" ng-change="ctrl.onChangeExportType()">
+                                    <md-select id="exportType" ng-model="ctrl.exportType"
+                                               ng-change="ctrl.onChangeExportType()">
                                         <md-option ng-value="type.id" ng-repeat="type in ctrl.exportTypeList">
                                             {{lang.get(type.key)}}
                                         </md-option>
@@ -45,7 +46,8 @@
                             <div layout="row"
                                  ng-if="ctrl.exportType === 1 || (ctrl.exportType === 2 && ctrl.partialExportList.exportItems.RELATED_BOOKS.length)">
                                 <span flex></span>
-                                <md-button class="md-raised" ng-click="ctrl.openLinkedDocsAttachmentDialogFromPartialExport($event)">
+                                <md-button class="md-raised"
+                                           ng-click="ctrl.openLinkedDocsAttachmentDialogFromPartialExport($event)">
                                     {{lang.export_attachments_related_to_linked_documents}}
                                 </md-button>
                                 <span flex></span>
@@ -208,7 +210,8 @@
                                         <div flex scroll-directive>
                                             <table md-table md-row-select multiple ng-model="ctrl.subSearchSelected"
                                                    md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.subSearchResult.order" md-on-reorder="ctrl.getSortedDataSubSearchResult">
+                                                <thead md-head md-order="ctrl.grid.subSearchResult.order"
+                                                       md-on-reorder="ctrl.getSortedDataSubSearchResult">
                                                 <tr md-row>
                                                     <th md-column md-order-by="mainEnSiteText">
                                                         <span>{{lang.sites_main_site}}</span>
@@ -380,7 +383,8 @@
                                         <div flex scroll-directive>
                                             <table md-table md-row-select multiple ng-model="ctrl.sitesInfoToSelected"
                                                    md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.sitesInfoTo.order" md-on-reorder="ctrl.getSortedDataSitesInfoTo">
+                                                <thead md-head md-order="ctrl.grid.sitesInfoTo.order"
+                                                       md-on-reorder="ctrl.getSortedDataSitesInfoTo">
                                                 <tr md-row>
                                                     <th md-column md-order-by="mainEnSiteText">
                                                         <span>{{lang.sites_main_site}}</span>
@@ -513,7 +517,8 @@
                                         <div flex scroll-directive>
                                             <table md-table md-row-select multiple ng-model="ctrl.sitesInfoCCSelected"
                                                    md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.sitesInfoCC.order" md-on-reorder="ctrl.getSortedDataSitesInfoCC">
+                                                <thead md-head md-order="ctrl.grid.sitesInfoCC.order"
+                                                       md-on-reorder="ctrl.getSortedDataSitesInfoCC">
                                                 <tr md-row>
                                                     <th md-column md-order-by="mainEnSiteText">
                                                         <span>{{lang.sites_main_site}}</span>
@@ -698,7 +703,8 @@
                                         <div flex scroll-directive>
                                             <table md-table md-row-select multiple ng-model="ctrl.subSearchSelected_DL"
                                                    md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.subSearchResult_DL.order" md-on-reorder="ctrl.getSortedDataSubSearchResult_DL">
+                                                <thead md-head md-order="ctrl.grid.subSearchResult_DL.order"
+                                                       md-on-reorder="ctrl.getSortedDataSubSearchResult_DL">
                                                 <tr md-row>
                                                     <th md-column md-order-by="mainEnSiteText">
                                                         <span>{{lang.sites_main_site}}</span>
@@ -870,7 +876,8 @@
                                         <div flex scroll-directive>
                                             <table md-table md-row-select multiple ng-model="ctrl.sitesInfoToSelected"
                                                    md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.sitesInfoTo.order" md-on-reorder="ctrl.getSortedDataSitesInfoTo">
+                                                <thead md-head md-order="ctrl.grid.sitesInfoTo.order"
+                                                       md-on-reorder="ctrl.getSortedDataSitesInfoTo">
                                                 <tr md-row>
                                                     <th md-column md-order-by="mainEnSiteText">
                                                         <span>{{lang.sites_main_site}}</span>
@@ -1003,7 +1010,8 @@
                                         <div flex scroll-directive>
                                             <table md-table md-row-select multiple ng-model="ctrl.sitesInfoCCSelected"
                                                    md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.sitesInfoCC.order" md-on-reorder="ctrl.getSortedDataSitesInfoCC">
+                                                <thead md-head md-order="ctrl.grid.sitesInfoCC.order"
+                                                       md-on-reorder="ctrl.getSortedDataSitesInfoCC">
                                                 <tr md-row>
                                                     <th md-column md-order-by="mainEnSiteText">
                                                         <span>{{lang.sites_main_site}}</span>

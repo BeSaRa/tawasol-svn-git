@@ -413,7 +413,8 @@ module.exports = function (app) {
                 .controllerMethod
                 .selectOUApplicationUserSingle(self.organization, property, self.selectUserLabels[property], $event)
                 .then(function (ouApplicationUser) {
-                    self.organization[property] = ouApplicationUser;
+                    self.organization[property] = ouApplicationUser.applicationUser;
+                    self.isAddManagerToAllUsersEnabled = ouApplicationUser.isAddManagerToAllUsersEnabled;
                 })
         };
         /**
@@ -560,6 +561,10 @@ module.exports = function (app) {
                         organizationService
                             .updateOrganization(self.organization)
                             .then(function () {
+                                if (self.isAddManagerToAllUsersEnabled) {
+                                    organizationService.addManagerToAllUsers(self.organization.id);
+                                }
+
                                 self.model = angular.copy(self.organization);
                                 toast.success(langService.get('edit_success').change({name: self.organization.getNames()}));
                                 if (self.organization.id === employeeService.getEmployee().getOUID()) {

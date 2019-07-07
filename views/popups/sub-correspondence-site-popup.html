@@ -1,16 +1,17 @@
 <md-dialog>
     <div layout="column">
-        <md-toolbar>
-            <span class="p20" md-truncate>{{lang.sub_correspondence_sites_to}}  {{ctrl.mainCorrespondenceSite.getTranslatedName()}}</span>
-            <close-dialog-directive when-close="ctrl.closeSubCorrespondenceSiteView"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive
+                header-text="{{lang.sub_correspondence_sites_to}}  {{ctrl.mainCorrespondenceSite.getTranslatedName()}}"
+                close-callback="ctrl.closeSubCorrespondenceSiteView"></popup-toolbar-directive>
         <md-content scroll-directive>
             <div class="p20">
                 <div layout="row" layout-align="start center" class="page-header small">
-                    <md-button ng-click="ctrl.openAddSubCorrespondenceSiteDialog($event)" class="md-icon-button" tooltip="{{lang.add}}">
+                    <md-button ng-click="ctrl.openAddSubCorrespondenceSiteDialog($event)" class="md-icon-button"
+                               tooltip="{{lang.add}}">
                         <md-icon md-svg-icon="plus"></md-icon>
                     </md-button>
-                    <md-button ng-click="ctrl.reloadSubCorrespondenceSites()" class="md-icon-button" tooltip="{{lang.reload}}">
+                    <md-button ng-click="ctrl.reloadSubCorrespondenceSites()" class="md-icon-button"
+                               tooltip="{{lang.reload}}">
                         <md-icon md-svg-icon="refresh"></md-icon>
                     </md-button>
                     <span flex></span>
@@ -35,15 +36,18 @@
                                 <th ng-if="!ctrl.selectedSubCorrespondenceSites.length" md-column md-order-by="arName">
                                     <span>{{lang.arabic_name}}</span>
                                 </th>
-                                <th ng-class="{'hide-table-header':ctrl.selectedSubCorrespondenceSites.length}" md-column
+                                <th ng-class="{'hide-table-header':ctrl.selectedSubCorrespondenceSites.length}"
+                                    md-column
                                     md-order-by="enName">
                                     <span>{{lang.english_name}}</span>
                                 </th>
-                                <th ng-class="{'hide-table-header':ctrl.selectedSubCorrespondenceSites.length}" md-column
+                                <th ng-class="{'hide-table-header':ctrl.selectedSubCorrespondenceSites.length}"
+                                    md-column
                                     md-order-by="status">
                                     <span>{{lang.status}}</span>
                                 </th>
-                                <th ng-class="{'hide-table-header':ctrl.selectedSubCorrespondenceSites.length}" md-column
+                                <th ng-class="{'hide-table-header':ctrl.selectedSubCorrespondenceSites.length}"
+                                    md-column
                                     md-order-by="global">
                                     <span>{{lang.global}}</span>
                                 </th>

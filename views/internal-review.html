@@ -95,12 +95,18 @@
                                                                       indicator-type="paperElectronic"
                                                                       record-type="internal"></grid-indicator-directive>
                                         </td>
-                                        <td md-cell class="td-data">
-                                            <a href=""
-                                               ng-if="reviewInternal.hasContent() && ctrl.employeeService.hasPermissionTo('VIEW_DOCUMENT')"
-                                               class="view-doc"
+                                        <td md-cell class="subject">
+                                            <!--<grid-document-subject-directive record="reviewInternal"
+                                                                             plain-text-only="!reviewInternal.hasContent()"
+                                                                             click-callback="ctrl.viewDocument">
+                                            </grid-document-subject-directive>-->
+                                            <a href="" ng-if="reviewInternal.hasContent()"
+                                               class="view-doc subject-internal" md-truncate
+                                               tooltip="{{reviewInternal.docSubject}}"
                                                ng-click="ctrl.viewDocument(reviewInternal, $event)">{{reviewInternal.docSubject}}</a>
-                                            <span ng-if="!reviewInternal.hasContent()">{{reviewInternal.docSubject}}</span>
+                                            <span ng-if="!reviewInternal.hasContent()"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{reviewInternal.docSubject}}">{{reviewInternal.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{reviewInternal.priorityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{reviewInternal.securityLevel.getTranslatedName()}}</td>

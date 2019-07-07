@@ -4,10 +4,6 @@
         <!-- page-header start -->
         <div layout="row" layout-align="start center" class="page-header padding-header small">
             <span>{{lang.menu_item_outgoing_prepare}}</span>
-            <!--<md-button ng-click="ctrl.openAddPrepareOutgoingDialog($event)" class="md-icon-button"
-                       tooltip="{{lang.add}}">
-                <md-icon md-svg-icon="plus"></md-icon>
-            </md-button>-->
             <md-button ng-click="ctrl.reloadPrepareOutgoings()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
@@ -81,7 +77,14 @@
                                                                       indicator-type="paperElectronic"
                                                                       record-type="outgoing"></grid-indicator-directive>
                                         </td>
-                                        <td md-cell>{{prepareOutgoing.docSubject}}</td>
+                                        <td md-cell class="subject">
+                                            <!--<grid-document-subject-directive record="prepareOutgoing"
+                                                                             plain-text-only="true">
+                                            </grid-document-subject-directive>-->
+                                            <span ng-if="!prepareOutgoing.hasContent()"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{prepareOutgoing.docSubject}}">{{prepareOutgoing.docSubject}}</span>
+                                        </td>
                                         <td md-cell>{{prepareOutgoing.priorityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{prepareOutgoing.securityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{prepareOutgoing.creatorInfo.getTranslatedName()}}</td>

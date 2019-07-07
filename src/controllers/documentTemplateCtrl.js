@@ -13,7 +13,8 @@ module.exports = function (app) {
                                                      Organization,
                                                      selectedRegOU,
                                                      gridService,
-                                                     generator) {
+                                                     generator,
+                                                     downloadService) {
         'ngInject';
         var self = this;
 
@@ -205,5 +206,16 @@ module.exports = function (app) {
                         });
                 });
         };
+
+        /**
+         * @description Downloads the original document template
+         * @param documentTemplate
+         * @param $event
+         */
+        self.downloadDocumentTemplate = function (documentTemplate, $event) {
+            downloadService.controllerMethod
+                .documentTemplateDownload(documentTemplate);
+        };
+
     });
 };

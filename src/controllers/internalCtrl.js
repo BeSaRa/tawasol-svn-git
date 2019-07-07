@@ -153,18 +153,18 @@ module.exports = function (app) {
                 defer.resolve(true);
             }
 
-            defer.promise.then(function () {
+            return defer.promise.then(function () {
                 var methods = {
-                    reply: {
-                        withContent: 'saveReplyDocumentWithContent',
-                        metaData: 'saveReplyDocument'
+                    createReply: {
+                        withContent: 'saveCreateReplyDocumentWithContent',
+                        metaData: 'saveCreateReplyDocument'
                     },
                     normal: {
                         withContent: 'saveDocumentWithContent',
                         metaData: 'saveDocument'
                     }
                 };
-                var method = (replyTo && !self.internal.vsId) ? methods.reply : methods.normal,
+                var method = (replyTo && !self.internal.vsId) ? methods.createReply : methods.normal,
                     vsId = false;
                 /*No document information(No prepare document selected)*/
                 if (self.documentInformation && !self.internal.addMethod) {
@@ -239,6 +239,7 @@ module.exports = function (app) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             if (replyTo) {
                 mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                replyTo = false;
             }
 
             if (self.terminateAfterCreateReply) {
@@ -515,7 +516,7 @@ module.exports = function (app) {
                 permissionKey: "ELECTRONIC_SIGNATURE",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && !model.isPrivateSecurityLevel(); //Don't show if its paper internal
+                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && !model.isPrivateSecurityLevel() && !model.isInternalPersonal(); //Don't show if its paper internal
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

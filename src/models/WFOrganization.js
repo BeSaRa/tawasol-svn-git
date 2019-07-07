@@ -27,6 +27,14 @@ module.exports = function (app) {
             WFOrganization.prototype.getTranslatedName = function () {
                 return this[langService.current + 'Name'];
             };
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            WFOrganization.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
+            };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('WFOrganization', 'init', this);

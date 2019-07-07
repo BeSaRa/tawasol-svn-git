@@ -35,6 +35,19 @@ module.exports = function (app) {
             return self.smsTemplates.length ? $q.when(self.smsTemplates) : self.loadSmsTemplates();
         };
 
+
+        /**
+         * @description load sms templates from server.
+         * @returns {Promise|smsTemplates}
+         */
+        self.loadActiveSmsTemplates = function () {
+            return $http.get(urlService.smsTemplates + '/active').then(function (result) {
+                self.smsTemplates = generator.generateCollection(result.data.rs, SmsTemplate, self._sharedMethods);
+                self.smsTemplates = generator.interceptReceivedCollection('SmsTemplate', self.smsTemplates);
+                return self.smsTemplates;
+            });
+        };
+
         /**
          * @description Contains methods for CRUD operations for sms templates
          */

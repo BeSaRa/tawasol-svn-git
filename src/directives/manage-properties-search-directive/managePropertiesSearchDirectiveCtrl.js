@@ -32,7 +32,8 @@ module.exports = function (app) {
         // all security level
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
-        /*self.docStatuses = angular.copy(documentStatusService.documentStatuses);*/
+        /*self.docStatuses = angular.copy(documentStatusService.documentStatuses);
+        self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));*/
         self.followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
 
         self.approvers = [];
@@ -46,6 +47,9 @@ module.exports = function (app) {
         self.documentFileSearchText = '';
 
         self.displayFollowUpDates = false;
+
+        self.regOUSearchText = '';
+        self.sectionOUSearchText = '';
 
         /*Types options for the type drop down*/
         self.typeOptions = [
@@ -567,10 +571,10 @@ module.exports = function (app) {
         };
 
         self.onRegistryChanged = function () {
-            if (!self.document.registryOU)
-                return false;
-
             self.subOrganizations = [];
+            if (!self.document.registryOU) {
+                return false;
+            }
             organizationService
                 .loadChildrenOrganizations(self.document.registryOU)
                 .then(function (result) {
@@ -578,8 +582,8 @@ module.exports = function (app) {
                         result.push(angular.copy(self.employee.userOrganization));
                     } else {
                         result.unshift(angular.copy(organizationService.getOrganizationById(self.document.registryOU)));
-                        self.document.ou = null;
                     }
+                    self.document.ou = null;
                     self.subOrganizations = result;
                 });
         };

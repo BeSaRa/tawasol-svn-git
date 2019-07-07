@@ -45,10 +45,6 @@
                                             md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                             <span>{{lang.priority_level}}</span>
                                         </th>
-                                        <!--<th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
-                                            <span>{{lang.security_level}}</span>
-                                        </th>-->
                                         <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
                                             md-order-by="{{ctrl.getSortingKey('docType', 'DocumentType')}}">
                                             <span>{{lang.label_document_type}}</span>
@@ -81,12 +77,20 @@
                                                                       record-type="correspondence"></grid-indicator-directive>
                                         </td>
                                         <td  md-cell><span class="serial-td">{{quickSearch.docFullSerial}}</span></td>
-                                        <td md-cell><a href="" class="view-doc"
-                                                       ng-click="ctrl.viewDocument(quickSearch, $event)">{{quickSearch.docSubject}}</a>
+                                        <td md-cell class="subject">
+                                            <!--<grid-document-subject-directive record="quickSearch"
+                                                                             plain-text-only="!quickSearch.hasContent()"
+                                                                             click-callback="ctrl.viewDocument">
+                                            </grid-document-subject-directive>-->
+                                            <a href="" ng-if="quickSearch.hasContent()"
+                                               class="view-doc subject-internal" md-truncate
+                                               tooltip="{{quickSearch.docSubject}}"
+                                               ng-click="ctrl.viewDocument(quickSearch, $event)">{{quickSearch.docSubject}}</a>
+                                            <span ng-if="!quickSearch.hasContent()"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{quickSearch.docSubject}}">{{quickSearch.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{quickSearch.priorityLevel.getTranslatedName()}}</td>
-                                        <!--<td md-cell>{{quickSearch.securityLevel.getTranslatedName()}}</td>-->
-                                        <!--<td md-cell>{{lang[quickSearch.getInfo().documentClass +"_document_class"]}}</td>-->
                                         <td md-cell>{{quickSearch.docType.getTranslatedName()}}</td>
                                         <td md-cell>{{quickSearch.createdBy}}</td>
                                         <td md-cell>{{quickSearch.createdOn}}</td>

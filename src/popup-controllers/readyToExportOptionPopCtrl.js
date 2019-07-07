@@ -4,7 +4,7 @@ module.exports = function (app) {
                                                            langService,
                                                            toast,
                                                            errorCode,
-                                                           sites,
+                                                           // sites,
                                                            _,
                                                            resend,
                                                            cmsTemplate,
@@ -17,7 +17,8 @@ module.exports = function (app) {
                                                            correspondenceService,
                                                            PartialExportCollection,
                                                            g2gData,
-                                                           WorkItem) {
+                                                           WorkItem,
+                                                           prepareExport) {
         'ngInject';
         var self = this;
 
@@ -29,7 +30,11 @@ module.exports = function (app) {
         self.model = new ReadyToExportOption();
 
         self.settings = rootEntity.getGlobalSettings();
-        self.correspondenceSites = [].concat(sites.first, _.map(sites.second, function (item) {
+        /*self.correspondenceSites = [].concat(sites.first, _.map(sites.second, function (item) {
+            item.ccVerion = true;
+            return item;
+        }));*/
+        self.correspondenceSites = [].concat(prepareExport.sitesitesToList, _.map(prepareExport.sitesCCList, function (item) {
             item.ccVerion = true;
             return item;
         }));
@@ -42,6 +47,25 @@ module.exports = function (app) {
             return item.siteCategory === 2;
         });
 
+
+        self.getExportWayText = function () {
+            var exportWayMap = {
+                1: 'export_electronic',
+                2: 'export_manual',
+                3: 'export_fax'
+            };
+            return langService.get(exportWayMap[prepareExport.exportWay]);
+        };
+        self.exportWayTextMain = self.getExportWayText();
+        self.isElectronicExport = function(){
+            return prepareExport.exportWay === 1;
+        };
+        self.isManualExport = function(){
+            return prepareExport.exportWay === 2;
+        };
+        self.isFaxExport = function(){
+            return prepareExport.exportWay === 3;
+        };
 
         self.exportType = 1;
 
@@ -136,7 +160,7 @@ module.exports = function (app) {
         self.exportCorrespondenceWorkItem = function () {
             if (self.resend) {
                 return correspondenceService
-                    .resendCorrespondenceWorkItem(self.readyToExport, self.exportType === 1 ? self.validateExportOption(self.model) : self.partialExportList , g2gData)
+                    .resendCorrespondenceWorkItem(self.readyToExport, self.exportType === 1 ? self.validateExportOption(self.model) : self.partialExportList, g2gData)
                     .then(function (result) {
                         dialog.hide(result);
                     })
@@ -221,7 +245,6 @@ module.exports = function (app) {
         self.closeExportPopupFromCtrl = function () {
             dialog.cancel('close');
         };
-
 
         self.openLinkedDocsAttachmentDialog = function ($event) {
             return dialog

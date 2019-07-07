@@ -1,10 +1,9 @@
-<md-dialog id="addOrganizationsDistributionWorkflow" class="dialog-extend"
-           ng-attr-aria-label="{{lang.add_organizations}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="addOrganizationsDistributionWorkflow" ng-attr-aria-label="{{lang.add_organizations}}">
     <div layout="column">
-        <md-toolbar layout="row" layout-align="start center">
-            <span class="p20" ng-if="!ctrl.editMode">{{lang.add_organizations}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.editMode"
+                                 header-text="{{lang.add_organizations}}"></popup-toolbar-directive>
         <md-content>
             <div layout="row" class="p20" style="height: 345px !important;">
                 <div layout="column">

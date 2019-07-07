@@ -188,37 +188,6 @@
                                                                    callback="ctrl.changeStar"
                                                                    selected-records="ctrl.selectedWorkItems"
                                             ></star-unstar-directive>
-                                            <!--
-                                                                                    &lt;!&ndash;tooltip="{{workItem.getTranslatedStarred()}}"&ndash;&gt;
-                                                                                    <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
-                                                                                             ng-if="workItem.generalStepElm.starred && (!ctrl.selectedWorkItems.length
-                                                                                                     || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber)"
-                                                                                             md-svg-icon="star"
-                                                                                             ng-click="ctrl.changeStar(workItem, $event)"
-                                                                                    ></md-icon>
-                                                                                    &lt;!&ndash;tooltip="{{workItem.getTranslatedStarred()}}"&ndash;&gt;
-                                                                                    <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
-                                                                                             ng-if="workItem.generalStepElm.starred
-                                                                                                     && ((ctrl.selectedWorkItems.length === 1
-                                                                                                     && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber != workItem.generalStepElm.workObjectNumber)
-                                                                                                        || ctrl.selectedWorkItems.length > 1)"
-                                                                                             md-svg-icon="star"
-                                                                                    ></md-icon>
-                                                                                    &lt;!&ndash;tooltip="{{workItem.getTranslatedStarred()}}"&ndash;&gt;
-                                                                                    <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
-                                                                                             ng-if="!workItem.generalStepElm.starred && (!ctrl.selectedWorkItems.length
-                                                                                                      || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber)"
-                                                                                             md-svg-icon="star-outline"
-                                                                                             ng-click="ctrl.changeStar(workItem, $event)"
-                                                                                    ></md-icon>
-                                                                                    &lt;!&ndash;tooltip="{{workItem.getTranslatedStarred()}}"&ndash;&gt;
-                                                                                    <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
-                                                                                             ng-if="!workItem.generalStepElm.starred
-                                                                                                     && ((ctrl.selectedWorkItems.length === 1
-                                                                                                     && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber != workItem.generalStepElm.workObjectNumber)
-                                                                                                        || ctrl.selectedWorkItems.length > 1)"
-                                                                                             md-svg-icon="star-outline"
-                                                                                    ></md-icon>-->
                                         </td>
                                         <td md-cell><span class="serial-td" >{{workItem.generalStepElm.docFullSerial}}</span></td>
                                         <td md-cell class="indicator-td text-right"
@@ -233,11 +202,17 @@
                                                                       record-type="workItem"></grid-indicator-directive>
                                         </td>
                                         <td md-cell class="subject">
-                                            <a href="" class="view-doc subject" md-truncate
-                                               ng-if="workItem.hasContent()"
+                                            <!--<grid-document-subject-directive record="workItem"
+                                                                             plain-text-only="!workItem.hasContent()"
+                                                                             click-callback="ctrl.viewDocument">
+                                            </grid-document-subject-directive>-->
+                                            <a href="" ng-if="workItem.hasContent()"
+                                               class="view-doc subject-internal" md-truncate
                                                tooltip="{{workItem.generalStepElm.docSubject}}"
                                                ng-click="ctrl.viewDocument(workItem, $event)">{{workItem.generalStepElm.docSubject}}</a>
-                                            <span ng-if="!workItem.hasContent()">{{workItem.generalStepElm.docSubject}}</span>
+                                            <span ng-if="!workItem.hasContent()"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{workItem.generalStepElm.docSubject}}">{{workItem.generalStepElm.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{workItem.getReceivedDate()}}</td>
                                         <td md-cell>{{workItem.action.getTranslatedName()}}</td>

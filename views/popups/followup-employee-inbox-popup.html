@@ -1,14 +1,13 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.select_organization_and_user}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.select_organization_and_user}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.select_organization_and_user}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.select_organization_and_user}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="organizationAndUserForm" autocomplete="off">
                 <div layout="column" class="p20">
                     <div layout="row">
-                        <md-input-container flex>
+                        <!--<md-input-container flex>
                             <label for="organization">{{lang.organization_unit}}</label>
                             <md-select name="organization" id="organization" required
                                        ng-change="ctrl.getApplicationUsersForOU($event)"
@@ -21,7 +20,35 @@
                             <div ng-messages="organizationAndUserForm.organization.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
+                        </md-input-container>-->
+                        <!-- Organizations -->
+                        <md-input-container flex>
+                            <label for="organization">{{lang.organization_unit}}</label>
+                            <md-select id="organization" name="organization" required
+                                       ng-change="ctrl.getApplicationUsersForOU($event)"
+                                       aria-label="{{lang.organization_unit}}"
+                                       ng-model="ctrl.selectedOrganization"
+                                       md-on-close="ctrl.clearSearchText('inlineOU')"
+                                       data-md-container-class="select-header-container">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.inlineOUSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option
+                                        ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.inlineOUSearchText : 'getNameByLanguageRegOUSection'"
+                                        ng-value="organization.id">
+                                        <span
+                                                md-highlight-text="ctrl.inlineOUSearchText"
+                                                md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="organizationAndUserForm.organization.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
                         </md-input-container>
+                        <!-- Users -->
                         <md-input-container flex>
                             <label for="applicationUser">{{lang.app_users}}</label>
                             <md-select name="applicationUser" id="applicationUser"

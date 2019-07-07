@@ -1,13 +1,14 @@
 module.exports = function (app) {
     app.controller('viewCorrespondenceG2GPopCtrl', function ($mdSidenav,
-                                                          dialog,
-                                                          $element,
-                                                          toast,
-                                                          langService,
-                                                          $timeout,
-                                                          popupNumber,
-                                                          employeeService,
-                                                          generator) {
+                                                             dialog,
+                                                             $element,
+                                                             toast,
+                                                             langService,
+                                                             $timeout,
+                                                             popupNumber,
+                                                             loadingIndicatorService,
+                                                             employeeService,
+                                                             generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondenceG2GPopCtrl';
@@ -15,6 +16,7 @@ module.exports = function (app) {
         self.validation = false;
         self.detailsReady = false;
         self.employeeService = employeeService;
+        self.loadingIndicatorService = loadingIndicatorService;
         $timeout(function () {
             self.detailsReady = true;
             self.model = angular.copy(self.correspondence);
@@ -71,8 +73,7 @@ module.exports = function (app) {
         self.checkDisabled = function () {
             if (self.correspondence.docClassName === 'Incoming') {
                 return !self.correspondence.site;
-            }
-            else if (self.correspondence.docClassName === 'Outgoing') {
+            } else if (self.correspondence.docClassName === 'Outgoing') {
                 return !(self.correspondence.sitesInfoTo && self.correspondence.sitesInfoTo.length);
             }
             return false;

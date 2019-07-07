@@ -105,6 +105,20 @@ module.exports = function (app) {
                 });
         };
         /**
+         * @description add manager to all users
+         * @param ouId
+         * @returns {*}
+         */
+        self.addManagerToAllUsers = function (ouId) {
+            ouId = ouId.hasOwnProperty('id') ? ouId.id : ouId;
+            return $http
+                .put(urlService.addManagerToAllUsers.replace('{ouId}', ouId))
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        };
+
+        /**
          * to replace organization from organizations .
          * @param organization
          */
@@ -616,6 +630,20 @@ module.exports = function (app) {
                     return organizations;
                 });
         };
+
+        /**
+         * @description Returns the organizations the user can follow up on
+         * @returns {*}
+         */
+        self.getFollowUpOrganizations = function () {
+            return $http.get(urlService.followupOu)
+                .then(function (result) {
+                    result = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
+                    result = generator.interceptReceivedCollection('Organization', result);
+                    return result;
+                })
+        };
+
         /**
          * @description load central archive organizations.
          * @return {*}

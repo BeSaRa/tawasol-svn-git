@@ -132,12 +132,18 @@
                                                                           indicator-type="hasAttachment"
                                                                           record-type="SentItemCentralArchive"></grid-indicator-directive>
                                             </td>
-                                            <td md-cell md-truncate class="subject">
-                                                <a href="" class="view-doc" md-truncate
-                                                   ng-click="ctrl.viewDocument(centralArchiveItem, $event)"
-                                                   tooltip="{{centralArchiveItem.docSubject}}">
-                                                    {{centralArchiveItem.docSubject}}
-                                                </a>
+                                            <td md-cell class="subject">
+                                                <!--<grid-document-subject-directive record="centralArchiveItem"
+                                                                                 plain-text-only="!centralArchiveItem.hasContent()"
+                                                                                 click-callback="ctrl.viewDocument">
+                                                </grid-document-subject-directive>-->
+                                                <a href="" ng-if="centralArchiveItem.hasContent()"
+                                                   class="view-doc subject-internal" md-truncate
+                                                   tooltip="{{centralArchiveItem.docSubject}}"
+                                                   ng-click="ctrl.viewDocument(centralArchiveItem, $event)">{{centralArchiveItem.docSubject}}</a>
+                                                <span ng-if="!centralArchiveItem.hasContent()"
+                                                      class="view-doc subject-internal" md-truncate
+                                                      tooltip="{{centralArchiveItem.docSubject}}">{{centralArchiveItem.docSubject}}</span>
                                             </td>
                                             <td md-cell>{{centralArchiveItem.typeOriginalCopy}}</td>
                                             <td md-cell class="td-data">

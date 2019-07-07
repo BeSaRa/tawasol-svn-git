@@ -1,9 +1,8 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{ctrl.title ? lang.get(ctrl.title) : lang.terminate_reason}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{ctrl.title ? lang.get(ctrl.title) : lang.terminate_reason}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{ctrl.title ? lang.get(ctrl.title) : lang.terminate_reason}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{ctrl.title ? lang.get(ctrl.title) : lang.terminate_reason}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="reason_form" autocomplete="off">
                 <div layout="column" class="p20">

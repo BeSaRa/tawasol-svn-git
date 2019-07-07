@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.search}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.search}}">
     <div layout="column">
-        <md-toolbar>
-            <span ng-if="!ctrl.editMode" class="p20">{{lang.search}} : {{lang.menu_item_sent_items}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.editMode"
+                                 header-text="{{lang.search}} : {{lang.menu_item_sent_items}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="userSentItemSearchForm" autocomplete="off">
                 <div layout="column" class="p20">

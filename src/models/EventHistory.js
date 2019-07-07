@@ -71,6 +71,9 @@ module.exports = function (app) {
             EventHistory.prototype.getTranslatedName = function () {
                 return this.docSubject;
             };
+            EventHistory.prototype.getSubject = function () {
+                return this.docSubject;
+            };
 
             EventHistory.prototype.setViewDocumentService = function (service) {
                 viewDocumentService = service;

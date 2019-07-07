@@ -775,6 +775,10 @@ module.exports = function (app) {
                 return correspondenceService.editWordInDesktop(this);
             };
 
+            WorkItem.prototype.openSendSMSDialog = function ($event) {
+                return correspondenceService.openSendSMSDialog(this, $event);
+            };
+
             WorkItem.prototype.createReply = function ($event) {
                 if (this.getInfo().documentClass === 'incoming') {
                     return dialog.showDialog({

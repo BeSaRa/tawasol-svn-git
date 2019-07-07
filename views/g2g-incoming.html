@@ -79,9 +79,14 @@
                                                                       indicator-type="isInternalG2G"
                                                                       record-type="g2g"></grid-indicator-directive>
                                         </td>
-                                        <td md-cell md-truncate class="subject">
-                                            <a href="" class="view-doc" md-truncate
-                                               title="{{g2gItem.correspondence.docSubject}}"
+                                        <td md-cell class="subject">
+                                            <!--<grid-document-subject-directive record="g2gItem"
+                                                                             plain-text-only="false"
+                                                                             click-callback="ctrl.viewDocument">
+                                            </grid-document-subject-directive>-->
+                                            <a href=""
+                                               class="view-doc subject-internal" md-truncate
+                                               tooltip="{{g2gItem.correspondence.docSubject}}"
                                                ng-click="ctrl.viewDocument(g2gItem, $event)">{{g2gItem.correspondence.docSubject}}</a>
                                         </td>
                                         <td md-cell>{{g2gItem.typeInfo.getTranslatedName()}}</td>

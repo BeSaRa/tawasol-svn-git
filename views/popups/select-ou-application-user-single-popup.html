@@ -1,9 +1,11 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{ctrl.label || lang.select_user}}">
-    <md-toolbar layout="row" layout-align="start center">
-        <span class="p20" flex ng-if="ctrl.label">{{lang.get(ctrl.label) ? lang.get(ctrl.label) : ctrl.label }}</span>
-        <span class="p20" flex ng-if="!ctrl.label">{{lang.select_user}}</span>
-        <close-dialog-directive when-close="ctrl.close"></close-dialog-directive>
-    </md-toolbar>
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{ctrl.label || lang.select_user}}">
+    <popup-toolbar-directive ng-if="ctrl.label"
+                             header-text="{{lang.get(ctrl.label) ? lang.get(ctrl.label) : ctrl.label }}"
+                             close-callback="ctrl.close"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="!ctrl.label" header-text="{{lang.select_user}}"
+                             close-callback="ctrl.close"></popup-toolbar-directive>
     <md-content scroll-directive class="p20" layout="column">
         <div layout="row" layout-align="start center" class="m8">
             <span flex></span>
@@ -14,9 +16,13 @@
                 <table md-table md-row-select ng-model="ctrl.ouApplicationUserSelected" md-progress="ctrl.progress">
                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                     <tr md-row>
-                        <th md-column md-order-by="{{ctrl.getSortingKey('applicationUser', 'ApplicationUser')}}"><span>{{lang.name}}</span></th>
+                        <th md-column md-order-by="{{ctrl.getSortingKey('applicationUser', 'ApplicationUser')}}"><span>{{lang.name}}</span>
+                        </th>
                         <th md-column md-order-by="applicationUser.loginName"><span>{{lang.login_name}}</span></th>
                         <th md-column md-order-by="applicationUser.domainName"><span>{{lang.domain_name}}</span></th>
+                        <th md-column ng-if="ctrl.ouApplicationUserSelected.length">
+                            {{lang.add_manager_to_all_users}}
+                        </th>
                     </tr>
                     </thead>
                     <tbody md-body>
@@ -30,6 +36,14 @@
                         </td>
                         <td md-cell>
                             <span tooltip="{{ouApplicationUser.applicationUser.getDefaultOrganization().getNames()}}">{{ouApplicationUser.applicationUser.domainName}}</span>
+                        </td>
+                        <td md-cell>
+                            <div layout-align="center center" layout="row">
+                                <md-switch aria-label="{{lang.add_manager_to_all_users}}"
+                                           ng-if="ctrl.ouApplicationUserSelected.length && ctrl.ouApplicationUserSelected[0].applicationUser.id === ouApplicationUser.applicationUser.id"
+                                           ng-model="ctrl.isAddManagerToAllUsersEnabled">
+                                </md-switch>
+                            </div>
                         </td>
                     </tr>
                     <tr ng-if="!ctrl.ouApplicationUsers.length" md-row>
@@ -50,8 +64,9 @@
             </md-table-container>
         </md-card>
         <div layout="row" layout-align="center center">
-            <md-button class="md-raised" ng-disabled="!ctrl.ouApplicationUserSelected.length" ng-click="ctrl.saveSelectedOuUser()">
-                {{lang.save}}
+            <md-button class="md-raised" ng-disabled="!ctrl.ouApplicationUserSelected.length"
+                       ng-click="ctrl.saveSelectedOuUser()">
+                {{lang.add}}
             </md-button>
         </div>
     </md-content>

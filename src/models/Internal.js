@@ -4,6 +4,7 @@ module.exports = function (app) {
                                       generator,
                                       Correspondence,
                                       dialog,
+                                      queueStatusService,
                                       Indicator) {
             'ngInject';
             return function Internal(model) {
@@ -65,6 +66,9 @@ module.exports = function (app) {
                 Internal.prototype.isCompositeSites = function () {
                     return false;
                 };
+                Internal.prototype.isInternalPersonal = function () {
+                    return this.internalDocType === 0;
+                };
 
 
                 Internal.prototype.launchWorkFlowAndCheckApprovedInternal = function ($event, action, tab) {
@@ -81,12 +85,17 @@ module.exports = function (app) {
                         return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
                     }
                 };
-
-                Internal.prototype.saveReplyDocumentWithContent = function (information, workItemNum, sendToReview) {
+                Internal.prototype.saveCreateReplyDocument = function (status, workItemNum) {
+                    correspondenceService = this.getCorrespondenceService();
+                    if (status)
+                        this.docStatus = queueStatusService.getDocumentStatus(status);
+                    return correspondenceService.addCreateReplyCorrespondence(this, workItemNum);
+                };
+                Internal.prototype.saveCreateReplyDocumentWithContent = function (information, workItemNum, sendToReview) {
                     correspondenceService = this.getCorrespondenceService();
                     if (sendToReview)
                         this.docStatus = 4;
-                    return correspondenceService.updateReplyCorrespondenceWithContent(this, information, workItemNum);
+                    return correspondenceService.addCreateReplyCorrespondenceWithContent(this, information, workItemNum);
                 };
 
 

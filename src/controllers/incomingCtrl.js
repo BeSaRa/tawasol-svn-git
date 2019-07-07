@@ -177,7 +177,7 @@ module.exports = function (app) {
             })
                 .catch(function (error) {
                     self.saveInProgress = false;
-                    // don't show the error in g2g receive becouse handled by error dialog
+                    // don't show the error in g2g receive because handled by error dialog
                     if (error && !self.receiveG2G)
                         toast.error(error);
 
@@ -216,23 +216,19 @@ module.exports = function (app) {
                     successKey = 'save_success';
                 }
 
-                if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
-                    dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
-                        .then(function () {
-                            self.docActionLaunchDistributionWorkflow(self.incoming);
-                        });
-                }
-
                 self.requestCompleted = true;
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
 
-                if (centralArchives && self.incoming.hasContent()) {
-                    self.docActionLaunchDistributionWorkflow(self.incoming, false, {
-                        tab: 'registry_organizations',
-                        registryOU: self.incoming.registryOU,
-                        ou: self.incoming.ou
-                    });
+                if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')) {
+                    if (centralArchives && self.incoming.hasContent()) {
+                        self.docActionLaunchDistributionWorkflow(self.incoming);
+                    } else if (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist)) {
+                        dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
+                            .then(function () {
+                                self.docActionLaunchDistributionWorkflow(self.incoming);
+                            });
+                    }
                 }
             }
         };
@@ -306,11 +302,18 @@ module.exports = function (app) {
             document.barcodePrint(document);
         };
 
-        self.docActionLaunchDistributionWorkflow = function (document, $event, defaultTab) {
-            defaultTab = defaultTab ? defaultTab : 'favorites';
+        self.docActionLaunchDistributionWorkflow = function (document, $event) {
             if (!self.incoming.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
+            }
+            var defaultTab = 'favorites';
+            if (centralArchives && self.incoming.hasContent()) {
+                defaultTab = {
+                    tab: 'registry_organizations',
+                    registryOU: self.incoming.registryOU,
+                    ou: self.incoming.ou || self.incoming.registryOU
+                }
             }
             document.launchWorkFlow($event, 'forward', defaultTab)
                 .then(function () {

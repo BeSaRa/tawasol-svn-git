@@ -135,7 +135,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.createReplyIncoming = function (workItem, $event,defer) {
+        self.createReplyIncoming = function (workItem, $event, defer) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
@@ -538,7 +538,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            console.log('sendSMS : ', workItem);
+            workItem.openSendSMSDialog($event);
         };
 
         /**
@@ -568,7 +568,7 @@ module.exports = function (app) {
             var info = workItem.getInfo();
             viewDocumentService.loadDocumentViewUrlWithOutEdit(info.vsId).then(function (result) {
                 //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
-                dialog.successMessage(langService.get('link_message').change({result: result}),null,null,null,null,true);
+                dialog.successMessage(langService.get('link_message').change({result: result}), null, null, null, null, true);
                 return true;
             });
         };
@@ -808,8 +808,8 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // view
             {
@@ -826,8 +826,8 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // Preview
                     {
@@ -889,8 +889,8 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Terminate
@@ -905,8 +905,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Add To Folder
             {
@@ -921,8 +921,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Add To Favorite
             {
@@ -938,8 +938,8 @@ module.exports = function (app) {
                 },
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Create Reply
             {
@@ -970,8 +970,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Broadcast
             {
@@ -1002,8 +1002,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Get Link
             {
@@ -1019,8 +1019,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Subscribe
             {
@@ -1035,8 +1035,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Export (Send to ready to export)
             {
@@ -1070,9 +1070,9 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
-                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
+                    return true;
+                },
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid', gridService.grids.inbox.group)
             },
             // View Tracking Sheet (Shortcut Only)
             {
@@ -1084,8 +1084,8 @@ module.exports = function (app) {
                 showInView: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 callback: self.viewTrackingSheet,
                 params: ['view_tracking_sheet', 'tabs']
             },
@@ -1109,8 +1109,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false,
                 subMenu: [
                     // Tags
@@ -1219,8 +1219,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // Direct Linked Documents
                     {
@@ -1255,8 +1255,8 @@ module.exports = function (app) {
                 text: 'grid_action_download',
                 shortcut: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
                     "DOWNLOAD_COMPOSITE_BOOK"
@@ -1298,8 +1298,8 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
@@ -1357,10 +1357,9 @@ module.exports = function (app) {
                         icon: 'message',
                         text: 'grid_action_send_sms',
                         shortcut: false,
-                        hide: true,
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: function (action, model) {
                             return true;
                         }
@@ -1507,8 +1506,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",
                     "DUPLICATE_BOOK_FROM_VERSION"

@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="Document Versions!">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="Document Versions!">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.document_versions}} : {{ctrl.correspondence.getTranslatedName()}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive
+                header-text="{{lang.document_versions}} : {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <!--<div layout="row" ng-repeat="(key , version) in ctrl.versions">
                 <div layout="row" flex ng-repeat="(index , item) in version">

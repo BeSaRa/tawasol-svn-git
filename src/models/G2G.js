@@ -77,6 +77,14 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Returns the document subject
+             * @returns {null}
+             */
+            G2G.prototype.getSubject = function () {
+                return this.correspondence.docSubject;
+            };
+
+            /**
              * @description Get the translated correspondence site info.
              * @returns {string}
              */

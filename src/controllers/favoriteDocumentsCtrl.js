@@ -391,6 +391,15 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description send sms for Correspondence document
+         * @param workItem
+         * @param $event
+         */
+        self.sendSMS = function (workItem, $event) {
+            workItem.openSendSMSDialog($event);
+        };
+
         self.viewInDeskTop = function (workItem) {
             return correspondenceService.viewWordInDesktop(workItem);
         };
@@ -659,7 +668,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                             return true;
                         },
-                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid', gridService.grids.inbox.favorite)
             },
             // View Tracking Sheet (Shortcut Only)
             {
@@ -823,7 +832,36 @@ module.exports = function (app) {
                         }
                     }
                 ]
-            }
+            },
+            // Send
+            {
+                type: 'action',
+                icon: 'send',
+                text: 'grid_action_send',
+                shortcut: false,
+                checkShow: function (action, model) {
+                    return true;
+                },
+                permissionKey: [
+                    "SEND_SMS"
+                ],
+                checkAnyPermission: true,
+                subMenu: [
+                    // SMS
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'grid_action_send_sms',
+                        shortcut: false,
+                        permissionKey: "SEND_SMS",
+                        callback: self.sendSMS,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
+            },
         ];
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);

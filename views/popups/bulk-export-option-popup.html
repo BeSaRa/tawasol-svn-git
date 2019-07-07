@@ -1,10 +1,9 @@
-<md-dialog id="ready-to-export-options" class="dialog-extend"
-           ng-attr-aria-label="{{ctrl.resend ? lang.resend_options : lang.export_options}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="ready-to-export-options" ng-attr-aria-label="{{ctrl.resend ? lang.resend_options : lang.export_options}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{ctrl.resend ? lang.resend_options : lang.export_options}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive
+                header-text="{{ctrl.resend ? lang.resend_options : lang.export_options}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="bulkExportOptionsForm" autocomplete="off">
                 <!--<div layout="row" class="p20" flex ng-if="ctrl.canExportAnyRelatedData()">

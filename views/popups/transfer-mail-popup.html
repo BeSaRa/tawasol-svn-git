@@ -1,9 +1,8 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.transfer_reason}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.transfer_reason}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.transfer_reason}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.transfer_reason}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="reason_form" autocomplete="off">
                 <div layout="column" class="p20">

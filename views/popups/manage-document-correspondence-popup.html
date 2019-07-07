@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.correspondence_sites}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.correspondence_sites}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.correspondence_sites}} : {{ctrl.documentSubject}}</span>
-            <close-dialog-directive when-close="ctrl.closeDocumentCorrespondence"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.correspondence_sites}} : {{ctrl.documentSubject}}"
+                                 close-callback="ctrl.closeDocumentCorrespondence"></popup-toolbar-directive>
         <md-content scroll-directive>
             <manage-correspondence-sites-directive
                     ng-if="ctrl.documentClass.toLowerCase()==='outgoing'"

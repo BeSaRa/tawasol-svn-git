@@ -63,7 +63,8 @@ module.exports = function (app) {
                                                    G2GMessagingHistory,
                                                    DocumentComment,
                                                    userFolderService,
-                                                   $stateParams) {
+                                                   $stateParams,
+                                                   SmsLog) {
         'ngInject';
         var self = this, managerService, correspondenceStorageService;
         self.serviceName = 'correspondenceService';
@@ -569,12 +570,13 @@ module.exports = function (app) {
          * @param workItemNum
          * @return {Promise|Correspondence}
          */
-        self.updateReplyCorrespondence = function (correspondence, workItemNum) {
+        self.addCreateReplyCorrespondence = function (correspondence, workItemNum) {
             return $http
                 .post(
                     _createUrlSchema('create-reply-metadata/incoming/' + workItemNum, correspondence.docClassName, null),
                     generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence)
-                ).then(function () {
+                ).then(function (result) {
+                    correspondence.vsId = result.data.rs;
                     return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
                 }).catch(function (error) {
                     return $q.reject(self.getTranslatedError(error));
@@ -666,7 +668,7 @@ module.exports = function (app) {
          * @param information
          * @param workItemNum
          */
-        self.updateReplyCorrespondenceWithContent = function (correspondence, information, workItemNum) {
+        self.addCreateReplyCorrespondenceWithContent = function (correspondence, information, workItemNum) {
             var book = _createCorrespondenceStructure(correspondence, information);
 
             return $http.post(_createUrlSchema('create-reply-full/incoming/' + workItemNum, correspondence.docClassName, null), book)
@@ -1771,7 +1773,7 @@ module.exports = function (app) {
                     return correspondence;
                 })
                 .catch(function (error) {
-                    errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
+                    /*errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
                         dialog.errorMessage(langService.get('g2g_not_authenticated'));
                     });
                     errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
@@ -1785,7 +1787,8 @@ module.exports = function (app) {
                     });
                     errorCode.checkIf(error, 'G2G_CAN_NOT_RECEIVE_RECALLED_DOCUMENT', function () {
                         dialog.errorMessage(langService.get('g2g_can_not_receive_recalled_document'));
-                    });
+                    });*/
+                    return errorCode.showErrorDialog(error);
                 });
         };
 
@@ -2731,18 +2734,40 @@ module.exports = function (app) {
                         g2gData: g2gData
                     },
                     resolve: {
-                        sites: function (correspondenceService) {
+                        /*sites: function (correspondenceService) {
                             'ngInject';
                             return correspondenceService
                                 .loadCorrespondenceSites(workItem);
-                        },
+                        },*/
                         entityTypes: function (entityTypeService) {
                             'ngInject';
                             return entityTypeService
                                 .loadEntityTypes();
+                        },
+                        prepareExport: function () {
+                            'ngInject';
+                            return self.prepareExportedDataFromBackend(workItem)
                         }
                     }
                 });
+        };
+
+        self.prepareExportedDataFromBackend = function (workItem) {
+            var info = workItem.getInfo();
+            return $http.get(urlService.correspondence + '/' + info.documentClass + '/vsid/' + info.vsId + '/prepare-export')
+                .then(function (result) {
+                    result.data.rs.sitesitesToList = _.map(result.data.rs.sitesitesToList, function (site) {
+                        site.docClassName = info.documentClass;
+                        return site;
+                    });
+                    result.data.rs.sitesCCList = _.map(result.data.rs.sitesCCList, function (site) {
+                        site.docClassName = info.documentClass;
+                        return site;
+                    });
+                    result.data.rs.sitesitesToList = generator.interceptReceivedCollection('Site', generator.generateCollection(result.data.rs.sitesitesToList, Site));
+                    result.data.rs.sitesCCList = generator.interceptReceivedCollection('Site', generator.generateCollection(result.data.rs.sitesCCList, Site));
+                    return result.data.rs;
+                })
         };
 
         /**
@@ -3680,6 +3705,82 @@ module.exports = function (app) {
                     }
                 });
             }
+        };
+
+        self.openSendSMSDialog = function (correspondence, $event) {
+            var info = correspondence.getInfo();
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('send-sms'),
+                controllerAs: 'ctrl',
+                eventTarget: $event || null,
+                bindToController: true,
+                controller: 'sendSmsPopCtrl',
+                locals: {
+                    record: correspondence
+                },
+                resolve: {
+                    linkedEntities: function () {
+                        'ngInject';
+                        return self.getLinkedEntitiesByVsIdClass(info.vsId, info.documentClass);
+                    },
+                    smsTemplates: function (applicationUserService, smsTemplateService) {
+                        'ngInject';
+                        return applicationUserService.getApplicationUsers()
+                            .then(function () {
+                                return smsTemplateService.loadActiveSmsTemplates();
+                            });
+                    }
+                }
+            })
+        };
+
+        /**
+         * @description Gets the parsed sms template to display as sms message
+         * @param correspondence
+         * @param smsObject
+         * @returns {*}
+         */
+        self.parseSMSTemplate = function (correspondence, smsObject) {
+            var info = correspondence.getInfo(),
+                url = urlService.correspondence + '/' + info.documentClass + '/' + info.vsId + '/template/' + smsObject.smsTemplate,
+                smsObjectCopy = angular.copy(smsObject);
+
+            if (smsObjectCopy.linkedEntity) {
+                smsObjectCopy.linkedEntity = generator.interceptSendInstance('LinkedObject', smsObjectCopy.linkedEntity);
+                // adding dummy property for backend purpose only
+                smsObjectCopy.destinationName = smsObjectCopy.linkedEntity.getTranslatedName();
+            }
+            return $http.put(url, smsObjectCopy.linkedEntity || {})
+                .then(function (result) {
+                    return result.data.rs;
+                })
+        };
+
+        /**
+         * @description Sends the sms to the given mobile number
+         * @param correspondence
+         * @param smsObject
+         * @returns {*}
+         */
+        self.sendSMSMessage = function (correspondence, smsObject) {
+            var info = correspondence.getInfo(),
+                smsObjectCopy = angular.copy(smsObject),
+                url = urlService.correspondence + '/' + info.documentClass + '/vsid/' + info.vsId + '/send-sms';
+
+            if (smsObjectCopy.linkedEntity)
+                smsObjectCopy.linkedEntity = generator.interceptSendInstance('LinkedObject', smsObjectCopy.linkedEntity);
+
+            var model = new SmsLog({
+                smsTemplateId: smsObject.smsTemplate,
+                destinationName: smsObjectCopy.linkedEntity ? smsObjectCopy.linkedEntity.getTranslatedName() : '',
+                mobileNo: smsObjectCopy.mobileNumber,
+                message: smsObjectCopy.message
+            });
+
+            return $http.post(url, model)
+                .then(function (result) {
+                    return result.data.rs;
+                })
         };
 
         $timeout(function () {

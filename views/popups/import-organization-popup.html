@@ -1,9 +1,8 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.import_organizations}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.import_organizations}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.import_organizations}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.import_organizations}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="importOrganizationForm" autocomplete="off">
                 <div layout="column" class="p20">

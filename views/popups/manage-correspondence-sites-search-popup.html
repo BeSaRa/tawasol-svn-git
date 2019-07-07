@@ -1,9 +1,8 @@
-<md-dialog class="dialog-extend">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.select_correspondence_site}}</span>
-            <close-dialog-directive when-close="ctrl.closePopup"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.select_correspondence_site}}"
+                                 close-callback="ctrl.closePopup"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="correspondenceSitesForm" autocomplete="off">
                 <div layout="column" class="p20">

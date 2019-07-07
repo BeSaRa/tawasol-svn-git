@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.permissions}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.permissions}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{ctrl.model.customRoleId.getTranslatedName()}} : {{lang.permissions}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{ctrl.model.customRoleId.getTranslatedName()}} : {{lang.permissions}}"
+        ></popup-toolbar-directive>
         <md-content scroll-directive>
             <div class="p20">
                 <div layout="row" layout-align="start center">

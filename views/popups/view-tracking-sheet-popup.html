@@ -1,9 +1,8 @@
-<md-dialog class="dialog-extend mw60" id="view-tracking-sheet-dialog" aria-label="{{lang[ctrl.popupHeading]}}">
+<md-dialog class="dialog-extend mw60"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="view-tracking-sheet-dialog" aria-label="{{lang[ctrl.popupHeading]}}">
     <div layout="column">
-        <md-toolbar layout="row" layout-align="start center">
-            <span class="p20">{{ctrl.popupHeading}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{ctrl.popupHeading}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="trackingSheetForm" autocomplete="off">
                 <!-- SINGLE GRID VIEW -->
@@ -428,52 +427,53 @@
                         </md-content>
                     </div>
                     <!-- SMS Logs -->
-                    <!-- <div ng-if="ctrl.heading === 'view_tracking_sheet_sms_logs'">
-                         <md-content>
-                             <div layout="column" class="p20">
-                                 <md-card>
-                                     <md-table-container>
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_sms_logs'">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <md-card>
+                                    <md-table-container>
                                         <div flex scroll-directive>
-                                         <table md-table>
-                                             <thead md-head md-order="ctrl.smsLogsGrid.order">
-                                             <tr md-row>
-                                                 <th md-column md-order-by="message"><span>{{lang.sms_message}}</span>
-                                                 </th>
-                                                 <th md-column md-order-by="smsTemplateId">
-                                                     <span>{{lang.sms_template}}</span>
-                                                 </th>
-                                                 <th md-column md-order-by="ouId"><span>{{lang.organizations}}</span>
-                                                 </th>
-                                                 <th md-column md-order-by="actionBy"><span>{{lang.username}}</span>
-                                                 </th>
-                                                 <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
-                                                 </th>
-                                             </tr>
-                                             </thead>
-                                             <tbody md-body>
-                                             <tr md-select="smsLogRecord" md-row
-                                                 ng-repeat="smsLogRecord in ctrl.smsLogRecords | filter:ctrl.searchModelSMSLogs | limitTo: ctrl.smsLogsGrid.limit: ((ctrl.smsLogsGrid.page - 1) * ctrl.smsLogsGrid.limit) |orderBy:ctrl.smsLogsGrid.order  track by $index">
-                                                 <td md-cell>{{smsLogRecord.message}}</td>
-                                                 <td md-cell>{{smsLogRecord.smsTemplateId}}</td>
-                                                 <td md-cell>{{smsLogRecord.ouId}}</td>
-                                                 <td md-cell>{{smsLogRecord.actionBy}}</td>
-                                                 <td md-cell>{{smsLogRecord.actionDate}}</td>
-                                             </tr>
-                                             </tbody>
-                                         </table>
-                                         </div>
-                                         <md-table-pagination
-                                                 md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                 md-limit-options="ctrl.smsLogsGrid.limitOptions"
-                                                 md-limit="ctrl.smsLogsGrid.limit"
-                                                 md-page="ctrl.smsLogsGrid.page"
-                                                 md-total="{{ctrl.smsLogRecords.length}}"
-                                                 md-page-select></md-table-pagination>
-                                     </md-table-container>
-                                 </md-card>
-                             </div>
-                         </md-content>
-                     </div>-->
+                                            <table md-table>
+                                                <thead md-head md-order="ctrl.smsLogsGrid.order">
+                                                <tr md-row>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('user', 'ApplicationUser')}}">
+                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                    </th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('organization', 'OrganizationUnit')}}">
+                                                        <span>{{lang.organization}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="message">
+                                                        <span>{{lang.sms_message}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-select="smsLogRecord" md-row
+                                                    ng-repeat="smsLogRecord in ctrl.smsLogRecords | filter:ctrl.searchModelSMSLogs | limitTo: ctrl.smsLogsGrid.limit: ((ctrl.smsLogsGrid.page - 1) * ctrl.smsLogsGrid.limit) |orderBy:ctrl.smsLogsGrid.order  track by $index">
+                                                    <td md-cell>{{smsLogRecord.user.getTranslatedName()}}</td>
+                                                    <td md-cell>{{smsLogRecord.organization.getTranslatedName()}}</td>
+                                                    <td md-cell>{{smsLogRecord.actionDate_vts}}</td>
+                                                    <td md-cell>{{smsLogRecord.message}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <md-table-pagination
+                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                md-limit-options="ctrl.smsLogsGrid.limitOptions"
+                                                md-limit="ctrl.smsLogsGrid.limit"
+                                                md-page="ctrl.smsLogsGrid.page"
+                                                md-total="{{ctrl.smsLogRecords.length}}"
+                                                md-page-select></md-table-pagination>
+                                    </md-table-container>
+                                </md-card>
+                            </div>
+                        </md-content>
+                    </div>
                     <!-- Outgoing Delivery Reports / Messaging History -->
                     <div ng-if="ctrl.heading === 'view_tracking_sheet_outgoing_delivery_reports'">
                         <md-content>
@@ -1056,54 +1056,55 @@
                         </md-content>
                     </md-tab>
                     <!-- SMS Logs -->
-                    <!-- <md-tab label="{{lang.view_tracking_sheet_sms_logs}}"
-                             ng-if="ctrl.showTab('view_tracking_sheet_sms_logs')"
-                             md-on-select="ctrl.setCurrentTab('view_tracking_sheet_sms_logs')">
-                         <md-content>
-                             <div layout="column" class="p20">
-                                 <md-card>
-                                     <md-table-container>
+                    <md-tab label="{{lang.view_tracking_sheet_sms_logs}}"
+                            ng-if="ctrl.showTab('view_tracking_sheet_sms_logs')"
+                            md-on-select="ctrl.setCurrentTab('view_tracking_sheet_sms_logs')">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <md-card>
+                                    <md-table-container>
                                         <div flex scroll-directive>
-                                         <table md-table>
-                                             <thead md-head md-order="ctrl.smsLogsGrid.order">
-                                             <tr md-row>
-                                                 <th md-column md-order-by="message"><span>{{lang.sms_message}}</span>
-                                                 </th>
-                                                 <th md-column md-order-by="smsTemplateId">
-                                                     <span>{{lang.sms_template}}</span>
-                                                 </th>
-                                                 <th md-column md-order-by="ouId"><span>{{lang.organizations}}</span>
-                                                 </th>
-                                                 <th md-column md-order-by="actionBy"><span>{{lang.username}}</span>
-                                                 </th>
-                                                 <th md-column md-order-by="actionDate"><span>{{lang.action_date}}</span>
-                                                 </th>
-                                             </tr>
-                                             </thead>
-                                             <tbody md-body>
-                                             <tr md-select="smsLogRecord" md-row
-                                                 ng-repeat="smsLogRecord in ctrl.smsLogRecords | filter:ctrl.searchModelSMSLogs | limitTo: ctrl.smsLogsGrid.limit: ((ctrl.smsLogsGrid.page - 1) * ctrl.smsLogsGrid.limit) |orderBy:ctrl.smsLogsGrid.order  track by $index">
-                                                 <td md-cell>{{smsLogRecord.message}}</td>
-                                                 <td md-cell>{{smsLogRecord.smsTemplateId}}</td>
-                                                 <td md-cell>{{smsLogRecord.ouId}}</td>
-                                                 <td md-cell>{{smsLogRecord.actionBy}}</td>
-                                                 <td md-cell>{{smsLogRecord.actionDate}}</td>
-                                             </tr>
-                                             </tbody>
-                                         </table>
-                                         </div>
-                                         <md-table-pagination
-                                                 md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                 md-limit-options="ctrl.smsLogsGrid.limitOptions"
-                                                 md-limit="ctrl.smsLogsGrid.limit"
-                                                 md-page="ctrl.smsLogsGrid.page"
-                                                 md-total="{{ctrl.smsLogRecords.length}}"
-                                                 md-page-select></md-table-pagination>
-                                     </md-table-container>
-                                 </md-card>
-                             </div>
-                         </md-content>
-                     </md-tab>-->
+                                            <table md-table>
+                                                <thead md-head md-order="ctrl.smsLogsGrid.order">
+                                                <tr md-row>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('user', 'ApplicationUser')}}">
+                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                    </th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('organization', 'OrganizationUnit')}}">
+                                                        <span>{{lang.organization}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="message">
+                                                        <span>{{lang.sms_message}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-select="smsLogRecord" md-row
+                                                    ng-repeat="smsLogRecord in ctrl.smsLogRecords | filter:ctrl.searchModelSMSLogs | limitTo: ctrl.smsLogsGrid.limit: ((ctrl.smsLogsGrid.page - 1) * ctrl.smsLogsGrid.limit) |orderBy:ctrl.smsLogsGrid.order  track by $index">
+                                                    <td md-cell>{{smsLogRecord.user.getTranslatedName()}}</td>
+                                                    <td md-cell>{{smsLogRecord.organization.getTranslatedName()}}</td>
+                                                    <td md-cell>{{smsLogRecord.actionDate_vts}}</td>
+                                                    <td md-cell>{{smsLogRecord.message}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <md-table-pagination
+                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                md-limit-options="ctrl.smsLogsGrid.limitOptions"
+                                                md-limit="ctrl.smsLogsGrid.limit"
+                                                md-page="ctrl.smsLogsGrid.page"
+                                                md-total="{{ctrl.smsLogRecords.length}}"
+                                                md-page-select></md-table-pagination>
+                                    </md-table-container>
+                                </md-card>
+                            </div>
+                        </md-content>
+                    </md-tab>
                     <!-- Outgoing Delivery Reports / Messaging History -->
                     <md-tab label="{{lang.view_tracking_sheet_outgoing_delivery_reports}}"
                             ng-if="ctrl.showTab('view_tracking_sheet_outgoing_delivery_reports')"

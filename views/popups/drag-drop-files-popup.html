@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.attachment_attachments}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.attachment_attachments}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20" ng-if="!ctrl.model.id">{{lang.attachment_attachments}}</span>
-            <close-dialog-directive when-close="ctrl.closeDrag"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.model.id" header-text="{{lang.attachment_attachments}}"
+                                 close-callback="ctrl.closeDrag"></popup-toolbar-directive>
         <md-content scroll-directive>
             <div class="p20">
                 <!-- Add attachment-->

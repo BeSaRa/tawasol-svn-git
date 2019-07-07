@@ -77,6 +77,14 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Returns the document subject
+             * @returns {null}
+             */
+            G2GMessagingHistory.prototype.getSubject = function () {
+                return this.subject;
+            };
+
+            /**
              * @description to get documentClass,vsId.
              * @return {{documentClass: *, vsId: *}}
              */

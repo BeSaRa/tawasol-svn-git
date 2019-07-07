@@ -1,11 +1,11 @@
 <md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_reference_plan_number: ctrl.model.getNames()}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20" ng-if="!ctrl.model.id">{{lang.add_new_reference_plan_Item}}</span>
-            <span class="p20" ng-if="ctrl.model.id">{{ctrl.model.getNames()}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.model.id"
+                                 header-text="{{lang.add_new_reference_plan_Item}}"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.model.id"
+                                 header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="referencePlanNumberForm" autocomplete="off">
                 <md-tabs md-dynamic-height>
@@ -42,7 +42,8 @@
                                     </md-input-container>
                                     <md-input-container flex>
                                         <label for="docType">{{lang.label_document_type}}</label>
-                                        <md-select id="docType" ng-model="ctrl.referencePlanItem.expressionComponents.docType">
+                                        <md-select id="docType"
+                                                   ng-model="ctrl.referencePlanItem.expressionComponents.docType">
                                             <md-option ng-value="documentType.lookupKey"
                                                        ng-repeat="documentType in ctrl.documentTypes">
                                                 {{documentType.getTranslatedName()}}

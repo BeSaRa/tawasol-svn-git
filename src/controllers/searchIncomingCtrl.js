@@ -70,12 +70,6 @@ module.exports = function (app) {
 
         self.registryOrganizations = employeeService.isCentralArchive() ? angular.copy(centralArchives) : angular.copy(organizationService.getAllRegistryOrganizations());
 
-        self.registryOrganizations.unshift(new Organization({
-            id: null,
-            arName: langService.getKey('none', 'ar'),
-            enName: langService.getKey('none', 'en')
-        }));
-
         /**
          * @description Checks if the field is mandatory
          * @param fieldName
@@ -547,7 +541,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendSMS = function (searchedIncomingDocument, $event) {
-            console.log('send sms for searched incoming document : ', searchedIncomingDocument);
+            searchedIncomingDocument.openSendSMSDialog($event);
         };
 
         /**
@@ -876,7 +870,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                             return true;
                         },
-                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid', gridService.grids.search.incoming)
             },
             // Manage
             {
@@ -1100,10 +1094,9 @@ module.exports = function (app) {
                         icon: 'message',
                         text: 'grid_action_send_sms',
                         shortcut: false,
-                        hide: true,
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: function (action, model) {
                             return true;
                         }

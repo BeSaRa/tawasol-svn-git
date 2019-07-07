@@ -1,9 +1,7 @@
 <md-dialog>
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.sub_classifications_to}}  {{ctrl.mainClassification.getNames()}}</span>
-            <close-dialog-directive when-close="ctrl.closeSubClassificationView"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.sub_classifications_to}}  {{ctrl.mainClassification.getNames()}}"
+                                 close-callback="ctrl.closeSubClassificationView"></popup-toolbar-directive>
         <md-content scroll-directive>
             <div class="p20">
                 <div layout="row" layout-align="start center" class="page-header small">

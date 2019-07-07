@@ -23,7 +23,6 @@ module.exports = function (app) {
 
         self.mainSites = [];
         self.mainSitesCopy = angular.copy(self.mainSites);
-        debugger;
 
         self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
         self.mainSiteSearchText = '';

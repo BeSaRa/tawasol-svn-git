@@ -4,30 +4,26 @@ module.exports = function (app) {
         return function (scope, element, attrs) {
             var cursorLeft, cursorTop, sideBar, sideBarVisibleInitially = false, sideBarWidth, subLeft, subTop;
             element.bind('contextmenu', function (event) {
-                var $target = $(event.target);
-                var tagName = event.target.tagName.toLowerCase();
+                var $target = $(event.target),
+                    tagName = event.target.tagName.toLowerCase();
                 /*
                 * If right click on column(td)
                 * OR
-                * If right click on span inside (td) and span has any parent td with class "td-data"
-                * OR
-                * If right click on anchor inside (td) and anchor has any parent td with class "subject" or "td-data"
+                * If right click on span(or anchor or div) inside (td) and clicked element any parent td with class "subject" or "td-data"
                 *
                 * AND
                 *
                 * Selected records count should be less than 2
                 * */
                 if (// If right click on td
-                    ( tagName === "td"
-                        // If right click on span and it has parent with class "td-data"
-                        || (tagName === 'span' && $target.parents("td.td-data").length > 0)
-                        // If right click on anchor tag and it has parent with class "subject" or "td-data"
-                        || (tagName === 'a' && ($target.parents("td.subject").length > 0 || $target.parents("td.td-data").length > 0))
+                    (tagName === "td"
+                        //Or if right click on span(or anchor tag or div) and it has parent with class "subject" or "td-data"
+                        || ((tagName === 'a' || tagName === 'div' || tagName === 'span')
+                            && ($target.parents("td.subject").length > 0 || $target.parents("td.td-data").length > 0))
                     )
                     // Selected records count should be less than 2
                     && Number(attrs['selectedLength'] < 2)
-                ) {//scope.$parent.ctrl.selectedPrepareOutgoings.length < 2){
-
+                ) {
                     // If no record selected
                     // OR
                     // If 1 record is selected and right click on same element.
@@ -48,7 +44,7 @@ module.exports = function (app) {
                             var left = angular.copy(event.clientX - positions.left - 18);
                             var top = angular.copy(event.clientY - positions.top - 13);
 
-                            if(!cursorLeft && !cursorTop) {
+                            if (!cursorLeft && !cursorTop) {
                                 cursorLeft = angular.copy(event.clientX);
                                 cursorTop = angular.copy(event.clientY);
                             }
@@ -86,15 +82,13 @@ module.exports = function (app) {
                 sideBar = angular.element('#main-sidebar');
                 sideBarWidth = angular.copy(parseInt(sideBar.width(), 10));
 
-                var newLeft, menuVisibleNow= sideBar.hasClass('gt-small');
+                var newLeft, menuVisibleNow = sideBar.hasClass('gt-small');
                 //console.log('sidebar width ', sideBarWidth);
-                if((menuVisibleNow && sideBarVisibleInitially) || (!menuVisibleNow && !sideBarVisibleInitially)){
+                if ((menuVisibleNow && sideBarVisibleInitially) || (!menuVisibleNow && !sideBarVisibleInitially)) {
                     newLeft = cursorLeft;
-                }
-                else if(menuVisibleNow && !sideBarVisibleInitially){
+                } else if (menuVisibleNow && !sideBarVisibleInitially) {
                     newLeft = cursorLeft + sideBarWidth;
-                }
-                else if(!menuVisibleNow && sideBarVisibleInitially){
+                } else if (!menuVisibleNow && sideBarVisibleInitially) {
                     newLeft = cursorLeft - sideBarWidth;
                 }
 

@@ -1,11 +1,11 @@
 <md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_distribution_list : ctrl.model.getNames()}}">
     <div layout="column">
-        <md-toolbar layout="row" layout-align="start center">
-            <span class="p20" ng-if="!ctrl.editMode">{{lang.add_new_distribution_list}}</span>
-            <span class="p20" ng-if="ctrl.editMode">{{ctrl.model.getNames()}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.editMode"
+                                 header-text="{{lang.add_new_distribution_list}}"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.editMode"
+                                 header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
         <md-content>
             <form name="distributionList_form" autocomplete="off">
                 <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
@@ -100,7 +100,8 @@
                                     </div>
                                 </div>
                                 <!-- Add Mode -->
-                                <md-card ng-if="!ctrl.editMode && ctrl.distributionList.relatedOus.length" layout="column"
+                                <md-card ng-if="!ctrl.editMode && ctrl.distributionList.relatedOus.length"
+                                         layout="column"
                                          class="card-overlay">
                                     <md-table-container>
                                         <div flex>
@@ -122,10 +123,12 @@
                                                             </div>
                                                         </div>
                                                     </th>
-                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column md-order-by="ouid.arName">
+                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column
+                                                        md-order-by="ouid.arName">
                                                         <span>{{lang.arabic_name}}</span>
                                                     </th>
-                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column md-order-by="ouid.enName">
+                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column
+                                                        md-order-by="ouid.enName">
                                                         <span>{{lang.english_name}}</span>
                                                     </th>
                                                     <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column>
@@ -154,7 +157,8 @@
                                     </md-table-container>
                                 </md-card>
                                 <!-- Edit Mode -->
-                                <md-card ng-if="ctrl.editMode && ctrl.distributionList.relatedOus.length" layout="column"
+                                <md-card ng-if="ctrl.editMode && ctrl.distributionList.relatedOus.length"
+                                         layout="column"
                                          class="card-overlay">
                                     <md-table-container>
                                         <div flex>
@@ -176,10 +180,12 @@
                                                             </div>
                                                         </div>
                                                     </th>
-                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column md-order-by="ouid.arName">
+                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column
+                                                        md-order-by="ouid.arName">
                                                         <span>{{lang.arabic_name}}</span>
                                                     </th>
-                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column md-order-by="ouid.enName">
+                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column
+                                                        md-order-by="ouid.enName">
                                                         <span>{{lang.english_name}}</span>
                                                     </th>
                                                     <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column>

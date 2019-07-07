@@ -13,10 +13,7 @@ module.exports = function (app) {
                                               toast,
                                               cmsTemplate,
                                               employeeService,
-                                              applicationUserSignatureService,
-                                              applicationUserService,
-                                              listGeneratorService,
-                                              $window) {
+                                              applicationUserSignatureService) {
         'ngInject';
         var self = this;
         self.serviceName = 'userInboxService';

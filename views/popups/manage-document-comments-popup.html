@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.comments_manage_document_comments}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.comments_manage_document_comments}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.comments_manage_document_comments}} : {{ctrl.documentSubject}}</span>
-            <close-dialog-directive when-close="ctrl.closeDocumentComments"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.comments_manage_document_comments}} : {{ctrl.documentSubject}}"
+                                 close-callback="ctrl.closeDocumentComments"></popup-toolbar-directive>
         <md-content scroll-directive>
             <manage-comments-directive
                     vs-id="ctrl.vsId"

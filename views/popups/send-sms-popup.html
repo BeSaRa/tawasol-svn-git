@@ -1,0 +1,102 @@
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.sms}}">
+    <div layout="column">
+        <popup-toolbar-directive
+                header-text="{{lang.sms}} - {{ctrl.record.getTranslatedName()}}"></popup-toolbar-directive>
+        <md-content scroll-directive>
+            <form name="smsForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <!-- Linked Entity -->
+                        <md-input-container flex>
+                            <label for="linkedEntity">{{lang.linked_entity}}</label>
+                            <md-select name="linkedEntity" id="linkedEntity"
+                                       ng-change="ctrl.onChangeLinkedEntity($event)"
+                                       aria-label="{{lang.linked_entity}}"
+                                       ng-model="ctrl.smsMessage.linkedEntity">
+                                <md-option ng-value="null">{{lang.none}}</md-option>
+                                <md-option ng-value="linkedEntity"
+                                           ng-repeat="linkedEntity in ctrl.linkedEntities track by $index">
+                                    {{linkedEntity.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <!-- SMS Template -->
+                        <md-input-container flex>
+                            <label for="smsTemplate">{{lang.sms_template}}</label>
+                            <md-select name="smsTemplate" id="smsTemplate"
+                                       ng-change="ctrl.onChangeSmsTemplate($event)"
+                                       aria-label="{{lang.sms_template}}"
+                                       ng-model="ctrl.smsMessage.smsTemplate">
+                                <md-option ng-value="null">{{lang.none}}</md-option>
+                                <md-option ng-value="smsTemplate.id"
+                                           ng-repeat="smsTemplate in ctrl.smsTemplates track by $index">
+                                    {{smsTemplate.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Mobile Number -->
+                        <md-input-container flex>
+                            <label for="mobileNumber">{{lang.mobile_number}}</label>
+                            <input id="mobileNumber" required name="mobileNumber"
+                                   ng-model="ctrl.smsMessage.mobileNumber"
+                                   custom-validate-directive="phone_mobile">
+                            <div ng-messages="smsForm.mobileNumber.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="phone_mobile">
+                                    {{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <span flex=""></span>
+                        <div>
+                            <md-button class="md-raised"
+                                       ng-disabled="!ctrl.smsMessage.smsTemplate"
+                                       ng-click="ctrl.getMessageFromTemplate()">
+                                {{lang.get_message}}
+                            </md-button>
+                        </div>
+                    </div>
+                    <div layout="column">
+                        <fieldset flex>
+                            <legend class="md-accent">
+                                {{lang.sms_message}}
+                            </legend>
+                            <div layout="row">
+                                <md-input-container flex>
+                            <textarea id="message" name="message"
+                                      aria-label="{{lang.sms_message}}"
+                                      rows="5" required minlength="4" maxlength="200"
+                                      ng-model="ctrl.smsMessage.message">
+                            </textarea>
+                                    <div ng-messages="smsForm.message.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                        <div ng-message="minlength">{{lang.short}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length:200})}}</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised"
+                           ng-disabled="smsForm.$invalid"
+                           ng-click="ctrl.sendSMS(smsForm, $event)">
+                    {{lang.send}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closePopup()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

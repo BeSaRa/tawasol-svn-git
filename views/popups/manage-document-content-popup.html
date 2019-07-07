@@ -1,10 +1,13 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{!ctrl.correspondence.contentSize ? lang.create_content : lang.edit_content}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{!ctrl.correspondence.contentSize ? lang.create_content : lang.edit_content}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20" ng-if="!ctrl.correspondence.contentSize">{{lang.create_content}} : {{ctrl.documentSubject}}</span>
-            <span class="p20" ng-if="ctrl.correspondence.contentSize">{{lang.edit_content}} : {{ctrl.documentSubject}}</span>
-            <close-dialog-directive when-close="ctrl.closeDocumentContent"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.correspondence.contentSize"
+                                 header-text="{{lang.create_content}} : {{ctrl.documentSubject}}"
+        ></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.correspondence.contentSize"
+                                 header-text="{{lang.edit_content}} : {{ctrl.documentSubject}}"
+        ></popup-toolbar-directive>
         <md-content scroll-directive>
             <manage-content-directive
                     from-dialog="ctrl.fromDialog"
@@ -19,10 +22,12 @@
             <div layout="row">
                 <md-button class="md-raised"
                            ng-disabled="!(ctrl.documentInformation || ctrl.correspondence.contentFile)"
-                           ng-click="ctrl.saveDocumentContent()">{{lang.save}}</md-button>
+                           ng-click="ctrl.saveDocumentContent()">{{lang.save}}
+                </md-button>
                 <span flex></span>
                 <md-button class="md-raised"
-                           ng-click="ctrl.closeDocumentContent()">{{lang.close}}</md-button>
+                           ng-click="ctrl.closePopup()">{{lang.close}}
+                </md-button>
             </div>
         </div>
     </div>

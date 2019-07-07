@@ -2,32 +2,55 @@
     <form name="docSearchForm">
         <div layout="column" ng-if="ctrl.searchType === 'basic'">
             <div layout="row">
+                <!-- RegOU -->
                 <md-input-container flex>
                     <label for="registryOU">{{lang.select_organization}}</label>
                     <md-select name="registryOU" id="registryOU"
                                ng-model="ctrl.document.registryOU"
                                ng-change="ctrl.onRegistryChanged()"
                                ng-disabled="!ctrl.employee.hasPermissionTo('SEARCH_IN_ALL_OU')"
-                               ng-readonly="!ctrl.employee.hasPermissionTo('SEARCH_IN_ALL_OU')">
+                               ng-readonly="!ctrl.employee.hasPermissionTo('SEARCH_IN_ALL_OU')"
+                               md-on-close="ctrl.clearSearchText('regOU')"
+                               data-md-container-class="select-header-container">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.regOUSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
+                        <md-option ng-value="null">{{lang.none}}</md-option>
                         <md-option ng-value="organization.id"
-                                   ng-repeat="organization in ctrl.registryOrganizations">
-                            {{organization.getTranslatedName()}}
+                                   ng-repeat="organization in ctrl.registryOrganizations | translatedNameFilter: ctrl.regOUSearchText">
+                            <span
+                                md-highlight-text="ctrl.regOUSearchText"
+                                md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
                         </md-option>
                     </md-select>
                     <div ng-messages="docSearchForm.registryOU.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <!-- Section -->
                 <md-input-container flex>
                     <label for="ou">{{lang.department}}</label>
                     <md-select name="ou" id="ou"
                                ng-model="ctrl.document.ou"
-                               ng-disabled="!ctrl.employee.hasPermissionTo('SEARCH_IN_ALL_OU')"
-                               ng-readonly="!ctrl.employee.hasPermissionTo('SEARCH_IN_ALL_OU')">
+                               ng-disabled="!ctrl.document.registryOU"
+                               ng-readonly="!ctrl.document.registryOU"
+                               md-on-close="ctrl.clearSearchText('sectionOU')"
+                               data-md-container-class="select-header-container">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.sectionOUSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
                         <md-option ng-value="null">{{lang.none}}</md-option>
                         <md-option ng-value="organization.id"
-                                   ng-repeat="organization in ctrl.subOrganizations">
-                            {{organization.getTranslatedName()}}
+                                   ng-repeat="organization in ctrl.subOrganizations | translatedNameFilter: ctrl.sectionOUSearchText">
+                            <span
+                                    md-highlight-text="ctrl.sectionOUSearchText"
+                                    md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
                         </md-option>
 
                     </md-select>

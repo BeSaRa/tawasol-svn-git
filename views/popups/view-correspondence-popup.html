@@ -11,7 +11,9 @@
                                                       work-item="ctrl.workItem"
                                                       correspondence="ctrl.correspondence"></correspondence-view-action-directive>
                 <div flex layout-align="center center" layout="row">
-                    <span>{{::ctrl.correspondence.getTranslatedName()}}</span>
+                    <span flex md-truncate>{{::ctrl.correspondence.getTranslatedName()}}</span>
+                    <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
+                                          md-diameter="30"></md-progress-circular>
                 </div>
                 <md-button ng-click="ctrl.toggleFullScreen()" class="md-icon-button">
                     <md-icon md-svg-icon="fullscreen"></md-icon>

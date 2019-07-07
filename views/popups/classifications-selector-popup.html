@@ -1,16 +1,14 @@
 <md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.select_classification}}">
     <div layout="column">
-        <md-toolbar layout="row" layout-align="start center">
-            <span class="p20">{{lang.select_classification}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.select_classification}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <div class="p20" layout="row">
                 <md-input-container flex>
                     <label for="classifications">{{lang.select_classification}}</label>
                     <md-select multiple ng-model="ctrl.classification"
-                    id="classifications">
+                               id="classifications">
                         <md-option
                                 ng-repeat="classification in ctrl.classifications track by $index"
                                 ng-if="ctrl.excludeIfExists(classification) && ctrl.includeIfEnabled(classification) && !classification.isGlobal"

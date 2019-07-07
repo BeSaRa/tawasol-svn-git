@@ -1,11 +1,9 @@
 <md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_classification : ctrl.model.getNames()}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20" ng-if="!ctrl.editMode">{{lang.add_new_classification}}</span>
-            <span class="p20" ng-if="ctrl.editMode">{{ctrl.model.getNames()}}</span>
-            <close-dialog-directive when-close="ctrl.closeClassificationDialog"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_classification}}" close-callback="ctrl.closeClassificationDialog"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getNames()}}" close-callback="ctrl.closeClassificationDialog"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="classificationForm">
                 <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">

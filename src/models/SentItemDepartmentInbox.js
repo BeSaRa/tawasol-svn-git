@@ -67,8 +67,17 @@ module.exports = function (app) {
                 return this.docSubject;
             };
 
+            SentItemDepartmentInbox.prototype.getSubject = function () {
+                return this.docSubject;
+            };
+
             SentItemDepartmentInbox.prototype.getTranslatedType = function () {
                 return this.type === 0 ? langService.get('original') : langService.get('copy');
+            };
+
+            SentItemDepartmentInbox.prototype.hasContent = function () {
+                return true;
+                // return this.contentSize;
             };
 
 

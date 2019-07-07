@@ -6,7 +6,8 @@
                        class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
-            <md-button ng-if="ctrl.searchedOutgoingIncomingDocuments.length" ng-click="ctrl.printResult($event)" class="md-icon-button" tooltip="{{lang.print}}">
+            <md-button ng-if="ctrl.searchedOutgoingIncomingDocuments.length" ng-click="ctrl.printResult($event)"
+                       class="md-icon-button" tooltip="{{lang.print}}">
                 <md-icon md-svg-icon="printer"></md-icon>
             </md-button>
         </div>
@@ -78,7 +79,8 @@
                         md-on-select="ctrl.setCurrentTab('result')">
                     <md-table-container>
                         <div flex scroll-directive>
-                            <table md-table md-row-select multiple ng-model="ctrl.selectedSearchedOutgoingIncomingDocuments"
+                            <table md-table md-row-select multiple
+                                   ng-model="ctrl.selectedSearchedOutgoingIncomingDocuments"
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                 <tr md-row>
@@ -111,10 +113,6 @@
                                         md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
-                                    <!--<th ng-if="!ctrl.selectedSearchedOutgoingIncomingDocuments.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
-                                        <span>{{lang.security_level}}</span>
-                                    </th>-->
                                     <th ng-if="!ctrl.selectedSearchedOutgoingIncomingDocuments.length" md-column
                                         md-order-by="{{ctrl.getSortingKey('docTypeForSearchGrid', 'DocumentType')}}">
                                         <span>{{lang.label_document_type}}</span>
@@ -169,20 +167,31 @@
                                                                   indicator-type="hasLinkedDocuments"
                                                                   record-type="correspondence"></grid-indicator-directive>
                                     </td>
-                                    <td md-cell><span class="serial-td">{{searchedOutgoingIncomingDocument.docFullSerial}}</span></td>
-                                    <td md-cell class="td-data">
-                                        <a href="" ng-if="searchedOutgoingIncomingDocument.hasContent()" class="view-doc"
-                                           ng-click="ctrl.viewDocument(searchedOutgoingIncomingDocument, $event)">{{searchedOutgoingIncomingDocument.docSubject}}</a>
-                                        <span ng-if="!searchedOutgoingIncomingDocument.hasContent()">{{searchedOutgoingIncomingDocument.docSubject}}</span>
+                                    <td md-cell><span class="serial-td">{{searchedOutgoingIncomingDocument.docFullSerial}}</span>
                                     </td>
-                                    <td md-cell>{{searchedOutgoingIncomingDocument.priorityLevel.getTranslatedName()}}</td>
-                                    <!--<td md-cell>{{searchedOutgoingIncomingDocument.securityLevel.getTranslatedName()}}</td>-->
+                                    <td md-cell class="subject">
+                                        <!--<grid-document-subject-directive record="searchedOutgoingIncomingDocument"
+                                                                         plain-text-only="!searchedOutgoingIncomingDocument.hasContent()"
+                                                                         click-callback="ctrl.viewDocument">
+                                        </grid-document-subject-directive>-->
+                                        <a href="" ng-if="searchedOutgoingIncomingDocument.hasContent()"
+                                           class="view-doc subject-internal" md-truncate
+                                           tooltip="{{searchedOutgoingIncomingDocument.docSubject}}"
+                                           ng-click="ctrl.viewDocument(searchedOutgoingIncomingDocument, $event)">{{searchedOutgoingIncomingDocument.docSubject}}</a>
+                                        <span ng-if="!searchedOutgoingIncomingDocument.hasContent()"
+                                              class="view-doc subject-internal" md-truncate
+                                              tooltip="{{searchedOutgoingIncomingDocument.docSubject}}">{{searchedOutgoingIncomingDocument.docSubject}}</span>
+                                    </td>
+                                    <td md-cell>{{searchedOutgoingIncomingDocument.priorityLevel.getTranslatedName()}}
+                                    </td>
                                     <td md-cell>{{searchedOutgoingIncomingDocument.docTypeInfo.getTranslatedName()}}
                                     </td>
-                                    <td md-cell>{{searchedOutgoingIncomingDocument.creatorInfo.getTranslatedName()}}</td>
+                                    <td md-cell>{{searchedOutgoingIncomingDocument.creatorInfo.getTranslatedName()}}
+                                    </td>
                                     <td md-cell>{{searchedOutgoingIncomingDocument.createdOn}}</td>
                                     <td md-cell class="td-data">
-                                        <main-site-sub-site-directive item="searchedOutgoingIncomingDocument"></main-site-sub-site-directive>
+                                        <main-site-sub-site-directive
+                                                item="searchedOutgoingIncomingDocument"></main-site-sub-site-directive>
                                     </td>
                                     <td md-cell ng-if="ctrl.selectedSearchedOutgoingIncomingDocuments.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedSearchedOutgoingIncomingDocuments.length
@@ -196,7 +205,8 @@
                                 <tr md-row ng-if="!ctrl.searchedOutgoingIncomingDocuments.length">
                                     <td md-cell colspan="8" class="red-text text-center">{{lang.no_records_found}}</td>
                                 </tr>
-                                <tr md-row ng-if="ctrl.searchedOutgoingIncomingDocuments.length && !searchResults.length">
+                                <tr md-row
+                                    ng-if="ctrl.searchedOutgoingIncomingDocuments.length && !searchResults.length">
                                     <td md-cell colspan="8" class="red-text text-center">
                                         {{lang.no_records_found_matching_search}}
                                     </td>

@@ -293,7 +293,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendSMS = function (searchedCorrespondenceDocument, $event) {
-            console.log('send sms for searched outgoing document : ', searchedCorrespondenceDocument);
+            searchedCorrespondenceDocument.openSendSMSDialog($event);
         };
 
         /**
@@ -666,7 +666,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return true;
                 },
-                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid', gridService.grids.search.quick)
             },
             // View Tracking Sheet (Shortcut Only)
             {
@@ -903,10 +903,9 @@ module.exports = function (app) {
                         icon: 'message',
                         text: 'grid_action_send_sms',
                         shortcut: false,
-                        hide: true,
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: function (action, model) {
                             return true;
                         }

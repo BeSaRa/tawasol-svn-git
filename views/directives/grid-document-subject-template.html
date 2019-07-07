@@ -1,0 +1,63 @@
+<div class="view-doc subject-internal" ng-cloak>
+    <div ng-if="!ctrl.skipTruncate">
+        <!--<md-tooltip ng-if="!ctrl.skipTooltip" class="tooltip-multiline">
+            {{ctrl.getRecordText()}}
+        </md-tooltip>-->
+        <a href="" ng-if="!ctrl.plainTextOnly"
+           class="view-doc subject-internal" md-truncate
+           tooltip="{{::ctrl.getRecordText(true)}}"
+           ng-click="ctrl.subjectCallback($event)">{{::ctrl.getRecordText()}}</a>
+        <span ng-if="ctrl.plainTextOnly"
+              class="view-doc subject" md-truncate
+              tooltip="{{::ctrl.getRecordText(true)}}">{{::ctrl.getRecordText()}}</span>
+    </div>
+
+    <div ng-if="ctrl.skipTruncate">
+        <!--<md-tooltip ng-if="!ctrl.skipTooltip" class="tooltip-multiline">
+            {{ctrl.getRecordText()}}
+        </md-tooltip>-->
+        <a href="" ng-if="!ctrl.plainTextOnly"
+           class="view-doc subject-internal"
+           tooltip="{{::ctrl.getRecordText(true)}}"
+           ng-click="ctrl.subjectCallback(record, $event)">{{::ctrl.getRecordText()}}</a>
+        <span ng-if="ctrl.plainTextOnly"
+              class="view-doc subject-internal"
+              tooltip="{{::ctrl.getRecordText(true)}}">{{::ctrl.getRecordText()}}</span>
+    </div>
+
+</div>
+
+
+<!--<div class="view-doc subject-internal" ng-cloak>
+    <div ng-if="!ctrl.skipTruncate">
+        &lt;!&ndash;<md-tooltip ng-if="!ctrl.skipTooltip" class="tooltip-multiline">
+            {{ctrl.getRecordText()}}
+        </md-tooltip>&ndash;&gt;
+        <a href="" ng-if="!ctrl.plainTextOnly"
+           class="view-doc subject-internal" md-truncate
+           tooltip="{{ctrl.tooltipSubject}}"
+           ng-click="ctrl.subjectCallback($event)">{{ctrl.subject}}</a>
+        <span ng-if="ctrl.plainTextOnly"
+              class="view-doc subject" md-truncate
+              tooltip="{{ctrl.tooltipSubject}}">{{ctrl.subject}}</span>
+    </div>
+
+    <div ng-if="ctrl.skipTruncate">
+        &lt;!&ndash;<md-tooltip ng-if="!ctrl.skipTooltip" class="tooltip-multiline">
+            {{ctrl.getRecordText()}}
+        </md-tooltip>&ndash;&gt;
+        <a href="" ng-if="!ctrl.plainTextOnly"
+           class="view-doc subject-internal"
+           tooltip="{{ctrl.tooltipSubject}}"
+           ng-click="ctrl.subjectCallback(record, $event)">{{ctrl.subject}}</a>
+        <span ng-if="ctrl.plainTextOnly"
+              class="view-doc subject-internal"
+              tooltip="{{ctrl.tooltipSubject}}">{{ctrl.subject}}</span>
+    </div>
+
+</div>-->
+
+
+
+
+

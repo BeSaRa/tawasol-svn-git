@@ -224,7 +224,7 @@ module.exports = function (app) {
                     new ResolveDefer(defer);
                 })
                 .catch(function (error) {
-                    if (error)
+                    if (error && error !=='close')
                         toast.error(langService.get('export_failed'));
                 });
         };

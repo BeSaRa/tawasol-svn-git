@@ -1,4 +1,5 @@
-<md-dialog class="dialog-extend">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}">
     <div class="p20" layout="column">
         <div class="attachment-viewer-header" layout="row" layout-align="start center">
             <span flex>{{ctrl.attachment.documentTitle}}</span>

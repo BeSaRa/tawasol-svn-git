@@ -1,9 +1,8 @@
-<md-dialog class="dialog-extend mw60" id="view-tracking-sheet-dialog" aria-label="{{lang[ctrl.popupHeading]}}">
+<md-dialog class="dialog-extend mw60"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="view-tracking-sheet-dialog" aria-label="{{lang[ctrl.popupHeading]}}">
     <div layout="column">
-        <md-toolbar layout="row" layout-align="start center">
-            <span class="p20">{{lang.delivery_report}} - {{ctrl.title}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.delivery_report}} - {{ctrl.title}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="trackingSheetForm" autocomplete="off">
                 <!-- SINGLE GRID VIEW -->
@@ -15,13 +14,15 @@
                                 <md-card>
                                     <md-table-container flex scroll-directive>
                                         <table md-table>
-                                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                            <thead md-head md-order="ctrl.grid.order"
+                                                   md-on-reorder="ctrl.getSortedData">
                                             <tr md-row>
                                                 <th md-column
                                                     md-order-by="{{ctrl.getSortingKey('statusInfo', 'Information')}}">
                                                     <span>{{lang.status}}</span>
                                                 </th>
-                                                <th md-column md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString','Information')}}">
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString','Information')}}">
                                                     <span>{{lang.correspondence_sites}}</span>
                                                 </th>
                                                 <th md-column

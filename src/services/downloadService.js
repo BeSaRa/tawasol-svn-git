@@ -78,6 +78,14 @@ module.exports = function (app) {
             fileDownload: function (path, $event) {
                 //var domain = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/";
                 window.open(path);
+            },
+            documentTemplateDownload: function (vsId, $event) {
+                vsId = vsId && vsId.hasOwnProperty('vsId') ? vsId.vsId : vsId;
+                return self.downloadDocumentTemplate(vsId)
+                    .then(function (result) {
+                        window.open(result);
+                        return true;
+                    });
             }
         };
 
@@ -202,6 +210,17 @@ module.exports = function (app) {
         self.downloadAttachment = function (vsId) {
             return $http
                 .get(urlService.downloadDocumentAttachment + '/' + vsId)
+                .then(function (result) {
+                    return result.data.rs;
+                })
+        };
+
+        /**
+         * @description download document template from server
+         */
+        self.downloadDocumentTemplate = function (vsId) {
+            return $http
+                .get(urlService.downloadDocumentTemplate + '/' + vsId)
                 .then(function (result) {
                     return result.data.rs;
                 })

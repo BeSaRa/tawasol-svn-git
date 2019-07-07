@@ -1,12 +1,11 @@
 <md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_property_configuration : ctrl.model.getNames()}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20" ng-if="!ctrl.editMode">{{lang.add_new_property_configuration}}</span>
-            <span class="p20" ng-if="ctrl.editMode">{{lang.edit_property_configuration}}</span>
-            <!--<span class="p20" ng-if="ctrl.editMode">{{ctrl.model.getNames()}}</span>-->
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.editMode"
+                                 header-text="{{lang.add_new_property_configuration}}"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.editMode"
+                                 header-text="{{lang.edit_property_configuration}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="property_configuration_form" autocomplete="off">
                 <div layout="column" class="p20">

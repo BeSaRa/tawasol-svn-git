@@ -91,10 +91,18 @@
                                         model="reviewIncoming"
                                         selected-length="{{ctrl.selectedReviewIncomings.length ? ctrl.selectedReviewIncomings.length : 0}}"
                                         ng-repeat="reviewIncoming in searchResults = (ctrl.reviewIncomings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))  track by $index">
-                                        <td md-cell class="td-data">
-                                            <a href="" ng-if="reviewIncoming.hasContent()" class="view-doc"
+                                        <td md-cell class="subject">
+                                            <!--<grid-document-subject-directive record="reviewIncoming"
+                                                                             plain-text-only="!reviewIncoming.hasContent()"
+                                                                             click-callback="ctrl.viewDocument">
+                                            </grid-document-subject-directive>-->
+                                            <a href="" ng-if="reviewIncoming.hasContent()"
+                                               class="view-doc subject-internal" md-truncate
+                                               tooltip="{{reviewIncoming.docSubject}}"
                                                ng-click="ctrl.viewDocument(reviewIncoming, $event)">{{reviewIncoming.docSubject}}</a>
-                                            <span ng-if="!reviewIncoming.hasContent()">{{reviewIncoming.docSubject}}</span>
+                                            <span ng-if="!reviewIncoming.hasContent()"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{reviewIncoming.docSubject}}">{{reviewIncoming.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{reviewIncoming.priorityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{reviewIncoming.securityLevel.getTranslatedName()}}</td>

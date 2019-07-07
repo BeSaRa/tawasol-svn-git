@@ -1,9 +1,8 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.user_subscriptions}}">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.user_subscriptions}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.user_subscriptions}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.user_subscriptions}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="manageSubscriptionsForm" autocomplete="off">
                 <div layout="column" class="p20">

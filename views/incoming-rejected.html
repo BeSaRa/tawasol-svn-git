@@ -84,10 +84,18 @@
                                         model="rejectedIncoming"
                                         selected-length="{{ctrl.selectedRejectedIncomings.length ? ctrl.selectedRejectedIncomings.length : 0}}"
                                         ng-repeat="rejectedIncoming in searchResults = (ctrl.rejectedIncomings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
-                                        <td md-cell class="td-data">
-                                            <a href="" ng-if="rejectedIncoming.hasContent()" class="view-doc"
+                                        <td md-cell class="subject">
+                                            <!--<grid-document-subject-directive record="rejectedIncoming"
+                                                                             plain-text-only="!rejectedIncoming.hasContent()"
+                                                                             click-callback="ctrl.viewDocument">
+                                            </grid-document-subject-directive>-->
+                                            <a href="" ng-if="rejectedIncoming.hasContent()"
+                                               class="view-doc subject-internal" md-truncate
+                                               tooltip="{{rejectedIncoming.docSubject}}"
                                                ng-click="ctrl.viewDocument(rejectedIncoming, $event)">{{rejectedIncoming.docSubject}}</a>
-                                            <span ng-if="!rejectedIncoming.hasContent()">{{rejectedIncoming.docSubject}}</span>
+                                            <span ng-if="!rejectedIncoming.hasContent()"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{rejectedIncoming.docSubject}}">{{rejectedIncoming.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{rejectedIncoming.priorityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{rejectedIncoming.securityLevel.getTranslatedName()}}</td>

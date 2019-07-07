@@ -1,9 +1,7 @@
 <md-dialog>
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.reference_number_plan}}:  {{ctrl.referencePlanNumber.getNames()}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive
+                header-text="{{lang.reference_number_plan}} : {{ctrl.referencePlanNumber.getNames()}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <div class="p20">
                 <md-card md-whiteframe="3" layout="column" class="card-overlay">

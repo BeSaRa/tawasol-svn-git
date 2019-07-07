@@ -7,6 +7,7 @@ module.exports = function (app) {
             self.id = null;
             self.vsId = null;
             self.message = null;
+            self.encodedMessage = null;
             self.mobileNo = null;
             self.destinationName = null;
             self.destinationId = null;
@@ -15,6 +16,8 @@ module.exports = function (app) {
             self.actionDate = null;
             self.actionBy = null;
             self.ouId = null;
+            self.status = null;
+            self.errorMessage = null;
 
             if (model)
                 angular.extend(this, model);

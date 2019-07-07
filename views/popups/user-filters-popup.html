@@ -1,10 +1,10 @@
-<md-dialog class="dialog-extend">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20" ng-if="!ctrl.editMode">{{ lang.create_filter }}</span>
-            <span class="p20" ng-if="ctrl.editMode">{{ ctrl.model.getNames() }}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.editMode"
+                                 header-text="{{ lang.create_filter }}"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.editMode"
+                                 header-text="{{ ctrl.model.getNames() }}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="userFilter" autocomplete="off">
                 <md-tabs md-dynamic-height>
@@ -247,7 +247,8 @@
                                     <!-- Linked Entities -->
                                     <md-input-container flex>
                                         <label for="hasLinkedEntities">{{lang.linked_entities}}</label>
-                                        <md-select id="hasLinkedEntities" ng-model="ctrl.filter.ui.key_linkedEntities.value">
+                                        <md-select id="hasLinkedEntities"
+                                                   ng-model="ctrl.filter.ui.key_linkedEntities.value">
                                             <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option ng-repeat="option in ctrl.linkedEntitiesOptions"
                                                        ng-value="option.id">
@@ -260,7 +261,8 @@
                                     <!-- Linked Attachments -->
                                     <md-input-container flex>
                                         <label for="hasLinkedAttachments">{{lang.attachments}}</label>
-                                        <md-select id="hasLinkedAttachments" ng-model="ctrl.filter.ui.key_linkedAttachments.value">
+                                        <md-select id="hasLinkedAttachments"
+                                                   ng-model="ctrl.filter.ui.key_linkedAttachments.value">
                                             <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option ng-repeat="option in ctrl.linkedAttachmentsOptions"
                                                        ng-value="option.id">

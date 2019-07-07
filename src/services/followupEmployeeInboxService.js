@@ -78,7 +78,7 @@ module.exports = function (app) {
                         resolve: {
                             organizations: function (organizationService) {
                                 'ngInject';
-                                return organizationService.getOrganizationsByRegOU(employeeService.getEmployee().getRegistryOUID());
+                                return organizationService.getFollowUpOrganizations();
                             },
                             ouApplicationUsers: function (ouApplicationUserService) {
                                 'ngInject';

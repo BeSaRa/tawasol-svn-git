@@ -91,11 +91,17 @@
                                             <span class="serial-td">{{favoriteDocument.docFullSerial}}</span>
                                         </td>
                                         <td md-cell class="subject">
-                                            <a href="" class="view-doc subject" md-truncate
-                                               ng-if="favoriteDocument.hasContent()"
+                                            <!--<grid-document-subject-directive record="favoriteDocument"
+                                                                             plain-text-only="!favoriteDocument.hasContent()"
+                                                                             click-callback="ctrl.viewDocument">
+                                            </grid-document-subject-directive>-->
+                                            <a href="" ng-if="favoriteDocument.hasContent()"
+                                               class="view-doc subject-internal" md-truncate
                                                tooltip="{{favoriteDocument.docSubject}}"
                                                ng-click="ctrl.viewDocument(favoriteDocument, $event)">{{favoriteDocument.docSubject}}</a>
-                                            <span ng-if="!favoriteDocument.hasContent()">{{favoriteDocument.docSubject}}</span>
+                                            <span ng-if="!favoriteDocument.hasContent()"
+                                                  class="view-doc subject" md-truncate
+                                                  tooltip="{{favoriteDocument.docSubject}}">{{favoriteDocument.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{favoriteDocument.docTypeInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{favoriteDocument.securityLevelInfo.getTranslatedName()}}</td>

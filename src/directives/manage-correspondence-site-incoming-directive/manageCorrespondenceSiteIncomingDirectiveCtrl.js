@@ -621,7 +621,7 @@ module.exports = function (app) {
             }
             return self.simpleSubSiteSearchCopy;
         };
-        self.onSimpleSubChange = function (subSite) {
+        self.onSimpleSubSiteSelectedChange = function (subSite) {
             if (subSite) {
                 self.subSearchResult = _.filter(self.subSearchResultCopy, function (resultCopy) {
                     return resultCopy.subSiteId === subSite.subSiteId;

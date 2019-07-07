@@ -1,5 +1,6 @@
-<md-dialog id="correspondence-workflow-popup" class="dialog-extend" ng-class="{'fullscreen':ctrl.fullScreen}"
-           aria-label="launch correspondence workflow">
+<md-dialog class="dialog-extend"
+           ng-class="{'fullscreen':ctrl.fullScreen}"
+           id="correspondence-workflow-popup" aria-label="launch correspondence workflow">
     <!-- Header -->
     <div class="correspondence-workflow-popup-dialog-header" layout="row" layout-align="start center">
         <div>
@@ -10,8 +11,8 @@
         <bulk-correspondence-status-directive ng-if="ctrl.multi"
                                               delete-callback="ctrl.deleteFromSelectedCorrespondence"
                                               items="ctrl.multiStatus"></bulk-correspondence-status-directive>
-        <span ng-if="!ctrl.multi"
-              class="p20">{{lang.get(ctrl.textButton)}} : {{ctrl.correspondence.getTranslatedName()}}</span>
+        <span ng-if="!ctrl.multi" md-truncate
+              class="p20 subject-header">{{lang.get(ctrl.textButton)}} : {{ctrl.correspondence.getTranslatedName()}}</span>
         <span ng-if="ctrl.multi" class="p20">{{lang.send_documents}}</span>
         <span flex></span>
         <!--<md-progress-circular md-mode="indeterminate"

@@ -61,8 +61,8 @@ module.exports = function (app) {
         };
 
 
-        self.closeDocumentContent = function () {
+        self.closePopup = function () {
             dialog.cancel();
-        }
+        };
     });
 };

@@ -49,7 +49,53 @@ module.exports = function (app) {
             });
         };
 
-        self.terminateG2G = function (g2gItem) {
+        /**
+         * @description  open reason dialog
+         * @param dialogTitle
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.showReasonDialog = function (dialogTitle, $event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('reason'),
+                    controller: 'reasonPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    targetEvent: $event,
+                    locals: {
+                        title: dialogTitle
+                    },
+                    resolve: {
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.getUserComments()
+                                .then(function (result) {
+                                    return _.filter(result, 'status');
+                                });
+                        }
+                    }
+                });
+        };
+
+        self.terminateG2G = function (g2gItem,$event) {
+            return self.showReasonDialog('terminate_reason', $event)
+                .then(function (reason) {
+                    var isInternal = g2gItem.isInternalG2G();
+                    g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
+                    return $http.put((urlService.g2gInbox + 'terminate/' + isInternal),
+                        {
+                            first: g2gItem,
+                            second: reason
+                        }).then(function (result) {
+                        return result.data.rs;
+                    }).catch(function (error) {
+                        return errorCode.showErrorDialog(error);
+                    });
+                });
+        };
+
+        /*self.terminateG2G = function (g2gItem) {
             return dialog.confirmMessage(langService.get('confirm_terminate').change({name: g2gItem.getTranslatedName()}))
                 .then(function () {
                     var isInternal = g2gItem.isInternalG2G();
@@ -57,25 +103,10 @@ module.exports = function (app) {
                     return $http.put((urlService.g2gInbox + 'terminate/' + isInternal), g2gItem).then(function (result) {
                         return result.data.rs;
                     }).catch(function (error) {
-                        /*errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
-                            dialog.errorMessage(langService.get('g2g_not_authenticated'));
-                        });
-                        errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
-                            dialog.errorMessage(langService.get('g2g_not_authorized'));
-                        });
-                        errorCode.checkIf(error, 'G2G_BOOK_PROPERTIES_CAN_NOT_BE_EMPTY', function () {
-                            dialog.errorMessage(langService.get('g2g_book_properties_can_not_be_empty'));
-                        });
-                        errorCode.checkIf(error, 'G2G_ERROR_WHILE_TERMINATE', function () {
-                            dialog.errorMessage(langService.get('g2g_error_occurred_while_terminate'));
-                        });
-                        errorCode.checkIf(error, 'G2G_CANNOT_REMOVE_TRANSACTION_FOR_THIS_SITE_BECAUSE_THE_STATUS_IS_NOT_REJECTED_OR_RETURNED', function () {
-                            dialog.errorMessage(langService.get('g2g_can_not_terminate_because_book_not_rejected_or_returned'));
-                        });*/
                         return errorCode.showErrorDialog(error);
                     });
                 });
-        };
+        };*/
 
         self.resendG2G = function (g2gItem) {
             var isInternal = g2gItem.isInternalG2G();
@@ -83,21 +114,6 @@ module.exports = function (app) {
             return $http.put((urlService.g2gInbox + 'resend/' + isInternal), g2gItem).then(function (result) {
                 return result.data.rs;
             }).catch(function (error) {
-                /*errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
-                    dialog.errorMessage(langService.get('g2g_not_authenticated'));
-                });
-                errorCode.checkIf(error, 'G2G_ERROR_FETCH_SENT_OR_RETURN_BOOK', function () {
-                    dialog.errorMessage(langService.get('g2g_error_fetch_sent_return_book'));
-                });
-                errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
-                    dialog.errorMessage(langService.get('g2g_not_authorized'));
-                });
-                errorCode.checkIf(error, 'G2G_BOOK_PROPERTIES_CAN_NOT_BE_EMPTY', function () {
-                    dialog.errorMessage(langService.get('g2g_book_properties_can_not_be_empty'));
-                });
-                errorCode.checkIf(error, 'G2G_ERROR_WHILE_SENDING', function () {
-                    dialog.errorMessage(langService.get('g2g_error_while_sending'));
-                });*/
                 return errorCode.showErrorDialog(error);
             });
         };

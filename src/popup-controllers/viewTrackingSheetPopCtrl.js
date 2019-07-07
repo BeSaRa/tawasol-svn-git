@@ -102,6 +102,21 @@ module.exports = function (app) {
             ]
         };
 
+
+        self.mergedLinkedDocHistoryGrid = {
+            limit: 5, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.mergedLinkedDocumentHistoryRecords.length + 21);
+                    }
+                }
+            ]
+        };
+
         /**
          * @description Gets the grid records by sorting
          */
@@ -118,20 +133,6 @@ module.exports = function (app) {
                     label: langService.get('all'),
                     value: function () {
                         return (self.attachmentsHistoryRecords.length + 21);
-                    }
-                }
-            ]
-        };
-
-        self.mergedLinkedDocHistoryGrid = {
-            limit: 5, // default limit
-            page: 1, // first page
-            order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.mergedLinkedDocumentHistoryRecords.length + 21);
                     }
                 }
             ]
@@ -200,6 +201,12 @@ module.exports = function (app) {
             ]
         };
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataSMSLog = function () {
+            self.smsLogRecords = $filter('orderBy')(self.smsLogRecords, self.smsLogsGrid.order);
+        };
         self.smsLogsGrid = {
             limit: 5, // default limit
             page: 1, // first page
@@ -344,7 +351,7 @@ module.exports = function (app) {
             'view_tracking_sheet_linked_entities_history': self.linkedEntitiesHistoryRecords.length,
             'view_tracking_sheet_destination_history': self.destinationHistoryRecords.length,
             'view_tracking_sheet_content_view_history': self.contentViewHistoryRecords.length,
-            //'view_tracking_sheet_sms_logs' : self.smsLogRecords.length,
+            'view_tracking_sheet_sms_logs' : self.smsLogRecords.length,
             'view_tracking_sheet_outgoing_delivery_reports': self.outgoingDeliveryReportRecords.length,
             'view_tracking_sheet_full_history': self.fullHistoryRecords.length
         };

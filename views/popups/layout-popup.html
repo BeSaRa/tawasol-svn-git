@@ -1,11 +1,11 @@
 <md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.dashboard_add_layout : ctrl.model.getTranslatedName()}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20" ng-if="!ctrl.editMode">{{lang.dashboard_add_layout}}</span>
-            <span class="p20" ng-if="ctrl.editMode">{{ctrl.model.getTranslatedName()}}</span>
-            <close-dialog-directive when-close="ctrl.closeLayoutDialog"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.dashboard_add_layout}}"
+                                 close-callback="ctrl.closeLayoutDialog"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getTranslatedName()}}"
+                                 close-callback="ctrl.closeLayoutDialog"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="layout_form">
                 <div layout="column" class="p20">
