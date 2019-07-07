@@ -1,11 +1,8 @@
 <md-dialog class="dialog-extend"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_administrator : ctrl.model.getNames()}}">
     <div layout="column">
-        <md-toolbar>
-            <span ng-if="!ctrl.editMode" class="p20">{{lang.add_new_administrator}}</span>
-            <span ng-if="ctrl.editMode" class="p20">{{ctrl.model.getNames()}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_administrator}}"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="administratorForm" autocomplete="off">
                 <div layout="column" class="p20">

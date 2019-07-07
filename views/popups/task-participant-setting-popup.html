@@ -1,10 +1,7 @@
 <md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.tasks}}">
     <div layout="column">
-        <md-toolbar>
-            <span ng-if="!ctrl.editMode" class="p20">{{lang.add_new_task_participant}}</span>
-            <span ng-if="ctrl.editMode" class="p20">{{lang.edit_task_participant}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_task_participant}}"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{lang.edit_task_participant}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form autocomplete="off" name="participant_form">
                 <md-content>

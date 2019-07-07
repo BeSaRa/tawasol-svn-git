@@ -1,8 +1,5 @@
 <md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.select_organization }}">
-    <md-toolbar layout="row" layout-align="start center">
-        <span class="p20" flex ng-if="!ctrl.label">{{lang.select_organization}} - {{ctrl.documentFile.getTranslatedName()}}</span>
-        <close-dialog-directive when-close="ctrl.closeDialog"></close-dialog-directive>
-    </md-toolbar>
+    <popup-toolbar-directive header-text="{{lang.select_organization}} - {{ctrl.documentFile.getTranslatedName()}}"></popup-toolbar-directive>
     <md-content scroll-directive class="p20" layout="column">
         <div layout="row" layout-align="center center" ng-if="!ctrl.showRelatedOUForm">
             <md-button class="md-raised" ng-click="ctrl.toggleRelatedOuForm(true)">

@@ -1,9 +1,6 @@
 <md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.tasks}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{ctrl.task.taskTitle}} {{ctrl.task.taskDescription.length ? '-' + ctrl.task.taskDescription : ''}}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{ctrl.task.taskTitle}} {{ctrl.task.taskDescription.length ? '- ' + ctrl.task.taskDescription : ''}}"></popup-toolbar-directive>
         <md-content class="p20">
             <div layout="column">
                 <div layout="row">

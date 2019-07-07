@@ -1,9 +1,6 @@
 <md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.comments_excludes}}">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.comments_excludes}} {{lang.from}} {{ctrl.organization.getTranslatedName()}}</span>
-            <close-dialog-directive when-close="ctrl.closePopup"></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive header-text="{{lang.comments_excludes}} {{lang.from}} {{ctrl.organization.getTranslatedName()}}"></popup-toolbar-directive>
 
         <md-content scroll-directive>
             <div class="p20">

@@ -229,6 +229,8 @@
                 .addToAllWithBase('downloadDocumentComposite', '/cms-entity/correspondence/download-document/composite/vsid')
                 //download Attachment
                 .addToAllWithBase('downloadDocumentAttachment', '/cms-entity/correspondence/download-document/attachment/vsid')
+                //download documentTemplate
+                .addToAllWithBase('downloadDocumentTemplate', '/cms-entity/correspondence/download-document/template/vsid')
                 //get document email content
                 .addToAllWithBase('getDocumentEmailContent', '/cms-entity/correspondence/download-document/email/vsid')
                 //get composite document email content
@@ -333,6 +335,10 @@
                 .addToAllWithBase('maipLabels', '/cms-entity/correspondence/download-document/maip/labels')
                 // central archives for user
                 .addToAllWithBase('distributionWFCentralArchiveForUser', 'cms-entity/admin/ou/dist/central-archive')
+                //follow up ou
+                .addToAllWithBase('followupOu', 'cms-entity/admin/ou/dist/follow-up-ou')
+                // add manager to all
+                .addToAllWithBase('addManagerToAllUsers', "cms-entity/admin/ou/ou/{ouId}/add-manager-to-all")
                 // task management
                 .addToAllWithBase('tasks', 'cms-entity/user/tasks')
                 // user admin list
