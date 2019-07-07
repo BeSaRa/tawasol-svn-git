@@ -1,8 +1,9 @@
 module.exports = function (app) {
-    app.controller('localizationCtrl', function (lookupService, _, toast, $rootScope, dialog, langService, cmsTemplate, $q, $filter, gridService) {
+    app.controller('localizationCtrl', function (lookupService, _, toast, $rootScope, dialog, langService, cmsTemplate, $q, $filter, gridService, contextHelpService) {
         'ngInject';
         var self = this;
         self.controllerName = 'localizationCtrl';
+        contextHelpService.setHelpTo('Localization');
         // current localizations
         self.localizations = [];
         // all localization Modules
