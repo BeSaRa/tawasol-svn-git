@@ -43,6 +43,7 @@ module.exports = function (app) {
 
             self.maipServiceURL = null;
             self.isMAIPEnabled = false;
+            self.hrEnabled = false;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -100,6 +101,10 @@ module.exports = function (app) {
              */
             Entity.prototype.getTranslatedStatus = function () {
                 return this.status ? langService.get('active') : langService.get('inactive');
+            };
+
+            Entity.prototype.getTranslatedHRIntegrationStatus = function () {
+                return this.hrEnabled ? langService.get('active') : langService.get('inactive');
             };
 
             Entity.prototype.getNameByKey = function (langKey) {

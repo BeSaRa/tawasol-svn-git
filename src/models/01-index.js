@@ -169,4 +169,5 @@ module.exports = function (app) {
     require('./Administrator')(app);
     require('./FollowupOrganization')(app);
     require('./OUViewPermission')(app);
+    require('./HREmployee')(app);
 };

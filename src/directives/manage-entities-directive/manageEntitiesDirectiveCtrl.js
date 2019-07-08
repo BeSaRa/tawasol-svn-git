@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                             $timeout,
                                                             toast,
                                                             correspondenceService,
+                                                            rootEntity,
                                                             cmsTemplate,
                                                             _) {
         'ngInject';
@@ -101,8 +102,24 @@ module.exports = function (app) {
          */
         self.pushEntityType = function (entityType) {
             _createEntity(entityType);
-            self.showEntityFrom = true;
+            if (entityType.lookupStrKey.toLowerCase() === 'employee' &&
+                rootEntity.returnRootEntity().rootEntity.hrEnabled) {
+                self.openHREmployeeIntegrationDialog()
+                    .then(function (employees) {
+                        self.editMode = false; // rest editMode in case you edited existing employee and add new 
+                        self.entity = employees;
+                        self.addEntityToDocument();
+                    })
+                    .catch(function (error) {
+                        if (error && error === 'close')
+                            self.closeEntityForm();
+                    });
+            } else {
+                self.showEntityFrom = true;
+            }
         };
+
+
         /**
          * close entity form
          */
@@ -127,7 +144,12 @@ module.exports = function (app) {
                     self.linkedEntities.splice(self.editIndex, 1, self.entity);
                     document.linkedEntities = self.linkedEntities;
                 } else {
-                    self.linkedEntities.push(self.entity);
+                    // used when add multiple linked object using hr employee integration
+                    if (angular.isArray(self.entity)) {
+                        self.linkedEntities = self.linkedEntities.concat(self.entity)
+                    } else {
+                        self.linkedEntities.push(self.entity);
+                    }
                     document.linkedEntities = self.linkedEntities;
                 }
 
@@ -142,14 +164,25 @@ module.exports = function (app) {
                     });
                 } else {
                     promise = $timeout(function () {
-                        self.linkedEntities.push(self.entity);
+                        // used when add multiple linked object using hr employee integration
+                        if (angular.isArray(self.entity)) {
+                            self.linkedEntities = self.linkedEntities.concat(self.entity)
+                        } else {
+                            self.linkedEntities.push(self.entity);
+                        }
+
                         return self.linkedEntities;
                     });
                 }
 
             }
             promise.then(function () {
-                toast.success(langService.get(self.editMode ? 'save_success' : 'add_success').change({name: self.entity.getTranslatedName()}));
+                // for multiple selection of search result hr employees
+                if (rootEntity.returnRootEntity().rootEntity.hrEnabled && self.entity.length) {
+                    toast.success(langService.get('save_success'));
+                } else {
+                    toast.success(langService.get(self.editMode ? 'save_success' : 'add_success').change({name: self.entity.getTranslatedName()}));
+                }
                 self.closeEntityForm();
             });
         };
@@ -238,7 +271,7 @@ module.exports = function (app) {
          * @param $event
          * @returns {promise|*}
          */
-        self.viewEntity = function(linkedEntity, $event){
+        self.viewEntity = function (linkedEntity, $event) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
@@ -250,7 +283,26 @@ module.exports = function (app) {
                         linkedEntity: linkedEntity.preparedType()
                     }
                 });
-        }
+        };
+
+        /**
+         *
+         * @param $event open hr employee search dialog
+         * @returns {promise}
+         */
+        self.openHREmployeeIntegrationDialog = function ($event) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    templateUrl: cmsTemplate.getPopup('hr-employee-integration'),
+                    controller: 'employeeHRIntegrationPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    locals: {
+                        linkedEntities: self.linkedEntities
+                    }
+                });
+        };
 
     });
 };

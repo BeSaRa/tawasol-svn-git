@@ -7,6 +7,9 @@ module.exports = function (app) {
                                             correspondenceService,
                                             outgoingService,
                                             $state,
+                                            $http,
+                                            urlService,
+                                            HREmployee,
                                             Attachment) {
         'ngInject';
         var self = this;
@@ -454,6 +457,19 @@ module.exports = function (app) {
                     }
                 }
             );
+        }
+
+
+        /**
+         * @description search for hr employees when hr Enabled
+         */
+        self.searchForIntegratedHREmployees = function (criteria) {
+            return $http.post(urlService.hrEmployeeIntegration, generator.interceptSendInstance('HREmployee', criteria))
+                .then(function (result) {
+                    var employeeLinkedEntity = generator.generateCollection(result.data.rs, HREmployee, self._sharedMethods);
+                    employeeLinkedEntity = generator.interceptReceivedCollection('HREmployee', employeeLinkedEntity);
+                    return employeeLinkedEntity;
+                })
         }
 
     });

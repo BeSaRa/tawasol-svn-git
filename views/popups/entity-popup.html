@@ -89,9 +89,6 @@
                                             <div ng-message="E">{{lang.english_only}}</div>
                                         </div>
                                     </md-input-container>-->
-                                    <md-switch flex ng-model="ctrl.entity.status" aria-label="{{lang.status}}">
-                                        <label>{{lang.status}} : {{ctrl.entity.getTranslatedStatus()}}</label>
-                                    </md-switch>
                                     <md-input-container flex>
                                         <label for="enName">{{lang.help_url}}</label>
                                         <input name="helpUrl" id="helpUrl" maxlength="500"
@@ -101,6 +98,15 @@
                                             <div ng-message="maxlength">{{lang.max_length.change({length:500})}}</div>
                                         </div>
                                     </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-switch flex ng-model="ctrl.entity.status" aria-label="{{lang.status}}">
+                                        <label>{{lang.status}} : {{ctrl.entity.getTranslatedStatus()}}</label>
+                                    </md-switch>
+
+                                    <md-switch flex ng-model="ctrl.entity.hrEnabled" aria-label="{{lang.status}}">
+                                        <label>{{lang.hr_integration}} : {{ctrl.entity.getTranslatedHRIntegrationStatus()}}</label>
+                                    </md-switch>
                                 </div>
                                 <div layout="row">
                                     <div flex class="p20">

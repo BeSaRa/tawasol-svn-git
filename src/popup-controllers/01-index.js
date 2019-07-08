@@ -119,4 +119,5 @@ module.exports = function (app) {
     require('./manageExcludedSubOrganizationsCommentPopCtrl')(app);
     require('./documentFileSelectRelatedOUPopCtrl')(app);
     require('./followupUserOrganizationPopCtrl')(app);
+    require('./employeeHRIntegrationPopCtrl')(app);
 };
