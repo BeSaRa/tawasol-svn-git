@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('MenuItem', function (CMSModelInterceptor) {
+    app.factory('MenuItem', function (CMSModelInterceptor, langService) {
         'ngInject';
         return function MenuItem(model) {
             var self = this;
@@ -28,6 +28,14 @@ module.exports = function (app) {
             MenuItem.prototype.closeItem = function () {
                 this.open = false;
                 return this;
+            };
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            MenuItem.prototype.getNameByLanguage = function (language) {
+                return langService.getByLangKey(this.lang_key, language);
             };
 
             CMSModelInterceptor.runEvent('MenuItem', 'init', this);
