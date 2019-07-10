@@ -132,7 +132,27 @@ module.exports = function (app) {
             return self.getOutgoingLinkedEntities(document);
         };
 
+        /**
+         * @description send fax
+         * @param document
+         * @param sitesInfoTo
+         * @param exportOptions
+         * @returns {*}
+         */
+        self.sendFax = function (document, sitesInfoTo, exportOptions) {
+            var vsId = document.hasOwnProperty('vsId') ? document.vsId : document;
 
+            var sitesTo = {
+                first: exportOptions,
+                second: generator.interceptSendCollection('Site', sitesInfoTo)
+            };
+
+            return $http
+                .post((urlService.outgoings + '/' + vsId + '/' + 'send-fax'), sitesTo)
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        }
 
     });
 };

@@ -3735,6 +3735,45 @@ module.exports = function (app) {
         };
 
         /**
+         *@description open send fax dialog
+         * @param correspondence
+         * @param $event
+         */
+        self.openSendFaxDialog = function (correspondence, $event) {
+            var info = correspondence.getInfo(),
+                defer = $q.defer();
+
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('send-fax'),
+                controllerAs: 'ctrl',
+                targetEvent: $event || false,
+                bindToController: true,
+                controller: 'sendFaxPopCtrl',
+                escapeToClose: false,
+                resolve: {
+                    correspondence: function () {
+                        'ngInject';
+                        return self.loadCorrespondenceByVsIdClass(info.vsId, info.documentClass)
+                            .then(function (correspondence) {
+                                defer.resolve(correspondence);
+                                return correspondence;
+                            });
+                    },
+                    sites: function () {
+                        'ngInject';
+                        if (info.documentClass.toLowerCase() === 'incoming') {
+                            return [];
+                        }
+                        return defer.promise.then(function (correspondence) {
+                            return self.loadCorrespondenceSites(correspondence)
+                        });
+                    }
+                }
+            })
+        };
+
+
+        /**
          * @description Gets the parsed sms template to display as sms message
          * @param correspondence
          * @param smsObject

@@ -420,7 +420,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendMainDocumentFax = function (userSentItem, $event) {
-            console.log('sendMainDocumentFax : ', userSentItem);
+            userSentItem.openSendFaxDialog($event);
         };
 
 
@@ -969,12 +969,12 @@ module.exports = function (app) {
                         icon: 'attachment',
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
-                        hide: true,
                         permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: function (action, model) {
-                            return true;
+                            var info = model.getInfo();
+                            return info.documentClass === "outgoing";
                         }
                     },
                     // SMS

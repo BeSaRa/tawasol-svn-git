@@ -15,7 +15,9 @@ module.exports = function (app) {
                 emptySubRecords: '=',
                 disableCorrespondence: '=',
                 emptySiteSearch: '=',
-                isCompositeDocument: '=?'
+                isCompositeDocument: '=?',
+                isSendingFax: '=?',
+                faxExportOptions: '=?'
             },
             link: function ($scope, element, attrs) {
                 $scope.$watch(function () {

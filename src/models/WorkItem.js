@@ -268,7 +268,7 @@ module.exports = function (app) {
                 return this.generalStepElm.docStatus < 24 && !this.generalStepElm.addMethod;
             };
 
-            WorkItem.prototype.hasSingleSignature = function() {
+            WorkItem.prototype.hasSingleSignature = function () {
                 return this.generalStepElm.signaturesCount && this.generalStepElm.signaturesCount === 1;
             };
 
@@ -777,6 +777,10 @@ module.exports = function (app) {
 
             WorkItem.prototype.openSendSMSDialog = function ($event) {
                 return correspondenceService.openSendSMSDialog(this, $event);
+            };
+
+            WorkItem.prototype.openSendFaxDialog = function ($event) {
+                return correspondenceService.openSendFaxDialog(this, $event);
             };
 
             WorkItem.prototype.createReply = function ($event) {

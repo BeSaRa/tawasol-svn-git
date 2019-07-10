@@ -814,7 +814,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendMainDocumentFax = function (userInbox, $event) {
-            console.log('sendUserInboxMainDocumentFax : ', userInbox);
+            userInbox.openSendFaxDialog($event);
         };
 
         /**
@@ -1665,12 +1665,12 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'attachment',
                         text: 'grid_action_main_document_fax',
-                        hide: true,
                         permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: function (action, model) {
-                            return true;
+                            var info = model.getInfo();
+                            return info.documentClass === "outgoing";
                         }
                     },
                     // SMS

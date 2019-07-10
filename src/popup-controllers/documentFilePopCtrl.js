@@ -267,7 +267,6 @@ module.exports = function (app) {
                     });
                     // if all related OUs(ouDocumentFiles) are removed, change the documentFile to global
                     if (!self.documentFile.relatedOus.length) {
-                        debugger;
                         self.documentFile.setIsGlobal(true).update()
                             .then(function () {
                                 self.toggleRelatedOuForm();

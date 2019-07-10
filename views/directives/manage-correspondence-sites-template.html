@@ -180,7 +180,7 @@
                                         </md-autocomplete>
                                     </div>
                                     <div layout="row">
-                                        <div>
+                                        <div ng-if="!ctrl.isSendingFax">
                                             <md-menu-bar class="follow-up-menu-bar">
                                                 <md-menu>
                                                     <md-button ng-click="$mdMenu.open()"
@@ -198,7 +198,7 @@
                                                 </md-menu>
                                             </md-menu-bar>
                                         </div>
-                                        <div>
+                                        <div ng-if="!ctrl.isSendingFax">
                                             <md-datepicker ng-if="ctrl.needReply(ctrl.followupStatus)"
                                                            name="followUpStatusDate"
                                                            ng-model="ctrl.followUpStatusDate"
@@ -208,7 +208,7 @@
                                                            ng-change="ctrl.onFollowupDateChange()"
                                                            md-open-on-focus></md-datepicker>
                                         </div>
-                                        <div layout="row" layout-align="start center">
+                                        <div layout="row" layout-align="start center" ng-if="!ctrl.isSendingFax">
                                             <md-menu-bar>
                                                 <md-menu>
                                                     <button class="md-icon-button" ng-click="$mdMenu.open()"
@@ -234,6 +234,13 @@
                                                 </md-menu>
                                             </md-menu-bar>
                                         </div>
+                                        <div ng-if="ctrl.isSendingFax">
+                                            <md-button class="md-icon-button"
+                                                       ng-click="ctrl.addSitesTo(ctrl.subSearchSelected)"
+                                                       tooltip="{{lang.add}}">
+                                                <md-icon md-svg-icon="plus"></md-icon>
+                                            </md-button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -256,7 +263,7 @@
                                             ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType">
                                             <span>{{lang.sites_select_site_type}}</span>
                                         </th>
-                                        <th md-column>
+                                        <th md-column ng-if="!ctrl.isSendingFax">
                                             <span>{{lang.sites_follow_up_status}}</span>
                                         </th>
                                     </tr>
@@ -281,7 +288,7 @@
                                                 <span class="span-column">{{site.getTranslatedSiteType()}}</span>
                                             </div>
                                         </td>
-                                        <td md-cell>
+                                        <td md-cell ng-if="!ctrl.isSendingFax">
                                             <div layout="row">
                                                 <div>
                                                     <md-menu-bar class="follow-up-menu-bar">
@@ -315,7 +322,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td md-cell>
+                                        <td md-cell ng-if="!ctrl.isSendingFax">
                                             <div flex layout="row" layout-align="start center">
                                                 <md-menu-bar>
                                                     <md-menu>
@@ -340,6 +347,12 @@
                                                 </md-menu-bar>
                                             </div>
                                         </td>
+                                        <td md-cell ng-if="ctrl.isSendingFax">
+                                            <md-button class="md-icon-button" ng-click="ctrl.addSiteTo(site)"
+                                                       tooltip="{{lang.add}}">
+                                                <md-icon md-svg-icon="plus"></md-icon>
+                                            </md-button>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -361,13 +374,15 @@
                         <md-toolbar class="md-table-toolbar md-default"
                                     ng-class="{'selected':ctrl.sitesInfoToSelected.length}">
                             <div class="md-toolbar-tools">
-                                <div ng-if="!ctrl.sitesInfoToSelected.length" flex>{{lang.sites_original}}</div>
+                                <div ng-if="!ctrl.sitesInfoToSelected.length" flex>{{(ctrl.isSendingFax) ?
+                                    lang.send_fax_to : lang.sites_original}}
+                                </div>
                                 <div ng-if="ctrl.sitesInfoToSelected.length" layout="row" flex
                                      layout-align="start center">
                                     <div>{{ctrl.sitesInfoToSelected.length}} {{lang.items_selected}}</div>
                                     <span flex></span>
                                     <div layout="row" ng-if="!ctrl.disableCorrespondence">
-                                        <div>
+                                        <div ng-if="!ctrl.isSendingFax">
                                             <md-menu-bar class="follow-up-menu-bar">
                                                 <md-menu>
                                                     <md-button ng-click="$mdMenu.open()">
@@ -385,7 +400,7 @@
                                                 </md-menu>
                                             </md-menu-bar>
                                         </div>
-                                        <div>
+                                        <div ng-if="!ctrl.isSendingFax">
                                             <md-datepicker
                                                     ng-if="!ctrl.disableCorrespondence && ctrl.needReply(ctrl.sitesInfoToFollowupStatus)"
                                                     name="sitesInfoToFollowupStatus"
@@ -395,12 +410,24 @@
                                                     ng-change="ctrl.onSitesInfoFollowupDateChange('To')"
                                                     md-open-on-focus></md-datepicker>
                                         </div>
-                                        <div layout="row" layout-align="start center">
-                                            <md-button class="md-icon-button" ng-if="!ctrl.disableCorrespondence"
-                                                       ng-click="ctrl.onSitesInfoDeleteBulk( 'To' ,$event)">
-                                                <md-icon md-svg-icon="delete"></md-icon>
-                                            </md-button>
-                                        </div>
+                                    </div>
+                                </div>
+                                <div layout="row" layout-align="start center">
+                                    <div ng-if="ctrl.isSendingFax">
+                                        <md-checkbox ng-model="ctrl.faxExportOptions.ATTACHMENTS"
+                                                     aria-label="attachments">
+                                            <span>{{lang.attachments}}</span>
+                                        </md-checkbox>
+                                        <md-checkbox ng-model="ctrl.faxExportOptions.RELATED_BOOKS"
+                                                     aria-label="Related Books">
+                                            <span>{{lang.related_books}}</span>
+                                        </md-checkbox>
+                                    </div>
+                                    <div ng-if="ctrl.sitesInfoToSelected.length">
+                                        <md-button class="md-icon-button" ng-if="!ctrl.disableCorrespondence"
+                                                   ng-click="ctrl.onSitesInfoDeleteBulk( 'To' ,$event)">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>
                                     </div>
                                 </div>
                             </div>
@@ -421,10 +448,10 @@
                                         <th md-column md-order-by="siteType">
                                             <span>{{lang.sites_select_site_type}}</span>
                                         </th>
-                                        <th md-column>
+                                        <th md-column ng-if="!ctrl.isSendingFax">
                                             <span>{{lang.sites_follow_up_status}}</span>
                                         </th>
-                                        <th md-column>
+                                        <th md-column ng-if="!ctrl.isSendingFax">
                                             <span>{{lang.sites_follow_up_date}}</span>
                                         </th>
                                     </tr>
@@ -448,16 +475,16 @@
                                                 <span class="span-column">{{site.getTranslatedSiteType()}}</span>
                                             </div>
                                         </td>
-                                        <td md-cell>
+                                        <td md-cell ng-if="!ctrl.isSendingFax">
                                             <div layout="row"><span
                                                     flex>{{site.followupStatus.getTranslatedName()}}</span>
                                             </div>
                                         </td>
-                                        <td md-cell>
+                                        <td md-cell ng-if="!ctrl.isSendingFax">
                                             <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
                                             </div>
                                         </td>
-                                        <td md-cell>
+                                        <td md-cell ng-if="!ctrl.isSendingFax">
                                             <div flex layout="row" layout-align="start center"
                                                  ng-if="!ctrl.disableCorrespondence">
                                                 <div>
@@ -619,7 +646,7 @@
     </md-tab>
 
     <!-- DISTRIBUTION LIST TAB -->
-    <md-tab label="{{lang.distribution_lists}}" ng-if="ctrl.showTab('distributionLists')"
+    <md-tab label="{{lang.distribution_lists}}" ng-if="ctrl.showTab('distributionLists') && !ctrl.isSendingFax"
             md-on-select="ctrl.setCurrentTab('distributionLists')">
         <md-content class="white-bg">
             <div scroll-directive class="p20" layout="column">

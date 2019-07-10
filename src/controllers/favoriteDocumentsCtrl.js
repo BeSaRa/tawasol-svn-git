@@ -269,8 +269,7 @@ module.exports = function (app) {
                     hasPermission = false;
                 else
                     hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-            }
-            else if (info.documentClass === "incoming")
+            } else if (info.documentClass === "incoming")
                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
             else if (info.documentClass === "outgoing") {
                 //If approved outgoing electronic, don't allow to edit
@@ -400,6 +399,15 @@ module.exports = function (app) {
             workItem.openSendSMSDialog($event);
         };
 
+        /**
+         * @description Send Main Document Fax
+         * @param workItem
+         * @param $event
+         */
+        self.sendMainDocumentFax = function (workItem, $event) {
+            workItem.openSendFaxDialog($event);
+        };
+
         self.viewInDeskTop = function (workItem) {
             return correspondenceService.viewWordInDesktop(workItem);
         };
@@ -427,8 +435,8 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // view
             {
@@ -445,8 +453,8 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // Preview
                     {
@@ -509,13 +517,14 @@ module.exports = function (app) {
                             return info.needToApprove();
                         }
                     }
-                ]},
+                ]
+            },
             // Separator
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Remove
@@ -527,8 +536,8 @@ module.exports = function (app) {
                 callback: self.removeFavoriteDocument,
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Edit
             {
@@ -618,8 +627,7 @@ module.exports = function (app) {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
                             } else if (info.documentClass === 'incoming') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
-                            }
-                            else if (info.documentClass === 'internal') {
+                            } else if (info.documentClass === 'internal') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                             }
                             return !model.isBroadcasted()
@@ -641,8 +649,8 @@ module.exports = function (app) {
                 callback: self.sendFavoriteDocumentToReview,
                 class: "action-red",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Launch Distribution Workflow
             {
@@ -655,8 +663,8 @@ module.exports = function (app) {
                 hide: true, /* Launch Distribution is not clear, so need to be discussed with Mr. Abu Al Nassr*/
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // View Tracking Sheet
             {
@@ -666,8 +674,8 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid', gridService.grids.inbox.favorite)
             },
             // View Tracking Sheet (Shortcut Only)
@@ -680,8 +688,8 @@ module.exports = function (app) {
                 showInView: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 callback: self.viewTrackingSheet,
                 params: ['view_tracking_sheet', 'tabs']
             },
@@ -693,8 +701,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
@@ -792,8 +800,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",
                     "DUPLICATE_BOOK_FROM_VERSION"
@@ -858,6 +866,20 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;
+                        }
+                    },
+                    // Main Document Fax
+                    {
+                        type: 'action',
+                        icon: 'attachment',
+                        text: 'grid_action_main_document_fax',
+                        shortcut: false,
+                        permissionKey: "SEND_DOCUMENT_BY_FAX",
+                        callback: self.sendMainDocumentFax,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            return info.documentClass === "outgoing";
                         }
                     }
                 ]

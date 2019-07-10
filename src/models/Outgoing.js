@@ -119,6 +119,11 @@ module.exports = function (app) {
                 return this.exportViaCentralArchive || this.addedViaCentralArchive;
             };
 
+            Outgoing.prototype.openSendFaxDialog = function ($event) {
+                correspondenceService = this.getCorrespondenceService();
+                return correspondenceService.openSendFaxDialog(this, $event);
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Outgoing', 'init', this);

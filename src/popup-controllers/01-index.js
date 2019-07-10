@@ -120,4 +120,5 @@ module.exports = function (app) {
     require('./documentFileSelectRelatedOUPopCtrl')(app);
     require('./followupUserOrganizationPopCtrl')(app);
     require('./employeeHRIntegrationPopCtrl')(app);
+    require('./sendFaxPopCtrl')(app);
 };

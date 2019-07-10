@@ -108,6 +108,18 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
+                                    <md-input-container flex>
+                                        <label name="faxNumber">{{lang.fax}}</label>
+                                        <input id="faxNumber" name="faxNumber"
+                                               ng-model="ctrl.correspondenceSite.faxNumber"
+                                               custom-validate-directive="number">
+                                        <div ng-messages="correspondenceSiteForm.faxNumber.$error">
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <span flex></span>
+                                </div>
+                                <div layout="row">
                                     <!-- Status -->
                                     <div flex>
                                         <md-switch ng-model="ctrl.correspondenceSite.status"

@@ -230,6 +230,10 @@ module.exports = function (app) {
                 return exportData;
             };
 
+            EventHistory.prototype.openSendFaxDialog = function ($event) {
+                return correspondenceService.openSendFaxDialog(this, $event);
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('EventHistory', 'init', this);
