@@ -76,7 +76,7 @@ module.exports = function (app) {
                             selectedUser: selectedUser
                         },
                         resolve: {
-                            organizations: function (organizationService) {
+                            followUpOrganizations: function (organizationService) {
                                 'ngInject';
                                 return organizationService.getFollowUpOrganizations();
                             },

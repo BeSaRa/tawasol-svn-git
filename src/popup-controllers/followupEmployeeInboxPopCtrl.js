@@ -9,7 +9,7 @@ module.exports = function (app) {
                                                              ApplicationUser,
                                                              selectedOrganization,
                                                              selectedUser,
-                                                             organizations,
+                                                             followUpOrganizations,
                                                              ouApplicationUsers,
                                                              employeeService,
                                                              Information) {
@@ -21,7 +21,7 @@ module.exports = function (app) {
 
         var _mapRegOUSections = function(){
             // filter all regOU
-            var regOus = _.filter(organizations, function (item) {
+            var regOus = _.filter(followUpOrganizations, function (item) {
                 return item.hasRegistry;
             });
             regOus = _.map(regOus, function (regOu) {
@@ -33,14 +33,14 @@ module.exports = function (app) {
             });
 
             // filter all sections (no registry)
-            var sections = _.filter(organizations, function (item) {
+            var sections = _.filter(followUpOrganizations, function (item) {
                 return !item.hasRegistry;
             });
 
             // if needed to show regou - section, append the dummy property "tempRegOUSection"
             sections = _.map(sections, function (item) {
                 // if ou is section(has no registry and has regOuId, add temporary field for regOu)
-                var regOu = _.find(organizations, function (ou) {
+                var regOu = _.find(followUpOrganizations, function (ou) {
                     return ou.id === (item.regouId || item.regOuId);
                 });
                 item.tempRegOUSection = new Information({

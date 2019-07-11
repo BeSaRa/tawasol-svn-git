@@ -470,7 +470,7 @@ module.exports = function (app) {
 
             groups = _.map(groups, function (item) {
                 // if ou is section(has no registry and has regOuId, add temporary field for regOu)
-                var regOu = _.find(organizationService.organizations, function (ou) {
+                var regOu = _.find(organizations, function (ou) {
                     return ou.id === (item.regouId || item.regOuId);
                 });
                 item.tempRegOUSection = new Information({
