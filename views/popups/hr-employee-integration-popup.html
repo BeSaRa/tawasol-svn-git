@@ -1,9 +1,7 @@
 <md-dialog class="dialog-extend">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{ lang.search_for_employee }}</span>
-            <close-dialog-directive></close-dialog-directive>
-        </md-toolbar>
+        <popup-toolbar-directive
+                header-text="{{ lang.search_for_employee }}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="HRIntegrationSearchForm" autocomplete="off">
                 <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
