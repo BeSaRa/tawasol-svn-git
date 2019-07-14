@@ -973,8 +973,7 @@ module.exports = function (app) {
                         callback: self.sendMainDocumentFax,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            var info = model.getInfo();
-                            return info.documentClass === "outgoing";
+                            return true;
                         }
                     },
                     // SMS

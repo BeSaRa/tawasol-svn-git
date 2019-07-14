@@ -5,7 +5,7 @@ module.exports = function (app) {
                                                langService,
                                                dialog,
                                                correspondence,
-                                               outgoingService) {
+                                               correspondenceService) {
         'ngInject';
         var self = this;
         self.controllerName = 'sendFaxPopCtrl';
@@ -20,7 +20,7 @@ module.exports = function (app) {
         };
 
         self.sendFax = function ($event) {
-            outgoingService.sendFax(self.correspondence, self.correspondence.sitesInfoTo, self.faxExportOptions).then(function (result) {
+            correspondenceService.sendFax(self.correspondence, self.correspondence.sitesInfoTo, self.faxExportOptions).then(function (result) {
                 dialog.hide();
                 toast.success(langService.get('success_sending_fax'));
             }).catch(function () {

@@ -124,6 +124,10 @@ module.exports = function (app) {
                     subSiteId: self.site.subSiteId
                 }
             };
+            Incoming.prototype.openSendFaxDialog = function ($event) {
+                correspondenceService = this.getCorrespondenceService();
+                return correspondenceService.openSendFaxDialog(this, $event);
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

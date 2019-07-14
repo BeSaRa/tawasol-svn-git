@@ -103,4 +103,5 @@ module.exports = function (app) {
     require('./cms-close-dialog-directive/cms-close-dialog-directive')(app);
     require('./popup-toolbar-directive/01-index')(app);
     require('./grid-document-subject-directive/01-index')(app);
+    require('./manage-correspondence-fax-directive/01-index')(app);
 };

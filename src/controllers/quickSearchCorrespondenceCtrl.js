@@ -284,7 +284,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendMainDocumentFax = function (searchedCorrespondenceDocument, $event) {
-            console.log('send main document fax for searched outgoing document : ', searchedCorrespondenceDocument);
+            searchedCorrespondenceDocument.openSendFaxDialog($event);
         };
 
         /**
@@ -889,10 +889,9 @@ module.exports = function (app) {
                         icon: 'fax',
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
-                        hide: true,
                         permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: function (action, model) {
                             return true;
                         }

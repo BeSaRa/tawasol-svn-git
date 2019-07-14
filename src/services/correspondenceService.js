@@ -3758,18 +3758,32 @@ module.exports = function (app) {
                                 defer.resolve(correspondence);
                                 return correspondence;
                             });
-                    },
-                    sites: function () {
-                        'ngInject';
-                        if (info.documentClass.toLowerCase() === 'incoming') {
-                            return [];
-                        }
-                        return defer.promise.then(function (correspondence) {
-                            return self.loadCorrespondenceSites(correspondence)
-                        });
                     }
                 }
             })
+        };
+
+        /**
+         * @description send fax
+         * @param document
+         * @param sitesInfoTo
+         * @param exportOptions
+         * @returns {*}
+         */
+        self.sendFax = function (document, sitesInfoTo, exportOptions) {
+            var vsId = document.hasOwnProperty('vsId') ? document.vsId : document,
+                info = document.getInfo();
+
+            var sitesTo = {
+                first: exportOptions,
+                second: generator.interceptSendCollection('Site', sitesInfoTo)
+            };
+
+            return $http
+                .post(_createUrlSchema(vsId, info.documentClass, 'send-fax'), sitesTo)
+                .then(function (result) {
+                    return result.data.rs;
+                });
         };
 
 

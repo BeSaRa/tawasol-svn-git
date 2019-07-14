@@ -1,21 +1,21 @@
 module.exports = function (app) {
-    app.directive('manageCorrespondenceSitesDirective', function (cmsTemplate) {
+    app.directive('manageCorrespondenceSitesFaxDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            templateUrl: cmsTemplate.getDirective('manage-correspondence-sites-template.html'),
-            controller: 'manageCorrespondenceSitesDirectiveCtrl',
+            templateUrl: cmsTemplate.getDirective('manage-correspondence-sites-fax-template.html'),
+            controller: 'manageCorrespondenceSitesFaxDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,
             scope: {
                 sitesInfoTo: '=',
-                sitesInfoCC: '=',
                 vsId: '=',
                 documentClass: '=',
                 emptySubRecords: '=',
                 disableCorrespondence: '=',
                 emptySiteSearch: '=',
-                isCompositeDocument: '=?'
+                isCompositeDocument: '=?',
+                faxExportOptions: '=?'
             },
             link: function ($scope, element, attrs) {
                 $scope.$watch(function () {

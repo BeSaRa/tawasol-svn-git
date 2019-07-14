@@ -79,7 +79,7 @@ module.exports = function (app) {
                     // internal electronic and not approved
                     if (info.documentClass.toLowerCase() === 'internal' && info.docStatus < 24 && !info.isPaper) {
                         return dialog.confirmMessage(langService.get("confirm_launch_document_has_active_workflow")).then(function () {
-                             correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab);
+                            correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab);
                         })
                     } else {
                         return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
@@ -96,6 +96,10 @@ module.exports = function (app) {
                     if (sendToReview)
                         this.docStatus = 4;
                     return correspondenceService.addCreateReplyCorrespondenceWithContent(this, information, workItemNum);
+                };
+                Internal.prototype.openSendFaxDialog = function ($event) {
+                    correspondenceService = this.getCorrespondenceService();
+                    return correspondenceService.openSendFaxDialog(this, $event);
                 };
 
 

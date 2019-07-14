@@ -5,13 +5,12 @@
         <popup-toolbar-directive
                 header-text="{{lang.fax}} - {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
         <md-content scroll-directive>
-            <manage-correspondence-sites-directive
+            <manage-correspondence-sites-fax-directive
                     vs-id="ctrl.correspondence.vsId"
                     document-class="ctrl.correspondence.docClassName"
                     sites-info-to="ctrl.correspondence.sitesInfoTo"
-                    is-sending-fax="true"
                     fax-export-options="ctrl.faxExportOptions">
-            </manage-correspondence-sites-directive>
+            </manage-correspondence-sites-fax-directive>
         </md-content>
         <div>
             <div layout="row">

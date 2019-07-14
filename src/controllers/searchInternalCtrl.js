@@ -503,7 +503,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendMainDocumentFax = function (searchedInternalDocument, $event) {
-            console.log('send main document fax for searched internal document : ', searchedInternalDocument);
+            searchedInternalDocument.openSendFaxDialog($event);
         };
 
         /**
@@ -1047,9 +1047,8 @@ module.exports = function (app) {
                         icon: 'fax',
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
-                        hide: true,
                         callback: self.sendMainDocumentFax,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: function (action, model) {
                             return true;
                         },
