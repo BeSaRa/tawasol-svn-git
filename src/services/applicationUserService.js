@@ -76,6 +76,7 @@ module.exports = function (app) {
                             roles: roles,
                             permissions: permissions,
                             ouApplicationUsers: [],
+                            ouViewPermissions: [],
                             currentOrganization: currentOrganization
                         }
                     });
@@ -182,6 +183,7 @@ module.exports = function (app) {
                             roles: roles,
                             permissions: permissions,
                             ouApplicationUsers: [],
+                            ouViewPermissions: [],
                             currentOrganization: organization
                         }
                     });
@@ -232,6 +234,10 @@ module.exports = function (app) {
                                 'ngInject';
                                 return ouApplicationUserService.getOUApplicationUsersByUserId(applicationUser.id);
                             },
+                            ouViewPermissions: function (ouApplicationUserService) {
+                                'ngInject';
+                                return ouApplicationUserService.getOUsViewPermissionForUser(applicationUser.id);
+                            }
                             /* // by BeSaRa to resolve the signature if found
                              signature: function (applicationUserSignatureService, $q) {
                                  'ngInject';

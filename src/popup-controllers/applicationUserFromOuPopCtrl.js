@@ -19,6 +19,8 @@ module.exports = function (app) {
                                                              lookupService,
                                                              userClassificationViewPermissionService,
                                                              UserClassificationViewPermission,
+                                                             OUViewPermission,
+                                                             ouViewPermissions,
                                                              themes,
                                                              userClassificationViewPermissions,
                                                              roles,
@@ -40,7 +42,8 @@ module.exports = function (app) {
                                                              organizationService,
                                                              $q,
                                                              $filter,
-                                                             $timeout) {
+                                                             $timeout,
+                                                             Information) {
         'ngInject';
         var self = this;
         self.controllerName = 'applicationUserFromOuPopCtrl';
@@ -55,6 +58,8 @@ module.exports = function (app) {
         self.model = angular.copy(applicationUser);
         self.currentOrganization = currentOrganization;
         self.notFound = {};
+        self.inlineUserOUSearchText = '';
+        self.inlineOuSearchText = '';
 
         self.rootEntity = rootEntity;
 
@@ -105,8 +110,41 @@ module.exports = function (app) {
         self.themes = themes;
         self.roles = roles;
         self.organizations = organizations;
+        self.organizationsCopy = _sortRegOusSections(angular.copy(self.organizations), true);
         self.classifications = classifications;
         self.permissions = permissions;
+
+        function _sortRegOusSections(organizations, appendRegOUSection) {
+            // filter all regOU and sort
+            var regOus = _.filter(organizations, function (item) {
+                return item.hasRegistry;
+            });
+            regOus = _.map(regOus, function (regOu) {
+                regOu.tempRegOUSection = new Information({
+                    arName: regOu.arName,
+                    enName: regOu.enName
+                });
+                return regOu;
+            });
+
+            // filter all sections (no registry) and sort
+            var groups = _.filter(organizations, function (item) {
+                return !item.hasRegistry;
+            });
+
+            groups = _.map(groups, function (item) {
+                // if ou is section(has no registry and has regOuId, add temporary field for regOu)
+                item.tempRegOUSection = new Information({
+                    arName: item.registryParentId.arName + ' - ' + item.arName,
+                    enName: item.registryParentId.enName + ' - ' + item.enName
+                });
+                return item;
+            });
+
+            return _.sortBy([].concat(regOus, groups), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]);
+        }
 
         self.viewInboxAsOptions = [
             {
@@ -208,8 +246,7 @@ module.exports = function (app) {
                 for (var i = 0; i < fields.length; i++) {
                     fields[i].$setUntouched();
                 }
-            }
-            else {
+            } else {
                 generator.replaceWithOriginalValues(self.applicationUser, self.model, resetProperties, true);
             }
         };
@@ -282,8 +319,7 @@ module.exports = function (app) {
                 self.applicationUser.newsmsEmailNotify = false;
                 self.applicationUser.deadlinesmsNotify = false;
                 self.applicationUser.reminderSmsnotify = false;
-            }
-            else {
+            } else {
                 generator.replaceWithOriginalValues(self.applicationUser, self.model, ['newsmsEmailNotify', 'deadlinesmsNotify', 'reminderSmsnotify']);
             }
             self.resetNotificationsAppUser('newsmsEmailNotify', 'newItemSmspriority', [applicationUserForm.newItemSmspriority]);
@@ -301,8 +337,7 @@ module.exports = function (app) {
                 self.applicationUser.newItemEmailNotify = false;
                 self.applicationUser.deadlineEmailNotify = false;
                 self.applicationUser.reminderEmailNotify = false;
-            }
-            else {
+            } else {
                 generator.replaceWithOriginalValues(self.applicationUser, self.model, ['newItemEmailNotify', 'deadlineEmailNotify', 'reminderEmailNotify']);
             }
             self.resetNotificationsAppUser('newItemEmailNotify', 'newItemEmailPriority', [applicationUserForm.newItemEmailPriority]);
@@ -329,8 +364,7 @@ module.exports = function (app) {
                         self.applicationUser.signature = result;
                         defer.resolve(tabName);
                     });
-            }
-            else {
+            } else {
                 defer.resolve(tabName);
             }
             return defer.promise.then(function (tab) {
@@ -557,8 +591,7 @@ module.exports = function (app) {
                     .catch(function () {
 
                     })
-            }
-            else {
+            } else {
                 toast.info(langService.get('select_classification_security_level'));
             }
         };
@@ -601,8 +634,7 @@ module.exports = function (app) {
                                 self.updateGridAndResetClassificationViewPermissionModel('classification_view_permission_update_success');
                             });
                     });
-            }
-            else {
+            } else {
                 toast.info(langService.get('select_classification_security_level'));
             }
         };
@@ -858,8 +890,7 @@ module.exports = function (app) {
                                     })
                             });
                     });
-            }
-            else {
+            } else {
                 toast.info(langService.get('select_ou_role_security_level'));
             }
         };
@@ -951,7 +982,7 @@ module.exports = function (app) {
                                 permissions: permissions,
                                 userOuPermissions: userOuPermissions
                             },
-                            resolve : {
+                            resolve: {
                                 dynamicMenuItems: function (dynamicMenuItemService, UserMenuItem) {
                                     'ngInject';
                                     return dynamicMenuItemService.loadPrivateDynamicMenuItems()
@@ -1076,6 +1107,114 @@ module.exports = function (app) {
             }
         ];
 
+
+        self.ouViewPermissions = ouViewPermissions;
+        self.selectedOUViewPermissions = [];
+        var _resetOUViewPermissionModel = function () {
+            self.ouViewPermission = self.editMode ? new OUViewPermission({
+                userId: self.ouApplicationUser.applicationUser.id
+            }) : new OUViewPermission();
+        };
+        _resetOUViewPermissionModel();
+
+        self.addOuViewPermissionFromCtrl = function () {
+            var ouViewPermissionCopy = angular.copy(self.ouViewPermissions);
+            ouViewPermissionCopy.push(self.ouViewPermission);
+
+            ouApplicationUserService.addOuViewPermissionForUser(ouViewPermissionCopy, self.ouApplicationUser.applicationUser.id)
+                .then(function (result) {
+                    ouApplicationUserService.getOUsViewPermissionForUser(self.ouApplicationUser.applicationUser.id).then(function (result) {
+                        self.ouViewPermissions = result;
+                        self.selectedOUViewPermissions = [];
+                        toast.success(langService.get('add_success').change({name: new Information(self.ouViewPermission.ouId).getTranslatedName()}));
+                        _resetOUViewPermissionModel();
+                    })
+                }).catch(function () {
+
+            })
+        };
+
+
+        /**
+         * @description remove OU view Permission
+         * @param ouViewPermission
+         * @param $event
+         */
+        self.removeOUViewPermission = function (ouViewPermission, $event) {
+            return dialog
+                .confirmMessage(langService.get('confirm_remove').change({name: ouViewPermission.ouInfo.getTranslatedName()}), null, null, $event)
+                .then(function () {
+                    ouApplicationUserService.removeBulkOuViewPermissionsForUser(ouViewPermission)
+                        .then(function (result) {
+                            ouApplicationUserService.getOUsViewPermissionForUser(self.ouApplicationUser.applicationUser.id).then(function (result) {
+                                self.ouViewPermissions = result;
+                                self.selectedOUViewPermissions = [];
+                                toast.success(langService.get('delete_success'));
+                            })
+                        })
+                });
+        };
+
+        /**
+         * @description remove B ulk OU View Permission
+         * @param $event
+         */
+        self.removeBulkOUViewPermissions = function ($event) {
+            return dialog
+                .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event)
+                .then(function () {
+                    ouApplicationUserService.removeBulkOuViewPermissionsForUser(self.selectedOUViewPermissions)
+                        .then(function (result) {
+                            ouApplicationUserService.getOUsViewPermissionForUser(self.ouApplicationUser.applicationUser.id).then(function (result) {
+                                self.ouViewPermissions = result;
+                                toast.success(langService.get('delete_success'));
+                            })
+                        })
+                });
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataOUViewPermissions = function () {
+            self.ouViewPermissions = $filter('orderBy')(self.ouViewPermissions, self.ouViewPermissionsGrid.order);
+        };
+
+        self.excludeOuViewPermissionIfExists = function (organization) {
+            return _.map(self.ouViewPermissions, 'ouId').indexOf(organization.id) === -1 &&
+                _.map(self.organizationsForAppUser, 'ou.id').indexOf(organization.id) === -1;
+        };
+
+        self.ouViewPermissionsGrid = {
+            limit: 5, // default limit
+            page: 1, // first page
+            //order: 'arName', // default sorting order
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, {
+                label: langService.get('all'),
+                value: function () {
+                    return (self.ouViewPermissions.length + 21);
+                }
+            }]
+        };
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            var code = $event.which || $event.keyCode;
+            if (code !== 38 && code !== 40)
+                $event.stopPropagation();
+        };
 
         /**
          * @description Close the popup

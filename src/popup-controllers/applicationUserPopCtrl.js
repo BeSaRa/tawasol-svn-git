@@ -1393,7 +1393,7 @@ module.exports = function (app) {
         };
 
         self.excludeOuViewPermissionIfExists = function (organization) {
-            return _.map(self.ouViewPermissions, 'ouId').indexOf(organization.id) === -1 ||
+            return _.map(self.ouViewPermissions, 'ouId').indexOf(organization.id) === -1 &&
                 self.excludedOrganizations.indexOf(organization.id) === -1;
         };
 
