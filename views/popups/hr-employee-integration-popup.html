@@ -1,7 +1,8 @@
 <md-dialog class="dialog-extend">
     <div layout="column">
         <popup-toolbar-directive
-                header-text="{{ lang.search_for_employee }}"></popup-toolbar-directive>
+                header-text="{{ lang.search_for_employee }}"
+                close-callback="ctrl.closePopupFromCtrl"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="HRIntegrationSearchForm" autocomplete="off">
                 <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
