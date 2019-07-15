@@ -848,7 +848,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'attachment',
-                        text: 'grid_action_main_document_fax',
+                        text: 'grid_action_send_document_by_fax',
                         shortcut: false,
                         hide: true,
                         permissionKey: "SEND_DOCUMENT_BY_FAX",

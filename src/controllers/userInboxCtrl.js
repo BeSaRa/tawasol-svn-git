@@ -1664,7 +1664,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'attachment',
-                        text: 'grid_action_main_document_fax',
+                        text: 'grid_action_send_document_by_fax',
                         permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
                         class: "action-green",

@@ -1045,7 +1045,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'fax',
-                        text: 'grid_action_main_document_fax',
+                        text: 'grid_action_send_document_by_fax',
                         shortcut: false,
                         callback: self.sendMainDocumentFax,
                         class: "action-green",
