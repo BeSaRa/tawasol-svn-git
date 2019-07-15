@@ -834,6 +834,7 @@ module.exports = function (app) {
                 templateUrl: templateProvider.getView('search-viewers-log'),
                 controller: 'searchViewersLogCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_search_viewers_log'
 
             })
             // outgoing
@@ -1608,6 +1609,7 @@ module.exports = function (app) {
                 templateUrl: templateProvider.getView('administrators'),
                 controller: 'administratorsCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_administrators',
                 resolve: {
                     administrators: function (administratorService) {
                         'ngInject';
