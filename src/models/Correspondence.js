@@ -765,6 +765,10 @@ module.exports = function (app) {
                 return correspondenceService.openSendSMSDialog(this, $event);
             };
 
+            Correspondence.prototype.addToIcnArchiveDialog = function ($event) {
+                return correspondenceService.openIcnArchiveOptionsDialog(this, $event);
+            };
+
             Correspondence.prototype.createReply = function ($event) {
                 if (this.getInfo().documentClass === 'incoming') {
                     return dialog.showDialog({

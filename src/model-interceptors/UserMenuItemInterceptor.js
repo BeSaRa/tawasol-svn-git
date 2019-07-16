@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, generator) {
+    app.run(function (CMSModelInterceptor, generator, DynamicMenuItem) {
         'ngInject';
         var modelName = 'UserMenuItem';
 
@@ -16,6 +16,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            model.menuItem = generator.interceptReceivedInstance('DynamicMenuItem', generator.generateInstance(model.menuItem, DynamicMenuItem));
             return model;
         });
 

@@ -368,6 +368,10 @@ module.exports = function (app) {
                 return correspondenceService.addCorrespondenceToFavorite(this, ignoreMessage);
             };
 
+            WorkItem.prototype.addToIcnArchiveDialog = function ($event) {
+                return correspondenceService.openIcnArchiveOptionsDialog(this, $event);
+            };
+
             WorkItem.prototype.removeFromFavorite = function (ignoreMessage) {
                 return correspondenceService.deleteCorrespondenceFromFavorite(this, ignoreMessage);
             };

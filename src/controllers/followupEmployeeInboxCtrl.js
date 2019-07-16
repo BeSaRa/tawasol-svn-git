@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                           correspondenceService,
                                                           userInboxService,
                                                           $q,
+                                                          _,
                                                           $state,
                                                           $filter,
                                                           langService,

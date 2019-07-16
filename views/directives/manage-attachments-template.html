@@ -28,6 +28,14 @@
                                 </div>
                             </md-button>
                         </md-menu-item>
+                        <md-menu-item ng-if="ctrl.vsId">
+                            <md-button ng-click="ctrl.openAttachmentIcnDialog($event)">
+                                <div>
+                                    <span><md-icon md-svg-icon="file-cloud"></md-icon></span>
+                                    <span>{{lang.icn_import}}</span>
+                                </div>
+                            </md-button>
+                        </md-menu-item>
                     </md-menu-content>
                 </md-menu>
             </md-menu-bar>

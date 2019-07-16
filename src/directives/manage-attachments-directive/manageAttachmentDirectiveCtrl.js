@@ -335,7 +335,6 @@ module.exports = function (app) {
                 .then(function () {
                     self.attachment = null;
                 })
-
         };
 
         self.openEditDocumentAttachment = function (attachment) {
@@ -441,6 +440,23 @@ module.exports = function (app) {
                 return type.status;
             }
             return false;
+        };
+
+        /**
+         * @description Opens the attachment options popup before opening icn search template popup
+         * @param $event
+         */
+        self.openAttachmentIcnDialog = function ($event) {
+            if (!self.vsId){
+                return;
+            }
+            attachmentService.openIcnAttachmentOptionsDialog(self.document, $event)
+                .then(function (result) {
+                    self.reloadAttachments()
+                        .then(function (result) {
+                            self.attachment = null;
+                        })
+                })
         }
     });
 };

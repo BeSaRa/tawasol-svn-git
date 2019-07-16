@@ -117,7 +117,9 @@ module.exports = function (app) {
                 no: 'لا',
                 confirm_logout: 'هل أنت متأكد أنك تريد تسجيل الخروج ?',
                 logout: 'تسجيل خروج',
-                user_guide: 'دليل المستخدم'
+                user_guide: 'دليل المستخدم',
+                enter_otp: 'أدخل OTP',
+                view: 'عرض'
             },
             en: {
                 root_entity_not_found: 'No Entity has been provided, to contact through. <br /> Or that the entity does not exist for the connection',
@@ -202,7 +204,9 @@ module.exports = function (app) {
                 no: 'No',
                 confirm_logout: 'are you sure you want to logout ?',
                 logout: 'logout',
-                user_guide: 'User Guide'
+                user_guide: 'User Guide',
+                enter_otp: 'Enter OTP',
+                view: 'View'
             }
         };
 
@@ -330,7 +334,7 @@ module.exports = function (app) {
         };
 
 
-        self.setSelectedLanguage = function (language) {
+        self.setSelectedLanguage = function (language, defaultTitle) {
             var result = -1;
             _.filter(self.languages, function (lang, index) {
                 if (lang.code === language.code)
@@ -340,7 +344,12 @@ module.exports = function (app) {
 
             self.selectedLanguage = self.languages[result];
             self.current = self.selectedLanguage.code;
-            titleService.setTitle(rootEntity.returnRootEntity().getTranslatedAppName());
+            if (defaultTitle){
+                titleService.setTitle('TAWASOL');
+            }
+            else {
+                titleService.setTitle(rootEntity.returnRootEntity().getTranslatedAppName());
+            }
             self.setCurrentLang(self.current);
         };
         self.getCurrentTranslate = function () {

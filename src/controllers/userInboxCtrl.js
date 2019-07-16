@@ -499,6 +499,18 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Archive the document to icn
+         * @param workItem
+         * @param $event
+         */
+        self.addToIcnArchive = function (workItem, $event) {
+            workItem.addToIcnArchiveDialog($event)
+                .then(function () {
+                    self.reloadUserInboxes(self.grid.page);
+                });
+        };
+
+        /**
          * @description Create Reply
          * @param userInbox
          * @param $event
@@ -1271,6 +1283,17 @@ module.exports = function (app) {
                         text: 'grid_action_to_favorite',
                         permissionKey: "MANAGE_FAVORITE",
                         callback: self.addToFavorite,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Add To ICN Archive
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_archive',
+                        callback: self.addToIcnArchive,
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;

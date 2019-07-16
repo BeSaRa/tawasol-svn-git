@@ -90,7 +90,7 @@
                                                   rows="3"></textarea>
                                     </md-input-container>
                                 </div>
-                                <div layout="row">
+                                <div layout="row" ng-if="!ctrl.dynamicMenuItem.isICNEntryTemplateOrSearchType()">
                                     <url-parser-directive
                                             dynamic-menu-item="ctrl.dynamicMenuItem"></url-parser-directive>
                                 </div>

@@ -36,6 +36,13 @@ module.exports = function (app) {
                 url: '/404',
                 templateUrl: templateProvider.getView('404')
             })
+            // view document from external link with otp
+            .state('view-external-doc?param1?param2?param3', {
+                url: '/view-external-doc',
+                //templateUrl: templateProvider.getView('view-external-doc'),
+                controller: 'viewExternalDocCtrl',
+                controllerAs: 'ctrl'
+            })
             .state('password', {
                 url: '/password-encrypt',
                 templateUrl: templateProvider.getView('password-encrypt'),

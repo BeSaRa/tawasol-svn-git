@@ -7,7 +7,8 @@ module.exports = function (app) {
                                             employeeService,
                                             MenuItem,
                                             $q,
-                                            $http) {
+                                            $http,
+                                            dynamicMenuItemService) {
         'ngInject';
         var self = this;
         // predefined sidebars
@@ -32,8 +33,17 @@ module.exports = function (app) {
         self.allParents = [];
 
         self.setDynamicMenuItems = function (dynamicMenuItems) {
-            self.dynamicMenuItems = dynamicMenuItems;
+            self.dynamicMenuItems = _.filter(dynamicMenuItems, function (menuItem) {
+                return !(self.isICNEntryTemplateOrSearchType(menuItem));
+            });
             self.prepareDynamicMenuItems();
+        };
+
+        self.isICNEntryTemplateOrSearchType = function (menuItem) {
+            menuItem = menuItem.hasOwnProperty('menuType') ? menuItem.menuType : menuItem;
+            // icnSearchTemplate = 4, icnEntryTemplate = 3
+            return menuItem === dynamicMenuItemService.dynamicMenuItemsTypes.icnSearchTemplate
+                || menuItem === dynamicMenuItemService.dynamicMenuItemsTypes.icnEntryTemplate;
         };
 
 

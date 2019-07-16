@@ -114,7 +114,7 @@ module.exports = function (app) {
         self.organizationsCopy = _sortRegOusSections(angular.copy(self.organizations), true);
 
         function _sortRegOusSections(organizations, appendRegOUSection) {
-            // filter all regOU and sort
+            // filter all regOU
             var regOus = _.filter(organizations, function (item) {
                 return item.hasRegistry;
             });
@@ -126,11 +126,12 @@ module.exports = function (app) {
                 return regOu;
             });
 
-            // filter all sections (no registry) and sort
+            // filter all sections (no registry)
             var groups = _.filter(organizations, function (item) {
                 return !item.hasRegistry;
             });
 
+            // if needed to show regou - section, append the dummy property "tempRegOUSection"
             groups = _.map(groups, function (item) {
                 // if ou is section(has no registry and has regOuId, add temporary field for regOu)
                 item.tempRegOUSection = new Information({

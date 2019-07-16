@@ -1,0 +1,109 @@
+<md-dialog class="dialog-extend"
+           ng-attr-aria-label="{{lang.attachments}} - {{lang.icn_import}}">
+    <div layout="column">
+        <popup-toolbar-directive header-text="{{lang.attachments}} - {{lang.icn_import}}"></popup-toolbar-directive>
+        <md-content scroll-directive>
+            <form name="icnImportForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <!-- Title -->
+                        <md-input-container flex>
+                            <label for="documentTitle">{{lang.attachment_document_title}}</label>
+                            <input ng-model="ctrl.attachment.documentTitle" name="documentTitle" id="documentTitle">
+                        </md-input-container>
+                        <!-- Update Action Status -->
+                        <md-input-container flex>
+                            <label for="updateActionStatus">{{lang.attachment_update_action_status}}</label>
+                            <md-select id="updateActionStatus"
+                                       name="updateActionStatus"
+                                       ng-required="true"
+                                       ng-model-options="{trackBy:'$value.lookupKey'}"
+                                       ng-model="ctrl.attachment.updateActionStatus">
+                                <md-option
+                                        ng-repeat="updateAction in ctrl.attachmentUpdateActions"
+                                        ng-value="updateAction">
+                                    {{updateAction.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="icnImportForm.updateActionStatus.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Attachment Type -->
+                        <md-input-container flex>
+                            <label for="attachmentType">{{lang.attachment_attachment_type}}</label>
+                            <md-select
+                                    ng-required="true"
+                                    id="attachmentType"
+                                    name="attachmentType"
+                                    ng-model-options="{trackBy:'$value'}"
+                                    ng-model="ctrl.attachment.attachmentType">
+                                <md-option ng-repeat="type in ctrl.attachmentTypes"
+                                           ng-value="type.lookupKey"
+                                           ng-if="!ctrl.attachment.vsId && type.status">
+                                    {{type.getTranslatedName()}}
+                                </md-option>
+                                <md-option ng-repeat="type in ctrl.attachmentTypes"
+                                           ng-value="type"
+                                           ng-if="ctrl.attachment.vsId && ctrl.checkAttachmentTypeIsAvailable(type)"
+                                           ng-disabled="!type.status">
+                                    {{type.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="icnImportForm.attachmentType.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- Security Level -->
+                        <md-input-container ng-if="!ctrl.inheritSecurity" flex>
+                            <label for="securityLevel">{{lang.attachment_attachment_security_level}}</label>
+                            <md-select ng-model-options="{trackBy: '$value'}"
+                                       id="securityLevel"
+                                       name="securityLevel"
+                                       ng-required="true"
+                                       ng-model="ctrl.attachment.securityLevel">
+                                <md-option ng-value="level.lookupKey" ng-repeat="level in ctrl.securityLevel">
+                                    {{level.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="icnImportForm.securityLevel.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- Search Templates -->
+                        <md-input-container flex>
+                            <label for="searchTemplate">{{lang.search_template}}</label>
+                            <md-select aria-label="searchTemplate"
+                                       ng-required="true"
+                                       id="searchTemplate"
+                                       name="searchTemplate"
+                                       ng-model="ctrl.attachment.searchTemplate">
+                                <md-option ng-repeat="template in ctrl.icnSearchTemplates track by $index"
+                                           ng-value="template">
+                                    {{template.menuItem.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="icnImportForm.searchTemplate.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-disabled="icnImportForm.$invalid"
+                           ng-click="ctrl.getICNImportForm($event)">{{lang.attachment_add}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closePopup($event)">{{lang.close}}</md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

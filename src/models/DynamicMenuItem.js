@@ -152,14 +152,15 @@ module.exports = function (app) {
 
             DynamicMenuItem.prototype.mapSend = function () {
                 var self = this, variables = self.scanURLVariables();
-
-                if (angular.isArray(variables)) {
-                    _.map(variables, function (value, index) {
-                        variables[index] = value + ':' + self.parsedURLParams[value].lookupKey;
-                    });
-                    self.urlParams = variables.join('|');
+                // if icn menu type, skip check variables
+                if (self.menuType !== 3 && self.menuType !== 4) {
+                    if (angular.isArray(variables)) {
+                        _.map(variables, function (value, index) {
+                            variables[index] = value + ':' + self.parsedURLParams[value].lookupKey;
+                        });
+                        self.urlParams = variables.join('|');
+                    }
                 }
-
                 delete self.children;
                 delete self.parsedURLParams;
             };
@@ -305,6 +306,13 @@ module.exports = function (app) {
 
             DynamicMenuItem.prototype.getTranslatedName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
+            };
+
+            DynamicMenuItem.prototype.isICNEntryTemplateOrSearchType = function () {
+                var menuType = this.menuType && this.menuType.hasOwnProperty('lookupKey') ? this.menuType.lookupKey : this.menuType;
+                // icnSearchTemplate = 4, icnEntryTemplate = 3
+                return menuType === dynamicMenuItemService.dynamicMenuItemsTypes.icnSearchTemplate
+                    || menuType === dynamicMenuItemService.dynamicMenuItemsTypes.icnEntryTemplate;
             };
 
             // don't remove CMSModelInterceptor from last line

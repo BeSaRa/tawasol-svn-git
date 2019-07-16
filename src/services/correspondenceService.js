@@ -3707,6 +3707,12 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description Opens the send sms dialog
+         * @param correspondence
+         * @param $event
+         * @returns {promise}
+         */
         self.openSendSMSDialog = function (correspondence, $event) {
             var info = correspondence.getInfo();
             return dialog.showDialog({
@@ -3732,6 +3738,55 @@ module.exports = function (app) {
                     }
                 }
             })
+        };
+
+        /**
+         * @description Gets the parsed sms template to display as sms message
+         * @param correspondence
+         * @param smsObject
+         * @returns {*}
+         */
+        self.parseSMSTemplate = function (correspondence, smsObject) {
+            var info = correspondence.getInfo(),
+                url = urlService.correspondence + '/' + info.documentClass + '/' + info.vsId + '/template/' + smsObject.smsTemplate,
+                smsObjectCopy = angular.copy(smsObject);
+
+            if (smsObjectCopy.linkedEntity) {
+                smsObjectCopy.linkedEntity = generator.interceptSendInstance('LinkedObject', smsObjectCopy.linkedEntity);
+                // adding dummy property for backend purpose only
+                smsObjectCopy.destinationName = smsObjectCopy.linkedEntity.getTranslatedName();
+            }
+            return $http.put(url, smsObjectCopy.linkedEntity || {})
+                .then(function (result) {
+                    return result.data.rs;
+                })
+        };
+
+        /**
+         * @description Sends the sms to the given mobile number
+         * @param correspondence
+         * @param smsObject
+         * @returns {*}
+         */
+        self.sendSMSMessage = function (correspondence, smsObject) {
+            var info = correspondence.getInfo(),
+                smsObjectCopy = angular.copy(smsObject),
+                url = urlService.correspondence + '/' + info.documentClass + '/vsid/' + info.vsId + '/send-sms';
+
+            if (smsObjectCopy.linkedEntity)
+                smsObjectCopy.linkedEntity = generator.interceptSendInstance('LinkedObject', smsObjectCopy.linkedEntity);
+
+            var model = new SmsLog({
+                smsTemplateId: smsObject.smsTemplate,
+                destinationName: smsObjectCopy.linkedEntity ? smsObjectCopy.linkedEntity.getTranslatedName() : '',
+                mobileNo: smsObjectCopy.mobileNumber,
+                message: smsObjectCopy.message
+            });
+
+            return $http.post(url, model)
+                .then(function (result) {
+                    return result.data.rs;
+                })
         };
 
         /**
@@ -3786,54 +3841,109 @@ module.exports = function (app) {
                 });
         };
 
-
         /**
-         * @description Gets the parsed sms template to display as sms message
+         * @description Opens the icn archive options popup
          * @param correspondence
-         * @param smsObject
-         * @returns {*}
+         * @param $event
+         * @returns {promise}
          */
-        self.parseSMSTemplate = function (correspondence, smsObject) {
-            var info = correspondence.getInfo(),
-                url = urlService.correspondence + '/' + info.documentClass + '/' + info.vsId + '/template/' + smsObject.smsTemplate,
-                smsObjectCopy = angular.copy(smsObject);
+        self.openIcnArchiveOptionsDialog = function (correspondence, $event) {
+            return dialog
+                .showDialog({
+                    controller: 'icnArchiveOptionsPopCtrl',
+                    templateUrl: cmsTemplate.getPopup('icn-archive-options'),
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    locals: {
+                        correspondence: correspondence
+                    },
+                    resolve: {
+                        icnEntryTemplates: function (dynamicMenuItemService) {
+                            'ngInject';
+                            return [];
+                            return dynamicMenuItemService.loadUserMenuItemsByMenuType(dynamicMenuItemService.dynamicMenuItemsTypes.icnEntryTemplate)
+                                .then(function (result) {
+                                    return _.filter(result, function (menu) {
+                                        return !!menu.menuItem.status;
+                                    })
+                                });
+                        }
+                    }
+                });
+        };
 
-            if (smsObjectCopy.linkedEntity) {
-                smsObjectCopy.linkedEntity = generator.interceptSendInstance('LinkedObject', smsObjectCopy.linkedEntity);
-                // adding dummy property for backend purpose only
-                smsObjectCopy.destinationName = smsObjectCopy.linkedEntity.getTranslatedName();
-            }
-            return $http.put(url, smsObjectCopy.linkedEntity || {})
-                .then(function (result) {
-                    return result.data.rs;
-                })
+
+        self.openICNArchiveDialog = function (correspondence, options, entryTemplate, $event) {
+            //var menuUrl = entryTemplate.hasOwnProperty('menuItem') ? entryTemplate.menuItem : entryTemplate;
+            //menuUrl = menuUrl && menuUrl.hasOwnProperty('url') ? menuUrl.url : menuUrl;
+
+            // var menuUrl = 'http://100.100.3.229:9080/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=EntryTemplate%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7B18487AE8-97ED-CC43-84CA-6381CDA00000%7D%2C:docId%2C:vsId%2C:refVsId&mimeType=application%2Fx-icn-documententrytemplate&template_name=EntryTemplate&version=current&vsId=%7B7D5A53D2-1139-CCE7-85C6-6381CDA00000%7D';
+            var menuUrl = 'http://100.100.3.229:9080/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=EntryTemplate%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7B18487AE8-97ED-CC43-84CA-6381CDA00000%7D%2C:docId%2C:vsId%2C:refVsId&mimeType=application%2Fx-icn-documententrytemplate&template_name=EntryTemplate&version=current&vsId=%7B7D5A53D2-1139-CCE7-85C6-6381CDA00000%7D';
+            menuUrl = menuUrl.change({
+                vsId: '{C73D894C-69CA-C364-8EE3-6BF04D300000}',
+                docId: '{3943901C-7CDE-C745-85E6-6BF0C5400000}', //'{142D85D9-7553-CA9F-8417-6BF04D300000}',
+                refVsId: '{3BD4C023-1275-CB20-8716-6ACFA4D00000}'
+            });
+            return dialog
+                .showDialog({
+                    controller: 'icnArchivePopCtrl',
+                    templateUrl: cmsTemplate.getPopup('icn-archive'),
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    targetEvent: $event,
+                    locals: {
+                        correspondence: correspondence,
+                        menuUrl: menuUrl
+                    },
+                    resolve: {
+                        credentials: function (authenticationService) {
+                            'ngInject';
+                            return authenticationService.getUserData();
+                        }
+                    }
+                });
         };
 
         /**
-         * @description Sends the sms to the given mobile number
-         * @param correspondence
-         * @param smsObject
-         * @returns {*}
+         * @description Opens the otp dialog to view document by external user
+         * @param $event
+         * @returns {promise}
          */
-        self.sendSMSMessage = function (correspondence, smsObject) {
-            var info = correspondence.getInfo(),
-                smsObjectCopy = angular.copy(smsObject),
-                url = urlService.correspondence + '/' + info.documentClass + '/vsid/' + info.vsId + '/send-sms';
+        self.openOtpDialog = function ($event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('otp'),
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    controller: function (dialog, toast) {
+                        'ngInject';
+                        var self = this;
+                        self.otp = null;
 
-            if (smsObjectCopy.linkedEntity)
-                smsObjectCopy.linkedEntity = generator.interceptSendInstance('LinkedObject', smsObjectCopy.linkedEntity);
+                        self.viewDocument = function (form, $event) {
+                            if (!self.otp || form.$invalid) {
+                                toast.error(langService.get('enter_otp'));
+                                return;
+                            }
+                            dialog.hide(self.otp);
+                        };
 
-            var model = new SmsLog({
-                smsTemplateId: smsObject.smsTemplate,
-                destinationName: smsObjectCopy.linkedEntity ? smsObjectCopy.linkedEntity.getTranslatedName() : '',
-                mobileNo: smsObjectCopy.mobileNumber,
-                message: smsObjectCopy.message
-            });
-
-            return $http.post(url, model)
-                .then(function (result) {
-                    return result.data.rs;
+                        self.closeOtpPopup = function () {
+                            dialog.cancel('close');
+                        }
+                    },
+                    targetEvent: $event,
+                    locals: {}
                 })
+                .then(function (result) {
+                    // request the service, open/download the document, handle exceptions
+                    return result;
+                }).catch(function (error) {
+                    if (error === 'close'){
+
+                    }
+                    return $q.reject(error);
+                });
         };
 
         $timeout(function () {

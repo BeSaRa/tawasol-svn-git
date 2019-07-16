@@ -8,12 +8,17 @@ module.exports = function (app) {
          */
         function _prepareExtensionGroups() {
             var groups = provider.getAllExtensionGroups();
-            _.map(groups, function (extensions, group) {
+            /*_.map(groups, function (extensions, group) {
                 extensions = _.map(extensions, function (extension) {
                     return extension.toLowerCase();
                 });
                 groups[group] = extensions;
             });
+            provider.setAllExtensionGroups(groups);*/
+
+            for (var group in groups){
+                groups[group] = groups[group].map(v => v.toLowerCase());
+            }
             provider.setAllExtensionGroups(groups);
         }
 
@@ -92,6 +97,7 @@ module.exports = function (app) {
          * @param generator
          * @param $timeout
          * @param Attachment
+         * @param employeeService
          * @param _
          * @param $sce
          * @param rootEntity
@@ -112,7 +118,8 @@ module.exports = function (app) {
                                   $sce,
                                   rootEntity,
                                   correspondenceService,
-                                  fileTypeService) {
+                                  fileTypeService,
+                                  tokenService) {
             'ngInject';
             var self = this;
             self.serviceName = 'attachmentService';
@@ -577,6 +584,79 @@ module.exports = function (app) {
                         resolve: {
                             attachment: function () {
                                 return self.loadAttachment(selectedImage.vsId, workItem.getInfo().documentClass);
+                            }
+                        }
+                    });
+            };
+
+            /**
+             * @description Opens the dialog to select search template and fill mandatory information
+             * @param correspondence
+             * @param $event
+             * @returns {promise}
+             */
+            self.openIcnAttachmentOptionsDialog = function (correspondence, $event) {
+                return dialog
+                    .showDialog({
+                        controller: 'icnAttachmentOptionsPopCtrl',
+                        templateUrl: cmsTemplate.getPopup('icn-attachment-options'),
+                        controllerAs: 'ctrl',
+                        targetEvent: $event,
+                        locals: {
+                            correspondence: correspondence
+                        },
+                        resolve: {
+                            icnSearchTemplates: function (dynamicMenuItemService) {
+                                'ngInject';
+                                return dynamicMenuItemService.loadUserMenuItemsByMenuType(dynamicMenuItemService.dynamicMenuItemsTypes.icnSearchTemplate)
+                                    .then(function (result) {
+                                        return _.filter(result, function (menu) {
+                                            return !!menu.menuItem.status;
+                                        })
+                                    });
+                            }
+                        }
+                    });
+            };
+
+            /**
+             * @description Opens the dialog with icn search template form
+             * @param correspondence
+             * @param attachment
+             * @param $event
+             * @returns {promise}
+             */
+            self.openICNImportDialog = function (correspondence, attachment, $event) {
+                var searchTemplate = attachment.searchTemplate.menuItem,
+                    menuUrl = searchTemplate.hasOwnProperty('menuItem') ? searchTemplate.menuItem : searchTemplate,
+                    securityLevel = attachment.securityLevel && attachment.securityLevel.hasOwnProperty('lookupKey') ? attachment.securityLevel.lookupKey : attachment.securityLevel,
+                    attachmentType = attachment.attachmentType && attachment.attachmentType.hasOwnProperty('lookupKey') ? attachment.attachmentType.lookupKey : attachment.attachmentType;
+
+                securityLevel = securityLevel.hasOwnProperty('id') ? securityLevel.id : securityLevel;
+                menuUrl = menuUrl && menuUrl.hasOwnProperty('url') ? menuUrl.url : menuUrl;
+
+                menuUrl = menuUrl.change({
+                    token: tokenService.getToken(), //'eyJhbGciOiJIUzUxMiJ9.eyJwIjpbMTYxLDE1NywxNTYsMzgsMzcsMzYsMzUsMzQsMzMsMzIsMzEsMTcwLDE2MywxNjIsMTU1LDE1NCwxMTUsNTMsNDgsNDcsNDYsNDUsNDQsNDMsNDEsNDAsMzksMTcxLDE2MCwxNTksMTU4LDEyMSwxMjMsMTIwLDExOSwxMTgsMTE3LDExNiw1NCw1Miw1MSw1MCw0OSwxNjksMTY4LDEzNiwxMzUsMTM0LDEzMywxMzIsMTI0LDY0LDYzLDYyLDYxLDYwLDU4LDU3LDU1LDcwLDY5LDY4LDY3LDY2LDc3LDc2LDc1LDc0LDczLDcyLDcxLDExMywxNjQsMTUyLDE1MSwxNTAsMTQ5LDE0OCwxMzEsMTMwLDEyOSwxMjgsMTI3LDEyNiwxMjIsMTA3LDEwNiwxMDUsMTA0LDEwMiwxMDEsMTAwLDk5LDk4LDk3LDk2LDk1LDk0LDkzLDkyLDkxLDkwLDg5LDExMiwxMTQsNDIsNjUsMTY3LDExMSwxMTAsMTA5LDEwOCwzMCwyOSwyOCwyNywyNiwyNCwyMywyMiwyMSwyMCwxOCwxNywxNiwxNSwxNCwxMywxMSwxMCw5LDcsNiw1LDQsMywyLDEsMTksMTY2XSwic3ViIjoibnIyIiwicHMiOiJ4NU9VYnpmSjkzMEFhcG92Tlk0WXdRPT06VG1tUWhLMEY0SXVRZzZQSStPaG9nUT09IiwidGkiOiJtb3RjIiwiaWEiOmZhbHNlLCJ1byI6WzIsMzQsNDAsNDMsNjMsNjQsNjldLCJkbyI6dHJ1ZSwib2lkIjo0LCJnZCI6ImMxN2EzOWJkLTBjZDEtNDlmOS1hZDI0LWRhYzg2ODUyMDdkMSIsInNzbyI6ZmFsc2UsImNyIjoxNTYzMjc4MzY5OTE4LCJleHAiOjIxOTQ0MzAzNjl9.VmkA3YiLgcmswKsLfMmM4nniJA6NAhKIRQY1tbByhOHhOEUxjf_Gf1x7TU2MCqVgIE3nIG9luXtMNizPPamunA',
+                    vsId: correspondence.getInfo().vsId,//'{B92F5ED0-AC04-C66C-85C0-6BF47DA00000}',
+                    attachmentType: attachmentType,
+                    securityLevel: securityLevel,
+                    attachmentName: attachment.documentTitle ? attachment.documentTitle : ''
+                });
+                return dialog
+                    .showDialog({
+                        controller: 'icnAttachmentPopCtrl',
+                        templateUrl: cmsTemplate.getPopup('icn-attachment'),
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        targetEvent: $event,
+                        locals: {
+                            correspondence: correspondence,
+                            menuUrl: menuUrl
+                        },
+                        resolve: {
+                            credentials: function (authenticationService) {
+                                'ngInject';
+                                return authenticationService.getUserData();
                             }
                         }
                     });

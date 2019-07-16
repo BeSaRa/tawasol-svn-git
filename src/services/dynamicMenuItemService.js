@@ -14,6 +14,14 @@ module.exports = function (app) {
         var self = this;
         self.serviceName = 'dynamicMenuItemService';
         self.dynamicMenuItems = [];
+        self.dynamicMenuItemsTypes = {
+            icn: 0,
+            ssrsReports: 1,
+            others: 2,
+            icnEntryTemplate: 3,
+            icnSearchTemplate: 4
+        };
+
         /**
          * @description Load the document types from server.
          * @returns {Promise|dynamicMenuItems}
@@ -43,6 +51,18 @@ module.exports = function (app) {
          */
         self.loadUserMenuItems = function (userId, ouId) {
             return $http.get(urlService.dynamicMenuItems.replace('menu-item', 'user-menu-item') + ['/user-id', userId, 'ou-id', ouId].join('/'))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('UserMenuItem', generator.generateCollection(result.data.rs, UserMenuItem));
+                });
+        };
+        /**
+         * @description load user menu items by menu type
+         * @param menuType
+         * @return {*}
+         */
+        self.loadUserMenuItemsByMenuType = function (menuType) {
+            menuType = menuType.hasOwnProperty('menuType') ? menuType.menuType : menuType;
+            return $http.get(urlService.dynamicMenuItems.replace('menu-item', 'user-menu-item') + '/menu-type/' + menuType)
                 .then(function (result) {
                     return generator.interceptReceivedCollection('UserMenuItem', generator.generateCollection(result.data.rs, UserMenuItem));
                 });

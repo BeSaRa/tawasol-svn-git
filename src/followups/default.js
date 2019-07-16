@@ -78,11 +78,17 @@ module.exports = function (app) {
         $transitions.onStart({}, function (transition) {
             var stateName = transition.to().name;
             if (!application.isReadyStatus() && stateName !== 'loading' && stateName !== 'password') {
-                var Identifier = transition.injector().get('$stateParams').identifier;
-                if ($location.path().indexOf('404') === -1 && $location.path().indexOf('access-denied') === -1) {
+                var path = $location.path();
+                if (path.indexOf('view-external-doc') > -1) {
                     application.setUrl($location.url());
+                    //return transition.router.stateService.target('view-external-doc');
+                } else {
+                    var identifier = transition.injector().get('$stateParams').identifier;
+                    if (path.indexOf('404') === -1 && path.indexOf('access-denied') === -1) {
+                        application.setUrl($location.url());
+                    }
+                    return transition.router.stateService.target('loading', {identifier: identifier});
                 }
-                return transition.router.stateService.target('loading', {identifier: Identifier});
             }
         });
 
