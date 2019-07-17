@@ -18,7 +18,8 @@ module.exports = function (app) {
          */
         self.storageKeys = {
             sorting: 'sort',
-            pagingLimit: 'limit'
+            pagingLimit: 'limit',
+            truncateSubject: 'truncate'
         };
         /**
          * @description List of the grids with static values to be used for sorting.
@@ -78,8 +79,7 @@ module.exports = function (app) {
                 internal: 'searchInt',
                 general: 'searchGen',
                 quick: 'searchQuick',
-                outgoingIncoming: 'searchOutInc',
-                viewersLog: 'viewersLog'
+                outgoingIncoming: 'searchOutInc'
             },
             administration: {
                 entity: 'entity',
@@ -107,8 +107,27 @@ module.exports = function (app) {
                 documentFile: 'docFile',
                 documentTemplate: 'docTemplate',
                 attachmentType: 'attachType',
-                dynamicMenuItem: 'dynamicMenu',
-                administrators: 'administrators'
+                dynamicMenuItem: 'dynamicMenu'
+            },
+            others: {
+                linkedDoc: 'linkedDoc',
+                linkedDocSearch: 'linkedDocSearch',
+                linkedDocAttachments: 'linkedDocAttach',
+                versionSelect: 'versionSelect',
+                viewTask: 'viewTask',
+                taskDoc: 'taskDoc'
+            },
+            trackingSheet: {
+                workflowHistory: 'vts_workflowHistory',
+                linkedDocsHistory: 'vts_linkedDocsHistory',
+                attachmentsHistory: 'vts_attachmentsHistory',
+                mergedLinkedDocsHistory: 'vts_mergedLinkedDocsHistory',
+                linkedEntitiesHistory: 'vts_linkedEntitiesHistory',
+                destinationsHistory: 'vts_destinationsHistory',
+                contentViewHistory: 'vts_contentViewHistory',
+                smsLogs: 'vts_smsLogs',
+                outgoingDeliveryReport: 'vts_outDeliveryReport',
+                fullHistory: 'vts_fullHistory'
             }
         };
 
@@ -688,6 +707,97 @@ module.exports = function (app) {
             }
             // the returned sticky actions for the viewer
             return stickyActions;
+        };
+
+
+        /**
+         * @description Gets the truncate subject key by grid name
+         * @param gridName
+         * If passed, return truncate subject key by gridName.
+         * Otherwise, returns all truncate subject keys.
+         * @param returnObjectIfGridName
+         * Use only when gridName is passed
+         * @returns {*}
+         */
+        self.getGridSubjectTruncateByGridName = function (gridName, returnObjectIfGridName) {
+            var truncateStorage = localStorageService.get(_getStorageKey(self.storageKeys.truncateSubject));
+            if (truncateStorage && generator.isJsonString(truncateStorage)) {
+                truncateStorage = JSON.parse(truncateStorage);
+                if (truncateStorage && Object.keys(truncateStorage).length) {
+                    if (gridName) {
+                        if (returnObjectIfGridName) {
+                            var gridSubjectTruncate = {};
+                            gridSubjectTruncate[gridName] = truncateStorage[gridName];
+                            return gridSubjectTruncate;
+                        } else {
+                            return !!(truncateStorage[gridName]);
+                        }
+                    }
+                    return truncateStorage;
+                }
+            }
+            return false;
+        };
+
+        /**
+         * @description Set the truncate subject key for the grid
+         * @param gridName
+         * @param value
+         */
+        self.setGridSubjectTruncateByGridName = function (gridName, value) {
+            var truncateStorage = self.getGridSubjectTruncateByGridName();
+            if (!truncateStorage) {
+                truncateStorage = {};
+                truncateStorage[gridName] = value;
+            } else {
+                if (truncateStorage[gridName] !== value)
+                    truncateStorage[gridName] = value;
+            }
+
+            localStorageService.set(_getStorageKey(self.storageKeys.truncateSubject), JSON.stringify(truncateStorage));
+        };
+
+        function _removeGridSubjectTruncateByGridName(gridName) {
+            // get all the saved truncate subject keys
+            var truncateStorage = self.getGridSubjectTruncateByGridName();
+            // if found saved truncate key, remove the given grid truncate key
+            if (truncateStorage) {
+                delete truncateStorage[gridName];
+            }
+            // after delete, if the truncate subject still has any other grids, save the truncate subject again to update.
+            if (truncateStorage && Object.keys(truncateStorage).length) {
+                localStorageService.set(_getStorageKey(self.storageKeys.truncateSubject), JSON.stringify(truncateStorage));
+                return 1;
+            }
+            self.removeAllGridSubjectTruncate();
+            return -1;
+        }
+
+        /**
+         * @description Delete the truncate subject value for the grid
+         * @param {string | string[]}gridName
+         * if passed, it will remove truncate subject key for given grid or array of grids
+         * otherwise, remove the truncate subject keys for all grids
+         */
+        self.removeGridPagingTruncateByGridName = function (gridName) {
+            if (!gridName)
+                self.removeAllGridSubjectTruncate();
+            if (typeof gridName === 'string') {
+                _removeGridSubjectTruncateByGridName(gridName);
+            } else if (angular.isArray(gridName) && gridName.length) {
+                for (var i = 0; i < gridName.length; i++) {
+                    // remove the saved truncate value one by one and if saved truncate values finished and removed from storage, break the loop.
+                    if (_removeGridSubjectTruncateByGridName(gridName[i]) === -1)
+                        break;
+                }
+            }
+        };
+
+        /**
+         * @description Removes all the truncate subject keys
+         */
+        self.removeAllGridSubjectTruncate = function () {
+            localStorageService.remove(_getStorageKey(self.storageKeys.truncateSubject));
         };
     });
 };

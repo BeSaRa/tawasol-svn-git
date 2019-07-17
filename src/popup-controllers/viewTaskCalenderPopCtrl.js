@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('viewTaskCalenderPopCtrl', function (taskItem, employeeService, viewDocumentService, taskService, $scope, task) {
+    app.controller('viewTaskCalenderPopCtrl', function (taskItem, employeeService, viewDocumentService, taskService, $scope, task, gridService) {
         'ngInject';
         var self = this;
 
@@ -21,8 +21,12 @@ module.exports = function (app) {
             var documentClass = task.correspondence.classDescription;
             var actions = taskService.gridActions[documentClass.toLowerCase()];
             viewDocumentService.viewQueueDocument(correspondence, actions, 'review' + documentClass, $event);
-        }
+        };
 
+        self.truncateSubject = gridService.getGridSubjectTruncateByGridName(gridService.grids.others.viewTask);
+        self.setTruncateSubject = function ($event) {
+            gridService.setGridSubjectTruncateByGridName(gridService.grids.others.viewTask, self.truncateSubject);
+        };
 
     });
 };

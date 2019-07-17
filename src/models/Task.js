@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('Task', function (CMSModelInterceptor, _, $timeout, configurationService) {
+    app.factory('Task', function (CMSModelInterceptor, _, $timeout, configurationService, Indicator) {
         'ngInject';
         return function Task(model) {
             var self = this, taskService;
@@ -113,6 +113,32 @@ module.exports = function (app) {
                         });
                 }
             };
+
+            var indicator = new Indicator();
+            Task.prototype.getSecurityLevelIndicator = function (securityLevel) {
+                return indicator.getSecurityLevelIndicator(securityLevel);
+            };
+
+            Task.prototype.getPriorityLevelIndicator = function (priorityLevel) {
+                return indicator.getPriorityLevelIndicator(priorityLevel);
+            };
+
+            Task.prototype.getAttachmentsIndicator = function () {
+                return indicator.getAttachmentsIndicator();
+            };
+
+            Task.prototype.getLinkedDocumentsIndicator = function () {
+                return indicator.getLinkedDocumentsIndicator();
+            };
+
+            Task.prototype.getDocClassIndicator = function (docType) {
+                return indicator.getDocClassIndicator(docType);
+            };
+
+            Task.prototype.getIsPaperIndicator = function (isPaper) {
+                return indicator.getIsPaperIndicator(isPaper);
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Task', 'init', this);

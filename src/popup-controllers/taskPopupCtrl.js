@@ -14,7 +14,8 @@ module.exports = function (app) {
                                               dialog,
                                               managerService,
                                               moment,
-                                              generator) {
+                                              generator,
+                                              gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'taskPopupCtrl';
@@ -271,7 +272,12 @@ module.exports = function (app) {
                     self.task.documentVSID = correspondences[0];
                     self.task.correspondence = correspondences[0];
                 });
-        }
+        };
+
+        self.truncateSubject = gridService.getGridSubjectTruncateByGridName(gridService.grids.others.taskDoc);
+        self.setTruncateSubject = function ($event) {
+            gridService.setGridSubjectTruncateByGridName(gridService.grids.others.taskDoc, self.truncateSubject);
+        };
 
     });
 };

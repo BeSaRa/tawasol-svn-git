@@ -34,6 +34,18 @@
                     </table>
                 </div>
                 <div layout="row">
+                    <div flex></div>
+                    <div class="p020">
+                        <md-switch aria-label="{{lang.truncate_subject}}"
+                                   class="m0"
+                                   ng-model="ctrl.truncateSubject"
+                                   ng-change="ctrl.setTruncateSubject($event)">
+                            <span>{{lang.truncate_subject}} : </span>
+                            {{ctrl.truncateSubject ? lang.yes : lang.no }}
+                        </md-switch>
+                    </div>
+                </div>
+                <div layout="row">
                     <md-card flex>
                         <md-table-container>
                             <table md-table>
@@ -42,14 +54,11 @@
                                     <th md-column>
                                         <!-- Indicators -->
                                     </th>
+                                    <th md-column>
+                                        <!-- Indicators -->
+                                    </th>
                                     <th md-column md-order-by="docSubject">
                                         <span>{{lang.subject}}</span>
-                                    </th>
-                                    <th md-column md-order-by="priorityLevel">
-                                        <span>{{lang.priority_level}}</span>
-                                    </th>
-                                    <th md-column md-order-by="securityLevel">
-                                        <span>{{lang.security_level}}</span>
                                     </th>
                                     <th md-column md-order-by="createdBy">
                                         <span>{{lang.creator}}</span>
@@ -62,6 +71,10 @@
                                 <tbody md-body>
                                 <tr md-row>
                                     <td md-cell class="indicator-td">
+                                        <!-- Security Level -->
+                                        <grid-indicator-directive record="ctrl.task.correspondence"
+                                                                  indicator-type="securityLevel"
+                                                                  record-type="correspondence"></grid-indicator-directive>
                                         <!-- Document Class (Outgoing/Incoming/Internal) -->
                                         <grid-indicator-directive record="ctrl.task.correspondence"
                                                                   indicator-type="docClass"
@@ -71,22 +84,43 @@
                                                                   ng-if="ctrl.task.correspondence.getInfo().documentClass !== 'incoming'"
                                                                   indicator-type="paperElectronic"
                                                                   record-type="correspondence"></grid-indicator-directive>
-                                        <!-- Has Attachments -->
-                                        <grid-indicator-directive record="ctrl.task.correspondence"
-                                                                  indicator-type="hasAttachment"
-                                                                  record-type="correspondence"></grid-indicator-directive>
                                         <!-- Linked Documents -->
                                         <grid-indicator-directive record="ctrl.task.correspondence"
                                                                   indicator-type="hasLinkedDocuments"
                                                                   record-type="correspondence"></grid-indicator-directive>
                                     </td>
-                                    <td md-cell class="td-data">
+                                    <td md-cell class="indicator-td text-right"
+                                        style="padding-right:0 !important; padding-left:0 !important;">
+                                        <!-- Priority Level -->
+                                        <grid-indicator-directive record="ctrl.task.correspondence"
+                                                                  indicator-type="priorityLevel"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Has Attachments -->
+                                        <grid-indicator-directive record="ctrl.task.correspondence"
+                                                                  indicator-type="hasAttachment"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                    </td>
+                                    <!--<td md-cell class="td-data">
                                         <a href="" ng-if="ctrl.task.correspondence.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(ctrl.task.correspondence, $event)">{{ctrl.task.correspondence.docSubject}}</a>
                                         <span ng-if="!ctrl.task.correspondence.hasContent()">{{ctrl.task.correspondence.docSubject}}</span>
+                                    </td>-->
+                                    <td md-cell class="subject">
+                                        <a href="" ng-if="ctrl.task.correspondence.hasContent() && ctrl.truncateSubject"
+                                           class="view-doc subject-internal" md-truncate
+                                           tooltip="{{ctrl.task.correspondence.docSubject}}"
+                                           ng-click="ctrl.viewDocument(ctrl.task.correspondence, $event)">{{ctrl.task.correspondence.docSubject}}</a>
+                                        <span ng-if="!ctrl.task.correspondence.hasContent() && ctrl.truncateSubject"
+                                              class="view-doc subject-internal" md-truncate
+                                              tooltip="{{ctrl.task.correspondence.docSubject}}">{{ctrl.task.correspondence.docSubject}}</span>
+                                        <a href="" ng-if="ctrl.task.correspondence.hasContent() && !ctrl.truncateSubject"
+                                           class="view-doc subject-internal"
+                                           tooltip="{{ctrl.task.correspondence.docSubject}}"
+                                           ng-click="ctrl.viewDocument(ctrl.task.correspondence, $event)">{{ctrl.task.correspondence.docSubject}}</a>
+                                        <span ng-if="!ctrl.task.correspondence.hasContent() && !ctrl.truncateSubject"
+                                              class="view-doc subject-internal"
+                                              tooltip="{{ctrl.task.correspondence.docSubject}}">{{ctrl.task.correspondence.docSubject}}</span>
                                     </td>
-                                    <td md-cell>{{ctrl.task.correspondence.priorityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{ctrl.task.correspondence.securityLevel.getTranslatedName()}}</td>
                                     <td md-cell>{{ctrl.task.correspondence.getTranslatedCreator()}}</td>
                                     <td md-cell>{{ctrl.task.correspondence.createdOn}}</td>
                                 </tr>
