@@ -253,6 +253,20 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Archive the document to icn
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.addToIcnArchive = function (workItem, $event, defer) {
+            workItem.addToIcnArchiveDialog($event)
+                .then(function () {
+                    self.reloadFolders(self.grid.page);
+                    new ResolveDefer(defer);
+                });
+        };
+
+        /**
          * @description Create Reply
          * @param workItem
          * @param $event
@@ -931,18 +945,46 @@ module.exports = function (app) {
                     return true;
                 }
             },
-            // Add To Favorite
+            // Add To
             {
                 type: 'action',
-                icon: 'star',
-                text: 'grid_action_add_to_favorite',
-                permissionKey: "MANAGE_FAVORITE",
-                shortcut: false,
-                callback: self.addToFavorite,
+                icon: 'plus',
+                text: 'grid_action_add_to',
                 class: "action-green",
+                permissionKey: [
+                    'MANAGE_FAVORITE',
+                    ''// archive
+                ],
+                checkAnyPermission: true,
                 checkShow: function (action, model) {
-                    return !model.isBroadcasted();
-                }
+                    return true;
+                },
+                subMenu: [
+                    // Add To Favorite
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_to_favorite',
+                        permissionKey: "MANAGE_FAVORITE",
+                        callback: self.addToFavorite,
+                        shortcut: false,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return !model.isBroadcasted();
+                        }
+                    },
+                    // Add To ICN Archive
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_archive',
+                        callback: self.addToIcnArchive,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
             },
             // Create Reply
             {

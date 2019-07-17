@@ -626,7 +626,7 @@ module.exports = function (app) {
              * @param $event
              * @returns {promise}
              */
-            self.openICNImportDialog = function (correspondence, attachment, $event) {
+            self.openICNAttachmentDialog = function (correspondence, attachment, $event) {
                 var searchTemplate = attachment.searchTemplate.menuItem,
                     menuUrl = searchTemplate.hasOwnProperty('menuItem') ? searchTemplate.menuItem : searchTemplate,
                     securityLevel = attachment.securityLevel && attachment.securityLevel.hasOwnProperty('lookupKey') ? attachment.securityLevel.lookupKey : attachment.securityLevel,
@@ -636,8 +636,8 @@ module.exports = function (app) {
                 menuUrl = menuUrl && menuUrl.hasOwnProperty('url') ? menuUrl.url : menuUrl;
 
                 menuUrl = menuUrl.change({
-                    token: tokenService.getToken(), //'eyJhbGciOiJIUzUxMiJ9.eyJwIjpbMTYxLDE1NywxNTYsMzgsMzcsMzYsMzUsMzQsMzMsMzIsMzEsMTcwLDE2MywxNjIsMTU1LDE1NCwxMTUsNTMsNDgsNDcsNDYsNDUsNDQsNDMsNDEsNDAsMzksMTcxLDE2MCwxNTksMTU4LDEyMSwxMjMsMTIwLDExOSwxMTgsMTE3LDExNiw1NCw1Miw1MSw1MCw0OSwxNjksMTY4LDEzNiwxMzUsMTM0LDEzMywxMzIsMTI0LDY0LDYzLDYyLDYxLDYwLDU4LDU3LDU1LDcwLDY5LDY4LDY3LDY2LDc3LDc2LDc1LDc0LDczLDcyLDcxLDExMywxNjQsMTUyLDE1MSwxNTAsMTQ5LDE0OCwxMzEsMTMwLDEyOSwxMjgsMTI3LDEyNiwxMjIsMTA3LDEwNiwxMDUsMTA0LDEwMiwxMDEsMTAwLDk5LDk4LDk3LDk2LDk1LDk0LDkzLDkyLDkxLDkwLDg5LDExMiwxMTQsNDIsNjUsMTY3LDExMSwxMTAsMTA5LDEwOCwzMCwyOSwyOCwyNywyNiwyNCwyMywyMiwyMSwyMCwxOCwxNywxNiwxNSwxNCwxMywxMSwxMCw5LDcsNiw1LDQsMywyLDEsMTksMTY2XSwic3ViIjoibnIyIiwicHMiOiJ4NU9VYnpmSjkzMEFhcG92Tlk0WXdRPT06VG1tUWhLMEY0SXVRZzZQSStPaG9nUT09IiwidGkiOiJtb3RjIiwiaWEiOmZhbHNlLCJ1byI6WzIsMzQsNDAsNDMsNjMsNjQsNjldLCJkbyI6dHJ1ZSwib2lkIjo0LCJnZCI6ImMxN2EzOWJkLTBjZDEtNDlmOS1hZDI0LWRhYzg2ODUyMDdkMSIsInNzbyI6ZmFsc2UsImNyIjoxNTYzMjc4MzY5OTE4LCJleHAiOjIxOTQ0MzAzNjl9.VmkA3YiLgcmswKsLfMmM4nniJA6NAhKIRQY1tbByhOHhOEUxjf_Gf1x7TU2MCqVgIE3nIG9luXtMNizPPamunA',
-                    vsId: correspondence.getInfo().vsId,//'{B92F5ED0-AC04-C66C-85C0-6BF47DA00000}',
+                    token: tokenService.getToken(),
+                    vsId: correspondence.getInfo().vsId,
                     attachmentType: attachmentType,
                     securityLevel: securityLevel,
                     attachmentName: attachment.documentTitle ? attachment.documentTitle : ''

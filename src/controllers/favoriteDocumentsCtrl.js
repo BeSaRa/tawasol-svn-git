@@ -105,6 +105,20 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Archive the document to icn
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.addToIcnArchive = function (correspondence, $event, defer) {
+            correspondence.addToIcnArchiveDialog($event)
+                .then(function () {
+                    self.reloadFavoriteDocuments(self.grid.page);
+                    new ResolveDefer(defer);
+                });
+        };
+
+        /**
          * @description Remove the document from favorite documents
          * @param favoriteDocument
          * @param $event
@@ -394,9 +408,13 @@ module.exports = function (app) {
          * @description send sms for Correspondence document
          * @param workItem
          * @param $event
+         * @param defer
          */
-        self.sendSMS = function (workItem, $event) {
-            workItem.openSendSMSDialog($event);
+        self.sendSMS = function (workItem, $event, defer) {
+            workItem.openSendSMSDialog($event)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
         };
 
         /**
@@ -526,6 +544,33 @@ module.exports = function (app) {
                     return true;
                 },
                 showInView: false
+            },
+            // Add To
+            {
+                type: 'action',
+                icon: 'plus',
+                text: 'grid_action_add_to',
+                class: "action-green",
+                permissionKey: [
+                    ''// archive
+                ],
+                checkAnyPermission: true,
+                checkShow: function (action, model) {
+                    return true;
+                },
+                subMenu: [
+                    // Add To ICN Archive
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_archive',
+                        callback: self.addToIcnArchive,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
             },
             // Remove
             {

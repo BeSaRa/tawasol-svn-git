@@ -92,6 +92,20 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Archive the document to icn
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.addToIcnArchive = function (workItem, $event, defer) {
+            workItem.addToIcnArchiveDialog($event)
+                .then(function () {
+                    self.reloadGroupInbox(self.grid.page);
+                    new ResolveDefer(defer);
+                });
+        };
+
+        /**
          * @description Gets the grid records by sorting
          */
         self.getSortedData = function () {
@@ -532,13 +546,17 @@ module.exports = function (app) {
          * @description Send SMS
          * @param workItem
          * @param $event
+         * @param defer
          */
-        self.sendSMS = function (workItem, $event) {
+        self.sendSMS = function (workItem, $event, defer) {
             if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            workItem.openSendSMSDialog($event);
+            workItem.openSendSMSDialog($event)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
         };
 
         /**
@@ -908,38 +926,70 @@ module.exports = function (app) {
                     return true;
                 }
             },
-            // Add To Folder
+            // Add To
             {
                 type: 'action',
-                icon: 'folder-plus',
-                text: 'grid_action_add_to_folder',
-                shortcut: false,
-                callback: self.addToFolder,
+                icon: 'plus',
+                text: 'grid_action_add_to',
                 class: "action-green",
-                hide: true,
-                disabled: function (model) {
-                    return model.isLocked() && !model.isLockedByCurrentUser();
-                },
+                permissionKey: [
+                    '', // folder
+                    //'MANAGE_FAVORITE',
+                    ''// archive
+                ],
+                checkAnyPermission: true,
                 checkShow: function (action, model) {
                     return true;
-                }
-            },
-            // Add To Favorite
-            {
-                type: 'action',
-                icon: 'star',
-                text: 'grid_action_add_to_favorite',
-                permissionKey: "MANAGE_FAVORITE",
-                shortcut: false,
-                callback: self.addToFavorite,
-                hide: true,
-                disabled: function (model) {
-                    return model.isLocked() && !model.isLockedByCurrentUser();
                 },
-                class: "action-green",
-                checkShow: function (action, model) {
-                    return true;
-                }
+                subMenu: [
+                    // Add To Folder
+                    {
+                        type: 'action',
+                        icon: 'folder-plus',
+                        text: 'grid_action_to_folder',
+                        shortcut: false,
+                        callback: self.addToFolder,
+                        class: "action-green",
+                        hide: true,
+                        disabled: function (model) {
+                            return model.isLocked() && !model.isLockedByCurrentUser();
+                        },
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Add To Favorite
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_to_favorite',
+                        permissionKey: "MANAGE_FAVORITE",
+                        shortcut: false,
+                        callback: self.addToFavorite,
+                        hide: true,
+                        disabled: function (model) {
+                            return model.isLocked() && !model.isLockedByCurrentUser();
+                        },
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Add To ICN Archive
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_archive',
+                        callback: self.addToIcnArchive,
+                        class: "action-green",
+                        disabled: function (model) {
+                            return model.isLocked() && !model.isLockedByCurrentUser();
+                        },
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
             },
             // Create Reply
             {

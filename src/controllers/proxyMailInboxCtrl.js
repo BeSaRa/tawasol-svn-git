@@ -206,12 +206,28 @@ module.exports = function (app) {
          * @description Add To Folder
          * @param workItem
          * @param $event
+         * @param defer
          */
-        self.addToFolderProxyMailInbox = function (workItem, $event) {
+        self.addToFolderProxyMailInbox = function (workItem, $event, defer) {
             workItem.addToFolder($event, false).then(function (result) {
+                new ResolveDefer(defer);
                 if (result)
                     self.reloadProxyMailInboxes(self.grid.page);
             });
+        };
+
+        /**
+         * @description Archive the document to icn
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.addToIcnArchive = function (workItem, $event, defer) {
+            workItem.addToIcnArchiveDialog($event)
+                .then(function () {
+                    self.reloadProxyMailInboxes(self.grid.page);
+                    new ResolveDefer(defer);
+                });
         };
 
         /**
@@ -220,8 +236,8 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.createReplyIncoming = function (workItem, $event,defer) {
-                workItem.createReply($event)
+        self.createReplyIncoming = function (workItem, $event, defer) {
+            workItem.createReply($event)
                 .then(function (result) {
                     new ResolveDefer(defer);
                 });
@@ -503,7 +519,7 @@ module.exports = function (app) {
          * @param workItem
          * @param $event
          */
-        self.sendProxyMailInboxSMS = function (workItem, $event) {
+        self.sendSMS = function (workItem, $event) {
             console.log('sendProxyMailInboxSMS : ', workItem);
         };
 
@@ -870,19 +886,46 @@ module.exports = function (app) {
                     return true;
                 }
             },
-            // Add To Folder
+            // Add To
             {
                 type: 'action',
-                icon: 'folder-plus',
-                text: 'grid_action_add_to_folder',
-                shortcut: true,
-                callback: self.addToFolderProxyMailInbox,
+                icon: 'plus',
+                text: 'grid_action_add_to',
                 class: "action-green",
-                showInViewOnly: true,
-                hide: true,
+                permissionKey: [
+                    ''// archive
+                ],
+                checkAnyPermission: true,
                 checkShow: function (action, model) {
                     return true;
-                }
+                },
+                subMenu: [
+                    // Add To Folder
+                    {
+                        type: 'action',
+                        icon: 'folder-plus',
+                        text: 'grid_action_to_folder',
+                        shortcut: true,
+                        callback: self.addToFolderProxyMailInbox,
+                        class: "action-green",
+                        showInViewOnly: true,
+                        hide: true,
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Add To ICN Archive
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_archive',
+                        callback: self.addToIcnArchive,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
             },
             // Create Reply (Incoming Only)
             {
@@ -1271,7 +1314,7 @@ module.exports = function (app) {
                         shortcut: false,
                         hide: true,
                         permissionKey: "SEND_SMS",
-                        callback: self.sendProxyMailInboxSMS,
+                        callback: self.sendSMS,
                         class: "action-red",
                         checkShow: function (action, model) {
                             return true;

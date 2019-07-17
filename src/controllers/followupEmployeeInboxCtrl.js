@@ -239,6 +239,20 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Archive the document to icn
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.addToIcnArchive = function (workItem, $event, defer) {
+            workItem.addToIcnArchiveDialog($event)
+                .then(function () {
+                    self.reloadFollowupEmployeeInboxes(self.grid.page);
+                    new ResolveDefer(defer);
+                });
+        };
+
         /* /!**
          * @description Terminate followup employee Item
          * @param followupEmployeeInbox
@@ -429,7 +443,7 @@ module.exports = function (app) {
          * @param followupEmployeeInbox
          * @param $event
          */
-        self.sendFollowupEmployeeInboxSMS = function (followupEmployeeInbox, $event) {
+        self.sendSMS = function (followupEmployeeInbox, $event) {
             console.log('sendFollowupEmployeeInboxSMS : ', followupEmployeeInbox);
         };
 
@@ -738,19 +752,47 @@ module.exports = function (app) {
                 },
                 showInView: false
             },
-            // Add To Favorite
+            // Add To
             {
                 type: 'action',
-                icon: 'star',
-                text: 'grid_action_add_to_favorite',
-                permissionKey: "MANAGE_FAVORITE",
-                shortcut: false,
-                showInViewOnly: true,
-                callback: self.addToFavorite,
+                icon: 'plus',
+                text: 'grid_action_add_to',
                 class: "action-green",
-                checkShow: function (action, model, showInViewOnly) {
-                    return !model.isBroadcasted();
-                }
+                permissionKey: [
+                    'MANAGE_FAVORITE',
+                    ''// archive
+                ],
+                checkAnyPermission: true,
+                checkShow: function (action, model) {
+                    return true;
+                },
+                subMenu: [
+                    // Add To Favorite
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_to_favorite',
+                        permissionKey: "MANAGE_FAVORITE",
+                        callback: self.addToFavorite,
+                        class: "action-green",
+                        shortcut: false,
+                        showInViewOnly: true,
+                        checkShow: function (action, model, showInViewOnly) {
+                            return !model.isBroadcasted();
+                        }
+                    },
+                    // Add To ICN Archive
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_archive',
+                        callback: self.addToIcnArchive,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
             },
             // Manage
             {
@@ -964,7 +1006,7 @@ module.exports = function (app) {
                         shortcut: false,
                         hide: true,
                         permissionKey: "SEND_SMS",
-                        callback: self.sendFollowupEmployeeInboxSMS,
+                        callback: self.sendSMS,
                         class: "action-red",
                         checkShow: function (action, model) {
                             return true;

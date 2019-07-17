@@ -502,11 +502,13 @@ module.exports = function (app) {
          * @description Archive the document to icn
          * @param workItem
          * @param $event
+         * @param defer
          */
-        self.addToIcnArchive = function (workItem, $event) {
+        self.addToIcnArchive = function (workItem, $event, defer) {
             workItem.addToIcnArchiveDialog($event)
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page);
+                    new ResolveDefer(defer);
                 });
         };
 
@@ -833,9 +835,13 @@ module.exports = function (app) {
          * @description Send SMS
          * @param userInbox
          * @param $event
+         * @param defer
          */
-        self.sendSMS = function (userInbox, $event) {
-            userInbox.openSendSMSDialog($event);
+        self.sendSMS = function (userInbox, $event, defer) {
+            userInbox.openSendSMSDialog($event)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
         };
 
         /**
@@ -1258,7 +1264,8 @@ module.exports = function (app) {
                 text: 'grid_action_add_to',
                 class: "action-green",
                 permissionKey: [
-                    'MANAGE_FAVORITE'
+                    'MANAGE_FAVORITE',
+                    ''// archive
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {

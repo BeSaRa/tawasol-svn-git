@@ -350,6 +350,20 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Archive the document to icn
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.addToIcnArchive = function (correspondence, $event, defer) {
+            correspondence.addToIcnArchiveDialog($event)
+                .then(function () {
+                    self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                    new ResolveDefer(defer);
+                });
+        };
+
+        /**
          * @description Create Reply
          * @param correspondence
          * @param $event
@@ -575,9 +589,13 @@ module.exports = function (app) {
          * @description send sms for searched document
          * @param correspondence
          * @param $event
+         * @param defer
          */
-        self.sendSMS = function (correspondence, $event) {
-            correspondence.openSendSMSDialog($event);
+        self.sendSMS = function (correspondence, $event, defer) {
+            correspondence.openSendSMSDialog($event)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
         };
 
         /**
@@ -819,19 +837,47 @@ module.exports = function (app) {
                 },
                 showInView: false
             },
-            // Add To Favorite
+            // Add To
             {
                 type: 'action',
-                icon: 'star',
-                text: 'grid_action_add_to_favorite',
-                permissionKey: "MANAGE_FAVORITE",
-                shortcut: false,
-                callback: self.addToFavorite,
+                icon: 'plus',
+                text: 'grid_action_add_to',
                 class: "action-green",
+                permissionKey: [
+                    'MANAGE_FAVORITE',
+                    ''// archive
+                ],
+                checkAnyPermission: true,
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return info.docStatus >= 22;
-                }
+                    return true;
+                },
+                subMenu: [
+                    // Add To Favorite
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_to_favorite',
+                        permissionKey: "MANAGE_FAVORITE",
+                        shortcut: false,
+                        callback: self.addToFavorite,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            return info.docStatus >= 22;
+                        }
+                    },
+                    // Add To ICN Archive
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_archive',
+                        callback: self.addToIcnArchive,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
             },
             // Create Reply
             {

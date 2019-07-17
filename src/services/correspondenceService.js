@@ -3860,7 +3860,6 @@ module.exports = function (app) {
                     resolve: {
                         icnEntryTemplates: function (dynamicMenuItemService) {
                             'ngInject';
-                            return [];
                             return dynamicMenuItemService.loadUserMenuItemsByMenuType(dynamicMenuItemService.dynamicMenuItemsTypes.icnEntryTemplate)
                                 .then(function (result) {
                                     return _.filter(result, function (menu) {
@@ -3872,36 +3871,60 @@ module.exports = function (app) {
                 });
         };
 
-
+        /**
+         * @description Opens the dialog with icn entry template form
+         * @param correspondence
+         * @param options
+         * @param entryTemplate
+         * @param $event
+         * @returns {promise}
+         */
         self.openICNArchiveDialog = function (correspondence, options, entryTemplate, $event) {
-            //var menuUrl = entryTemplate.hasOwnProperty('menuItem') ? entryTemplate.menuItem : entryTemplate;
-            //menuUrl = menuUrl && menuUrl.hasOwnProperty('url') ? menuUrl.url : menuUrl;
+            delete options.ATTACHMENT_LINKED_DOCS;
+            var info = correspondence.getInfo(),
+                url = urlService.correspondence + '/' + info.documentClass + '/' + info.vsId + '/archive-icn';
+            /*$http.put(url, options)
+                .then(function (result) {
+                    var menuUrl = entryTemplate.hasOwnProperty('menuItem') ? entryTemplate.menuItem : entryTemplate;
+                    menuUrl = menuUrl && menuUrl.hasOwnProperty('url') ? menuUrl.url : menuUrl;
+                    /!*menuUrl = menuUrl.change({
+                        vsId: result.data.rs.vsId,
+                        docId: result.data.rs.id,
+                        refVsId: result.data.rs.refVSID
+                    });*!/
+                    menuUrl = menuUrl.change({
+                        vsId: '{C73D894C-69CA-C364-8EE3-6BF04D300000}',
+                        docId: '{3943901C-7CDE-C745-85E6-6BF0C5400000}',
+                        refVsId: '{3BD4C023-1275-CB20-8716-6ACFA4D00000}'
+                    });*/
 
-            // var menuUrl = 'http://100.100.3.229:9080/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=EntryTemplate%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7B18487AE8-97ED-CC43-84CA-6381CDA00000%7D%2C:docId%2C:vsId%2C:refVsId&mimeType=application%2Fx-icn-documententrytemplate&template_name=EntryTemplate&version=current&vsId=%7B7D5A53D2-1139-CCE7-85C6-6381CDA00000%7D';
-            var menuUrl = 'http://100.100.3.229:9080/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=EntryTemplate%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7B18487AE8-97ED-CC43-84CA-6381CDA00000%7D%2C:docId%2C:vsId%2C:refVsId&mimeType=application%2Fx-icn-documententrytemplate&template_name=EntryTemplate&version=current&vsId=%7B7D5A53D2-1139-CCE7-85C6-6381CDA00000%7D';
-            menuUrl = menuUrl.change({
-                vsId: '{C73D894C-69CA-C364-8EE3-6BF04D300000}',
-                docId: '{3943901C-7CDE-C745-85E6-6BF0C5400000}', //'{142D85D9-7553-CA9F-8417-6BF04D300000}',
-                refVsId: '{3BD4C023-1275-CB20-8716-6ACFA4D00000}'
-            });
-            return dialog
-                .showDialog({
-                    controller: 'icnArchivePopCtrl',
-                    templateUrl: cmsTemplate.getPopup('icn-archive'),
-                    controllerAs: 'ctrl',
-                    bindToController: true,
-                    targetEvent: $event,
-                    locals: {
-                        correspondence: correspondence,
-                        menuUrl: menuUrl
-                    },
-                    resolve: {
-                        credentials: function (authenticationService) {
-                            'ngInject';
-                            return authenticationService.getUserData();
-                        }
-                    }
-                });
+                    var menuUrl = entryTemplate.hasOwnProperty('menuItem') ? entryTemplate.menuItem : entryTemplate;
+                    menuUrl = menuUrl && menuUrl.hasOwnProperty('url') ? menuUrl.url : menuUrl;
+
+                    menuUrl = menuUrl.change({
+                        vsId: '{C73D894C-69CA-C364-8EE3-6BF04D300000}',
+                        docId: '{3943901C-7CDE-C745-85E6-6BF0C5400000}',
+                        refVsId: '{3BD4C023-1275-CB20-8716-6ACFA4D00000}'
+                    });
+                    return dialog
+                        .showDialog({
+                            controller: 'icnArchivePopCtrl',
+                            templateUrl: cmsTemplate.getPopup('icn-archive'),
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            targetEvent: $event,
+                            locals: {
+                                correspondence: correspondence,
+                                menuUrl: menuUrl
+                            },
+                            resolve: {
+                                credentials: function (authenticationService) {
+                                    'ngInject';
+                                    return authenticationService.getUserData();
+                                }
+                            }
+                        });
+                // });
         };
 
         /**
@@ -3939,7 +3962,7 @@ module.exports = function (app) {
                     // request the service, open/download the document, handle exceptions
                     return result;
                 }).catch(function (error) {
-                    if (error === 'close'){
+                    if (error === 'close') {
 
                     }
                     return $q.reject(error);

@@ -16,7 +16,8 @@ module.exports = function (app) {
         self.createLoginIframe = function () {
             aLink = angular.element('<a />').attr('href', self.menuUrl);
             var loginLink = aLink[0].protocol + '//' + aLink[0].host + '/navigator/jaxrs/logon?userid={{username}}&password={{password}}';
-            self.loginURL = $sce.trustAsResourceUrl(loginLink.replace('{{username}}', encodeURIComponent(self.credentials.username)).replace('{{password}}', encodeURIComponent(self.credentials.password)));
+            //self.loginURL = $sce.trustAsResourceUrl(loginLink.replace('{{username}}', encodeURIComponent(self.credentials.username)).replace('{{password}}', encodeURIComponent(self.credentials.password)));
+            self.loginURL = $sce.trustAsResourceUrl(loginLink.replace('{{username}}', encodeURIComponent('nr2')).replace('{{password}}', encodeURIComponent('ebla')));
         };
         self.removeLoginIframe = function () {
             angular.element('#icn-login').remove();

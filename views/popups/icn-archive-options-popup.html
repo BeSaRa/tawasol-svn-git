@@ -2,7 +2,8 @@
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="ready-to-export-options" ng-attr-aria-label="{{lang.archive}}">
     <div layout="column">
-        <popup-toolbar-directive header-text="{{lang.archive}} - {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
+        <popup-toolbar-directive
+                header-text="{{lang.archive}} - {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="icnArchiveForm" autocomplete="off">
                 <div layout="column" class="p20">
@@ -40,8 +41,8 @@
         </md-content>
         <div>
             <div layout="row">
-                <md-button class="md-raised" ng-click="ctrl.archiveCorrespondence()">
-                    <!--ng-disabled="icnArchiveForm.$invalid"-->
+                <md-button class="md-raised" ng-click="ctrl.archiveCorrespondence()"
+                           ng-disabled="icnArchiveForm.$invalid">
                     {{lang.archive}}
                 </md-button>
                 <span flex></span>

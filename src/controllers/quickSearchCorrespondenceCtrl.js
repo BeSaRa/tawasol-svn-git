@@ -131,6 +131,20 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Archive the document to icn
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.addToIcnArchive = function (correspondence, $event, defer) {
+            correspondence.addToIcnArchiveDialog($event)
+                .then(function () {
+                    self.reloadQuickSearchCorrespondence(self.grid.page);
+                    new ResolveDefer(defer);
+                });
+        };
+
         /* /!**
           * @description Export quick searched Correspondence document
           * @param searchedCorrespondenceDocument
@@ -291,9 +305,13 @@ module.exports = function (app) {
          * @description send sms for searched Correspondence document
          * @param searchedCorrespondenceDocument
          * @param $event
+         * @param defer
          */
-        self.sendSMS = function (searchedCorrespondenceDocument, $event) {
-            searchedCorrespondenceDocument.openSendSMSDialog($event);
+        self.sendSMS = function (searchedCorrespondenceDocument, $event, defer) {
+            searchedCorrespondenceDocument.openSendSMSDialog($event)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
         };
 
         /**
@@ -568,7 +586,8 @@ module.exports = function (app) {
                 text: 'grid_action_add_to',
                 class: "action-green",
                 permissionKey: [
-                    'MANAGE_FAVORITE'
+                    'MANAGE_FAVORITE',
+                    ''// archive
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
@@ -587,6 +606,17 @@ module.exports = function (app) {
                         checkShow: function (action, model) {
                             var info = model.getInfo();
                             return info.docStatus >= 22;
+                        }
+                    },
+                    // Add To ICN Archive
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_archive',
+                        callback: self.addToIcnArchive,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
                         }
                     }
                 ]

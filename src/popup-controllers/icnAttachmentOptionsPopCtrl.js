@@ -35,8 +35,8 @@ module.exports = function (app) {
          * @description Gets the iframe for icn search template with attachment properties
          * @param $event
          */
-        self.getICNImportForm = function ($event) {
-            attachmentService.openICNImportDialog(correspondence, self.attachment, $event)
+        self.getICNAttachmentForm = function ($event) {
+            attachmentService.openICNAttachmentDialog(correspondence, self.attachment, $event)
                 .then(function (result) {
                     if (result === 'icnAttachmentSuccess') {
                         toast.success(langService.get('save_success'));

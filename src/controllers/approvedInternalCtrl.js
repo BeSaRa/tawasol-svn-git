@@ -223,6 +223,21 @@ module.exports = function (app) {
                         }
                     });
             };
+
+            /**
+             * @description Archive the document to icn
+             * @param workItem
+             * @param $event
+             * @param defer
+             */
+            self.addToIcnArchive = function (workItem, $event, defer) {
+                workItem.addToIcnArchiveDialog($event)
+                    .then(function () {
+                        self.reloadApprovedInternals(self.grid.page);
+                        new ResolveDefer(defer);
+                    });
+            };
+
             /**
              * @description Get the link of approved internal
              * @param approvedInternal
@@ -381,15 +396,19 @@ module.exports = function (app) {
 
             /**
              * @description Send SMS
-             * @param approvedInternal
+             * @param workItem
              * @param $event
+             * @param defer
              */
-            self.sendApprovedInternalSMS = function (approvedInternal, $event) {
-                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
-                    dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
+            self.sendSMS = function (workItem, $event, defer) {
+                if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                    dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                     return;
                 }
-                console.log('sendApprovedInternalSMS : ', approvedInternal);
+                workItem.openSendSMSDialog($event)
+                    .then(function (result) {
+                        new ResolveDefer(defer);
+                    });
             };
 
             /**
@@ -775,21 +794,52 @@ module.exports = function (app) {
                         return true;
                     }
                 },
-                // Add To Favorite
+                // Add To
                 {
                     type: 'action',
-                    icon: 'star',
-                    text: 'grid_action_add_to_favorite',
-                    permissionKey: "MANAGE_FAVORITE",
-                    shortcut: false,
-                    callback: self.addToFavorite,
+                    icon: 'plus',
+                    text: 'grid_action_add_to',
                     class: "action-green",
-                    disabled: function (model) {
-                        return model.isLocked() && !model.isLockedByCurrentUser();
-                    },
+                    permissionKey: [
+                        'MANAGE_FAVORITE',
+                        ''// archive
+                    ],
+                    checkAnyPermission: true,
                     checkShow: function (action, model) {
                         return true;
-                    }
+                    },
+                    subMenu: [
+                        // Add To Favorite
+                        {
+                            type: 'action',
+                            icon: 'star',
+                            text: 'grid_action_to_favorite',
+                            permissionKey: "MANAGE_FAVORITE",
+                            shortcut: false,
+                            callback: self.addToFavorite,
+                            class: "action-green",
+                            disabled: function (model) {
+                                return model.isLocked() && !model.isLockedByCurrentUser();
+                            },
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // Add To ICN Archive
+                        {
+                            type: 'action',
+                            icon: 'star',
+                            text: 'grid_action_archive',
+                            callback: self.addToIcnArchive,
+                            class: "action-green",
+                            disabled: function (model) {
+                                return model.isLocked() && !model.isLockedByCurrentUser();
+                            },
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        }
+                    ]
                 },
                 // Launch Distribution Workflow
                 {
@@ -921,7 +971,7 @@ module.exports = function (app) {
                             text: 'grid_action_send_sms',
                             shortcut: false,
                             permissionKey: "SEND_SMS",
-                            callback: self.sendApprovedInternalSMS,
+                            callback: self.sendSMS,
                             class: "action-red",
                             checkShow: function (action, model) {
                                 return true;
