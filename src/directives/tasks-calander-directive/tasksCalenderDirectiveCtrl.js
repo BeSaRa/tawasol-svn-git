@@ -40,7 +40,7 @@ module.exports = function (app) {
         taskService.hasGridActions('outgoing', function () {
             return $controller('searchOutgoingCtrl', {
                 organizations: [],
-                propertyConfigurations : [],
+                propertyConfigurations: [],
                 centralArchives: false,
                 approvers: [],
                 reviewOutgoings: []
@@ -50,7 +50,7 @@ module.exports = function (app) {
         taskService.hasGridActions('incoming', function () {
             return $controller('searchIncomingCtrl', {
                 organizations: [],
-                propertyConfigurations : [],
+                propertyConfigurations: [],
                 centralArchives: false,
                 reviewIncomings: []
             }).gridActions;
@@ -59,7 +59,7 @@ module.exports = function (app) {
         taskService.hasGridActions('internal', function () {
             return $controller('searchInternalCtrl', {
                 organizations: [],
-                propertyConfigurations : [],
+                propertyConfigurations: [],
                 centralArchives: false,
                 approvers: [],
                 reviewInternals: []
@@ -104,16 +104,34 @@ module.exports = function (app) {
                         });
                 },
                 eventRender: function (info) {
-                    var element = angular.element(info.el);
+                    var element = angular.element(info.el), content = angular.element(element).find('.fc-content');
                     var scope = $rootScope.$new(true);
+                    var menu = angular.element('<md-menu />', {class: 'menu-calender'});
+
+                    menu.append('<md-button ng-click="$mdMenu.open()" class="md-icon-button menu-button-calender" ><md-icon class="fc-task-icon" tooltip="{{lang.im_task_owner}}" md-svg-icon="dots-vertical"></md-icon></md-button>');
+                    menu.append('<md-menu-content></md-menu-content>');
+                    var menuContent = menu.find('md-menu-content');
+                    // edit button
+                    menuContent.append('<md-menu-item><md-button ng-click="ctrl.editTask(ctrl.task)">edit</md-button></md-menu-item>');
+                    // complete button
+                    menuContent.append('<md-menu-item><md-button>make task complete</md-button></md-menu-item>');
+
                     scope.lang = langService.getCurrentTranslate();
+
                     scope.ctrl = {
                         task: info.event.extendedProps,
-                        viewTask: self.viewTask
+                        viewTask: self.viewTask,
+                        editTask: self.editTaskDialog
                     };
-                    element.attr('ng-click', 'ctrl.viewTask(ctrl.task , $event)');
+                    // ng-click="ctrl.editTask(ctrl.task,$event)"
+                    content.find('.fc-title').attr('flex', '');
+                    content.attr('layout', 'row');
+                    content.attr('layout-align', 'start center');
+                    content.find('.fc-title').attr('ng-click', 'ctrl.viewTask(ctrl.task , $event)');
+
                     if (scope.ctrl.task.creator) {
-                        angular.element(element).find('.fc-content').prepend('<md-icon class="fc-task-icon" tooltip="{{lang.im_task_owner}}" md-svg-icon="account"></md-icon>');
+                        content.prepend('<md-icon class="fc-task-icon" tooltip="{{lang.im_task_owner}}" md-svg-icon="account"></md-icon>');
+                        content.append(menu);
                     }
                     $compile(element)(scope);
                 },
@@ -179,7 +197,6 @@ module.exports = function (app) {
                     }
                 })
                 .then(function (callback) {
-                    console.log(callback);
                     self[callback](task);
                 });
         };
@@ -188,7 +205,12 @@ module.exports = function (app) {
          * @param task
          */
         self.editTaskDialog = function (task) {
-            taskService.controllerMethod.taskEdit(task.taskId);
+            taskService
+                .controllerMethod
+                .taskEdit(task.taskId)
+                .then(function () {
+                    taskService.reloadCalender();
+                });
         };
 
         self.setTaskComplete = function (task) {

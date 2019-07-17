@@ -125,9 +125,10 @@ module.exports = function (app) {
                     outOfOffice: false
                 }, true)
                 .then(function (result) {
-                    return generator.interceptReceivedCollection('TaskParticipant', _.map(result, function (user) {
+                    var x = generator.interceptReceivedCollection('TaskParticipant', _.map(result, function (user) {
                         return (new TaskParticipant()).generateFromOUApplicationUser(user);
                     }));
+                    return x;
                 })
         };
 
@@ -141,9 +142,8 @@ module.exports = function (app) {
 
         self.saveTaskParticipant = function (task, taskParticipant) {
             return $http
-                .post('asdad', generator.interceptSendInstance('TaskParticipant', taskParticipant))
+                .put(urlService.tasks + '//update-task-participant/task-id/' + task.id, generator.interceptSendInstance('TaskParticipant', taskParticipant))
                 .then(function (result) {
-                    taskParticipant.id = result;
                     return taskParticipant;
                 });
         };
@@ -256,7 +256,25 @@ module.exports = function (app) {
                     });
             },
             taskEdit: function (taskId) {
-
+                var employee = employeeService.getEmployee();
+                return dialog
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('task'),
+                        controller: 'taskPopupCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            editMode: true
+                        },
+                        resolve: {
+                            task: function () {
+                                return self.findTaskById(taskId);
+                            },
+                            availableUsers: function () {
+                                'ngInject';
+                                return self.getAvailableUsers();
+                            }
+                        }
+                    });
             }
         };
 

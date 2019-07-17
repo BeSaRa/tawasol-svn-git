@@ -1,7 +1,8 @@
 <md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.tasks}}">
     <div layout="column">
         <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_task}}"></popup-toolbar-directive>
-        <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{lang.edit_task}} : {{ctrl.model.taskTitle}}"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.editMode"
+                                 header-text="{{lang.edit_task}} : {{ctrl.model.taskTitle}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form autocomplete="off" name="task_form">
                 <md-tabs md-dynamic-height>
@@ -19,9 +20,18 @@
                                             <!--<div ng-message="maxlength">{{lang.max_length.change({length:3})}}</div>-->
                                         </div>
                                     </md-input-container>
+                                </div>
+                                <div class="no-margin-for-child-input-container" layout="row">
                                     <md-input-container>
                                         <md-switch ng-model="ctrl.task.allDay">
-                                            {{lang.task_all_day}}
+                                            {{lang.task_all_day}} : {{ctrl.task.allDay ? lang.yes : lang.no}}
+                                        </md-switch>
+                                    </md-input-container>
+                                    <span flex></span>
+                                    <md-input-container>
+                                        <md-switch ng-model="ctrl.task.withoutParticipant">
+                                            {{lang.task_without_participant}} : {{ ctrl.task.withoutParticipant ?
+                                            lang.yes : lang.no}}
                                         </md-switch>
                                     </md-input-container>
                                 </div>
@@ -100,6 +110,80 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
+                                    <span flex=""></span>
+                                    <md-button class="md-raised" ng-click="ctrl.linkDocumentTask($event)">
+                                        {{lang.link_document_to_task}}
+                                    </md-button>
+                                    <span flex=""></span>
+                                </div>
+                                <div ng-if="ctrl.task.documentVSID" layout="row">
+                                    <md-card flex>
+                                        <md-table-container>
+                                            <table md-table>
+                                                <thead md-head>
+                                                <tr md-row>
+                                                    <th md-column>
+                                                        <!-- Indicators -->
+                                                    </th>
+                                                    <th md-column md-order-by="docSubject">
+                                                        <span>{{lang.subject}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="priorityLevel">
+                                                        <span>{{lang.priority_level}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="securityLevel">
+                                                        <span>{{lang.security_level}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="createdBy">
+                                                        <span>{{lang.creator}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="createdOn">
+                                                        <span>{{lang.created_on}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-row>
+                                                    <td md-cell class="indicator-td">
+                                                        <!-- Document Class (Outgoing/Incoming/Internal) -->
+                                                        <grid-indicator-directive record="ctrl.task.correspondence"
+                                                                                  indicator-type="docClass"
+                                                                                  record-type="correspondence"></grid-indicator-directive>
+                                                        <!-- Paper/Electronic-->
+                                                        <grid-indicator-directive record="ctrl.task.correspondence"
+                                                                                  ng-if="ctrl.task.correspondence.getInfo().documentClass !== 'incoming'"
+                                                                                  indicator-type="paperElectronic"
+                                                                                  record-type="correspondence"></grid-indicator-directive>
+                                                        <!-- Has Attachments -->
+                                                        <grid-indicator-directive record="ctrl.task.correspondence"
+                                                                                  indicator-type="hasAttachment"
+                                                                                  record-type="correspondence"></grid-indicator-directive>
+                                                        <!-- Linked Documents -->
+                                                        <grid-indicator-directive record="ctrl.task.correspondence"
+                                                                                  indicator-type="hasLinkedDocuments"
+                                                                                  record-type="correspondence"></grid-indicator-directive>
+                                                    </td>
+                                                    <td md-cell class="td-data">
+                                                        <a href="" ng-if="ctrl.task.correspondence.hasContent()"
+                                                           class="view-doc"
+                                                           ng-click="ctrl.viewCorrespondence(ctrl.task.correspondence, $event)">{{ctrl.task.correspondence.docSubject}}</a>
+                                                        <span ng-if="!ctrl.task.correspondence.hasContent()">{{ctrl.task.correspondence.docSubject}}</span>
+                                                    </td>
+                                                    <td md-cell>
+                                                        {{ctrl.task.correspondence.priorityLevel.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        {{ctrl.task.correspondence.securityLevel.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>{{ctrl.task.correspondence.getTranslatedCreator()}}</td>
+                                                    <td md-cell>{{ctrl.task.correspondence.createdOn}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </md-table-container>
+                                    </md-card>
+                                </div>
+                                <div layout="row">
                                     <md-input-container flex>
                                         <label>{{lang.task_description}}</label>
                                         <textarea rows="3" name="taskDescription" id="taskDescription"
@@ -110,7 +194,7 @@
                         </md-content>
                     </md-tab>
                     <md-tab label="{{lang.task_linked}}"
-                            ng-disabled="!ctrl.task.startDate || !ctrl.task.dueDate || !ctrl.task.taskTitle.length">
+                            ng-disabled="!ctrl.task.startDate || !ctrl.task.dueDate || !ctrl.task.taskTitle.length || ctrl.task.withoutParticipant">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row">

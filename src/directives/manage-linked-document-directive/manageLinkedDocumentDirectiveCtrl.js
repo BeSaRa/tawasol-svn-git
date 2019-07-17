@@ -62,7 +62,6 @@ module.exports = function (app) {
                 return;
             }
             correspondenceService.viewCorrespondence(correspondence, [], true, true);
-            //correspondenceService.viewLinkedDocument(correspondence);
         };
         /**
          * @description open search dialog
@@ -79,7 +78,8 @@ module.exports = function (app) {
                         linkedDocs: self.linkedDocs,
                         viewCallback: self.viewCorrespondence,
                         excludeVsId: self.vsId,
-                        isAdminSearch: false
+                        isAdminSearch: false,
+                        multiSelect : true
                     }
                 })
                 .then(function (correspondences) {

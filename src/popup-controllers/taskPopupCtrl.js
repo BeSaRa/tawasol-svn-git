@@ -3,18 +3,21 @@ module.exports = function (app) {
                                               task,
                                               validationService,
                                               langService,
+                                              cmsTemplate,
                                               toast,
                                               availableUsers,
                                               taskService,
                                               lookupService,
+                                              employeeService,
+                                              correspondenceService,
                                               editMode,
                                               dialog,
+                                              managerService,
                                               moment,
                                               generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'taskPopupCtrl';
-
         self.task = task;
         self.model = angular.copy(task);
         self.editMode = editMode;
@@ -126,6 +129,31 @@ module.exports = function (app) {
                         });
                 });
         };
+
+        self.editTaskFromCtrl = function () {
+            return validationService
+                .createValidation('EDIT_TASK')
+                .addStep('check_required', true, generator.checkRequiredFields, self.task, function (result) {
+                    return !result.length;
+                })
+                .notifyFailure(function () {
+                    var labels = _.map(result, function (label) {
+                        return self.validateLabels[label];
+                    });
+                    generator.generateErrorFields('check_this_fields', labels);
+                })
+                .validate()
+                .then(function (result) {
+                    return taskService
+                        .updateTask(self.task)
+                        .then(function (task) {
+                            self.model = angular.copy(task);
+                            self.task = angular.copy(task);
+                            toast.success(langService.get('edit_success').change({name: task.taskTitle}));
+                            self.closeTaskPopupFromCtrl();
+                        });
+                });
+        };
         /**
          * @description to get selected start time and store it to use it later for disable time if the start/end date is the same day.
          */
@@ -214,6 +242,35 @@ module.exports = function (app) {
 
         self.closeTaskPopupFromCtrl = function () {
             dialog.hide(self.task);
+        };
+
+        self.viewCorrespondence = function (correspondence, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(correspondence, [], true, true);
+        };
+
+        self.linkDocumentTask = function ($event) {
+            dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('search-linked-document'),
+                    controller: 'searchLinkedDocumentPopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    locals: {
+                        linkedDocs: [],
+                        viewCallback: self.viewCorrespondence,
+                        excludeVsId: null,
+                        isAdminSearch: false,
+                        multiSelect: false
+                    }
+                })
+                .then(function (correspondences) {
+                    self.task.documentVSID = correspondences[0];
+                    self.task.correspondence = correspondences[0];
+                });
         }
 
     });

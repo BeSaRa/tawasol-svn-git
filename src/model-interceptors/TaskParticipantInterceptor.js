@@ -37,8 +37,8 @@ module.exports = function (app) {
             model.startTime = model.allDay ? null : moment(startDate).format('HH:mm');
             model.endTime = model.allDay ? null : moment(dueDate).format('HH:mm');
             model.participantId = Number(model.userId + '' + model.ouId);
-            model.ouId = new Information(model.ouInfo);
-            model.userId = new Information(model.userInfo);
+            model.ouId = new Information(model.ouInfo || model.ouId);
+            model.userId = new Information(model.userInfo || model.userId);
             return model;
         });
 

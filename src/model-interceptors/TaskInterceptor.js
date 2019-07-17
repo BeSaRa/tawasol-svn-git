@@ -14,7 +14,10 @@ module.exports = function (app) {
             2: {
                 model: Internal,
                 name: 'Internal'
-            }
+            },
+            Outgoing: 0,
+            Incoming: 1,
+            Internal: 2
         };
 
 
@@ -37,6 +40,14 @@ module.exports = function (app) {
 
                 model.startDate = moment(model.startDate).toDate();
                 model.dueDate = moment(model.dueDate).toDate();
+            }
+            model.userId = model.userId.hasOwnProperty('id') ? model.userId.id : model.userId;
+            model.ouId = model.ouId.hasOwnProperty('id') ? model.ouId.id : model.ouId;
+
+            if (model.correspondence) {
+                model.documentVSID = model.correspondence.vsId;
+                model.docClassId = classesMap[model.correspondence.classDescription];
+                delete model.correspondence;
             }
             // delete extra properties
             delete model.userInfo;

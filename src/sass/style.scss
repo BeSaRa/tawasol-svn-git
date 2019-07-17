@@ -2255,13 +2255,23 @@ $ta-background-transparent: transparent !important;
   }
 }
 
-.icon-min0w15{
+.icon-min0w15 {
   width: 15px !important;
   height: 15px !important;
   min-width: 0;
   min-height: 0;
 }
 
-.font-13{
+.font-13 {
   font-size: 13px;
+}
+
+.no-margin-for-child-input-container {
+  md-input-container {
+    margin: 0 !important;
+
+    md-switch {
+      margin: 0 !important;
+    }
+  }
 }

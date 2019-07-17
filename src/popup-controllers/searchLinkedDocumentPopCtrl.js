@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                             $filter,
                                                             excludeVsId,
                                                             viewDocumentService,
+                                                            multiSelect,
                                                             correspondenceService,
                                                             classificationService,
                                                             Correspondence,
@@ -29,6 +30,8 @@ module.exports = function (app) {
 
         self.excludeVsId = excludeVsId;
         self.isAdminSearch = isAdminSearch;
+
+        self.multiSelect = multiSelect;
 
         // all security levels
         //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
@@ -54,6 +57,7 @@ module.exports = function (app) {
         self.correspondences = [];
 
         self.selectedIndex = 0;
+
         /**
          * @description get available documentFiles for the document by security level.
          * @param timeout

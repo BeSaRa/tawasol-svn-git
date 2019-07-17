@@ -115,7 +115,8 @@ module.exports = function (app) {
                         linkedDocs: existingDocs,
                         viewCallback: self.viewCorrespondence,
                         excludeVsId: null,
-                        isAdminSearch: true
+                        isAdminSearch: true,
+                        multiSelect : true
                     }
                 }).then(function (correspondences) {
                     var vsIds = _.map(existingDocs, 'vsId'); // get current documents vsIds
