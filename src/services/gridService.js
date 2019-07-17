@@ -127,7 +127,8 @@ module.exports = function (app) {
                 contentViewHistory: 'vts_contentViewHistory',
                 smsLogs: 'vts_smsLogs',
                 outgoingDeliveryReport: 'vts_outDeliveryReport',
-                fullHistory: 'vts_fullHistory'
+                fullHistory: 'vts_fullHistory',
+                docLinkViewers: 'vts_docLinkViewer'
             }
         };
 
