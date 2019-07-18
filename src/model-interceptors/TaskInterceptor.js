@@ -55,16 +55,6 @@ module.exports = function (app) {
             delete model.startTime;
             delete model.endTime;
 
-            // delete indicators --> remove if intercept correspondence before send
-            delete model.securityLevelLookup;
-            delete model.securityLevelIndicator;
-            delete model.priorityLevelLookup;
-            delete model.priorityLevelIndicator;
-            delete model.docClassIndicator;
-            delete model.isPaperIndicator;
-            delete model.attachmentsIndicator;
-            delete model.linkedDocsIndicator;
-
             return model;
         });
 
@@ -81,18 +71,6 @@ module.exports = function (app) {
             model.userId = new Information(model.userInfo);
             model.ouId = new Information(model.ouInfo);
 
-            /*if (model.correspondence) {
-                model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.correspondence.securityLevel);
-                model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
-
-                model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.correspondence.priorityLevel);
-                model.priorityLevelIndicator = (model.priorityLevelLookup && model.priorityLevelLookup.lookupKey !== 0) ? model.getPriorityLevelIndicator(model.priorityLevelLookup) : null;
-
-                model.attachmentsIndicator = model.correspondence.attachementsNO ? model.getAttachmentsIndicator() : null;
-                model.linkedDocsIndicator = model.correspondence.linkedDocsNO ? model.getLinkedDocumentsIndicator() : null;
-                model.docClassIndicator = model.correspondence.workFlowName ? model.getDocClassIndicator(model.correspondence.workFlowName) : null;
-                model.isPaperIndicator = model.getIsPaperIndicator(model.correspondence.hasOwnProperty('addMethod') ? model.correspondence.addMethod : 1);
-            }*/
             return model;
         });
 
