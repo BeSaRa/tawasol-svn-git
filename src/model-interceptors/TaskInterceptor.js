@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, _, Outgoing, Incoming, Internal, generator, moment, Information, taskService, lookupService) {
+    app.run(function (CMSModelInterceptor, _, Outgoing, Incoming, Internal, generator, moment, Information, taskService) {
         'ngInject';
         var modelName = 'Task';
         var classesMap = {
@@ -54,6 +54,8 @@ module.exports = function (app) {
             delete model.ouInfo;
             delete model.startTime;
             delete model.endTime;
+
+            // delete indicators --> remove if intercept correspondence before send
             delete model.securityLevelLookup;
             delete model.securityLevelIndicator;
             delete model.priorityLevelLookup;
@@ -79,7 +81,7 @@ module.exports = function (app) {
             model.userId = new Information(model.userInfo);
             model.ouId = new Information(model.ouInfo);
 
-            if (model.correspondence) {
+            /*if (model.correspondence) {
                 model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.correspondence.securityLevel);
                 model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
 
@@ -90,7 +92,7 @@ module.exports = function (app) {
                 model.linkedDocsIndicator = model.correspondence.linkedDocsNO ? model.getLinkedDocumentsIndicator() : null;
                 model.docClassIndicator = model.correspondence.workFlowName ? model.getDocClassIndicator(model.correspondence.workFlowName) : null;
                 model.isPaperIndicator = model.getIsPaperIndicator(model.correspondence.hasOwnProperty('addMethod') ? model.correspondence.addMethod : 1);
-            }
+            }*/
             return model;
         });
 
