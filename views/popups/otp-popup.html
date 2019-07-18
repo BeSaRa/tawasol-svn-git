@@ -5,7 +5,7 @@
         <popup-toolbar-directive
                 header-text="{{lang.enter_otp}}" hide-close="true" close-callback="ctrl.closeOtpPopup"></popup-toolbar-directive>
         <md-content scroll-directive>
-            <form name="otpForm">
+            <form name="otpForm" novalidate enter-submit-directive="btn-view-doc">
                 <div class="p20" layout="row">
                     <md-input-container flex>
                         <label for="otp">{{lang.enter_otp}}</label>
@@ -20,6 +20,7 @@
                     </md-input-container>
                     <div>
                         <md-button class="md-raised" ng-disabled="otpForm.$invalid"
+                                   id="btn-view-doc"
                                    ng-click="ctrl.viewDocument(otpForm, $event)">
                             {{lang.view}}
                         </md-button>
