@@ -193,7 +193,7 @@
                                                         <a href="" ng-if="ctrl.task.correspondence.hasContent() && ctrl.truncateSubject"
                                                            class="view-doc subject-internal" md-truncate
                                                            tooltip="{{ctrl.task.correspondence.docSubject}}"
-                                                           ng-click="ctrl.viewDocument(ctrl.task.correspondence, $event)">{{ctrl.task.correspondence.docSubject}}</a>
+                                                           ng-click="ctrl.viewCorrespondence(ctrl.task.correspondence, $event)">{{ctrl.task.correspondence.docSubject}}</a>
                                                         <span ng-if="!ctrl.task.correspondence.hasContent() && ctrl.truncateSubject"
                                                               class="view-doc subject-internal" md-truncate
                                                               tooltip="{{ctrl.task.correspondence.docSubject}}">{{ctrl.task.correspondence.docSubject}}</span>

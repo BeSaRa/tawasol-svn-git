@@ -90,29 +90,36 @@ module.exports = function (app) {
                 }
             };
 
+            Task.prototype.deleteParticipant = function (taskParticipant) {
+                var self = this;
+                var index = self.findParticipantIndex(taskParticipant);
+                if (!this.hasId()) {
+                    return $timeout(function () {
+                        self.taskParticipants.splice(index, 1);
+                        return taskParticipant;
+                    });
+                } else {
+                    if (taskParticipant.id) {
+                        return taskService.deleteTaskParticipant(self, taskParticipant)
+                            .then(function () {
+                                self.taskParticipants.splice(index, 1);
+                                return taskParticipant;
+                            });
+                    } else {
+                        return $timeout(function () {
+                            self.taskParticipants.splice(index, 1);
+                            return taskParticipant;
+                        });
+                    }
+                }
+            };
+
             Task.prototype.findParticipantIndex = function (taskParticipant) {
                 return _.findIndex(this.taskParticipants, function (participant) {
                     return participant.participantId === taskParticipant.participantId;
                 });
             };
 
-            Task.prototype.deleteParticipant = function (participant) {
-                var self = this;
-                var index = self.findParticipantIndex(participant);
-                if (!this.hasId()) {
-                    return $timeout(function () {
-                        self.taskParticipants.splice(index, 1);
-                        return participant;
-                    });
-                } else {
-                    return taskService
-                        .deleteTaskParticipant(self, participant)
-                        .then(function () {
-                            self.taskParticipants.splice(index, 1);
-                            return participant;
-                        });
-                }
-            };
 
             var indicator = new Indicator();
             Task.prototype.getSecurityLevelIndicator = function (securityLevel) {

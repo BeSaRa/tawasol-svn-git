@@ -235,7 +235,7 @@ module.exports = function (app) {
 
         self.removeTaskParticipant = function (participant) {
             self.task
-                .deleteTaskParticipant(participant)
+                .deleteParticipant(participant)
                 .then(function () {
 
                 })

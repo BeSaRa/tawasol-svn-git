@@ -142,7 +142,7 @@ module.exports = function (app) {
 
         self.saveTaskParticipant = function (task, taskParticipant) {
             return $http
-                .put(urlService.tasks + '//update-task-participant/task-id/' + task.id, generator.interceptSendInstance('TaskParticipant', taskParticipant))
+                .put(urlService.tasks + '/update-task-participant/task-id/' + task.id, generator.interceptSendInstance('TaskParticipant', taskParticipant))
                 .then(function (result) {
                     return taskParticipant;
                 });
