@@ -119,7 +119,8 @@ module.exports = function (app) {
                 logout: 'تسجيل خروج',
                 user_guide: 'دليل المستخدم',
                 enter_otp: 'أدخل OTP',
-                view: 'عرض'
+                view: 'عرض',
+                failed_to_download:'فشل في التحميل'
             },
             en: {
                 root_entity_not_found: 'No Entity has been provided, to contact through. <br /> Or that the entity does not exist for the connection',
@@ -206,7 +207,8 @@ module.exports = function (app) {
                 logout: 'logout',
                 user_guide: 'User Guide',
                 enter_otp: 'Enter OTP',
-                view: 'View'
+                view: 'View',
+                failed_to_download: 'Failed to download'
             }
         };
 

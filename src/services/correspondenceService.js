@@ -3784,7 +3784,7 @@ module.exports = function (app) {
         };
 
         self.sendDocumentLink = function (documentLink, correspondence) {
-            (documentLink.hasOwnProperty('id') && documentLink.id) ? self.updateDocumentLink(documentLink, correspondence) : self.addDocumentLink(documentLink, correspondence);
+            return (documentLink.hasOwnProperty('id') && documentLink.id) ? self.updateDocumentLink(documentLink, correspondence) : self.addDocumentLink(documentLink, correspondence);
         };
 
         /**
@@ -4009,6 +4009,24 @@ module.exports = function (app) {
                 });
         };
 
+        self.viewOTPDocument = function (otp) {
+            if ($stateParams.subscriberId && $stateParams.entity) {
+                return $http.get(urlService.documentLink + "/view-link/" + $stateParams.subscriberId + "/entity/" + $stateParams.entity, {
+                    params: {
+                        entity: otp
+                    }
+                }).then(function (result) {
+                    if (!result.data.rs)
+                        toast.error(langService.get('failed_to_download'));
+                    else
+                        downloadService.downloadRemoteFile(result.data.rs);
+                }).catch(function () {
+                    toast.error(langService.get('failed_to_download'))
+                })
+            } else
+                toast.error(langService.get('failed_to_download'))
+        };
+
         /**
          * @description Opens the otp dialog to view document by external user
          * @param $event
@@ -4020,7 +4038,7 @@ module.exports = function (app) {
                     templateUrl: cmsTemplate.getPopup('otp'),
                     controllerAs: 'ctrl',
                     bindToController: true,
-                    controller: function (dialog, toast) {
+                    controller: function (dialog, toast, correspondenceService) {
                         'ngInject';
                         var self = this;
                         self.otp = null;
@@ -4031,7 +4049,7 @@ module.exports = function (app) {
                                 return;
                             }
                             // request the service, open/download the document, handle exceptions
-
+                            correspondenceService.viewOTPDocument(self.otp);
                         };
 
                         self.closeOtpPopup = function () {
