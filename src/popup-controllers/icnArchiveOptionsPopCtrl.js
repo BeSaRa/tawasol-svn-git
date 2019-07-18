@@ -10,7 +10,8 @@ module.exports = function (app) {
                                                          rootEntity,
                                                          dialog,
                                                          correspondenceService,
-                                                         icnEntryTemplates) {
+                                                         icnEntryTemplates,
+                                                         langService) {
         'ngInject';
         var self = this;
 
@@ -18,6 +19,9 @@ module.exports = function (app) {
 
         self.correspondence = correspondence;
         self.model = new ReadyToExportOption();
+        delete self.model.RELATED_OBJECTS;
+        delete self.model.ATTACHMENT_LINKED_DOCS;
+
         self.entryTemplates = icnEntryTemplates;
         self.settings = rootEntity.getGlobalSettings();
         self.selectedEntryTemplate = null;
@@ -33,7 +37,7 @@ module.exports = function (app) {
         var canExportOptions = {
             'ATTACHMENTS': 'Attachment',
             'RELATED_BOOKS': 'LinkedDoc',
-            'RELATED_OBJECTS': 'LinkedObj'
+            //'RELATED_OBJECTS': 'LinkedObj'
         };
 
         self.canExportAnyRelatedData = function () {
@@ -54,7 +58,14 @@ module.exports = function (app) {
          * @description export workItem
          */
         self.archiveCorrespondence = function ($event) {
-            correspondenceService.openICNArchiveDialog(correspondence, self.validateExportOption(self.model), self.selectedEntryTemplate, $event);
+            correspondenceService
+                .openICNArchiveDialog(correspondence, self.validateExportOption(self.model), self.selectedEntryTemplate, $event)
+                .then(function (result) {
+                    if (result === 'icnArchiveSuccess') {
+                        toast.success(langService.get("archive_specific_success").change({name: correspondence.getTranslatedName()}));
+                        dialog.hide(true);
+                    }
+                });
         };
 
         // validate before send to export

@@ -3880,51 +3880,50 @@ module.exports = function (app) {
          * @returns {promise}
          */
         self.openICNArchiveDialog = function (correspondence, options, entryTemplate, $event) {
-            delete options.ATTACHMENT_LINKED_DOCS;
             var info = correspondence.getInfo(),
-                url = urlService.correspondence + '/' + info.documentClass + '/' + info.vsId + '/archive-icn';
-            /*$http.put(url, options)
+                archiveIcnUrl = urlService.correspondence + '/' + info.documentClass + '/' + info.vsId + '/archive-icn',
+                entryTemplateUrl = entryTemplate.hasOwnProperty('menuItem') ? entryTemplate.menuItem : entryTemplate;
+
+            entryTemplateUrl = entryTemplateUrl && entryTemplateUrl.hasOwnProperty('url') ? entryTemplateUrl.url : entryTemplateUrl;
+
+            return $http.put(archiveIcnUrl, options)
                 .then(function (result) {
-                    var menuUrl = entryTemplate.hasOwnProperty('menuItem') ? entryTemplate.menuItem : entryTemplate;
-                    menuUrl = menuUrl && menuUrl.hasOwnProperty('url') ? menuUrl.url : menuUrl;
-                    /!*menuUrl = menuUrl.change({
+                    entryTemplateUrl = entryTemplateUrl.change({
                         vsId: result.data.rs.vsId,
                         docId: result.data.rs.id,
                         refVsId: result.data.rs.refVSID
-                    });*!/
-                    menuUrl = menuUrl.change({
-                        vsId: '{C73D894C-69CA-C364-8EE3-6BF04D300000}',
-                        docId: '{3943901C-7CDE-C745-85E6-6BF0C5400000}',
-                        refVsId: '{3BD4C023-1275-CB20-8716-6ACFA4D00000}'
-                    });*/
-
-                    var menuUrl = entryTemplate.hasOwnProperty('menuItem') ? entryTemplate.menuItem : entryTemplate;
-                    menuUrl = menuUrl && menuUrl.hasOwnProperty('url') ? menuUrl.url : menuUrl;
-
-                    menuUrl = menuUrl.change({
-                        vsId: '{C73D894C-69CA-C364-8EE3-6BF04D300000}',
-                        docId: '{3943901C-7CDE-C745-85E6-6BF0C5400000}',
-                        refVsId: '{3BD4C023-1275-CB20-8716-6ACFA4D00000}'
                     });
-                    return dialog
-                        .showDialog({
-                            controller: 'icnArchivePopCtrl',
-                            templateUrl: cmsTemplate.getPopup('icn-archive'),
-                            controllerAs: 'ctrl',
-                            bindToController: true,
-                            targetEvent: $event,
-                            locals: {
-                                correspondence: correspondence,
-                                menuUrl: menuUrl
-                            },
-                            resolve: {
-                                credentials: function (authenticationService) {
-                                    'ngInject';
-                                    return authenticationService.getUserData();
-                                }
-                            }
-                        });
-                // });
+                    return _showICNArchiveDialog(correspondence, entryTemplateUrl, $event)
+                });
+
+           /* // static vsId, docId, refVsId (just for testing)
+            entryTemplateUrl = entryTemplateUrl.change({
+                vsId: '{C73D894C-69CA-C364-8EE3-6BF04D300000}',
+                docId: '{3943901C-7CDE-C745-85E6-6BF0C5400000}',
+                refVsId: '{3BD4C023-1275-CB20-8716-6ACFA4D00000}'
+            });
+            return _showICNArchiveDialog(correspondence, entryTemplateUrl, $event);*/
+        };
+
+        var _showICNArchiveDialog = function (correspondence, entryTemplateUrl, $event) {
+            return dialog
+                .showDialog({
+                    controller: 'icnArchivePopCtrl',
+                    templateUrl: cmsTemplate.getPopup('icn-archive'),
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    targetEvent: $event,
+                    locals: {
+                        correspondence: correspondence,
+                        entryTemplateUrl: entryTemplateUrl
+                    },
+                    resolve: {
+                        credentials: function (authenticationService) {
+                            'ngInject';
+                            return authenticationService.getUserData();
+                        }
+                    }
+                });
         };
 
         /**

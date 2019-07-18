@@ -627,15 +627,15 @@ module.exports = function (app) {
              * @returns {promise}
              */
             self.openICNAttachmentDialog = function (correspondence, attachment, $event) {
-                var searchTemplate = attachment.searchTemplate.menuItem,
-                    menuUrl = searchTemplate.hasOwnProperty('menuItem') ? searchTemplate.menuItem : searchTemplate,
-                    securityLevel = attachment.securityLevel && attachment.securityLevel.hasOwnProperty('lookupKey') ? attachment.securityLevel.lookupKey : attachment.securityLevel,
-                    attachmentType = attachment.attachmentType && attachment.attachmentType.hasOwnProperty('lookupKey') ? attachment.attachmentType.lookupKey : attachment.attachmentType;
+                var securityLevel = attachment.securityLevel && attachment.securityLevel.hasOwnProperty('lookupKey') ? attachment.securityLevel.lookupKey : attachment.securityLevel,
+                    attachmentType = attachment.attachmentType && attachment.attachmentType.hasOwnProperty('lookupKey') ? attachment.attachmentType.lookupKey : attachment.attachmentType,
+                    searchTemplate = attachment.searchTemplate.menuItem,
+                    searchTemplateUrl = searchTemplate.hasOwnProperty('menuItem') ? searchTemplate.menuItem : searchTemplate;
 
                 securityLevel = securityLevel.hasOwnProperty('id') ? securityLevel.id : securityLevel;
-                menuUrl = menuUrl && menuUrl.hasOwnProperty('url') ? menuUrl.url : menuUrl;
+                searchTemplateUrl = searchTemplateUrl && searchTemplateUrl.hasOwnProperty('url') ? searchTemplateUrl.url : searchTemplateUrl;
 
-                menuUrl = menuUrl.change({
+                searchTemplateUrl = searchTemplateUrl.change({
                     token: tokenService.getToken(),
                     vsId: correspondence.getInfo().vsId,
                     attachmentType: attachmentType,
@@ -651,7 +651,7 @@ module.exports = function (app) {
                         targetEvent: $event,
                         locals: {
                             correspondence: correspondence,
-                            menuUrl: menuUrl
+                            searchTemplateUrl: searchTemplateUrl
                         },
                         resolve: {
                             credentials: function (authenticationService) {

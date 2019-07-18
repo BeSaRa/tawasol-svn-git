@@ -14,7 +14,7 @@ module.exports = function (app) {
 
         var aLink = null;
         self.createLoginIframe = function () {
-            aLink = angular.element('<a />').attr('href', self.menuUrl);
+            aLink = angular.element('<a />').attr('href', self.entryTemplateUrl);
             var loginLink = aLink[0].protocol + '//' + aLink[0].host + '/navigator/jaxrs/logon?userid={{username}}&password={{password}}';
             //self.loginURL = $sce.trustAsResourceUrl(loginLink.replace('{{username}}', encodeURIComponent(self.credentials.username)).replace('{{password}}', encodeURIComponent(self.credentials.password)));
             self.loginURL = $sce.trustAsResourceUrl(loginLink.replace('{{username}}', encodeURIComponent('nr2')).replace('{{password}}', encodeURIComponent('ebla')));
@@ -26,7 +26,7 @@ module.exports = function (app) {
 
         $timeout(function () {
             self.removeLoginIframe();
-            self.url = $sce.trustAsResourceUrl(self.menuUrl);
+            self.url = $sce.trustAsResourceUrl(self.entryTemplateUrl);
         }, 2000);
 
         /**
@@ -39,21 +39,26 @@ module.exports = function (app) {
         self.closeICNArchiveDialog = function () {
             dialog.cancel();
         };
-/*
-        /!**
+
+        /**
          * @description Handles the response from icn
          * @param $event
-         *!/
+         */
         self.handleResponseFromICN = function ($event) {
-            if($event && $event.data && generator.isJsonString($event.data)) {
+            if ($event && $event.data && generator.isJsonString($event.data)) {
                 var response = JSON.parse($event.data);
-                if (response.hasOwnProperty('status') && response.status === 'success' && response.hasOwnProperty('frame') && response.frame === 'archive') {
-                    dialog.hide('icnAttachmentSuccess');
+                if (response.hasOwnProperty('frame') && response.frame === 'archive' && response.hasOwnProperty('status')) {
+                    if (response.status === 'success') {
+                        $window.removeEventListener('message', self.handleResponseFromICN);
+                        dialog.hide('icnArchiveSuccess');
+                    } else if (response.status === 'cancel'){
+                        dialog.cancel('icnArchiveCancel');
+                    }
                 }
             }
         };
 
-        $window.addEventListener("message", self.handleResponseFromICN);*/
+        $window.addEventListener("message", self.handleResponseFromICN);
 
     });
 };
