@@ -349,6 +349,8 @@
                 .addToAllWithBase('ouViewPermission', 'cms-entity/admin/user-view-ou-permission')
                 // linked entities: hr employee integration
                 .addToAllWithBase('hrEmployeeIntegration', 'cms-entity/admin/employee/criteria')
+                // document link
+                .addToAllWithBase('documentLink', 'cms-entity/user/document-link')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

@@ -783,6 +783,10 @@ module.exports = function (app) {
                 return correspondenceService.openSendSMSDialog(this, $event);
             };
 
+            WorkItem.prototype.openSendDocumentURLDialog = function ($event) {
+                return correspondenceService.openSendDocumentURLDialog(this, $event);
+            };
+
             WorkItem.prototype.openSendFaxDialog = function ($event) {
                 return correspondenceService.openSendFaxDialog(this, $event);
             };

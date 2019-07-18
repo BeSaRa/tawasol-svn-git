@@ -121,6 +121,7 @@ module.exports = function (app) {
     require('./followupUserOrganizationPopCtrl')(app);
     require('./employeeHRIntegrationPopCtrl')(app);
     require('./sendFaxPopCtrl')(app);
+    require('./sendDocumentLinkPopCtrl')(app);
     require('./icnAttachmentOptionsPopCtrl')(app);
     require('./icnAttachmentPopCtrl')(app);
     require('./icnArchiveOptionsPopCtrl')(app);

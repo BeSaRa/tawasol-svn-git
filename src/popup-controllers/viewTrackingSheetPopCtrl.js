@@ -19,6 +19,7 @@ module.exports = function (app) {
                                                          smsLogRecords,
                                                          outgoingDeliveryReportRecords,
                                                          fullHistoryRecords,
+                                                         documentLinkViewerRecords,
                                                          viewTrackingSheetService) {
         'ngInject';
         var self = this;
@@ -59,6 +60,7 @@ module.exports = function (app) {
         self.smsLogRecords = smsLogRecords;
         self.outgoingDeliveryReportRecords = outgoingDeliveryReportRecords;
         self.fullHistoryRecords = fullHistoryRecords;
+        self.documentLinkViewerRecords = documentLinkViewerRecords;
 
         /**
          * @description Gets the grid records by sorting
@@ -263,6 +265,27 @@ module.exports = function (app) {
             ]
         };
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataDocumentLinkViewerHistory = function () {
+            self.documentLinkViewerRecords = $filter('orderBy')(self.documentLinkViewerRecords, self.documentLinkViewerGrid.order);
+        };
+
+        self.documentLinkViewerGrid = {
+            limit: 5, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.documentLinkViewerRecords.length + 21);
+                    }
+                }
+            ]
+        };
+
         self.sortMergedLinkedDocs = function () {
             self.mergedLinkedDocumentHistoryRecords = $filter('orderBy')(self.mergedLinkedDocumentHistoryRecords, self.mergedLinkedDocHistoryGrid.order);
 
@@ -310,6 +333,7 @@ module.exports = function (app) {
             //'view_tracking_sheet_sms_logs',
             'view_tracking_sheet_outgoing_delivery_reports',
             'view_tracking_sheet_full_history',
+            'view_tracking_sheet_document_link_viewer_history'
             //'view_tracking_sheet_doc_update_history',
             //'view_tracking_sheet_doc_status_history'
         ];
@@ -353,7 +377,8 @@ module.exports = function (app) {
             'view_tracking_sheet_content_view_history': self.contentViewHistoryRecords.length,
             'view_tracking_sheet_sms_logs' : self.smsLogRecords.length,
             'view_tracking_sheet_outgoing_delivery_reports': self.outgoingDeliveryReportRecords.length,
-            'view_tracking_sheet_full_history': self.fullHistoryRecords.length
+            'view_tracking_sheet_full_history': self.fullHistoryRecords.length,
+            'view_tracking_sheet_document_link_viewer_history': self.documentLinkViewerRecords.length
         };
 
         self.checkDisabled = function ($event) {

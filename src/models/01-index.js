@@ -170,4 +170,7 @@ module.exports = function (app) {
     require('./FollowupOrganization')(app);
     require('./OUViewPermission')(app);
     require('./HREmployee')(app);
+    require('./DocumentLink')(app);
+    require('./DocumentLinkSubscriber')(app);
+    require('./DocumentLinkViewer')(app);
 };

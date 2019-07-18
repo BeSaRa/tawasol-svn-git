@@ -563,6 +563,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Send Document Link
+         * @param searchedIncomingDocument
+         * @param $event
+         */
+        self.sendDocumentLink = function (searchedIncomingDocument, $event) {
+            searchedIncomingDocument.openSendDocumentURLDialog($event);
+        };
+
+        /**
          * @description get link for searched incoming document
          * @param searchedIncomingDocument
          * @param $event
@@ -1090,7 +1099,8 @@ module.exports = function (app) {
                     "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
                     "SEND_DOCUMENT_BY_FAX",
-                    "SEND_SMS"
+                    "SEND_SMS",
+                    "" // document link
                 ],
                 checkAnyPermission: true,
                 subMenu: [
@@ -1141,6 +1151,18 @@ module.exports = function (app) {
                         shortcut: false,
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // send document link
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'send_document_link',
+                        permissionKey: "",
+                        callback: self.sendDocumentLink,
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;

@@ -599,6 +599,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Send Document Link
+         * @param correspondence
+         * @param $event
+         */
+        self.sendDocumentLink = function (correspondence, $event) {
+            correspondence.openSendDocumentURLDialog($event);
+        };
+
+        /**
          * @description get link for searched document
          * @param correspondence
          * @param $event
@@ -1128,7 +1137,8 @@ module.exports = function (app) {
                     "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
                     "SEND_DOCUMENT_BY_FAX",
-                    "SEND_SMS"
+                    "SEND_SMS",
+                    "" // document link
                 ],
                 checkAnyPermission: true,
                 subMenu: [
@@ -1168,7 +1178,7 @@ module.exports = function (app) {
                         callback: self.sendMainDocumentFax,
                         class: "action-green",
                         checkShow: function (action, model) {
-                           return true;
+                            return true;
                         }
                     },
                     // SMS
@@ -1179,6 +1189,18 @@ module.exports = function (app) {
                         shortcut: false,
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // send document link
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'send_document_link',
+                        permissionKey: "",
+                        callback: self.sendDocumentLink,
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;

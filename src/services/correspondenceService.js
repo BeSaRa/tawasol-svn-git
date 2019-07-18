@@ -64,6 +64,7 @@ module.exports = function (app) {
                                                    DocumentComment,
                                                    userFolderService,
                                                    $stateParams,
+                                                   DocumentLink,
                                                    SmsLog) {
         'ngInject';
         var self = this, managerService, correspondenceStorageService;
@@ -3740,6 +3741,88 @@ module.exports = function (app) {
             })
         };
 
+
+        /**
+         * @description open send document url dialog
+         * @param correspondence
+         * @param $event
+         * @returns {promise}
+         */
+        self.openSendDocumentURLDialog = function (correspondence, $event) {
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('send-document-link'),
+                controllerAs: 'ctrl',
+                eventTarget: $event || null,
+                bindToController: true,
+                controller: 'sendDocumentLinkPopCtrl',
+                locals: {
+                    correspondence: correspondence
+                },
+                resolve: {
+                    documentLink: function () {
+                        'ngInject';
+                        return self.getDocumentLinkWithSubscribers(correspondence)
+                            .then(function (result) {
+                                return result;
+                            });
+                    }
+                }
+            })
+        };
+
+        self.getDocumentLinkWithSubscribers = function (correspondence) {
+            var info = correspondence.getInfo();
+            var employee = employeeService.getEmployee();
+
+            var route = "/user-id/" + employee.id + "/ouid/" + employee.getOUID() + "/vsid/" + info.vsId;
+            return $http.get(urlService.documentLink + route)
+                .then(function (result) {
+                    result.data.rs = generator.generateInstance(result.data.rs, DocumentLink, self._sharedMethods);
+                    result.data.rs = generator.interceptReceivedInstance('DocumentLink', result.data.rs);
+                    return result.data.rs;
+                })
+        };
+
+        self.sendDocumentLink = function (documentLink, correspondence) {
+            (documentLink.hasOwnProperty('id') && documentLink.id) ? self.updateDocumentLink(documentLink, correspondence) : self.addDocumentLink(documentLink, correspondence);
+        };
+
+        /**
+         * @description add document link
+         * @param documentLink
+         * @param correspondence
+         * @returns {*}
+         */
+        self.addDocumentLink = function (documentLink, correspondence) {
+            var info = correspondence.getInfo();
+            documentLink.docSubject = info.title;
+            documentLink.vsid = info.vsId;
+            documentLink.docClassId = info.docType;
+
+            return $http.post(urlService.documentLink,
+                generator.interceptSendInstance('DocumentLink', documentLink))
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        };
+
+        /**
+         * @description update document link
+         * @param documentLink
+         * @param correspondence
+         * @returns {*}
+         */
+        self.updateDocumentLink = function (documentLink, correspondence) {
+            var info = correspondence.getInfo();
+            documentLink.docSubject = info.title;
+
+            return $http.put(urlService.documentLink,
+                generator.interceptSendInstance('DocumentLink', documentLink))
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        };
+
         /**
          * @description Gets the parsed sms template to display as sms message
          * @param correspondence
@@ -3947,7 +4030,8 @@ module.exports = function (app) {
                                 toast.error(langService.get('enter_otp'));
                                 return;
                             }
-                            dialog.hide(self.otp);
+                            // request the service, open/download the document, handle exceptions
+
                         };
 
                         self.closeOtpPopup = function () {

@@ -19,6 +19,7 @@ module.exports = function (app) {
                                                       OutgoingDeliveryReport,
                                                       MergedLinkedDocumentHistory,
                                                       downloadService,
+                                                      employeeService,
                                                       gridService) {
             'ngInject';
             var self = this;
@@ -188,6 +189,19 @@ module.exports = function (app) {
                         checkShow: function (action, model) {
                             return true;
                         }
+                    },
+                    // Document Link Viewers History
+                    {
+                        type: 'action',
+                        icon: '',
+                        text: 'view_tracking_sheet_document_link_viewer_history',
+                        shortcut: false,
+                        callback: self.viewTrackingSheet,
+                        params: ['view_tracking_sheet_document_link_viewer_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
                     }
                 ];
             };
@@ -322,6 +336,14 @@ module.exports = function (app) {
                                             return result;
                                         }).catch(function (error) {
                                             return [];
+                                        }) : [];
+                            },
+                            documentLinkViewerRecords: function () {
+                                'ngInject';
+                                return (heading === 'view_tracking_sheet_document_link_viewer_history' || gridType === 'tabs')
+                                    ? self.loadDocumentLinkViewer(document)
+                                        .then(function (result) {
+                                            return result;
                                         }) : [];
                             }
                             /*docUpdateHistoryRecords: function () {
@@ -582,6 +604,30 @@ module.exports = function (app) {
                         return [];
                     });
             };
+
+            /**
+             * @description load document update history by vsId
+             * @param document
+             */
+            self.loadDocumentLinkViewer = function (document) {
+                var vsId = getVsId(document);
+                var employee = employeeService.getEmployee();
+                var route = "/viewer-list/user-id/" + employee.id + "/ouid/" + employee.getOUID() + "/vsid/" + vsId;
+
+                return $http.get(urlService.documentLink + route)
+                    .then(function (result) {
+                        var documentLinkViewers = _.map(result.data.rs, function (documentLinkViewer) {
+                            documentLinkViewer.viewTime = generator.getDateFromTimeStamp(documentLinkViewer.viewTime, true);
+                            return documentLinkViewer;
+                        });
+
+                        return documentLinkViewers;
+                    })
+                    .catch(function (error) {
+                        return [];
+                    });
+            };
+
 
             /* self.loadDocumentUpdateHistory = function(document){
              var vsId = getVsId(document);
