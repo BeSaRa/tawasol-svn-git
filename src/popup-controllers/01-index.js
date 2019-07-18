@@ -126,4 +126,5 @@ module.exports = function (app) {
     require('./icnAttachmentPopCtrl')(app);
     require('./icnArchiveOptionsPopCtrl')(app);
     require('./icnArchivePopCtrl')(app);
+    require('./otpPopCtrl')(app);
 };

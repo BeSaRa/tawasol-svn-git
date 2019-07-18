@@ -39,8 +39,14 @@ module.exports = function (app) {
             // view document from external link with otp
             .state('view-external-doc', {
                 url: '/view-external-doc?subscriberId?entity',
-                //templateUrl: templateProvider.getView('view-external-doc'),
-                controller: 'viewExternalDocCtrl',
+                controller: function (downloadService) {
+                    'ngInject';
+                    var self = this;
+                    var _openOtpPopup = function () {
+                        downloadService.controllerMethod.externalDocOtpDialog();
+                    };
+                    _openOtpPopup();
+                },
                 controllerAs: 'ctrl'
             })
             .state('password', {

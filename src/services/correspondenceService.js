@@ -3979,13 +3979,13 @@ module.exports = function (app) {
                     return _showICNArchiveDialog(correspondence, entryTemplateUrl, $event)
                 });
 
-           /* // static vsId, docId, refVsId (just for testing)
-            entryTemplateUrl = entryTemplateUrl.change({
-                vsId: '{C73D894C-69CA-C364-8EE3-6BF04D300000}',
-                docId: '{3943901C-7CDE-C745-85E6-6BF0C5400000}',
-                refVsId: '{3BD4C023-1275-CB20-8716-6ACFA4D00000}'
-            });
-            return _showICNArchiveDialog(correspondence, entryTemplateUrl, $event);*/
+            /* // static vsId, docId, refVsId (just for testing)
+             entryTemplateUrl = entryTemplateUrl.change({
+                 vsId: '{C73D894C-69CA-C364-8EE3-6BF04D300000}',
+                 docId: '{3943901C-7CDE-C745-85E6-6BF0C5400000}',
+                 refVsId: '{3BD4C023-1275-CB20-8716-6ACFA4D00000}'
+             });
+             return _showICNArchiveDialog(correspondence, entryTemplateUrl, $event);*/
         };
 
         var _showICNArchiveDialog = function (correspondence, entryTemplateUrl, $event) {
@@ -4006,67 +4006,6 @@ module.exports = function (app) {
                             return authenticationService.getUserData();
                         }
                     }
-                });
-        };
-
-        self.viewOTPDocument = function (otp) {
-            if ($stateParams.subscriberId && $stateParams.entity) {
-                return $http.get(urlService.documentLink + "/view-link/" + $stateParams.subscriberId + "/entity/" + $stateParams.entity, {
-                    params: {
-                        entity: otp
-                    }
-                }).then(function (result) {
-                    if (!result.data.rs)
-                        toast.error(langService.get('failed_to_download'));
-                    else
-                        downloadService.downloadRemoteFile(result.data.rs);
-                }).catch(function () {
-                    toast.error(langService.get('failed_to_download'))
-                })
-            } else
-                toast.error(langService.get('failed_to_download'))
-        };
-
-        /**
-         * @description Opens the otp dialog to view document by external user
-         * @param $event
-         * @returns {promise}
-         */
-        self.openOtpDialog = function ($event) {
-            return dialog
-                .showDialog({
-                    templateUrl: cmsTemplate.getPopup('otp'),
-                    controllerAs: 'ctrl',
-                    bindToController: true,
-                    controller: function (dialog, toast, correspondenceService) {
-                        'ngInject';
-                        var self = this;
-                        self.otp = null;
-
-                        self.viewDocument = function (form, $event) {
-                            if (!self.otp || form.$invalid) {
-                                toast.error(langService.get('enter_otp'));
-                                return;
-                            }
-                            // request the service, open/download the document, handle exceptions
-                            correspondenceService.viewOTPDocument(self.otp);
-                        };
-
-                        self.closeOtpPopup = function () {
-                            dialog.cancel('close');
-                        }
-                    },
-                    targetEvent: $event,
-                    locals: {}
-                })
-                .then(function (result) {
-                    // request the service, open/download the document, handle exceptions
-                    return result;
-                }).catch(function (error) {
-                    if (error === 'close') {
-
-                    }
-                    return $q.reject(error);
                 });
         };
 

@@ -10,7 +10,9 @@ module.exports = function (app) {
                                              dialog,
                                              cmsTemplate,
                                              rootEntity,
-                                             generator) {
+                                             generator,
+                                             $stateParams,
+                                             errorCode) {
         'ngInject';
         var self = this;
         self.serviceName = 'downloadService';
@@ -79,12 +81,32 @@ module.exports = function (app) {
                 //var domain = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/";
                 window.open(path);
             },
+            /**
+             * @description Download Document Template
+             * @param vsId
+             * @param $event
+             */
             documentTemplateDownload: function (vsId, $event) {
                 vsId = vsId && vsId.hasOwnProperty('vsId') ? vsId.vsId : vsId;
                 return self.downloadDocumentTemplate(vsId)
                     .then(function (result) {
                         window.open(result);
                         return true;
+                    });
+            },
+            /**
+             * @description Opens the popup to enter OTP by external user
+             * @param $event
+             * @returns {*}
+             */
+            externalDocOtpDialog: function ($event) {
+                return dialog
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('otp'),
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        controller: 'otpPopCtrl',
+                        targetEvent: $event || null
                     });
             }
         };
@@ -290,6 +312,34 @@ module.exports = function (app) {
 
         self.downloadRemoteFile = function (url, name) {
             return _download(url, name);
-        }
+        };
+
+        /**
+         * @description Gets the document url for external user and download/view the file
+         * @param otp
+         * @returns {*}
+         */
+        self.viewOTPDocument = function (otp) {
+            if (!$stateParams.subscriberId || !$stateParams.entity || !otp) {
+                toast.error(langService.get('failed_to_download'));
+                return false;
+            }
+            return $http.get(urlService.documentLink + "/view-link/" + $stateParams.subscriberId + "/entity/" + $stateParams.entity, {
+                params: {
+                    entity: otp
+                    // otp: otp
+                }
+            }).then(function (result) {
+                var fileName = result.data.rs.substring(result.data.rs.lastIndexOf('/') + 1);
+                self.downloadRemoteFile(result.data.rs, fileName);
+                return result.data.rs;
+            }).catch(function (error) {
+                errorCode.checkIf(error, "INVALID_LINK", function () {
+                    toast.error(langService.get('failed_to_download'));
+                });
+                return $q.reject('INVALID_LINK');
+            })
+        };
+
     });
 };

@@ -57,8 +57,9 @@ module.exports = function (app) {
                 SEC_LDAP_INVALID_OP: 13011,
                 SEC_ERROR_USER_UN_AUHTORIZED_FOR_SERVICE: 13012,
                 INVALID_DOC_STATUS_TO_EXPORT: 3036,
-                ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER:2059
+                ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER:2059,
                 // entity connection errors end
+                INVALID_LINK: 3041
             },
             errorLangKeys = {
                 3023: 'can_not_edit_after_export_because_received_by_one_site',

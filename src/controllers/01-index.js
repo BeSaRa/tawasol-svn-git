@@ -76,5 +76,4 @@ module.exports = function (app) {
     require('./searchViewersLogCtrl')(app);
     require('./taskCtrl')(app);
     require('./administratorsCtrl')(app);
-    require('./viewExternalDocCtrl')(app);
 };

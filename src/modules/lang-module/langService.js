@@ -120,6 +120,8 @@ module.exports = function (app) {
                 user_guide: 'دليل المستخدم',
                 enter_otp: 'أدخل OTP',
                 view: 'عرض',
+                min_length: 'يجب الا يتجاوز :length حروف',
+                max_length: 'يجب ان لا تتجاوز :length',
                 failed_to_download:'فشل في التحميل'
             },
             en: {
@@ -208,6 +210,8 @@ module.exports = function (app) {
                 user_guide: 'User Guide',
                 enter_otp: 'Enter OTP',
                 view: 'View',
+                min_length: 'Should be minimum :length characters',
+                max_length: 'Should be maximum :length characters',
                 failed_to_download: 'Failed to download'
             }
         };
