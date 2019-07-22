@@ -322,7 +322,7 @@ module.exports = function (app) {
         self.viewOTPDocument = function (otp) {
             if (!$stateParams.subscriberId || !$stateParams.entity || !otp) {
                 toast.error(langService.get('failed_to_download'));
-                return false;
+                return $q.reject('INVALID_LINK_OTP');
             }
             return $http.get(urlService.documentLink + "/view-link/" + $stateParams.subscriberId + "/entity/" + $stateParams.entity, {
                 params: {
@@ -331,7 +331,7 @@ module.exports = function (app) {
             }).then(function (result) {
                 var fileName = result.data.rs.substring(result.data.rs.lastIndexOf('/') + 1);
                 self.downloadRemoteFile(result.data.rs, fileName);
-                return result.data.rs;
+                return true;
             }).catch(function (error) {
                 errorCode.checkIf(error, "INVALID_LINK", function () {
                     toast.error(langService.get('failed_to_download'));
@@ -339,6 +339,5 @@ module.exports = function (app) {
                 return $q.reject('INVALID_LINK');
             })
         };
-
     });
 };

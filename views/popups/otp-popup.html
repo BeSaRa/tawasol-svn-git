@@ -3,7 +3,8 @@
            ng-attr-aria-label="{{lang.enter_otp}}">
     <div layout="column">
         <popup-toolbar-directive
-                header-text="{{lang.enter_otp}}" hide-close="true" close-callback="ctrl.closeOtpPopup"></popup-toolbar-directive>
+                header-text="{{lang.enter_otp}}" hide-close="true"
+                close-callback="ctrl.closeOtpPopup"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="otpForm" novalidate enter-submit-directive="btn-view-doc">
                 <div class="p20" layout="row">
@@ -19,7 +20,7 @@
                         </div>
                     </md-input-container>
                     <div>
-                        <md-button class="md-raised" ng-disabled="otpForm.$invalid"
+                        <md-button class="md-raised" ng-disabled="otpForm.$invalid || ctrl.inProgress"
                                    id="btn-view-doc"
                                    ng-click="ctrl.viewDocument(otpForm, $event)">
                             {{lang.view}}
@@ -28,7 +29,8 @@
                     <div>
                         <md-menu-bar class="p0">
                             <md-menu>
-                                <md-button aria-label="{{lang.select_lang}}" class="md-icon-button" ng-click="$mdMenu.open()">
+                                <md-button aria-label="{{lang.select_lang}}" class="md-icon-button"
+                                           ng-click="$mdMenu.open()" ng-disabled="ctrl.inProgress">
                                     <md-icon md-svg-icon="dots-vertical"></md-icon>
                                 </md-button>
                                 <md-menu-content id="login-select-language-content" width="3">
