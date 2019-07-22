@@ -39,9 +39,12 @@ module.exports = function (app) {
             // view document from external link with otp
             .state('view-external-doc', {
                 url: '/view-external-doc?subscriberId?entity',
-                controller: function (downloadService) {
+                template: '<div id="loading-overlay" ng-if="ctrl.loadingService.loading"></div>\n' +
+                    '            <md-progress-circular md-mode="indeterminate" ng-if="ctrl.loadingService.loading"></md-progress-circular>',
+                controller: function (downloadService, loadingIndicatorService) {
                     'ngInject';
                     var self = this;
+                    self.loadingService = loadingIndicatorService;
                     var _openOtpPopup = function () {
                         downloadService.controllerMethod.externalDocOtpDialog();
                     };

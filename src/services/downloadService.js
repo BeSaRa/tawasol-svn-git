@@ -326,8 +326,7 @@ module.exports = function (app) {
             }
             return $http.get(urlService.documentLink + "/view-link/" + $stateParams.subscriberId + "/entity/" + $stateParams.entity, {
                 params: {
-                    entity: otp
-                    // otp: otp
+                    otp: otp
                 }
             }).then(function (result) {
                 var fileName = result.data.rs.substring(result.data.rs.lastIndexOf('/') + 1);
