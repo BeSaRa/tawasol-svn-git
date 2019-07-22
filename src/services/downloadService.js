@@ -324,11 +324,11 @@ module.exports = function (app) {
                 toast.error(langService.get('failed_to_download'));
                 return $q.reject('INVALID_LINK_OTP');
             }
-            return $http.get(urlService.documentLink + "/view-link/" + $stateParams.subscriberId + "/entity/" + $stateParams.entity, {
-                params: {
-                    otp: otp
-                }
-            }).then(function (result) {
+            var url = urlService.documentLink + "/view-link/" + $stateParams.subscriberId + "/entity/" + $stateParams.entity + '?otp=' + otp;
+
+            tokenService.excludeUrlInRuntime(url)
+
+            return $http.get(url).then(function (result) {
                 var fileName = result.data.rs.substring(result.data.rs.lastIndexOf('/') + 1);
                 self.downloadRemoteFile(result.data.rs, fileName);
                 return true;

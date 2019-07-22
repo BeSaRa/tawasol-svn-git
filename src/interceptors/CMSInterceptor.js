@@ -46,6 +46,11 @@ module.exports = function (app) {
                 if (!result.config.hasOwnProperty('excludeLoading')) {
                     delete countRequests[result.config.uniqID];
                 }
+
+                if (tokenService.getExcludedRunTimeUrls().indexOf(result.config.url) > -1) {
+                    tokenService.removeRunTimeUrl(result.config.url);
+                }
+
                 !checkCount() ? loadingIndicatorService.endLoading() : null;
                 return result;
             },

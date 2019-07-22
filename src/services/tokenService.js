@@ -9,6 +9,7 @@ module.exports = function (app) {
             defaultExpiryValue = 60,
             refresh = true,
             urls = [],
+            runTimeUrls = [],
             excludedFromUpdateTokenUrls = [],
             $http = null, // set from langDirective
             authenticationService = null, // set from langDirective
@@ -122,6 +123,9 @@ module.exports = function (app) {
         self.getExcludedUrls = function () {
             return urls;
         };
+        self.getExcludedRunTimeUrls = function () {
+            return runTimeUrls;
+        };
 
         self.$get = function ($cookies, $q, urlService, $timeout, lookupService, employeeService) {
             'ngInject';
@@ -183,7 +187,7 @@ module.exports = function (app) {
                     $cookies.remove(self.getTokenKey());
                 },
                 setTokenForHeader: function (config) {
-                    if (self.getExcludedUrls().indexOf(config.url) > -1) {
+                    if (self.getExcludedUrls().indexOf(config.url) > -1 || self.getExcludedRunTimeUrls().indexOf(config.url) > -1) {
                         delete config.headers[self.getHeaderTokenKey()];
                         return config;
                     }
@@ -211,6 +215,15 @@ module.exports = function (app) {
                 },
                 getExcludedUpdateTokenUrls: function () {
                     return self.getExcludedUpdateTokenUrls();
+                },
+                excludeUrlInRuntime: function (url) {
+                    runTimeUrls.push(url);
+                },
+                getExcludedRunTimeUrls: function () {
+                    return runTimeUrls;
+                },
+                removeRunTimeUrl: function (url) {
+                    runTimeUrls.splice(runTimeUrls.indexOf(url), 1);
                 }
 
             }
