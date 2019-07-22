@@ -2,10 +2,12 @@ module.exports = function (app) {
     app.controller('taskPopupCtrl', function (_,
                                               task,
                                               validationService,
+                                              $q,
                                               langService,
                                               cmsTemplate,
                                               toast,
                                               availableUsers,
+                                              $timeout,
                                               taskService,
                                               lookupService,
                                               employeeService,
@@ -14,8 +16,8 @@ module.exports = function (app) {
                                               dialog,
                                               managerService,
                                               moment,
-                                              generator,
-                                              gridService) {
+                                              $scope,
+                                              generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'taskPopupCtrl';
@@ -39,7 +41,7 @@ module.exports = function (app) {
 
         self.selectedParticipant = null;
 
-        self.participantsIds = [];
+        self.taskParticipantsIds = [];
 
         self.validateLabels = {
             taskTitle: 'task_title',
@@ -56,12 +58,23 @@ module.exports = function (app) {
             return map;
         }
 
-        function _getParticipantIds() {
-            self.participantsIds = _.map(self.task.taskParticipants, function (participant) {
-                return Number((participant.userId.id ? participant.userId.id : participant.userId) + '' + (participant.ouId.id ? participant.ouId.id : participant.ouId));
+        function _excludeSelect() {
+            self.availableUsers = _.map(self.availableUsers, function (user) {
+                self.taskParticipantsIds.indexOf(user.participantId) === -1 ? user.exclude = false : user.exclude = true;
+                return user;
             });
         }
 
+        function _getParticipantIds() {
+            self.taskParticipantsIds = _.map(self.task.taskParticipants, function (participant) {
+                return participant.participantId;
+            });
+            _excludeSelect();
+        }
+
+        _getParticipantIds();
+
+        // to exclude selected user
         /**
          * @description get selected time from calender hours array by passing time as string eg. '10:30'
          * @param time
@@ -188,33 +201,42 @@ module.exports = function (app) {
             return (self.startDate && self.endDate && self.startDate === self.endDate) && hour.compareValue <= self.selectedStartTime.compareValue;
         };
 
-        self.personQuerySearch = function () {
-            return _.filter(self.availableUsers, function (participant) {
-                return self.participantsIds.indexOf(participant.participantId) === -1;
+        function filterSelected() {
+            return self.availableUsers.filter(function (user) {
+                return self.taskParticipantsIds.indexOf(user.participantId) === -1;
+            });
+        }
+
+
+        self.personQuerySearch = function (query) {
+            return self.availableUsers.filter(function (item) {
+                return self.taskParticipantsIds.indexOf(item.participantId) === -1;
             });
         };
 
-        self.selectedItemChange = function (taskParticipant) {
-            if (!self.selectedParticipant) {
-                return null;
+
+        self.selectedItemChange = function (autoCompleteId) {
+            var clearButton = angular.element('#' + autoCompleteId);
+            if (self.selectedParticipant) {
+                taskService
+                    .openSettingForParticipant(self.selectedParticipant, self.task)
+                    .then(function (participant) {
+                        self.task
+                            .addParticipant(participant)
+                            .then(function () {
+                                _getParticipantIds();
+                                $timeout(function () {
+                                    clearButton.find('button').click();
+                                });
+                                if (self.task.hasId()) {
+                                    toast.success(langService.get('task_participant_added_successfully'));
+                                }
+                            });
+                    })
+            } else {
+                clearButton = undefined;
             }
 
-            taskService
-                .openSettingForParticipant(taskParticipant, self.task)
-                .then(function (participant) {
-                    self.task
-                        .addParticipant(participant)
-                        .then(function () {
-                            _getParticipantIds();
-                            self.selectedParticipant = null;
-                            if (self.task.hasId()) {
-                                toast.success(langService.get('task_participant_added_successfully'));
-                            }
-                        });
-                })
-                .catch(function () {
-                    self.selectedParticipant = null;
-                });
         };
 
         self.editTaskParticipantFromCtrl = function (participant) {
@@ -274,10 +296,13 @@ module.exports = function (app) {
                 });
         };
 
-        self.truncateSubject = gridService.getGridSubjectTruncateByGridName(gridService.grids.others.taskDoc);
-        self.setTruncateSubject = function ($event) {
-            gridService.setGridSubjectTruncateByGridName(gridService.grids.others.taskDoc, self.truncateSubject);
+        self.canSaveTask = function () {
+            return self.hasMinimumValues() && (self.task.withoutParticipant || (!self.task.withoutParticipant && self.task.taskParticipants.length))
         };
+
+        self.hasMinimumValues = function () {
+            return !!(self.task.taskTitle && self.task.taskTitle.length > 3 && self.task.startDate && self.task.dueDate);
+        }
 
     });
 };

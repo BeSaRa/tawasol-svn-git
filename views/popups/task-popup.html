@@ -190,14 +190,16 @@
                                                         <span ng-if="!ctrl.task.correspondence.hasContent()">{{ctrl.task.correspondence.docSubject}}</span>
                                                     </td>-->
                                                     <td md-cell class="subject">
-                                                        <a href="" ng-if="ctrl.task.correspondence.hasContent() && ctrl.truncateSubject"
+                                                        <a href=""
+                                                           ng-if="ctrl.task.correspondence.hasContent() && ctrl.truncateSubject"
                                                            class="view-doc subject-internal" md-truncate
                                                            tooltip="{{ctrl.task.correspondence.docSubject}}"
                                                            ng-click="ctrl.viewCorrespondence(ctrl.task.correspondence, $event)">{{ctrl.task.correspondence.docSubject}}</a>
                                                         <span ng-if="!ctrl.task.correspondence.hasContent() && ctrl.truncateSubject"
                                                               class="view-doc subject-internal" md-truncate
                                                               tooltip="{{ctrl.task.correspondence.docSubject}}">{{ctrl.task.correspondence.docSubject}}</span>
-                                                        <a href="" ng-if="ctrl.task.correspondence.hasContent() && !ctrl.truncateSubject"
+                                                        <a href=""
+                                                           ng-if="ctrl.task.correspondence.hasContent() && !ctrl.truncateSubject"
                                                            class="view-doc subject-internal"
                                                            tooltip="{{ctrl.task.correspondence.docSubject}}"
                                                            ng-click="ctrl.viewDocument(ctrl.task.correspondence, $event)">{{ctrl.task.correspondence.docSubject}}</a>
@@ -230,10 +232,11 @@
                                 <div layout="row">
                                     <md-autocomplete
                                             flex
+                                            id="selectParticipant"
                                             md-no-cache="true"
                                             md-selected-item="ctrl.selectedParticipant"
                                             md-search-text="ctrl.participantSearchText"
-                                            md-selected-item-change="ctrl.selectedItemChange(item)"
+                                            md-selected-item-change="ctrl.selectedItemChange('selectParticipant')"
                                             md-items="item in ctrl.personQuerySearch(ctrl.participantSearchText)"
                                             md-item-text="item.display"
                                             md-min-length="0"
@@ -289,12 +292,12 @@
         <div>
             <div layout="row">
                 <md-button class="md-raised"
-                           ng-disabled="task_form.$invalid"
+                           ng-disabled="task_form.$invalid || !ctrl.canSaveTask()"
                            ng-if="!ctrl.editMode"
                            ng-click="ctrl.addTaskFromCtrl()">{{lang.add}}
                 </md-button>
                 <md-button class="md-raised" ng-if="ctrl.editMode"
-                           ng-disabled="task_form.$invalid|| ctrl.workflowGroup.groupMembers.length===0"
+                           ng-disabled="task_form.$invalid || !ctrl.canSaveTask()"
                            ng-click="ctrl.editTaskFromCtrl()">{{lang.save}}
                 </md-button>
                 <span flex></span>

@@ -125,10 +125,9 @@ module.exports = function (app) {
                     outOfOffice: false
                 }, true)
                 .then(function (result) {
-                    var x = generator.interceptReceivedCollection('TaskParticipant', _.map(result, function (user) {
+                    return  generator.interceptReceivedCollection('TaskParticipant', _.map(result, function (user) {
                         return (new TaskParticipant()).generateFromOUApplicationUser(user);
                     }));
-                    return x;
                 })
         };
 
@@ -182,7 +181,7 @@ module.exports = function (app) {
                         taskParticipant: taskParticipant,
                         task: task
                     }
-                })
+                });
         };
 
         self.completeTask = function (taskId) {

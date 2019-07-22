@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, _, Outgoing, Incoming, Internal, generator, moment, Information, taskService) {
+    app.run(function (CMSModelInterceptor, _, Outgoing, Incoming, TaskParticipant ,  Internal, generator, moment, Information, taskService) {
         'ngInject';
         var modelName = 'Task';
         var classesMap = {
@@ -66,7 +66,7 @@ module.exports = function (app) {
             model.endTime = model.allDay ? null : moment(dueDate).format('HH:mm');
             model.correspondence = model.correspondence ? generator.interceptReceivedInstance(['Correspondence', classesMap[model.docClassId].name], generator.generateInstance(model.correspondence, classesMap[model.docClassId].model)) : null;
             model.taskParticipants = _.map(model.taskParticipants, function (participant) {
-                return generator.interceptReceivedInstance('TaskParticipant', participant);
+                return generator.interceptReceivedInstance('TaskParticipant', new TaskParticipant(participant));
             });
             model.userId = new Information(model.userInfo);
             model.ouId = new Information(model.ouInfo);

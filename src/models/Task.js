@@ -55,9 +55,9 @@ module.exports = function (app) {
             };
 
             Task.prototype.addParticipant = function (taskParticipant) {
-                taskParticipant.taskDetailsId = this.id;
                 var self = this;
-                if (!this.hasId()) {
+                taskParticipant.taskDetailsId = self.id;
+                if (!self.hasId()) {
                     return $timeout(function () {
                         self.taskParticipants.push(taskParticipant);
                         return taskParticipant;
