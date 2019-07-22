@@ -81,7 +81,9 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_user_inbox', 'USER_INBOX')
             .addMenuPermission('menu_item_sent_items', 'SENT_ITEMS')
             .addMenuPermission('menu_item_folders', 'FOLDERS_QUEUE')
-            .addMenuPermission('menu_item_followup_employee_inbox', 'FOLLOW-UP_EMPLOYEES’_INBOXES')
+            .addMenuPermission('menu_item_followup_employee_inbox', function (employee) {
+                return employee.hasAnyPermissions(['FOLLOW-UP_EMPLOYEES’_INBOXES', 'FOLLOW_UP_OU_INBOX']);
+            })
             .addMenuPermission('menu_item_group_inbox', function (employee) {
                 return !employee.inRegistry() && employee.hasThesePermissions('GROUP_MAIL');
             })
@@ -117,17 +119,17 @@ module.exports = function (app) {
             .end()
             .addMenuPermission('menu_item_g2g', 'GOVERNMENT_TO_GOVERNMENT')
             .addMenuPermissionGroup('menu_item_reports')
-            .addMenuPermission('menu_item_reports_statistical_correspondence_report','CORRESPONDENCE_REPORT')
-            .addMenuPermission('menu_item_reports_statistical_report','CORRESPONDENCE_SITE_REPORT')
-            .addMenuPermission('menu_item_reports_documentary_report','WORKFLOW_OPERATION_REPORT')
-            .addMenuPermission('menu_item_reports_followup_report','FOLLOWUP_REPORT')
-            .addMenuPermission('menu_item_reports_user_mail_report','USERMAIL_REPORT')
-            .addMenuPermission('menu_item_reports_login_logs_report','USERLOGIN_LOGS_REPORT')
-            .addMenuPermission('menu_item_reports_system_usage_report','SYSTEM_USAGE_BOARD')
-            .addMenuPermission('menu_item_reports_message_board_response','FOLLOWUP_BOARD')
-            .addMenuPermission('menu_item_reports_user_performance_panel','USER_PERFORMANCE_BOARD')
-            .addMenuPermission('menu_item_reports_monitoring_correspondence_documentary_panel','REALTIME_MONITORING_BOARD')
-            .addMenuPermission('menu_item_reports_processed_documents','PROCESSED_DOCUMENT_REPORT');
+            .addMenuPermission('menu_item_reports_statistical_correspondence_report', 'CORRESPONDENCE_REPORT')
+            .addMenuPermission('menu_item_reports_statistical_report', 'CORRESPONDENCE_SITE_REPORT')
+            .addMenuPermission('menu_item_reports_documentary_report', 'WORKFLOW_OPERATION_REPORT')
+            .addMenuPermission('menu_item_reports_followup_report', 'FOLLOWUP_REPORT')
+            .addMenuPermission('menu_item_reports_user_mail_report', 'USERMAIL_REPORT')
+            .addMenuPermission('menu_item_reports_login_logs_report', 'USERLOGIN_LOGS_REPORT')
+            .addMenuPermission('menu_item_reports_system_usage_report', 'SYSTEM_USAGE_BOARD')
+            .addMenuPermission('menu_item_reports_message_board_response', 'FOLLOWUP_BOARD')
+            .addMenuPermission('menu_item_reports_user_performance_panel', 'USER_PERFORMANCE_BOARD')
+            .addMenuPermission('menu_item_reports_monitoring_correspondence_documentary_panel', 'REALTIME_MONITORING_BOARD')
+            .addMenuPermission('menu_item_reports_processed_documents', 'PROCESSED_DOCUMENT_REPORT');
 
 
     });
