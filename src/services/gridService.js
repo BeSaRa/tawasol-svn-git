@@ -82,6 +82,7 @@ module.exports = function (app) {
                 outgoingIncoming: 'searchOutInc'
             },
             administration: {
+                administrators: 'administrators',
                 entity: 'entity',
                 classification: 'classification',
                 workflowGroup: 'wfGroup',
