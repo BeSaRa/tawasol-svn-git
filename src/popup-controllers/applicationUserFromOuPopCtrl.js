@@ -1081,6 +1081,27 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description open follow up organization dialog
+         */
+        self.openFollowupOrganizationDialog = function (ouApplicationUser, $event) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    templateUrl: cmsTemplate.getPopup('followup-user-organization'),
+                    controller: 'followupUserOrganizationPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        ouApplicationUser: ouApplicationUser
+                    },
+                    resolve: {
+                        followupOrganizations: function () {
+                            'ngInject';
+                            return ouApplicationUserService.loadFollowupUserOrganization(ouApplicationUser);
+                        }
+                    }
+                });
+        };
 
         /**
          * @description Array of actions that can be performed on grid

@@ -1145,9 +1145,6 @@ module.exports = function (app) {
                             return ouApplicationUserService.loadFollowupUserOrganization(ouApplicationUser);
                         }
                     }
-                })
-                .then(function (result) {
-
                 });
         };
 
