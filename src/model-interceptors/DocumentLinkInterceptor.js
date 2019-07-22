@@ -20,7 +20,8 @@ module.exports = function (app) {
                 model.creationTime = generator.getTimeStampFromDate(new Date());
             }
 
-            model.expirationTime = generator.getTimeStampFromDate(model.expirationTime);
+            var expirationTime = new Date(model.expirationTime.getFullYear(), model.expirationTime.getMonth(), model.expirationTime.getDate(), 23, 59, 59, 999);
+            model.expirationTime = generator.getTimeStampFromDate(expirationTime);
 
             return model;
         });
