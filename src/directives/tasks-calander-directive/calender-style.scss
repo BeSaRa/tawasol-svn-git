@@ -81,6 +81,27 @@
     color: white;
     border-radius: 5px;
     margin: 5px;
+    min-height: 24px !important;
+    button {
+      padding: 0 !important;
+      margin: 0 !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      height: 24px !important;
+      width: 24px !important;
+      svg {
+        color: white;
+      }
+    }
+
+    a {
+      color: white;
+      cursor: pointer;
+
+      &.selected {
+        cursor: default;
+      }
+    }
   }
 }
 

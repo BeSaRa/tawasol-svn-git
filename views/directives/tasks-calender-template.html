@@ -1,5 +1,11 @@
 <ul class="task-state-labels">
-    <li class="{{ctrl.classes[index]}}" ng-repeat="(index , state) in ctrl.taskStates track by  state.id ">{{state.getTranslatedName()}}</li>
+    <li layout="row" layout-align="start center" class="{{ctrl.classes[index]}}"
+        ng-repeat="(index , state) in ctrl.taskStates track by  state.id ">
+        <md-button ng-click="ctrl.removeSelectedState()" ng-if="ctrl.selectedState.id === state.id" class="md-icon-button">
+            <md-icon md-svg-icon="close"></md-icon>
+        </md-button>
+        <a ng-click="ctrl.getTasksByState(state)">{{state.getTranslatedName()}}</a>
+    </li>
 </ul>
 <div id="tasks-calender">
 

@@ -35,6 +35,10 @@ module.exports = function (app) {
 
         self.classes = taskService.classes;
 
+        self.selectedState = null;
+
+        self.firstTimeRender = true;
+
 
         // get controller of review outgoing
         taskService.hasGridActions('outgoing', function () {
@@ -72,16 +76,29 @@ module.exports = function (app) {
             }).gridActions;
         });
 
+        self.removeSelectedState = function () {
+            self.selectedState = null;
+            taskService.calender.refetchEvents();
+        };
+
+        self.getTasksByState = function (state) {
+            self.selectedState = state;
+            taskService.calender.refetchEvents();
+        };
         /**
          * @description callback for selected calender cells to add a new event.
          * @param selectInfo
          */
         self.openAddEventDialog = function (selectInfo) {
+            if (selectInfo.end.valueOf() < (new Date()).valueOf()) {
+                self.calender.unselect();
+                return;
+            }
             taskService
                 .controllerMethod
                 .taskAdd(selectInfo.start, selectInfo.end, selectInfo.allDay)
                 .then(function () {
-                    taskService.reloadCalender();
+                    taskService.calender.refetchEvents();
                 })
         };
         /**
@@ -99,9 +116,9 @@ module.exports = function (app) {
                     plugins: ['interaction', 'dayGrid', 'timeGrid'],
                     events: function (fetchInfo, successCallback, failCallback) {
                         taskService
-                            .loadEvents(fetchInfo.start, fetchInfo.end)
+                            .loadEvents(fetchInfo.start, fetchInfo.end, self.selectedState)
                             .then(function (events) {
-                                successCallback(events);
+                                successCallback(taskService.events);
                             });
                     },
                     eventRender: function (info) {
@@ -147,6 +164,12 @@ module.exports = function (app) {
                             .setUserId(info.event.extendedProps.participantInfo.id)
                             .setAllDay(info.event.allDay);
 
+                        if (info.event.end.valueOf() < (new Date).valueOf()) {
+                            toast.error(langService.get('due_date_less_than_today'));
+                            info.revert();
+                            return;
+                        }
+
                         taskService
                             .changeTaskParticipantDuration(info.event.extendedProps.taskId, taskParticipant)
                             .then(function () {
@@ -163,6 +186,12 @@ module.exports = function (app) {
                             .setOuId(info.event.extendedProps.participantOuInfo.id)
                             .setUserId(info.event.extendedProps.participantInfo.id)
                             .setAllDay(info.event.allDay);
+
+                        if (info.event.end.valueOf() < (new Date).valueOf()) {
+                            toast.error(langService.get('due_date_less_than_today'));
+                            info.revert();
+                            return;
+                        }
 
                         taskService
                             .changeTaskParticipantDuration(info.event.extendedProps.taskId, taskParticipant)
@@ -212,7 +241,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .taskEdit(task.taskId)
                 .then(function () {
-                    taskService.reloadCalender();
+                    taskService.calender.refetchEvents();
                 });
         };
 
@@ -221,7 +250,7 @@ module.exports = function (app) {
                 .completeTask(task.taskId)
                 .then(function () {
                     toast.success(langService.get('task_completed_successfully'));
-                    taskService.reloadCalender();
+                    taskService.calender.refetchEvents();
                 });
         };
 
@@ -230,7 +259,7 @@ module.exports = function (app) {
                 .completeTaskParticipant(task.taskId, task.taskParticipantId)
                 .then(function () {
                     toast.success(langService.get('task_completed_successfully'));
-                    taskService.reloadCalender();
+                    taskService.calender.refetchEvents();
                 })
         };
 
@@ -239,7 +268,7 @@ module.exports = function (app) {
                 .sendReminderForAllTaskParticipants(task.taskId)
                 .then(function () {
                     toast.success(langService.get('reminder_has_been_successfully_sent_to_all_participants'));
-                    taskService.reloadCalender();
+                    taskService.calender.refetchEvents();
                 });
         };
 

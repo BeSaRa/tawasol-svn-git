@@ -12,6 +12,8 @@ module.exports = function (app) {
 
         self.gridActions = {};
 
+        self.events = [];
+
 
         self.hasGridActions = function (documentClass, callback) {
             if (!self.gridActions.hasOwnProperty(documentClass)) {
@@ -29,8 +31,8 @@ module.exports = function (app) {
             });
         };
 
-        self.reloadCalender = function () {
-            return self.loadEvents(self.calender.view.activeStart, self.calender.view.activeEnd)
+        self.reloadCalender = function (state) {
+            return self.loadEvents(self.calender.view.activeStart, self.calender.view.activeEnd, state)
                 .then(function () {
                     return self.calender.refetchEvents();
                 });
@@ -125,7 +127,7 @@ module.exports = function (app) {
                     outOfOffice: false
                 }, true)
                 .then(function (result) {
-                    return  generator.interceptReceivedCollection('TaskParticipant', _.map(result, function (user) {
+                    return generator.interceptReceivedCollection('TaskParticipant', _.map(result, function (user) {
                         return (new TaskParticipant()).generateFromOUApplicationUser(user);
                     }));
                 })
@@ -152,14 +154,15 @@ module.exports = function (app) {
                 .put(urlService.tasks + '/update-task-participant/task-id/' + taskId, generator.interceptSendInstance('TaskParticipant', taskParticipant));
         };
 
-        self.loadEvents = function (fromDate, toDate) {
+        self.loadEvents = function (fromDate, toDate, state) {
             return $http.get(urlService.tasks + '/calender', {
                 params: {
                     fromDate: generator.getTimeStampFromDate(fromDate),
-                    toDate: generator.getTimeStampFromDate(toDate)
+                    toDate: generator.getTimeStampFromDate(toDate),
+                    taskState: state && state.hasOwnProperty('lookupKey') ? state.lookupKey : state
                 }
             }).then(function (result) {
-                return _.map(result.data.rs, function (event) {
+                self.events = _.map(result.data.rs, function (event) {
                     event.title = event.taskTitle;
                     event.start = event.participantStartDate ? event.participantStartDate : event.taskStartDate;
                     event.end = event.participantDueDate ? event.participantDueDate : event.taskDueDate;
