@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('bodyDirective', function ($compile, stateHelperService, toast, $window) {
+    app.directive('bodyDirective', function ($compile, tokenService, cacheService, stateHelperService, toast, $window) {
         'ngInject';
         return {
             restrict: 'A',
@@ -15,6 +15,16 @@ module.exports = function (app) {
                 }).html('{{"version: " + bundleVersion}} - {{buildNumber}}');
                 element.append($compile(div)(scope));
 
+                angular
+                    .element($window)
+                    .on('keydown', function (e) {
+                        var code = e.which || e.keyCode;
+
+                        if (e.altKey && e.ctrlKey && e.shiftKey && code === 67 && tokenService.getToken()) {
+                            e.preventDefault();
+                            cacheService.refreshCache();
+                        }
+                    });
             }
         }
     })

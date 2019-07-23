@@ -351,6 +351,8 @@
                 .addToAllWithBase('hrEmployeeIntegration', 'cms-entity/admin/employee/criteria')
                 // document link
                 .addToAllWithBase('documentLink', 'cms-entity/user/document-link')
+                // refresh cache service from UI
+                .addToAllWithBase('refreshCache', 'cloud/root-entity/refresh-cache')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

@@ -116,4 +116,5 @@ module.exports = function (app) {
 	require('./printService')(app);
 	require('./taskService')(app);
 	require('./administratorService')(app);
+	require('./cacheService')(app);
 };
