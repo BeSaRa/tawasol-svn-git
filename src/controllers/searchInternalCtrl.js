@@ -822,7 +822,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'star',
-                        text: 'grid_action_archive',
+                        text: 'grid_action_icn_archive',
                         callback: self.addToIcnArchive,
                         class: "action-green",
                         checkShow: function (action, model) {
