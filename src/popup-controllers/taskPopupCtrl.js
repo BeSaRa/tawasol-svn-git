@@ -255,12 +255,16 @@ module.exports = function (app) {
                 });
         };
 
+        self.canDeleteTaskParticipant = function () {
+            return self.task.taskParticipants && self.task.taskParticipants.length > 1;
+        };
+
         self.removeTaskParticipant = function (participant) {
             self.task
                 .deleteParticipant(participant)
                 .then(function () {
-
-                })
+                    toast.success(langService.get('delete_success'));
+                });
         };
 
         self.closeTaskPopupFromCtrl = function () {

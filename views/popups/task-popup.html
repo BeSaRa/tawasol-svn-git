@@ -274,7 +274,7 @@
                                                                tooltip="{{lang.edit}}" class="md-icon-button">
                                                         <md-icon md-svg-icon="account-edit"></md-icon>
                                                     </md-button>
-                                                    <md-button ng-click="ctrl.removeTaskParticipant(participant)"
+                                                    <md-button ng-if="ctrl.canDeleteTaskParticipant()" ng-click="ctrl.removeTaskParticipant(participant)"
                                                                tooltip="{{lang.delete}}" class="md-icon-button">
                                                         <md-icon md-svg-icon="account-remove"></md-icon>
                                                     </md-button>

@@ -135,16 +135,17 @@ module.exports = function (app) {
 
         self.deleteTaskParticipant = function (task, taskParticipant) {
             return $http
-                .delete()
-                .then(function () {
-
+                .delete(urlService.tasks + '/participant-id/' + taskParticipant.id)
+                .then(function (result) {
+                    return taskParticipant;
                 });
         };
 
         self.saveTaskParticipant = function (task, taskParticipant) {
             return $http
-                .put(urlService.tasks + '/update-task-participant/task-id/' + task.id, generator.interceptSendInstance('TaskParticipant', taskParticipant))
+                .post(urlService.tasks + '/task-id/' + task.id + '/participant', generator.interceptSendInstance('TaskParticipant', taskParticipant))
                 .then(function (result) {
+                    taskParticipant.id = result.data.rs;
                     return taskParticipant;
                 });
         };
