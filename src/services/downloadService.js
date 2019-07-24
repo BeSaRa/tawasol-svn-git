@@ -100,6 +100,7 @@ module.exports = function (app) {
              * @returns {*}
              */
             externalDocOtpDialog: function ($event) {
+                dialog.hide();
                 return dialog
                     .showDialog({
                         templateUrl: cmsTemplate.getPopup('otp'),
@@ -324,9 +325,13 @@ module.exports = function (app) {
                 toast.error(langService.get('failed_to_download'));
                 return $q.reject('INVALID_LINK_OTP');
             }
-            var url = urlService.documentLink + "/view-link/" + $stateParams.subscriberId + "/entity/" + $stateParams.entity + '?otp=' + otp;
-
-            tokenService.excludeUrlInRuntime(url)
+            //var url = urlService.documentLink + "/view-link/" + $stateParams.subscriberId + "/entity/" + $stateParams.entity + '?otp=' + otp;
+            var url = urlService.viewDocumentLink.change({
+                subscriberId: $stateParams.subscriberId,
+                entity: $stateParams.entity,
+                otp: otp
+            });
+            tokenService.excludeUrlInRuntime(url);
 
             return $http.get(url).then(function (result) {
                 var fileName = result.data.rs.substring(result.data.rs.lastIndexOf('/') + 1);

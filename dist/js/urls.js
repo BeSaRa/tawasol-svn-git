@@ -351,6 +351,8 @@
                 .addToAllWithBase('hrEmployeeIntegration', 'cms-entity/admin/employee/criteria')
                 // document link
                 .addToAllWithBase('documentLink', 'cms-entity/user/document-link')
+                // view document link (no-auth)
+                .addToAllWithBase('viewDocumentLink', 'no-auth/view-link/:subscriberId/entity/:entity?otp=:otp')
                 // refresh cache service from UI
                 .addToAllWithBase('refreshCache', 'cloud/root-entity/refresh-cache')
         })
