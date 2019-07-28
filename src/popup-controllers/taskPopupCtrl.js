@@ -4,6 +4,7 @@ module.exports = function (app) {
                                               validationService,
                                               $q,
                                               langService,
+                                              WorkItem,
                                               cmsTemplate,
                                               toast,
                                               availableUsers,
@@ -273,11 +274,22 @@ module.exports = function (app) {
         };
 
         self.viewCorrespondence = function (correspondence, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
+            var info = correspondence.getInfo();
+            var workItem = null;
+            var ctrl = !self.task.wobNum ? taskService.getQueueController(info.documentClass) : taskService.getQueueController('userInbox');
+
+            if (self.task.wobNum) {
+                workItem = new WorkItem({
+                    generalStepElm: {
+                        workObjectNumber: self.task.wobNum,
+                        docType: info.docClassId
+                    }
+                });
+                ctrl.viewDocument(workItem, $event);
                 return;
             }
-            correspondenceService.viewCorrespondence(correspondence, [], true, true);
+
+            ctrl.viewDocument(correspondence, $event);
         };
 
         self.linkDocumentTask = function ($event) {

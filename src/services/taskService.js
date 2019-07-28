@@ -15,10 +15,15 @@ module.exports = function (app) {
         self.events = [];
 
 
-        self.hasGridActions = function (documentClass, callback) {
-            if (!self.gridActions.hasOwnProperty(documentClass)) {
-                self.gridActions[documentClass] = callback();
+        self.hasQueueController = function (queueName, callback) {
+            queueName = queueName.toLowerCase();
+            if (!self.gridActions.hasOwnProperty(queueName)) {
+                self.gridActions[queueName] = callback();
             }
+        };
+
+        self.getQueueController = function (documentClass) {
+            return self.gridActions[documentClass.toLowerCase()];
         };
 
         self.setCalender = function (calender) {
@@ -307,8 +312,7 @@ module.exports = function (app) {
                                     endTime: null,
                                     documentVSID: info.vsId,
                                     docClassId: info.docClassId,
-                                    correspondence: info.isWorkItem() ? correspondence.convertToCorrespondence() : correspondence,
-                                    wobNum: info.isWorkItem() ? info.wobNumber : null
+                                    correspondence: info.isWorkItem() ? correspondence.convertToCorrespondence() : correspondence
                                 });
                             },
                             availableUsers: function () {

@@ -41,39 +41,44 @@ module.exports = function (app) {
 
 
         // get controller of review outgoing
-        taskService.hasGridActions('outgoing', function () {
+        taskService.hasQueueController('outgoing', function () {
             return $controller('searchOutgoingCtrl', {
                 organizations: [],
                 propertyConfigurations: [],
                 centralArchives: false,
                 approvers: [],
                 reviewOutgoings: []
-            }).gridActions;
+            });
         });
         // get controller of review incoming
-        taskService.hasGridActions('incoming', function () {
+        taskService.hasQueueController('incoming', function () {
             return $controller('searchIncomingCtrl', {
                 organizations: [],
                 propertyConfigurations: [],
                 centralArchives: false,
                 reviewIncomings: []
-            }).gridActions;
+            });
         });
         // get controller of review internal
-        taskService.hasGridActions('internal', function () {
+        taskService.hasQueueController('internal', function () {
             return $controller('searchInternalCtrl', {
                 organizations: [],
                 propertyConfigurations: [],
                 centralArchives: false,
                 approvers: [],
                 reviewInternals: []
-            }).gridActions;
+            });
         });
 
-        taskService.hasGridActions('internal', function () {
-            return $controller('searchInternalCtrl', {
-                reviewInternals: []
-            }).gridActions;
+        // get controller of review internal
+        taskService.hasQueueController('userInbox', function () {
+            return $controller('userInboxCtrl', {
+                $scope: $rootScope.$new(true),
+                userInboxes: [],
+                userFilters: [],
+                fromNotification: true,
+                emailItem: false
+            });
         });
 
         self.removeSelectedState = function () {
