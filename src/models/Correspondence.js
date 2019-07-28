@@ -8,6 +8,7 @@ module.exports = function (app) {
                                             $q,
                                             dialog,
                                             moment,
+                                            taskService,
                                             LinkedObject,
                                             Attachment,
                                             DocumentComment,
@@ -786,6 +787,12 @@ module.exports = function (app) {
                         }
                     });
                 }
+            };
+
+            Correspondence.prototype.createDocumentTask = function($event){
+                return taskService
+                    .controllerMethod
+                    .addCorrespondenceTask(this, $event);
             };
 
             // don't remove CMSModelInterceptor from last line

@@ -129,17 +129,24 @@ module.exports = function (app) {
                         menu.append('<md-button ng-click="$mdMenu.open()" class="md-icon-button menu-button-calender" ><md-icon class="fc-task-icon" tooltip="{{lang.im_task_owner}}" md-svg-icon="dots-vertical"></md-icon></md-button>');
                         menu.append('<md-menu-content></md-menu-content>');
                         var menuContent = menu.find('md-menu-content');
-                        // edit button
-                        menuContent.append('<md-menu-item><md-button ng-click="ctrl.editTask(ctrl.task)">edit</md-button></md-menu-item>');
+
                         // complete button
-                        menuContent.append('<md-menu-item><md-button>make task complete</md-button></md-menu-item>');
+                        menuContent.append('<md-menu-item ng-if="ctrl.taskNeedToBeComplete(ctrl.task)"><md-button  ng-click="ctrl.setTaskComplete(ctrl.task)">{{lang.make_task_complete}}</md-button></md-menu-item>');
+
 
                         scope.lang = langService.getCurrentTranslate();
 
                         scope.ctrl = {
                             task: info.event.extendedProps,
                             viewTask: self.viewTask,
-                            editTask: self.editTaskDialog
+                            editTask: self.editTaskDialog,
+                            sendReminderForAll: self.sendReminderForAllParticipants,
+                            setTaskComplete: function (task) {
+                                return task.creator ? self.setTaskComplete(task) : self.setTaskParticipantComplete(task);
+                            },
+                            taskNeedToBeComplete: function (task) {
+                                return (task.creator && task.taskState !== 3) || (task.taskParticipantId && task.participantTaskState !== 3)
+                            }
                         };
                         // ng-click="ctrl.editTask(ctrl.task,$event)"
                         content.find('.fc-title').attr('flex', '');
@@ -148,9 +155,15 @@ module.exports = function (app) {
                         content.find('.fc-title').attr('ng-click', 'ctrl.viewTask(ctrl.task , $event)');
 
                         if (scope.ctrl.task.creator) {
+                            // creator indicator
                             content.prepend('<md-icon class="fc-task-icon" tooltip="{{lang.im_task_owner}}" md-svg-icon="account"></md-icon>');
-                            content.append(menu);
+                            // edit button
+                            menuContent.append('<md-menu-item><md-button ng-click="ctrl.editTask(ctrl.task)">{{lang.edit}}</md-button></md-menu-item>');
+                            // send reminder for all participant
+                            menuContent.append('<md-menu-item><md-button ng-click="ctrl.sendReminderForAll(ctrl.task)">{{lang.send_reminder_for_all}}</md-button></md-menu-item>');
                         }
+
+                        content.append(menu);
                         $compile(element)(scope);
                     },
                     eventDrop: function (info) {

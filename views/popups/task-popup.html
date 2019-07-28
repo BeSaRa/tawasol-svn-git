@@ -140,14 +140,14 @@
                                                     <th md-column>
                                                         <!-- Indicators -->
                                                     </th>
-                                                    <th md-column md-order-by="docSubject">
+                                                    <th md-column>
                                                         <span>{{lang.subject}}</span>
                                                     </th>
-                                                    <th md-column md-order-by="createdBy">
-                                                        <span>{{lang.creator}}</span>
+                                                    <th md-column>
+                                                        <span>{{lang.priority_level}}</span>
                                                     </th>
-                                                    <th md-column md-order-by="createdOn">
-                                                        <span>{{lang.created_on}}</span>
+                                                    <th md-column>
+                                                        <span>{{lang.security_level}}</span>
                                                     </th>
                                                 </tr>
                                                 </thead>
@@ -183,12 +183,6 @@
                                                                                   indicator-type="hasAttachment"
                                                                                   record-type="correspondence"></grid-indicator-directive>
                                                     </td>
-                                                    <!--<td md-cell class="td-data">
-                                                        <a href="" ng-if="ctrl.task.correspondence.hasContent()"
-                                                           class="view-doc"
-                                                           ng-click="ctrl.viewCorrespondence(ctrl.task.correspondence, $event)">{{ctrl.task.correspondence.docSubject}}</a>
-                                                        <span ng-if="!ctrl.task.correspondence.hasContent()">{{ctrl.task.correspondence.docSubject}}</span>
-                                                    </td>-->
                                                     <td md-cell class="subject">
                                                         <a href=""
                                                            ng-if="ctrl.task.correspondence.hasContent() && ctrl.truncateSubject"
@@ -202,13 +196,15 @@
                                                            ng-if="ctrl.task.correspondence.hasContent() && !ctrl.truncateSubject"
                                                            class="view-doc subject-internal"
                                                            tooltip="{{ctrl.task.correspondence.docSubject}}"
-                                                           ng-click="ctrl.viewDocument(ctrl.task.correspondence, $event)">{{ctrl.task.correspondence.docSubject}}</a>
+                                                           ng-click="ctrl.viewCorrespondence(ctrl.task.correspondence, $event)">{{ctrl.task.correspondence.docSubject}}</a>
                                                         <span ng-if="!ctrl.task.correspondence.hasContent() && !ctrl.truncateSubject"
                                                               class="view-doc subject-internal"
                                                               tooltip="{{ctrl.task.correspondence.docSubject}}">{{ctrl.task.correspondence.docSubject}}</span>
                                                     </td>
-                                                    <td md-cell>{{ctrl.task.correspondence.getTranslatedCreator()}}</td>
-                                                    <td md-cell>{{ctrl.task.correspondence.createdOn}}</td>
+                                                    <td md-cell>{{ctrl.task.correspondence.priorityLevel.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>{{ctrl.task.correspondence.securityLevel.getTranslatedName()}}
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -274,7 +270,8 @@
                                                                tooltip="{{lang.edit}}" class="md-icon-button">
                                                         <md-icon md-svg-icon="account-edit"></md-icon>
                                                     </md-button>
-                                                    <md-button ng-if="ctrl.canDeleteTaskParticipant()" ng-click="ctrl.removeTaskParticipant(participant)"
+                                                    <md-button ng-if="ctrl.canDeleteTaskParticipant()"
+                                                               ng-click="ctrl.removeTaskParticipant(participant)"
                                                                tooltip="{{lang.delete}}" class="md-icon-button">
                                                         <md-icon md-svg-icon="account-remove"></md-icon>
                                                     </md-button>

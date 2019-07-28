@@ -75,6 +75,7 @@ module.exports = function (app) {
              * @returns {Indicator}
              */
             Indicator.prototype.getSecurityLevelIndicator = function (securityLevel) {
+                console.log('securityLevel', securityLevel);
                 var icon = self.getIndicatorIcons(lookupService.securityLevel);
                 var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
                 var securityLevelMap = _.find(_.map(securityLevels, function (lookup, index) {
@@ -83,7 +84,7 @@ module.exports = function (app) {
                         //class: 'indicator secure' + (index + 1),
                         class: 'indicator secure' + (lookup.lookupKey),
                         text: 'indicator_security_level',
-                        icon: self.getIndicatorIcons(lookupService.securityLevel),
+                        icon: icon,
                         tooltip: 'indicator_security_level',
                         value: lookup
                     }

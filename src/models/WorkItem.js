@@ -5,11 +5,15 @@ module.exports = function (app) {
                                       Information,
                                       ResolveDefer,
                                       $sce,
+                                      taskService,
                                       viewDocumentService,
                                       Correspondence,
                                       $q,
                                       dialog,
                                       generator,
+                                      Outgoing,
+                                      Incoming,
+                                      Internal,
                                       moment,
                                       employeeService,
                                       lookupService,
@@ -21,7 +25,13 @@ module.exports = function (app) {
             var self = this,
                 correspondenceService = null,
                 managerService = null,
-                downloadService = null;
+                downloadService = null,
+                classesMap = {
+                    outgoing: Outgoing,
+                    incoming: Incoming,
+                    internal: Internal
+                };
+
             self.generalStepElm = null;
             self.folder = null;
             self.mainClassification = null;
@@ -804,6 +814,28 @@ module.exports = function (app) {
                         }
                     });
                 }
+            };
+
+            WorkItem.prototype.createDocumentTask = function ($event) {
+                return taskService
+                    .controllerMethod
+                    .addCorrespondenceTask(this, $event);
+            };
+
+            WorkItem.prototype.convertToCorrespondence = function () {
+                var self = this;
+                var info = this.getInfo();
+                self.priorityLevel.lookupKey = self.priorityLevel.id;
+                self.securityLevel.lookupKey = self.securityLevel.id;
+                return generator.interceptReceivedInstance(['Correspondence', generator.ucFirst(info.documentClass)], new classesMap[info.documentClass]({
+                    docSubject: info.title,
+                    docStatus: info.docStatus,
+                    vsId: info.vsId,
+                    securityLevel: new Information(self.securityLevel),
+                    priorityLevel: new Information(self.priorityLevel),
+                    contentSize: true
+                }));
+
             };
 
 

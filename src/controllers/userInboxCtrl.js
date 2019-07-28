@@ -648,6 +648,10 @@ module.exports = function (app) {
                 });
         };
 
+        self.addDocumentTask = function (workItem, $event) {
+            workItem.createDocumentTask($event)
+        };
+
         /**
          * @description View Tracking Sheet
          * @param userInbox
@@ -1438,6 +1442,16 @@ module.exports = function (app) {
                         && info.documentClass === 'outgoing'
                         && !model.isPrivateSecurityLevel();
                 }
+            },
+            // add task
+            {
+                type: 'action',
+                icon: 'calendar-check-outline',
+                text: 'create_task',
+                callback: self.addDocumentTask,
+                class: "action-green",
+                shortcut: true,
+                checkShow: gridService.checkToShowAction
             },
             // View Tracking Sheet (with sub menu)
             {

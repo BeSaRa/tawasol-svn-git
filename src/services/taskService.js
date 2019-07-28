@@ -201,7 +201,6 @@ module.exports = function (app) {
         };
 
         self.findTaskById = function (taskId) {
-            console.log("taskId", taskId);
             taskId = taskId.hasOwnProperty('id') ? taskId.id : taskId;
             return $http
                 .get(urlService.tasks + '/' + taskId)
@@ -228,6 +227,7 @@ module.exports = function (app) {
                 })
         };
 
+
         self.controllerMethod = {
             taskAdd: function (startDate, dueDate, allDay) {
                 var employee = employeeService.getEmployee();
@@ -248,6 +248,7 @@ module.exports = function (app) {
                                 startTime: allDay ? null : (startDate ? moment(startDate).format('HH:mm') : configurationService.DEFAULT_START_TASK_TIME),
                                 endTime: allDay ? null : (dueDate ? moment(dueDate).format('HH:mm') : null)
                             }),
+                            correspondence: false,
                             editMode: false
                         },
                         resolve: {
@@ -266,11 +267,49 @@ module.exports = function (app) {
                         controller: 'taskPopupCtrl',
                         controllerAs: 'ctrl',
                         locals: {
-                            editMode: true
+                            editMode: true,
+                            correspondence: false
                         },
                         resolve: {
                             task: function () {
                                 return self.findTaskById(taskId);
+                            },
+                            availableUsers: function () {
+                                'ngInject';
+                                return self.getAvailableUsers();
+                            }
+                        }
+                    });
+            },
+            addCorrespondenceTask: function (correspondence, $event) {
+                var employee = employeeService.getEmployee();
+                var info = correspondence.getInfo();
+                return dialog
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('task'),
+                        controller: 'taskPopupCtrl',
+                        controllerAs: 'ctrl',
+                        targetEvent: $event,
+                        locals: {
+                            editMode: false
+                        },
+                        resolve: {
+                            task: function () {
+                                return new Task({
+                                    allDay: true,
+                                    userId: employee.id,
+                                    ouId: employee.getOUID(),
+                                    startDate: new Date(),
+                                    dueDate: null,
+                                    priorityLevel: 0, // normal
+                                    taskState: 2, // inProgress
+                                    startTime: null,
+                                    endTime: null,
+                                    documentVSID: info.vsId,
+                                    docClassId: info.docClassId,
+                                    correspondence: info.isWorkItem() ? correspondence.convertToCorrespondence() : correspondence,
+                                    wobNum: info.isWorkItem() ? info.wobNumber : null
+                                });
                             },
                             availableUsers: function () {
                                 'ngInject';

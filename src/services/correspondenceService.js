@@ -100,6 +100,15 @@ module.exports = function (app) {
             g2gmessaginghistory: G2GMessagingHistory
         };
 
+        self.docClassIds = {
+            outgoing: 0,
+            incoming: 1,
+            internal: 2,
+            Outgoing: 0,
+            Incoming: 1,
+            Internal: 2
+        };
+
         self.screenLookups = {
             outgoing: {},
             incoming: {},
@@ -460,8 +469,9 @@ module.exports = function (app) {
          * @return {CorrespondenceInfo}
          */
         self.getCorrespondenceInformation = function (correspondence) {
+            var dc = _getDocumentClass(correspondence);
             return new CorrespondenceInfo({
-                documentClass: _getDocumentClass(correspondence),
+                documentClass: dc,
                 vsId: _getVsId(correspondence),
                 id: _getId(correspondence),
                 workFlow: _getWorkFlow(correspondence),
@@ -472,7 +482,8 @@ module.exports = function (app) {
                 docFullSerial: _getDocFullSerial(correspondence),
                 incomingVsId: _getIncomingVsId(correspondence),
                 docType: _getDocType(correspondence),
-                editByDeskTop: _getEditInDesktop(correspondence)
+                editByDeskTop: _getEditInDesktop(correspondence),
+                docClassId: self.docClassIds[dc]
             });
         };
         /**

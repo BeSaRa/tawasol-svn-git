@@ -21,6 +21,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'taskPopupCtrl';
+
         self.task = task;
         self.model = angular.copy(task);
         self.editMode = editMode;

@@ -13,6 +13,7 @@ module.exports = function (app) {
             self.docFullSerial = null;
             self.incomingVsId = null;
             self.docType = null;
+            self.docClassId = null;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
