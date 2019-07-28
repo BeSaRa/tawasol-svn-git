@@ -423,6 +423,10 @@ module.exports = function (app) {
             correspondence.barcodePrint($event);
         };
 
+        self.addDocumentTask = function (correspondence, $event) {
+            correspondence.createDocumentTask($event)
+        };
+
         /**
          * @description View Tracking Sheet
          * @param correspondence
@@ -965,6 +969,16 @@ module.exports = function (app) {
                     return true;
                 },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid', gridService.grids.search.outgoingIncoming)
+            },
+            // add task
+            {
+                type: 'action',
+                icon: 'calendar-check-outline',
+                text: 'create_task',
+                callback: self.addDocumentTask,
+                class: "action-green",
+                shortcut: true,
+                checkShow: gridService.checkToShowAction
             },
             // Manage
             {
