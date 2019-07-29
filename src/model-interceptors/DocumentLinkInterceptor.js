@@ -27,7 +27,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.expirationTime = generator.getDateFromTimeStamp(model.expirationTime);
+            model.expirationTime = generator.getDateObjectFromTimeStamp(model.expirationTime);
 
             return model;
         });
