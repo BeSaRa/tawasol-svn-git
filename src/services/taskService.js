@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.service('taskService', function (urlService, $timeout, moment, configurationService, ouApplicationUserService, TaskParticipant, cmsTemplate, employeeService, dialog, $http, $q, generator, Task, _) {
+    app.service('taskService', function (urlService, TaskCalenderItem, $timeout, moment, configurationService, ouApplicationUserService, TaskParticipant, cmsTemplate, employeeService, dialog, $http, $q, generator, Task, _) {
         'ngInject';
         var self = this;
         self.serviceName = 'taskService';
@@ -13,6 +13,18 @@ module.exports = function (app) {
         self.gridActions = {};
 
         self.events = [];
+
+        self.reminders = [];
+
+        self.loadReminders = function () {
+            return self
+                .loadEvents(moment().startOf('month'), moment().endOf('month').add(15, 'day'), null, true)
+                .then(function (result) {
+                    self.reminders = generator.interceptReceivedCollection('TaskCalenderItem', generator.generateCollection(result.data.rs, TaskCalenderItem));
+                    console.log('self.reminders', self.reminders);
+                    return self.reminders;
+                });
+        };
 
 
         self.hasQueueController = function (queueName, callback) {
@@ -159,8 +171,15 @@ module.exports = function (app) {
             return $http
                 .put(urlService.tasks + '/update-task-participant/task-id/' + taskId, generator.interceptSendInstance('TaskParticipant', taskParticipant));
         };
-
-        self.loadEvents = function (fromDate, toDate, state) {
+        /**
+         * load events by date from / to
+         * @param fromDate
+         * @param toDate
+         * @param state
+         * @param ignoreMapping
+         * @returns {*}
+         */
+        self.loadEvents = function (fromDate, toDate, state, ignoreMapping) {
             return $http.get(urlService.tasks + '/calender', {
                 params: {
                     fromDate: generator.getTimeStampFromDate(fromDate),
@@ -168,6 +187,8 @@ module.exports = function (app) {
                     taskState: state && state.hasOwnProperty('lookupKey') ? state.lookupKey : state
                 }
             }).then(function (result) {
+                if (ignoreMapping)
+                    return result;
                 self.events = _.map(result.data.rs, function (event) {
                     event.title = event.taskTitle;
                     event.start = event.participantStartDate ? event.participantStartDate : event.taskStartDate;

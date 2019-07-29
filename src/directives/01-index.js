@@ -9,7 +9,6 @@ module.exports = function (app) {
     require('./user-menu-directive/01-index')(app);
     require('./scroll-directive/scroll-directive')(app);
     require('./close-dialog-directive/close-dialog-directive')(app);
-    require('./tasks-notify-directive/01-index')(app);
     require('./documents-notify-directive/01-index')(app);
     require('./sidebar-menu-directive/01-index')(app);
     require('./background-directive/background-directive')(app);
@@ -104,4 +103,5 @@ module.exports = function (app) {
     require('./popup-toolbar-directive/01-index')(app);
     require('./grid-document-subject-directive/01-index')(app);
     require('./manage-correspondence-fax-directive/01-index')(app);
+    require('./task-list-directive/01-index')(app);
 };

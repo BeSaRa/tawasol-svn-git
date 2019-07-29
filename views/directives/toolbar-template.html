@@ -16,7 +16,7 @@
             <div class="font-size-14" ng-if="!toolbar.employeeService.isAdminUser()">
                 <md-menu-bar class="user-menu">
                     <md-menu flex md-position-mode="{{toolbar.getPositionMode($event)}}">
-                        <md-button ng-click="toolbar.openUserOrganizationMenu($mdMenu)"  >
+                        <md-button ng-click="toolbar.openUserOrganizationMenu($mdMenu)">
                             <div layout="row" flex layout-align="start center">
                                 <!--{{lang.administration}} :-->
                                 {{toolbar.employee.userOrganization.getTranslatedName()}}
@@ -60,24 +60,23 @@
                        ng-click="toolbar.logoutEmployee($event)">
                 <md-icon md-svg-icon="logout"></md-icon>
             </md-button>
-            <documents-notify-directive ng-if="toolbar.employeeService.hasPermissionTo('USER_INBOX')"></documents-notify-directive>
-
+            <documents-notify-directive
+                    ng-if="toolbar.employeeService.hasPermissionTo('USER_INBOX')"></documents-notify-directive>
+            <task-list-directive></task-list-directive>
             <private-announcement-directive></private-announcement-directive>
-
             <user-subscription-directive></user-subscription-directive>
-
             <md-button tooltip="{{lang.help}}" fixed-position="true"
                        ng-click="toolbar.openHelp()" class="md-icon-button">
                 <md-icon md-svg-icon="help"></md-icon>
             </md-button>
-
             <div hide-xs class="separator"></div>
             <language-switcher-directive></language-switcher-directive>
-<!--            <div ng-if="toolbar.themeService.themes.length" class="separator"></div>-->
-<!--            <md-button ng-click="toolbar.toggleSidebar('right-sidebar')"-->
-<!--                       class="md-icon-button m015">-->
-<!--                <md-icon md-svg-icon="format-list-bulleted"></md-icon>-->
-<!--            </md-button>-->
+            <!--            <div ng-if="toolbar.themeService.themes.length" class="separator"></div>-->
+            <!--            <md-button ng-click="toolbar.toggleSidebar('right-sidebar')"-->
+            <!--                       class="md-icon-button m015">-->
+            <!--                <md-icon md-svg-icon="format-list-bulleted"></md-icon>-->
+            <!--            </md-button>-->
+
         </div>
         <!-- End toolbar-right-side-->
     </div>

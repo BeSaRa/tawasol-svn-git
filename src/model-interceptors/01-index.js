@@ -109,4 +109,5 @@ module.exports = function (app) {
     require('./OUViewPermissionInterceptor')(app);
     require('./HREmplolyeeInterceptor')(app);
     require('./DocumentLinkInterceptor')(app);
+    require('./TaskCalenderItemInterceptor')(app);
 };

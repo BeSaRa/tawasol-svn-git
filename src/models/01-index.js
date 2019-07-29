@@ -173,4 +173,5 @@ module.exports = function (app) {
     require('./DocumentLink')(app);
     require('./DocumentLinkSubscriber')(app);
     require('./DocumentLinkViewer')(app);
+    require('./TaskCalenderItem')(app);
 };
