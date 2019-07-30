@@ -8,6 +8,14 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
+            <div class="p020">
+                <md-switch aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.grid.truncateSubject"
+                           ng-change="ctrl.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
             <span ng-if="!!(ctrl.selectedMonthText && ctrl.selectedYear)">{{lang[ctrl.selectedMonthText]}}, {{ctrl.selectedYear}}</span>
             <md-button ng-click="ctrl.getMonthYearForSentItems($event)" class="md-icon-button"
                        tooltip="{{lang.select_month_and_year}}">
@@ -101,8 +109,12 @@
                                                                              plain-text-only="false"
                                                                              click-callback="ctrl.viewDocument">
                                             </grid-document-subject-directive>-->
-                                            <a href=""
+                                            <a href="" ng-if="ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal" md-truncate
+                                               tooltip="{{g2gItem.subject}}"
+                                               ng-click="ctrl.viewDocument(g2gItem, $event)">{{g2gItem.subject}}</a>
+                                            <a href="" ng-if="!ctrl.grid.truncateSubject"
+                                               class="view-doc subject-internal"
                                                tooltip="{{g2gItem.subject}}"
                                                ng-click="ctrl.viewDocument(g2gItem, $event)">{{g2gItem.subject}}</a>
                                         </td>

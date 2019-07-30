@@ -51,15 +51,11 @@ module.exports = function (app) {
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.favorite, limit);
                 self.reloadFavoriteDocuments(page);
+            },
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.favorite),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.favorite, self.grid.truncateSubject);
             }
-            /*limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (favoriteDocumentsService.totalCount + 21);
-                    }
-                }
-            ]*/
         };
 
 

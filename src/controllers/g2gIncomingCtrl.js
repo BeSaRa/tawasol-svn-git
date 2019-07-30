@@ -48,6 +48,10 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.g2g.incoming, self.g2gItems),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.g2g.incoming, limit);
+            },
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.g2g.incoming),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.g2g.incoming, self.grid.truncateSubject);
             }
         };
 

@@ -60,6 +60,10 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.outgoing.rejected, self.rejectedOutgoings),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.outgoing.rejected, limit);
+            },
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.outgoing.rejected),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.outgoing.rejected, self.grid.truncateSubject);
             }
         };
 

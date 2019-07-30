@@ -7,7 +7,7 @@ module.exports = function (app) {
         self.tooltipSubject = '';
 
         self.getRecordText = function (forTooltip) {
-            if (forTooltip && self.skipTooltip) {
+            /*if (forTooltip && self.skipTooltip) {
                 return '';
             }
             if (self.textValue) {
@@ -21,31 +21,40 @@ module.exports = function (app) {
             } else if ('getTranslatedName' in self.record) {
                 return self.record.getTranslatedName();
             }
-            return '';
+            return '';*/
 
-            /*if (forTooltip && self.skipTooltip) {
-                self.tooltipSubject = '';
-                return;
-            }
+            var subject = '', tooltip = '';
             if (self.textValue) {
-                self.subject = angular.copy(self.textValue);
-                self.tooltipSubject = angular.copy(self.subject);
+                subject = angular.copy(self.textValue);
+                tooltip = angular.copy(subject);
             } else if (self.textProperty) {
-                self.subject = _.get(self.record, angular.copy(self.textProperty));
-                self.tooltipSubject = angular.copy(self.subject);
+                subject = _.get(self.record, angular.copy(self.textProperty));
+                tooltip = angular.copy(subject);
             } else if (self.textCallback) {
-                self.subject = self.record[self.textCallback]();
-                self.tooltipSubject = angular.copy(self.subject);
+                subject = self.record[self.textCallback]();
+                tooltip = angular.copy(subject);
             } else if ('getSubject' in self.record) {
-                self.subject = self.record.getSubject();
-                self.tooltipSubject = angular.copy(self.subject);
+                subject = self.record.getSubject();
+                tooltip = angular.copy(subject);
             } else if ('getTranslatedName' in self.record) {
-                self.subject = self.record.getTranslatedName();
-                self.tooltipSubject = angular.copy(self.subject);
+                subject = self.record.getTranslatedName();
+                tooltip = angular.copy(subject);
             } else {
-                self.subject = '';
-                self.tooltipSubject = angular.copy(self.subject);
-            }*/
+                subject = '';
+                tooltip = angular.copy(subject);
+            }
+            self.subject = subject;
+            if (subject){
+                if (!self.skipTruncate && self.truncateLength){
+                    self.subject = _.truncate(subject, {'length': self.truncateLength, 'separator': ' '});
+                }
+            }
+            self.tooltipSubject = self.skipTooltip ? '' : tooltip;
+            if (forTooltip) {
+                return self.tooltipSubject;
+            } else {
+               return self.subject;
+            }
         };
 
         self.subjectCallback = function ($event) {

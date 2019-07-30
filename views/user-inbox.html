@@ -18,6 +18,29 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
+            <div class="p020">
+                <md-switch ng-if="ctrl.selectedGridType === 'inbox'"
+                           aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.grid.truncateSubject"
+                           ng-change="ctrl.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+                <md-switch ng-if="ctrl.selectedGridType === 'starred'"
+                           aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.starredGrid.truncateSubject"
+                           ng-change="ctrl.starredGrid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.starredGrid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+                <md-switch ng-if="ctrl.selectedGridType === 'filter'"
+                           aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.filterGrid[0].truncateSubject"
+                           ng-change="ctrl.filterGrid[0].setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.filterGrid[0].truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
             <div>
                 <div layout="row" tooltip="{{ctrl.showStarred ? lang.hide_starred: lang.show_starred}}"
                      layout-align="start center">

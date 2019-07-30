@@ -715,7 +715,7 @@ module.exports = function (app) {
                 .loadOUApplicationUserByUserIdAndOUId(userId, ouId)
                 .then(function (ouApplicationUser) {
                     //TODO: remove this workaround after backend return back for us the ouInfo
-                    if (!ouApplicationUser.ouInfo.id) {
+                    if (ouApplicationUser.ouid && !ouApplicationUser.ouInfo.id) {
                         ouApplicationUser.ouInfo.fillInfoFromOU(organizationService.getOrganizationById(ouApplicationUser.ouid));
                     }
                     return self.mapProxyUsers(ouApplicationUser);

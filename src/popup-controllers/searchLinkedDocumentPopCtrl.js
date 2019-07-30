@@ -189,7 +189,11 @@ module.exports = function (app) {
                     }
                 }
             ],
-            filter: {search: {}}
+            filter: {search: {}},
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.others.linkedDocSearch),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.others.linkedDocSearch, self.grid.truncateSubject);
+            }
         };
 
 

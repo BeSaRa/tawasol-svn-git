@@ -1652,11 +1652,12 @@ tr.unread-row, tr.current-version {
 }
 
 .subject {
-  max-width: 200px !important;
+  max-width: 400px !important;
 }
 
 .subject-internal {
-  max-width: 160px !important;
+  max-width: 360px !important;
+  min-width: 200px !important;
 }
 
 .view-doc {

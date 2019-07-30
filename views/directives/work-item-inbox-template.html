@@ -165,14 +165,22 @@
                 <td md-cell class="subject">
                     <!--<grid-document-subject-directive record="userInbox"
                                                      plain-text-only="!userInbox.hasContent()"
-                                                     click-callback="ctrl.viewDocument">
+                                                     click-callback="ctrl.viewDocument"
+                                                     skip-truncate="!ctrl.grid.truncateSubject">
                     </grid-document-subject-directive>-->
-                    <a href="" ng-if="userInbox.hasContent()"
+                    <a href="" ng-if="userInbox.hasContent() && ctrl.grid.truncateSubject"
                        class="view-doc subject-internal" md-truncate
                        tooltip="{{userInbox.generalStepElm.docSubject}}"
                        ng-click="ctrl.viewDocument(userInbox, $event)">{{userInbox.generalStepElm.docSubject}}</a>
-                    <span ng-if="!userInbox.hasContent()"
+                    <span ng-if="!userInbox.hasContent() && ctrl.grid.truncateSubject"
                           class="view-doc subject-internal" md-truncate
+                          tooltip="{{userInbox.generalStepElm.docSubject}}">{{userInbox.generalStepElm.docSubject}}</span>
+                    <a href="" ng-if="userInbox.hasContent() && !ctrl.grid.truncateSubject"
+                       class="view-doc subject-internal"
+                       tooltip="{{userInbox.generalStepElm.docSubject}}"
+                       ng-click="ctrl.viewDocument(userInbox, $event)">{{userInbox.generalStepElm.docSubject}}</a>
+                    <span ng-if="!userInbox.hasContent() && !ctrl.grid.truncateSubject"
+                          class="view-doc subject-internal"
                           tooltip="{{userInbox.generalStepElm.docSubject}}">{{userInbox.generalStepElm.docSubject}}</span>
                 </td>
                 <td md-cell>{{userInbox.getReceivedDate()}}</td>
@@ -183,9 +191,9 @@
                     </div>
                 </td>
                 <td md-cell class="td-data">
-                                            <span class="{{userInbox.dueDateStatusIndicator.class}}"
-                                                  tooltip="{{lang[userInbox.dueDateStatusIndicator.tooltip].change({due_date_status:lang[userInbox.dueDateStatusIndicator.text] })}}">
-                                                {{userInbox.generalStepElm.dueDate}}</span>
+                    <span class="{{userInbox.dueDateStatusIndicator.class}}"
+                          tooltip="{{lang[userInbox.dueDateStatusIndicator.tooltip].change({due_date_status:lang[userInbox.dueDateStatusIndicator.text] })}}">
+                        {{userInbox.generalStepElm.dueDate}}</span>
                 </td>
                 <td md-cell class="td-data">
                     <main-site-sub-site-directive item="userInbox"></main-site-sub-site-directive>

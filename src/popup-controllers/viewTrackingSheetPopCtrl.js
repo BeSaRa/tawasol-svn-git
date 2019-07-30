@@ -20,7 +20,8 @@ module.exports = function (app) {
                                                          outgoingDeliveryReportRecords,
                                                          fullHistoryRecords,
                                                          documentLinkViewerRecords,
-                                                         viewTrackingSheetService) {
+                                                         viewTrackingSheetService,
+                                                         gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewTrackingSheetPopCtrl';
@@ -80,7 +81,11 @@ module.exports = function (app) {
                         return (self.workflowHistoryRecords.length + 21);
                     }
                 }
-            ]
+            ],
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.workflowHistory),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.workflowHistory, self.workflowHistoryGrid.truncateSubject);
+            }
         };
 
         /**
@@ -101,7 +106,11 @@ module.exports = function (app) {
                         return (self.linkedDocumentsHistoryRecords.length + 21);
                     }
                 }
-            ]
+            ],
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.linkedDocsHistory),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.linkedDocsHistory, self.linkedDocumentsHistoryGrid.truncateSubject);
+            }
         };
 
 
@@ -116,7 +125,11 @@ module.exports = function (app) {
                         return (self.mergedLinkedDocumentHistoryRecords.length + 21);
                     }
                 }
-            ]
+            ],
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.mergedLinkedDocsHistory),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.mergedLinkedDocsHistory, self.mergedLinkedDocHistoryGrid.truncateSubject);
+            }
         };
 
         /**
@@ -137,7 +150,11 @@ module.exports = function (app) {
                         return (self.attachmentsHistoryRecords.length + 21);
                     }
                 }
-            ]
+            ],
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.attachmentsHistory),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.attachmentsHistory, self.attachmentsHistoryGrid.truncateSubject);
+            }
         };
 
         /**
@@ -158,7 +175,11 @@ module.exports = function (app) {
                         return (self.linkedEntitiesHistoryRecords.length + 21);
                     }
                 }
-            ]
+            ],
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.linkedEntitiesHistory),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.linkedEntitiesHistory, self.linkedEntitiesHistoryGrid.truncateSubject);
+            }
         };
 
         /**
@@ -179,7 +200,11 @@ module.exports = function (app) {
                         return (self.destinationHistoryRecords.length + 21);
                     }
                 }
-            ]
+            ],
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.destinationsHistory),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.destinationsHistory, self.destinationHistoryGrid.truncateSubject);
+            }
         };
 
         /**
@@ -200,7 +225,11 @@ module.exports = function (app) {
                         return (self.contentViewHistoryRecords.length + 21);
                     }
                 }
-            ]
+            ],
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.contentViewHistory),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.contentViewHistory, self.contentViewHistoryGrid.truncateSubject);
+            }
         };
 
         /**
@@ -220,7 +249,11 @@ module.exports = function (app) {
                         return (self.smsLogRecords.length + 21);
                     }
                 }
-            ]
+            ],
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.smsLogs),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.smsLogs, self.smsLogsGrid.truncateSubject);
+            }
         };
 
         /**
@@ -241,7 +274,11 @@ module.exports = function (app) {
                         return (self.outgoingDeliveryReportRecords.length + 21);
                     }
                 }
-            ]
+            ],
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.outgoingDeliveryReport),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.outgoingDeliveryReport, self.outgoingDeliveryReportGrid.truncateSubject);
+            }
         };
 
         /**
@@ -262,7 +299,11 @@ module.exports = function (app) {
                         return (self.fullHistoryRecords.length + 21);
                     }
                 }
-            ]
+            ],
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.fullHistory),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.fullHistory, self.fullHistoryGrid.truncateSubject);
+            }
         };
 
         /**

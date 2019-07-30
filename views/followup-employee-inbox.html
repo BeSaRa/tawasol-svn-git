@@ -8,6 +8,14 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
+            <div class="p020">
+                <md-switch aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.grid.truncateSubject"
+                           ng-change="ctrl.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
             <div>{{ctrl.currentSelectedUser.getTranslatedName()}}</div>
             <md-button ng-click="ctrl.getEmployeeForFollowupEmployeeInbox($event)" class="md-icon-button"
                        tooltip="{{lang.select_organization_and_user}}">
@@ -168,12 +176,19 @@
                                                                              plain-text-only="!followupEmployeeInbox.hasContent()"
                                                                              click-callback="ctrl.viewDocument">
                                             </grid-document-subject-directive>-->
-                                            <a href="" ng-if="followupEmployeeInbox.hasContent()"
+                                            <a href="" ng-if="followupEmployeeInbox.hasContent() && ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal" md-truncate
                                                tooltip="{{followupEmployeeInbox.generalStepElm.docSubject}}"
                                                ng-click="ctrl.viewDocument(followupEmployeeInbox, $event)">{{followupEmployeeInbox.generalStepElm.docSubject}}</a>
-                                            <span ng-if="!followupEmployeeInbox.hasContent()"
+                                            <span ng-if="!followupEmployeeInbox.hasContent() && ctrl.grid.truncateSubject"
                                                   class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{followupEmployeeInbox.generalStepElm.docSubject}}">{{followupEmployeeInbox.generalStepElm.docSubject}}</span>
+                                            <a href="" ng-if="followupEmployeeInbox.hasContent() && !ctrl.grid.truncateSubject"
+                                               class="view-doc subject-internal"
+                                               tooltip="{{followupEmployeeInbox.generalStepElm.docSubject}}"
+                                               ng-click="ctrl.viewDocument(followupEmployeeInbox, $event)">{{followupEmployeeInbox.generalStepElm.docSubject}}</a>
+                                            <span ng-if="!followupEmployeeInbox.hasContent() && !ctrl.grid.truncateSubject"
+                                                  class="view-doc subject-internal"
                                                   tooltip="{{followupEmployeeInbox.generalStepElm.docSubject}}">{{followupEmployeeInbox.generalStepElm.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{followupEmployeeInbox.generalStepElm.receivedDate}}</td>

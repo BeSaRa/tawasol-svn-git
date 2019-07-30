@@ -10,6 +10,15 @@
                        class="md-icon-button" tooltip="{{lang.print}}">
                 <md-icon md-svg-icon="printer"></md-icon>
             </md-button>
+            <span flex=""></span>
+            <div class="p020" ng-if="ctrl.selectedTabName === 'result'">
+                <md-switch aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.grid.truncateSubject"
+                           ng-change="ctrl.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
         </div>
 
         <ng-form class="white-bg" name="searchGeneralForm" id="searchGeneralForm" flex layout="column"
@@ -194,12 +203,19 @@
                                                                          plain-text-only="!searchedGeneralDocument.hasContent()"
                                                                          click-callback="ctrl.viewDocument">
                                         </grid-document-subject-directive>-->
-                                        <a href="" ng-if="searchedGeneralDocument.hasContent()"
+                                        <a href="" ng-if="searchedGeneralDocument.hasContent() && ctrl.grid.truncateSubject"
                                            class="view-doc subject-internal" md-truncate
                                            tooltip="{{searchedGeneralDocument.docSubject}}"
                                            ng-click="ctrl.viewDocument(searchedGeneralDocument, $event)">{{searchedGeneralDocument.docSubject}}</a>
-                                        <span ng-if="!searchedGeneralDocument.hasContent()"
+                                        <span ng-if="!searchedGeneralDocument.hasContent() && ctrl.grid.truncateSubject"
                                               class="view-doc subject-internal" md-truncate
+                                              tooltip="{{searchedGeneralDocument.docSubject}}">{{searchedGeneralDocument.docSubject}}</span>
+                                        <a href="" ng-if="searchedGeneralDocument.hasContent() && !ctrl.grid.truncateSubject"
+                                           class="view-doc subject-internal"
+                                           tooltip="{{searchedGeneralDocument.docSubject}}"
+                                           ng-click="ctrl.viewDocument(searchedGeneralDocument, $event)">{{searchedGeneralDocument.docSubject}}</a>
+                                        <span ng-if="!searchedGeneralDocument.hasContent() && !ctrl.grid.truncateSubject"
+                                              class="view-doc subject-internal"
                                               tooltip="{{searchedGeneralDocument.docSubject}}">{{searchedGeneralDocument.docSubject}}</span>
                                     </td>
                                     <td md-cell>{{searchedGeneralDocument.priorityLevel.getTranslatedName()}}</td>

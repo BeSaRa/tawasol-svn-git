@@ -53,6 +53,7 @@ module.exports = function (app) {
         self.bySender = false;
 
         self.selectedTab = 0;
+        self.selectedGridType = 'inbox';
 
         self.changeCriteria = function () {
             var local = angular.copy(self.searchModel);
@@ -120,6 +121,10 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.userInbox),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.userInbox, limit);
+            },
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.userInbox),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.userInbox, self.grid.truncateSubject);
             }
         };
 
@@ -130,6 +135,10 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.starred, self.starredUserInboxes),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.starred, limit);
+            },
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.starred),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.starred, self.starredGrid.truncateSubject);
             }
         };
 
@@ -174,6 +183,11 @@ module.exports = function (app) {
                     limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.inboxFilter),
                     pagingCallback: function (page, limit) {
                         gridService.setGridPagingLimitByGridName(gridService.grids.inbox.inboxFilter, limit);
+                    },
+                    truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.inboxFilter),
+                    setTruncateSubject: function ($event) {
+                        // using first filter grid because all filter grids will use same value for truncate
+                        gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.inboxFilter, self.filterGrid[0].truncateSubject);
                     }
                 })
             }
@@ -271,6 +285,7 @@ module.exports = function (app) {
                 filter: angular.copy(filter)
             };
             _prepareFilters();
+            self.selectedGridType = 'filter';
             if (!filter.status) {
                 toast.info(langService.get('filter_disabled_activate_to_get_data'));
                 self.workItemsFilters[$index] = [];
@@ -290,6 +305,7 @@ module.exports = function (app) {
             self.selectedFilter = null;
             self.selectedTab = $index;
             self.selectedUserInboxes = [];
+            self.selectedGridType = ($index === 0 ? 'inbox' : 'starred');
         };
         /**
          * @description Replaces the record in grid after update

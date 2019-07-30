@@ -83,13 +83,13 @@ module.exports = function (app) {
 
 
             defer.promise.then(function () {
-                if (!model.ouid.hasOwnProperty('id')) {
+                if (model.ouid && !model.ouid.hasOwnProperty('id')) {
                     model.ouid = _.find(organizations, function (organization) {
                         return organization.id === model.ouid;
                     });
                 }
 
-                if (!model.customRoleId.hasOwnProperty('id')) {
+                if (model.customRoleId && !model.customRoleId.hasOwnProperty('id')) {
                     var roles = roleService.roles;
                     model.customRoleId = _.find(roles, function (role) {
                         return role.id === model.customRoleId;

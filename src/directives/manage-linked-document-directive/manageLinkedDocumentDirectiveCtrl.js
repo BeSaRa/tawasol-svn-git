@@ -11,7 +11,8 @@ module.exports = function (app) {
                                                                   $timeout,
                                                                   employeeService,
                                                                   $stateParams,
-                                                                  toast) {
+                                                                  toast,
+                                                                  gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageLinkedDocumentDirectiveCtrl';
@@ -42,7 +43,11 @@ module.exports = function (app) {
                     }
                 }
             ],
-            filter: {search: {}}
+            filter: {search: {}},
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.others.linkedDoc),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.others.linkedDoc, self.grid.truncateSubject);
+            }
         };
 
         function _filterExists(correspondences, vsIds) {

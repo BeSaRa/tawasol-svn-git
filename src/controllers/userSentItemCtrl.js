@@ -110,6 +110,10 @@ module.exports = function (app) {
                     self.userSentItems = gridService.searchGridData(self.grid, self.userSentItemsCopy);
                     self.totalRecords = self.grid.searchText ? self.userSentItems.length : userSentItemService.totalCount;
                 }
+            },
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.sentItem),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.sentItem, self.grid.truncateSubject);
             }
         };
 

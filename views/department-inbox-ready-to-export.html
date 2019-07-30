@@ -8,6 +8,14 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
+            <div class="p020">
+                <md-switch aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.grid.truncateSubject"
+                           ng-change="ctrl.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
             <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
         </div>
         <!-- end page-header -->
@@ -136,12 +144,19 @@
                                                                              plain-text-only="!readyToExport.hasContent()"
                                                                              click-callback="ctrl.viewDocument">
                                             </grid-document-subject-directive>-->
-                                            <a href="" ng-if="readyToExport.hasContent()"
+                                            <a href="" ng-if="readyToExport.hasContent() && ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal" md-truncate
                                                tooltip="{{readyToExport.generalStepElm.docSubject}}"
                                                ng-click="ctrl.viewDocument(readyToExport, $event)">{{readyToExport.generalStepElm.docSubject}}</a>
-                                            <span ng-if="!readyToExport.hasContent()"
+                                            <span ng-if="!readyToExport.hasContent() && ctrl.grid.truncateSubject"
                                                   class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{readyToExport.generalStepElm.docSubject}}">{{readyToExport.generalStepElm.docSubject}}</span>
+                                            <a href="" ng-if="readyToExport.hasContent() && !ctrl.grid.truncateSubject"
+                                               class="view-doc subject-internal"
+                                               tooltip="{{readyToExport.generalStepElm.docSubject}}"
+                                               ng-click="ctrl.viewDocument(readyToExport, $event)">{{readyToExport.generalStepElm.docSubject}}</a>
+                                            <span ng-if="!readyToExport.hasContent() && !ctrl.grid.truncateSubject"
+                                                  class="view-doc subject-internal"
                                                   tooltip="{{readyToExport.generalStepElm.docSubject}}">{{readyToExport.generalStepElm.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{readyToExport.generalStepElm.receivedDate}}</td>

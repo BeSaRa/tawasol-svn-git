@@ -8,6 +8,14 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
+            <div class="p020">
+                <md-switch aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.grid.truncateSubject"
+                           ng-change="ctrl.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
             <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
         </div><!-- page-header -->
         <div layout="column" flex>
@@ -82,12 +90,19 @@
                                                                              plain-text-only="!quickSearch.hasContent()"
                                                                              click-callback="ctrl.viewDocument">
                                             </grid-document-subject-directive>-->
-                                            <a href="" ng-if="quickSearch.hasContent()"
+                                            <a href="" ng-if="quickSearch.hasContent() && ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal" md-truncate
                                                tooltip="{{quickSearch.docSubject}}"
                                                ng-click="ctrl.viewDocument(quickSearch, $event)">{{quickSearch.docSubject}}</a>
-                                            <span ng-if="!quickSearch.hasContent()"
+                                            <span ng-if="!quickSearch.hasContent() && ctrl.grid.truncateSubject"
                                                   class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{quickSearch.docSubject}}">{{quickSearch.docSubject}}</span>
+                                            <a href="" ng-if="quickSearch.hasContent() && !ctrl.grid.truncateSubject"
+                                               class="view-doc subject-internal"
+                                               tooltip="{{quickSearch.docSubject}}"
+                                               ng-click="ctrl.viewDocument(quickSearch, $event)">{{quickSearch.docSubject}}</a>
+                                            <span ng-if="!quickSearch.hasContent() && !ctrl.grid.truncateSubject"
+                                                  class="view-doc subject-internal"
                                                   tooltip="{{quickSearch.docSubject}}">{{quickSearch.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{quickSearch.priorityLevel.getTranslatedName()}}</td>

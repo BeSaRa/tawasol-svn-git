@@ -12,6 +12,14 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
+            <div class="p020">
+                <md-switch aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.grid.truncateSubject"
+                           ng-change="ctrl.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
             <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
         </div>
         <!-- end page-header -->
@@ -85,8 +93,11 @@
                                             <!--<grid-document-subject-directive record="prepareInternal"
                                                                              plain-text-only="true">
                                             </grid-document-subject-directive>-->
-                                            <span ng-if="!prepareInternal.hasContent()"
+                                            <span ng-if="ctrl.grid.truncateSubject"
                                                   class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{prepareInternal.docSubject}}">{{prepareInternal.docSubject}}</span>
+                                            <span ng-if="!ctrl.grid.truncateSubject"
+                                                  class="view-doc subject-internal"
                                                   tooltip="{{prepareInternal.docSubject}}">{{prepareInternal.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{prepareInternal.priorityLevel.getTranslatedName()}}</td>

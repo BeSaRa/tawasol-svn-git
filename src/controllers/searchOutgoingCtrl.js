@@ -52,6 +52,9 @@ module.exports = function (app) {
             self.searchOutgoing.registryOU = self.employeeService.getEmployee().getRegistryOUID();
             self.searchOutgoing.ou = self.employeeService.getEmployee().getOUID();
             self.loadSubOrganizations = true;
+        } else {
+            self.searchOutgoing.registryOU = self.employeeService.getEmployee().getRegistryOUID();
+            self.loadSubOrganizations = true;
         }
         /**
          * @description Get the dynamic required fields
@@ -227,7 +230,11 @@ module.exports = function (app) {
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.search.outgoing, limit);
             },
-            filter: {search: {}}
+            filter: {search: {}},
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.search.outgoing),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.search.outgoing, self.grid.truncateSubject);
+            }
         };
 
         /**

@@ -9,6 +9,14 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
+            <div class="p020">
+                <md-switch aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.grid.truncateSubject"
+                           ng-change="ctrl.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
             <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
         </div>
         <!-- end page-header -->
@@ -142,12 +150,19 @@
                                                                              plain-text-only="!returnedDepartmentInbox.hasContent()"
                                                                              click-callback="ctrl.viewDocument">
                                             </grid-document-subject-directive>-->
-                                            <a href="" ng-if="returnedDepartmentInbox.hasContent()"
+                                            <a href="" ng-if="returnedDepartmentInbox.hasContent() && ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal" md-truncate
                                                tooltip="{{returnedDepartmentInbox.generalStepElm.docSubject}}"
                                                ng-click="ctrl.viewDocument(returnedDepartmentInbox, $event)">{{returnedDepartmentInbox.generalStepElm.docSubject}}</a>
-                                            <span ng-if="!returnedDepartmentInbox.hasContent()"
+                                            <span ng-if="!returnedDepartmentInbox.hasContent() && ctrl.grid.truncateSubject"
                                                   class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{returnedDepartmentInbox.generalStepElm.docSubject}}">{{returnedDepartmentInbox.generalStepElm.docSubject}}</span>
+                                            <a href="" ng-if="returnedDepartmentInbox.hasContent() && !ctrl.grid.truncateSubject"
+                                               class="view-doc subject-internal"
+                                               tooltip="{{returnedDepartmentInbox.generalStepElm.docSubject}}"
+                                               ng-click="ctrl.viewDocument(returnedDepartmentInbox, $event)">{{returnedDepartmentInbox.generalStepElm.docSubject}}</a>
+                                            <span ng-if="!returnedDepartmentInbox.hasContent() && !ctrl.grid.truncateSubject"
+                                                  class="view-doc subject-internal"
                                                   tooltip="{{returnedDepartmentInbox.generalStepElm.docSubject}}">{{returnedDepartmentInbox.generalStepElm.docSubject}}</span>
                                         </td>
                                         <td md-cell>{{returnedDepartmentInbox.generalStepElm.receivedDate}}</td>

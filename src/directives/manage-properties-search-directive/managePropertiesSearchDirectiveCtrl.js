@@ -137,7 +137,6 @@ module.exports = function (app) {
             };
 
             self.getYears();
-
         });
         // for sub organizations
         self.subOrganizations = [];
@@ -570,7 +569,7 @@ module.exports = function (app) {
             }
         };
 
-        self.onRegistryChanged = function () {
+        self.onRegistryChanged = function (skipResetOu) {
             self.subOrganizations = [];
             if (!self.document.registryOU) {
                 return false;
@@ -583,7 +582,9 @@ module.exports = function (app) {
                     } else {
                         result.unshift(angular.copy(organizationService.getOrganizationById(self.document.registryOU)));
                     }
-                    self.document.ou = null;
+                    if (!skipResetOu) {
+                        self.document.ou = null;
+                    }
                     self.subOrganizations = result;
                 });
         };
@@ -614,7 +615,7 @@ module.exports = function (app) {
             return self.loadSubOrganizations;
         }, function (newVal) {
             if (newVal) {
-                self.onRegistryChanged();
+                self.onRegistryChanged(true);
                 self.loadSubOrganizations = false;
                 watcher();
             }

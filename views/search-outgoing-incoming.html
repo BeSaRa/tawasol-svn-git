@@ -10,6 +10,15 @@
                        class="md-icon-button" tooltip="{{lang.print}}">
                 <md-icon md-svg-icon="printer"></md-icon>
             </md-button>
+            <span flex=""></span>
+            <div class="p020" ng-if="ctrl.selectedTabName === 'result'">
+                <md-switch aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.grid.truncateSubject"
+                           ng-change="ctrl.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
         </div>
 
         <ng-form class="white-bg" name="searchOutgoingIncomingForm" id="searchOutgoingIncomingForm" flex layout="column"
@@ -174,12 +183,19 @@
                                                                          plain-text-only="!searchedOutgoingIncomingDocument.hasContent()"
                                                                          click-callback="ctrl.viewDocument">
                                         </grid-document-subject-directive>-->
-                                        <a href="" ng-if="searchedOutgoingIncomingDocument.hasContent()"
+                                        <a href="" ng-if="searchedOutgoingIncomingDocument.hasContent() && ctrl.grid.truncateSubject"
                                            class="view-doc subject-internal" md-truncate
                                            tooltip="{{searchedOutgoingIncomingDocument.docSubject}}"
                                            ng-click="ctrl.viewDocument(searchedOutgoingIncomingDocument, $event)">{{searchedOutgoingIncomingDocument.docSubject}}</a>
-                                        <span ng-if="!searchedOutgoingIncomingDocument.hasContent()"
+                                        <span ng-if="!searchedOutgoingIncomingDocument.hasContent() && ctrl.grid.truncateSubject"
                                               class="view-doc subject-internal" md-truncate
+                                              tooltip="{{searchedOutgoingIncomingDocument.docSubject}}">{{searchedOutgoingIncomingDocument.docSubject}}</span>
+                                        <a href="" ng-if="searchedOutgoingIncomingDocument.hasContent() && !ctrl.grid.truncateSubject"
+                                           class="view-doc subject-internal"
+                                           tooltip="{{searchedOutgoingIncomingDocument.docSubject}}"
+                                           ng-click="ctrl.viewDocument(searchedOutgoingIncomingDocument, $event)">{{searchedOutgoingIncomingDocument.docSubject}}</a>
+                                        <span ng-if="!searchedOutgoingIncomingDocument.hasContent() && !ctrl.grid.truncateSubject"
+                                              class="view-doc subject-internal"
                                               tooltip="{{searchedOutgoingIncomingDocument.docSubject}}">{{searchedOutgoingIncomingDocument.docSubject}}</span>
                                     </td>
                                     <td md-cell>{{searchedOutgoingIncomingDocument.priorityLevel.getTranslatedName()}}

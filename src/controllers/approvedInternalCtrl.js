@@ -75,6 +75,10 @@ module.exports = function (app) {
                 limitOptions: gridService.getGridLimitOptions(gridService.grids.internal.approved, self.approvedInternals),
                 pagingCallback: function (page, limit) {
                     gridService.setGridPagingLimitByGridName(gridService.grids.internal.approved, limit);
+                },
+                truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.internal.approved),
+                setTruncateSubject: function ($event) {
+                    gridService.setGridSubjectTruncateByGridName(gridService.grids.internal.approved, self.grid.truncateSubject);
                 }
             };
 

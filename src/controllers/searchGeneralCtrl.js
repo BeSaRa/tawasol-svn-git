@@ -50,6 +50,9 @@ module.exports = function (app) {
             self.searchGeneral.registryOU = self.employeeService.getEmployee().getRegistryOUID();
             self.searchGeneral.ou = self.employeeService.getEmployee().getOUID();
             self.loadSubOrganizations = true;
+        } else {
+            self.searchGeneral.registryOU = self.employeeService.getEmployee().getRegistryOUID();
+            self.loadSubOrganizations = true;
         }
 
         /**
@@ -273,7 +276,11 @@ module.exports = function (app) {
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.search.general, limit);
             },
-            filter: {search: {}}
+            filter: {search: {}},
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.search.general),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.search.general, self.grid.truncateSubject);
+            }
         };
 
         /**

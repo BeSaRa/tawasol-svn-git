@@ -52,6 +52,9 @@ module.exports = function (app) {
             self.searchInternal.registryOU = self.employeeService.getEmployee().getRegistryOUID();
             self.searchInternal.ou = self.employeeService.getEmployee().getOUID();
             self.loadSubOrganizations = true;
+        } else {
+            self.searchInternal.registryOU = self.employeeService.getEmployee().getRegistryOUID();
+            self.loadSubOrganizations = true;
         }
 
         /**
@@ -240,7 +243,11 @@ module.exports = function (app) {
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.search.internal, limit);
             },
-            filter: {search: {}}
+            filter: {search: {}},
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.search.internal),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.search.internal, self.grid.truncateSubject);
+            }
         };
 
         /**

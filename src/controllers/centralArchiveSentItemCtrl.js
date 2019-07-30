@@ -59,6 +59,10 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.centralArchive.sentItem, self.sentItemCentralArchives),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.centralArchive.sentItem, limit);
+            },
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.centralArchive.sentItem),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.centralArchive.sentItem, self.grid.truncateSubject);
             }
         };
 

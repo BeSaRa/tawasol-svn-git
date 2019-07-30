@@ -53,6 +53,10 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.incoming.readyToSend, self.readyToSendIncomings),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.incoming.readyToSend, limit);
+            },
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.incoming.readyToSend),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.incoming.readyToSend, self.grid.truncateSubject);
             }
         };
 

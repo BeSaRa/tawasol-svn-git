@@ -71,6 +71,16 @@
                     <div ng-if="ctrl.heading === 'view_tracking_sheet_linked_documents_history'">
                         <md-content>
                             <div layout="column" class="p20">
+                                <div layout="row" class="p020">
+                                    <span flex></span>
+                                    <md-switch aria-label="{{lang.truncate_subject}}"
+                                               class="m0"
+                                               ng-model="ctrl.linkedDocumentsHistoryGrid.truncateSubject"
+                                               ng-change="ctrl.linkedDocumentsHistoryGrid.setTruncateSubject($event)">
+                                        <span>{{lang.truncate_subject}} : </span>
+                                        {{ctrl.linkedDocumentsHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                                    </md-switch>
+                                </div>
                                 <md-card>
                                     <md-table-container>
                                         <div flex scroll-directive>
@@ -99,7 +109,15 @@
                                                 <tbody md-body>
                                                 <tr md-select="linkedDocumentHistoryRecord" md-row
                                                     ng-repeat="linkedDocumentHistoryRecord in ctrl.linkedDocumentsHistoryRecords | filter:ctrl.searchModelLinkedDocsHistory | limitTo: ctrl.linkedDocumentsHistoryGrid.limit: ((ctrl.linkedDocumentsHistoryGrid.page - 1) * ctrl.linkedDocumentsHistoryGrid.limit) track by $index">
-                                                    <td md-cell>{{linkedDocumentHistoryRecord.itemName}}</td>
+                                                    <!--<td md-cell>{{linkedDocumentHistoryRecord.itemName}}</td>-->
+                                                    <td md-cell class="subject">
+                                                        <span ng-if="ctrl.linkedDocumentsHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{linkedDocumentHistoryRecord.itemName}}">{{linkedDocumentHistoryRecord.itemName}}</span>
+                                                        <span ng-if="!ctrl.linkedDocumentsHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal"
+                                                              tooltip="{{linkedDocumentHistoryRecord.itemName}}">{{linkedDocumentHistoryRecord.itemName}}</span>
+                                                    </td>
                                                     <td md-cell>
                                                         {{linkedDocumentHistoryRecord.eventTypeInfo.getTranslatedName()}}
                                                     </td>
@@ -129,6 +147,16 @@
                     <div ng-if="ctrl.heading === 'view_tracking_sheet_attachments_history'">
                         <md-content>
                             <div layout="column" class="p20">
+                                <div layout="row" class="p020">
+                                    <span flex></span>
+                                    <md-switch aria-label="{{lang.truncate_subject}}"
+                                               class="m0"
+                                               ng-model="ctrl.attachmentsHistoryGrid.truncateSubject"
+                                               ng-change="ctrl.attachmentsHistoryGrid.setTruncateSubject($event)">
+                                        <span>{{lang.truncate_subject}} : </span>
+                                        {{ctrl.attachmentsHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                                    </md-switch>
+                                </div>
                                 <md-card>
                                     <md-table-container>
                                         <div flex scroll-directive>
@@ -153,7 +181,15 @@
                                                 <tbody md-body>
                                                 <tr md-select="attachmentHistoryRecord" md-row
                                                     ng-repeat="attachmentHistoryRecord in ctrl.attachmentsHistoryRecords | filter:ctrl.searchModelAttachmentsHistory | limitTo: ctrl.attachmentsHistoryGrid.limit: ((ctrl.attachmentsHistoryGrid.page - 1) * ctrl.attachmentsHistoryGrid.limit)  track by $index">
-                                                    <td md-cell>{{attachmentHistoryRecord.itemName}}</td>
+                                                    <!--<td md-cell>{{attachmentHistoryRecord.itemName}}</td>-->
+                                                    <td md-cell class="subject">
+                                                        <span ng-if="ctrl.attachmentsHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{attachmentHistoryRecord.itemName}}">{{attachmentHistoryRecord.itemName}}</span>
+                                                        <span ng-if="!ctrl.attachmentsHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal"
+                                                              tooltip="{{attachmentHistoryRecord.itemName}}">{{attachmentHistoryRecord.itemName}}</span>
+                                                    </td>
                                                     <td md-cell>
                                                         {{attachmentHistoryRecord.eventTypeInfo.getTranslatedName()}}
                                                     </td>
@@ -181,6 +217,16 @@
                     <div ng-if="ctrl.heading === 'view_tracking_sheet_merged_linked_document_history'">
                         <md-content>
                             <div layout="column" class="p20">
+                                <div layout="row" class="p020">
+                                    <span flex></span>
+                                    <md-switch aria-label="{{lang.truncate_subject}}"
+                                               class="m0"
+                                               ng-model="ctrl.mergedLinkedDocHistoryGrid.truncateSubject"
+                                               ng-change="ctrl.mergedLinkedDocHistoryGrid.setTruncateSubject($event)">
+                                        <span>{{lang.truncate_subject}} : </span>
+                                        {{ctrl.mergedLinkedDocHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                                    </md-switch>
+                                </div>
                                 <md-card>
                                     <md-table-container>
                                         <div flex scroll-directive>
@@ -200,7 +246,15 @@
                                                 <tbody md-body>
                                                 <tr md-select="mergedLinkedDocHistory" md-row
                                                     ng-repeat="mergedLinkedDocHistory in ctrl.mergedLinkedDocumentHistoryRecords | filter:ctrl.searchModelMergedLinkedDocHistory | limitTo: ctrl.mergedLinkedDocHistoryGrid.limit: ((ctrl.mergedLinkedDocHistoryGrid.page - 1) * ctrl.mergedLinkedDocHistoryGrid.limit)  track by $index">
-                                                    <td md-cell>{{mergedLinkedDocHistory.docSubject}}</td>
+                                                    <!--<td md-cell>{{mergedLinkedDocHistory.docSubject}}</td>-->
+                                                    <td md-cell class="subject">
+                                                        <span ng-if="ctrl.mergedLinkedDocHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{mergedLinkedDocHistory.docSubject}}">{{mergedLinkedDocHistory.docSubject}}</span>
+                                                        <span ng-if="!ctrl.mergedLinkedDocHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal"
+                                                              tooltip="{{mergedLinkedDocHistory.docSubject}}">{{mergedLinkedDocHistory.docSubject}}</span>
+                                                    </td>
                                                     <td md-cell>{{mergedLinkedDocHistory.documentCreationDate}}</td>
                                                     <td md-cell>
                                                         <md-icon md-svg-icon="check"
@@ -366,6 +420,16 @@
                     <div ng-if="ctrl.heading === 'view_tracking_sheet_content_view_history'">
                         <md-content>
                             <div layout="column" class="p20">
+                                <div layout="row" class="p020">
+                                    <span flex></span>
+                                    <md-switch aria-label="{{lang.truncate_subject}}"
+                                               class="m0"
+                                               ng-model="ctrl.contentViewHistoryGrid.truncateSubject"
+                                               ng-change="ctrl.contentViewHistoryGrid.setTruncateSubject($event)">
+                                        <span>{{lang.truncate_subject}} : </span>
+                                        {{ctrl.contentViewHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                                    </md-switch>
+                                </div>
                                 <md-card>
                                     <md-table-container>
                                         <div flex scroll-directive>
@@ -395,7 +459,15 @@
                                                      <td md-cell>{{contentViewHistoryRecord.actionDate}}</td>
                                                      <td md-cell>{{contentViewHistoryRecord.docSubject}}</td>
                                                      <td md-cell>{{contentViewHistoryRecord.getTranslatedOUInfo()}}</td>-->
-                                                    <td md-cell>{{contentViewHistoryRecord.docSubject}}</td>
+                                                    <!--<td md-cell>{{contentViewHistoryRecord.docSubject}}</td>-->
+                                                    <td md-cell class="subject">
+                                                        <span ng-if="ctrl.contentViewHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{contentViewHistoryRecord.docSubject}}">{{contentViewHistoryRecord.docSubject}}</span>
+                                                        <span ng-if="!ctrl.contentViewHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal"
+                                                              tooltip="{{contentViewHistoryRecord.docSubject}}">{{contentViewHistoryRecord.docSubject}}</span>
+                                                    </td>
                                                     <td md-cell>{{contentViewHistoryRecord.documentType}}</td>
                                                     <td md-cell>
                                                         <div flex layout="row" layout-align="start center">
@@ -740,6 +812,16 @@
                             md-on-select="ctrl.setCurrentTab('view_tracking_sheet_linked_documents_history')">
                         <md-content>
                             <div layout="column" class="p20">
+                                <div layout="row" class="p020">
+                                    <span flex></span>
+                                    <md-switch aria-label="{{lang.truncate_subject}}"
+                                               class="m0"
+                                               ng-model="ctrl.linkedDocumentsHistoryGrid.truncateSubject"
+                                               ng-change="ctrl.linkedDocumentsHistoryGrid.setTruncateSubject($event)">
+                                        <span>{{lang.truncate_subject}} : </span>
+                                        {{ctrl.linkedDocumentsHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                                    </md-switch>
+                                </div>
                                 <md-card>
                                     <md-table-container>
                                         <div flex scroll-directive>
@@ -768,7 +850,15 @@
                                                 <tbody md-body>
                                                 <tr md-select="linkedDocumentHistoryRecord" md-row
                                                     ng-repeat="linkedDocumentHistoryRecord in ctrl.linkedDocumentsHistoryRecords | filter:ctrl.searchModelLinkedDocsHistory | limitTo: ctrl.linkedDocumentsHistoryGrid.limit: ((ctrl.linkedDocumentsHistoryGrid.page - 1) * ctrl.linkedDocumentsHistoryGrid.limit) track by $index">
-                                                    <td md-cell>{{linkedDocumentHistoryRecord.itemName}}</td>
+                                                    <!--<td md-cell>{{linkedDocumentHistoryRecord.itemName}}</td>-->
+                                                    <td md-cell class="subject">
+                                                        <span ng-if="ctrl.linkedDocumentsHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{linkedDocumentHistoryRecord.itemName}}">{{linkedDocumentHistoryRecord.itemName}}</span>
+                                                        <span ng-if="!ctrl.linkedDocumentsHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal"
+                                                              tooltip="{{linkedDocumentHistoryRecord.itemName}}">{{linkedDocumentHistoryRecord.itemName}}</span>
+                                                    </td>
                                                     <td md-cell>
                                                         {{linkedDocumentHistoryRecord.eventTypeInfo.getTranslatedName()}}
                                                     </td>
@@ -800,6 +890,16 @@
                             md-on-select="ctrl.setCurrentTab('view_tracking_sheet_attachments_history')">
                         <md-content>
                             <div layout="column" class="p20">
+                                <div layout="row" class="p020">
+                                    <span flex></span>
+                                    <md-switch aria-label="{{lang.truncate_subject}}"
+                                               class="m0"
+                                               ng-model="ctrl.attachmentsHistoryGrid.truncateSubject"
+                                               ng-change="ctrl.attachmentsHistoryGrid.setTruncateSubject($event)">
+                                        <span>{{lang.truncate_subject}} : </span>
+                                        {{ctrl.attachmentsHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                                    </md-switch>
+                                </div>
                                 <md-card>
                                     <md-table-container>
                                         <div flex scroll-directive>
@@ -824,7 +924,15 @@
                                                 <tbody md-body>
                                                 <tr md-select="attachmentHistoryRecord" md-row
                                                     ng-repeat="attachmentHistoryRecord in ctrl.attachmentsHistoryRecords | filter:ctrl.searchModelAttachmentsHistory | limitTo: ctrl.attachmentsHistoryGrid.limit: ((ctrl.attachmentsHistoryGrid.page - 1) * ctrl.attachmentsHistoryGrid.limit)  track by $index">
-                                                    <td md-cell>{{attachmentHistoryRecord.itemName}}</td>
+                                                    <!--<td md-cell>{{attachmentHistoryRecord.itemName}}</td>-->
+                                                    <td md-cell class="subject">
+                                                        <span ng-if="ctrl.attachmentsHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{attachmentHistoryRecord.itemName}}">{{attachmentHistoryRecord.itemName}}</span>
+                                                        <span ng-if="!ctrl.attachmentsHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal"
+                                                              tooltip="{{attachmentHistoryRecord.itemName}}">{{attachmentHistoryRecord.itemName}}</span>
+                                                    </td>
                                                     <td md-cell>
                                                         {{attachmentHistoryRecord.eventTypeInfo.getTranslatedName()}}
                                                     </td>
@@ -854,6 +962,16 @@
                             md-on-select="ctrl.setCurrentTab('view_tracking_sheet_merged_linked_document_history')">
                         <md-content>
                             <div layout="column" class="p20">
+                                <div layout="row" class="p020">
+                                    <span flex></span>
+                                    <md-switch aria-label="{{lang.truncate_subject}}"
+                                               class="m0"
+                                               ng-model="ctrl.mergedLinkedDocHistoryGrid.truncateSubject"
+                                               ng-change="ctrl.mergedLinkedDocHistoryGrid.setTruncateSubject($event)">
+                                        <span>{{lang.truncate_subject}} : </span>
+                                        {{ctrl.mergedLinkedDocHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                                    </md-switch>
+                                </div>
                                 <md-card>
                                     <md-table-container>
                                         <div flex scroll-directive>
@@ -873,7 +991,15 @@
                                                 <tbody md-body>
                                                 <tr md-select="mergedLinkedDocHistory" md-row
                                                     ng-repeat="mergedLinkedDocHistory in ctrl.mergedLinkedDocumentHistoryRecords | filter:ctrl.searchModelMergedLinkedDocHistory | limitTo: ctrl.mergedLinkedDocHistoryGrid.limit: ((ctrl.mergedLinkedDocHistoryGrid.page - 1) * ctrl.mergedLinkedDocHistoryGrid.limit) track by $index">
-                                                    <td md-cell>{{mergedLinkedDocHistory.docSubject}}</td>
+                                                    <!--<td md-cell>{{mergedLinkedDocHistory.docSubject}}</td>-->
+                                                    <td md-cell class="subject">
+                                                        <span ng-if="ctrl.mergedLinkedDocHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{mergedLinkedDocHistory.docSubject}}">{{mergedLinkedDocHistory.docSubject}}</span>
+                                                        <span ng-if="!ctrl.mergedLinkedDocHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal"
+                                                              tooltip="{{mergedLinkedDocHistory.docSubject}}">{{mergedLinkedDocHistory.docSubject}}</span>
+                                                    </td>
                                                     <td md-cell>{{mergedLinkedDocHistory.documentCreationDate}}</td>
                                                     <td md-cell>
                                                         <md-icon md-svg-icon="check"
@@ -1045,6 +1171,16 @@
                             md-on-select="ctrl.setCurrentTab('view_tracking_sheet_content_view_history')">
                         <md-content>
                             <div layout="column" class="p20">
+                                <div layout="row" class="p020">
+                                    <span flex></span>
+                                    <md-switch aria-label="{{lang.truncate_subject}}"
+                                               class="m0"
+                                               ng-model="ctrl.contentViewHistoryGrid.truncateSubject"
+                                               ng-change="ctrl.contentViewHistoryGrid.setTruncateSubject($event)">
+                                        <span>{{lang.truncate_subject}} : </span>
+                                        {{ctrl.contentViewHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                                    </md-switch>
+                                </div>
                                 <md-card>
                                     <md-table-container>
                                         <div flex scroll-directive>
@@ -1074,7 +1210,15 @@
                                                      <td md-cell>{{contentViewHistoryRecord.actionDate}}</td>
                                                      <td md-cell>{{contentViewHistoryRecord.docSubject}}</td>
                                                      <td md-cell>{{contentViewHistoryRecord.getTranslatedOUInfo()}}</td>-->
-                                                    <td md-cell>{{contentViewHistoryRecord.docSubject}}</td>
+                                                    <!--<td md-cell>{{contentViewHistoryRecord.docSubject}}</td>-->
+                                                    <td md-cell class="subject">
+                                                        <span ng-if="ctrl.contentViewHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{contentViewHistoryRecord.docSubject}}">{{contentViewHistoryRecord.docSubject}}</span>
+                                                        <span ng-if="!ctrl.contentViewHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal"
+                                                              tooltip="{{contentViewHistoryRecord.docSubject}}">{{contentViewHistoryRecord.docSubject}}</span>
+                                                    </td>
                                                     <td md-cell>{{contentViewHistoryRecord.documentType}}</td>
                                                     <td md-cell>
                                                         <div flex layout="row" layout-align="start center">

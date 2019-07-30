@@ -67,6 +67,10 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.centralArchive.readyToExport, self.workItems),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.centralArchive.readyToExport, limit);
+            },
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.centralArchive.readyToExport),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.centralArchive.readyToExport, self.grid.truncateSubject);
             }
         };
 

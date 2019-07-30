@@ -1,9 +1,19 @@
 <div flex layout="column">
-    <div layout="row" ng-if="!ctrl.disableEverything">
-        <md-button class="md-raised" ng-click="ctrl.openSearchDialog($event)">
+    <div layout="row">
+        <md-button class="md-raised" ng-if="!ctrl.disableEverything"
+                   ng-click="ctrl.openSearchDialog($event)">
             {{lang.search}}
         </md-button>
         <div flex></div>
+        <div class="p020">
+            <md-switch aria-label="{{lang.truncate_subject}}"
+                       class="m0"
+                       ng-model="ctrl.grid.truncateSubject"
+                       ng-change="ctrl.grid.setTruncateSubject($event)">
+                <span>{{lang.truncate_subject}} : </span>
+                {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+            </md-switch>
+        </div>
     </div>
     <div layout="row" ng-if="ctrl.linkedDocs.length">
         <md-card flex>
@@ -94,10 +104,26 @@
                                         </span>
                                     </span>-->
                         </td>
-                        <td md-cell class="td-data">
+                        <!--<td md-cell class="td-data">
                             <a href="" ng-if="correspondence.hasContent()" class="view-doc"
                                ng-click="ctrl.viewCorrespondence(correspondence, $event)">{{correspondence.docSubject}}</a>
                             <span ng-if="!correspondence.hasContent()">{{correspondence.docSubject}}</span>
+                        </td>-->
+                        <td md-cell class="subject">
+                            <a href="" ng-if="correspondence.hasContent() && ctrl.grid.truncateSubject"
+                               class="view-doc subject-internal" md-truncate
+                               tooltip="{{correspondence.docSubject}}"
+                               ng-click="ctrl.viewDocument(correspondence, $event)">{{correspondence.docSubject}}</a>
+                            <span ng-if="!correspondence.hasContent() && ctrl.grid.truncateSubject"
+                                  class="view-doc subject-internal" md-truncate
+                                  tooltip="{{correspondence.docSubject}}">{{correspondence.docSubject}}</span>
+                            <a href="" ng-if="correspondence.hasContent() && !ctrl.grid.truncateSubject"
+                               class="view-doc subject-internal"
+                               tooltip="{{correspondence.docSubject}}"
+                               ng-click="ctrl.viewDocument(correspondence, $event)">{{correspondence.docSubject}}</a>
+                            <span ng-if="!correspondence.hasContent() && !ctrl.grid.truncateSubject"
+                                  class="view-doc subject-internal"
+                                  tooltip="{{correspondence.docSubject}}">{{correspondence.docSubject}}</span>
                         </td>
                         <td md-cell>{{correspondence.priorityLevel.getTranslatedName()}}</td>
                         <td md-cell>{{correspondence.securityLevel.getTranslatedName()}}</td>
