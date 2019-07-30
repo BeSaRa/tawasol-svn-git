@@ -5,7 +5,7 @@ module.exports = function (app) {
             IGNORE_HTTPS_FOR_SCANNER: false,
             SCANNER_HTTPS_PORTS: [49735, 49736, 49737],
             SCANNER_HTTP_PORTS: [49732/*, 49733, 49734*/],
-            CORRESPONDENCE_SITES_TYPES_LOOKUPS: [1 /* internal sites */, 3 /* g2g sites */, 5 /* internal g2g sites */]
+            CORRESPONDENCE_SITES_TYPES_LOOKUPS: [1 /* internal sites */, 3 /* g2g sites */, 5 /* internal g2g sites */],
             OFFICE_ONLINE_DELAY: 3000,
             DEFAULT_START_TASK_TIME: '08:00',
             DEFAULT_SEND_RELATED_DOCS: true
