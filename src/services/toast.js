@@ -15,7 +15,7 @@ module.exports = function (app) {
          */
         self.show = function (message, type, duration) {
             var position = langService.current === 'ar' ? 'top left' : 'top right';
-            // message = _.truncate(message, {'length': 250});
+            message = _.truncate(message, {'length': 150});
             if (!type) {
                 $log.warn("Method Deprecated:  Please use one of the toast.success, toast.error, toast.warning, toast.info methods");
                 return $mdToast.show(

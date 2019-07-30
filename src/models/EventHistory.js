@@ -14,7 +14,7 @@ module.exports = function (app) {
                         return langService.get(this.docClassIndicator.tooltip);
                     },
                     sent_items_document_subject: 'docSubject',
-                    sent_items_receive_date: 'actionDate',
+                    action_date: 'actionDate',
                     sent_items_action: function () {
                         return this.action.getTranslatedName();
                     },
