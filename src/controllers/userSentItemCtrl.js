@@ -99,7 +99,7 @@ module.exports = function (app) {
                 }
             },
             searchText: '',
-            searchCallback: function (serverSide) {
+            searchCallback: function (grid, serverSide) {
                 if (!!serverSide) {
                     gridService.searchGridData(self.grid, self.userSentItemsCopy, userSentItemService.filterUserSentItems)
                         .then(function (result) {

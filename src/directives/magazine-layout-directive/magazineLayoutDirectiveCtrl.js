@@ -281,73 +281,75 @@ module.exports = function (app) {
             {
                 column: 'serial_asc',
                 text: function () {
-                    return langService.get('inbox_serial') + ' - ' + langService.get('ascending')
+                    return langService.get('inbox_serial') + ' - ' + langService.get('ascending');
                 },
                 value: function () {
-                    return 'generalStepElm.docFullSerial'
+                    return 'generalStepElm.docFullSerial';
                 }
             },
             {
                 column: 'serial_desc',
                 text: function () {
-                    return langService.get('inbox_serial') + ' - ' + langService.get('descending')
+                    return langService.get('inbox_serial') + ' - ' + langService.get('descending');
                 },
                 value: function () {
-                    return '-generalStepElm.docFullSerial'
+                    return '-generalStepElm.docFullSerial';
                 }
             },
             {
                 column: 'subject_asc',
                 text: function () {
-                    return langService.get('subject') + ' - ' + langService.get('ascending')
+                    return langService.get('subject') + ' - ' + langService.get('ascending');
                 },
                 value: function () {
-                    return 'generalStepElm.docSubject'
+                    return 'generalStepElm.docSubject';
                 }
             },
             {
                 column: 'subject_desc',
                 text: function () {
-                    return langService.get('subject') + ' - ' + langService.get('descending')
+                    return langService.get('subject') + ' - ' + langService.get('descending');
                 },
                 value: function () {
-                    return '-generalStepElm.docSubject'
+                    return '-generalStepElm.docSubject';
                 }
             },
             {
                 column: 'receivedDate_asc',
                 text: function () {
-                    return langService.get('received_date') + ' - ' + langService.get('ascending')
+                    return langService.get('received_date') + ' - ' + langService.get('ascending');
                 },
                 value: function () {
-                    return 'generalStepElm.receivedDate'
+                    return 'generalStepElm.receivedDate';
                 }
             },
             {
                 column: 'receivedDate_desc',
                 text: function () {
-                    return langService.get('received_date') + ' - ' + langService.get('descending')
+                    return langService.get('received_date') + ' - ' + langService.get('descending');
                 },
                 value: function () {
-                    return '-generalStepElm.receivedDate'
+                    return '-generalStepElm.receivedDate';
                 }
             },
             {
                 column: 'action_asc',
                 text: function () {
-                    return langService.get('action') + ' - ' + langService.get('ascending')
+                    return langService.get('action') + ' - ' + langService.get('ascending');
                 },
                 value: function () {
-                    return 'generalStepElm.action'
+                    // return 'generalStepElm.action'
+                    return self.getSortingKey('action', 'WorkflowAction');
                 }
             },
             {
                 column: 'action_desc',
                 text: function () {
-                    return langService.get('action') + ' - ' + langService.get('descending')
+                    return langService.get('action') + ' - ' + langService.get('descending');
                 },
                 value: function () {
-                    return '-generalStepElm.action'
+                    // return '-generalStepElm.action'
+                    return '-' + self.getSortingKey('action', 'WorkflowAction');
                 }
             },
             {
@@ -356,7 +358,7 @@ module.exports = function (app) {
                     return langService.get('sender') + ' - ' + langService.get('ascending')
                 },
                 value: function () {
-                    return 'generalStepElm.sender'
+                    return self.getSortingKey('senderInfo','SenderInfo');
                 }
             },
             {
@@ -365,7 +367,7 @@ module.exports = function (app) {
                     return langService.get('sender') + ' - ' + langService.get('descending')
                 },
                 value: function () {
-                    return '-generalStepElm.sender'
+                    return '-' + self.getSortingKey('senderInfo','SenderInfo');
                 }
             },
             {
@@ -374,34 +376,34 @@ module.exports = function (app) {
                     return langService.get('due_date') + ' - ' + langService.get('ascending')
                 },
                 value: function () {
-                    return 'generalStepElm.dueDate'
+                    return 'generalStepElm.dueDate';
                 }
             },
             {
                 column: 'dueDate_desc',
                 text: function () {
-                    return langService.get('due_date') + ' - ' + langService.get('descending')
+                    return langService.get('due_date') + ' - ' + langService.get('descending');
                 },
                 value: function () {
-                    return '-generalStepElm.dueDate'
+                    return '-generalStepElm.dueDate';
                 }
             },
             {
                 column: 'correspondenceSites_asc',
                 text: function () {
-                    return langService.get('correspondence_sites') + ' - ' + langService.get('ascending')
+                    return langService.get('correspondence_sites') + ' - ' + langService.get('ascending');
                 },
                 value: function () {
-                    return self.getSortingKey('mainSiteSubSiteString', 'Information')
+                    return self.getSortingKey('mainSiteSubSiteString', 'Information');
                 }
             },
             {
                 column: 'correspondenceSites_desc',
                 text: function () {
-                    return langService.get('correspondence_sites') + ' - ' + langService.get('descending')
+                    return langService.get('correspondence_sites') + ' - ' + langService.get('descending');
                 },
                 value: function () {
-                    return '-' + self.getSortingKey('mainSiteSubSiteString', 'Information')
+                    return '-' + self.getSortingKey('mainSiteSubSiteString', 'Information');
                 }
             }
         ];

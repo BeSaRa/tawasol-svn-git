@@ -50,7 +50,7 @@ module.exports = function (app) {
                 }
             },
             searchText: '',
-            searchCallback: function () {
+            searchCallback: function (grid) {
                 self.workflowGroups = gridService.searchGridData(self.grid, self.workflowGroupsCopy);
             }
         };

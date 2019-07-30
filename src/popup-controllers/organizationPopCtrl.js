@@ -242,6 +242,7 @@ module.exports = function (app) {
 
         self.grid = {
             classifications: {
+                name: 'ouClassificationsGrid',
                 limit: 5, // default limit
                 page: 1, // first page
                 //order: 'arName', // default sorting order
@@ -260,11 +261,12 @@ module.exports = function (app) {
                     status: ''
                 },
                 searchText: '',
-                searchCallback: function () {
+                searchCallback: function (grid) {
                     self.ouClassifications = gridService.searchGridData(self.grid.classifications, self.ouClassificationsCopy);
                 }
             },
             correspondenceSites: {
+                name: 'ouCorrespondenceSitesGrid',
                 limit: 5, // default limit
                 page: 1, // first page
                 //order: 'arName', // default sorting order
@@ -283,7 +285,7 @@ module.exports = function (app) {
                     status: ''
                 },
                 searchText: '',
-                searchCallback: function () {
+                searchCallback: function (grid) {
                     self.ouCorrespondenceSites = gridService.searchGridData(self.grid.correspondenceSites, self.ouCorrespondenceSitesCopy);
                 }
             }
@@ -595,6 +597,7 @@ module.exports = function (app) {
         };
 
         self.childrenGrid = {
+            name: 'childrenGrid',
             searchColumns: {
                 depNameAr: 'arName',
                 depNameEn: 'enName',
@@ -612,7 +615,7 @@ module.exports = function (app) {
                 organizationTypeEn: 'organizationTypeInfo.enName'
             },
             searchText: '',
-            searchCallback: function () {
+            searchCallback: function (grid) {
                 self.organizationChildren = gridService.searchGridData(self.childrenGrid, self.organizationChildrenCopy);
             }
         };
@@ -1088,6 +1091,7 @@ module.exports = function (app) {
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
          */
         self.documentTemplateGrid = {
+            name: 'documentTemplateGrid',
             limit: 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
@@ -1108,7 +1112,7 @@ module.exports = function (app) {
                 }
             },
             searchText: '',
-            searchCallback: function () {
+            searchCallback: function (grid) {
                 self.documentTemplates = gridService.searchGridData(self.documentTemplateGrid, self.documentTemplatesCopy);
             }
         };
@@ -1198,6 +1202,7 @@ module.exports = function (app) {
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
          */
         self.propertyConfigurationGrid = {
+            name: 'propertyConfigurationGrid',
             limit: 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
@@ -1313,6 +1318,7 @@ module.exports = function (app) {
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
          */
         self.appUserGrid = {
+            name: 'appUserGrid',
             limit: 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
@@ -1332,7 +1338,7 @@ module.exports = function (app) {
                 domainName: 'applicationUser.domainName'
             },
             searchText: '',
-            searchCallback: function () {
+            searchCallback: function (grid) {
                 self.ouAssignedUsers = gridService.searchGridData(self.appUserGrid, self.ouAssignedUsersCopy);
             }
         };

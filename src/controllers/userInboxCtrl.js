@@ -47,6 +47,21 @@ module.exports = function (app) {
         self.excludeMe = fromNotification;
         contextHelpService.setHelpTo('user-inbox', self.excludeMe);
         var timeoutRefresh = false;
+        var gridSearchColumns = {
+            serial: 'generalStepElm.docFullSerial',
+            subject: 'generalStepElm.docSubject',
+            receivedDate: 'generalStepElm.receivedDate',
+            action: function (record) {
+                return self.getSortingKey('action', 'WorkflowAction');
+            },
+            sender: function (record) {
+                return self.getSortingKey('senderInfo','SenderInfo');
+            },
+            dueDate: 'generalStepElm.dueDate',
+            corrSite: function (record) {
+                return self.getSortingKey('mainSiteSubSiteString','Information');
+            }
+        };
 
         self.langService = langService;
 
@@ -72,7 +87,9 @@ module.exports = function (app) {
          * @type {*}
          */
         self.userInboxes = userInboxes;
+        self.userInboxesCopy = angular.copy(self.userInboxes);
         self.starredUserInboxes = _.filter(self.userInboxes, 'generalStepElm.starred');
+        self.starredUserInboxesCopy = angular.copy(self.starredUserInboxes);
         //self.userFolders = userFolders;
 
 
@@ -115,12 +132,18 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            name: 'inboxGrid',
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.userInbox) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.userInbox),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.userInbox, limit);
+            },
+            searchColumns: gridSearchColumns,
+            searchText: '',
+            searchCallback: function (grid) {
+                self.userInboxes = gridService.searchGridData(self.grid, self.userInboxesCopy);
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.userInbox),
             setTruncateSubject: function ($event) {
@@ -129,12 +152,18 @@ module.exports = function (app) {
         };
 
         self.starredGrid = {
+            name: 'starredGrid',
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.starred) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.starred, self.starredUserInboxes),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.starred, limit);
+            },
+            searchColumns: gridSearchColumns,
+            searchText: '',
+            searchCallback: function (grid) {
+                self.starredUserInboxes = gridService.searchGridData(self.starredGrid, self.starredUserInboxesCopy);
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.starred),
             setTruncateSubject: function ($event) {
@@ -168,6 +197,7 @@ module.exports = function (app) {
         self.userFilters = $filter('orderBy')(userFilters, 'sortOptionId');
 
         self.workItemsFilters = [];
+        self.workItemsFiltersCopy = [];
 
         self.selectedFilter = null;
 
@@ -175,8 +205,10 @@ module.exports = function (app) {
         function _prepareFilters() {
             self.filterGrid = [];
             self.workItemsFilters = new Array(self.userFilters.length);
+            self.workItemsFiltersCopy = new Array(self.userFilters.length);
             for (var i = 0; i < self.userFilters.length; i++) {
                 self.filterGrid.push({
+                    name: 'filterGrid_' + i,
                     limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.inboxFilter) || 5, //self.globalSetting.searchAmount, // default limit
                     page: 1, // first page
                     order: '', // default sorting order
@@ -184,12 +216,18 @@ module.exports = function (app) {
                     pagingCallback: function (page, limit) {
                         gridService.setGridPagingLimitByGridName(gridService.grids.inbox.inboxFilter, limit);
                     },
+                    filterIndex: i,
+                    searchColumns: gridSearchColumns,
+                    searchText: '',
+                    searchCallback: function (grid) {
+                        self.workItemsFilters[grid.filterIndex] = gridService.searchGridData(grid, self.workItemsFiltersCopy[grid.filterIndex]);
+                    },
                     truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.inboxFilter),
                     setTruncateSubject: function ($event) {
                         // using first filter grid because all filter grids will use same value for truncate
                         gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.inboxFilter, self.filterGrid[0].truncateSubject);
                     }
-                })
+                });
             }
         }
 
@@ -289,10 +327,12 @@ module.exports = function (app) {
             if (!filter.status) {
                 toast.info(langService.get('filter_disabled_activate_to_get_data'));
                 self.workItemsFilters[$index] = [];
+                self.workItemsFiltersCopy[$index] = [];
                 return false;
             } else {
                 correspondenceService.loadWorkItemsByFilterID(filter).then(function (workItems) {
                     self.workItemsFilters[$index] = workItems;
+                    self.workItemsFiltersCopy[$index] = workItems;
                     if (order) {
                         self.filterGrid[self.selectedFilter.index].order = order;
                         self.getSortedDataForFilter(order);
@@ -363,7 +403,9 @@ module.exports = function (app) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.userInboxes = result;
+                    self.userInboxesCopy = angular.copy(self.userInboxes);
                     self.starredUserInboxes = _.filter(result, 'generalStepElm.starred');
+                    self.starredUserInboxesCopy = angular.copy(self.starredUserInboxes);
                     self.selectedUserInboxes = [];
                     defer.resolve(true);
                     if (pageNumber)

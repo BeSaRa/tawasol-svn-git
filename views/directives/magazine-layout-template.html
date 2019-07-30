@@ -90,7 +90,7 @@
              model="workItem"
              ng-class="{'selected':ctrl.isWorkItemSelected(workItem)}"
              magazine-item-directive="workItem" selected-length="ctrl.selectedWorkItems.length" md-whiteframe="1"
-             ng-repeat="workItem in ctrl.workItems | filter:ctrl.searchModel| limitTo:ctrl.pageLimit:( ( ctrl.page - 1) * ctrl.pageLimit) track by $index"
+             ng-repeat="workItem in ctrl.workItems | limitTo:ctrl.pageLimit:( ( ctrl.page - 1) * ctrl.pageLimit) track by $index"
              class="magazine-item">
             <div layout="row">
                 <a href="" tooltip="{{workItem.isRead() ? lang.indicator_mark_unread: lang.indicator_mark_read}}"

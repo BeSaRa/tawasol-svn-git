@@ -38,7 +38,6 @@ module.exports = function (app) {
                                                        $scope,
                                                        ApplicationUserSignature,
                                                        attachmentService,
-                                                       currentOrganization,
                                                        organizationService,
                                                        $q,
                                                        $filter,
@@ -56,7 +55,6 @@ module.exports = function (app) {
 
         self.maxRowCount = angular.copy(self.globalSetting.searchAmountLimit);
         self.model = angular.copy(applicationUser);
-        self.currentOrganization = currentOrganization;
         self.notFound = {};
 
         self.rootEntity = rootEntity;
@@ -212,10 +210,7 @@ module.exports = function (app) {
         /**
          * @description List of ou application users
          */
-        //self.ouApplicationUsers = ouApplicationUsers;
-        self.ouApplicationUsers = (self.currentOrganization) ? (_.filter(ouApplicationUsers, function (ouAppUser) {
-            return ouAppUser.applicationUser.defaultOUID === self.currentOrganization;
-        })) : ouApplicationUsers;
+        self.ouApplicationUsers = ouApplicationUsers;
 
         //self.organizationsForAppUser = _.map(self.ouApplicationUsers, 'ouid');
 
@@ -238,11 +233,6 @@ module.exports = function (app) {
         self.ouApplicationUser = new OUApplicationUser({
             applicationUser: self.applicationUser
         });
-        if (self.currentOrganization) {
-            self.ouApplicationUser.id = self.ouApplicationUsers.length ? self.ouApplicationUsers[0].id : null;
-            self.ouApplicationUser.securityLevels = self.ouApplicationUsers.length ? self.ouApplicationUsers[0].securityLevels : null;
-            self.ouApplicationUser.customRoleId = self.ouApplicationUsers.length ? self.ouApplicationUsers[0].customRoleId : null;
-        }
 
         /**
          * @description Resets the original values if notification is enabled/disabled
@@ -864,20 +854,14 @@ module.exports = function (app) {
         /**
          * @description Adds the selected values of organization, custom role, security level to the grid
          */
-        self.addOUApplicationUserFromCtrl = function (ouAppUser, currentOrganization) {
+        self.addOUApplicationUserFromCtrl = function () {
 
-            if (ouAppUser && currentOrganization) {
-                self.ouApplicationUser = ouAppUser;
-                self.currentOrganization = currentOrganization;
-            }
             if (self.ouApplicationUser.ouid && self.ouApplicationUser.customRoleId && self.ouApplicationUser.securityLevels) {
                 self.ouApplicationUser.wfsecurity = self.ouApplicationUser.ouid.wfsecurity.lookupKey;
                 return ouApplicationUserService
                     .addOUApplicationUser(self.ouApplicationUser)
                     .then(function (result) {
-                        if (!self.currentOrganization) {
-                            self.cancelOuApplicationUser();
-                        }
+                        self.cancelOuApplicationUser();
                         self.ouApplicationUsers.push(result);
 
                         self.getOrganizationsForAppUser();

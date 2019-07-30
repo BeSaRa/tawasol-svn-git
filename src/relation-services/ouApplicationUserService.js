@@ -406,20 +406,6 @@ module.exports = function (app) {
                 ? $q.when(self.ouApplicationUsersByUserId)
                 : self.loadOUApplicationUsersByUserId(applicationUserId);
         };
-        /* /!**
-          * @description Get Organizations by Application User
-          * @param applicationUserId
-          * @returns {*|Promise<any>}
-          *!/
-         self.getOUApplicationUsersByUserId = function (applicationUserId) {
-             applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;
-             return self.loadOUApplicationUsers().then(function (ouApplicationUsers) {
-                 return _.filter(ouApplicationUsers, function (ouApplicationUser) {
-                     if (Number(ouApplicationUser.applicationUser.id) === Number(applicationUserId))
-                         return ouApplicationUser.ouid;
-                 });
-             });
-         };*/
 
         self.getUsersWhoSetYouAsProxy = function (applicationUserId) {
             applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;

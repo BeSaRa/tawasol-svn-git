@@ -934,7 +934,7 @@ module.exports = function (app) {
                 englishName: 'wfgroup.enName'
             },
             searchText: '',
-            searchCallback: function () {
+            searchCallback: function (grid) {
                 self.userWorkflowGroups = gridService.searchGridData(self.userWorkflowGrid, self.userWorkflowGroupsCopy);
             }
         };

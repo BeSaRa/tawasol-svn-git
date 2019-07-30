@@ -49,7 +49,7 @@ module.exports = function (app) {
                     enName: 'enName'
                 },
                 searchText: '',
-                searchCallback: function () {
+                searchCallback: function (grid) {
                     self.distributionLists = gridService.searchGridData(self.grid, self.distributionListsCopy);
                 }
             };

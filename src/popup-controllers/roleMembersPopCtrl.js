@@ -72,7 +72,7 @@ module.exports = function (app) {
                  }
             },
             searchText: '',
-            searchCallback: function () {
+            searchCallback: function (grid) {
                 self.roleMembers = gridService.searchGridData(self.grid, self.roleMembersCopy);
             }
         };

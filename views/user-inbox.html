@@ -53,7 +53,16 @@
                        class="md-icon-button" tooltip="{{lang.create_filter}}">
                 <md-icon md-svg-icon="add-filter"></md-icon>
             </md-button>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <!--<search-filter-directive model="ctrl.searchModel"></search-filter-directive>-->
+            <grid-search-directive grid="ctrl.grid"
+                                   ng-if="ctrl.selectedGridType === 'inbox'"></grid-search-directive>
+            <grid-search-directive grid="ctrl.starredGrid"
+                                   ng-if="ctrl.selectedGridType === 'starred'"></grid-search-directive>
+            <div ng-repeat="filter in ctrl.userFilters">
+                <grid-search-directive grid="ctrl.filterGrid[$index]"
+                                       ng-if="ctrl.selectedGridType === 'filter' && ctrl.selectedFilter.index === $index"
+                ></grid-search-directive>
+            </div>
         </div>
         <!-- end page-header -->
         <!-- page-content -->

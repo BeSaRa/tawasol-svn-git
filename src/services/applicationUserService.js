@@ -53,10 +53,9 @@ module.exports = function (app) {
              * @param roles
              * @param permissions
              * @param userClassificationViewPermissions
-             * @param currentOrganization
              * @param $event
              */
-            applicationUserAdd: function (jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, currentOrganization, $event) {
+            applicationUserAdd: function (jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -65,7 +64,7 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         locals: {
                             editMode: false,
-                            applicationUser: currentOrganization ? new ApplicationUser({defaultOUID: currentOrganization}) : new ApplicationUser(),
+                            applicationUser: new ApplicationUser(),
                             applicationUsers: self.applicationUsers,
                             jobTitles: jobTitles,
                             ranks: ranks,
@@ -76,8 +75,7 @@ module.exports = function (app) {
                             roles: roles,
                             permissions: permissions,
                             ouApplicationUsers: [],
-                            ouViewPermissions: [],
-                            currentOrganization: currentOrganization
+                            ouViewPermissions: []
                         }
                     });
             },
@@ -92,10 +90,9 @@ module.exports = function (app) {
              * @param roles
              * @param permissions
              * @param userClassificationViewPermissions
-             * @param currentOrganization
              * @param $event
              */
-            applicationUserEdit: function (applicationUser, jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, currentOrganization, $event) {
+            applicationUserEdit: function (applicationUser, jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, $event) {
                 var id = applicationUser.hasOwnProperty('id') ? applicationUser.id : applicationUser;
                 userClassificationViewPermissions = userClassificationViewPermissionService.getUserClassificationViewPermissionsByUserId(id);
 
@@ -122,8 +119,7 @@ module.exports = function (app) {
                             themes: themes,
                             userClassificationViewPermissions: userClassificationViewPermissionsByUserId,
                             roles: roles,
-                            permissions: permissions,
-                            currentOrganization: currentOrganization
+                            permissions: permissions
                         },
                         resolve: {
                             ouApplicationUsers: function (ouApplicationUserService) {

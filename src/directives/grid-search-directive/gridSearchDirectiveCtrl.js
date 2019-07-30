@@ -13,7 +13,7 @@ module.exports = function (app) {
                 searchWithDebounce();
             }
             else {
-                self.grid.searchCallback();
+                self.grid.searchCallback(self.grid);
             }
         };
 
@@ -24,7 +24,7 @@ module.exports = function (app) {
                 return pendingSearch = $q(function (resolve, reject) {
                     cancelSearch = reject;
                     $timeout(function () {
-                        resolve(self.grid.searchCallback(true));
+                        resolve(self.grid.searchCallback(self.grid, true));
                         refreshDebounce();
                     }, 500, true)
                 });

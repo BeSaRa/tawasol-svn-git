@@ -272,9 +272,10 @@
                                         <label for="customRoleId">{{lang.role}}</label>
                                         <md-select id="customRoleId" name="customRoleId" required
                                                    ng-disabled="ctrl.ouApplicationUser.id"
+                                                   ng-model-options="{trackBy:'$value.id'}"
                                                    ng-model="ctrl.ouApplicationUser.customRoleId">
                                             <md-option ng-value="role"
-                                                       ng-repeat="role in ctrl.roles track by $index"
+                                                       ng-repeat="role in ctrl.roles"
                                                        ng-disabled="!role.status">
                                                 {{role.getTranslatedName()}}
                                             </md-option>
