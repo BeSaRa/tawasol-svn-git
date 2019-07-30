@@ -98,20 +98,7 @@
                                                  tooltip="{{lang[correspondence.linkedDocsIndicator.tooltip]}}"
                                         ></md-icon>
                                     </span>
-                            <!--<span flex class="indicator-badge"
-                                  ng-class="{'indicator-content': correspondence.tagsIndicator}">
-                                        <span ng-if="correspondence.tagsIndicator"
-                                              tooltip="{{lang[correspondence.tagsIndicator.tooltip]}}"
-                                              class="{{correspondence.tagsIndicator.class}}">
-                                            {{correspondence.tagsIndicator.text}}
-                                        </span>
-                                    </span>-->
                         </td>
-                        <!--<td md-cell class="td-data">
-                            <a href="" ng-if="correspondence.hasContent()" class="view-doc"
-                               ng-click="ctrl.viewCorrespondence(correspondence, $event)">{{correspondence.docSubject}}</a>
-                            <span ng-if="!correspondence.hasContent()">{{correspondence.docSubject}}</span>
-                        </td>-->
                         <td md-cell class="subject">
                             <a href="" ng-if="correspondence.hasContent() && ctrl.grid.truncateSubject"
                                class="view-doc subject-internal" md-truncate
