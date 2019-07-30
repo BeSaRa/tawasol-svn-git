@@ -11,7 +11,8 @@ module.exports = function (app) {
         };
 
         self.openTasksViewer = function (task, $event) {
-
+            $event.preventDefault();
+            taskService.viewCalenderTask(task, $event);
         };
 
         self.reloadReminders = function ($event, $mdMenu) {

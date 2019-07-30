@@ -14,7 +14,7 @@
                     <li ng-repeat="item in ctrl.taskService.reminders track by $index" layout="row">
                         <div class="task-body" flex layout="column">
                             <div class="task-header" layout="row">
-                                <a md-truncate flex ng-class="{'unread': !item.isOpen}"
+                                <a href="#" md-truncate flex ng-class="{'unread': !item.isOpen}"
                                    class="notification-subject" ng-click="ctrl.openTasksViewer(item,$event)">{{item.taskTitle}}</a>
                             </div>
                             <div layout="row">

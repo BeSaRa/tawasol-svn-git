@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('viewTaskCalenderPopCtrl', function (taskItem, employeeService, lookupService, viewDocumentService, taskService, $scope, task, gridService) {
+    app.controller('viewTaskCalenderPopCtrl', function (taskItem, WorkItem, employeeService, lookupService, viewDocumentService, taskService, $scope, task, gridService) {
         'ngInject';
         var self = this;
 
@@ -33,9 +33,22 @@ module.exports = function (app) {
         }
 
         self.viewDocument = function (correspondence, $event) {
-            var documentClass = task.correspondence.classDescription;
-            var actions = taskService.gridActions[documentClass.toLowerCase()];
-            viewDocumentService.viewQueueDocument(correspondence, actions, 'review' + documentClass, $event);
+            var info = correspondence.getInfo();
+            var workItem = null;
+            var ctrl = !self.task.wobNum ? taskService.getQueueController(info.documentClass) : taskService.getQueueController('userInbox');
+
+            if (self.task.wobNum) {
+                workItem = new WorkItem({
+                    generalStepElm: {
+                        workObjectNumber: self.task.wobNum,
+                        docType: info.docClassId
+                    }
+                });
+                ctrl.viewDocument(workItem, $event);
+                return;
+            }
+
+            ctrl.viewDocument(correspondence, $event);
         };
 
         self.truncateSubject = gridService.getGridSubjectTruncateByGridName(gridService.grids.others.viewTask);

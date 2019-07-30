@@ -290,10 +290,12 @@
                                                     <td md-cell>{{participant.dueDate|date:'y-MM-dd'}}</td>
                                                     <td md-cell>{{participant.completionDate|date:'y-MM-dd'}}</td>
                                                     <td md-cell>
-                                                        {{participant.taskCreatorComment}}
+                                                        <div tooltip="{{participant.taskCreatorComment}}" md-truncate
+                                                             style="max-width: 100px;">{{participant.taskCreatorComment}}</div>
                                                     </td>
                                                     <td md-cell>
-                                                        {{lang.participant_comment}}
+                                                        <div tooltip="{{lang.participant_comment}}" md-truncate
+                                                             style="max-width: 100px;">{{participant.participantReply}}</div>
                                                     </td>
                                                     <td md-cell>
                                                         <div flex layout="row">

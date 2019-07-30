@@ -2,8 +2,8 @@
     <div layout="column">
         <popup-toolbar-directive
                 header-text="{{ctrl.task.taskTitle}} {{ctrl.task.taskDescription.length ? '- ' + ctrl.task.taskDescription : ''}}"></popup-toolbar-directive>
-        <md-content class="p20">
-            <div layout="column">
+        <md-content scroll-directive>
+            <div class="p20" layout="column">
                 <div layout="row">
                     <fieldset class="size-100">
                         <legend>{{lang.task_linked}}</legend>
@@ -50,12 +50,13 @@
                                         <td md-cell>{{participant.dueDate|date:'y-MM-dd'}}</td>
                                         <td md-cell>{{participant.completionDate|date:'y-MM-dd'}}</td>
                                         <td md-cell>
-                                            {{lang.task_comment}}
+                                            <div tooltip="{{participant.taskCreatorComment}}" md-truncate
+                                                  style="max-width: 100px;">{{participant.taskCreatorComment}}</div>
                                         </td>
                                         <td md-cell>
-                                            {{lang.participant_comment}}
+                                            <div tooltip="{{lang.participant_comment}}" md-truncate
+                                                  style="max-width: 100px;">{{participant.participantReply}}</div>
                                         </td>
-
                                     </tr>
                                     </tbody>
                                 </table>
@@ -171,7 +172,6 @@
                         </div>
                     </fieldset>
                 </div>
-
             </div>
         </md-content>
     </div>
