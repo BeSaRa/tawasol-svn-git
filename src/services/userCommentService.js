@@ -35,15 +35,15 @@ module.exports = function (app) {
             return self.userComments.length ? $q.when(self.userComments) : self.loadUserComments();
         };
 
-        self.loadUserCommentsForDistribution = function (skipSorting) {
+        self.loadUserCommentsForDistribution = function () {
             return $http.get(urlService.userComments + '/dist').then(function (result) {
                 result = generator.generateCollection(result.data.rs, UserComment, self._sharedMethods);
                 result = generator.interceptReceivedCollection('UserComment', result);
-                if (!skipSorting) {
+                /*if (!skipSorting) {
                     result = _.sortBy(result, [function (comment) {
                         return comment.shortComment.toLowerCase();
                     }]);
-                }
+                }*/
                 return result;
             });
         };
