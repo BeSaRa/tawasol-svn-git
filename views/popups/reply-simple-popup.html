@@ -129,7 +129,7 @@
                     <div layout="row">
                         <md-input-container flex>
                             <label for="comments"> {{lang.type_your_comment}}</label>
-                            <textarea rows="5" id="comments" name="comments"
+                            <textarea rows="5" id="comments" name="comments" class="cms-comment"
                                       ng-model="ctrl.distWorkflowItem.comments"
                                       ng-required="ctrl.distWorkflowItem.isSecureAction"></textarea>
                             <div ng-messages="distWorkflowItem_form.comments.$error">

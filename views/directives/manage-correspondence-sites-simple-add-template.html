@@ -29,16 +29,19 @@
                    ng-change="ctrl.getSubSites($event)"
                    md-on-close="ctrl.clearSearchText('mainSite')"
                    data-md-container-class="select-header-container">
-            <!--<md-tooltip md-direction="top"
-                        ng-if="!!(ctrl.mainSiteSearchText)"
-                        md-visible="true">
-                {{lang.press_enter_to_load_more_records}}
-            </md-tooltip>-->
             <md-select-header class="select-header" layout="column">
-                <input ng-model="ctrl.mainSiteSearchText"
-                       ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSite')"
-                       placeholder="{{lang.search}}"
-                       class="select-header-input">
+                <div layout="row" flex class="size-100">
+                    <input ng-model="ctrl.mainSiteSearchText"
+                           ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSite')"
+                           placeholder="{{lang.search}}"
+                           class="select-header-input">
+                    <md-button ng-if="ctrl.mainSiteSearchText"
+                               ng-click="ctrl.loadMainSitesRecords($event)"
+                               class="select-header-icon md-icon-button"
+                               tooltip="{{lang.load_more_records}}">
+                        <md-icon md-svg-icon="magnify-plus"></md-icon>
+                    </md-button>
+                </div>
                 <div class="help-text-div" ng-if="ctrl.mainSiteSearchText">{{lang.press_enter_to_load_more_records}}
                 </div>
             </md-select-header>
@@ -62,7 +65,8 @@
             placeholder="{{lang.sub_site}}"
             md-autofocus>
         <md-item-template>
-            <span md-highlight-text="ctrl.searchText" md-highlight-flags="i">{{item.getTranslatedName()}} - {{ item.getTranslatedName(true)}}</span>
+            <span md-highlight-text="ctrl.searchText" md-highlight-flags="i">{{item.getTranslatedName()}}</span>
+            <!-- - {{ item.getTranslatedName(true)}}-->
         </md-item-template>
         <md-not-found>
             {{lang.no_sites_to_display}}

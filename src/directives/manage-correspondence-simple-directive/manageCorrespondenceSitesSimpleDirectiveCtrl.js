@@ -463,7 +463,6 @@ module.exports = function (app) {
          */
         self.onSiteTypeChange = function ($event) {
             self.selectedItem = null;
-
             if (self.selectedSiteType) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
@@ -510,7 +509,10 @@ module.exports = function (app) {
         self.querySearch = function (query) {
             query = query.toLowerCase();
             return query ? self.subSearchResult.filter(function (item) {
-                return item.subArSiteText.toLowerCase().indexOf(query) !== -1 || item.subEnSiteText.toLowerCase().indexOf(query) !== -1
+                if (langService.current === 'ar')
+                    return item.subArSiteText.toLowerCase().indexOf(query) !== -1;
+                else
+                    return item.subEnSiteText.toLowerCase().indexOf(query) !== -1;
             }) : self.subSearchResult;
         };
 
@@ -864,7 +866,7 @@ module.exports = function (app) {
          */
         self.loadMainSitesRecords = function ($event) {
             var siteType = self.selectedSiteType ? (self.selectedSiteType.hasOwnProperty('lookupKey') ? self.selectedSiteType.lookupKey : self.selectedSiteType) : null;
-            if (self.mainSiteSearchText){
+            if (self.mainSiteSearchText) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: siteType,
                     criteria: self.mainSiteSearchText,

@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                                               dialog,
                                                                               moment,
                                                                               $scope,
+                                                                              configurationService,
                                                                               Site,
                                                                               lookupService,
                                                                               CorrespondenceSiteType,
@@ -345,10 +346,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.onSiteTypeChangeAdvanced = function ($event) {
+            debugger;
             var siteType = self.selectedSiteTypeAdvanced && self.selectedSiteTypeAdvanced.hasOwnProperty('lookupKey')
                 ? self.selectedSiteTypeAdvanced.lookupKey
                 : self.selectedSiteTypeAdvanced;
-            if (typeof siteType !== 'undefined' && siteType !== null && siteType === 1) {
+            if (typeof siteType !== 'undefined' && siteType !== null && (configurationService.CORRESPONDENCE_SITES_TYPES_LOOKUPS.indexOf(siteType) !== -1)) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: siteType,
                     criteria: null,
@@ -358,7 +360,7 @@ module.exports = function (app) {
                     self.mainSites = result;
                     self.mainSitesCopy = angular.copy(self.mainSites);
                     self.selectedMainSiteAdvanced = null;
-                    //_selectDefaultMainSiteAndGetSubSites();
+                    _selectDefaultMainSiteAndGetSubSitesAdvanced();
                 });
             } else {
                 self.subSearchResult = [];
@@ -710,6 +712,15 @@ module.exports = function (app) {
                 self.selectedMainSiteSimple ? self.onMainSiteChangeSimple() : null;
             }
         };
+
+        var _selectDefaultMainSiteAndGetSubSitesAdvanced = function () {
+            if (self.selectedSiteTypeAdvanced && self.selectedSiteTypeAdvanced.lookupKey === 1) {
+                self.selectedMainSiteAdvanced = _.find(self.mainSites, function (site) {
+                    return site.id === 10000000;
+                });
+                self.selectedMainSiteAdvanced ? self.onMainSiteChangeAdvanced() : null;
+            }
+        }
 
 /*
 

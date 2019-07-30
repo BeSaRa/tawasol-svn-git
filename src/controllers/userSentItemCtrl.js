@@ -25,7 +25,8 @@ module.exports = function (app) {
                                                  dialog,
                                                  EventHistoryCriteria,
                                                  printService,
-                                                 moment) {
+                                                 moment,
+                                                 EventHistory) {
         'ngInject';
         var self = this;
 
@@ -243,6 +244,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.recallSingle = function (userSentItem, $event) {
+            userSentItem = self.userSentItemCopy ? self.userSentItemCopy : userSentItem;
             userSentItemService.recallSentItem(userSentItem, $event, null, self.userSentItemCopy)
                 .then(function (result) {
                     if (result) {
@@ -729,9 +731,12 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.recallSingle,
                 class: "action-green",
-                hide: false, /*In Phase 2*/
+                hide: false,
                 checkShow: function (action, model) {
                     /*workflowActionId == 9(terminated) or (actionType == 3 == broadcast)*/
+                    if (!(model instanceof EventHistory)){
+                        model = angular.copy(self.userSentItemCopy);
+                    }
                     return (model.workflowActionId !== 9 && model.actionType !== 3 && model.wfId !== null);
                 }
             },

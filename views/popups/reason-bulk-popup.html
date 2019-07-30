@@ -34,7 +34,7 @@
                         <md-input-container flex>
                             <label for="reason">{{lang.reason}}</label>
                             <textarea required id="reason" maxlength="200" minlength="3" name="reason"
-                                      ng-model="ctrl.reason">
+                                      ng-model="ctrl.reason" class="cms-comment">
                             </textarea>
                             <div ng-messages="reason_form.reason.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>

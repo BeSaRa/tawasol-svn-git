@@ -156,6 +156,10 @@
                                                 </th>
                                                 <th md-column ng-if="!ctrl.selectedCorrespondences.length"
                                                     md-order-by="priorityLevel">
+                                                    <span>{{lang.inbox_serial}}</span>
+                                                </th>
+                                                <th md-column ng-if="!ctrl.selectedCorrespondences.length"
+                                                    md-order-by="priorityLevel">
                                                     <span>{{lang.priority_level}}</span>
                                                 </th>
                                                 <th md-column ng-if="!ctrl.selectedCorrespondences.length"
@@ -231,18 +235,19 @@
                                                     <a href="" ng-if="correspondence.hasContent() && ctrl.grid.truncateSubject"
                                                        class="view-doc subject-internal" md-truncate
                                                        tooltip="{{correspondence.docSubject}}"
-                                                       ng-click="ctrl.viewDocument(correspondence, $event)">{{correspondence.docSubject}}</a>
+                                                       ng-click="ctrl.viewCorrespondence(correspondence, $event)">{{correspondence.docSubject}}</a>
                                                     <span ng-if="!correspondence.hasContent() && ctrl.grid.truncateSubject"
                                                           class="view-doc subject-internal" md-truncate
                                                           tooltip="{{correspondence.docSubject}}">{{correspondence.docSubject}}</span>
                                                     <a href="" ng-if="correspondence.hasContent() && !ctrl.grid.truncateSubject"
                                                        class="view-doc subject-internal"
                                                        tooltip="{{correspondence.docSubject}}"
-                                                       ng-click="ctrl.viewDocument(correspondence, $event)">{{correspondence.docSubject}}</a>
+                                                       ng-click="ctrl.viewCorrespondence(correspondence, $event)">{{correspondence.docSubject}}</a>
                                                     <span ng-if="!correspondence.hasContent() && !ctrl.grid.truncateSubject"
                                                           class="view-doc subject-internal"
                                                           tooltip="{{correspondence.docSubject}}">{{correspondence.docSubject}}</span>
                                                 </td>
+                                                <td md-cell><span class="serial-td">{{correspondence.docFullSerial}}</span></td>
                                                 <td md-cell>{{correspondence.priorityLevel.getTranslatedName()}}</td>
                                                 <td md-cell>{{correspondence.securityLevel.getTranslatedName()}}</td>
                                                 <td md-cell>{{lang[correspondence.getInfo().documentClass

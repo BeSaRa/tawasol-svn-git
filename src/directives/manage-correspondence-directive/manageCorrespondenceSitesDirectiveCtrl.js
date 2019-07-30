@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                                        CorrespondenceSiteType,
                                                                        $interval,
                                                                        LangWatcher,
+                                                                       configurationService,
                                                                        $timeout,
                                                                        $q,
                                                                        _,
@@ -469,7 +470,7 @@ module.exports = function (app) {
                 ? self.selectedSiteTypeAdvanced.lookupKey
                 : self.selectedSiteTypeAdvanced;
             // if internal site type or g2g site type, load main sites
-            if (typeof siteType !== 'undefined' && siteType !== null && (siteType === 1 || siteType === 3)) {
+            if (typeof siteType !== 'undefined' && siteType !== null && (configurationService.CORRESPONDENCE_SITES_TYPES_LOOKUPS.indexOf(siteType) !== -1)) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: siteType,
                     criteria: null,
@@ -479,6 +480,7 @@ module.exports = function (app) {
                     self.mainSites = result;
                     self.mainSitesCopy = angular.copy(self.mainSites);
                     self.selectedMainSiteAdvanced = null;
+                    _selectDefaultMainSiteAndGetSubSitesAdvanced();
                 });
             } else {
                 self.subSearchResult = [];
@@ -873,6 +875,15 @@ module.exports = function (app) {
                 self.selectedMainSiteSimple ? self.onMainSiteChangeSimple() : null;
             }
         };
+
+        var _selectDefaultMainSiteAndGetSubSitesAdvanced = function () {
+            if (self.selectedSiteTypeAdvanced && self.selectedSiteTypeAdvanced.lookupKey === 1) {
+                self.selectedMainSiteAdvanced = _.find(self.mainSites, function (site) {
+                    return site.id === 10000000;
+                });
+                self.selectedMainSiteAdvanced ? self.onMainSiteChangeAdvanced() : null;
+            }
+        }
 
     });
 };

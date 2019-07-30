@@ -16,36 +16,41 @@ module.exports = function (app) {
                                                                              generator,
                                                                              SiteView,
                                                                              rootEntity,
-                                                                             toast) {
+                                                                             toast,
+                                                                             configurationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSitesSearchDirectiveCtrl';
 
         self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
-        self.inlineMainSiteSearchText = '';
+        self.siteTypeSimpleSearchText = '';
+        self.siteTypeAdvancedSearchText = '';
+        self.mainSiteSimpleSearchText = '';
+        self.mainSiteAdvancedSearchText = '';
+        self.subSiteAdvancedSearchText = '';
 
         self.documentClass = null;
         self.searchByMain = false;
         self.emptyResults = false;
+
         $timeout(function () {
             // all correspondence site types
             self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
             self.sitesInfoCC = self.sitesInfoCC || [];
             self.sitesInfoTo = self.sitesInfoTo || [];
             self.sitesInfoIncoming = self.sitesInfoIncoming || [];
-            if (self.isSimpleCorrespondenceSiteSearchType && self.selectedSiteType)
-                self.onSiteTypeChange();
-        });
 
-        // model to search on correspondence sites type
-        self.typeSearch = '';
-        //self.selectedType = null;
-        // model for search on main correspondence sites
-        self.mainSearch = '';
-        // selected mainCorrespondence sites
-        self.selectedMain = null;
-        // model for search on sub correspondence sites
-        self.subSearch = '';
+            self.mainSites = [];
+            self.mainSitesCopy = angular.copy(self.mainSites);
+
+            if (self.isSimpleCorrespondenceSiteSearchType && self.selectedSiteType)
+                self.onSiteTypeSimpleChange();
+        });
+        self.selectedSiteType = null;
+
+        self.selectedMainSiteSimple = null;
+        self.selectedMainSiteAdvanced = null;
+
         // sub Search result
         self.subSearchResult = [];
         // sub correspondence selected from result
@@ -94,7 +99,6 @@ module.exports = function (app) {
         // default sites info incoming followupStatusDate
         self.sitesInfoIncomingFollowupStatusDate1 = null;
         self.sitesInfoIncomingFollowupStatusDate2 = null;
-
 
         /**
          * create current date + given days if provided.
@@ -322,16 +326,14 @@ module.exports = function (app) {
                         if (to.toLowerCase() === 'incoming') {
                             self.sitesInfoIncoming = [];
                             self.sitesInfoIncoming.push(site);
-                        }
-                        else {
+                        } else {
                             self.sitesInfoTo = [];
                             self.sitesInfoCC = [];
                             self['sitesInfo' + to].push(site);
                         }
                         return true;
                     });
-            }
-            else {
+            } else {
                 promise = $timeout(function () {
                     if (to.toLowerCase() === 'incoming' && self.searchByMain) {
                         self.sitesInfoIncoming = [];
@@ -446,30 +448,12 @@ module.exports = function (app) {
         };
 
         /**
-         * search in correspondence types and retrieve the filtered result.
-         * @param typeSearch
-         * @return {Array}
-         */
-        self.onTypeSearch = function (typeSearch) {
-            var defer = $q.defer(), result;
-            if (!typeSearch.trim().length) {
-                result = [];
-            } else {
-                result = _.map(_.filter(self.correspondenceSiteTypes, function (type) {
-                    return _matchType(typeSearch, type);
-                }), _mapTypes);
-            }
-            $timeout(function () {
-                defer.resolve(result);
-            }, Math.random() * 1000, false);
-            return defer.promise;
-        };
-        /**
-         * @description Get main correspondence sites on change of correspondence site type.
+         * @description Get main correspondence sites on change of correspondence site type in simple search.
          * @param $event
          */
-        self.onSiteTypeChange = function ($event) {
-            if (self.selectedSiteType && self.selectedSiteType.id) {
+        self.onSiteTypeSimpleChange = function ($event) {
+            var siteType = self.selectedSiteType && self.selectedSiteType.hasOwnProperty('lookupKey') ? self.selectedSiteType.lookupKey : self.selectedSiteType;
+            if (siteType) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                     criteria: null,
@@ -478,14 +462,44 @@ module.exports = function (app) {
                 }).then(function (result) {
                     self.subSearchResult = [];
                     self.mainSites = result;
-                    self.selectedMainSite = null;
+                    self.mainSitesCopy = angular.copy(self.mainSites);
+                    self.selectedMainSiteSimple = null;
+                    _selectDefaultMainSiteAndGetSubSites();
                 });
-            }
-            else {
+            } else {
                 self.mainSites = [];
+                self.mainSitesCopy = angular.copy(self.mainSites);
                 self.subSearchResult = [];
-                self.subSearchResultCopy = [];
-                self.selectedMainSite = null;
+                self.subSearchResultCopy = angular.copy(self.subSearchResult);
+                self.selectedMainSiteSimple = null;
+            }
+        };
+
+        /**
+         * @description Get main correspondence sites on change of correspondence site type in advanced search.
+         * @param $event
+         */
+        self.onSiteTypeChangeAdvanced = function ($event) {
+            var siteType = self.selectedSiteType && self.selectedSiteType.hasOwnProperty('lookupKey') ? self.selectedSiteType.lookupKey : self.selectedSiteType;
+            // if internal site type or g2g site type, load main sites
+            if (typeof siteType !== 'undefined' && siteType !== null && (configurationService.CORRESPONDENCE_SITES_TYPES_LOOKUPS.indexOf(siteType) !== -1)) {
+                correspondenceViewService.correspondenceSiteSearch('main', {
+                    type: siteType,
+                    criteria: null,
+                    excludeOuSites: false,
+                    includeDisabled: true
+                }).then(function (result) {
+                    self.subSearchResult = [];
+                    self.mainSites = result;
+                    self.mainSitesCopy = angular.copy(self.mainSites);
+                    self.selectedMainSiteAdvanced = null;
+                    _selectDefaultMainSiteAndGetSubSitesAdvanced();
+                });
+            } else {
+                self.subSearchResult = [];
+                self.mainSites = [];
+                self.mainSitesCopy = angular.copy(self.mainSites);
+                self.selectedMainSiteAdvanced = null;
             }
         };
 
@@ -493,106 +507,82 @@ module.exports = function (app) {
          * @description Get sub sites on change of main site
          * @param $event
          */
-        self.selectedMainSite = null;
-        self.getSubSites = function ($event) {
+        self.onMainSiteChangeSimple = function ($event) {
             if (self.searchByMain) {
-                self.documentClass.toLowerCase() === 'outgoing' ? _addSite('To', _mapMainSite(self.selectedMainSite)) : _addSite('Incoming', _mapMainSite(self.selectedMainSite));
-                return;
+                if (self.selectedMainSiteSimple) {
+                    self.documentClass.toLowerCase() === 'outgoing' ? _addSite('To', _mapMainSite(self.selectedMainSiteSimple)) : _addSite('Incoming', _mapMainSite(self.selectedMainSiteSimple));
+                } else {
+                    if (self.documentClass.toLowerCase() === 'incoming') {
+                        self.sitesInfoIncoming = [];
+                    } else {
+                        self['sitesInfoTo'] = [];
+                    }
+                }
+            } else {
+                if (self.selectedMainSiteSimple) {
+                    correspondenceViewService.correspondenceSiteSearch('sub', {
+                        type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
+                        parent: self.selectedMainSiteSimple ? self.selectedMainSiteSimple.id : null,
+                        criteria: null,
+                        excludeOuSites: false,
+                        includeDisabled: true
+                    }).then(function (result) {
+                        self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
+                        self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+
+                        if (self.subSearchResult.length === 1) {
+                            self.subSearchSelected.push(self.subSearchResult[0]);
+                        }
+                    });
+                }
             }
-            correspondenceViewService.correspondenceSiteSearch('sub', {
-                type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
-                parent: self.selectedMainSite ? self.selectedMainSite.id : null,
-                criteria: null,
-                excludeOuSites: false,
-                includeDisabled: true
-            }).then(function (result) {
-                self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
-                self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
-            });
         };
 
-        self.searchByMainChange = function () {
-            /*if (self.searchByMain) {
-                self.subSearchResult = [];
-                self.subSearchResultCopy = [];
-            } else {
-                self.sitesInfoTo = [];
-                self.sitesInfoCC = [];
-                self.sitesInfoIncoming = [];
+        /**
+         * @description set selected type when not selected after select main site.
+         */
+        self.onMainSiteChangeAdvanced = function () {
+            if (!!self.selectedMainSiteAdvanced) {
+                if (!self.selectedSiteType) {
+                    self.selectedSiteType = _mapTypes(_getTypeByLookupKey(self.selectedMainSiteAdvanced.correspondenceSiteTypeId));
+                }
             }
-            self.selectedSiteType = null;
-            self.selectedMainSite = null;
-            self.selectedMain = null;*/
 
-            self.mainSearch = '';
-            self.subSearch = '';
+            if (self.searchByMain) {
+                if (self.selectedMainSiteAdvanced) {
+                    self.documentClass.toLowerCase() === 'outgoing' ? _addSite('To', _mapMainSite(self.selectedMainSiteAdvanced)) : _addSite('Incoming', _mapMainSite(self.selectedMainSiteAdvanced));
+                } else {
+                    if (self.documentClass.toLowerCase() === 'incoming') {
+                        self.sitesInfoIncoming = [];
+                    } else {
+                        self['sitesInfoTo'] = [];
+                    }
+                }
+            } else {
+                if (!!self.selectedMainSiteAdvanced) {
+                    self.onSubSiteSearchAdvanced(true);
+                }
+            }
+        };
+
+        self.onSearchByMainChange = function () {
+            self.subSiteAdvancedSearchText = '';
             self.selectedSiteType = null;
-            self.selectedMainSite = null;
-            self.selectedMain = null;
+            self.selectedMainSiteSimple = null;
+            self.selectedMainSiteAdvanced = null;
             self.subSearchResult = [];
             self.subSearchResultCopy = [];
             self.sitesInfoTo = [];
             self.sitesInfoCC = [];
             self.sitesInfoIncoming = [];
             self.subRecords = _concatCorrespondenceSites(true);
-            self.onMainChange(self.selectedMain);
-        };
-        /**
-         * search in MainCorrespondenceSites and retrieve the filtered result.
-         * @return {Array}
-         * @param mainSearch
-         */
-        self.onMainSearch = function (mainSearch) {
-            if (!pendingSearch || !debounceSearch()) {
-                cancelSearch();
-                if (self.mainSearch.trim().length < 2)
-                    return [];
-
-                return pendingSearch = $q(function (resolve, reject) {
-                    cancelSearch = reject;
-
-                    $timeout(function () {
-                        refreshDebounce();
-                        correspondenceViewService.correspondenceSiteSearch('main', {
-                            type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
-                            criteria: mainSearch,
-                            includeDisabled: true
-                        }).then(function (result) {
-                            resolve(_.map(result, _mapSite));
-                        });
-                    }, 500);
-                });
-            }
-            return pendingSearch;
-        };
-        /**
-         * @description set selected type when not selected after select main site.
-         * @param main
-         */
-        self.onMainChange = function (main) {
-            if (main && !self.selectedSiteType)
-                self.selectedSiteType = _mapTypes(_getTypeByLookupKey(main.correspondenceSiteTypeId));
-
-            if (self.searchByMain) {
-                if (self.selectedMain) {
-                    self.documentClass.toLowerCase() === 'outgoing' ? _addSite('To', _mapMainSite(self.selectedMain)) : _addSite('Incoming', _mapMainSite(self.selectedMain));
-                }
-                else {
-                    if (self.documentClass.toLowerCase() === 'incoming' && self.searchByMain) {
-                        self.sitesInfoIncoming = [];
-                    }
-                    else {
-                        self['sitesInfoTo'] = [];
-                    }
-                }
-
-            }
-            else{
-                if (!!main){
-                    self.onSubSearch(true);
-                }
+            if (self.isSimpleCorrespondenceSiteSearchType) {
+                self.onMainSiteChangeSimple()
+            } else {
+                self.onMainSiteChangeAdvanced();
             }
         };
+
         /**
          * check if need reply
          * @return {boolean}
@@ -601,12 +591,12 @@ module.exports = function (app) {
             return (status && status.lookupStrKey === 'NEED_REPLY');
         };
         /**
-         * @description empty the subSearch result and selected to hide the search result grid.
+         * @description empty the subSiteAdvancedSearchText result and selected to hide the search result grid.
          */
         self.onCloseSearch = function () {
             self.subSearchResult = [];
             self.subSearchSelected = [];
-            self.subSearch = '';
+            self.subSiteAdvancedSearchText = '';
         };
         /**
          * @description set all followupStatus for all subSearchResult.
@@ -643,8 +633,7 @@ module.exports = function (app) {
                 date = new Date(site.followupDate1);
                 date.setDate(date.getDate() + 1);
                 site.followupDate2Min = date;
-            }
-            else {
+            } else {
                 date = new Date(site.followupDate2);
                 date.setDate(date.getDate() - 1);
                 site.followupDate1Max = date;
@@ -658,32 +647,27 @@ module.exports = function (app) {
                     date = new Date(self.sitesInfoToFollowupStatusDate1);
                     date.setDate(date.getDate() + 1);
                     self.sitesInfoToFollowupStatusDateMin = date;
-                }
-                else {
+                } else {
                     date = new Date(self.sitesInfoToFollowupStatusDate2);
                     date.setDate(date.getDate() - 1);
                     self.sitesInfoToFollowupStatusDateMax = date
                 }
-            }
-            else if (type === 'CC') {
+            } else if (type === 'CC') {
                 if (picker === 1) {
                     date = new Date(self.sitesInfoCCFollowupStatusDate1);
                     date.setDate(date.getDate() + 1);
                     self.sitesInfoCCFollowupStatusDateMin = date;
-                }
-                else {
+                } else {
                     date = new Date(self.sitesInfoCCFollowupStatusDate2);
                     date.setDate(date.getDate() - 1);
                     self.sitesInfoCCFollowupStatusDateMax = date
                 }
-            }
-            else if (type === 'Incoming') {
+            } else if (type === 'Incoming') {
                 if (picker === 1) {
                     date = new Date(self.sitesInfoIncomingFollowupStatusDate1);
                     date.setDate(date.getDate() + 1);
                     self.sitesInfoIncomingFollowupStatusDateMin = date;
-                }
-                else {
+                } else {
                     date = new Date(self.sitesInfoIncomingFollowupStatusDate2);
                     date.setDate(date.getDate() - 1);
                     self.sitesInfoIncomingFollowupStatusDateMax = date
@@ -731,9 +715,9 @@ module.exports = function (app) {
          * search in sub correspondence sites related to mainSites.
          * @return {*}
          */
-        self.onSubSearch = function (skipSubSiteText) {
+        self.onSubSiteSearchAdvanced = function (skipSubSiteText) {
             if (!skipSubSiteText) {
-                if (self.subSearch.length < 3) {
+                if (self.subSiteAdvancedSearchText.length < 3) {
                     self.subSearchResult = [];
                     return;
                 }
@@ -751,12 +735,12 @@ module.exports = function (app) {
                         refreshDebounce();
                         correspondenceViewService.correspondenceSiteSearch('sub', {
                             type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
-                            parent: self.selectedMain ? self.selectedMain.id : null,
-                            criteria: self.subSearch,
+                            parent: self.selectedMainSiteAdvanced ? self.selectedMainSiteAdvanced.id : null,
+                            criteria: self.subSiteAdvancedSearchText,
                             includeDisabled: true
                         }).then(function (result) {
                             if (!skipSubSiteText) {
-                                if (self.subSearch.length < 3) {
+                                if (self.subSiteAdvancedSearchText.length < 3) {
                                     self.subSearchResult = [];
                                     return;
                                 }
@@ -776,11 +760,10 @@ module.exports = function (app) {
         }, function (value) {
             if (value) {
                 self.searchByMain = false;
-                self.mainSearch = '';
-                self.subSearch = '';
+                self.subSiteAdvancedSearchText = '';
                 self.selectedSiteType = null;
-                self.selectedMainSite = null;
-                self.selectedMain = null;
+                self.selectedMainSiteSimple = null;
+                self.selectedMainSiteAdvanced = null;
                 self.subSearchResult = [];
                 self.subSearchResultCopy = [];
                 self.sitesInfoTo = [];
@@ -792,24 +775,94 @@ module.exports = function (app) {
         });
 
 
-
         /**
          * @description Clears the searchText for the given field
          * @param fieldType
          */
         self.clearSearchText = function (fieldType) {
             self[fieldType + 'SearchText'] = '';
+            $timeout(function () {
+                if (fieldType === 'mainSiteSimple' || fieldType === 'mainSiteAdvanced') {
+                    self.mainSites = angular.copy(self.mainSitesCopy);
+                }
+            })
         };
 
         /**
          * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
          * @param $event
+         * @param fieldType
          */
-        self.preventSearchKeyDown = function ($event) {
-            var code = $event.which || $event.keyCode;
-            if (code !== 38 && code !== 40)
-                $event.stopPropagation();
+        self.preventSearchKeyDown = function ($event, fieldType) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                // if enter key pressed, load from server with search text
+                if (code === 13) {
+                    if (fieldType === 'mainSiteSimple' || fieldType === 'mainSiteAdvanced') {
+                        self.loadMainSitesRecords($event);
+                    }
+                }
+                // prevent keydown except arrow up and arrow down keys
+                else if (code !== 38 && code !== 40) {
+                    $event.stopPropagation();
+                }
+            }
         };
+
+        /**
+         * @description request service for loading dropdown records with searchText
+         * @param $event
+         */
+        self.loadMainSitesRecords = function ($event) {
+            var searchText = self.isSimpleCorrespondenceSiteSearchType ? self.mainSiteSimpleSearchText : self.mainSiteAdvancedSearchText,
+                siteType = self.isSimpleCorrespondenceSiteSearchType ? self.selectedSiteType : self.selectedSiteType,
+                excludeOUSites = false;
+
+            if (searchText) {
+                siteType = siteType ? (siteType.hasOwnProperty('lookupKey') ? siteType.lookupKey : siteType) : null;
+                correspondenceViewService.correspondenceSiteSearch('main', {
+                    type: siteType,
+                    criteria: searchText,
+                    excludeOuSites: excludeOUSites,
+                    includeDisabled: true
+
+                }).then(function (result) {
+                    if (result.length) {
+                        self.subSearchResult = [];
+                        var availableMainSitesIds = _.map(self.mainSitesCopy, 'id');
+                        result = _.filter(result, function (corrSite) {
+                            return availableMainSitesIds.indexOf(corrSite.id) === -1;
+                        });
+                        self.mainSites = self.mainSites.concat(result);
+                        self.mainSitesCopy = angular.copy(self.mainSites);
+                        // _selectDefaultMainSiteAndGetSubSites();
+                    } else {
+                        self.mainSites = angular.copy(self.mainSitesCopy);
+                    }
+                }).catch(function (error) {
+                    self.mainSites = angular.copy(self.mainSitesCopy);
+                });
+            }
+        };
+
+
+        var _selectDefaultMainSiteAndGetSubSites = function () {
+            if (self.selectedSiteType && self.selectedSiteType.lookupKey === 1) {
+                self.selectedMainSiteSimple = _.find(self.mainSites, function (site) {
+                    return site.id === 10000000;
+                });
+                self.selectedMainSiteSimple ? self.onMainSiteChangeSimple() : null;
+            }
+        };
+
+        var _selectDefaultMainSiteAndGetSubSitesAdvanced = function () {
+            if (self.selectedSiteType && self.selectedSiteType.lookupKey === 1) {
+                self.selectedMainSiteAdvanced = _.find(self.mainSites, function (site) {
+                    return site.id === 10000000;
+                });
+                self.selectedMainSiteAdvanced ? self.onMainSiteChangeAdvanced() : null;
+            }
+        }
 
     });
 };

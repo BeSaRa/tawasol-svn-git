@@ -32,16 +32,19 @@
                        ng-change="ctrl.onMainSiteChangeSimple($event)"
                        md-on-close="ctrl.clearSearchText('mainSiteSimple')"
                        data-md-container-class="select-header-container">
-                <!--<md-tooltip md-direction="top"
-                            ng-if="!!(ctrl.mainSiteSimpleSearchText)"
-                            md-visible="true">
-                    {{lang.press_enter_to_load_more_records}}
-                </md-tooltip>-->
                 <md-select-header class="select-header" layout="column">
-                    <input ng-model="ctrl.mainSiteSimpleSearchText"
-                           ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSiteSimple')"
-                           placeholder="{{lang.search}}"
-                           class="select-header-input">
+                    <div layout="row" flex class="size-100">
+                        <input ng-model="ctrl.mainSiteSimpleSearchText"
+                               ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSiteSimple')"
+                               placeholder="{{lang.search}}"
+                               class="select-header-input">
+                        <md-button ng-if="ctrl.mainSiteSimpleSearchText"
+                                   ng-click="ctrl.loadMainSitesRecords($event)"
+                                   class="select-header-icon md-icon-button"
+                                   tooltip="{{lang.load_more_records}}">
+                            <md-icon md-svg-icon="magnify-plus"></md-icon>
+                        </md-button>
+                    </div>
                     <div class="help-text-div" ng-if="ctrl.mainSiteSimpleSearchText">
                         {{lang.press_enter_to_load_more_records}}
                     </div>
@@ -89,16 +92,19 @@
                        ng-change="ctrl.onMainSiteChangeAdvanced($event)"
                        md-on-close="ctrl.clearSearchText('mainSiteAdvanced')"
                        data-md-container-class="select-header-container">
-                <!--<md-tooltip md-direction="top"
-                                        ng-if="!!(ctrl.mainSiteAdvancedSearchText)"
-                                        md-visible="true">
-                                {{lang.press_enter_to_load_more_records}}
-                            </md-tooltip>-->
                 <md-select-header class="select-header" layout="column">
-                    <input ng-model="ctrl.mainSiteAdvancedSearchText"
-                           ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSiteAdvanced')"
-                           placeholder="{{lang.search}}"
-                           class="select-header-input">
+                    <div layout="row" flex class="size-100">
+                        <input ng-model="ctrl.mainSiteAdvancedSearchText"
+                               ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSiteAdvanced')"
+                               placeholder="{{lang.search}}"
+                               class="select-header-input">
+                        <md-button ng-if="ctrl.mainSiteAdvancedSearchText"
+                                   ng-click="ctrl.loadMainSitesRecords($event)"
+                                   class="select-header-icon md-icon-button"
+                                   tooltip="{{lang.load_more_records}}">
+                            <md-icon md-svg-icon="magnify-plus"></md-icon>
+                        </md-button>
+                    </div>
                     <div class="help-text-div" ng-if="ctrl.mainSiteAdvancedSearchText">
                         {{lang.press_enter_to_load_more_records}}
                     </div>

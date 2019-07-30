@@ -125,25 +125,34 @@
                                             <grid-indicator-directive record="readyToExport"
                                                                       indicator-type="securityLevel"
                                                                       record-type="workItem"></grid-indicator-directive>
+                                            <!-- Priority Level -->
+                                            <grid-indicator-directive record="readyToExport"
+                                                                      indicator-type="priorityLevel"
+                                                                      record-type="workItem"></grid-indicator-directive>
+                                            <!-- Paper/Electronic -->
+                                            <grid-indicator-directive record-type="workItem"
+                                                                      record="readyToExport"
+                                                                      indicator-type="paperElectronic">
+                                            </grid-indicator-directive>
+                                            <!-- Has Attachments -->
+                                            <grid-indicator-directive record="readyToExport" span-class="float-right"
+                                                                      indicator-type="hasAttachment"
+                                                                      record-type="workItem"></grid-indicator-directive>
+                                            <!-- Has Attachments -->
+                                            <grid-indicator-directive record="readyToExport" span-class="float-right"
+                                                                      indicator-type="hasLinkedDocuments"
+                                                                      record-type="workItem"></grid-indicator-directive>
                                         </td>
                                         <td md-cell><span class="serial-td">{{readyToExport.generalStepElm.docFullSerial}}</span>
                                         </td>
                                         <td md-cell class="subject">
-                                            <!-- Paper/Electronic -->
-                                            <grid-indicator-directive record-type="WorkItem"
-                                                                      record="readyToExport"
-                                                                      indicator-type="paperElectronic">
-                                            </grid-indicator-directive>
                                             <!-- Locked Item -->
-                                            <grid-indicator-directive record-type="WorkItem"
+                                            <grid-indicator-directive record-type="workItem"
                                                                       record="readyToExport"
                                                                       indicator-type="isLockedWorkItem"
                                                                       callback="ctrl.unlockWorkItem">
                                             </grid-indicator-directive>
-                                            <!--<grid-document-subject-directive record="readyToExport"
-                                                                             plain-text-only="!readyToExport.hasContent()"
-                                                                             click-callback="ctrl.viewDocument">
-                                            </grid-document-subject-directive>-->
+
                                             <a href="" ng-if="readyToExport.hasContent() && ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal" md-truncate
                                                tooltip="{{readyToExport.generalStepElm.docSubject}}"

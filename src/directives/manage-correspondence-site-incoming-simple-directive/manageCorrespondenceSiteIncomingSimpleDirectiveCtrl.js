@@ -608,7 +608,10 @@ module.exports = function (app) {
         self.querySearch = function (query) {
             query = query.toLowerCase();
             return query ? self.subSearchResult.filter(function (item) {
-                return item.subArSiteText.toLowerCase().indexOf(query) !== -1 || item.subEnSiteText.toLowerCase().indexOf(query) !== -1
+                if (langService.current === 'ar')
+                    return item.subArSiteText.toLowerCase().indexOf(query) !== -1;
+                else
+                    return item.subEnSiteText.toLowerCase().indexOf(query) !== -1;
             }) : self.subSearchResult;
         };
 

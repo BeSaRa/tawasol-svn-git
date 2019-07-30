@@ -756,6 +756,7 @@ span.key, span.value {
 
 .angular-tooltip {
   max-width: 700px !important;
+  line-height: 1.3em;
 }
 
 md-tooltip.tooltip-multiline {
@@ -1830,6 +1831,10 @@ tr.unread-row, tr.current-version {
   .property-key.property-block {
     display: block;
   }
+}
+
+.cms-comment {
+  line-height: 1.3em !important;
 }
 
 .viewer-actions {

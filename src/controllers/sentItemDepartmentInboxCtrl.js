@@ -22,7 +22,7 @@ module.exports = function (app) {
                                                             generator,
                                                             mailNotificationService,
                                                             printService,
-                                                            EventHistoryCriteria,
+                                                            SentItemDepartmentInbox,
                                                             gridService) {
         'ngInject';
         var self = this;
@@ -162,6 +162,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.recall = function (sentItemDepartmentInbox, $event) {
+            sentItemDepartmentInbox = self.departmentSentItemCopy ? self.departmentSentItemCopy : sentItemDepartmentInbox;
             if (sentItemDepartmentInbox.receivedById !== null) {
                 dialog.errorMessage(langService.get('cannot_recall_received_book'));
                 return;
@@ -414,14 +415,18 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+
+            self.departmentSentItemCopy = angular.copy(sentItemDepartmentInbox);
             correspondenceService.viewCorrespondence({
                 vsId: sentItemDepartmentInbox.vsId,
                 docClassName: self.docClassName
             }, self.gridActions, true, true, true)
                 .then(function () {
+                    self.departmentSentItemCopy = null;
                     self.reloadSentItemDepartmentInboxes(self.grid.page);
                 })
                 .catch(function () {
+                    self.departmentSentItemCopy = null;
                     self.reloadSentItemDepartmentInboxes(self.grid.page);
                 });
         };
@@ -437,11 +442,14 @@ module.exports = function (app) {
                 return;
             }
 
+            self.departmentSentItemCopy = angular.copy(sentItemDepartmentInbox);
             sentItemDepartmentInbox.viewNewDepartmentSentItem(self.gridActions, 'departmentSentItem', $event)
                 .then(function () {
+                    self.departmentSentItemCopy = null;
                     self.reloadSentItemDepartmentInboxes(self.grid.page);
                 })
                 .catch(function () {
+                    self.departmentSentItemCopy = null;
                     self.reloadSentItemDepartmentInboxes(self.grid.page);
                 });
         };
@@ -685,11 +693,14 @@ module.exports = function (app) {
                 icon: 'tag',
                 text: 'grid_action_recall',
                 shortcut: true,
-                showInView: false,
                 callback: self.recall,
                 class: "action-green",
-                hide: false, /*In Phase 2*/
+                hide: false,
                 checkShow: function (action, model) {
+                    if (!(model instanceof SentItemDepartmentInbox)) {
+                        model = angular.copy(self.departmentSentItemCopy);
+                    }
+
                     return model.isSubSiteToInternalRegOu();
                 }
             },
