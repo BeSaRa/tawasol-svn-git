@@ -21,9 +21,15 @@ module.exports = function (app) {
                 .loadEvents(moment().startOf('month'), moment().endOf('month').add(15, 'day'), null, true)
                 .then(function (result) {
                     self.reminders = generator.interceptReceivedCollection('TaskCalenderItem', generator.generateCollection(result.data.rs, TaskCalenderItem));
-                    console.log('self.reminders', self.reminders);
                     return self.reminders;
                 });
+
+            // return $http
+            //     .get(urlService.tasks + '/calender-remainders')
+            //     .then(function (result) {
+            //         self.reminders = generator.interceptReceivedCollection('TaskCalenderItem', generator.generateCollection(result.data.rs, TaskCalenderItem));
+            //         return self.reminders;
+            //     })
         };
 
 
@@ -163,6 +169,15 @@ module.exports = function (app) {
                 .post(urlService.tasks + '/task-id/' + task.id + '/participant', generator.interceptSendInstance('TaskParticipant', taskParticipant))
                 .then(function (result) {
                     taskParticipant.id = result.data.rs;
+                    return taskParticipant;
+                });
+        };
+
+
+        self.updateTaskParticipant = function (task, taskParticipant) {
+            return $http
+                .put(urlService.tasks + '/task-id/' + task.id + '/participant', generator.interceptSendInstance('TaskParticipant', taskParticipant))
+                .then(function (result) {
                     return taskParticipant;
                 });
         };

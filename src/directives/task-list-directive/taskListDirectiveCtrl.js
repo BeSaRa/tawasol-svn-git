@@ -14,6 +14,16 @@ module.exports = function (app) {
 
         };
 
+        self.reloadReminders = function ($event, $mdMenu) {
+            $event.stopPropagation();
+            $event.preventDefault();
+            self.taskService
+                .loadReminders()
+                .then(function () {
+                    $mdMenu.open();
+                });
+        };
+
 
         var interval, stopLoadingReminders = false;
 

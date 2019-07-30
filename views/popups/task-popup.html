@@ -153,7 +153,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row>
-                                                    <td md-cell class="indicator-td">
+                                                    <td md-cell>
                                                         <!-- Security Level -->
                                                         <grid-indicator-directive record="ctrl.task.correspondence"
                                                                                   indicator-type="securityLevel"
@@ -172,8 +172,7 @@
                                                                                   indicator-type="hasLinkedDocuments"
                                                                                   record-type="correspondence"></grid-indicator-directive>
                                                     </td>
-                                                    <td md-cell class="indicator-td text-right"
-                                                        style="padding-right:0 !important; padding-left:0 !important;">
+                                                    <td md-cell class="indicator-td text-right">
                                                         <!-- Priority Level -->
                                                         <grid-indicator-directive record="ctrl.task.correspondence"
                                                                                   indicator-type="priorityLevel"
@@ -201,9 +200,11 @@
                                                               class="view-doc subject-internal"
                                                               tooltip="{{ctrl.task.correspondence.docSubject}}">{{ctrl.task.correspondence.docSubject}}</span>
                                                     </td>
-                                                    <td md-cell>{{ctrl.task.correspondence.priorityLevel.getTranslatedName()}}
+                                                    <td md-cell>
+                                                        {{ctrl.task.correspondence.priorityLevel.getTranslatedName()}}
                                                     </td>
-                                                    <td md-cell>{{ctrl.task.correspondence.securityLevel.getTranslatedName()}}
+                                                    <td md-cell>
+                                                        {{ctrl.task.correspondence.securityLevel.getTranslatedName()}}
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -243,43 +244,76 @@
                                     </md-autocomplete>
                                 </div>
                                 <div layout="row">
-                                    <table md-whiteframe="2" flex class="task-management-attendance-table">
-                                        <thead>
-                                        <tr>
-                                            <th><span>{{lang.name}} / {{lang.department}}</span></th>
-                                            <th><span>{{lang.task_due_date}}</span></th>
-                                            <th><span>{{lang.task_completion_date}}</span></th>
-                                            <th><span>{{lang.task_state}}</span></th>
-                                            <th><span>{{lang.actions}}</span></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr ng-repeat="participant in ctrl.task.taskParticipants track by $index">
-                                            <td>
-                                                <div class="attendance-titles">
-                                                    <span class="attendance-name">{{participant.userId.getTranslatedName()}}</span>
-                                                    <span class="attendance-department">{{participant.ouId.getTranslatedName()}}</span>
-                                                </div>
-                                            </td>
-                                            <td>{{participant.dueDate|date:'y-MM-dd'}}</td>
-                                            <td>{{participant.completionDate|date:'y-MM-dd'}}</td>
-                                            <td>{{ctrl.taskStatesMap[participant.taskState].getTranslatedName()}}</td>
-                                            <td>
-                                                <div flex layout="row">
-                                                    <md-button ng-click="ctrl.editTaskParticipantFromCtrl(participant)"
-                                                               tooltip="{{lang.edit}}" class="md-icon-button">
-                                                        <md-icon md-svg-icon="account-edit"></md-icon>
-                                                    </md-button>
-                                                    <md-button ng-if="ctrl.canDeleteTaskParticipant()"
-                                                               ng-click="ctrl.removeTaskParticipant(participant)"
-                                                               tooltip="{{lang.delete}}" class="md-icon-button">
-                                                        <md-icon md-svg-icon="account-remove"></md-icon>
-                                                    </md-button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                    <md-card flex>
+                                        <md-table-container>
+                                            <table md-table>
+                                                <thead md-head>
+                                                <tr md-row>
+                                                    <th md-column>
+                                                        {{lang.name}}
+                                                    </th>
+                                                    <th md-column>
+                                                        {{lang.department}}
+                                                    </th>
+                                                    <th md-column>
+                                                        {{lang.task_state}}
+                                                    </th>
+                                                    <th md-column>
+                                                        {{lang.task_due_date}}
+                                                    </th>
+                                                    <th md-column>
+                                                        {{lang.task_completion_date}}
+                                                    </th>
+                                                    <th md-column>
+                                                        {{lang.task_comment}}
+                                                    </th>
+                                                    <th md-column>
+                                                        {{lang.participant_comment}}
+                                                    </th>
+                                                    <th md-column>
+                                                        {{lang.actions}}
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr ng-repeat="participant in ctrl.task.taskParticipants track by participant.id"
+                                                    md-row>
+                                                    <td md-cell>
+                                                        {{participant.userId.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        {{participant.ouId.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        {{ctrl.taskStatesMap[participant.taskState].getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>{{participant.dueDate|date:'y-MM-dd'}}</td>
+                                                    <td md-cell>{{participant.completionDate|date:'y-MM-dd'}}</td>
+                                                    <td md-cell>
+                                                        {{participant.taskCreatorComment}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        {{lang.participant_comment}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        <div flex layout="row">
+                                                            <md-button
+                                                                    ng-click="ctrl.editTaskParticipantFromCtrl(participant)"
+                                                                    tooltip="{{lang.edit}}" class="md-icon-button">
+                                                                <md-icon md-svg-icon="account-edit"></md-icon>
+                                                            </md-button>
+                                                            <md-button ng-if="ctrl.canDeleteTaskParticipant()"
+                                                                       ng-click="ctrl.removeTaskParticipant(participant)"
+                                                                       tooltip="{{lang.delete}}" class="md-icon-button">
+                                                                <md-icon md-svg-icon="account-remove"></md-icon>
+                                                            </md-button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </md-table-container>
+                                    </md-card>
                                 </div>
                             </div>
                         </md-content>

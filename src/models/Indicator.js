@@ -75,7 +75,6 @@ module.exports = function (app) {
              * @returns {Indicator}
              */
             Indicator.prototype.getSecurityLevelIndicator = function (securityLevel) {
-                console.log('securityLevel', securityLevel);
                 var icon = self.getIndicatorIcons(lookupService.securityLevel);
                 var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
                 var securityLevelMap = _.find(_.map(securityLevels, function (lookup, index) {

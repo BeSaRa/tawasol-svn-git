@@ -14,7 +14,7 @@
                     <li ng-repeat="item in ctrl.taskService.reminders track by $index" layout="row">
                         <div class="task-body" flex layout="column">
                             <div class="task-header" layout="row">
-                                <a href="#" md-truncate flex ng-class="{'unread': !item.isOpen}"
+                                <a md-truncate flex ng-class="{'unread': !item.isOpen}"
                                    class="notification-subject" ng-click="ctrl.openTasksViewer(item,$event)">{{item.taskTitle}}</a>
                             </div>
                             <div layout="row">
@@ -32,6 +32,11 @@
                     </li>
                 </ul>
             </div>
+            <md-menu-item>
+                <md-button ng-click="ctrl.reloadReminders($event , $mdMenu)" class="md-raised">
+                    <div layout="row" layout-align="center center"><span>{{lang.reload}}</span></div>
+                </md-button>
+            </md-menu-item>
         </md-menu-content>
     </md-menu>
 </md-menu-bar>
