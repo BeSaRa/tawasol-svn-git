@@ -34,9 +34,12 @@ module.exports = function (app) {
             self.currentTab = tabName;
         };
         self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
+
         self.siteTypeSimpleSearchText = '';
         self.siteTypeAdvancedSearchText = '';
         self.mainSiteSimpleSearchText = '';
+        self.mainSiteAdvancedSearchText = '';
+        self.simpleSubSiteResultSearchText = '';
 
         self.documentClass = null;
         $timeout(function () {
@@ -51,9 +54,6 @@ module.exports = function (app) {
 
         self.selectedSiteTypeSimple = null;
         self.selectedSiteTypeAdvanced = null;
-
-        self.mainSiteAdvancedSearchText = '';
-        self.simpleSubSiteResultSearchText = '';
 
         // selected mainCorrespondence sites
         self.selectedMainSiteAdvanced = null;
@@ -468,7 +468,8 @@ module.exports = function (app) {
             var siteType = self.selectedSiteTypeAdvanced && self.selectedSiteTypeAdvanced.hasOwnProperty('lookupKey')
                 ? self.selectedSiteTypeAdvanced.lookupKey
                 : self.selectedSiteTypeAdvanced;
-            if (typeof siteType !== 'undefined' && siteType !== null && siteType === 1) {
+            // if internal site type or g2g site type, load main sites
+            if (typeof siteType !== 'undefined' && siteType !== null && (siteType === 1 || siteType === 3)) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: siteType,
                     criteria: null,

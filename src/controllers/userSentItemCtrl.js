@@ -731,8 +731,8 @@ module.exports = function (app) {
                 class: "action-green",
                 hide: false, /*In Phase 2*/
                 checkShow: function (action, model) {
-                    /*workflowActionId == 9(terminated) or (actionType == 3 == broadcast) can't Recall terminated Document and broadcasted*/
-                    return (model.workflowActionId !== 9 && model.actionType !== 3);
+                    /*workflowActionId == 9(terminated) or (actionType == 3 == broadcast)*/
+                    return (model.workflowActionId !== 9 && model.actionType !== 3 && model.wfId !== null);
                 }
             },
             // Reassign

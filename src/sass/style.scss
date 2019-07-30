@@ -2290,6 +2290,16 @@ $ta-background-transparent: transparent !important;
 }
 
 
+.cms-ta-scroll {
+  height: 152px !important;
+  overflow: auto !important;
+}
+
+.ta-scroll-window > .ta-bind {
+  min-height: 140px !important;
+}
+
+
 html.rtl {
   .absolute-announcements.login-announcements {
     left: 450px;

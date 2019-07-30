@@ -42,8 +42,8 @@
                            ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSiteSimple')"
                            placeholder="{{lang.search}}"
                            class="select-header-input">
-                    <div class="help-text-div" ng-if="ctrl.mainSiteSimpleSearchText">{{lang.press_enter_to_load_more_records}}
-                        load more records
+                    <div class="help-text-div" ng-if="ctrl.mainSiteSimpleSearchText">
+                        {{lang.press_enter_to_load_more_records}}
                     </div>
                 </md-select-header>
                 <md-option
@@ -99,8 +99,8 @@
                            ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSiteAdvanced')"
                            placeholder="{{lang.search}}"
                            class="select-header-input">
-                    <div class="help-text-div" ng-if="ctrl.mainSiteAdvancedSearchText">{{lang.press_enter_to_load_more_records}}
-                        load more records
+                    <div class="help-text-div" ng-if="ctrl.mainSiteAdvancedSearchText">
+                        {{lang.press_enter_to_load_more_records}}
                     </div>
                 </md-select-header>
                 <md-option ng-repeat="site in ctrl.mainSites | translatedNameFilter:ctrl.mainSiteAdvancedSearchText"
