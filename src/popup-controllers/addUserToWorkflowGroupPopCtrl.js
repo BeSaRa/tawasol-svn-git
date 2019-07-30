@@ -11,13 +11,50 @@ module.exports = function (app) {
                                                               generator,
                                                               isUserPreference,
                                                               organizationGroups,
-                                                              $filter) {
+                                                              $filter,
+                                                              Information) {
             'ngInject';
             var self = this;
 
             self.controllerName = 'addUserToWorkflowGroupPopCtrl';
-            self.organizationGroups = organizationGroups;
+            self.inlineOUSearchText = '';
 
+            var _mapRegOUSections = function () {
+                // filter all regOU
+                var regOus = _.filter(organizationGroups, function (item) {
+                    return item.hasRegistry;
+                });
+                regOus = _.map(regOus, function (regOu) {
+                    regOu.tempRegOUSection = new Information({
+                        arName: regOu.arName,
+                        enName: regOu.enName
+                    });
+                    return regOu;
+                });
+
+                // filter all sections (no registry)
+                var sections = _.filter(organizationGroups, function (item) {
+                    return !item.hasRegistry;
+                });
+
+                // if needed to show regou - section, append the dummy property "tempRegOUSection"
+                sections = _.map(sections, function (item) {
+                    // if ou is section(has no registry and has regOuId, add temporary field for regOu)
+                    var regOu = _.find(organizationGroups, function (ou) {
+                        return ou.id === (item.regouId || item.regOuId);
+                    });
+                    item.tempRegOUSection = new Information({
+                        arName: ((regOu) ? regOu.arName + ' - ' : '') + item.arName,
+                        enName: ((regOu) ? regOu.enName + ' - ' : '') + item.enName
+                    });
+                    return item;
+                });
+                return _.sortBy([].concat(regOus, sections), [function (ou) {
+                    return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+                }]);
+            };
+
+            self.organizationGroups = _mapRegOUSections();//organizationGroups;
 
             self.usersCriteria = new UserSearchCriteria({
                 ou: (self.organizationGroups.length ? _.find(self.organizationGroups, function (item) {
@@ -69,8 +106,8 @@ module.exports = function (app) {
              * @returns {*}
              */
             self.getSortingKey = function (property, modelType) {
-                if (property === 'organization'){
-                    return langService.current  + 'OUName';
+                if (property === 'organization') {
+                    return langService.current + 'OUName';
                     // return 'ou' + (langService.currentLangTitleCase) + 'Name';
                 }
                 return generator.getColumnSortingKey(property, modelType);
@@ -156,16 +193,36 @@ module.exports = function (app) {
                     })
             };
 
-        /**
-         * @description Get the search results grid total count
-         * @returns {number}
-         */
-        self.getSearchedUsersGridTotal = function () {
+            /**
+             * @description Get the search results grid total count
+             * @returns {number}
+             */
+            self.getSearchedUsersGridTotal = function () {
                 return _.filter(self.users, function (user) {
                     return !self.checkIfExist(user) && !self.checkIfAdded(user);
                 }).length;
-            }
+            };
 
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event){
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
+        };
 
         }
     )

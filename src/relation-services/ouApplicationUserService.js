@@ -212,8 +212,12 @@ module.exports = function (app) {
                             },
                             organizationGroups: function (distributionWFService) {
                                 'ngInject';
-                                return distributionWFService
-                                    .loadDistWorkflowOrganizations('organizations')
+                                if (isUserPreference) {
+                                    return distributionWFService
+                                        .loadDistWorkflowOrganizations('organizations');
+                                } else {
+                                    return organizationService.getOrganizations();
+                                }
                             }
 
                         }

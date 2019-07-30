@@ -477,6 +477,7 @@ md-sidenav {
 
     &.info {
       color: #31708f;
+      background-color: #d9edf7;
       border-color: #bce8f1;
     }
 
@@ -1529,15 +1530,12 @@ form#signature-form {
 }
 
 .copyright-text {
-  margin-top: 100px;
   font-size: 13px;
   line-height: 1.8;
   padding: 10px 0;
-  bottom: 0;
   background: rgba(255, 255, 255, .5);
   position: absolute;
-  right: 0;
-  left: 0;
+  bottom: 0;
 }
 
 .help-text {
@@ -1545,7 +1543,7 @@ form#signature-form {
   font-size: 13px;
   line-height: 1.8;
   padding: 10px 0;
-  bottom: 0;
+  bottom: 40px;
   background: rgba(255, 255, 255, .5);
   position: absolute;
   right: 0;
@@ -2273,5 +2271,28 @@ $ta-background-transparent: transparent !important;
     md-switch {
       margin: 0 !important;
     }
+  }
+}
+
+.absolute-announcements.login-announcements {
+  position: fixed !important;
+  bottom: 5px;
+  left: 50px;
+  right: 450px;
+
+  &.owl-carousel {
+    width: auto !important;
+  }
+
+  .info {
+    background-color: transparent !important;
+  }
+}
+
+
+html.rtl {
+  .absolute-announcements.login-announcements {
+    left: 450px;
+    right: 50px;
   }
 }

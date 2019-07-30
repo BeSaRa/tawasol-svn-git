@@ -13,15 +13,8 @@
                 <h4>{{login.rootEntity.getTranslatedAppName()}} - {{ lang.application_description }}</h4>
             </div>
         </div>
-        <br/>
-        <br/>
-        <br/>
         <div flex>
-            <login-announcement-directive announcements="login.announcements"></login-announcement-directive>
-        </div>
-        <div class="copyright-text" layout="row" layout-align="center end"
-             ng-if="login.rootEntity.settings.showCopyrightText">
-            {{login.rootEntity.settings.copyrightText}}
+            <login-announcement-directive classes="absolute-announcements" announcements="login.announcements"></login-announcement-directive>
         </div>
     </div>
     <div scroll-directive md-whiteframe="3" layout="column" ng-class="{'gt-sm':mediaSize('gt-sm')}"
@@ -81,15 +74,6 @@
                 </md-input-container>
             </div>
             <div layout="column">
-                <!--<div layout="row">
-                    <md-checkbox ng-disabled="login.loginStatus" aria-label="Remember Me">
-                        {{lang.remember_me}}
-                    </md-checkbox>
-                    <span flex></span>
-                    <a id="forget-password-link" ng-disabled="login.loginStatus" href="#">{{lang.forget_password}}</a>
-                </div>
-                <br/>
-                <br/>-->
                 <md-button id="login-button" ng-disabled="login.loginStatus || login_form.$invalid"
                            ng-click="login.login($event)"
                            class="md-raised md-primary">{{lang.login}}
@@ -101,12 +85,15 @@
                 <md-progress-linear md-mode="intermediate"></md-progress-linear>
             </div>
         </form>
-        <login-announcement-directive ng-hide="mediaSize('gt-sm')"
-                                      announcements="[1,2,3,4,5]"></login-announcement-directive>
         <div class="help-text" layout="row" layout-align="center end">
             <a href="" ng-click="login.showHelp($event)" ng-if="login.isHelpAvailable()">{{lang.help}}</a>
             <span ng-if="login.isHelpAvailable()">&nbsp; | &nbsp;</span>
             <a href="" ng-click="login.showTerms($event)">Terms</a>
+        </div>
+        <br>
+        <div class="copyright-text" layout="row" layout-align="center end"
+             ng-if="login.rootEntity.settings.showCopyrightText">
+            {{login.rootEntity.settings.copyrightText}}
         </div>
     </div>
 </div>

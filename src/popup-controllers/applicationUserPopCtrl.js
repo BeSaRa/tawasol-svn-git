@@ -133,8 +133,8 @@ module.exports = function (app) {
             groups = _.map(groups, function (item) {
                 // if ou is section(has no registry and has regOuId, add temporary field for regOu)
                 item.tempRegOUSection = new Information({
-                    arName: item.registryParentId.arName + ' - ' + item.arName,
-                    enName: item.registryParentId.enName + ' - ' + item.enName
+                    arName: (item.registryParentId ? item.registryParentId.arName : '') + ' - ' + item.arName,
+                    enName: (item.registryParentId ? item.registryParentId.enName : '') + ' - ' + item.enName
                 });
                 return item;
             });
@@ -1455,9 +1455,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.preventSearchKeyDown = function ($event) {
-            var code = $event.which || $event.keyCode;
-            if (code !== 38 && code !== 40)
-                $event.stopPropagation();
+            if ($event){
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
         };
         /**
          * @description Close the popup

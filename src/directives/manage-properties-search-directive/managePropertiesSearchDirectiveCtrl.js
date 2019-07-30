@@ -631,7 +631,7 @@ module.exports = function (app) {
             return self.loadSubOrganizations;
         }, function (newVal) {
             if (newVal) {
-                self.onRegistryChanged(true);
+                self.onRegistryChanged(false);
                 self.loadSubOrganizations = false;
                 watcher();
             }

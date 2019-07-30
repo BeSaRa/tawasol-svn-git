@@ -12,12 +12,22 @@
                         <md-input-container flex ng-if="!ctrl.usersCriteria.hide">
                             <label for="ou">{{lang.select_organization}}</label>
                             <md-select id="ou" name="ou"
+                                       ng-model-options="{trackBy : '$value.id'}"
                                        ng-change="ctrl.onSearchUsers()"
-                                       ng-model="ctrl.usersCriteria.ou">
-                                <!--<md-option ng-value="null">{{lang.all}}</md-option>-->
-                                <md-option required ng-value="organization"
-                                           ng-repeat="organization in ctrl.organizationGroups">
-                                    {{organization.getTranslatedName()}}
+                                       ng-model="ctrl.usersCriteria.ou"
+                                       md-on-close="ctrl.clearSearchText('inlineOU')"
+                                       data-md-container-class="select-header-container">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.inlineOUSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option ng-value="organization"
+                                           ng-repeat="organization in ctrl.organizationGroups | translatedNameFilter: ctrl.inlineOUSearchText : 'getNameByLanguageRegOUSection'">
+                                    <span
+                                            md-highlight-text="ctrl.inlineOUSearchText"
+                                            md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
                                 </md-option>
                             </md-select>
                         </md-input-container>

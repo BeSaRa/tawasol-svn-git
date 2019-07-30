@@ -27,19 +27,27 @@
         <md-input-container flex>
             <label for="mainSiteSimple">{{lang.main_site}}</label>
             <md-select id="mainSiteSimple" ng-model="ctrl.selectedMainSiteSimple"
+                       ng-model-options="{trackBy: '$value.id'}"
                        ng-disabled="!ctrl.selectedSiteTypeSimple || !ctrl.selectedSiteTypeSimple.id"
                        ng-change="ctrl.onMainSiteChangeSimple($event)"
                        md-on-close="ctrl.clearSearchText('mainSiteSimple')"
                        data-md-container-class="select-header-container">
-                <md-select-header class="select-header">
+                <!--<md-tooltip md-direction="top"
+                            ng-if="!!(ctrl.mainSiteSimpleSearchText)"
+                            md-visible="true">
+                    {{lang.press_enter_to_load_more_records}}
+                </md-tooltip>-->
+                <md-select-header class="select-header" layout="column">
                     <input ng-model="ctrl.mainSiteSimpleSearchText"
-                           ng-keydown="ctrl.preventSearchKeyDown($event)"
-                           ng-change="ctrl.filterDropdownRecords($event, 'mainSiteSimple')"
+                           ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSiteSimple')"
                            placeholder="{{lang.search}}"
                            class="select-header-input">
+                    <div class="help-text-div" ng-if="ctrl.mainSiteSimpleSearchText">{{lang.press_enter_to_load_more_records}}
+                        load more records
+                    </div>
                 </md-select-header>
                 <md-option
-                        ng-repeat="site in ctrl.mainSites"
+                        ng-repeat="site in ctrl.mainSites | translatedNameFilter: ctrl.mainSiteSimpleSearchText"
                         ng-value="site">
                 <span
                         md-highlight-text="ctrl.mainSiteSimpleSearchText"
@@ -81,14 +89,22 @@
                        ng-change="ctrl.onMainSiteChangeAdvanced($event)"
                        md-on-close="ctrl.clearSearchText('mainSiteAdvanced')"
                        data-md-container-class="select-header-container">
-                <md-select-header class="select-header">
+                <!--<md-tooltip md-direction="top"
+                                        ng-if="!!(ctrl.mainSiteAdvancedSearchText)"
+                                        md-visible="true">
+                                {{lang.press_enter_to_load_more_records}}
+                            </md-tooltip>-->
+                <md-select-header class="select-header" layout="column">
                     <input ng-model="ctrl.mainSiteAdvancedSearchText"
-                           ng-keydown="ctrl.preventSearchKeyDown($event)"
-                           ng-change="ctrl.filterDropdownRecords($event, 'mainSiteAdvanced')"
+                           ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSiteAdvanced')"
                            placeholder="{{lang.search}}"
                            class="select-header-input">
+                    <div class="help-text-div" ng-if="ctrl.mainSiteAdvancedSearchText">{{lang.press_enter_to_load_more_records}}
+                        load more records
+                    </div>
                 </md-select-header>
-                <md-option ng-repeat="site in ctrl.mainSites" ng-value="site">
+                <md-option ng-repeat="site in ctrl.mainSites | translatedNameFilter:ctrl.mainSiteAdvancedSearchText"
+                           ng-value="site">
                     <span md-highlight-text="ctrl.mainSiteAdvancedSearchText"
                           md-highlight-flags="i">{{site.getTranslatedName()}}</span>
                 </md-option>

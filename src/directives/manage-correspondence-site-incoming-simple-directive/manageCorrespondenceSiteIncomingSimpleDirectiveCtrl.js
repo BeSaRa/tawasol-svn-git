@@ -14,6 +14,7 @@ module.exports = function (app) {
                                                                                     correspondenceService,
                                                                                     toast,
                                                                                     rootEntity,
+                                                                                    managerService,
                                                                                     gridService) {
         'ngInject';
         var self = this;
@@ -653,64 +654,61 @@ module.exports = function (app) {
          */
         self.clearSearchText = function (fieldType) {
             self[fieldType + 'SearchText'] = '';
+            $timeout(function () {
+                if (fieldType === 'mainSite') {
+                    self.mainSites = angular.copy(self.mainSitesCopy);
+                }
+            })
         };
 
         /**
          * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
          * @param $event
-         */
-        self.preventSearchKeyDown = function ($event) {
-            var code = $event.which || $event.keyCode;
-            if (code !== 38 && code !== 40)
-                $event.stopPropagation();
-        };
-
-
-        /**
-         * @description filter the dropdown with searchText or request service if searched record not found
-         * @param $event
          * @param fieldType
          */
-        self.filterDropdownRecords = function ($event, fieldType) {
-            $timeout(function () {
-                if (fieldType === 'mainSite') {
-                    _filterSearchMainSites(fieldType);
+        self.preventSearchKeyDown = function ($event, fieldType) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                // if enter key pressed, load from server with search text
+                if (code === 13) {
+                    if (fieldType === 'mainSite') {
+                        self.loadMainSitesRecords($event);
+                    }
                 }
-            })
+                // prevent keydown except arrow up and arrow down keys
+                else if (code !== 38 && code !== 40) {
+                    $event.stopPropagation();
+                }
+            }
         };
 
-        var _filterSearchMainSites = function (fieldType) {
-            var searchResult = gridService.searchGridData({
-                searchText: self.mainSiteSearchText,
-                searchColumns: {
-                    arName: langService.current === 'ar' ? 'arName' : '',
-                    enName: langService.current === 'en' ? 'enName' : '',
-                }
-            }, self.mainSitesCopy);
-            if (searchResult && searchResult.length) {
-                self.mainSites = searchResult;
-                _selectDefaultMainSiteAndGetSubSites();
-            } else {
-                if (self.mainSiteSearchText) {
-                    var siteType = self.selectedSiteType ? (self.selectedSiteType.hasOwnProperty('lookupKey') ? self.selectedSiteType.lookupKey : self.selectedSiteType) : null;
-                    correspondenceViewService.correspondenceSiteSearch('main', {
-                        type: siteType,
-                        criteria: self.mainSiteSearchText,
-                        excludeOuSites: false
-                    }).then(function (result) {
-                        if (result.length) {
-                            self.subSearchResult = [];
-                            self.mainSites = self.mainSites.concat(result);
-                            self.mainSitesCopy = angular.copy(self.mainSites);
-                            _filterSearchMainSites(fieldType);
-                            // _selectDefaultMainSiteAndGetSubSites();
-                        } else {
-                            self.mainSites = [];
-                        }
-                    }).catch(function (error) {
+        /**
+         * @description request service for loading dropdown records with searchText
+         * @param $event
+         */
+        self.loadMainSitesRecords = function ($event) {
+            var siteType = self.selectedSiteType ? (self.selectedSiteType.hasOwnProperty('lookupKey') ? self.selectedSiteType.lookupKey : self.selectedSiteType) : null;
+            if (self.mainSiteSearchText) {
+                correspondenceViewService.correspondenceSiteSearch('main', {
+                    type: siteType,
+                    criteria: self.mainSiteSearchText,
+                    excludeOuSites: false
+                }).then(function (result) {
+                    if (result.length) {
+                        self.subSearchResult = [];
+                        var availableMainSitesIds = _.map(self.mainSitesCopy, 'id');
+                        result = _.filter(result, function (corrSite) {
+                            return availableMainSitesIds.indexOf(corrSite.id) === -1;
+                        });
+                        self.mainSites = self.mainSites.concat(result);
+                        self.mainSitesCopy = angular.copy(self.mainSites);
+                        // _selectDefaultMainSiteAndGetSubSites();
+                    } else {
                         self.mainSites = angular.copy(self.mainSitesCopy);
-                    });
-                }
+                    }
+                }).catch(function (error) {
+                    self.mainSites = angular.copy(self.mainSitesCopy);
+                });
             }
         };
 
