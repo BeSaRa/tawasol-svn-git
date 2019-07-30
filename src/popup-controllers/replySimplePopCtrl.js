@@ -160,7 +160,6 @@ module.exports = function (app) {
                 return map.join(', ');
             }
             return langService.get('managers');
-        }
         };
 
         /**
