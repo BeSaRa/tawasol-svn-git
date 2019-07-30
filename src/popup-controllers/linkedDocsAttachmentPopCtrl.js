@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('linkedDocsAttachmentPopCtrl', function (dialog, exportOptions, _, langService, model, linkedDocs) {
+    app.controller('linkedDocsAttachmentPopCtrl', function (dialog, exportOptions, _, langService, model, linkedDocs, gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'linkedDocsAttachmentPopCtrl';
@@ -45,7 +45,11 @@ module.exports = function (app) {
                     }
                 }
             ],
-            filter: {search: {}}
+            filter: {search: {}},
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.others.linkedDocAttachments),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.others.linkedDocAttachments, self.grid.truncateSubject);
+            }
         };
 
         self.sendSelectedLinkedDocuments = function () {

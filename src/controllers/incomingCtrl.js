@@ -142,7 +142,7 @@ module.exports = function (app) {
                     .saveDocument(status);
             }
 
-         return    promise.then(function (result) {
+            return promise.then(function (result) {
                 self.incoming = result;
                 self.model = angular.copy(self.incoming);
                 self.documentInformationExist = !!angular.copy(self.documentInformation);
@@ -151,7 +151,7 @@ module.exports = function (app) {
 
                 /*If content file was attached */
                 if (self.incoming.contentFile) {
-                 return self.incoming.addDocumentContentFile()
+                    return self.incoming.addDocumentContentFile()
                         .then(function () {
                             self.contentFileExist = !!(self.incoming.hasOwnProperty('contentFile') && self.incoming.contentFile);
                             self.contentFileSizeExist = !!(self.contentFileExist && self.incoming.contentFile.size);
@@ -159,7 +159,7 @@ module.exports = function (app) {
                             saveCorrespondenceFinished(status, newId);
                         })
                 } else if (duplicateVersion && self.incoming.hasContent()) {
-                  return   self.incoming
+                    return self.incoming
                         .attacheContentUrl(self.documentInformation)
                         .then(function () {
                             self.contentFileExist = true;
@@ -171,7 +171,7 @@ module.exports = function (app) {
                     self.contentFileSizeExist = false;
 
                     saveCorrespondenceFinished(status, newId);
-                    return  true;
+                    return true;
                 }
 
             })
@@ -186,10 +186,10 @@ module.exports = function (app) {
         };
 
 
-        self.saveCorrespondenceAndPrintBarcode =function ($event) {
+        self.saveCorrespondenceAndPrintBarcode = function ($event) {
             self.saveCorrespondence()
                 .then(function () {
-                    self.docActionPrintBarcode(self.incoming,$event);
+                    self.docActionPrintBarcode(self.incoming, $event);
                 })
         };
 

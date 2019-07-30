@@ -32,6 +32,7 @@ module.exports = function (app) {
         self.selectedApplicationUser = null;
 
         self.selectedUserDomain = null;
+        self.commentSearchText = '';
 
         self.setSelectedReason = function () {
             self.reason = self.selectedComment.getComment();
@@ -136,7 +137,27 @@ module.exports = function (app) {
 
         self.nothingNeedUserReason = function () {
             return self.itemNeedReason() || self.itemNeedUser();
-        }
+        };
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of workflow action dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
+        };
 
 
     });

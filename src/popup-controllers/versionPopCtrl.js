@@ -6,7 +6,8 @@ module.exports = function (app) {
                                                allowDuplicateAction,
                                                generator,
                                                langService,
-                                               $filter) {
+                                               $filter,
+                                               gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'versionPopCtrl';
@@ -16,9 +17,9 @@ module.exports = function (app) {
         self.length = versions.length;
         self.actions = []; //actions;
         self.allowDuplicateAction = allowDuplicateAction;
-        self.progress = null;
         self.selectedVersions = [];
         self.grid = {
+            progress: null,
             limit: 5, //self.globalSetting.searchAmount, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -29,7 +30,11 @@ module.exports = function (app) {
                         return (self.versions.length + 21);
                     }
                 }
-            ]
+            ],
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.others.versionSelect),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.others.versionSelect, self.grid.truncateSubject);
+            }
         };
 
         /**

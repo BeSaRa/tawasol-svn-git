@@ -101,6 +101,12 @@ module.exports = function (app) {
         $timeout(function () {
             // all system organizations
             self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
+            // sort regOus
+            if (self.registryOrganizations && self.registryOrganizations.length) {
+                self.registryOrganizations = _.sortBy(self.registryOrganizations, [function (ou) {
+                    return ou[langService.current + 'Name'].toLowerCase();
+                }]);
+            }
             // all document types
             var docClass = self.document.docClassName;
             var dummySearchDocClass = self.document.dummySearchDocClass.toLowerCase();
@@ -420,7 +426,7 @@ module.exports = function (app) {
          * @description on registry change.
          * @param organizationId
          */
-        self.onRegistryChange = function (organizationId) {
+        /*self.onRegistryChange = function (organizationId) {
             // console.log(organizationId);
             if (!organizationId)
                 return;
@@ -432,7 +438,7 @@ module.exports = function (app) {
                     // self.organizations = result;
                     self.subOrganizations = result;
                 });
-        };
+        };*/
 
         self.showRegistryUnit = function () {
             return self.registryOrganizations && self.registryOrganizations.length && employeeService.isCentralArchive() && self.document && self.document.addMethod && (self.document.classDescription.toLowerCase() === 'outgoing' || self.document.classDescription.toLowerCase() === 'incoming');
@@ -585,6 +591,10 @@ module.exports = function (app) {
                     if (!skipResetOu) {
                         self.document.ou = null;
                     }
+                    // sort sections/sub-organizations
+                    result = _.sortBy(result, [function (ou) {
+                        return ou[langService.current + 'Name'].toLowerCase();
+                    }]);
                     self.subOrganizations = result;
                 });
         };

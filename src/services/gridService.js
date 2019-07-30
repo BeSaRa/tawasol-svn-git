@@ -738,7 +738,7 @@ module.exports = function (app) {
                     return truncateStorage;
                 }
             }
-            return null;
+            return false;
         };
 
         /**

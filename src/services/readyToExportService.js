@@ -216,10 +216,11 @@ module.exports = function (app) {
                             resolve: {
                                 comments: function (userCommentService) {
                                     'ngInject';
-                                    return userCommentService.getUserComments()
+                                    /*return userCommentService.getUserComments()
                                         .then(function (result) {
                                             return _.filter(result, 'status');
-                                        });
+                                        });*/
+                                    return userCommentService.loadUserCommentsForDistribution();
                                 }
                             }
                         }).then(function (reason) {
@@ -259,10 +260,11 @@ module.exports = function (app) {
                             resolve: {
                                 comments: function (userCommentService) {
                                     'ngInject';
-                                    return userCommentService.getUserComments()
+                                    /*return userCommentService.getUserComments()
                                         .then(function (result) {
                                             return _.filter(result, 'status');
-                                        });
+                                        });*/
+                                    return userCommentService.loadUserCommentsForDistribution();
                                 }
                             }
                         })

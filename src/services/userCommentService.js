@@ -1,14 +1,14 @@
 module.exports = function (app) {
     app.service('userCommentService', function (urlService,
-                                                    $http ,
-                                                    $q ,
-                                                    generator,
-                                                    UserComment,
-                                                    _,
-                                                    dialog,
-                                                    langService,
-                                                    toast,
-                                                    cmsTemplate) {
+                                                $http,
+                                                $q,
+                                                generator,
+                                                UserComment,
+                                                _,
+                                                dialog,
+                                                langService,
+                                                toast,
+                                                cmsTemplate) {
         'ngInject';
         var self = this;
         self.serviceName = 'userCommentService';
@@ -33,6 +33,19 @@ module.exports = function (app) {
          */
         self.getUserComments = function () {
             return self.userComments.length ? $q.when(self.userComments) : self.loadUserComments();
+        };
+
+        self.loadUserCommentsForDistribution = function (skipSorting) {
+            return $http.get(urlService.userComments + '/dist').then(function (result) {
+                result = generator.generateCollection(result.data.rs, UserComment, self._sharedMethods);
+                result = generator.interceptReceivedCollection('UserComment', result);
+                if (!skipSorting) {
+                    result = _.sortBy(result, [function (comment) {
+                        return comment.shortComment.toLowerCase();
+                    }]);
+                }
+                return result;
+            });
         };
 
         /**
@@ -87,7 +100,7 @@ module.exports = function (app) {
             userCommentDelete: function (userComment, $event) {
                 return dialog.confirmMessage(langService.get('confirm_delete_msg'), null, null, $event)
                     .then(function () {
-                        return self.deleteUserComment(userComment).then(function(){
+                        return self.deleteUserComment(userComment).then(function () {
                             toast.success(langService.get("delete_success"));
                             return true;
                         })
@@ -105,7 +118,7 @@ module.exports = function (app) {
                         return self.deleteBulkUserComments(userComments)
                             .then(function (result) {
                                 var response = false;
-                                if(result.length === userComments.length){
+                                if (result.length === userComments.length) {
                                     toast.error(langService.get("failed_delete_selected"));
                                     response = false;
                                 } else if (result.length) {
@@ -118,7 +131,7 @@ module.exports = function (app) {
                                     response = true;
                                 }
                                 return response;
-                         });
+                            });
                     });
             }
         };
@@ -200,7 +213,7 @@ module.exports = function (app) {
             });
         };
 
-         /**
+        /**
          * @description Activate user comment
          * @param userComment
          */
@@ -237,7 +250,7 @@ module.exports = function (app) {
                 });
         };
 
-         /**
+        /**
          * @description Deactivate bulk of user comments
          * @param userComments
          */

@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('reasonBulkPopCtrl', function (comments, dialog, workItems, _, userInboxService) {
+    app.controller('reasonBulkPopCtrl', function (comments, dialog, workItems, _, correspondenceService) {
         'ngInject';
         var self = this;
         self.controllerName = 'reasonBulkPopCtrl';
@@ -11,6 +11,7 @@ module.exports = function (app) {
         self.selectedComment = null;
         // the default reason for terminate
         self.reason = null;
+        self.commentSearchText = '';
 
         /**
          * @description to check if the workItem has custom reason.
@@ -21,14 +22,19 @@ module.exports = function (app) {
             return !!workItem.reason;
         };
 
-        self.setBulkTerminateReason = function () {
+        self.setBulkReason = function () {
             self.reason = self.selectedComment.getComment();
         };
 
         self.openReasonDialog = function (workItem) {
-            userInboxService
+            /*userInboxService
                 .controllerMethod
                 .userInboxTerminate(workItem, false, true)
+                .then(function (reason) {
+                    workItem.reason = reason;
+                });*/
+            correspondenceService
+                .openCommentDialog()
                 .then(function (reason) {
                     workItem.reason = reason;
                 });
@@ -55,6 +61,26 @@ module.exports = function (app) {
          */
         self.closeBulkReasonPopup = function () {
             dialog.cancel();
+        };
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
         };
 
     });

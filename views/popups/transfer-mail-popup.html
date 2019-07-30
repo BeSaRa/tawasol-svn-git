@@ -40,9 +40,21 @@
                             <label for="comment">{{lang.comment}}</label>
                             <md-select ng-change="ctrl.setSelectedReason()" id="comment"
                                        ng-disabled="!ctrl.selectedOrganization"
-                                       ng-model="ctrl.selectedComment">
-                                <md-option ng-repeat="comment in ctrl.comments" ng-value="comment">
-                                    {{comment.getCommentTitle()}}
+                                       ng-model="ctrl.selectedComment"
+                                       md-on-close="ctrl.clearSearchText('comment')"
+                                       data-md-container-class="select-header-container">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.commentSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option
+                                        ng-repeat="comment in ctrl.comments | translatedNameFilter: ctrl.commentSearchText"
+                                        ng-value="comment">
+                                    <span
+                                            md-highlight-text="ctrl.commentSearchText"
+                                            md-highlight-flags="i">{{comment.getCommentTitle()}}</span>
                                 </md-option>
                             </md-select>
                         </md-input-container>

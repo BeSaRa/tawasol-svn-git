@@ -6,14 +6,25 @@
                 header-text="{{lang.linked_document_manage}} : {{ctrl.model.getTranslatedName()}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <div class="p20">
+                <div layout="row" class="p020">
+                    <span flex></span>
+                    <md-switch aria-label="{{lang.truncate_subject}}"
+                               class="m0"
+                               ng-model="ctrl.grid.truncateSubject"
+                               ng-change="ctrl.grid.setTruncateSubject($event)">
+                        <span>{{lang.truncate_subject}} : </span>
+                        {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                    </md-switch>
+                </div>
                 <div layout="row" ng-if="ctrl.linkedDocs.length">
+
                     <md-card flex>
                         <md-table-container scroll-directive>
                             <table md-table md-row-select multiple ng-model="ctrl.selectedCorrespondences"
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th ng-if="ctrl.selectedCorrespondences.length" md-column>
+                                    <th colspan="6" ng-if="ctrl.selectedCorrespondences.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedCorrespondences.length}} {{lang.items_selected}} </span>
                                             <span flex></span>
@@ -25,16 +36,16 @@
                                     <th md-column md-order-by="docSubject" ng-if="!ctrl.selectedCorrespondences.length">
                                         <span>{{lang.subject}}</span>
                                     </th>
-                                    <th md-column md-order-by="priorityLevel">
+                                    <th md-column md-order-by="priorityLevel" ng-if="!ctrl.selectedCorrespondences.length">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
-                                    <th md-column md-order-by="securityLevel">
+                                    <th md-column md-order-by="securityLevel" ng-if="!ctrl.selectedCorrespondences.length">
                                         <span>{{lang.security_level}}</span>
                                     </th>
-                                    <th md-column md-order-by="createdBy">
+                                    <th md-column md-order-by="createdBy" ng-if="!ctrl.selectedCorrespondences.length">
                                         <span>{{lang.creator}}</span>
                                     </th>
-                                    <th md-column md-order-by="createdOn">
+                                    <th md-column md-order-by="createdOn" ng-if="!ctrl.selectedCorrespondences.length">
                                         <span>{{lang.created_on}}</span>
                                     </th>
                                 </tr>
@@ -86,10 +97,26 @@
                                                     </span>
                                                 </span>-->
                                     </td>
-                                    <td md-cell class="td-data">
+                                    <!--<td md-cell class="td-data">
                                         <a href="" ng-if="correspondence.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewCorrespondence(correspondence, $event)">{{correspondence.docSubject}}</a>
                                         <span ng-if="!correspondence.hasContent()">{{correspondence.docSubject}}</span>
+                                    </td>-->
+                                    <td md-cell class="subject">
+                                        <a href="" ng-if="correspondence.hasContent() && ctrl.grid.truncateSubject"
+                                           class="view-doc subject-internal" md-truncate
+                                           tooltip="{{correspondence.docSubject}}"
+                                           ng-click="ctrl.viewCorrespondence(correspondence, $event)">{{correspondence.docSubject}}</a>
+                                        <span ng-if="!correspondence.hasContent() && ctrl.grid.truncateSubject"
+                                              class="view-doc subject-internal" md-truncate
+                                              tooltip="{{correspondence.docSubject}}">{{correspondence.docSubject}}</span>
+                                        <a href="" ng-if="correspondence.hasContent() && !ctrl.grid.truncateSubject"
+                                           class="view-doc subject-internal"
+                                           tooltip="{{correspondence.docSubject}}"
+                                           ng-click="ctrl.viewCorrespondence(correspondence, $event)">{{correspondence.docSubject}}</a>
+                                        <span ng-if="!correspondence.hasContent() && !ctrl.grid.truncateSubject"
+                                              class="view-doc subject-internal"
+                                              tooltip="{{correspondence.docSubject}}">{{correspondence.docSubject}}</span>
                                     </td>
                                     <td md-cell>{{correspondence.priorityLevel.getTranslatedName()}}</td>
                                     <td md-cell>{{correspondence.securityLevel.getTranslatedName()}}</td>
