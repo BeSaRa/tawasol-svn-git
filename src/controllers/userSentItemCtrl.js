@@ -243,7 +243,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.recallSingle = function (userSentItem, $event) {
-            userSentItemService.recallSentItem(userSentItem, $event)
+            userSentItemService.recallSentItem(userSentItem, $event, null, self.userSentItemCopy)
                 .then(function (result) {
                     if (result) {
                         self.reloadUserSentItems(self.grid.page)
@@ -480,14 +480,17 @@ module.exports = function (app) {
 
             var info = userSentItem.getInfo();
             info.wobNumber = null;
+            self.userSentItemCopy = angular.copy(userSentItem);
             correspondenceService.viewCorrespondence({
                 vsId: info.vsId,
                 docClassName: info.documentClass
             }, self.gridActions, checkIfEditPropertiesAllowed(userSentItem, true), true)
                 .then(function () {
+                    self.userSentItemCopy = null;
                     self.reloadUserSentItems(self.grid.page);
                 })
                 .catch(function () {
+                    self.userSentItemCopy = null;
                     self.reloadUserSentItems(self.grid.page);
                 });
         };
@@ -502,11 +505,15 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+
+            self.userSentItemCopy = angular.copy(userSentItem);
             userSentItem.viewUserSentItem(self.gridActions, 'sentItem', $event)
                 .then(function () {
+                    self.userSentItemCopy = null;
                     return self.reloadUserSentItems(self.grid.page);
                 })
                 .catch(function () {
+                    self.userSentItemCopy = null;
                     return self.reloadUserSentItems(self.grid.page);
                 });
         };
@@ -720,7 +727,6 @@ module.exports = function (app) {
                 icon: 'tag',
                 text: 'grid_action_recall',
                 shortcut: true,
-                showInView: false,
                 callback: self.recallSingle,
                 class: "action-green",
                 hide: false, /*In Phase 2*/

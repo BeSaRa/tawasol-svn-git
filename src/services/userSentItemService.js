@@ -186,10 +186,11 @@ module.exports = function (app) {
              * @description recall sent item again to user inbox.
              * @returns WorkItem status
              */
-            self.recallSentItem = function (sentItem, $event, ignoreMessage) {
+            self.recallSentItem = function (sentItem, $event, ignoreMessage, gridSendItem) {
+                var wfId = (gridSendItem) ? gridSendItem.wfId : sentItem.wfId;
                 return self.showReasonDialog('recall_reason', $event)
                     .then(function (reason) {
-                        return $http.put((urlService.userInbox + '/' + sentItem.wfId + '/recall'), {
+                        return $http.put((urlService.userInbox + '/' + wfId + '/recall'), {
                             comment: reason
                         }).then(function (result) {
                             return result.data.rs;
