@@ -290,6 +290,12 @@ module.exports = function (app) {
                     classification.id = result.data.rs;
                     classification.groupPrefix = 'cl_' + classification.id;
                     return generator.generateInstance(classification, Classification, self._sharedMethods);
+                })
+                .catch(function (error) {
+                    return errorCode.checkIf(error, 'DUPLICATE_ENTRY', function () {
+                        dialog.errorMessage(langService.get('record_already_exists').change({entity: langService.get('classification')}));
+                        return $q.reject('DUPLICATE_ENTRY');
+                    });
                 });
         };
         /**

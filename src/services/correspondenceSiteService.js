@@ -277,6 +277,12 @@ module.exports = function (app) {
                 .then(function (result) {
                     correspondenceSite.id = result.data.rs;
                     return generator.generateInstance(correspondenceSite, CorrespondenceSite, self._sharedMethods);
+                })
+                .catch(function (error) {
+                    return errorCode.checkIf(error, 'DUPLICATE_ENTRY', function () {
+                        dialog.errorMessage(langService.get('record_already_exists').change({entity: langService.get('correspondence_site')}));
+                        return $q.reject('DUPLICATE_ENTRY');
+                    });
                 });
         };
         /**

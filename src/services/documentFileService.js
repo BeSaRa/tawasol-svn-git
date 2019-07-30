@@ -241,6 +241,12 @@ module.exports = function (app) {
                 .then(function (result) {
                     documentFile.id = result.data.rs;
                     return documentFile;
+                })
+                .catch(function (error) {
+                    return errorCode.checkIf(error, 'DUPLICATE_ENTRY', function () {
+                        dialog.errorMessage(langService.get('record_already_exists').change({entity: langService.get('document_file')}));
+                        return $q.reject('DUPLICATE_ENTRY');
+                    });
                 });
         };
         /**

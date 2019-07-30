@@ -105,12 +105,21 @@ module.exports = function (app) {
              * @param error
              * @param messageLangKey
              * LangKey to override the error message
+             * @param message
+             * Message will override the error message and messageLangKey
              */
-            showErrorDialog: function (error, messageLangKey) {
-                var code = error.hasOwnProperty('data') && error.data ? error.data.ec : error,
-                    errorExists = _.values(errorCodes).indexOf(code) !== -1;
-                if (errorExists && errorLangKeys[code])
-                    dialog.errorMessage(langService.get(messageLangKey ? messageLangKey : errorLangKeys[code]));
+            showErrorDialog: function (error, messageLangKey, message) {
+                var code = error.hasOwnProperty('data') && error.data ? error.data.ec : error;
+                if (message) {
+                    dialog.errorMessage(message);
+                } else if (messageLangKey) {
+                    dialog.errorMessage(langService.get(messageLangKey));
+                } else {
+                    var errorExists = _.values(errorCodes).indexOf(code) !== -1;
+                    if (errorExists && errorLangKeys[code]) {
+                        dialog.errorMessage(langService.get(errorLangKeys[code]));
+                    }
+                }
                 return $q.reject(error);
             }
         }
