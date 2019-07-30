@@ -30,14 +30,10 @@ module.exports = function (app) {
             limit: 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.viewerLogs.length + 21);
-                    }
-                }
-            ]
+            limitOptions:gridService.getGridLimitOptions(gridService.grids.search.viewersLog, self.viewerLogs),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.search.viewersLog, limit);
+            }
         };
         self.selectedLogs = [];
         self.selectedDocument = null;
