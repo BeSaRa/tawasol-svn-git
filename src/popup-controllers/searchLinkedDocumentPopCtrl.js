@@ -16,7 +16,8 @@ module.exports = function (app) {
                                                             $timeout,
                                                             _,
                                                             employeeService,
-                                                            isAdminSearch) {
+                                                            isAdminSearch,
+                                                            gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchLinkedDocumentPopCtrl';
