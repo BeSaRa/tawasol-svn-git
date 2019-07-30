@@ -55,6 +55,9 @@ module.exports = function (app) {
                 case 2:
                     _openInDesktop();
                     break;
+                // application user both: desktop/web
+                default:
+                    _defaultBehavior();
             }
 
         };
@@ -199,7 +202,7 @@ module.exports = function (app) {
                             if (!ignoreMessage)
                                 toast.success(langService.get('save_success'));
                             self.disableSaveTimeout = false;
-                            if (saveBeforeApprove){
+                            if (saveBeforeApprove) {
                                 return 'savedBeforeApprove';
                             }
                             dialog.hide(true);
