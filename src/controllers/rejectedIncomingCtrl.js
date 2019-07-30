@@ -237,14 +237,13 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Archive for selected review rejected incoming mails
+         * @description Archive for selected rejected incoming mails
          * @param $event
          */
-        self.archiveIncomingBulk = function ($event) {
-            rejectedIncomingService
-                .controllerMethod
-                .rejectedIncomingArchiveBulk(self.selectedRejectedIncomings, $event)
-                .then(function (result) {
+        self.archiveBulk = function ($event) {
+            correspondenceService
+                .archiveBulkCorrespondences(self.selectedRejectedIncomings, $event)
+                .then(function () {
                     self.reloadRejectedIncomings(self.grid.page);
                 });
         };
@@ -318,21 +317,18 @@ module.exports = function (app) {
         };
         /**
          * @description Archive the rejected incoming item
-         * @param rejectedIncoming
+         * @param correspondence
          * @param $event
          * @param defer
          */
-        self.archive = function (rejectedIncoming, $event, defer) {
-            rejectedIncomingService
-                .controllerMethod
-                .rejectedIncomingArchive(rejectedIncoming, $event)
-                .then(function (result) {
+        self.archive = function (correspondence, $event, defer) {
+            correspondence.archiveDocument($event)
+                .then(function () {
                     self.reloadRejectedIncomings(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         });
-                })
-
+                });
         };
 
         /**

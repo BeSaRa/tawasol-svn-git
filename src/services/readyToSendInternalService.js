@@ -40,42 +40,7 @@ module.exports = function (app) {
          * @description Contains methods for CRUD operations for ready to send internal mails
          */
         self.controllerMethod = {
-            /**
-             * @description Archive the ready to send internal mail
-             * @param readyToSendInternal
-             * @param $event
-             */
-            readyToSendInternalArchive: function (readyToSendInternal, $event) {
-                return self.archiveReadyToSendInternal(readyToSendInternal)
-                    .then(function () {
-                        toast.success(langService.get("archive_specific_success").change({name: readyToSendInternal.getTranslatedName()}));
-                        return true;
-                    });
-            },
-            /**
-             * @description Archive bulk ready to send internal mails
-             * @param readyToSendInternals
-             * @param $event
-             */
-            readyToSendInternalArchiveBulk: function (readyToSendInternals, $event) {
-                return self.archiveBulkReadyToSendInternal(readyToSendInternals)
-                    .then(function (result) {
-                        var response = false;
-                        if (result.length === readyToSendInternals.length) {
-                            toast.error(langService.get("failed_archive_selected"));
-                            response = false;
-                        } else if (result.length) {
-                            generator.generateFailedBulkActionRecords('archive_success_except_following', _.map(result, function (readyToSendInternal) {
-                                return readyToSendInternal.getNames();
-                            }));
-                            response = true;
-                        } else {
-                            toast.success(langService.get("archive_success"));
-                            response = true;
-                        }
-                        return response;
-                    });
-            }
+
         };
 
         /**
@@ -88,40 +53,6 @@ module.exports = function (app) {
             /*  return _.find(self.readyToSendInternals, function (readyToSendInternal) {
                   return Number(readyToSendInternal.id) === Number(readyToSendInternalId);
               });*/
-        };
-
-        /**
-         * @description Archive the ready to send internal mail
-         * @param readyToSendInternal
-         */
-        self.archiveReadyToSendInternal = function (readyToSendInternal) {
-            var vsId = readyToSendInternal.hasOwnProperty('vsId') ? readyToSendInternal.vsId : readyToSendInternal;
-            return $http
-                .put(urlService.internals + '/' + vsId + '/archive')
-                .then(function () {
-                    return readyToSendInternal;
-                });
-        };
-
-        /**
-         * @description Archive the bulk ready to send internal mail
-         * @param readyToSendInternals
-         */
-        self.archiveBulkReadyToSendInternal = function (readyToSendInternals) {
-            var vsIds = readyToSendInternals[0].hasOwnProperty('vsId') ? _.map(readyToSendInternals, 'vsId') : readyToSendInternals;
-            return $http
-                .put((urlService.internals + '/archive/bulk'), vsIds)
-                .then(function (result) {
-                    result = result.data.rs;
-                    var failedReadyToSendInternals = [];
-                    _.map(result, function (value, key) {
-                        if (!value)
-                            failedReadyToSendInternals.push(key);
-                    });
-                    return _.filter(readyToSendInternals, function (readyToSendInternal) {
-                        return (failedReadyToSendInternals.indexOf(readyToSendInternal.vsId) > -1);
-                    });
-                });
         };
 
         /**

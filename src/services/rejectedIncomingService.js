@@ -154,42 +154,6 @@ module.exports = function (app) {
                         }
                         return response;
                     });
-            },
-            /**
-             * @description Archive the rejected incoming mail
-             * @param rejectedIncoming
-             * @param $event
-             */
-            rejectedIncomingArchive: function (rejectedIncoming, $event) {
-                return self.archiveRejectedIncoming(rejectedIncoming)
-                    .then(function () {
-                        toast.success(langService.get("archive_specific_success").change({name: rejectedIncoming.getTranslatedName()}));
-                        return true;
-                    });
-            },
-            /**
-             * @description Archive bulk rejected incoming mails
-             * @param rejectedIncomings
-             * @param $event
-             */
-            rejectedIncomingArchiveBulk: function (rejectedIncomings, $event) {
-                return self.archiveBulkRejectedIncoming(rejectedIncomings)
-                    .then(function (result) {
-                        var response = false;
-                        if (result.length === rejectedIncomings.length) {
-                            toast.error(langService.get("failed_archive_selected"));
-                            response = false;
-                        } else if (result.length) {
-                            generator.generateFailedBulkActionRecords('archive_success_except_following', _.map(result, function (rejectedIncoming) {
-                                return rejectedIncoming.getNames();
-                            }));
-                            response = true;
-                        } else {
-                            toast.success(langService.get("archive_success"));
-                            response = true;
-                        }
-                        return response;
-                    });
             }
         };
 
@@ -339,40 +303,6 @@ module.exports = function (app) {
             var bulkVsIds = rejectedIncomings[0].hasOwnProperty('vsId') ? _.map(rejectedIncomings, 'vsId') : rejectedIncomings;
             return $http
                 .put(urlService.incomings + '/send-to-review/bulk', bulkVsIds)
-                .then(function (result) {
-                    result = result.data.rs;
-                    var failedRejectedIncomings = [];
-                    _.map(result, function (value, key) {
-                        if (!value)
-                            failedRejectedIncomings.push(key);
-                    });
-                    return _.filter(rejectedIncomings, function (rejectedIncoming) {
-                        return (failedRejectedIncomings.indexOf(rejectedIncoming.vsId) > -1);
-                    });
-                });
-        };
-
-        /**
-         * @description Archive the rejected incoming mail
-         * @param rejectedIncoming
-         */
-        self.archiveRejectedIncoming = function (rejectedIncoming) {
-            var vsId = rejectedIncoming.hasOwnProperty('vsId') ? rejectedIncoming.vsId : rejectedIncoming;
-            return $http
-                .put(urlService.incomings + '/' + vsId + '/archive')
-                .then(function () {
-                    return rejectedIncoming;
-                });
-        };
-
-        /**
-         * @description Archive the bulk rejected incoming mail
-         * @param rejectedIncomings
-         */
-        self.archiveBulkRejectedIncoming = function (rejectedIncomings) {
-            var vsIds = rejectedIncomings[0].hasOwnProperty('vsId') ? _.map(rejectedIncomings, 'vsId') : rejectedIncomings;
-            return $http
-                .put((urlService.incomings + '/archive/bulk'), vsIds)
                 .then(function (result) {
                     result = result.data.rs;
                     var failedRejectedIncomings = [];

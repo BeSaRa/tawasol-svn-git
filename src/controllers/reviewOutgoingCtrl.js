@@ -263,6 +263,35 @@ module.exports = function (app) {
                         });
                 });
         };
+
+        /**
+         * @description Archive the review outgoing item
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.archive = function (correspondence, $event, defer) {
+            correspondence.archiveDocument($event)
+                .then(function () {
+                    self.reloadReviewOutgoings(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
+        /**
+         * @description Archive for selected review outgoing correspondence
+         * @param $event
+         */
+        self.archiveBulk = function ($event) {
+            correspondenceService
+                .archiveBulkCorrespondences(self.selectedReviewOutgoings, $event)
+                .then(function () {
+                    self.reloadReviewOutgoings(self.grid.page);
+                });
+        };
+
         /**
          * @description Reject the outgoing mail
          * @param reviewOutgoing
@@ -270,18 +299,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.rejectOutgoing = function (reviewOutgoing, $event, defer) {
-            /*reviewOutgoingService
-             .controllerMethod
-             .reviewOutgoingReject(reviewOutgoing, $event)
-             .then(function (result) {
-             self.reloadReviewOutgoings(self.grid.page)
-             .then(function () {
-             new ResolveDefer(defer);
-             });
-             })
-             .catch(function (result) {
-             self.reloadReviewOutgoings(self.grid.page);
-             });*/
             reviewOutgoing.rejectDocument($event)
                 .then(function () {
                     new ResolveDefer(defer);
@@ -596,8 +613,8 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // view
             {
@@ -614,8 +631,8 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // Preview
                     {
@@ -679,11 +696,12 @@ module.exports = function (app) {
                     }
                 ]
             },
+            // Separator
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Send To Ready To Export
@@ -703,6 +721,19 @@ module.exports = function (app) {
                     return info.documentClass === 'outgoing' && model.hasContent() && info.isPaper;
                 }
             },
+            // Remove
+            {
+                type: 'action',
+                icon: 'delete',
+                text: 'grid_action_remove',
+                shortcut: false,
+                permissionKey: "DELETE_OUTGOING",
+                callback: self.removeReviewOutgoing,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
             // Print Barcode
             {
                 type: 'action',
@@ -717,19 +748,6 @@ module.exports = function (app) {
                     return (info.isPaper);
                 }
             },
-            // Remove
-            {
-                type: 'action',
-                icon: 'delete',
-                text: 'grid_action_remove',
-                shortcut: false,
-                permissionKey: "DELETE_OUTGOING",
-                callback: self.removeReviewOutgoing,
-                class: "action-green",
-                checkShow: function (action, model) {
-                            return true;
-                        }
-            },
             //Launch Distribution Workflow
             {
                 type: 'action',
@@ -740,8 +758,20 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
+            },
+            // Archive
+            {
+                type: 'action',
+                icon: 'archive',
+                text: 'grid_action_archive',
+                shortcut: true,
+                callback: self.archive,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return true;
+                }
             },
             // Reject
             {
@@ -753,8 +783,8 @@ module.exports = function (app) {
                 permissionKey: "REJECT_OUTGOING",
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Accept
             {
@@ -766,8 +796,8 @@ module.exports = function (app) {
                 permissionKey: "ACCEPT_OUTGOING",
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Subscribe
             {
@@ -789,8 +819,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "EDIT_OUTGOING_CONTENT",
                     "EDIT_OUTGOING_PROPERTIES"
@@ -871,8 +901,8 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
             },
             // Manage
@@ -883,8 +913,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
@@ -986,8 +1016,8 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Broadcast
             {
@@ -1012,8 +1042,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",
                     "DUPLICATE_BOOK_FROM_VERSION"

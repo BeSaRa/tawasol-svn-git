@@ -142,18 +142,14 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Archive for selected review ready to send internal mails
+         * @description Archive for selected ready to send internal mails
          * @param $event
          */
-        self.archiveReadyToSendInternalBulk = function ($event) {
-            readyToSendInternalService
-                .controllerMethod
-                .readyToSendInternalArchiveBulk(self.selectedReadyToSendInternals, $event)
-                .then(function (result) {
-                    self.reloadReadyToSendInternals(self.grid.page)
-                        .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                        });
+        self.archiveBulk = function ($event) {
+            correspondenceService
+                .archiveBulkCorrespondences(self.selectedReadyToSendInternals, $event)
+                .then(function () {
+                    self.reloadReadyToSendInternals(self.grid.page);
                 });
         };
 
@@ -218,20 +214,18 @@ module.exports = function (app) {
         };
         /**
          * @description Archive the ready to send internal item
-         * @param readyToSendInternal
+         * @param correspondence
          * @param $event
          * @param defer
          */
-        self.archiveInternal = function (readyToSendInternal, $event, defer) {
-            readyToSendInternalService
-                .controllerMethod
-                .readyToSendInternalArchive(readyToSendInternal, $event)
-                .then(function (result) {
+        self.archive = function (correspondence, $event, defer) {
+            correspondence.archiveDocument($event)
+                .then(function () {
                     self.reloadReadyToSendInternals(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         });
-                })
+                });
         };
 
         /**
@@ -675,7 +669,7 @@ module.exports = function (app) {
                 icon: 'archive',
                 text: 'grid_action_archive',
                 shortcut: true,
-                callback: self.archiveInternal,
+                callback: self.archive,
                 class: "action-green",
                 checkShow: function (action, model) {
                             return true;

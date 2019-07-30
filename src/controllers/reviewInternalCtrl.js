@@ -285,6 +285,35 @@ module.exports = function (app) {
                         });
                 });
         };
+
+        /**
+         * @description Archive the review internal item
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.archive = function (correspondence, $event, defer) {
+            correspondence.archiveDocument($event)
+                .then(function () {
+                    self.reloadReviewInternals(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
+        /**
+         * @description Archive for selected review internal correspondence
+         * @param $event
+         */
+        self.archiveBulk = function ($event) {
+            correspondenceService
+                .archiveBulkCorrespondences(self.selectedReviewInternals, $event)
+                .then(function () {
+                    self.reloadReviewInternals(self.grid.page);
+                });
+        };
+
         /**
          * @description Reject the internal mail
          * @param reviewInternal
@@ -292,20 +321,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.rejectInternal = function (reviewInternal, $event, defer) {
-            /*reviewInternalService
-                .controllerMethod
-                .reviewInternalReject(reviewInternal, $event)
-                .then(function (result) {
-                    self.reloadReviewInternals(self.grid.page)
-                        .then(function () {
-                            new ResolveDefer(defer);
-                        });
-                    //self.replaceRecord(result);
-                })
-                .catch(function (result) {
-                    self.reloadReviewInternals(self.grid.page);
-                    //self.replaceRecord(result);
-                });*/
             reviewInternal.rejectDocument($event)
                 .then(function () {
                     new ResolveDefer(defer);
@@ -702,6 +717,69 @@ module.exports = function (app) {
                     return (info.isPaper);
                 }
             },
+            // Accept and Launch Distribution Workflow
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_accept_launch_distribution_workflow',
+                shortcut: true,
+                callback: self.acceptAndLaunchDistributionWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: function (action, model) {
+                            return true;
+                        }
+            },
+            // Archive
+            {
+                type: 'action',
+                icon: 'archive',
+                text: 'grid_action_archive',
+                shortcut: true,
+                callback: self.archive,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            // Reject
+            {
+                type: 'action',
+                icon: 'close',
+                text: 'grid_action_reject',
+                shortcut: true,
+                callback: self.rejectInternal,
+                permissionKey: "REJECT_INTERNAL",
+                class: "action-green",
+                checkShow: function (action, model) {
+                            return true;
+                        }
+            },
+            // Accept
+            {
+                type: 'action',
+                icon: 'check',
+                text: 'grid_action_accept',
+                shortcut: true,
+                callback: self.acceptInternal,
+                permissionKey: "ACCEPT_INTERNAL",
+                class: "action-green",
+                checkShow: function (action, model) {
+                            return true;
+                        }
+            },
+            // Subscribe
+            {
+                type: 'action',
+                icon: 'bell-plus',
+                text: 'grid_action_subscribe',
+                callback: self.subscribe,
+                class: "action-green",
+                hide: false,
+                checkShow: function (action, model) {
+                    return !model.isBroadcasted();
+                }
+            },
             // Edit
             {
                 type: 'action',
@@ -710,8 +788,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "EDIT_INTERNAL_CONTENT",
                     "EDIT_INTERNAL_PROPERTIES"
@@ -783,57 +861,6 @@ module.exports = function (app) {
                         }
                     }
                 ]
-            },
-            // Accept and Launch Distribution Workflow
-            {
-                type: 'action',
-                icon: 'sitemap',
-                text: 'grid_action_accept_launch_distribution_workflow',
-                shortcut: true,
-                callback: self.acceptAndLaunchDistributionWorkflow,
-                class: "action-green",
-                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
-                checkShow: function (action, model) {
-                            return true;
-                        }
-            },
-            // Reject
-            {
-                type: 'action',
-                icon: 'close',
-                text: 'grid_action_reject',
-                shortcut: true,
-                callback: self.rejectInternal,
-                permissionKey: "REJECT_INTERNAL",
-                class: "action-green",
-                checkShow: function (action, model) {
-                            return true;
-                        }
-            },
-            // Accept
-            {
-                type: 'action',
-                icon: 'check',
-                text: 'grid_action_accept',
-                shortcut: true,
-                callback: self.acceptInternal,
-                permissionKey: "ACCEPT_INTERNAL",
-                class: "action-green",
-                checkShow: function (action, model) {
-                            return true;
-                        }
-            },
-            // Subscribe
-            {
-                type: 'action',
-                icon: 'bell-plus',
-                text: 'grid_action_subscribe',
-                callback: self.subscribe,
-                class: "action-green",
-                hide: false,
-                checkShow: function (action, model) {
-                    return !model.isBroadcasted();
-                }
             },
             // View Tracking Sheet
             {

@@ -164,15 +164,13 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Archive for selected review ready to send incoming mails
+         * @description Archive for selected ready to send incoming mails
          * @param $event
          */
         self.archiveBulk = function ($event) {
-            //console.log('archive ready to send incoming mails bulk : ', self.selectedReadyToSendIncomings);
-            readyToSendIncomingService
-                .controllerMethod
-                .readyToSendIncomingArchiveBulk(self.selectedReadyToSendIncomings, $event)
-                .then(function (result) {
+            correspondenceService
+                .archiveBulkCorrespondences(self.selectedReadyToSendIncomings, $event)
+                .then(function () {
                     self.reloadReadyToSendIncomings(self.grid.page);
                 });
 
@@ -237,20 +235,18 @@ module.exports = function (app) {
 
         /**
          * @description Archive the ready to send incoming item
-         * @param readyToSendIncoming
+         * @param correspondence
          * @param $event
          * @param defer
          */
-        self.archive = function (readyToSendIncoming, $event, defer) {
-            readyToSendIncomingService
-                .controllerMethod
-                .readyToSendIncomingArchive(readyToSendIncoming, $event)
-                .then(function (result) {
+        self.archive = function (correspondence, $event, defer) {
+            correspondence.archiveDocument($event)
+                .then(function () {
                     self.reloadReadyToSendIncomings(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         });
-                })
+                });
         };
 
         /**

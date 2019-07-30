@@ -3890,6 +3890,55 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Archive the given correspondence
+         * @param correspondence
+         */
+        self.archiveCorrespondence = function (correspondence) {
+            var info = correspondence.getInfo(),
+                url = urlService.outgoings;
+            if (info.documentClass === 'incoming')
+                url = urlService.incomings;
+            else if (info.documentClass === 'internal')
+                url = urlService.internals;
+            return $http
+                .put(url + '/' + info.vsId + '/archive')
+                .then(function () {
+                    toast.success(langService.get("archive_specific_success").change({name: correspondence.getTranslatedName()}));
+                    return correspondence;
+                });
+        };
+
+        /**
+         * @description archive bulk correspondence.
+         * @param correspondences
+         * @param $event
+         * @param ignoreMessage
+         * @returns {*}
+         */
+        self.archiveBulkCorrespondences = function (correspondences, $event, ignoreMessage) {
+            // if the selected correspondences has just one record.
+            if (correspondences.length === 1)
+                return self.archiveCorrespondence(correspondences[0], $event);
+            else {
+                var info = correspondences[0].getInfo(),
+                    url = urlService.outgoings;
+                if (info.documentClass === 'incoming')
+                    url = urlService.incomings;
+                else if (info.documentClass === 'internal')
+                    url = urlService.internals;
+
+                var vsIds = _.map(correspondences, function (correspondence) {
+                    return correspondence.getInfo().vsId;
+                });
+                return $http
+                    .put((url + '/archive/bulk'), vsIds)
+                    .then(function (result) {
+                        return _bulkMessages(result, correspondences, ignoreMessage, 'failed_archive_selected', 'archive_success', 'archive_success_except_following');
+                    });
+            }
+        };
+
+        /**
          *@description open send fax dialog
          * @param correspondence
          * @param $event

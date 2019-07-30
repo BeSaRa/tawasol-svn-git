@@ -174,17 +174,15 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Archive for selected review rejected internal mails
+         * @description Archive for selected rejected internal mails
          * @param $event
          */
-        self.archiveRejectedInternalBulk = function ($event) {
-            console.log('archive rejected internal mails bulk : ', self.selectedRejectedInternals);
-            /*rejectedInternalService
-                .controllerMethod
-                .rejectedInternalArchiveBulk(self.selectedRejectedInternals, $event)
-                .then(function (result) {
+        self.archiveBulk = function ($event) {
+            correspondenceService
+                .archiveBulkCorrespondences(self.selectedRejectedInternals, $event)
+                .then(function () {
                     self.reloadRejectedInternals(self.grid.page);
-                });*/
+                });
         };
 
         /**
@@ -257,21 +255,18 @@ module.exports = function (app) {
         };
         /**
          * @description Archive the rejected internal item
-         * @param rejectedInternal
+         * @param correspondence
          * @param $event
          * @param defer
          */
-        self.archiveInternal = function (rejectedInternal, $event, defer) {
-
-            rejectedInternalService
-                .controllerMethod
-                .rejectedInternalArchive(rejectedInternal, $event)
-                .then(function (result) {
+        self.archive = function (correspondence, $event, defer) {
+            correspondence.archiveDocument($event)
+                .then(function () {
                     self.reloadRejectedInternals(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         });
-                })
+                });
         };
 
         /**
@@ -618,7 +613,7 @@ module.exports = function (app) {
                 icon: 'archive',
                 text: 'grid_action_archive',
                 shortcut: true,
-                callback: self.archiveInternal,
+                callback: self.archive,
                 class: "action-green",
                 checkShow: function (action, model) {
                             return true;

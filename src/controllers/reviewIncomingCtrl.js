@@ -74,8 +74,7 @@ module.exports = function (app) {
             var currentLang = langService.current === 'en' ? 'En' : 'Ar';
             if (property === 'mainsite') {
                 return 'main' + currentLang + 'SiteText';
-            }
-            else if (property === 'subsite') {
+            } else if (property === 'subsite') {
                 return 'sub' + currentLang + 'SiteText';
             }
             return generator.getColumnSortingKey(property, modelType);
@@ -272,6 +271,34 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Archive the review incoming item
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.archive = function (correspondence, $event, defer) {
+            correspondence.archiveDocument($event)
+                .then(function () {
+                    self.reloadReviewIncomings(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
+        /**
+         * @description Archive for selected review incoming correspondence
+         * @param $event
+         */
+        self.archiveBulk = function ($event) {
+            correspondenceService
+                .archiveBulkCorrespondences(self.selectedReviewIncomings, $event)
+                .then(function () {
+                    self.reloadReviewIncomings(self.grid.page);
+                });
+        };
+
+        /**
          * print Barcode
          * @param model
          * @param $event
@@ -288,20 +315,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.rejectIncoming = function (reviewIncoming, $event, defer) {
-            /*reviewIncomingService
-                .controllerMethod
-                .reviewIncomingReject(reviewIncoming, $event)
-                .then(function (result) {
-                    self.reloadReviewIncomings(self.grid.page)
-                        .then(function () {
-                            new ResolveDefer(defer);
-                        });
-                    //self.replaceRecord(result);
-                })
-                .catch(function (result) {
-                    self.reloadReviewIncomings(self.grid.page);
-                    //self.replaceRecord(result);
-                });*/
             reviewIncoming.rejectDocument($event)
                 .then(function () {
                     new ResolveDefer(defer);
@@ -561,8 +574,8 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // view
             {
@@ -579,8 +592,8 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // Preview
                     {
@@ -633,11 +646,11 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
-            // Remove Incoming
+            // Remove
             {
                 type: 'action',
                 icon: 'delete',
@@ -647,21 +660,8 @@ module.exports = function (app) {
                 callback: self.removeReviewIncoming,
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
-            },
-            // Accept and Launch Distribution Workflow
-            {
-                type: 'action',
-                icon: 'sitemap',
-                text: 'grid_action_accept_launch_distribution_workflow',
-                shortcut: true,
-                callback: self.acceptAndLaunchDistributionWorkflow,
-                class: "action-green",
-                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
-                checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Print Barcode
             {
@@ -673,8 +673,33 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: "PRINT_BARCODE",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
+            },
+            // Accept and Launch Distribution Workflow
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_accept_launch_distribution_workflow',
+                shortcut: true,
+                callback: self.acceptAndLaunchDistributionWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            // Archive
+            {
+                type: 'action',
+                icon: 'archive',
+                text: 'grid_action_archive',
+                shortcut: true,
+                callback: self.archive,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return true;
+                }
             },
             // Reject
             {
@@ -686,8 +711,8 @@ module.exports = function (app) {
                 permissionKey: "REJECT_INCOMING",
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Accept
             {
@@ -699,8 +724,8 @@ module.exports = function (app) {
                 permissionKey: "ACCEPT_INCOMING",
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Subscribe
             {
@@ -722,8 +747,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "EDIT_INCOMING’S_CONTENT",
                     "EDIT_INCOMING’S_PROPERTIES"
@@ -778,8 +803,8 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
             },
             // Manage
@@ -790,8 +815,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
@@ -892,8 +917,8 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Broadcast
             {
@@ -915,8 +940,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DUPLICATE_BOOK_FROM_VERSION"
                 ],

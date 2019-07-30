@@ -130,14 +130,13 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Archive for selected review ready to send outgoing mails
+         * @description Archive for selected ready to send outgoing mails
          * @param $event
          */
-        self.archiveOutgoingBulk = function ($event) {
-            readyToSendOutgoingService
-                .controllerMethod
-                .readyToSendOutgoingArchiveBulk(self.selectedReadyToSendOutgoings, $event)
-                .then(function (result) {
+        self.archiveBulk = function ($event) {
+            correspondenceService
+                .archiveBulkCorrespondences(self.selectedReadyToSendOutgoings, $event)
+                .then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page);
                 });
         };
@@ -198,20 +197,18 @@ module.exports = function (app) {
         };
         /**
          * @description Archive the ready to send outgoing item
-         * @param readyToSendOutgoing
+         * @param correspondence
          * @param $event
          * @param defer
          */
-        self.archiveOutgoing = function (readyToSendOutgoing, $event, defer) {
-            readyToSendOutgoingService
-                .controllerMethod
-                .readyToSendOutgoingArchive(readyToSendOutgoing, $event)
-                .then(function (result) {
+        self.archive = function (correspondence, $event, defer) {
+            correspondence.archiveDocument($event)
+                .then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         });
-                })
+                });
         };
 
         /**
@@ -494,8 +491,8 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // view
             {
@@ -512,8 +509,8 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // preview
                     {
@@ -580,8 +577,8 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Print Barcode
@@ -624,8 +621,8 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Archive
             {
@@ -633,11 +630,11 @@ module.exports = function (app) {
                 icon: 'archive',
                 text: 'grid_action_archive',
                 shortcut: true,
-                callback: self.archiveOutgoing,
+                callback: self.archive,
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Edit
             {
@@ -711,8 +708,7 @@ module.exports = function (app) {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
                             } else if (info.documentClass === 'incoming') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
-                            }
-                            else if (info.documentClass === 'internal') {
+                            } else if (info.documentClass === 'internal') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                             }
                             return !info.isPaper
@@ -731,8 +727,8 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: ["VIEW_DOCUMENT'S_TRACKING_SHEET"],
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
             },
             // Manage
@@ -743,8 +739,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
@@ -846,8 +842,8 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Broadcast
             {
@@ -870,8 +866,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",
                     "DUPLICATE_BOOK_FROM_VERSION"

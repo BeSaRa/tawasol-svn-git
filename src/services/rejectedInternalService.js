@@ -118,42 +118,6 @@ module.exports = function (app) {
                         }
                         return response;
                     });
-            },
-            /**
-             * @description Archive the rejected internal mail
-             * @param rejectedInternal
-             * @param $event
-             */
-            rejectedInternalArchive: function (rejectedInternal, $event) {
-                return self.archiveRejectedInternal(rejectedInternal)
-                    .then(function () {
-                        toast.success(langService.get("archive_specific_success").change({name: rejectedInternal.getTranslatedName()}));
-                        return true;
-                    });
-            },
-            /**
-             * @description Archive bulk rejected internal mails
-             * @param rejectedInternals
-             * @param $event
-             */
-            rejectedInternalArchiveBulk: function (rejectedInternals, $event) {
-                return self.archiveBulkRejectedInternal(rejectedInternals)
-                    .then(function (result) {
-                        var response = false;
-                        if (result.length === rejectedInternals.length) {
-                            toast.error(langService.get("failed_archive_selected"));
-                            response = false;
-                        } else if (result.length) {
-                            generator.generateFailedBulkActionRecords('archive_success_except_following', _.map(result, function (rejectedInternal) {
-                                return rejectedInternal.getNames();
-                            }));
-                            response = true;
-                        } else {
-                            toast.success(langService.get("archive_success"));
-                            response = true;
-                        }
-                        return response;
-                    });
             }
         };
 
@@ -201,40 +165,6 @@ module.exports = function (app) {
                     return (failedRejectedInternals.indexOf(rejectedInternal.vsId) > -1);
                 });
             });
-        };
-
-        /**
-         * @description Archive the rejected internal mail
-         * @param rejectedInternal
-         */
-        self.archiveRejectedInternal = function (rejectedInternal) {
-            var vsId = rejectedInternal.hasOwnProperty('vsId') ? rejectedInternal.vsId : rejectedInternal;
-            return $http
-                .put(urlService.internals + '/' + vsId + '/archive')
-                .then(function () {
-                    return rejectedInternal;
-                });
-        };
-
-        /**
-         * @description Archive the bulk rejected internal mail
-         * @param rejectedInternals
-         */
-        self.archiveBulkRejectedInternal = function (rejectedInternals) {
-            var vsIds = rejectedInternals[0].hasOwnProperty('vsId') ? _.map(rejectedInternals, 'vsId') : rejectedInternals;
-            /*return $http
-                .put((urlService.outgoings + '/archive/bulk'), vsIds)
-                .then(function (result) {
-                    result = result.data.rs;
-                    var failedRejectedInternals = [];
-                    _.map(result, function (value, key) {
-                        if (!value)
-                            failedRejectedInternals.push(key);
-                    });
-                    return _.filter(rejectedInternals, function (rejectedInternal) {
-                        return (failedRejectedInternals.indexOf(rejectedInternal.vsId) > -1);
-                    });
-                });*/
         };
 
         /**

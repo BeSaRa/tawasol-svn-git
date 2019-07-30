@@ -40,76 +40,7 @@ module.exports = function (app) {
          * @description Contains methods for CRUD operations for ready to send incoming mails
          */
         self.controllerMethod = {
-            /**
-             * @description Archive the ready to send incoming mail
-             * @param readyToSendIncoming
-             * @param $event
-             */
-            readyToSendIncomingArchive: function (readyToSendIncoming, $event) {
-                return self.archiveReadyToSendIncoming(readyToSendIncoming)
-                    .then(function () {
-                        toast.success(langService.get("archive_specific_success").change({name: readyToSendIncoming.getTranslatedName()}));
-                        return true;
-                    });
-            },
-            /**
-             * @description Archive bulk ready to send incoming mails
-             * @param readyToSendIncomings
-             * @param $event
-             */
-            readyToSendIncomingArchiveBulk: function (readyToSendIncomings, $event) {
-                return self.archiveBulkReadyToSendIncoming(readyToSendIncomings)
-                    .then(function (result) {
-                        var response = false;
-                        if (result.length === readyToSendIncomings.length) {
-                            toast.error(langService.get("failed_archive_selected"));
-                            response = false;
-                        } else if (result.length) {
-                            generator.generateFailedBulkActionRecords('archive_success_except_following', _.map(result, function (readyToSendIncoming) {
-                                return readyToSendIncoming.getNames();
-                            }));
-                            response = true;
-                        } else {
-                            toast.success(langService.get("archive_success"));
-                            response = true;
-                        }
-                        return response;
-                    });
-            }
-        };
 
-        /**
-         * @description Archive the ready to send incoming mail
-         * @param readyToSendIncoming
-         */
-        self.archiveReadyToSendIncoming = function (readyToSendIncoming) {
-            var vsId = readyToSendIncoming.hasOwnProperty('vsId') ? readyToSendIncoming.vsId : readyToSendIncoming;
-            return $http
-                .put(urlService.incomings + '/' + vsId + '/archive')
-                .then(function () {
-                    return readyToSendIncoming;
-                });
-        };
-
-        /**
-         * @description Archive the bulk ready to send incoming mail
-         * @param readyToSendIncomings
-         */
-        self.archiveBulkReadyToSendIncoming = function (readyToSendIncomings) {
-            var vsIds = readyToSendIncomings[0].hasOwnProperty('vsId') ? _.map(readyToSendIncomings, 'vsId') : readyToSendIncomings;
-            return $http
-                .put((urlService.incomings + '/archive/bulk'), vsIds)
-                .then(function (result) {
-                    result = result.data.rs;
-                    var failedReadyToSendIncomings = [];
-                    _.map(result, function (value, key) {
-                        if (!value)
-                            failedReadyToSendIncomings.push(key);
-                    });
-                    return _.filter(failedReadyToSendIncomings, function (readyToSendIncoming) {
-                        return (failedReadyToSendIncomings.indexOf(readyToSendIncoming.vsId) > -1);
-                    });
-                });
         };
 
         /**

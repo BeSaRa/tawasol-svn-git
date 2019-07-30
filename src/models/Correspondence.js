@@ -620,6 +620,10 @@ module.exports = function (app) {
                 return correspondenceService.rejectCorrespondence(this, $event, ignoreMessage);
             };
 
+            Correspondence.prototype.archiveDocument = function ($event, ignoreMessage) {
+                return correspondenceService.archiveCorrespondence(this, $event, ignoreMessage);
+            };
+
             Correspondence.prototype.emptyOrganizations = function () {
                 this.registryOU = null;
                 this.ou = null;

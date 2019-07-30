@@ -121,42 +121,6 @@ module.exports = function (app) {
                                 return response;
                             });
                     });
-            },
-            /**
-             * @description Archive the ready to send outgoing mail
-             * @param readyToSendOutgoing
-             * @param $event
-             */
-            readyToSendOutgoingArchive: function (readyToSendOutgoing, $event) {
-                return self.archiveReadyToSendOutgoing(readyToSendOutgoing)
-                    .then(function () {
-                        toast.success(langService.get("archive_specific_success").change({name: readyToSendOutgoing.getTranslatedName()}));
-                        return true;
-                    });
-            },
-            /**
-             * @description Archive bulk ready to send outgoing mails
-             * @param readyToSendOutgoings
-             * @param $event
-             */
-            readyToSendOutgoingArchiveBulk: function (readyToSendOutgoings, $event) {
-                return self.archiveBulkReadyToSendOutgoing(readyToSendOutgoings)
-                    .then(function (result) {
-                        var response = false;
-                        if (result.length === readyToSendOutgoings.length) {
-                            toast.error(langService.get("failed_archive_selected"));
-                            response = false;
-                        } else if (result.length) {
-                            generator.generateFailedBulkActionRecords('archive_success_except_following', _.map(result, function (readyToSendOutgoing) {
-                                return readyToSendOutgoing.getNames();
-                            }));
-                            response = true;
-                        } else {
-                            toast.success(langService.get("archive_success"));
-                            response = true;
-                        }
-                        return response;
-                    });
             }
         };
 
@@ -284,40 +248,6 @@ module.exports = function (app) {
                 .put((urlService.readyToSendOutgoings + '/deactivate/bulk'), bulkIds)
                 .then(function () {
                     return readyToSendOutgoings;
-                });
-        };
-
-        /**
-         * @description Archive the ready to send outgoing mail
-         * @param readyToSendOutgoing
-         */
-        self.archiveReadyToSendOutgoing = function (readyToSendOutgoing) {
-            var vsId = readyToSendOutgoing.hasOwnProperty('vsId') ? readyToSendOutgoing.vsId : readyToSendOutgoing;
-            return $http
-                .put(urlService.outgoings + '/' + vsId + '/archive')
-                .then(function () {
-                    return readyToSendOutgoing;
-                });
-        };
-
-        /**
-         * @description Archive the bulk ready to send outgoing mail
-         * @param readyToSendOutgoings
-         */
-        self.archiveBulkReadyToSendOutgoing = function (readyToSendOutgoings) {
-            var vsIds = readyToSendOutgoings[0].hasOwnProperty('vsId') ? _.map(readyToSendOutgoings, 'vsId') : readyToSendOutgoings;
-            return $http
-                .put((urlService.outgoings + '/archive/bulk'), vsIds)
-                .then(function (result) {
-                    result = result.data.rs;
-                    var failedReadyToSendOutgoings = [];
-                    _.map(result, function (value, key) {
-                        if (!value)
-                            failedReadyToSendOutgoings.push(key);
-                    });
-                    return _.filter(readyToSendOutgoings, function (readyToSendOutgoing) {
-                        return (failedReadyToSendOutgoings.indexOf(readyToSendOutgoing.vsId) > -1);
-                    });
                 });
         };
 

@@ -191,14 +191,13 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Archive for selected review rejected outgoing mails
+         * @description Archive for selected rejected outgoing mails
          * @param $event
          */
-        self.archiveOutgoingBulk = function ($event) {
-            rejectedOutgoingService
-                .controllerMethod
-                .rejectedOutgoingArchiveBulk(self.selectedRejectedOutgoings, $event)
-                .then(function (result) {
+        self.archiveBulk = function ($event) {
+            correspondenceService
+                .archiveBulkCorrespondences(self.selectedRejectedOutgoings, $event)
+                .then(function () {
                     self.reloadRejectedOutgoings(self.grid.page);
                 });
         };
@@ -270,24 +269,21 @@ module.exports = function (app) {
                         });
                 });
         };
+
         /**
          * @description Archive the rejected outgoing item
-         * @param rejectedOutgoing
+         * @param correspondence
          * @param $event
          * @param defer
          */
-        self.archiveOutgoing = function (rejectedOutgoing, $event, defer) {
-            rejectedOutgoingService
-                .controllerMethod
-                .rejectedOutgoingArchive(rejectedOutgoing, $event)
-                .then(function (result) {
+        self.archive = function (correspondence, $event, defer) {
+            correspondence.archiveDocument($event)
+                .then(function () {
                     self.reloadRejectedOutgoings(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
-                        })
-                    ;
-                })
-
+                        });
+                });
         };
 
         /**
@@ -676,7 +672,7 @@ module.exports = function (app) {
                 icon: 'archive',
                 text: 'grid_action_archive',
                 shortcut: true,
-                callback: self.archiveOutgoing,
+                callback: self.archive,
                 class: "action-green",
                 checkShow: function (action, model) {
                             return true;
