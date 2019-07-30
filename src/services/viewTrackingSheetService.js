@@ -37,6 +37,7 @@ module.exports = function (app) {
             self.outgoingDeliveryReports = [];
             self.mergedLinkedDocumentHistory = [];
             self.fullHistory = [];
+            self.documentLinkViewerRecords = [];
 
             /**
              * @description Returns the view tracking sheet options for grid actions
@@ -610,18 +611,16 @@ module.exports = function (app) {
              * @param document
              */
             self.loadDocumentLinkViewer = function (document) {
-                var vsId = getVsId(document);
-                var employee = employeeService.getEmployee();
+                var vsId = getVsId(document), employee = employeeService.getEmployee();
                 var route = "/viewer-list/user-id/" + employee.id + "/ouid/" + employee.getOUID() + "/vsid/" + vsId;
 
                 return $http.get(urlService.documentLink + route)
                     .then(function (result) {
-                        var documentLinkViewers = _.map(result.data.rs, function (documentLinkViewer) {
+                        self.documentLinkViewerRecords =  _.map(result.data.rs, function (documentLinkViewer) {
                             documentLinkViewer.viewTime = generator.getDateFromTimeStamp(documentLinkViewer.viewTime, true);
                             return documentLinkViewer;
                         });
-
-                        return documentLinkViewers;
+                        return self.documentLinkViewerRecords;
                     })
                     .catch(function (error) {
                         return [];
@@ -844,7 +843,9 @@ module.exports = function (app) {
                             ]);
                         }
                     }
-                } else if (heading === 'view_tracking_sheet_sms_logs') {
+                }
+                /* SMS Logs */
+                else if (heading === 'view_tracking_sheet_sms_logs') {
                     if (self.smsLogs.length) {
                         headerNames = [
                             langService.get('view_tracking_sheet_action_by'),
@@ -917,6 +918,26 @@ module.exports = function (app) {
                                 record.actionByOUInfo.getTranslatedName(),
                                 record.actionTypeInfo.getTranslatedName(),
                                 record.comments
+                            ]);
+                        }
+                    }
+                }
+                /* Document Link Viewers */
+                else if (heading === 'view_tracking_sheet_document_link_viewer_history') {
+                    if (self.documentLinkViewerRecords.length) {
+                        headerNames = [
+                            langService.get('name'),
+                            langService.get('mobile_number'),
+                            langService.get('email'),
+                            langService.get('action_date')
+                        ];
+                        for (i = 0; i < self.documentLinkViewerRecords.length; i++) {
+                            record = self.documentLinkViewerRecords[i];
+                            data.push([
+                                record.sharedToFullName,
+                                record.sharedToMobileNum,
+                                record.sharedToEmail,
+                                record.viewTime
                             ]);
                         }
                     }

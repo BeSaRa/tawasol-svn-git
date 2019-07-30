@@ -690,7 +690,6 @@
                             </div>
                         </md-content>
                     </div>
-
                     <!-- Document Link Viewers -->
                     <div ng-if="ctrl.heading === 'view_tracking_sheet_document_link_viewer_history'">
                         <md-content>
@@ -710,7 +709,7 @@
                                                         <span>{{lang.mobile_number}}</span>
                                                     </th>
                                                     <th md-column md-order-by="sharedToEmail">
-                                                        <span>{{lang.mobile_number}}</span>
+                                                        <span>{{lang.email}}</span>
                                                     </th>
                                                     <th md-column md-order-by="viewTime">
                                                         <span>{{lang.action_date}}</span>
@@ -1438,6 +1437,57 @@
                                                 md-limit="ctrl.fullHistoryGrid.limit"
                                                 md-page="ctrl.fullHistoryGrid.page"
                                                 md-total="{{ctrl.fullHistoryRecords.length}}"
+                                                md-page-select></md-table-pagination>
+                                    </md-table-container>
+                                </md-card>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <!-- Document Link Viewers -->
+                    <md-tab label="{{lang.view_tracking_sheet_document_link_viewer_history}}"
+                            ng-if="ctrl.showTab('view_tracking_sheet_document_link_viewer_history')"
+                            md-on-select="ctrl.setCurrentTab('view_tracking_sheet_document_link_viewer_history')">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <md-card>
+                                    <md-table-container>
+                                        <div flex scroll-directive>
+                                            <table md-table>
+                                                <thead md-head md-order="ctrl.documentLinkViewerGrid.order"
+                                                       md-on-reorder="ctrl.getSortedDataDocumentLinkViewerHistory">
+                                                <tr md-row>
+                                                    <th md-column
+                                                        md-order-by="sharedToFullName">
+                                                        <span>{{lang.name}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="sharedToMobileNum">
+                                                        <span>{{lang.mobile_number}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="sharedToEmail">
+                                                        <span>{{lang.email}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="viewTime">
+                                                        <span>{{lang.action_date}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-select="fullHistoryRecord" md-row
+                                                    ng-repeat="fullHistoryRecord in ctrl.documentLinkViewerRecords | filter:ctrl.searchModelDocumentLinkHistory | limitTo: ctrl.documentLinkViewerGrid.limit: ((ctrl.documentLinkViewerGrid.page - 1) * ctrl.documentLinkViewerGrid.limit) track by $index">
+                                                    <td md-cell>{{fullHistoryRecord.sharedToFullName}}</td>
+                                                    <td md-cell>{{fullHistoryRecord.sharedToMobileNum}}</td>
+                                                    <td md-cell>{{fullHistoryRecord.sharedToEmail}}</td>
+                                                    <td md-cell>{{fullHistoryRecord.viewTime}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <md-table-pagination
+                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                md-limit-options="ctrl.documentLinkViewerGrid.limitOptions"
+                                                md-limit="ctrl.documentLinkViewerGrid.limit"
+                                                md-page="ctrl.documentLinkViewerGrid.page"
+                                                md-total="{{ctrl.documentLinkViewerRecords.length}}"
                                                 md-page-select></md-table-pagination>
                                     </md-table-container>
                                 </md-card>

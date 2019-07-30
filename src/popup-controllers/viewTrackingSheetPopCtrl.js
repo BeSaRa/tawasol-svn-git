@@ -387,6 +387,18 @@ module.exports = function (app) {
         self.showTab = function (tabName) {
             if (tabName === 'view_tracking_sheet_outgoing_delivery_reports' || tabName === 'view_tracking_sheet_destination_history')
                 return (self.tabsToShow.indexOf(tabName) > -1 && info.documentClass === 'outgoing');
+            //TODO: Navjot - add conditions for sms log according to checkShow action
+            /*else if (tabName === 'view_tracking_sheet_sms_logs'){
+               return (parentGridName === gridService.grids.inbox.userInbox
+                    || parentGridName === gridService.grids.inbox.group
+                    || parentGridName === gridService.grids.inbox.favorite
+                    || parentGridName === gridService.grids.search.outgoing
+                    || parentGridName === gridService.grids.search.incoming
+                    || parentGridName === gridService.grids.search.internal
+                    || parentGridName === gridService.grids.search.general
+                    || parentGridName === gridService.grids.search.outgoingIncoming
+                    || parentGridName === gridService.grids.search.quick)
+            } */
             return (self.tabsToShow.indexOf(tabName) > -1);
         };
 
