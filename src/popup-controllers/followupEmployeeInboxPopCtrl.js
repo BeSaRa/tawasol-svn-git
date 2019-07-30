@@ -44,8 +44,8 @@ module.exports = function (app) {
                     return ou.id === (item.regouId || item.regOuId);
                 });
                 item.tempRegOUSection = new Information({
-                    arName: regOu.arName + ' - ' + item.arName,
-                    enName: regOu.enName + ' - ' + item.enName
+                    arName: ((regOu) ? regOu.arName + ' - ' : '') + item.arName,
+                    enName: ((regOu) ? regOu.enName + ' - ' : '') + item.enName
                 });
                 return item;
             });
