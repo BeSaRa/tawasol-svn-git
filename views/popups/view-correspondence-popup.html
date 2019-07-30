@@ -224,13 +224,17 @@
                     </accordion-directive>
                 </div>
             </md-sidenav>
-            <iframe id="iframe-main-document" ng-if="ctrl.correspondence && !ctrl.editMode"
-                    ng-src="{{ctrl.content.viewURL}}" flex
-                    frameborder="0"></iframe>
-            <iframe id="iframe-main-document" ng-if="!ctrl.correspondence || (ctrl.correspondence && ctrl.editMode)"
-                    ng-src="{{ctrl.content.editURL}}" flex
-                    frameborder="0"></iframe>
-            <!--class="document-viewer-full-width-height"-->
+            <div layout="column" class="relative" flex>
+                <iframe id="iframe-main-document" ng-if="ctrl.correspondence && !ctrl.editMode"
+                        ng-src="{{ctrl.content.viewURL}}" flex
+                        class="iframe-main-document"
+                        frameborder="0"></iframe>
+                <iframe id="iframe-main-document" ng-if="!ctrl.correspondence || (ctrl.correspondence && ctrl.editMode)"
+                        ng-src="{{ctrl.content.editURL}}" flex
+                        class="iframe-main-document"
+                        frameborder="0"></iframe>
+                <!--class="document-viewer-full-width-height"-->
+            </div>
         </div>
         <div layout="row">
             <div ng-if="ctrl.correspondence">
