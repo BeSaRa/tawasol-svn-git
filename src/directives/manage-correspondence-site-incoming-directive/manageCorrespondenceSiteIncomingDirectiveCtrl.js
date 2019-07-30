@@ -664,12 +664,12 @@ module.exports = function (app) {
         self.filterDropdownRecords = function ($event, fieldType) {
             $timeout(function () {
                 if (fieldType === 'mainSiteSimple' || fieldType === 'mainSiteAdvanced') {
-                    _filterSearchMainSites();
+                    _filterSearchMainSites(fieldType);
                 }
             })
         };
 
-        var _filterSearchMainSites = function () {
+        var _filterSearchMainSites = function (fieldType) {
             var searchText = self.isSimpleCorrespondenceSiteSearchType ? self.mainSiteSimpleSearchText : self.mainSiteAdvancedSearchText,
                 siteType = self.isSimpleCorrespondenceSiteSearchType ? self.selectedSiteTypeSimple : self.selectedSiteTypeAdvanced,
                 excludeOUSites = false;
@@ -696,8 +696,8 @@ module.exports = function (app) {
                             self.subSearchResult = [];
                             self.mainSites = self.mainSites.concat(result);
                             self.mainSitesCopy = angular.copy(self.mainSites);
-
-                            _selectDefaultMainSiteAndGetSubSites();
+                            _filterSearchMainSites(fieldType);
+                            // _selectDefaultMainSiteAndGetSubSites();
                         } else {
                             self.mainSites = [];
                         }

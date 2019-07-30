@@ -474,7 +474,6 @@ module.exports = function (app) {
                     self.mainSites = result;
                     self.mainSitesCopy = angular.copy(self.mainSites);
                     self.selectedMainSite = null;
-
                     _selectDefaultMainSiteAndGetSubSites()
                 });
             } else {
@@ -859,12 +858,12 @@ module.exports = function (app) {
         self.filterDropdownRecords = function ($event, fieldType) {
             $timeout(function () {
                 if (fieldType === 'mainSite') {
-                    _filterSearchMainSites();
+                    _filterSearchMainSites(fieldType);
                 }
             })
         };
 
-        var _filterSearchMainSites = function () {
+        var _filterSearchMainSites = function (fieldType) {
             var searchResult = gridService.searchGridData({
                 searchText: self.mainSiteSearchText,
                 searchColumns: {
@@ -887,8 +886,8 @@ module.exports = function (app) {
                             self.subSearchResult = [];
                             self.mainSites = self.mainSites.concat(result);
                             self.mainSitesCopy = angular.copy(self.mainSites);
-                            console.log('after search', self.mainSites);
-                            _selectDefaultMainSiteAndGetSubSites();
+                            _filterSearchMainSites(fieldType);
+                            // _selectDefaultMainSiteAndGetSubSites();
                         } else {
                             self.mainSites = [];
                         }
