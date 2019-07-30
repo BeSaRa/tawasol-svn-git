@@ -40,6 +40,18 @@ module.exports = function (app) {
         $timeout(function () {
             // all system organizations
             self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
+            // sort organizations
+            if (self.organizations && self.organizations.length) {
+                self.organizations = _.sortBy(self.organizations, [function (ou) {
+                    return ou[langService.current + 'Name'].toLowerCase();
+                }]);
+            }
+            // sort regOus
+            if (self.registryOrganizations && self.registryOrganizations.length) {
+                self.registryOrganizations = _.sortBy(self.registryOrganizations, [function (ou) {
+                    return ou[langService.current + 'Name'].toLowerCase();
+                }]);
+            }
             // all document types
             self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
             self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
@@ -306,7 +318,12 @@ module.exports = function (app) {
             organizationService
                 .loadChildrenOrganizations(organizationId)
                 .then(function (result) {
-                    // self.organizations = result;
+                    // sort sub organizations
+                    if (result && result.length) {
+                        result = _.sortBy(result, [function (ou) {
+                            return ou[langService.current + 'Name'].toLowerCase();
+                        }]);
+                    }
                     self.subOrganizations = result;
                 });
         };

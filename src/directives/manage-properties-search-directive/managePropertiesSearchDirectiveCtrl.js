@@ -101,6 +101,12 @@ module.exports = function (app) {
         $timeout(function () {
             // all system organizations
             self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
+            // sort organizations
+            if (self.organizations && self.organizations.length) {
+                self.organizations = _.sortBy(self.organizations, [function (ou) {
+                    return ou[langService.current + 'Name'].toLowerCase();
+                }]);
+            }
             // sort regOus
             if (self.registryOrganizations && self.registryOrganizations.length) {
                 self.registryOrganizations = _.sortBy(self.registryOrganizations, [function (ou) {
