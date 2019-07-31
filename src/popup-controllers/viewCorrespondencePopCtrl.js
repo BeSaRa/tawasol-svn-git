@@ -63,6 +63,11 @@ module.exports = function (app) {
         };
 
         function _openInDesktop() {
+            if (self.content.desktop) {
+                self.content.desktop.overlay = true;
+            } else {
+                dialog.hide('editInDesktop');
+            }
             self.correspondence
                 .editCorrespondenceInDesktop()
                 .then(function () {
@@ -70,7 +75,7 @@ module.exports = function (app) {
                 })
                 .catch(function () {
                     self.editMode = false;
-                    dialog.hide('editInDesktop');
+                    //dialog.hide('editInDesktop');
                 });
         }
 
@@ -256,6 +261,20 @@ module.exports = function (app) {
             self.mainDocument = true;
             self.secondURL = null;
             self.listIndex = null;
+        };
+
+        self.reloadMainDocument = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            self.content
+                .desktop
+                .reloadContent()
+                .then(function (content) {
+                    angular.extend(self.content, content);
+                    self.content.desktop.overlay = false;
+                    self.editMode = false;
+                    self.backToCorrespondence();
+                })
         };
 
         function _changeSecondURL(url, listName, index) {

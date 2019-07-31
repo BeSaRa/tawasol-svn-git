@@ -35,6 +35,7 @@ module.exports = function (app) {
                                   DocumentComment,
                                   localStorageService,
                                   Attachment,
+                                  EditInDesktopCallback,
                                   LinkedObject,
                                   errorCode,
                                   Information) {
@@ -219,6 +220,12 @@ module.exports = function (app) {
                     disabled.disableSites = true;
                     disabled.disableProperties = true;
                 }
+
+                var desktop = new EditInDesktopCallback({
+                    url: _createUrlSchema(null, info.documentClass, 'id/' + info.id + '/with-content'),
+                    type: 'correspondence'
+                });
+
                 return $http.get(_createUrlSchema(null, info.documentClass, 'id/' + info.id + '/with-content'))
                     .then(function (result) {
                         var documentClass = result.data.rs.metaData.classDescription;
@@ -228,6 +235,7 @@ module.exports = function (app) {
                     .then(function (result) {
                         result.metaData.viewVersion = true;
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        result.content.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -277,7 +285,10 @@ module.exports = function (app) {
             self.viewQueueDocument = function (correspondence, actions, pageName, $event) {
                 var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : new Outgoing(correspondence).getInfo(),
                     disabled;
-
+                var desktop = new EditInDesktopCallback({
+                    url: _createUrlSchema(info.vsId, info.documentClass, 'with-content'),
+                    type: 'correspondence'
+                });
                 return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
                     .then(function (result) {
                         var documentClass = result.data.rs.metaData.classDescription;
@@ -287,7 +298,7 @@ module.exports = function (app) {
                     .then(function (result) {
                         result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
-
+                        result.content.desktop = desktop;
                         disabled = _checkDisabled(pageName, result.metaData);
 
                         if (disabled.disableAll) {
@@ -355,6 +366,11 @@ module.exports = function (app) {
                     disabled.disableSites = true;
                     disabled.disableProperties = true;
                 }
+                var desktop = new EditInDesktopCallback({
+                    url: _createUrlSchema(info.vsId, info.documentClass, 'with-content'),
+                    type: 'correspondence'
+                });
+
                 return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
                     .then(function (result) {
                         var documentClass = result.data.rs.metaData.classDescription;
@@ -363,6 +379,7 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        result.content.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -417,11 +434,17 @@ module.exports = function (app) {
                     disabled.disableProperties = true;
                 }
 
+                var desktop = new EditInDesktopCallback({
+                    url: urlService.inboxWF + '/wob-num/' + info.wobNumber,
+                    type: 'workItem'
+                });
+
                 return $http.get(urlService.inboxWF + '/wob-num/' + info.wobNumber)
                     .then(function (result) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
+                        generalStepElementView.documentViewInfo.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -485,11 +508,17 @@ module.exports = function (app) {
                     disabled.disableProperties = true;
                 }
 
+                var desktop = new EditInDesktopCallback({
+                    url: _createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]),
+                    type: 'workItem'
+                });
+
                 return $http.get(_createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]))
                     .then(function (result) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
+                        generalStepElementView.documentViewInfo.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -557,12 +586,17 @@ module.exports = function (app) {
                     disabled.disableProperties = true;
                 }
                 var url = urlService.inboxWF + '/proxy/wob-num/' + info.wobNumber;
+                var desktop = new EditInDesktopCallback({
+                    url: url,
+                    type: 'workItem'
+                });
                 //url = approvedQueue ? _createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]) : _createWorkItemSchema(info, department, readyToExport);
                 return $http.get(url)
                     .then(function (result) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
+                        generalStepElementView.documentViewInfo.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -627,11 +661,17 @@ module.exports = function (app) {
                     disabled.disableProperties = true;
                 }
 
+                var desktop = new EditInDesktopCallback({
+                    url: [urlService.correspondence, 'ou-queue', 'wob-num', info.wobNumber].join('/'),
+                    type: 'workItem'
+                });
+
                 return $http.get([urlService.correspondence, 'ou-queue', 'wob-num', info.wobNumber].join('/'))
                     .then(function (result) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
+                        generalStepElementView.documentViewInfo.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -697,6 +737,11 @@ module.exports = function (app) {
                     disabled.disableProperties = true;
                 }
 
+                var desktop = new EditInDesktopCallback({
+                    url: _createUrlSchema(info.vsId, info.documentClass, 'with-content'),
+                    type: 'correspondence'
+                });
+
                 return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
                     .then(function (result) {
                         var documentClass = result.data.rs.metaData.classDescription;
@@ -706,6 +751,7 @@ module.exports = function (app) {
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                        result.content.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -759,11 +805,17 @@ module.exports = function (app) {
                     disabled.disableProperties = true;
                 }
 
+                var desktop = new EditInDesktopCallback({
+                    url: _createWorkItemSchema(info, true, true),
+                    type: 'workItem'
+                });
+
                 return $http.get(_createWorkItemSchema(info, true, true))
                     .then(function (result) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
+                        generalStepElementView.documentViewInfo.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -831,12 +883,17 @@ module.exports = function (app) {
                     disabled.disableSites = true;
                     disabled.disableProperties = true;
                 }
+                var desktop = new EditInDesktopCallback({
+                    url: _createWorkItemSchema(info, true, true),
+                    type: 'workItem'
+                });
 
                 return $http.get(_createWorkItemSchema(info, true, false))
                     .then(function (result) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
+                        generalStepElementView.documentViewInfo.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -908,6 +965,12 @@ module.exports = function (app) {
 
                 var vsId = incomingWithIncomingVsId ? info.incomingVsId : info.vsId;
                 var docClass = incomingWithIncomingVsId ? 'incoming' : info.documentClass;
+
+                var desktop = new EditInDesktopCallback({
+                    url: _createUrlSchema(vsId, docClass, 'with-content'),
+                    type: 'correspondence'
+                });
+
                 return $http.get(_createUrlSchema(vsId, docClass, 'with-content'))
                     .then(function (result) {
                         var documentClass = result.data.rs.metaData.classDescription;
@@ -916,6 +979,7 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        result.content.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -980,12 +1044,17 @@ module.exports = function (app) {
                     disabled.disableSites = true;
                     disabled.disableProperties = true;
                 }
+                var desktop = new EditInDesktopCallback({
+                    url: urlService.departmentWF + '/returned/' + info.wobNumber,
+                    type: 'correspondence'
+                });
 
                 return $http.get(urlService.departmentWF + '/returned/' + info.wobNumber)
                     .then(function (result) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
+                        generalStepElementView.documentViewInfo.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -1052,6 +1121,12 @@ module.exports = function (app) {
                     disabled.disableSites = true;
                     disabled.disableProperties = true;
                 }
+
+                var desktop = new EditInDesktopCallback({
+                    url: _createUrlSchema(info.vsId, info.documentClass, 'with-content'),
+                    type: 'correspondence'
+                });
+
                 return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
                     .then(function (result) {
                         var documentClass = result.data.rs.metaData.classDescription;
@@ -1060,6 +1135,7 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        result.content.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -1114,11 +1190,16 @@ module.exports = function (app) {
                     disabled.disableProperties = true;
                 }
 
+                var desktop = new EditInDesktopCallback({
+                    url: _createWorkItemSchema(info, true, true),
+                    type: 'workItem'
+                });
                 return $http.get(_createWorkItemSchema(info, true, true))
                     .then(function (result) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
+                        generalStepElementView.documentViewInfo.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),

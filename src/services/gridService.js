@@ -131,6 +131,16 @@ module.exports = function (app) {
                 outgoingDeliveryReport: 'vts_outDeliveryReport',
                 fullHistory: 'vts_fullHistory',
                 docLinkViewers: 'vts_docLinkViewer'
+            },
+            launch: {
+                favoritesUsers: 'launchFavUsers',
+                favoritesOUs: 'launchFavOUs',
+                users: 'launchUsers',
+                managers: 'launchManagers',
+                privateUsers: 'launchPrivateUsers',
+                presidentMinisters: 'launchPreMinisters',
+                wfGroups: 'launchWfGroups',
+                ous: 'launchOus',
             }
         };
 

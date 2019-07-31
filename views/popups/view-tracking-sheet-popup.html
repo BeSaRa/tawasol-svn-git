@@ -7,7 +7,7 @@
             <form name="trackingSheetForm" autocomplete="off">
                 <!-- SINGLE GRID VIEW -->
                 <div md-dynamic-height ng-if="ctrl.gridType !== 'tabs'">
-                    <!-- Workflow History Grid-->
+                    <!-- Workflow History Grid -->
                     <div ng-if="ctrl.heading === 'view_tracking_sheet_work_flow_history'">
                         <md-content>
                             <div layout="column" class="p20">
@@ -50,7 +50,8 @@
                                                     <td md-cell>{{workflowHistoryRecord.getTranslatedAction()}}</td>
                                                     <!--<td md-cell>{{workflowHistoryRecord.documentCreationDate_vts}}</td>-->
                                                     <td md-cell>{{workflowHistoryRecord.actionDate_vts}}</td>
-                                                    <td md-cell>{{workflowHistoryRecord.comments}}</td>
+                                                    <td md-cell class="cms-comment">{{workflowHistoryRecord.comments}}
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -61,7 +62,65 @@
                                                 md-limit="ctrl.workflowHistoryGrid.limit"
                                                 md-page="ctrl.workflowHistoryGrid.page"
                                                 md-total="{{ctrl.workflowHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.workflowHistoryGrid.pagingCallback"></md-table-pagination>
+                                    </md-table-container>
+                                </md-card>
+                            </div>
+                        </md-content>
+                    </div>
+                    <!-- Full History -->
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_full_history'">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <md-card>
+                                    <md-table-container>
+                                        <div flex scroll-directive>
+                                            <table md-table>
+                                                <thead md-head md-order="ctrl.fullHistoryGrid.order"
+                                                       md-on-reorder="ctrl.getSortedDataFullHistory">
+                                                <tr md-row>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('actionByInfo', 'Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                                    </th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('actionByOUInfo', 'Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_action_by_department}}</span>
+                                                    </th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('actionTypeInfo', 'Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_action_type}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="comments"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-select="fullHistoryRecord" md-row
+                                                    ng-repeat="fullHistoryRecord in ctrl.fullHistoryRecords | filter:ctrl.searchModelFullHistory | limitTo: ctrl.fullHistoryGrid.limit: ((ctrl.fullHistoryGrid.page - 1) * ctrl.fullHistoryGrid.limit) track by $index">
+                                                    <td md-cell>{{fullHistoryRecord.actionByInfo.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>{{fullHistoryRecord.actionDate}}</td>
+                                                    <td md-cell>{{fullHistoryRecord.actionByOUInfo.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>{{fullHistoryRecord.actionTypeInfo.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell class="cms-comment">{{fullHistoryRecord.comments}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <md-table-pagination
+                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                md-limit-options="ctrl.fullHistoryGrid.limitOptions"
+                                                md-limit="ctrl.fullHistoryGrid.limit"
+                                                md-page="ctrl.fullHistoryGrid.page"
+                                                md-total="{{ctrl.fullHistoryRecords.length}}"
+                                                md-page-select
+                                                md-on-paginate="ctrl.fullHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -137,7 +196,8 @@
                                                 md-limit="ctrl.linkedDocumentsHistoryGrid.limit"
                                                 md-page="ctrl.linkedDocumentsHistoryGrid.page"
                                                 md-total="{{ctrl.linkedDocumentsHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.linkedDocumentsHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -207,7 +267,8 @@
                                                 md-limit="ctrl.attachmentsHistoryGrid.limit"
                                                 md-page="ctrl.attachmentsHistoryGrid.page"
                                                 md-total="{{ctrl.attachmentsHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.attachmentsHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -289,7 +350,8 @@
                                                 md-limit="ctrl.mergedLinkedDocHistoryGrid.limit"
                                                 md-page="ctrl.mergedLinkedDocHistoryGrid.page"
                                                 md-total="{{ctrl.mergedLinkedDocumentHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.mergedLinkedDocHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -351,7 +413,8 @@
                                                 md-limit="ctrl.linkedEntitiesHistoryGrid.limit"
                                                 md-page="ctrl.linkedEntitiesHistoryGrid.page"
                                                 md-total="{{ctrl.linkedEntitiesHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.linkedEntitiesHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -410,7 +473,8 @@
                                                 md-limit="ctrl.destinationHistoryGrid.limit"
                                                 md-page="ctrl.destinationHistoryGrid.page"
                                                 md-total="{{ctrl.destinationHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.destinationHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -492,7 +556,8 @@
                                                 md-limit="ctrl.contentViewHistoryGrid.limit"
                                                 md-page="ctrl.contentViewHistoryGrid.page"
                                                 md-total="{{ctrl.contentViewHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.contentViewHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -540,7 +605,8 @@
                                                 md-limit="ctrl.smsLogsGrid.limit"
                                                 md-page="ctrl.smsLogsGrid.page"
                                                 md-total="{{ctrl.smsLogRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.smsLogsGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -614,7 +680,9 @@
                                                     <td md-cell>
                                                         {{outgoingDeliveryReportRecord.messageStatus.getTranslatedName()}}
                                                     </td>
-                                                    <td md-cell>{{outgoingDeliveryReportRecord.comment}}</td>
+                                                    <td md-cell class="cms-comment">
+                                                        {{outgoingDeliveryReportRecord.comment}}
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -625,66 +693,8 @@
                                                 md-limit="ctrl.outgoingDeliveryReportGrid.limit"
                                                 md-page="ctrl.outgoingDeliveryReportGrid.page"
                                                 md-total="{{ctrl.outgoingDeliveryReportRecords.length}}"
-                                                md-page-select></md-table-pagination>
-                                    </md-table-container>
-                                </md-card>
-                            </div>
-                        </md-content>
-                    </div>
-                    <!-- Full History -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_full_history'">
-                        <md-content>
-                            <div layout="column" class="p20">
-                                <md-card>
-                                    <md-table-container>
-                                        <div flex scroll-directive>
-                                            <table md-table>
-                                                <thead md-head md-order="ctrl.fullHistoryGrid.order"
-                                                       md-on-reorder="ctrl.getSortedDataFullHistory">
-                                                <tr md-row>
-                                                    <!--<th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
-                                                    </th>-->
-                                                    <th md-column
-                                                        md-order-by="{{ctrl.getSortingKey('actionByInfo', 'Information')}}">
-                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
-                                                    </th>
-                                                    <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
-                                                    </th>
-                                                    <th md-column
-                                                        md-order-by="{{ctrl.getSortingKey('actionByOUInfo', 'Information')}}">
-                                                        <span>{{lang.view_tracking_sheet_action_by_department}}</span>
-                                                    </th>
-                                                    <th md-column
-                                                        md-order-by="{{ctrl.getSortingKey('actionTypeInfo', 'Information')}}">
-                                                        <span>{{lang.view_tracking_sheet_action_type}}</span>
-                                                    </th>
-                                                    <th md-column md-order-by="comments"><span>{{lang.view_tracking_sheet_comments}}</span>
-                                                    </th>
-                                                </tr>
-                                                </thead>
-                                                <tbody md-body>
-                                                <tr md-select="fullHistoryRecord" md-row
-                                                    ng-repeat="fullHistoryRecord in ctrl.fullHistoryRecords | filter:ctrl.searchModelFullHistory | limitTo: ctrl.fullHistoryGrid.limit: ((ctrl.fullHistoryGrid.page - 1) * ctrl.fullHistoryGrid.limit) track by $index">
-                                                    <!--<td md-cell>{{fullHistoryRecord.docSubject}}</td>-->
-                                                    <td md-cell>{{fullHistoryRecord.actionByInfo.getTranslatedName()}}
-                                                    </td>
-                                                    <td md-cell>{{fullHistoryRecord.actionDate}}</td>
-                                                    <td md-cell>{{fullHistoryRecord.actionByOUInfo.getTranslatedName()}}
-                                                    </td>
-                                                    <td md-cell>{{fullHistoryRecord.actionTypeInfo.getTranslatedName()}}
-                                                    </td>
-                                                    <td md-cell>{{fullHistoryRecord.comments}}</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <md-table-pagination
-                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                md-limit-options="ctrl.fullHistoryGrid.limitOptions"
-                                                md-limit="ctrl.fullHistoryGrid.limit"
-                                                md-page="ctrl.fullHistoryGrid.page"
-                                                md-total="{{ctrl.fullHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.outgoingDeliveryReportGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -788,7 +798,8 @@
                                                     <td md-cell>{{workflowHistoryRecord.getTranslatedAction()}}</td>
                                                     <!--<td md-cell>{{workflowHistoryRecord.documentCreationDate_vts}}</td>-->
                                                     <td md-cell>{{workflowHistoryRecord.actionDate_vts}}</td>
-                                                    <td md-cell>{{workflowHistoryRecord.comments}}</td>
+                                                    <td md-cell class="cms-comment">{{workflowHistoryRecord.comments}}
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -799,7 +810,67 @@
                                                 md-limit="ctrl.workflowHistoryGrid.limit"
                                                 md-page="ctrl.workflowHistoryGrid.page"
                                                 md-total="{{ctrl.workflowHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.workflowHistoryGrid.pagingCallback"></md-table-pagination>
+                                    </md-table-container>
+                                </md-card>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <!-- Full History -->
+                    <md-tab label="{{lang.view_tracking_sheet_full_history}}"
+                            ng-if="ctrl.showTab('view_tracking_sheet_full_history')"
+                            md-on-select="ctrl.setCurrentTab('view_tracking_sheet_full_history')">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <md-card>
+                                    <md-table-container>
+                                        <div flex scroll-directive>
+                                            <table md-table>
+                                                <thead md-head md-order="ctrl.fullHistoryGrid.order"
+                                                       md-on-reorder="ctrl.getSortedDataFullHistory">
+                                                <tr md-row>
+                                                    <!--<th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                                    </th>-->
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('actionByInfo', 'Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                                    </th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('actionByOUInfo', 'Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_action_by_department}}</span>
+                                                    </th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('actionTypeInfo', 'Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_action_type}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-select="fullHistoryRecord" md-row
+                                                    ng-repeat="fullHistoryRecord in ctrl.fullHistoryRecords | filter:ctrl.searchModelFullHistory | limitTo: ctrl.fullHistoryGrid.limit: ((ctrl.fullHistoryGrid.page - 1) * ctrl.fullHistoryGrid.limit) track by $index">
+                                                    <!--<td md-cell>{{fullHistoryRecord.docSubject}}</td>-->
+                                                    <td md-cell>{{fullHistoryRecord.actionByInfo.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>{{fullHistoryRecord.actionDate}}</td>
+                                                    <td md-cell>{{fullHistoryRecord.actionByOUInfo.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>{{fullHistoryRecord.actionTypeInfo.getTranslatedName()}}
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <md-table-pagination
+                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                md-limit-options="ctrl.fullHistoryGrid.limitOptions"
+                                                md-limit="ctrl.fullHistoryGrid.limit"
+                                                md-page="ctrl.fullHistoryGrid.page"
+                                                md-total="{{ctrl.fullHistoryRecords.length}}"
+                                                md-page-select
+                                                md-on-paginate="ctrl.fullHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -877,7 +948,8 @@
                                                 md-limit="ctrl.linkedDocumentsHistoryGrid.limit"
                                                 md-page="ctrl.linkedDocumentsHistoryGrid.page"
                                                 md-total="{{ctrl.linkedDocumentsHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.linkedDocumentsHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -949,7 +1021,8 @@
                                                 md-limit="ctrl.attachmentsHistoryGrid.limit"
                                                 md-page="ctrl.attachmentsHistoryGrid.page"
                                                 md-total="{{ctrl.attachmentsHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.attachmentsHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -1033,7 +1106,8 @@
                                                 md-limit="ctrl.mergedLinkedDocHistoryGrid.limit"
                                                 md-page="ctrl.mergedLinkedDocHistoryGrid.page"
                                                 md-total="{{ctrl.mergedLinkedDocumentHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.mergedLinkedDocHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -1097,7 +1171,8 @@
                                                 md-limit="ctrl.linkedEntitiesHistoryGrid.limit"
                                                 md-page="ctrl.linkedEntitiesHistoryGrid.page"
                                                 md-total="{{ctrl.linkedEntitiesHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.linkedEntitiesHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -1158,7 +1233,8 @@
                                                 md-limit="ctrl.destinationHistoryGrid.limit"
                                                 md-page="ctrl.destinationHistoryGrid.page"
                                                 md-total="{{ctrl.destinationHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.destinationHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -1242,7 +1318,8 @@
                                                 md-limit="ctrl.contentViewHistoryGrid.limit"
                                                 md-page="ctrl.contentViewHistoryGrid.page"
                                                 md-total="{{ctrl.contentViewHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.contentViewHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -1292,7 +1369,8 @@
                                                 md-limit="ctrl.smsLogsGrid.limit"
                                                 md-page="ctrl.smsLogsGrid.page"
                                                 md-total="{{ctrl.smsLogRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.smsLogsGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -1368,7 +1446,9 @@
                                                     <td md-cell>
                                                         {{outgoingDeliveryReportRecord.messageStatus.getTranslatedName()}}
                                                     </td>
-                                                    <td md-cell>{{outgoingDeliveryReportRecord.comment}}</td>
+                                                    <td md-cell class="cms-comment">
+                                                        {{outgoingDeliveryReportRecord.comment}}
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -1379,65 +1459,8 @@
                                                 md-limit="ctrl.outgoingDeliveryReportGrid.limit"
                                                 md-page="ctrl.outgoingDeliveryReportGrid.page"
                                                 md-total="{{ctrl.outgoingDeliveryReportRecords.length}}"
-                                                md-page-select></md-table-pagination>
-                                    </md-table-container>
-                                </md-card>
-                            </div>
-                        </md-content>
-                    </md-tab>
-                    <!-- Full History -->
-                    <md-tab label="{{lang.view_tracking_sheet_full_history}}"
-                            ng-if="ctrl.showTab('view_tracking_sheet_full_history')"
-                            md-on-select="ctrl.setCurrentTab('view_tracking_sheet_full_history')">
-                        <md-content>
-                            <div layout="column" class="p20">
-                                <md-card>
-                                    <md-table-container>
-                                        <div flex scroll-directive>
-                                            <table md-table>
-                                                <thead md-head md-order="ctrl.fullHistoryGrid.order"
-                                                       md-on-reorder="ctrl.getSortedDataFullHistory">
-                                                <tr md-row>
-                                                    <!--<th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
-                                                    </th>-->
-                                                    <th md-column
-                                                        md-order-by="{{ctrl.getSortingKey('actionByInfo', 'Information')}}">
-                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
-                                                    </th>
-                                                    <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
-                                                    </th>
-                                                    <th md-column
-                                                        md-order-by="{{ctrl.getSortingKey('actionByOUInfo', 'Information')}}">
-                                                        <span>{{lang.view_tracking_sheet_action_by_department}}</span>
-                                                    </th>
-                                                    <th md-column
-                                                        md-order-by="{{ctrl.getSortingKey('actionTypeInfo', 'Information')}}">
-                                                        <span>{{lang.view_tracking_sheet_action_type}}</span>
-                                                    </th>
-                                                </tr>
-                                                </thead>
-                                                <tbody md-body>
-                                                <tr md-select="fullHistoryRecord" md-row
-                                                    ng-repeat="fullHistoryRecord in ctrl.fullHistoryRecords | filter:ctrl.searchModelFullHistory | limitTo: ctrl.fullHistoryGrid.limit: ((ctrl.fullHistoryGrid.page - 1) * ctrl.fullHistoryGrid.limit) track by $index">
-                                                    <!--<td md-cell>{{fullHistoryRecord.docSubject}}</td>-->
-                                                    <td md-cell>{{fullHistoryRecord.actionByInfo.getTranslatedName()}}
-                                                    </td>
-                                                    <td md-cell>{{fullHistoryRecord.actionDate}}</td>
-                                                    <td md-cell>{{fullHistoryRecord.actionByOUInfo.getTranslatedName()}}
-                                                    </td>
-                                                    <td md-cell>{{fullHistoryRecord.actionTypeInfo.getTranslatedName()}}
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <md-table-pagination
-                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                md-limit-options="ctrl.fullHistoryGrid.limitOptions"
-                                                md-limit="ctrl.fullHistoryGrid.limit"
-                                                md-page="ctrl.fullHistoryGrid.page"
-                                                md-total="{{ctrl.fullHistoryRecords.length}}"
-                                                md-page-select></md-table-pagination>
+                                                md-page-select
+                                                md-on-paginate="ctrl.outgoingDeliveryReportGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>
                                 </md-card>
                             </div>

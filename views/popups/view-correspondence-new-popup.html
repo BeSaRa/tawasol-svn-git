@@ -231,6 +231,12 @@
                 </div>
             </md-sidenav>
             <div layout="column" class="relative" flex>
+                <div ng-if="ctrl.content.desktop && ctrl.content.desktop.overlay" ng-click="ctrl.reloadMainDocument($event)" layout="column" layout-align="center center" id="overlay-to-reload-document">
+                    <p>{{lang.reload_document_after_edit_in_desktop}}</p>
+                    <md-button   id="reload-main-document" ng-click="ctrl.reloadMainDocument($event)" class="md-icon-button md-primary md-raised">
+                        <md-icon md-svg-icon="reload"></md-icon>
+                    </md-button>
+                </div>
                 <iframe ng-if="ctrl.mainDocument && !ctrl.editMode" id="iframe-main-document"
                         class="iframe-main-document"
                         ng-src="{{ctrl.content.viewURL}}" flex

@@ -163,6 +163,7 @@ module.exports = function (app) {
     require('./UserMenuItem')(app);
     require('./EventHistoryCriteria')(app);
     require('./MAIPLabel')(app);
+    require('./EditInDesktopCallback')(app);
     require('./Task')(app);
     require('./TaskParticipant')(app);
     require('./ViewerLog')(app);

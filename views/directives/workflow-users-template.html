@@ -355,14 +355,16 @@
                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                     md-limit-options="ctrl.grid[ctrl.gridName].limitOptions"
                     md-limit="ctrl.grid[ctrl.gridName].limit" md-page="ctrl.grid[ctrl.gridName].page"
-                    md-total="{{ctrl.gridItems.length}}" md-page-select>
+                    md-total="{{ctrl.gridItems.length}}" md-page-select
+                    md-on-paginate="ctrl.grid[ctrl.gridName].pagingCallback">
             </md-table-pagination>
             <md-table-pagination
                     ng-if="ctrl.excludeSelected"
                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                     md-limit-options="ctrl.grid[ctrl.gridName].limitOptions"
                     md-limit="ctrl.grid[ctrl.gridName].limit" md-page="ctrl.grid[ctrl.gridName].page"
-                    md-total="{{(ctrl.gridItems  | filter:ctrl.runUserNotExists).length}}" md-page-select>
+                    md-total="{{(ctrl.gridItems  | filter:ctrl.runUserNotExists).length}}" md-page-select
+                    md-on-paginate="ctrl.grid[ctrl.gridName].pagingCallback">
             </md-table-pagination>
         </md-table-container>
     </md-card>

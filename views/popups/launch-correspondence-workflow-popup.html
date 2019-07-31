@@ -260,8 +260,12 @@
                     </div>
                     <!-- Managers -->
                     <div flex layout="column" ng-if="ctrl.isSelectedTab('manager_users')">
-                        <current-tab-label-directive selected-tab="ctrl.selectedTab"
-                                                     workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                        <div layout="row">
+                            <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                         workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                            <span flex></span>
+                            <grid-search-directive grid="ctrl.grid['managerUsers']"></grid-search-directive>
+                        </div>
                         <div>
                             <br/>
                         </div>

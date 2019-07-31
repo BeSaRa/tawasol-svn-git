@@ -46,165 +46,169 @@ module.exports = function (app) {
              * @returns {[]}
              */
             self.getViewTrackingSheetOptions = function (gridOrTabs, parentGridName) {
-                if (gridOrTabs === 'tabs')
+                if (gridOrTabs === 'tabs') {
                     return [];
-                return [
-                    // Workflow History
-                    {
-                        type: 'action',
-                        icon: '',
-                        text: 'view_tracking_sheet_work_flow_history',
-                        shortcut: false,
-                        callback: self.viewTrackingSheet,
-                        params: ['view_tracking_sheet_work_flow_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            return true;
+                } else {
+                    /* params[0] is used to give heading to popup.
+                           params[1] showing that there is a single grid only, not tabs.
+                           params[2] showing a parent grid name.
+                        */
+                    return [
+                        // Workflow History
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_work_flow_history',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_work_flow_history', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // Linked Documents History
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_linked_documents_history',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_linked_documents_history', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // Attachments History
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_attachments_history',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_attachments_history', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // Merged Linked Document History
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_merged_linked_document_history',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_merged_linked_document_history', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // Linked Entities History
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_linked_entities_history',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_linked_entities_history', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // Destination History
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_destination_history',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_destination_history', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                var info = model.getInfo();
+                                return info.documentClass === "outgoing";
+                            }
+                        },
+                        // Content View History
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_content_view_history',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_content_view_history', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // SMS Logs
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_sms_logs',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_sms_logs', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return (parentGridName === gridService.grids.inbox.userInbox
+                                    || parentGridName === gridService.grids.inbox.group
+                                    || parentGridName === gridService.grids.inbox.favorite
+                                    || parentGridName === gridService.grids.search.outgoing
+                                    || parentGridName === gridService.grids.search.incoming
+                                    || parentGridName === gridService.grids.search.internal
+                                    || parentGridName === gridService.grids.search.general
+                                    || parentGridName === gridService.grids.search.outgoingIncoming
+                                    || parentGridName === gridService.grids.search.quick);
+                            }
+                        },
+                        // Outgoing Delivery Reports
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_outgoing_delivery_reports',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_outgoing_delivery_reports', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                var info = model.getInfo();
+                                return info.documentClass === "outgoing";
+                            }
+                        },
+                        // Full History
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_full_history',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_full_history', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // Document Link Viewers History
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_document_link_viewer_history',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_document_link_viewer_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
                         }
-                    },
-                    // Linked Documents History
-                    {
-                        type: 'action',
-                        icon: '',
-                        text: 'view_tracking_sheet_linked_documents_history',
-                        shortcut: false,
-                        callback: self.viewTrackingSheet,
-                        params: ['view_tracking_sheet_linked_documents_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            return true;
-                        }
-                    },
-                    // Attachments History
-                    {
-                        type: 'action',
-                        icon: '',
-                        text: 'view_tracking_sheet_attachments_history',
-                        shortcut: false,
-                        callback: self.viewTrackingSheet,
-                        params: ['view_tracking_sheet_attachments_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            return true;
-                        }
-                    },
-                    // Merged Linked Document History
-                    {
-                        type: 'action',
-                        icon: '',
-                        text: 'view_tracking_sheet_merged_linked_document_history',
-                        shortcut: false,
-                        callback: self.viewTrackingSheet,
-                        params: ['view_tracking_sheet_merged_linked_document_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            return true;
-                        }
-                    },
-                    // Linked Entities History
-                    {
-                        type: 'action',
-                        icon: '',
-                        text: 'view_tracking_sheet_linked_entities_history',
-                        shortcut: false,
-                        callback: self.viewTrackingSheet,
-                        params: ['view_tracking_sheet_linked_entities_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            return true;
-                        }
-                    },
-                    // Destination History
-                    {
-                        type: 'action',
-                        icon: '',
-                        text: 'view_tracking_sheet_destination_history',
-                        shortcut: false,
-                        callback: self.viewTrackingSheet,
-                        params: ['view_tracking_sheet_destination_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            var info = model.getInfo();
-                            return info.documentClass === "outgoing";
-                        }
-                    },
-                    // Content View History
-                    {
-                        type: 'action',
-                        icon: '',
-                        text: 'view_tracking_sheet_content_view_history',
-                        shortcut: false,
-                        callback: self.viewTrackingSheet,
-                        permissionKey: "VIEW_CONTENT_LOG",
-                        params: ['view_tracking_sheet_content_view_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            return true;
-                        }
-                    },
-                    // SMS Logs
-                    {
-                        type: 'action',
-                        icon: '',
-                        text: 'view_tracking_sheet_sms_logs',
-                        shortcut: false,
-                        //hide: true,
-                        callback: self.viewTrackingSheet,
-                        params: ['view_tracking_sheet_sms_logs', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            return (parentGridName === gridService.grids.inbox.userInbox
-                                || parentGridName === gridService.grids.inbox.group
-                                || parentGridName === gridService.grids.inbox.favorite
-                                || parentGridName === gridService.grids.search.outgoing
-                                || parentGridName === gridService.grids.search.incoming
-                                || parentGridName === gridService.grids.search.internal
-                                || parentGridName === gridService.grids.search.general
-                                || parentGridName === gridService.grids.search.outgoingIncoming
-                                || parentGridName === gridService.grids.search.quick);
-                        }
-                    },
-                    // Outgoing Delivery Reports
-                    {
-                        type: 'action',
-                        icon: '',
-                        text: 'view_tracking_sheet_outgoing_delivery_reports',
-                        shortcut: false,
-                        callback: self.viewTrackingSheet,
-                        params: ['view_tracking_sheet_outgoing_delivery_reports', 'grid'],
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            var info = model.getInfo();
-                            return info.documentClass === "outgoing";
-                        }
-                    },
-                    // Full History
-                    {
-                        type: 'action',
-                        icon: '',
-                        text: 'view_tracking_sheet_full_history',
-                        shortcut: false,
-                        callback: self.viewTrackingSheet,
-                        params: ['view_tracking_sheet_full_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            return true;
-                        }
-                    },
-                    // Document Link Viewers History
-                    {
-                        type: 'action',
-                        icon: '',
-                        text: 'view_tracking_sheet_document_link_viewer_history',
-                        shortcut: false,
-                        callback: self.viewTrackingSheet,
-                        params: ['view_tracking_sheet_document_link_viewer_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            return true;
-                        }
-                    }
-                ];
+                    ];
+                }
             };
 
 
@@ -225,6 +229,7 @@ module.exports = function (app) {
                 viewTrackingSheetPopup: function (document, params, $event) {
                     var heading = params ? params[0].toLowerCase() : 'view_tracking_sheet';
                     var gridType = params ? params[1].toLowerCase() : 'grid';
+                    var parentGridName = params ? params[2] : '';
                     return dialog.showDialog({
                         templateUrl: cmsTemplate.getPopup('view-tracking-sheet'),
                         controller: 'viewTrackingSheetPopCtrl',
@@ -233,7 +238,8 @@ module.exports = function (app) {
                         locals: {
                             document: document,
                             gridType: gridType,
-                            heading: heading
+                            heading: heading,
+                            parentGridName: parentGridName
                         },
                         resolve: {
                             workflowHistoryRecords: function () {
@@ -843,9 +849,7 @@ module.exports = function (app) {
                             ]);
                         }
                     }
-                }
-                /* SMS Logs */
-                else if (heading === 'view_tracking_sheet_sms_logs') {
+                } else if (heading === 'view_tracking_sheet_sms_logs') {
                     if (self.smsLogs.length) {
                         headerNames = [
                             langService.get('view_tracking_sheet_action_by'),

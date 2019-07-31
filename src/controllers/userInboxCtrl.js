@@ -16,6 +16,7 @@ module.exports = function (app) {
                                               $state,
                                               counterService,
                                               $q,
+                                              $rootScope,
                                               $mdMedia,
                                               langService,
                                               toast,
@@ -55,11 +56,11 @@ module.exports = function (app) {
                 return self.getSortingKey('action', 'WorkflowAction');
             },
             sender: function (record) {
-                return self.getSortingKey('senderInfo','SenderInfo');
+                return self.getSortingKey('senderInfo', 'SenderInfo');
             },
             dueDate: 'generalStepElm.dueDate',
             corrSite: function (record) {
-                return self.getSortingKey('mainSiteSubSiteString','Information');
+                return self.getSortingKey('mainSiteSubSiteString', 'Information');
             }
         };
 
@@ -523,6 +524,7 @@ module.exports = function (app) {
             userInbox
                 .terminate($event)
                 .then(function () {
+                    $rootScope.$broadcast('$terminated_from_notification', self.controllerName);
                     new ResolveDefer(defer);
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
@@ -1526,14 +1528,14 @@ module.exports = function (app) {
             {
                 type: 'action',
                 icon: 'eye',
-                text: 'view_tracking_sheet_full_history',
+                text: 'grid_action_view_tracking_sheet',
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: gridService.checkToShowAction,
                 sticky: true,
                 showInView: false,
                 showInViewOnly: true,
                 callback: self.viewTrackingSheet,
-                params: ['view_tracking_sheet_full_history', 'grid']
+                params: ['view_tracking_sheet', 'tabs', gridService.grids.inbox.userInbox]
             },
             // View Tracking Sheet (Shortcut Only)
             {
@@ -1548,7 +1550,7 @@ module.exports = function (app) {
                     return true;
                 },
                 callback: self.viewTrackingSheet,
-                params: ['view_tracking_sheet', 'tabs']
+                params: ['view_tracking_sheet', 'tabs', gridService.grids.inbox.userInbox]
             },
             // Manage
             {
@@ -2096,6 +2098,12 @@ module.exports = function (app) {
 
         $scope.$on('$folder_deleted', function (event) {
             if (self.controllerName === 'userInboxCtrl') {
+                self.reloadUserInboxes();
+            }
+        });
+
+        $scope.$on('$terminated_from_notification', function ($event, data) {
+            if (data === 'documentsNotifyDirectiveCtrl' && self.controllerName === 'userInboxCtrl') {
                 self.reloadUserInboxes();
             }
         });

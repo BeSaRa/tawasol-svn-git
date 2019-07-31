@@ -2311,3 +2311,15 @@ html.rtl {
     right: 50px;
   }
 }
+
+#overlay-to-reload-document {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0,0,0,.5);
+  color: white;
+  cursor: pointer;
+}
+#reload-main-document {
+
+}

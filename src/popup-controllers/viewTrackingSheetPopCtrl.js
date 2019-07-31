@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                          document,
                                                          gridType,
                                                          heading,
+                                                         parentGridName,
                                                          validationService,
                                                          generator,
                                                          dialog,
@@ -71,17 +72,13 @@ module.exports = function (app) {
         };
 
         self.workflowHistoryGrid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.workflowHistory) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.workflowHistoryRecords.length + 21);
-                    }
-                }
-            ],
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.workflowHistory, self.workflowHistoryRecords.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.workflowHistory, limit);
+            },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.workflowHistory),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.workflowHistory, self.workflowHistoryGrid.truncateSubject);
@@ -96,17 +93,13 @@ module.exports = function (app) {
         };
 
         self.linkedDocumentsHistoryGrid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.linkedDocsHistory) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.linkedDocumentsHistoryRecords.length + 21);
-                    }
-                }
-            ],
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.linkedDocsHistory, self.linkedDocumentsHistoryRecords.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.linkedDocsHistory, limit);
+            },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.linkedDocsHistory),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.linkedDocsHistory, self.linkedDocumentsHistoryGrid.truncateSubject);
@@ -115,17 +108,13 @@ module.exports = function (app) {
 
 
         self.mergedLinkedDocHistoryGrid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.mergedLinkedDocsHistory) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.mergedLinkedDocumentHistoryRecords.length + 21);
-                    }
-                }
-            ],
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.mergedLinkedDocsHistory, self.mergedLinkedDocumentHistoryRecords.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.mergedLinkedDocsHistory, limit);
+            },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.mergedLinkedDocsHistory),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.mergedLinkedDocsHistory, self.mergedLinkedDocHistoryGrid.truncateSubject);
@@ -140,17 +129,13 @@ module.exports = function (app) {
         };
 
         self.attachmentsHistoryGrid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.attachmentsHistory) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.attachmentsHistoryRecords.length + 21);
-                    }
-                }
-            ],
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.attachmentsHistory, self.attachmentsHistoryRecords.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.attachmentsHistory, limit);
+            },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.attachmentsHistory),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.attachmentsHistory, self.attachmentsHistoryGrid.truncateSubject);
@@ -165,17 +150,13 @@ module.exports = function (app) {
         };
 
         self.linkedEntitiesHistoryGrid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.linkedEntitiesHistory) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.linkedEntitiesHistoryRecords.length + 21);
-                    }
-                }
-            ],
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.linkedEntitiesHistory, self.linkedEntitiesHistoryRecords.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.linkedEntitiesHistory, limit);
+            },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.linkedEntitiesHistory),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.linkedEntitiesHistory, self.linkedEntitiesHistoryGrid.truncateSubject);
@@ -190,17 +171,13 @@ module.exports = function (app) {
         };
 
         self.destinationHistoryGrid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.destinationsHistory) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.destinationHistoryRecords.length + 21);
-                    }
-                }
-            ],
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.destinationsHistory, self.destinationHistoryRecords.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.destinationsHistory, limit);
+            },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.destinationsHistory),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.destinationsHistory, self.destinationHistoryGrid.truncateSubject);
@@ -215,17 +192,13 @@ module.exports = function (app) {
         };
 
         self.contentViewHistoryGrid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.contentViewHistory) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.contentViewHistoryRecords.length + 21);
-                    }
-                }
-            ],
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.contentViewHistory, self.contentViewHistoryRecords.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.contentViewHistory, limit);
+            },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.contentViewHistory),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.contentViewHistory, self.contentViewHistoryGrid.truncateSubject);
@@ -239,17 +212,13 @@ module.exports = function (app) {
             self.smsLogRecords = $filter('orderBy')(self.smsLogRecords, self.smsLogsGrid.order);
         };
         self.smsLogsGrid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.smsLogs) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.smsLogRecords.length + 21);
-                    }
-                }
-            ],
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.smsLogs, self.smsLogRecords.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.smsLogs, limit);
+            },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.smsLogs),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.smsLogs, self.smsLogsGrid.truncateSubject);
@@ -264,17 +233,13 @@ module.exports = function (app) {
         };
 
         self.outgoingDeliveryReportGrid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.outgoingDeliveryReport) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.outgoingDeliveryReportRecords.length + 21);
-                    }
-                }
-            ],
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.outgoingDeliveryReport, self.outgoingDeliveryReportRecords.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.outgoingDeliveryReport, limit);
+            },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.outgoingDeliveryReport),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.outgoingDeliveryReport, self.outgoingDeliveryReportGrid.truncateSubject);
@@ -289,17 +254,13 @@ module.exports = function (app) {
         };
 
         self.fullHistoryGrid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.fullHistory) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.fullHistoryRecords.length + 21);
-                    }
-                }
-            ],
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.fullHistory, self.fullHistoryRecords.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.fullHistory, limit);
+            },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.fullHistory),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.fullHistory, self.fullHistoryGrid.truncateSubject);
@@ -371,7 +332,7 @@ module.exports = function (app) {
             'view_tracking_sheet_linked_entities_history',
             'view_tracking_sheet_destination_history',
             'view_tracking_sheet_content_view_history',
-            //'view_tracking_sheet_sms_logs',
+            'view_tracking_sheet_sms_logs',
             'view_tracking_sheet_outgoing_delivery_reports',
             'view_tracking_sheet_full_history',
             'view_tracking_sheet_document_link_viewer_history'
@@ -385,11 +346,11 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.showTab = function (tabName) {
-            if (tabName === 'view_tracking_sheet_outgoing_delivery_reports' || tabName === 'view_tracking_sheet_destination_history')
+            if (tabName === 'view_tracking_sheet_outgoing_delivery_reports' || tabName === 'view_tracking_sheet_destination_history') {
                 return (self.tabsToShow.indexOf(tabName) > -1 && info.documentClass === 'outgoing');
-            //TODO: Navjot - add conditions for sms log according to checkShow action
-            /*else if (tabName === 'view_tracking_sheet_sms_logs'){
-               return (parentGridName === gridService.grids.inbox.userInbox
+            }
+            else if (tabName === 'view_tracking_sheet_sms_logs'){
+                return (parentGridName === gridService.grids.inbox.userInbox
                     || parentGridName === gridService.grids.inbox.group
                     || parentGridName === gridService.grids.inbox.favorite
                     || parentGridName === gridService.grids.search.outgoing
@@ -398,7 +359,7 @@ module.exports = function (app) {
                     || parentGridName === gridService.grids.search.general
                     || parentGridName === gridService.grids.search.outgoingIncoming
                     || parentGridName === gridService.grids.search.quick)
-            } */
+            }
             return (self.tabsToShow.indexOf(tabName) > -1);
         };
 

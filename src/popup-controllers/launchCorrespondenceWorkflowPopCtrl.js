@@ -33,7 +33,7 @@ module.exports = function (app) {
                                                                     isDeptIncoming,
                                                                     Information,
                                                                     fromSimplePopup,
-                                                                    generator) {
+                                                                    gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
@@ -177,6 +177,7 @@ module.exports = function (app) {
                     self.selectedTab = tab;
                     if (result.onDemand) {
                         self[result.property] = self.tabMapper[result.property](result.data, gridName);
+                        self[result.property + 'Copy'] = angular.copy(self[result.property]);
                     }
                     return true;
                 })
@@ -261,18 +262,28 @@ module.exports = function (app) {
                 selected: []
             },
             managerUsers: {
-                limit: 5, // default limit
+                name: 'launchManagers',
+                limit: gridService.getGridPagingLimitByGridName(gridService.grids.launch.managers) || 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order
-                limitOptions: [5, 10, 20, // limit options
-                    {
-                        label: langService.get('all'),
-                        value: function () {
-                            return (self.managerUsers.length + 21);
-                        }
+                selected: [],
+                limitOptions: gridService.getGridLimitOptions(gridService.grids.launch.managers, self.managerUsers.length),
+                pagingCallback: function (page, limit) {
+                    gridService.setGridPagingLimitByGridName(gridService.grids.launch.managers, limit);
+                },
+                searchColumns: {
+                    domainName: 'toUserDomain',
+                    name: function (record) {
+                        return record.getTranslatedKey();
+                    },
+                    ou: function (record) {
+                        return langService.current + 'OUName';
                     }
-                ],
-                selected: []
+                },
+                searchText: '',
+                searchCallback: function (grid) {
+                    self.managerUsers = gridService.searchGridData(self.grid.managerUsers, self.managerUsersCopy);
+                },
             },
             governmentEntitiesHeads: {
                 limit: 5, // default limit
