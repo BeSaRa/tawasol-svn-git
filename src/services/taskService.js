@@ -17,19 +17,12 @@ module.exports = function (app) {
         self.reminders = [];
 
         self.loadReminders = function () {
-            return self
-                .loadEvents(moment().startOf('month'), moment().endOf('month').add(15, 'day'), null, true)
+            return $http
+                .get(urlService.tasks + '/calender-remainders')
                 .then(function (result) {
                     self.reminders = generator.interceptReceivedCollection('TaskCalenderItem', generator.generateCollection(result.data.rs, TaskCalenderItem));
                     return self.reminders;
-                });
-
-            // return $http
-            //     .get(urlService.tasks + '/calender-remainders')
-            //     .then(function (result) {
-            //         self.reminders = generator.interceptReceivedCollection('TaskCalenderItem', generator.generateCollection(result.data.rs, TaskCalenderItem));
-            //         return self.reminders;
-            //     })
+                })
         };
 
 
