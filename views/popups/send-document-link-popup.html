@@ -169,7 +169,9 @@
             <div layout="row">
                 <div>
                     <md-button class="md-raised"
-                               ng-disabled="!ctrl.documentLink.documentLinkSubscribers.length || !ctrl.documentLink.expirationTime"
+                               ng-disabled="!ctrl.documentLink.documentLinkSubscribers.length
+                               || !ctrl.documentLink.expirationTime
+                               || !(ctrl.documentLink.exportOptionsMap.BOOK || ctrl.documentLink.exportOptionsMap.ATTACHMENTS || ctrl.documentLink.exportOptionsMap.RELATED_BOOKS)"
                                ng-click="ctrl.sendDocumentLink()">
                         {{lang.send}}
                     </md-button>
