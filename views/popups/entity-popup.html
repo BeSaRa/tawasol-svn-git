@@ -343,7 +343,7 @@
                                         </md-input-container>
                                     </div>
                                 </fieldset>
-                                <!-- maipServiceURL -->
+                                <!-- MAIP -->
                                 <fieldset>
                                     <legend class="md-accent">{{lang.maip_service}}</legend>
                                     <div layout="row">
@@ -459,6 +459,28 @@
                                                    ng-disabled="!ctrl.checkTestSmtpConnectionEnabled()"
                                                    ng-click="ctrl.testSmtpConnection()">{{lang.test_connection}}
                                         </md-button>
+                                    </div>
+                                </fieldset>
+                                <!-- FAX -->
+                                <fieldset>
+                                    <legend class="md-accent">{{lang.fax}}</legend>
+                                    <div layout="row">
+                                        <md-switch flex ng-model="ctrl.entity.faxEnabled"
+                                                   aria-label="{{lang.status}}">
+                                            <label>{{lang.status}} :
+                                                {{ctrl.entity.getTranslatedYesNo(ctrl.entity.faxEnabled)}}</label>
+                                        </md-switch>
+                                        <md-input-container flex>
+                                            <label for="rightFaxFolder">{{lang.fax_folder}}</label>
+                                            <input name="rightFaxFolder" id="rightFaxFolder"
+                                                   ng-required="ctrl.entity.faxEnabled"
+                                                   ng-model="ctrl.entity.rightFaxFolder" maxlength="500">
+                                            <div ng-messages="entityForm.rightFaxFolder.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:500})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
                                     </div>
                                 </fieldset>
                             </div>

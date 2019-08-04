@@ -44,6 +44,8 @@ module.exports = function (app) {
             self.maipServiceURL = null;
             self.isMAIPEnabled = false;
             self.hrEnabled = false;
+            self.faxEnabled = false;
+            self.rightFaxFolder = false;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -112,6 +114,15 @@ module.exports = function (app) {
             };
             Entity.prototype.getTranslatedIsSSL = function (isSSL) {
                 return isSSL ? langService.get('yes') : langService.get('no');
+            };
+
+            /**
+             * @description Get the translated true/false as active/inactive or yes/no
+             * @param fieldName
+             * * @returns {*}
+             */
+            Entity.prototype.getTranslatedYesNo = function (fieldName) {
+                return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
             Entity.prototype.removeAllPasswords = function () {
