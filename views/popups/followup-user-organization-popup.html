@@ -8,12 +8,13 @@
                 <md-content>
                     <div layout="column" class="p20">
                         <div layout="row">
-                            <!-- Organizations Dropdown-->
+                            <!-- regOu -->
                             <md-input-container flex>
-                                <label for="ouid">{{lang.organization_unit}}</label>
+                                <label for="ouid">{{lang.department}}</label>
                                 <md-select id="ouid" name="ouid"
                                            ng-model-options="{trackBy : '$value.id'}"
-                                           ng-model="ctrl.followupOrganization.followeeOUId"
+                                           ng-model="ctrl.regOu"
+                                           ng-change="ctrl.onRegistryChanged()"
                                            md-on-close="ctrl.clearSearchText('inlineUserOU')"
                                            data-md-container-class="select-header-container">
                                     <md-select-header class="select-header">
@@ -22,27 +23,48 @@
                                                placeholder="{{lang.search}}"
                                                class="select-header-input">
                                     </md-select-header>
-                                    <md-option ng-value="organization"
-                                               ng-if="ctrl.includeOrganizationsIfNotExists(organization)"
-                                               ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.inlineUserOUSearchText : 'getNameByLanguageRegOUSection'"
-                                               ng-disabled="!organization.status"
-                                               tooltip="{{(!organization.status)? lang.inactive_organization : '' }}">
+                                    <md-option ng-value="registryOrganizations"
+                                               ng-repeat="registryOrganizations in ctrl.registryOrganizations | translatedNameFilter: ctrl.inlineUserOUSearchText : 'getNameByLanguageRegOUSection'"
+                                               ng-disabled="ctrl.isRegOuDisabled(registryOrganizations)"
+                                               tooltip="{{(!registryOrganizations.status)? lang.inactive_organization : '' }}">
                                                 <span
                                                         md-highlight-text="ctrl.inlineUserOUSearchText"
-                                                        md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                                                        md-highlight-flags="i">{{registryOrganizations.getTranslatedNameRegOUSection()}}</span>
                                     </md-option>
                                 </md-select>
                             </md-input-container>
 
-                            <md-switch aria-label="{{lang.with_subs_ou}}"
-                                       ng-model="ctrl.followupOrganization.withSubs"
-                                       layout-align="center center">
-                                <label for="ouid">{{ctrl.getTranslatedWithSubs(ctrl.followupOrganization)}}</label>
-                            </md-switch>
+                            <!-- Section -->
+                            <md-input-container flex>
+                                <label for="ou">{{lang.section}}</label>
+                                <md-select name="ou" id="ou"
+                                           ng-model="ctrl.Ou"
+                                           ng-disabled="!ctrl.regOu"
+                                           ng-readonly="!ctrl.regOu"
+                                           md-on-close="ctrl.clearSearchText('sectionOU')"
+                                           data-md-container-class="select-header-container">
+                                    <md-select-header class="select-header">
+                                        <input ng-model="ctrl.sectionOUSearchText"
+                                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                               placeholder="{{lang.search}}"
+                                               class="select-header-input">
+                                    </md-select-header>
+                                    <md-option ng-value="null">{{lang.none}}</md-option>
+                                    <md-option ng-value="organization"
+
+                                               ng-disabled="!ctrl.includeOrganizationsIfNotExists(organization)"
+                                               ng-repeat="organization in ctrl.subOrganizations | translatedNameFilter: ctrl.sectionOUSearchText">
+                            <span
+                                    md-highlight-text="ctrl.sectionOUSearchText"
+                                    md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
+                                    </md-option>
+
+                                </md-select>
+                            </md-input-container>
 
                             <div class="p020">
                                 <md-button class="md-raised"
-                                           ng-disabled="!ctrl.followupOrganization.followeeOUId"
+                                           ng-disabled="ctrl.isAddFollowupOrganizationDisabled()"
                                            ng-click="ctrl.addFollowupOrganizationFromCtrl($event)">
                                     {{lang.add}}
                                 </md-button>
@@ -91,6 +113,7 @@
                                                 <td md-cell>
                                                     <md-switch aria-label="{{lang.with_subs_ou}}"
                                                                ng-model="followupOu.withSubs"
+                                                               ng-if="followupOu.followeeOUId.hasRegistry"
                                                                title="{{ctrl.getTranslatedWithSubs(followupOu)}}"></md-switch>
                                                 </td>
                                                 <td md-cell>

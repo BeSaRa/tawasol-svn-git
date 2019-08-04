@@ -5,10 +5,10 @@ module.exports = function (app) {
                       _) {
         'ngInject';
         var modelName = 'FollowupOrganization',
-            registryOrganizations;
+            organizations ;
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
-            registryOrganizations = organizationService.getAllRegistryOrganizations();
+            organizations = organizationService.returnOrganizations();
             return model;
         });
 
@@ -24,7 +24,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.followeeOUId = _.find(registryOrganizations, function (regOU) {
+            model.followeeOUId = _.find(organizations , function (regOU) {
                 return regOU.id === model.followeeOUId;
             });
             return model;

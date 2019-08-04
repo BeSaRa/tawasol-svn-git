@@ -19,12 +19,18 @@ module.exports = function (app) {
         self.inlineUserOUSearchText = '';
 
         self.followupOrganizations = followupOrganizations;
-        self.organizations = organizationService.getAllRegistryOrganizations();
+        self.registryOrganizations = organizationService.getAllRegistryOrganizations();
+        self.subOrganizations = [];
+        self.Ou = null;
+        self.regOu = null;
         self.selectedFollowupOrganizations = [];
 
         self.ouApplicationUser = ouApplicationUser;
 
         var _resetFollowupOUModel = function () {
+            self.Ou = null;
+            self.regOu = null;
+
             self.followupOrganization = new FollowupOrganization({
                 userId: ouApplicationUser.applicationUser.id,
                 ouId: ouApplicationUser.ouid.id
@@ -36,6 +42,12 @@ module.exports = function (app) {
          * @description add followup organization
          */
         self.addFollowupOrganizationFromCtrl = function ($event) {
+
+            self.followupOrganization.followeeOUId = (self.Ou) ? self.Ou : self.regOu;
+            if (self.Ou) {
+                self.followupOrganization.followeeOUId.hasRegistry = false;
+            }
+
             self.followupOrganizations.push(self.followupOrganization);
 
             _resetFollowupOUModel();
@@ -95,6 +107,19 @@ module.exports = function (app) {
 
         };
 
+        self.onRegistryChanged = function () {
+            self.subOrganizations = [];
+            organizationService
+                .loadChildrenOrganizations(self.regOu)
+                .then(function (result) {
+                    // sort sections/sub-organizations
+                     result = _.sortBy(result, [function (ou) {
+                         return ou[langService.current + 'Name'].toLowerCase();
+                     }]);
+
+                    self.subOrganizations = result;
+                })
+        };
 
         self.getTranslatedWithSubs = function (ou) {
             return ou.withSubs ? langService.get('with_subs_ou') : langService.get('without_subs_ou');
@@ -108,6 +133,22 @@ module.exports = function (app) {
             return _.map(self.followupOrganizations, function (ou) {
                 return ou.followeeOUId.id
             }).indexOf(organization.id) === -1;
+        };
+
+
+        self.isAddFollowupOrganizationDisabled = function () {
+            return !self.regOu ||
+                (!self.Ou &&
+                    _.map(self.followupOrganizations, function (ou) {
+                        return ou.followeeOUId.id;
+                    }).indexOf(self.regOu.id) !== -1);
+        };
+
+        self.isRegOuDisabled = function (organization) {
+            return !organization.status ||
+                _.some(self.followupOrganizations, function (ou) {
+                    return ou.followeeOUId.id === organization.id && ou.withSubs;
+                });
         };
 
         /**
