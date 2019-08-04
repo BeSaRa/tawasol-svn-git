@@ -42,7 +42,13 @@
                                     <div flex class="p20">
                                         <md-switch ng-model="ctrl.workflowAction.exportable">
                                             <label>{{lang.exportable}} :
-                                                {{ctrl.workflowAction.getTranslatedExportable()}}</label>
+                                                {{ctrl.workflowAction.getTranslatedYesNo('exportable')}}</label>
+                                        </md-switch>
+                                    </div>
+                                    <div flex class="p20">
+                                        <md-switch ng-model="ctrl.workflowAction.transferable">
+                                            <label>{{lang.transferable}} :
+                                                {{ctrl.workflowAction.getTranslatedYesNo('transferable')}}</label>
                                         </md-switch>
                                     </div>
                                     <div flex class="p20">
@@ -51,7 +57,7 @@
                                                    aria-label="{{lang.global}}"
                                                    ng-change="ctrl.changeWorkflowActionGlobal()">
                                             <span>{{lang.global}} : </span>{{
-                                            ctrl.workflowAction.getTranslatedGlobal()}}
+                                            ctrl.workflowAction.getTranslatedYesNo('isGlobal')}}
                                         </md-switch>
                                     </div>
                                 </div>

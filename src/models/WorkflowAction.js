@@ -1,8 +1,7 @@
 module.exports = function (app) {
     app.factory('WorkflowAction', function (CMSModelInterceptor,
                                             langService,
-                                            applicationUserService,
-                                            userWorkflowActionService) {
+                                            applicationUserService) {
         'ngInject';
         return function WorkflowAction(model) {
             var self = this, userWorkflowActionService;
@@ -11,6 +10,7 @@ module.exports = function (app) {
             self.enName = null;
             self.isGlobal = true;
             self.exportable = true;
+            self.transferable = true;
 
 
             // every model has required fields
@@ -82,6 +82,14 @@ module.exports = function (app) {
              */
             WorkflowAction.prototype.getTranslatedExportable = function () {
                 return this.exportable ? langService.get('yes') : langService.get('no');
+            };
+
+            /**
+             * @description Get the globalization of DocumentSecurity as Yes or No instead of true or false.
+             * @returns {string}
+             */
+            WorkflowAction.prototype.getTranslatedYesNo = function (fieldName) {
+                return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
 

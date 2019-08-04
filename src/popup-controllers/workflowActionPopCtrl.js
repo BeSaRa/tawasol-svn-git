@@ -141,6 +141,7 @@ module.exports = function (app) {
                 || (self.workflowAction.arName === self.model.arName
                     && self.workflowAction.enName === self.model.enName
                     && self.workflowAction.exportable === self.model.exportable
+                    && self.workflowAction.transferable === self.model.transferable
                     && self.workflowAction.isGlobal === self.model.isGlobal
                     && _.isEqual(_.map(self.workflowAction.relatedUsers, 'id').sort(), _.map(self.model.relatedUsers, 'id').sort())
                 )
