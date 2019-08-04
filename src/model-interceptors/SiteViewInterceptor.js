@@ -1,8 +1,8 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       correspondenceSiteTypeService,
-                      moment,
-                      Information) {
+                      Information,
+                      _) {
         'ngInject';
 
         var modelName = 'SiteView';

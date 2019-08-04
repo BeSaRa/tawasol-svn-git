@@ -12,7 +12,7 @@ module.exports = function (app) {
             self.status = true;
             self.parent = null;
             self.itemOrder = 1;
-            self.category=null;
+            self.category = null;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [
@@ -35,7 +35,7 @@ module.exports = function (app) {
                 return this.arName + ' ' + (separator ? separator : '-') + ' ' + this.enName;
             };
             CorrespondenceSiteType.prototype.getTranslatedName = function (reverse) {
-                return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
+                return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
             /**
              * @description Get the name of record with passed language name
@@ -52,6 +52,11 @@ module.exports = function (app) {
             CorrespondenceSiteType.prototype.canDelete = function () {
                 var defaultValues = [1, 3, 5]; // 1 - internal, 3 - g2g, 5 - old system, 2 - external
                 return defaultValues.indexOf(this.lookupKey) === -1;
+            };
+
+            CorrespondenceSiteType.prototype.isExternalSiteType = function () {
+                var internalAndG2GSites = [1, 3, 5]; // 1 - internal, 3 - g2g, 5 - old system
+                return internalAndG2GSites.indexOf(this.lookupKey) === -1;
             };
 
             // don't remove CMSModelInterceptor from last line

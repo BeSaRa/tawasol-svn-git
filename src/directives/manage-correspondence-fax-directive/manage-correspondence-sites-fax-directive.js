@@ -12,20 +12,8 @@ module.exports = function (app) {
                 vsId: '=',
                 documentClass: '=',
                 emptySubRecords: '=',
-                disableCorrespondence: '=',
                 emptySiteSearch: '=',
-                isCompositeDocument: '=?',
                 faxExportOptions: '=?'
-            },
-            link: function ($scope, element, attrs) {
-                $scope.$watch(function () {
-                        return $scope.ctrl.sitesInfoTo.length;
-                    },
-                    function (newValue, oldValue) {
-                        if (newValue < 2) {
-                            $scope.ctrl.isCompositeDocument = false;
-                        }
-                    });
             }
         }
     });

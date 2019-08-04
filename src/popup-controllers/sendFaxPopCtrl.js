@@ -20,12 +20,20 @@ module.exports = function (app) {
         };
 
         self.sendFax = function ($event) {
-            correspondenceService.sendFax(self.correspondence, self.correspondence.sitesInfoTo, self.faxExportOptions).then(function (result) {
-                dialog.hide();
-                toast.success(langService.get('success_sending_fax'));
-            }).catch(function () {
-                toast.error(langService.get('failed_sending_fax'))
-            })
+            var sitesWithoutFax = _.filter(self.correspondence.sitesInfoTo, function (site) {
+                return !site.faxNumber;
+            });
+            if (sitesWithoutFax.length) {
+                dialog.alertMessage(langService.get('please_add_fax_number_to_all_sites'));
+            } else {
+                correspondenceService.sendFax(self.correspondence, self.correspondence.sitesInfoTo, self.faxExportOptions)
+                    .then(function (result) {
+                        dialog.hide();
+                        toast.success(langService.get('success_sending_fax'));
+                    }).catch(function () {
+                    toast.error(langService.get('failed_sending_fax'))
+                })
+            }
         };
 
         /**

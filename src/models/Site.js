@@ -37,6 +37,7 @@ module.exports = function (app) {
             self.followupStatusResult = null;
             self.siteTypeResult = null;
             self.siteCategory = null;
+            self.faxNumber = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -79,6 +80,15 @@ module.exports = function (app) {
              */
             Site.prototype.setFollowupStatus = function (followupStatus) {
                 this.followupStatus = followupStatus;
+                return this;
+            };
+
+            /**
+             * @description set faxNumber
+             * @param faxNumber
+             */
+            Site.prototype.setFaxNumber = function (faxNumber) {
+                this.faxNumber = faxNumber;
                 return this;
             };
 
