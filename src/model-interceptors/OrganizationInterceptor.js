@@ -51,6 +51,10 @@ module.exports = function (app) {
                     return item;
                 });
             }
+            if (!(model.hasRegistry || model.centralArchive)) {
+                model.faxId = '';
+            }
+            
             // delete model.ldapPrefix;
             delete model.children;
             delete model.parentId;

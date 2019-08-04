@@ -370,7 +370,16 @@
                                         </md-select>
                                     </md-input-container>
                                     <!-- Empty Container -->
-                                    <md-input-container flex></md-input-container>
+                                    <md-input-container flex  ng-if="!(ctrl.organization.hasRegistry || ctrl.organization.centralArchive)"></md-input-container>
+                                    <!-- Fax Id -->
+                                    <md-input-container flex ng-if="ctrl.organization.hasRegistry || ctrl.organization.centralArchive">
+                                        <label for="faxId">{{lang.fax_id}}</label>
+                                        <input id="faxId" name="faxId"
+                                               ng-model="ctrl.organization.faxId">
+                                        <div ng-messages="org_form.faxId.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
                                 </div>
                             </div><!-- column container -->
                         </md-content>

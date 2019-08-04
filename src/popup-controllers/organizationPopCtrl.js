@@ -373,6 +373,9 @@ module.exports = function (app) {
                     } else {
                         self.organization.setCentralArchiveUnitId(self.listParentsHasCentralArchive[0])
                     }
+                    if (!(self.organization.hasRegistry || self.organization.centralArchive)){
+                        self.organization.faxId = '';
+                    }
                 })
                 .catch(function () {
                     self.organization.centralArchive = !self.organization.centralArchive;
@@ -391,6 +394,10 @@ module.exports = function (app) {
                         self.organization.referencePlanItemStartSerialList = [];
                         self.organization.referenceNumberPlanId = null;
                         self.organization.centralArchiveUnitId = null;
+                    }
+
+                    if (!(self.organization.hasRegistry || self.organization.centralArchive)){
+                        self.organization.faxId = '';
                     }
                 })
                 .catch(function () {
