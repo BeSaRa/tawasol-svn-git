@@ -1,7 +1,5 @@
 (function (document) {
-    // will commented before go to production
-    //require('./../dist/resources/lang.json'); // to watch the language and reload if any changes happened.
-    //require('./../dist/resources/menu.json'); // to watch the menus and reload if any changes happened.
+
     require('./sass/style.scss');
     require('./require/libs');
 
