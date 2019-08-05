@@ -1016,6 +1016,10 @@ module.exports = function (app) {
                                     'ngInject';
                                     return dynamicMenuItemService.loadPrivateDynamicMenuItems()
                                         .then(function (result) {
+                                            /*// filter the parent icn entry template and icn search template menus
+                                            result = _.filter(result, function (menuItem) {
+                                                return !((menuItem.menuType === 3 || menuItem.menuType === 4) && !menuItem.parent);
+                                            });*/
                                             return _.map(result, function (item) {
                                                 return new UserMenuItem({
                                                     menuItem: item,
@@ -1455,7 +1459,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.preventSearchKeyDown = function ($event) {
-            if ($event){
+            if ($event) {
                 var code = $event.which || $event.keyCode;
                 if (code !== 38 && code !== 40)
                     $event.stopPropagation();

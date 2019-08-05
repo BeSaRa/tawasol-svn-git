@@ -1357,9 +1357,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.preventSearchKeyDown = function ($event) {
-            var code = $event.which || $event.keyCode;
-            if (code !== 38 && code !== 40)
-                $event.stopPropagation();
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
         };
 
     });
