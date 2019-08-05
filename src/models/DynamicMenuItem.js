@@ -243,6 +243,15 @@ module.exports = function (app) {
                     case 1 :
                         type = 'reports';
                         break;
+                    case 2 :
+                        type = 'others';
+                        break;
+                    case 3 :
+                        type = 'icnEntryTemplate';
+                        break;
+                    case 4 :
+                        type = 'icnSearchTemplate';
+                        break;
                     default:
                         type = 'others';
                         break;

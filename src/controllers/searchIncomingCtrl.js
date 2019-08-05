@@ -817,7 +817,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: [
                     'MANAGE_FAVORITE',
-                    ''// archive
+                    'ICN_ENTRY_TEMPLATE'
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
@@ -841,10 +841,11 @@ module.exports = function (app) {
                     // Add To ICN Archive
                     {
                         type: 'action',
-                        icon: 'star',
+                        icon: 'archive',
                         text: 'grid_action_icn_archive',
                         callback: self.addToIcnArchive,
                         class: "action-green",
+                        permissionKey: 'ICN_ENTRY_TEMPLATE',
                         checkShow: function (action, model) {
                             return true;
                         }

@@ -33,8 +33,33 @@ module.exports = function (app) {
         self.allParents = [];
 
         self.setDynamicMenuItems = function (dynamicMenuItems) {
+            var isICNEntryOrSearchTemplate = false, index;
             self.dynamicMenuItems = _.filter(dynamicMenuItems, function (menuItem) {
-                return !(self.isICNEntryTemplateOrSearchType(menuItem));
+                isICNEntryOrSearchTemplate = menuItem.isICNEntryTemplateOrSearchType();
+                if (isICNEntryOrSearchTemplate) {
+                    if (menuItem.getMenuType() === 'icnEntryTemplate') {
+                        index = _.findIndex(employeeService.getEmployee().permissions, function (permission) {
+                            return permission.id === -1;
+                        });
+                        if (index === -1) {
+                            employeeService.getEmployee().permissions.push({
+                                id: -1,
+                                permissionKey: 'ICN_ENTRY_TEMPLATE'
+                            });
+                        }
+                    } else if (menuItem.getMenuType() === 'icnSearchTemplate') {
+                        index = _.findIndex(employeeService.getEmployee().permissions, function (permission) {
+                            return permission.id === -2;
+                        });
+                        if (index === -1) {
+                            employeeService.getEmployee().permissions.push({
+                                id: -2,
+                                permissionKey: 'ICN_SEARCH_TEMPLATE'
+                            });
+                        }
+                    }
+                }
+                return !(isICNEntryOrSearchTemplate);
             });
             self.prepareDynamicMenuItems();
         };

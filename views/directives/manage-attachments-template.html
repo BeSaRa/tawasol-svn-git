@@ -28,7 +28,7 @@
                                 </div>
                             </md-button>
                         </md-menu-item>
-                        <md-menu-item ng-if="ctrl.vsId">
+                        <md-menu-item ng-if="ctrl.vsId && ctrl.employeeService.hasPermissionTo('ICN_SEARCH_TEMPLATE')">
                             <md-button ng-click="ctrl.openAttachmentIcnDialog($event)">
                                 <div>
                                     <span><md-icon md-svg-icon="file-cloud"></md-icon></span>

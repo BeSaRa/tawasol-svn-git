@@ -19,11 +19,14 @@ module.exports = function (app) {
                                                               generator,
                                                               downloadService,
                                                               _,
-                                                              managerService) {
+                                                              managerService,
+                                                              employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageAttachmentDirectiveCtrl';
         LangWatcher($scope); // to watch the languages
+        self.employeeService = employeeService;
+
         self.allowScanner = true;
         self.allowUpload = true;
         self.attachment = null;
@@ -85,7 +88,7 @@ module.exports = function (app) {
                     file: file,
                     securityLevel: self.document ? securityLevel : null,
                     updateActionStatus: self.attachmentUpdateActions[0],
-                    attachmentType:  (self.attachmentTypes.length) ? self.attachmentTypes[0] : null
+                    attachmentType: (self.attachmentTypes.length) ? self.attachmentTypes[0] : null
                 });
             }
         }
@@ -100,7 +103,7 @@ module.exports = function (app) {
             self.scanner = true;
         };
 
-        function _checkReceiveG2G(){
+        function _checkReceiveG2G() {
             return self.receiveG2g;
         }
 
@@ -110,7 +113,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.openScannerDialog = function (buttonType, $event) {
-            if (_checkReceiveG2G()){
+            if (_checkReceiveG2G()) {
                 return;
             }
             self.hideButton(buttonType);
@@ -128,7 +131,7 @@ module.exports = function (app) {
          * @description open dialog from
          */
         self.openDragDropDialog = function ($event) {
-            if (_checkReceiveG2G()){
+            if (_checkReceiveG2G()) {
                 return;
             }
             attachmentService
@@ -233,7 +236,7 @@ module.exports = function (app) {
         };
 
         self.deleteDocumentAttachment = function (attachment, $event) {
-            if (_checkReceiveG2G()){
+            if (_checkReceiveG2G()) {
                 return;
             }
             var linkedExportedAttachments = [];
@@ -269,7 +272,7 @@ module.exports = function (app) {
         };
 
         self.deleteBulkAttachments = function ($event) {
-            if (_checkReceiveG2G()){
+            if (_checkReceiveG2G()) {
                 return;
             }
             dialog
@@ -314,7 +317,7 @@ module.exports = function (app) {
          * @param element
          */
         self.uploadAttachmentFile = function (files, element) {
-            if (_checkReceiveG2G()){
+            if (_checkReceiveG2G()) {
                 return;
             }
             attachmentService
@@ -338,7 +341,7 @@ module.exports = function (app) {
         };
 
         self.openEditDocumentAttachment = function (attachment) {
-            if (_checkReceiveG2G()){
+            if (_checkReceiveG2G()) {
                 return;
             }
             var file = attachment.file;
@@ -447,7 +450,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.openAttachmentIcnDialog = function ($event) {
-            if (!self.vsId){
+            if (!self.vsId || !employeeService.hasPermissionTo('ICN_SEARCH_TEMPLATE')) {
                 return;
             }
             attachmentService.openIcnAttachmentOptionsDialog(self.document, $event)
