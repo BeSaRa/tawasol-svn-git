@@ -16,7 +16,7 @@
                                data-md-container-class="select-header-container">
                         <md-select-header class="select-header">
                             <input ng-model="ctrl.registryOUSearchText"
-                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   ng-keydown="ctrl.handleSearchKeyDown($event)"
                                    placeholder="{{lang.search}}"
                                    class="select-header-input">
                         </md-select-header>
@@ -44,7 +44,7 @@
                                data-md-container-class="select-header-container">
                         <md-select-header class="select-header">
                             <input ng-model="ctrl.registrySectionSearchText"
-                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   ng-keydown="ctrl.handleSearchKeyDown($event)"
                                    placeholder="{{lang.search}}"
                                    class="select-header-input">
                         </md-select-header>
@@ -72,7 +72,7 @@
                                data-md-container-class="select-header-container">
                         <md-select-header class="select-header">
                             <input ng-model="ctrl.ouSearchText"
-                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   ng-keydown="ctrl.handleSearchKeyDown($event)"
                                    placeholder="{{lang.search}}"
                                    class="select-header-input">
                         </md-select-header>
@@ -217,15 +217,25 @@
                                ng-change="ctrl.onChangeMainClassification($event)"
                                md-on-close="ctrl.clearSearchText('mainClassification')"
                                data-md-container-class="select-header-container">
-                        <md-select-header class="select-header">
-                            <input ng-model="ctrl.mainClassificationSearchText"
-                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
-                                   ng-change="ctrl.filterDropdownRecords($event, 'mainClassification')"
-                                   placeholder="{{lang.search}}"
-                                   class="select-header-input">
+                        <md-select-header class="select-header" layout="column">
+                            <div layout="row" flex class="size-100">
+                                <input ng-model="ctrl.mainClassificationSearchText"
+                                       ng-keydown="ctrl.handleSearchKeyDown($event, 'mainClassification')"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                                <md-button ng-if="ctrl.mainClassificationSearchText"
+                                           ng-click="ctrl.loadMainClassificationRecords($event)"
+                                           class="select-header-icon md-icon-button"
+                                           tooltip="{{lang.load_more_records}}">
+                                    <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                </md-button>
+                            </div>
+                            <div class="help-text-div" ng-if="ctrl.mainClassificationSearchText">
+                                {{lang.press_enter_to_load_more_records}}
+                            </div>
                         </md-select-header>
                         <md-option ng-value="classification.classification"
-                                   ng-repeat="classification in ctrl.classifications">
+                                   ng-repeat="classification in ctrl.classifications | translatedNameFilter: ctrl.mainClassificationSearchText:null:'classification'">
                             <span
                                     md-highlight-text="ctrl.mainClassificationSearchText"
                                     md-highlight-flags="i">{{classification.classification.getTranslatedName()}}</span>
@@ -247,15 +257,25 @@
                             ng-required="ctrl.checkMandatory('subClassification')"
                             md-on-close="ctrl.clearSearchText('subClassification')"
                             data-md-container-class="select-header-container">
-                        <md-select-header class="select-header">
-                            <input ng-model="ctrl.subClassificationSearchText"
-                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
-                                   ng-change="ctrl.filterDropdownRecords($event, 'subClassification')"
-                                   placeholder="{{lang.search}}"
-                                   class="select-header-input">
+                        <md-select-header class="select-header" layout="column">
+                            <div layout="row" flex class="size-100">
+                                <input ng-model="ctrl.subClassificationSearchText"
+                                       ng-keydown="ctrl.handleSearchKeyDown($event, 'subClassification')"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                                <md-button ng-if="ctrl.subClassificationSearchText"
+                                           ng-click="ctrl.loadSubClassificationRecords($event)"
+                                           class="select-header-icon md-icon-button"
+                                           tooltip="{{lang.load_more_records}}">
+                                    <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                </md-button>
+                            </div>
+                            <div class="help-text-div" ng-if="ctrl.subClassificationSearchText">
+                                {{lang.press_enter_to_load_more_records}}
+                            </div>
                         </md-select-header>
                         <md-option ng-value="classification"
-                                   ng-repeat="classification in ctrl.document.mainClassification.children">
+                                   ng-repeat="classification in ctrl.document.mainClassification.children | translatedNameFilter: ctrl.subClassificationSearchText">
                             <span
                                     md-highlight-text="ctrl.subClassificationSearchText"
                                     md-highlight-flags="i">{{classification.getTranslatedName()}}</span>
@@ -326,15 +346,25 @@
                                ng-required="ctrl.checkMandatory('fileId')"
                                md-on-close="ctrl.clearSearchText('documentFile')"
                                data-md-container-class="select-header-container">
-                        <md-select-header class="select-header">
-                            <input ng-model="ctrl.documentFileSearchText"
-                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
-                                   ng-change="ctrl.filterDropdownRecords($event, 'documentFile')"
-                                   placeholder="{{lang.search}}"
-                                   class="select-header-input">
+                        <md-select-header class="select-header" layout="column">
+                            <div layout="row" flex class="size-100">
+                                <input ng-model="ctrl.documentFileSearchText"
+                                       ng-keydown="ctrl.handleSearchKeyDown($event, 'documentFile')"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                                <md-button ng-if="ctrl.documentFileSearchText"
+                                           ng-click="ctrl.loadDocumentFilesRecords($event)"
+                                           class="select-header-icon md-icon-button"
+                                           tooltip="{{lang.load_more_records}}">
+                                    <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                </md-button>
+                            </div>
+                            <div class="help-text-div" ng-if="ctrl.documentFileSearchText">
+                                {{lang.press_enter_to_load_more_records}}
+                            </div>
                         </md-select-header>
                         <md-option ng-value="file.file"
-                                   ng-repeat="file in ctrl.documentFiles">
+                                   ng-repeat="file in ctrl.documentFiles | translatedNameFilter: ctrl.documentFileSearchText">
                             <span
                                     md-highlight-text="ctrl.documentFileSearchText"
                                     md-highlight-flags="i">{{file.file.getTranslatedName()}}</span>

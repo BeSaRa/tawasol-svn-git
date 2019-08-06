@@ -531,39 +531,27 @@ module.exports = function (app) {
         };
 
 
-        var _filterSearchMainClassifications = function () {
-            var searchResult = gridService.searchGridData({
-                searchText: self.mainClassificationSearchText,
-                searchColumns: {
-                    arName: langService.current === 'ar' ? 'classification.arName' : '',
-                    enName: langService.current === 'en' ? 'classification.enName' : '',
-                }
-            }, self.classificationsCopy);
-            if (searchResult && searchResult.length) {
-                self.classifications = searchResult;
-            } else {
-                if (self.mainClassificationSearchText) {
-                    classificationService.loadClassificationsPairBySearchText(self.mainClassificationSearchText, self.document.securityLevel, null, false)
-                        .then(function (result) {
-                            if (result.first.length || result.second.length) {
-                                var lookups = {classifications: result.first, ouClassifications: result.second},
-                                    classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups).classifications;
+        self.loadMainClassificationRecords = function () {
+            if (self.mainClassificationSearchText) {
+                classificationService.loadClassificationsPairBySearchText(self.mainClassificationSearchText, self.document.securityLevel, null, false)
+                    .then(function (result) {
+                        if (result.first.length || result.second.length) {
+                            var lookups = {classifications: result.first, ouClassifications: result.second},
+                                classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups).classifications;
 
-                                self.classifications = self.classifications.concat(classificationsUnion);
-                                self.classificationsCopy = self.classificationsCopy.concat(classificationsUnion);
-                                self.filterDropdownRecords(null, 'mainClassification', true);
-                            } else {
-                                self.classifications = [];
-                            }
-                        })
-                        .catch(function (error) {
+                            self.classifications = self.classifications.concat(classificationsUnion);
+                            self.classificationsCopy = self.classificationsCopy.concat(classificationsUnion);
+                        } else {
                             self.classifications = angular.copy(self.classificationsCopy);
-                        })
-                }
+                        }
+                    })
+                    .catch(function (error) {
+                        self.classifications = angular.copy(self.classificationsCopy);
+                    })
             }
         };
 
-        var _filterSearchSubClassifications = function () {
+        self.loadSubClassificationRecords = function () {
             if (self.document.mainClassification) {
                 var mainClassification = _.find(self.classifications, function (classification) {
                         return classification.classification.id === self.document.mainClassification.id;
@@ -573,16 +561,7 @@ module.exports = function (app) {
                     }).classification,
                     subClassificationsCopy = mainClassificationCopy.children;
 
-                var searchResult = gridService.searchGridData({
-                    searchText: self.subClassificationSearchText,
-                    searchColumns: {
-                        arName: langService.current === 'ar' ? 'arName' : '',
-                        enName: langService.current === 'en' ? 'enName' : '',
-                    }
-                }, subClassificationsCopy);
-                if (searchResult && searchResult.length) {
-                    self.document.mainClassification.children = searchResult;
-                } else {
+
                     if (self.subClassificationSearchText) {
                         classificationService.loadClassificationsPairBySearchText(self.subClassificationSearchText, self.document.securityLevel, self.document.mainClassification, false)
                             .then(function (result) {
@@ -600,7 +579,6 @@ module.exports = function (app) {
                                     mainClassification.children = mainClassification.children.concat(subClassifications);
 
                                     self.classificationsCopy = angular.copy(self.classifications);
-                                    self.filterDropdownRecords(null, 'subClassification');
                                 } else {
                                     self.document.mainClassification.children = [];
                                 }
@@ -609,75 +587,59 @@ module.exports = function (app) {
                                 self.document.mainClassification.children = angular.copy(subClassificationsCopy);
                             })
                     }
-                }
+
             }
         };
 
 
-        var _filterSearchDocumentFiles = function () {
-            var searchResult = gridService.searchGridData({
-                searchText: self.documentFileSearchText,
-                searchColumns: {
-                    arName: langService.current === 'ar' ? 'file.arName' : '',
-                    enName: langService.current === 'en' ? 'file.enName' : '',
-                }
-            }, self.documentFilesCopy);
-            if (searchResult && searchResult.length) {
-                self.documentFiles = searchResult;
-            } else {
-                if (self.documentFileSearchText) {
-                    documentFileService.loadDocumentFilesBySearchText(self.documentFileSearchText, self.document.securityLevel, null, false)
-                        .then(function (result) {
-                            var lookups = {documentFiles: result.first, ouDocumentFiles: result.second},
-                                documentFilesUnion = correspondenceService.prepareLookupHierarchy(lookups).documentFiles;
-                            if (documentFilesUnion && documentFilesUnion.length) {
-                                self.documentFiles = self.documentFiles.concat(documentFilesUnion);
-                                self.documentFilesCopy = self.documentFilesCopy.concat(documentFilesUnion);
-                                self.filterDropdownRecords(null, 'documentFile');
-                            } else {
-                                self.documentFiles = [];
-                            }
-                        })
-                        .catch(function (error) {
+        self.loadDocumentFilesRecords = function () {
+            if (self.documentFileSearchText) {
+                documentFileService.loadDocumentFilesBySearchText(self.documentFileSearchText, self.document.securityLevel, null, false)
+                    .then(function (result) {
+                        var lookups = {documentFiles: result.first, ouDocumentFiles: result.second},
+                            documentFilesUnion = correspondenceService.prepareLookupHierarchy(lookups).documentFiles;
+
+                        if (documentFilesUnion && documentFilesUnion.length) {
+                            self.documentFiles = self.documentFiles.concat(documentFilesUnion);
+                            self.documentFilesCopy = self.documentFilesCopy.concat(documentFilesUnion);
+                        } else {
                             self.documentFiles = angular.copy(self.documentFilesCopy);
-                        })
-                }
+                        }
+                    })
+                    .catch(function (error) {
+                        self.documentFiles = angular.copy(self.documentFilesCopy);
+                    })
             }
         };
 
 
         /**
-         * @description filter the dropdown with searchText or request service if searched record not found
+         * @description Handles the default dropdown behavior of selecting option on keydown inside the search box of dropdown
          * @param $event
          * @param fieldType
          */
-        self.filterDropdownRecords = function ($event, fieldType) {
-            $timeout(function () {
-                if (fieldType === 'mainClassification') {
-                    _filterSearchMainClassifications();
-                } else if (fieldType === 'subClassification') {
-                    _filterSearchSubClassifications()
-                } else if (fieldType === 'documentFile') {
-                    _filterSearchDocumentFiles();
-                }
-            })
-        };
-
-        self.getTranslatedEnableDisableSecurityLevel = function(){
-            return self.isSecurityLevelEnabled ? langService.get('disable_security_level') : langService.get('enable_security_level');
-        };
-
-
-        /**
-         * @description Prevent the default dropdown behavior of selecting option on keydown inside the search box of dropdown
-         * @param $event
-         */
-        self.preventSearchKeyDown = function ($event) {
+        self.handleSearchKeyDown = function ($event, fieldType) {
             if ($event) {
                 var code = $event.which || $event.keyCode;
-                if (code !== 38 && code !== 40)
+                // if enter key pressed, load from server with search text
+                if (code === 13) {
+                    if (fieldType === 'mainClassification') {
+                        self.loadMainClassificationRecords($event);
+                    } else if (fieldType === 'subClassification') {
+                        self.loadSubClassificationRecords($event);
+                    } else if (fieldType === 'documentFile') {
+                        self.loadDocumentFilesRecords($event);
+                    }
+                }
+                // prevent keydown except arrow up and arrow down keys
+                else if (code !== 38 && code !== 40) {
                     $event.stopPropagation();
+                }
             }
+        };
+
+        self.getTranslatedEnableDisableSecurityLevel = function () {
+            return self.isSecurityLevelEnabled ? langService.get('disable_security_level') : langService.get('enable_security_level');
         };
     });
 };
