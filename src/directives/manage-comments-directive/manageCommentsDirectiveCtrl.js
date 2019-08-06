@@ -12,6 +12,8 @@ module.exports = function (app) {
                                                             DocumentComment,
                                                             $scope,
                                                             cmsTemplate,
+                                                            Information,
+                                                            ouApplicationUserService,
                                                             $filter,
                                                             _) {
         'ngInject';
@@ -68,6 +70,39 @@ module.exports = function (app) {
             }
         };
 
+        function _sortRegOusSections(organizations) {
+            // filter all regOU
+            var regOus = _.filter(organizations, function (item) {
+                return item.hasRegistry;
+            });
+            regOus = _.map(regOus, function (regOu) {
+                regOu.display = new Information({
+                    arName: regOu.arName,
+                    enName: regOu.enName
+                });
+                return regOu;
+            });
+
+            // filter all sections (no registry)
+            var groups = _.filter(organizations, function (item) {
+                return !item.hasRegistry;
+            });
+
+            // if needed to show regou - section, append the dummy property "display"
+            groups = _.map(groups, function (item) {
+                // if ou is section(has no registry and has regOuId, add temporary field for regOu)
+                item.display = new Information({
+                    arName: (item.registryParentId ? item.registryParentId.arName : '') + ' - ' + item.arName,
+                    enName: (item.registryParentId ? item.registryParentId.enName : '') + ' - ' + item.enName
+                });
+                return item;
+            });
+
+            return _.sortBy([].concat(regOus, groups), [function (ou) {
+                return ou.display[langService.current + 'Name'].toLowerCase();
+            }]);
+        }
+
         /**
          * @description Gets the grid records by sorting
          */
@@ -122,15 +157,16 @@ module.exports = function (app) {
         // used when search for organizations|users.
         self.services = {
             users: {
-                service: applicationUserService,
-                method: 'findUsersByText',
+                service: ouApplicationUserService,
+                method: 'getOuApplicationUserByOu',
                 mapResult: function (item) {
-                    return angular.extend(item, {display: item[langService.current + 'FullName']})
+                    var applicationUser = angular.extend(item, {display: item.applicationUser[langService.current + 'FullName']});
+                    return item.applicationUser;
                 }
             },
             organizations: {
                 service: organizationService,
-                method: 'findOrganizationsByText',
+                method: 'getOrganizations',
                 mapResult: function (item) {
                     return angular.extend(item, {display: item[langService.current + 'Name']});
                 }
@@ -138,6 +174,7 @@ module.exports = function (app) {
         };
         // private variables to debounce the request.
         var pendingSearch, cancelSearch = angular.noop, lastSearch;
+        self.selectedOu = _sortRegOusSections([self.services.organizations.mapResult(self.employee.userOrganization)])[0];
 
         /**
          * to refresh debounce (reset).
@@ -360,20 +397,19 @@ module.exports = function (app) {
                 // (!self.documentComment.commentPrivate() && self.documentComment.isPerOU && self.documentComment.withSubOUs) ||
                 // if ig Global
                 (self.documentComment.commentGlobal()) ||
-                // if not global and not private and not pe ou
-                (!self.documentComment.commentGlobal() && !self.documentComment.commentPrivate() && !self.documentComment.isPerOU) ||
-                // if not global and not private
-                (!self.documentComment.commentGlobal() && !self.documentComment.commentPrivate() && !self.documentComment.withSubOUs) ||
+                // if not global and not private and not user type
+                (self.documentComment.commentCustomize() && self.documentComment.isPerOU && !self.documentComment.withSubOUs) ||
                 // if not private and not global and not with subOUs selected and excludedIDs have length
                 (self.documentComment.commentCustomize() && self.documentComment.excludedIDs.length && self.documentComment.withSubOUs)
             );
         };
         /**
-         * query to search for (organization|users) to (exclude|include).
+         *  query to search for (organization|users) to (exclude|include).
+         * server side search
          * @param property
          * @return {*}
          */
-        self.querySearch = function (property) {
+       /* self.querySearch = function (property) {
             if (!pendingSearch || !debounceSearch()) {
                 cancelSearch();
                 var criteria = self[property + 'Search'];
@@ -401,13 +437,15 @@ module.exports = function (app) {
                 });
             }
             return pendingSearch;
-        };
+        };*/
         /**
          * @description search for includes.
          * @param criteria
          * @return {*}
          */
         self.querySearchIncludes = function (criteria) {
+            if (!self.documentComment.isPerOU)
+                return self.querySearch(criteria, self.selectedOu);
             return self.querySearch(criteria);
         };
         /**
@@ -416,8 +454,63 @@ module.exports = function (app) {
          * @return {*}
          */
         self.querySearchExcludes = function (criteria) {
+            if (!self.documentComment.isPerOU)
+                return self.querySearch(criteria, self.selectedOu);
             return self.querySearch(criteria);
         };
+
+        /**
+         *  query to search for (organization|users) to (exclude|include).
+         * client side search
+         * @param property
+         * @param selectedOu
+         * @return {*}
+         */
+        self.querySearch = function (property, selectedOu) {
+            var criteria = self[property + 'Search'];
+            var searchType = currentType();
+            var current = self.services[searchType];
+            var method = (selectedOu) ? current.service[current.method](selectedOu) : current.service[current.method]();
+
+            return method.then(function (result) {
+                var ids = _.map(self.documentComment[property], 'id');
+
+                return _.filter(result, function (item) {
+                    item = self.services[searchType].mapResult(item);
+                    var skipIdsFromSearchType = '';
+                    if (property === 'excludedIDs')
+                        skipIdsFromSearchType = 'includedIDs';
+                    else
+                        skipIdsFromSearchType = 'excludedIDs';
+
+                    if (!criteria)
+                        return ids.indexOf(item.id) === -1 &&
+                            _.map(self.documentComment[skipIdsFromSearchType], 'id').indexOf(item.id) === -1;
+
+                    criteria = criteria.toLowerCase();
+                    return item.display.toLowerCase().indexOf(criteria) !== -1 && ids.indexOf(item.id) === -1 &&
+                        _.map(self.documentComment[skipIdsFromSearchType], 'id').indexOf(item.id) === -1;
+                });
+            });
+        };
+
+        self.querySearchOrganization = function (query) {
+            query = query.toLowerCase();
+            return self.services.organizations.service[self.services.organizations.method]()
+                .then(function (organizations) {
+                    /*  organizations = _.map(organizations, function (ou) {
+                          return self.services.organizations.mapResult(ou);
+                      });*/
+
+                    organizations = _sortRegOusSections(organizations);
+
+                    return query ? organizations.filter(function (item) {
+                        return item.display[langService.current + 'Name'].toLowerCase().indexOf(query) !== -1;
+                    }) : organizations;
+                })
+        };
+
+
         /**
          * @description to select (user|organization) for (include|exclude).
          * @param property
@@ -428,7 +521,7 @@ module.exports = function (app) {
             if (!selected) {
                 return;
             }
-            self.documentComment[property].push(selected);
+            self.documentComment[property].push((self.documentComment.isPerOU) ? selected : selected.applicationUser);
             self[property] = null;
         };
         /**
@@ -488,8 +581,8 @@ module.exports = function (app) {
                     if (self.documentComment.commentCustomize() && property === 'includedIDs' && self.documentComment.isPerOU && self.documentComment.withSubOUs &&
                         self.documentComment.excludedIDs.length) {
 
-                        _.map(self.documentComment[property],function (item) {
-                            _removeInclude(property,item);
+                        _.map(self.documentComment[property], function (item) {
+                            _removeInclude(property, item);
                         })
                     } else {
                         _removeBulkSelected(property, selected, $event);
@@ -620,6 +713,12 @@ module.exports = function (app) {
                     organization: organization,
                     excludedIDs: self.excludedIDsCopy
                     // includedIDs: self.documentComment.includedIDs
+                },
+                resolve: {
+                    organizationChilds: function (organizationService) {
+                        'ngInject';
+                        return organizationService.loadOrganizationChildren(organization);
+                    }
                 }
             });
         };

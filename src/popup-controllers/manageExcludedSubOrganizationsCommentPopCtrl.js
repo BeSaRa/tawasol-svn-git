@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                                              organizationService,
                                                                              gridService,
                                                                              $filter,
+                                                                             organizationChilds,
                                                                              dialog) {
         'ngInject';
         var self = this;
@@ -41,15 +42,18 @@ module.exports = function (app) {
         };
 
         self.querySearch = function (query) {
-            return organizationService
-                .findOrganizationChildrenByText(query, null, self.organization)
+            return $q.when(organizationChilds)
                 .then(function (result) {
+                    result = _.map(result, function (item) {
+                        return angular.extend(item, {display: item[langService.current + 'Name']});
+                    });
+
                     return _.filter(result, function (item) {
-                        if (_.map(self.excludedSubOUs, 'id').indexOf(item.id) > -1 || item.id === self.organization.id)
-                            return false;
+                        if (!query)
+                            return _.map(self.excludedSubOUs, 'id').indexOf(item.id) === -1 && item.id !== self.organization.id;
 
                         item.display = item[langService.current + 'Name'];
-                        return item;
+                        return item.display.toLowerCase().indexOf(query.toLowerCase()) !== -1 && self.excludedSubOUs.indexOf(item.id) === -1;
                     });
                 });
         };

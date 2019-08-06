@@ -625,6 +625,30 @@ module.exports = function (app) {
         };
 
         /**
+         *  load ou application user by ou
+         * @param organization
+         * @returns {*}
+         */
+        self.loadOuApplicationUserByOu = function (organization) {
+            organization = organization.hasOwnProperty('id') ? organization.id : organization;
+
+            return $http
+                .get(urlService.ouApplicationUsers + '/ouid/' + organization)
+                .then(function (result) {
+                    self.ouApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
+                    return self.ouApplicationUsers;
+                });
+        };
+
+        /**
+         * get ou application user by ou
+         * @returns {Promise}
+         */
+        self.getOuApplicationUserByOu = function (organization) {
+            return self.ouApplicationUsers.length ? $q.when(self.ouApplicationUsers) : self.loadOuApplicationUserByOu(organization);
+        };
+
+        /**
          * @description to map the proxy User
          * @param collection
          * @returns {Array}

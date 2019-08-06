@@ -1689,10 +1689,12 @@ tr.unread-row, tr.current-version {
 
 .size-50 {
   width: 50% !important;
+  box-sizing: border-box;
 }
 
 .size-100 {
   width: 100% !important;
+  box-sizing: border-box;
 }
 
 .background-warning,
