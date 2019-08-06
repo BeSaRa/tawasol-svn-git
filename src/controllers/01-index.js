@@ -73,7 +73,7 @@ module.exports = function (app) {
     require('./documentFileCtrl')(app);
     require('./dynamicMenuItemCtrl')(app);
     require('./centralArchiveSentItemCtrl')(app);
-    require('./searchViewersLogCtrl')(app);
+    require('./viewersLogCtrl')(app);
     require('./taskCtrl')(app);
     require('./administratorsCtrl')(app);
 };

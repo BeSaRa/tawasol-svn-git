@@ -79,11 +79,11 @@ module.exports = function (app) {
                 internal: 'searchInt',
                 general: 'searchGen',
                 quick: 'searchQuick',
-                outgoingIncoming: 'searchOutInc',
-                viewersLog: 'viewersLog'
+                outgoingIncoming: 'searchOutInc'
             },
             administration: {
                 administrators: 'administrators',
+                viewersLog: 'viewersLog',
                 entity: 'entity',
                 classification: 'classification',
                 workflowGroup: 'wfGroup',

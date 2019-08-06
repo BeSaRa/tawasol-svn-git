@@ -38,6 +38,9 @@ module.exports = function (app) {
             .addMenuPermissions('menu_item_administrators', function (employee) {
                 return employee.isSuperAdmin;
             })
+            .addMenuPermission('menu_item_search_viewers_log', function (employee) {
+                return employee.isSuperAdmin && !employee.isAdmin;
+            })
             .end()
             // department inbox
             .addMenuPermissionGroup('menu_item_department_inbox')
@@ -100,9 +103,6 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_search_module_general', 'GENERAL_SEARCH')
             .addMenuPermissions('menu_item_search_module_outgoing_incoming', ['SEARCH_OUTGOING', 'SEARCH_INCOMING'])
             .addMenuPermission('menu_item_quick_search', 'QUICK_SEARCH')
-            .addMenuPermission('menu_item_search_viewers_log', function (employee) {
-                return employee.isSuperAdmin;
-            })
             .end()
             .addMenuPermissionGroup('menu_item_central_archive_mail')
             .addMenuPermission('menu_item_central_archive_ready_to_export', function (employee) {

@@ -845,10 +845,10 @@ module.exports = function (app) {
                 }
             })
             // Viewers Log
-            .state('app.search.viewers-log', {
+            .state('app.administration.viewers-log', {
                 url: '/viewers-log',
-                templateUrl: templateProvider.getView('search-viewers-log'),
-                controller: 'searchViewersLogCtrl',
+                templateUrl: templateProvider.getView('viewers-log'),
+                controller: 'viewersLogCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_viewers_log'
 

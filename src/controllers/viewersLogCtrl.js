@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('searchViewersLogCtrl', function (lookupService,
+    app.controller('viewersLogCtrl', function (lookupService,
                                                      langService,
                                                      ResolveDefer,
                                                      $q,
@@ -20,8 +20,8 @@ module.exports = function (app) {
                                                      documentSecurityService) {
         'ngInject';
         var self = this;
-        self.controllerName = 'searchViewersLogCtrl';
-        contextHelpService.setHelpTo('search-viewers-log');
+        self.controllerName = 'viewersLogCtrl';
+        contextHelpService.setHelpTo('viewers-log');
 
         self.watermarkSearchText = '';
         self.allSearchableRecords = [];
@@ -30,9 +30,9 @@ module.exports = function (app) {
             limit: 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions:gridService.getGridLimitOptions(gridService.grids.search.viewersLog, self.viewerLogs),
+            limitOptions:gridService.getGridLimitOptions(gridService.grids.administration.viewersLog, self.viewerLogs),
             pagingCallback: function (page, limit) {
-                gridService.setGridPagingLimitByGridName(gridService.grids.search.viewersLog, limit);
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.viewersLog, limit);
             }
         };
         self.selectedLogs = [];
