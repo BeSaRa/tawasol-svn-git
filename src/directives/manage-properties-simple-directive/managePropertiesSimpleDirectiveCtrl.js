@@ -454,8 +454,6 @@ module.exports = function (app) {
         };*/
 
 
-
-
         /**
          * @description Clears the searchText for the given field
          * @param fieldType
@@ -470,39 +468,27 @@ module.exports = function (app) {
         };
 
 
-        var _filterSearchMainClassifications = function () {
-            var searchResult = gridService.searchGridData({
-                searchText: self.mainClassificationSearchText,
-                searchColumns: {
-                    arName: langService.current === 'ar' ? 'classification.arName' : '',
-                    enName: langService.current === 'en' ? 'classification.enName' : '',
-                }
-            }, self.classificationsCopy);
-            if (searchResult && searchResult.length) {
-                self.classifications = searchResult;
-            } else {
-                if (self.mainClassificationSearchText) {
-                    classificationService.loadClassificationsPairBySearchText(self.mainClassificationSearchText, self.document.securityLevel, null, false)
-                        .then(function (result) {
-                            if (result.first.length || result.second.length) {
-                                var lookups = {classifications: result.first, ouClassifications: result.second},
-                                    classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups).classifications;
+        self.loadMainClassificationRecords = function () {
+            if (self.mainClassificationSearchText) {
+                classificationService.loadClassificationsPairBySearchText(self.mainClassificationSearchText, self.document.securityLevel, null, false)
+                    .then(function (result) {
+                        if (result.first.length || result.second.length) {
+                            var lookups = {classifications: result.first, ouClassifications: result.second},
+                                classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups).classifications;
 
-                                self.classifications = self.classifications.concat(classificationsUnion);
-                                self.classificationsCopy = self.classificationsCopy.concat(classificationsUnion);
-                                self.filterDropdownRecords(null, 'mainClassification', true);
-                            } else {
-                                self.classifications = [];
-                            }
-                        })
-                        .catch(function (error) {
+                            self.classifications = self.classifications.concat(classificationsUnion);
+                            self.classificationsCopy = self.classificationsCopy.concat(classificationsUnion);
+                        } else {
                             self.classifications = angular.copy(self.classificationsCopy);
-                        })
-                }
+                        }
+                    })
+                    .catch(function (error) {
+                        self.classifications = angular.copy(self.classificationsCopy);
+                    })
             }
         };
 
-        var _filterSearchSubClassifications = function () {
+        self.loadSubClassificationRecords = function () {
             if (self.document.mainClassification) {
                 var mainClassification = _.find(self.classifications, function (classification) {
                         return classification.classification.id === self.document.mainClassification.id;
@@ -512,71 +498,56 @@ module.exports = function (app) {
                     }).classification,
                     subClassificationsCopy = mainClassificationCopy.children;
 
-                var searchResult = gridService.searchGridData({
-                    searchText: self.subClassificationSearchText,
-                    searchColumns: {
-                        arName: langService.current === 'ar' ? 'arName' : '',
-                        enName: langService.current === 'en' ? 'enName' : '',
-                    }
-                }, subClassificationsCopy);
-                if (searchResult && searchResult.length) {
-                    self.document.mainClassification.children = searchResult;
-                } else {
-                    if (self.subClassificationSearchText) {
-                        classificationService.loadClassificationsPairBySearchText(self.subClassificationSearchText, self.document.securityLevel, self.document.mainClassification, false)
-                            .then(function (result) {
-                                var lookups = {classifications: result.first, ouClassifications: result.second},
-                                    classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups, self.document.mainClassification).classifications,
-                                    subClassifications = [];
 
-                                _.map(classificationsUnion, function (ouClassification) {
-                                    subClassifications = subClassifications.concat(ouClassification.classification.children);
-                                    return ouClassification;
-                                });
+                if (self.subClassificationSearchText) {
+                    classificationService.loadClassificationsPairBySearchText(self.subClassificationSearchText, self.document.securityLevel, self.document.mainClassification, false)
+                        .then(function (result) {
+                            var lookups = {classifications: result.first, ouClassifications: result.second},
+                                classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups, self.document.mainClassification).classifications,
+                                subClassifications = [];
 
-                                if (subClassifications && subClassifications.length) {
-                                    self.document.mainClassification.children = self.document.mainClassification.children.concat(subClassifications);
-                                    mainClassification.children = mainClassification.children.concat(subClassifications);
+                            _.map(classificationsUnion, function (ouClassification) {
+                                subClassifications = subClassifications.concat(ouClassification.classification.children);
+                                return ouClassification;
+                            });
 
-                                    self.classificationsCopy = angular.copy(self.classifications);
-                                    self.filterDropdownRecords(null, 'subClassification');
-                                } else {
-                                    self.document.mainClassification.children = [];
-                                }
-                            })
-                            .catch(function (error) {
+                            if (subClassifications && subClassifications.length) {
+                                self.document.mainClassification.children = self.document.mainClassification.children.concat(subClassifications);
+                                mainClassification.children = mainClassification.children.concat(subClassifications);
+
+                                self.classificationsCopy = angular.copy(self.classifications);
+                            } else {
                                 self.document.mainClassification.children = angular.copy(subClassificationsCopy);
-                            })
-                    }
+                            }
+                        })
+                        .catch(function (error) {
+                            self.document.mainClassification.children = angular.copy(subClassificationsCopy);
+                        })
                 }
             }
         };
 
 
         /**
-         * @description filter the dropdown with searchText or request service if searched record not found
+         * @description Handles the default dropdown behavior of selecting option on keydown inside the search box of dropdown
          * @param $event
          * @param fieldType
          */
-        self.filterDropdownRecords = function ($event, fieldType) {
-            $timeout(function () {
-                if (fieldType === 'mainClassification') {
-                    _filterSearchMainClassifications();
-                } else if (fieldType === 'subClassification') {
-                    _filterSearchSubClassifications()
-                }
-            })
-        };
-
-        /**
-         * @description Prevent the default dropdown behavior of selecting option on keydown inside the search box of dropdown
-         * @param $event
-         */
-        self.preventSearchKeyDown = function ($event) {
+        self.handleSearchKeyDown = function ($event, fieldType) {
             if ($event) {
                 var code = $event.which || $event.keyCode;
-                if (code !== 38 && code !== 40)
+                // if enter key pressed, load from server with search text
+                if (code === 13) {
+                    if (fieldType === 'mainClassification') {
+                        self.loadMainClassificationRecords($event);
+                    } else if (fieldType === 'subClassification') {
+                        self.loadSubClassificationRecords($event);
+                    }
+                }
+                // prevent keydown except arrow up and arrow down keys
+                else if (code !== 38 && code !== 40) {
                     $event.stopPropagation();
+                }
             }
         };
     });

@@ -580,7 +580,7 @@ module.exports = function (app) {
 
                                     self.classificationsCopy = angular.copy(self.classifications);
                                 } else {
-                                    self.document.mainClassification.children = [];
+                                    self.document.mainClassification.children = angular.copy(subClassificationsCopy);
                                 }
                             })
                             .catch(function (error) {
@@ -590,7 +590,6 @@ module.exports = function (app) {
 
             }
         };
-
 
         self.loadDocumentFilesRecords = function () {
             if (self.documentFileSearchText) {
