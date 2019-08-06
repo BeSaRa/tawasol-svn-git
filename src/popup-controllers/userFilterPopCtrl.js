@@ -233,6 +233,16 @@ module.exports = function (app) {
             }
         });
 
+        self.onChangeDocumentType = function($event){
+            if (self.filter.ui.key_2.value && self.filter.ui.key_2.value === 2){
+                self.filter.ui.key_siteType.value = null;
+                self.filter.ui.key_mainSite.value = null;
+                self.filter.ui.key_subSite.value = null;
+                self.mainSites = [];
+                self.subSites = [];
+            }
+        };
+
         /**
          * @description Get the main sites on change of site type
          * @param resetMainAndSub
@@ -271,7 +281,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.getSubSites = function (resetSub, $event) {
-            var mainSite = self.filter.ui.key_mainSite.value.hasOwnProperty('id') ? self.filter.ui.key_mainSite.value.id : self.filter.ui.key_mainSite.value;
+            var mainSite = self.filter.ui.key_mainSite.value && self.filter.ui.key_mainSite.value.hasOwnProperty('id') ? self.filter.ui.key_mainSite.value.id : self.filter.ui.key_mainSite.value;
             if (mainSite) {
                 correspondenceViewService.correspondenceSiteSearch('sub', {
                     type: self.filter.ui.key_siteType.value.hasOwnProperty('lookupKey') ? self.filter.ui.key_siteType.value.lookupKey : self.filter.ui.key_siteType.value,
@@ -303,12 +313,48 @@ module.exports = function (app) {
         /**
          * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
          * @param $event
+         * @param fieldType
          */
-        self.preventSearchKeyDown = function ($event) {
+        self.handleSearchKeyDown = function ($event, fieldType) {
             if ($event) {
                 var code = $event.which || $event.keyCode;
-                if (code !== 38 && code !== 40)
+                // if enter key pressed, load from server with search text
+                if (code === 13) {
+                    if (fieldType === 'mainSite') {
+                        self.loadMainSitesRecords($event);
+                    }
+                }
+                // prevent keydown except arrow up and arrow down keys
+                else if (code !== 38 && code !== 40) {
                     $event.stopPropagation();
+                }
+            }
+        };
+
+        /**
+         * @description request service for loading dropdown records with searchText
+         * @param $event
+         */
+        self.loadMainSitesRecords = function ($event) {
+            if (self.filter.ui.key_siteType.value && self.mainSiteSearchText) {
+                correspondenceViewService.correspondenceSiteSearch('main', {
+                    type: self.filter.ui.key_siteType.value.hasOwnProperty('lookupKey') ? self.filter.ui.key_siteType.value.lookupKey : self.filter.ui.key_siteType.value,
+                    criteria: self.mainSiteSearchText,
+                    excludeOuSites: false
+                }).then(function (result) {
+                    if (result.length) {
+                        var availableMainSitesIds = _.map(self.mainSitesCopy, 'id');
+                        result = _.filter(result, function (corrSite) {
+                            return availableMainSitesIds.indexOf(corrSite.id) === -1;
+                        });
+                        self.mainSites = self.mainSites.concat(result);
+                        self.mainSitesCopy = angular.copy(self.mainSites);
+                    } else {
+                        self.mainSites = angular.copy(self.mainSitesCopy);
+                    }
+                }).catch(function (error) {
+                    self.mainSites = angular.copy(self.mainSitesCopy);
+                });
             }
         };
     });

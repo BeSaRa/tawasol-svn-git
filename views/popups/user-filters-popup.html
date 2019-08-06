@@ -66,6 +66,7 @@
                                     <md-input-container flex>
                                         <label for="docType">{{ctrl.lookupNames['key_2'].getTranslatedName()}}</label>
                                         <md-select name="docType" id="docType"
+                                                   ng-change="ctrl.onChangeDocumentType($event)"
                                                    ng-model="ctrl.filter.ui.key_2.value">
                                             <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option ng-value="docType.lookupKey"
@@ -282,7 +283,7 @@
                                         </md-select>
                                     </md-input-container>
                                 </div>
-                                <div layout="row">
+                                <div layout="row" ng-if="ctrl.filter.ui.key_2.value !== 2">
                                     <!-- Correspondence Site Type -->
                                     <md-input-container flex>
                                         <label for="siteType">{{ctrl.lookupNames['key_siteType'].getTranslatedName()}}</label>
@@ -293,7 +294,7 @@
                                                    data-md-container-class="select-header-container">
                                             <md-select-header class="select-header">
                                                 <input ng-model="ctrl.siteTypeSearchText"
-                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       ng-keydown="ctrl.handleSearchKeyDown($event, 'siteType')"
                                                        placeholder="{{lang.search}}"
                                                        class="select-header-input">
                                             </md-select-header>
@@ -316,15 +317,27 @@
                                                    md-on-close="ctrl.clearSearchText('mainSite')"
                                                    ng-change="ctrl.getSubSites(true, $event)"
                                                    data-md-container-class="select-header-container">
-                                            <md-select-header class="select-header">
-                                                <input ng-model="ctrl.mainSiteSearchText"
-                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
-                                                       placeholder="{{lang.search}}"
-                                                       class="select-header-input">
+                                            <md-select-header class="select-header" layout="column">
+                                                <div layout="row" flex class="size-100">
+                                                    <input ng-model="ctrl.mainSiteSearchText"
+                                                           ng-model-options="{trackBy: '$value'}"
+                                                           ng-keydown="ctrl.handleSearchKeyDown($event, 'mainSite')"
+                                                           placeholder="{{lang.search}}"
+                                                           class="select-header-input">
+                                                    <md-button ng-if="ctrl.mainSiteSearchText"
+                                                               ng-click="ctrl.loadMainSitesRecords($event)"
+                                                               class="select-header-icon md-icon-button"
+                                                               tooltip="{{lang.load_more_records}}">
+                                                        <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                    </md-button>
+                                                </div>
+                                                <div class="help-text-div" ng-if="ctrl.mainSiteSearchText">
+                                                    {{lang.press_enter_to_load_more_records}}
+                                                </div>
                                             </md-select-header>
                                             <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option
-                                                    ng-repeat="mainSite in ctrl.mainSites | translatedNameFilter: ctrl.mainSiteSearchText track by $index"
+                                                    ng-repeat="mainSite in ctrl.mainSites | translatedNameFilter: ctrl.mainSiteSearchText"
                                                     ng-value="mainSite.id">
                                     <span
                                             md-highlight-text="ctrl.mainSiteSearchText"
@@ -342,7 +355,7 @@
                                                    data-md-container-class="select-header-container">
                                             <md-select-header class="select-header">
                                                 <input ng-model="ctrl.subSiteSearchText"
-                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       ng-keydown="ctrl.handleSearchKeyDown($event, 'subSite')"
                                                        placeholder="{{lang.search}}"
                                                        class="select-header-input">
                                             </md-select-header>
