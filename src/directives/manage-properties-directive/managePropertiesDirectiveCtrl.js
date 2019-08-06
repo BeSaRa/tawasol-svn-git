@@ -539,8 +539,8 @@ module.exports = function (app) {
                             var lookups = {classifications: result.first, ouClassifications: result.second},
                                 classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups).classifications;
 
-                            self.classifications = self.classifications.concat(classificationsUnion);
-                            self.classificationsCopy = self.classificationsCopy.concat(classificationsUnion);
+                            self.classifications = _.uniqBy(self.classifications.concat(classificationsUnion), 'classification.id');
+                            self.classificationsCopy = angular.copy(self.classifications);
                         } else {
                             self.classifications = angular.copy(self.classificationsCopy);
                         }
@@ -552,42 +552,36 @@ module.exports = function (app) {
         };
 
         self.loadSubClassificationRecords = function () {
-            if (self.document.mainClassification) {
+            if (self.document.mainClassification && self.subClassificationSearchText) {
                 var mainClassification = _.find(self.classifications, function (classification) {
                         return classification.classification.id === self.document.mainClassification.id;
                     }).classification,
                     mainClassificationCopy = _.find(self.classificationsCopy, function (classification) {
                         return classification.classification.id === self.document.mainClassification.id;
-                    }).classification,
-                    subClassificationsCopy = mainClassificationCopy.children;
+                    }).classification;
 
+                classificationService.loadClassificationsPairBySearchText(self.subClassificationSearchText, self.document.securityLevel, self.document.mainClassification, false)
+                    .then(function (result) {
+                        if (result.first.length || result.second.length) {
+                            var lookups = {classifications: result.first, ouClassifications: result.second},
+                                classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups, self.document.mainClassification).classifications,
+                                subClassifications = [];
 
-                    if (self.subClassificationSearchText) {
-                        classificationService.loadClassificationsPairBySearchText(self.subClassificationSearchText, self.document.securityLevel, self.document.mainClassification, false)
-                            .then(function (result) {
-                                var lookups = {classifications: result.first, ouClassifications: result.second},
-                                    classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups, self.document.mainClassification).classifications,
-                                    subClassifications = [];
+                            _.map(classificationsUnion, function (ouClassification) {
+                                subClassifications = subClassifications.concat(ouClassification.classification.children);
+                                return ouClassification;
+                            });
 
-                                _.map(classificationsUnion, function (ouClassification) {
-                                    subClassifications = subClassifications.concat(ouClassification.classification.children);
-                                    return ouClassification;
-                                });
-
-                                if (subClassifications && subClassifications.length) {
-                                    self.document.mainClassification.children = self.document.mainClassification.children.concat(subClassifications);
-                                    mainClassification.children = mainClassification.children.concat(subClassifications);
-
-                                    self.classificationsCopy = angular.copy(self.classifications);
-                                } else {
-                                    self.document.mainClassification.children = angular.copy(subClassificationsCopy);
-                                }
-                            })
-                            .catch(function (error) {
-                                self.document.mainClassification.children = angular.copy(subClassificationsCopy);
-                            })
-                    }
-
+                            self.document.mainClassification.children = _.uniqBy(self.document.mainClassification.children.concat(subClassifications), 'id');
+                            mainClassification.children = angular.copy(self.document.mainClassification.children);
+                            self.classificationsCopy = angular.copy(self.classifications);
+                        } else {
+                            self.document.mainClassification.children = angular.copy(mainClassificationCopy.children);
+                        }
+                    })
+                    .catch(function (error) {
+                        self.document.mainClassification.children = angular.copy(mainClassificationCopy.children);
+                    })
             }
         };
 
@@ -595,12 +589,12 @@ module.exports = function (app) {
             if (self.documentFileSearchText) {
                 documentFileService.loadDocumentFilesBySearchText(self.documentFileSearchText, self.document.securityLevel, null, false)
                     .then(function (result) {
-                        var lookups = {documentFiles: result.first, ouDocumentFiles: result.second},
-                            documentFilesUnion = correspondenceService.prepareLookupHierarchy(lookups).documentFiles;
+                        if (result.first.length || result.second.length) {
+                            var lookups = {documentFiles: result.first, ouDocumentFiles: result.second},
+                                documentFilesUnion = correspondenceService.prepareLookupHierarchy(lookups).documentFiles;
 
-                        if (documentFilesUnion && documentFilesUnion.length) {
-                            self.documentFiles = self.documentFiles.concat(documentFilesUnion);
-                            self.documentFilesCopy = self.documentFilesCopy.concat(documentFilesUnion);
+                            self.documentFiles = _.uniqBy(self.documentFiles.concat(documentFilesUnion), 'file.id');
+                            self.documentFilesCopy = angular.copy(self.documentFiles);
                         } else {
                             self.documentFiles = angular.copy(self.documentFilesCopy);
                         }
