@@ -364,7 +364,7 @@
                             </div>
                         </md-select-header>
                         <md-option ng-value="file.file"
-                                   ng-repeat="file in ctrl.documentFiles | translatedNameFilter: ctrl.documentFileSearchText">
+                                   ng-repeat="file in ctrl.documentFiles | translatedNameFilter: ctrl.documentFileSearchText:null:'file'">
                             <span
                                     md-highlight-text="ctrl.documentFileSearchText"
                                     md-highlight-flags="i">{{file.file.getTranslatedName()}}</span>
