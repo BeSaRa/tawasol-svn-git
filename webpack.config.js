@@ -14,7 +14,7 @@ module.exports = function (env) {
         entry: './src/app.js',
         output: {
             path: path.resolve(__dirname),
-            publicPath: '/',
+            publicPath: '',
             filename: 'dist/js/bundle.js'
         },
         devtool: !isProduction(env) ? 'eval' : false,
