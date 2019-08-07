@@ -9,6 +9,22 @@ module.exports = function (env) {
         options: {sourceMap: !isProduction(env)}
     };
 
+    const fileLoader = (isProduction(env) ? {
+        loader: 'file-loader',
+        options: {
+            name: '[name].[ext]',
+            publicPath: '../fonts/',
+            outputPath: 'dist/fonts'
+        }
+    } : {
+        loader: 'file-loader',
+        options: {
+            name: 'dist/fonts/[name].[ext]',
+            useRelativePath: false
+        }
+    });
+
+
     return {
         mode: isProduction(env) ? env.mode : 'development',
         entry: './src/app.js',
@@ -38,13 +54,7 @@ module.exports = function (env) {
                 },
                 {
                     test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/,
-                    use: {
-                        loader: 'file-loader',
-                        options: {
-                            name: 'dist/fonts/[name].[ext]',
-                            useRelativePath: false
-                        }
-                    }
+                    use: fileLoader
                 },
                 {
                     test: /\.(gif|svg|png|jpg)$/i,
