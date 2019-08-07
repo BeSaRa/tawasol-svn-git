@@ -542,16 +542,15 @@ module.exports = function (app) {
         /**
          * @description make an update for given correspondence.
          * @param correspondence
-         * @param withOutCheck
+         * @param withoutCheck
          * @return {Promise|Correspondence}
          */
-        var saveDefer = $q.defer();
-        self.updateCorrespondence = function (correspondence, withOutCheck) {
+        self.updateCorrespondence = function (correspondence, withoutCheck) {
             var route = 'metadata';
             var info = correspondence.getInfo();
 
             // to check weather incoming reference no already exists
-            if (!withOutCheck && info.documentClass === 'incoming') {
+            if (!withoutCheck && info.documentClass === 'incoming') {
                 route += '?with-check=true';
             }
 
@@ -560,20 +559,10 @@ module.exports = function (app) {
                     generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence)
                 )
                 .then(function () {
-                    saveDefer.resolve(generator.generateInstance(correspondence, _getModel(correspondence.docClassName)));
+                    return (generator.generateInstance(correspondence, _getModel(correspondence.docClassName)));
                 }).catch(function (error) {
-                if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
-                    dialog.confirmMessage(self.getTranslatedError(error) + "<br/>" + langService.get('confirm_continue_message'))
-                        .then(function () {
-                            self.updateCorrespondence(correspondence, true);
-                        }).catch(function () {
-                        saveDefer.reject();
-                    })
-                } else {
-                    saveDefer.reject(self.getTranslatedError(error));
-                }
+                return $q.reject(error);
             });
-            return saveDefer.promise;
         };
 
         /**
@@ -599,9 +588,10 @@ module.exports = function (app) {
         /**
          * @description  add correspondence
          * @param correspondence
+         * @param skipCheck
          * @return {Promise|Correspondence}
          */
-        self.createCorrespondence = function (correspondence, withOutCheck) {
+        self.createCorrespondence = function (correspondence, skipCheck) {
             var route = correspondence.docStatus === 3 ? 'draft' : 'metadata';
             var info = correspondence.getInfo();
             if (correspondence.contentFile) {
@@ -610,31 +600,21 @@ module.exports = function (app) {
                     correspondence.signaturesCount = 1;
             }
 
-            // to check weather incoming reference no already exists
-            if (!withOutCheck && info.documentClass === 'incoming') {
+            // to check whether incoming reference no already exists
+            if (!skipCheck && info.documentClass === 'incoming') {
                 route += '?with-check=true';
             }
-            $http
+            return $http
                 .post(_createUrlSchema(correspondence.vsId, correspondence.docClassName, route),
                     generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence)
                 )
                 .then(function (result) {
                     correspondence.vsId = result.data.rs;
-                    saveDefer.resolve(generator.generateInstance(correspondence, _getModel(correspondence.docClassName)));
-                    //return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
-                }).catch(function (error) {
-                if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
-                    dialog.confirmMessage(self.getTranslatedError(error) + "<br/>" + langService.get('confirm_continue_message'))
-                        .then(function () {
-                            self.createCorrespondence(correspondence, true);
-                        }).catch(function () {
-                        saveDefer.reject();
-                    })
-                } else {
-                    saveDefer.reject(self.getTranslatedError(error));
-                }
-            });
-            return saveDefer.promise;
+                    return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                })
+                .catch(function (error) {
+                    return $q.reject(error);
+                });
         };
         /**
          * add Correspondence with the full-template

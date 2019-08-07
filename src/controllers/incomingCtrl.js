@@ -31,7 +31,8 @@ module.exports = function (app) {
                                              receiveG2G, // available when g2g receive
                                              duplicateVersion,
                                              mailNotificationService,
-                                             gridService) {
+                                             gridService,
+                                             errorCode) {
         'ngInject';
         var self = this;
         self.controllerName = 'incomingCtrl';
@@ -125,7 +126,7 @@ module.exports = function (app) {
 
         self.requestCompleted = false;
         self.saveInProgress = false;
-        self.saveCorrespondence = function (status) {
+        self.saveCorrespondence = function (status, skipCheck, isSaveAndPrintBarcode) {
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
                 return;
@@ -139,7 +140,7 @@ module.exports = function (app) {
                 promise = self.incoming.receiveG2GDocument();
             } else {
                 promise = self.incoming
-                    .saveDocument(status);
+                    .saveDocument(status, !!skipCheck);
             }
 
             return promise.then(function (result) {
@@ -147,7 +148,7 @@ module.exports = function (app) {
                 self.model = angular.copy(self.incoming);
                 self.documentInformationExist = !!angular.copy(self.documentInformation);
 
-                var newId = self.model.vsId;
+                //var newId = self.model.vsId;
 
                 /*If content file was attached */
                 if (self.incoming.contentFile) {
@@ -156,7 +157,8 @@ module.exports = function (app) {
                             self.contentFileExist = !!(self.incoming.hasOwnProperty('contentFile') && self.incoming.contentFile);
                             self.contentFileSizeExist = !!(self.contentFileExist && self.incoming.contentFile.size);
 
-                            saveCorrespondenceFinished(status, newId);
+                            saveCorrespondenceFinished(status, isSaveAndPrintBarcode);
+                            return true;
                         })
                 } else if (duplicateVersion && self.incoming.hasContent()) {
                     return self.incoming
@@ -164,46 +166,71 @@ module.exports = function (app) {
                         .then(function () {
                             self.contentFileExist = true;
                             self.contentFileSizeExist = true;
-                            saveCorrespondenceFinished(status, newId);
+                            saveCorrespondenceFinished(status, isSaveAndPrintBarcode);
+                            return true;
                         });
                 } else {
                     self.contentFileExist = false;
                     self.contentFileSizeExist = false;
 
-                    saveCorrespondenceFinished(status, newId);
+                    saveCorrespondenceFinished(status, isSaveAndPrintBarcode);
                     return true;
                 }
 
             })
                 .catch(function (error) {
                     self.saveInProgress = false;
-                    // don't show the error in g2g receive because handled by error dialog
-                    if (error && !self.receiveG2G)
-                        toast.error(error);
+                    if(isSaveAndPrintBarcode){
+                        return $q.reject(error);
+                    }
+                    if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
+                        var errorObj = error.data.eo, msg = errorObj[langService.current + 'Name'];
+                        dialog.confirmMessage(msg + "<br/>" + langService.get('confirm_continue_message'))
+                            .then(function () {
+                                return self.saveCorrespondence(status, true, isSaveAndPrintBarcode);
+                            }).catch(function () {
+                            return $q.reject(error);
+                        });
+                    } else {
+                        // don't show the error in g2g receive because handled by error dialog
+                        if (error && !self.receiveG2G)
+                            toast.error(error);
 
-                    return $q.reject(error);
+                        return $q.reject(error);
+                    }
                 });
         };
 
 
         self.saveCorrespondenceAndPrintBarcode = function ($event) {
-            self.saveCorrespondence()
+            self.saveCorrespondence(null, false, true)
                 .then(function () {
                     self.docActionPrintBarcode(self.incoming, $event);
                 })
+                .catch(function (error) {
+                    if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
+                        var errorObj = error.data.eo, msg = errorObj[langService.current + 'Name'];
+                        dialog.confirmMessage(msg + "<br/>" + langService.get('confirm_continue_message'))
+                            .then(function () {
+                                self.saveCorrespondence(null, true, true)
+                                    .then(function () {
+                                        self.docActionPrintBarcode(self.incoming, $event);
+                                    })
+                            }).catch(function () {
+                            return $q.reject(error);
+                        });
+                    }
+                })
         };
 
-        var saveCorrespondenceFinished = function (status, newId) {
+        var saveCorrespondenceFinished = function (status, isSaveAndPrintBarcode) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             counterService.loadCounters();
             // once saved/received, don't consider the request as receive/receiveG2G
             self.receive = false;
             self.receiveG2G = false;
-            if (status) {// || (self.incoming.contentFile)
+            if (status) {
                 toast.success(langService.get('save_success'));
-                /*$timeout(function () {
-                    $state.go('app.incoming.draft');
-                })*/
                 self.requestCompleted = true;
                 self.saveInProgress = false;
             } else {
@@ -219,8 +246,7 @@ module.exports = function (app) {
                 self.requestCompleted = true;
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
-
-                if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')) {
+                if (!isSaveAndPrintBarcode && employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')) {
                     if (centralArchives && self.incoming.hasContent()) {
                         self.docActionLaunchDistributionWorkflow(self.incoming);
                     } else if (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist)) {

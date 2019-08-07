@@ -216,19 +216,19 @@ module.exports = function (app) {
             Correspondence.prototype.hasContent = function () {
                 return !!this.contentSize;
             };
-            Correspondence.prototype.updateDocument = function () {
-                return correspondenceService.updateCorrespondence(this);
+            Correspondence.prototype.updateDocument = function (skipCheck) {
+                return correspondenceService.updateCorrespondence(this, skipCheck);
             };
-            Correspondence.prototype.createDocument = function () {
+            Correspondence.prototype.createDocument = function (skipCheck) {
                 // in case if no ou and has registryOU set the ou as registryOU for document
                 if (!this.ou && this.registryOU)
                     this.ou = this.registryOU;
-                return correspondenceService.createCorrespondence(this);
+                return correspondenceService.createCorrespondence(this, skipCheck);
             };
-            Correspondence.prototype.saveDocument = function (status) {
+            Correspondence.prototype.saveDocument = function (status, skipCheck) {
                 if (status)
                     this.docStatus = queueStatusService.getDocumentStatus(status);
-                return this.hasVsId() ? this.updateDocument() : this.createDocument();
+                return this.hasVsId() ? this.updateDocument(skipCheck) : this.createDocument(skipCheck);
             };
 
 
