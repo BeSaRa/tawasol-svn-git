@@ -67,6 +67,19 @@ module.exports = function (app) {
                                 return true;
                             }
                         },
+                        // Full History
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_full_history',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_full_history', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
                         // Linked Documents History
                         {
                             type: 'action',
@@ -179,19 +192,6 @@ module.exports = function (app) {
                             checkShow: function (action, model) {
                                 var info = model.getInfo();
                                 return info.documentClass === "outgoing";
-                            }
-                        },
-                        // Full History
-                        {
-                            type: 'action',
-                            icon: '',
-                            text: 'view_tracking_sheet_full_history',
-                            shortcut: false,
-                            callback: self.viewTrackingSheet,
-                            params: ['view_tracking_sheet_full_history', 'grid', parentGridName],
-                            class: "action-green",
-                            checkShow: function (action, model) {
-                                return true;
                             }
                         },
                         // Document Link Viewers History

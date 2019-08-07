@@ -83,10 +83,10 @@ module.exports = function (app) {
             var message, defer = $q.defer();
             message = langService.getConcatenated(['edit_in_desktop_confirmation_1', 'edit_in_desktop_confirmation_2', 'edit_in_desktop_confirmation_3']);
 
-            if (!self.info.editByDeskTop) {
-                self.editMode = true;
-                return;
-            }
+            // if (!self.info.editByDeskTop) {
+            //     self.editMode = true;
+            //     return;
+            // }
             dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('edit-in-desktop-confirm-template'),
@@ -96,6 +96,7 @@ module.exports = function (app) {
 
                         ctrl.editInDesktopCallback = function () {
                             self.editMode = false;
+                            dialog.hide();
                             _openInDesktop();
                         };
 
