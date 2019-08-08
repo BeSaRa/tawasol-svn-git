@@ -180,6 +180,7 @@ module.exports = function (app) {
                     'security_level',
                     'sent_date',
                     'document_number',
+                    'g2g_book_number',
                     'sent_items_receive_date',
                     'status'
                 ];

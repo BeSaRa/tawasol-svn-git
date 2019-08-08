@@ -21,7 +21,8 @@ module.exports = function (app) {
                     sent_date: 'sentDate',
                     status: function () {
                         return this.statusInfo.getTranslatedName()
-                    }
+                    },
+                    'g2g_book_number': 'g2GRefNo'
                 };
 
             self.refDocId = null;
