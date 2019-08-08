@@ -77,17 +77,17 @@
     </div>
     <div ng-class="{'hide-widgets':!ctrl.editMode}" id="element-container" class="z-index hide-widgets top-left">
         <div id="align-arrow">
-            <md-button ng-click="ctrl.changeAlign('left')" class="md-icon-button layout-builder-left-arrow">
+            <md-button ng-click="ctrl.changeAlign('left')" class="md-icon-button layout-builder-button layout-builder-left-arrow">
                 <md-icon md-svg-icon="arrow-left-drop-circle"></md-icon>
             </md-button>
-            <!--<md-button ng-click="ctrl.changeAlign('top')" class="md-icon-button">
-                <md-icon md-svg-icon="arrow-up-drop-circle"></md-icon>
-            </md-button>
-            <md-button ng-click="ctrl.changeAlign('bottom')" class="md-icon-button">
+            <!--<md-button ng-click="ctrl.changeAlign('bottom')" class="md-icon-button">
                 <md-icon md-svg-icon="arrow-down-drop-circle"></md-icon>
             </md-button>-->
-            <md-button ng-click="ctrl.changeAlign('right')" class="md-icon-button layout-builder-left-arrow">
+            <md-button ng-click="ctrl.changeAlign('right')" class="md-icon-button layout-builder-button layout-builder-left-arrow">
                 <md-icon md-svg-icon="arrow-right-drop-circle"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.toggleEditMode()" class="md-icon-button layout-builder-button">
+                <md-icon md-svg-icon="close"></md-icon>
             </md-button>
         </div>
         <div id="inner-container">
