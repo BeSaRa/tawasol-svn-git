@@ -102,11 +102,11 @@ module.exports = function (app) {
          */
         self.pushEntityType = function (entityType) {
             _createEntity(entityType);
-            if (entityType.lookupStrKey.toLowerCase() === 'employee' &&
+            if (entityType.lookupStrKey && entityType.lookupStrKey.toLowerCase() === 'employee' &&
                 rootEntity.returnRootEntity().rootEntity.hrEnabled) {
                 self.openHREmployeeIntegrationDialog()
                     .then(function (employees) {
-                        self.editMode = false; // rest editMode in case you edited existing employee and add new 
+                        self.editMode = false; // rest editMode in case you edited existing employee and add new
                         self.entity = employees;
                         self.addEntityToDocument();
                     })
