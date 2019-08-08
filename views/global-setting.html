@@ -350,32 +350,32 @@
                                     <span>{{lang.register_administration_operation}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('auditAdminOperation')}}
                                 </md-switch>
                             </div>
-                            <div layout="column" flex class="p20">
-                                <div class="">
-                                    <md-button tooltip="{{lang.manage_users_to_exclude_from_audit_log}}"
-                                               class="md-icon-button"
-                                               ng-click="ctrl.selectExcludedApplicationUsers($event)">
-                                        <md-icon md-svg-icon="plus"></md-icon>
-                                    </md-button>
-                                    <span>{{lang.manage_users_to_exclude_from_audit_log}}</span></div>
-                                <table md-table>
-                                    <thead md-head>
-                                    <tr md-row>
-                                        <th md-column>{{lang.arabic_name}}</th>
-                                        <th md-column>{{lang.english_name}}</th>
-                                        <th md-column>{{lang.login_name}}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody md-body>
-                                    <tr md-row
-                                        ng-repeat="appUser in ctrl.globalSetting.excludedUsersFromAudit track by $index">
-                                        <td md-cell>{{appUser.arFullName}}</td>
-                                        <td md-cell>{{appUser.enFullName}}</td>
-                                        <td md-cell>{{appUser.loginName}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+<!--                            <div layout="column" flex class="p20">-->
+<!--                                <div class="">-->
+<!--                                    <md-button tooltip="{{lang.manage_users_to_exclude_from_audit_log}}"-->
+<!--                                               class="md-icon-button"-->
+<!--                                               ng-click="ctrl.selectExcludedApplicationUsers($event)">-->
+<!--                                        <md-icon md-svg-icon="plus"></md-icon>-->
+<!--                                    </md-button>-->
+<!--                                    <span>{{lang.manage_users_to_exclude_from_audit_log}}</span></div>-->
+<!--                                <table md-table>-->
+<!--                                    <thead md-head>-->
+<!--                                    <tr md-row>-->
+<!--                                        <th md-column>{{lang.arabic_name}}</th>-->
+<!--                                        <th md-column>{{lang.english_name}}</th>-->
+<!--                                        <th md-column>{{lang.login_name}}</th>-->
+<!--                                    </tr>-->
+<!--                                    </thead>-->
+<!--                                    <tbody md-body>-->
+<!--                                    <tr md-row-->
+<!--                                        ng-repeat="appUser in ctrl.globalSetting.excludedUsersFromAudit track by $index">-->
+<!--                                        <td md-cell>{{appUser.arFullName}}</td>-->
+<!--                                        <td md-cell>{{appUser.enFullName}}</td>-->
+<!--                                        <td md-cell>{{appUser.loginName}}</td>-->
+<!--                                    </tr>-->
+<!--                                    </tbody>-->
+<!--                                </table>-->
+<!--                            </div>-->
                         </div>
                         <br/>
                         <br/>
