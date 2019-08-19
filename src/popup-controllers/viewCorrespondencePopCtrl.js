@@ -352,6 +352,8 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.isShowViewerAction = function (action) {
+            if (!self.workItem)
+                return false;
             if (action.hasOwnProperty('checkAnyPermission')) {
                 return action.checkShow(action, self.workItem, action.checkAnyPermission);
             }

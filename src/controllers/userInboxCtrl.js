@@ -1594,6 +1594,7 @@ module.exports = function (app) {
                         permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
                         callback: self.manageComments,
                         class: "action-green",
+                        sticky: true,
                         checkShow: function (action, model) {
                             return true;
                         }
