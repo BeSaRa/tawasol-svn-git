@@ -22,7 +22,8 @@ module.exports = function (app) {
                                                          fullHistoryRecords,
                                                          documentLinkViewerRecords,
                                                          viewTrackingSheetService,
-                                                         gridService) {
+                                                         gridService,
+                                                         employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewTrackingSheetPopCtrl';
@@ -38,8 +39,7 @@ module.exports = function (app) {
                 self.popupHeading = self.popupHeadingForPrint = self.popupHeading + ' : ' + docSubject;
             if (info.docFullSerial)
                 self.popupHeading = self.popupHeadingForPrint = self.popupHeading + ' : ' + info.docFullSerial;
-        }
-        else if (self.gridType === 'tabs') {
+        } else if (self.gridType === 'tabs') {
             self.popupHeading = langService.get('view_tracking_sheet');
             self.popupHeadingForPrint = langService.get(self.selectedTab);
             if (docSubject) {
@@ -296,7 +296,7 @@ module.exports = function (app) {
             self.mergedLinkedDocumentHistoryRecords.splice(indexOfMainDoc, 1);
             self.mergedLinkedDocumentHistoryRecords.unshift(mainDoc);
         };
-        if(self.mergedLinkedDocumentHistoryRecords.length){
+        if (self.mergedLinkedDocumentHistoryRecords.length) {
             self.sortMergedLinkedDocs();
         }
 
@@ -348,8 +348,9 @@ module.exports = function (app) {
         self.showTab = function (tabName) {
             if (tabName === 'view_tracking_sheet_outgoing_delivery_reports' || tabName === 'view_tracking_sheet_destination_history') {
                 return (self.tabsToShow.indexOf(tabName) > -1 && info.documentClass === 'outgoing');
-            }
-            else if (tabName === 'view_tracking_sheet_sms_logs'){
+            } else if (tabName === 'view_tracking_sheet_content_view_history') {
+                return (self.tabsToShow.indexOf(tabName) > -1 && employeeService.hasPermissionTo('VIEW_CONTENT_LOG'));
+            } else if (tabName === 'view_tracking_sheet_sms_logs') {
                 return (parentGridName === gridService.grids.inbox.userInbox
                     || parentGridName === gridService.grids.inbox.group
                     || parentGridName === gridService.grids.inbox.favorite
@@ -363,7 +364,6 @@ module.exports = function (app) {
             return (self.tabsToShow.indexOf(tabName) > -1);
         };
 
-        //self.selectedTab = "view_tracking_sheet_work_flow_history";
         self.selectedTab = '';
         self.setCurrentTab = function (tabName) {
             self.selectedTab = tabName;
@@ -389,7 +389,7 @@ module.exports = function (app) {
             'view_tracking_sheet_linked_entities_history': self.linkedEntitiesHistoryRecords.length,
             'view_tracking_sheet_destination_history': self.destinationHistoryRecords.length,
             'view_tracking_sheet_content_view_history': self.contentViewHistoryRecords.length,
-            'view_tracking_sheet_sms_logs' : self.smsLogRecords.length,
+            'view_tracking_sheet_sms_logs': self.smsLogRecords.length,
             'view_tracking_sheet_outgoing_delivery_reports': self.outgoingDeliveryReportRecords.length,
             'view_tracking_sheet_full_history': self.fullHistoryRecords.length,
             'view_tracking_sheet_document_link_viewer_history': self.documentLinkViewerRecords.length

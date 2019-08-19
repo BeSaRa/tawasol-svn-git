@@ -153,6 +153,7 @@ module.exports = function (app) {
                             text: 'view_tracking_sheet_content_view_history',
                             shortcut: false,
                             callback: self.viewTrackingSheet,
+                            permissionKey: "VIEW_CONTENT_LOG",
                             params: ['view_tracking_sheet_content_view_history', 'grid', parentGridName],
                             class: "action-green",
                             checkShow: function (action, model) {

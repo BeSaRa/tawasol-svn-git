@@ -8,7 +8,7 @@
                 <!-- SINGLE GRID VIEW -->
                 <div md-dynamic-height ng-if="ctrl.gridType !== 'tabs'">
                     <!-- Workflow History Grid -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_work_flow_history'">
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_work_flow_history' && ctrl.showTab('view_tracking_sheet_work_flow_history')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <md-card>
@@ -70,7 +70,7 @@
                         </md-content>
                     </div>
                     <!-- Full History -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_full_history'">
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_full_history' && ctrl.showTab('view_tracking_sheet_full_history')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <md-card>
@@ -127,7 +127,7 @@
                         </md-content>
                     </div>
                     <!-- Linked Documents History Grid -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_linked_documents_history'">
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_linked_documents_history' && ctrl.showTab('view_tracking_sheet_linked_documents_history')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row" class="p020">
@@ -204,7 +204,7 @@
                         </md-content>
                     </div>
                     <!-- Attachments History Grid -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_attachments_history'">
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_attachments_history' && ctrl.showTab('view_tracking_sheet_attachments_history')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row" class="p020">
@@ -275,7 +275,7 @@
                         </md-content>
                     </div>
                     <!-- Merged Linked Document History Grid -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_merged_linked_document_history'">
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_merged_linked_document_history' && ctrl.showTab('view_tracking_sheet_merged_linked_document_history')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row" class="p020">
@@ -358,7 +358,7 @@
                         </md-content>
                     </div>
                     <!-- Linked Entities History Grid -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_linked_entities_history'">
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_linked_entities_history' && ctrl.showTab('view_tracking_sheet_linked_entities_history')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <md-card>
@@ -421,7 +421,7 @@
                         </md-content>
                     </div>
                     <!-- Destination History -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_destination_history'">
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_destination_history' && ctrl.showTab('view_tracking_sheet_destination_history')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <md-card>
@@ -481,7 +481,7 @@
                         </md-content>
                     </div>
                     <!-- Content View History -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_content_view_history'">
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_content_view_history' && ctrl.showTab('view_tracking_sheet_content_view_history')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row" class="p020">
@@ -564,7 +564,7 @@
                         </md-content>
                     </div>
                     <!-- SMS Logs -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_sms_logs'">
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_sms_logs' && ctrl.showTab('view_tracking_sheet_sms_logs')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <md-card>
@@ -613,7 +613,7 @@
                         </md-content>
                     </div>
                     <!-- Outgoing Delivery Reports / Messaging History -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_outgoing_delivery_reports'">
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_outgoing_delivery_reports' && ctrl.showTab('view_tracking_sheet_outgoing_delivery_reports')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <md-card>
@@ -701,7 +701,7 @@
                         </md-content>
                     </div>
                     <!-- Document Link Viewers -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_document_link_viewer_history'">
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_document_link_viewer_history' && ctrl.showTab('view_tracking_sheet_document_link_viewer_history')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <md-card>
