@@ -29,7 +29,8 @@ module.exports = function (app) {
                                                   mailNotificationService,
                                                   gridService,
                                                   favoriteDocumentsService,
-                                                  centralArchives,
+                                                  //centralArchives,
+                                                  registryOrganizations,
                                                   userSubscriptionService,
                                                   printService) {
         'ngInject';
@@ -71,7 +72,8 @@ module.exports = function (app) {
 
         self.validateLabelsSearchGeneral = {};
 
-        self.registryOrganizations = employeeService.isCentralArchive() ? angular.copy(centralArchives) : angular.copy(organizationService.getAllRegistryOrganizations());
+        //self.registryOrganizations = employeeService.isCentralArchive() ? angular.copy(centralArchives) : angular.copy(organizationService.getAllRegistryOrganizations());
+        self.registryOrganizations = registryOrganizations;
 
 
         function _mapResultToAvoidCorrespondenceCheck(result) {

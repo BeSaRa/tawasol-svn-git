@@ -28,7 +28,8 @@ module.exports = function (app) {
                                                    mailNotificationService,
                                                    gridService,
                                                    favoriteDocumentsService,
-                                                   centralArchives,
+                                                   //centralArchives,
+                                                   registryOrganizations,
                                                    userSubscriptionService,
                                                    printService) {
         'ngInject';
@@ -72,7 +73,8 @@ module.exports = function (app) {
 
         self.validateLabelsSearchIncoming = {};
 
-        self.registryOrganizations = employeeService.isCentralArchive() ? angular.copy(centralArchives) : angular.copy(organizationService.getAllRegistryOrganizations());
+        //self.registryOrganizations = employeeService.isCentralArchive() ? angular.copy(centralArchives) : angular.copy(organizationService.getAllRegistryOrganizations());
+        self.registryOrganizations = registryOrganizations;
 
         /**
          * @description Checks if the field is mandatory

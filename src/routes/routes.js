@@ -661,6 +661,33 @@ module.exports = function (app) {
                     lookups: function (correspondenceService) {
                         'ngInject';
                         return correspondenceService.getCorrespondenceLookups('common');
+                    },
+                    /*centralArchives: function ($q, employeeService, organizationService) {
+                        'ngInject';
+                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                    },*/
+                    registryOrganizations: function (employeeService, $q, _, organizationService) {
+                        'ngInject';
+                        if (employeeService.isCentralArchive()) {
+                            return organizationService.centralArchiveOrganizations()
+                                .then(function (centralArchives) {
+                                    return organizationService.getUserViewPermissionOusByUserId(employeeService.getEmployee().id)
+                                        .then(function (result) {
+                                            var availableOUIds = _.map(centralArchives, 'id');
+                                            result = _.filter(result, function (ouViewPermission) {
+                                                return availableOUIds.indexOf(ouViewPermission.id) === -1;
+                                            });
+                                            return centralArchives.concat(result);
+                                        })
+                                });
+                        } else if (employeeService.hasPermissionTo('SEARCH_IN_ALL_OU')) {
+                            return organizationService.loadOrganizations(true);
+                        } else {
+                            return organizationService.getUserViewPermissionOusByUserId(employeeService.getEmployee().id)
+                                .then(function (result) {
+                                    return result;
+                                })
+                        }
                     }
                 }
             })
@@ -672,7 +699,7 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module_outgoing',
                 resolve: {
-                    organizations: function (organizationService) {
+                    organizations: function (organizationService, _) {
                         'ngInject';
                         return organizationService.loadOrganizations()
                             .then(function (result) {
@@ -697,10 +724,6 @@ module.exports = function (app) {
                             .searchByCriteria({
                                 regOu: employeeService.getEmployee().organization.ouRegistryID
                             });
-                    },
-                    centralArchives: function ($q, organizations, employeeService, organizationService) {
-                        'ngInject';
-                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                     }
                 }
             })
@@ -712,7 +735,7 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module_incoming',
                 resolve: {
-                    organizations: function (organizationService) {
+                    organizations: function (organizationService, _) {
                         'ngInject';
                         return organizationService.loadOrganizations()
                             .then(function (result) {
@@ -730,10 +753,6 @@ module.exports = function (app) {
                         var ouId = employeeService.getEmployee().organization.ouid;
                         return propertyConfigurationService
                             .loadPropertyConfigurationsByDocumentClassAndOU('incoming', ouId);
-                    },
-                    centralArchives: function ($q, organizations, employeeService, organizationService) {
-                        'ngInject';
-                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                     }
                 }
             })
@@ -745,7 +764,7 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module_internal',
                 resolve: {
-                    organizations: function (organizationService) {
+                    organizations: function (organizationService, _) {
                         'ngInject';
                         return organizationService.loadOrganizations()
                             .then(function (result) {
@@ -770,10 +789,6 @@ module.exports = function (app) {
                             .searchByCriteria({
                                 regOu: employeeService.getEmployee().organization.ouRegistryID
                             });
-                    },
-                    centralArchives: function ($q, organizations, employeeService, organizationService) {
-                        'ngInject';
-                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                     }
                 }
             })
@@ -785,7 +800,7 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module_general',
                 resolve: {
-                    organizations: function (organizationService) {
+                    organizations: function (organizationService, _) {
                         'ngInject';
                         return organizationService.loadOrganizations()
                             .then(function (result) {
@@ -803,12 +818,7 @@ module.exports = function (app) {
                         var ouId = employeeService.getEmployee().organization.ouid;
                         return propertyConfigurationService
                             .loadPropertyConfigurationsByDocumentClassAndOU('general', ouId);
-                    },
-                    centralArchives: function ($q, organizations, employeeService, organizationService) {
-                        'ngInject';
-                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                     }
-
                 }
             })
             //Outgoing Incoming Search
@@ -819,7 +829,7 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module_outgoing_incoming',
                 resolve: {
-                    organizations: function (organizationService) {
+                    organizations: function (organizationService, _) {
                         'ngInject';
                         return organizationService.loadOrganizations()
                             .then(function (result) {
@@ -837,10 +847,6 @@ module.exports = function (app) {
                         var ouId = employeeService.getEmployee().organization.ouid;
                         return propertyConfigurationService
                             .loadPropertyConfigurationsByDocumentClassAndOU('incoming', ouId);
-                    },
-                    centralArchives: function ($q, organizations, employeeService, organizationService) {
-                        'ngInject';
-                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                     }
                 }
             })
@@ -964,7 +970,7 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_document_templates',
                 resolve: {
-                    organizations: function (organizationService) {
+                    organizations: function (organizationService, _) {
                         'ngInject';
                         return organizationService.loadOrganizations()
                             .then(function (result) {

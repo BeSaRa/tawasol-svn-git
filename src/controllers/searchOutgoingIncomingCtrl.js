@@ -13,7 +13,8 @@ module.exports = function (app) {
                                                            validationService,
                                                            generator,
                                                            //rootEntity,
-                                                           centralArchives,
+                                                           //centralArchives,
+                                                           registryOrganizations,
                                                            Organization,
                                                            organizationService,
                                                            managerService,
@@ -72,7 +73,8 @@ module.exports = function (app) {
 
         self.validateLabelsSearchOutgoingIncoming = {};
 
-        self.registryOrganizations = employeeService.isCentralArchive() ? angular.copy(centralArchives) : angular.copy(organizationService.getAllRegistryOrganizations());
+        //self.registryOrganizations = employeeService.isCentralArchive() ? angular.copy(centralArchives) : angular.copy(organizationService.getAllRegistryOrganizations());
+        self.registryOrganizations = registryOrganizations;
 
         /**
          * @description Checks if the field is mandatory

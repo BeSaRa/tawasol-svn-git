@@ -8,8 +8,6 @@
                     <md-select name="registryOU" id="registryOU"
                                ng-model="ctrl.document.registryOU"
                                ng-change="ctrl.onRegistryChanged()"
-                               ng-disabled="!ctrl.employee.hasPermissionTo('SEARCH_IN_ALL_OU')"
-                               ng-readonly="!ctrl.employee.hasPermissionTo('SEARCH_IN_ALL_OU')"
                                md-on-close="ctrl.clearSearchText('regOU')"
                                data-md-container-class="select-header-container">
                         <md-select-header class="select-header">

@@ -786,7 +786,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.getOUsViewPermissionForUser = function (userId) {
-            userId = userId && userId.hasOwnProperty('id') ? userId : userId;
+            userId = userId && userId.hasOwnProperty('id') ? userId.id : userId;
 
             return $http.get(urlService.ouViewPermission + '/user-id/' + userId).then(function (result) {
                 self.ouViewPermissions = generator.generateCollection(result.data.rs, OUViewPermission, self._sharedMethods);

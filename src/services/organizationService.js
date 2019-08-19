@@ -40,13 +40,18 @@ module.exports = function (app) {
          * @description load organizations from server.
          * @returns {Promise|organizations}
          */
-        self.loadOrganizations = function () {
-            return $http.get(urlService.organizations).then(function (result) {
+        self.loadOrganizations = function (skipUserRole) {
+            var url = urlService.organizations;
+            if (skipUserRole){
+                url = url + '/lookup';
+            }
+            return $http.get(url).then(function (result) {
                 self.organizations = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
                 self.organizations = generator.interceptReceivedCollection('Organization', self.organizations);
                 return self.organizations;
             });
         };
+
         /**
          * @description get all registry organizations
          * @param returnPromise
@@ -655,6 +660,21 @@ module.exports = function (app) {
                     return organizations.length ? organizations : false;
                 });
         };
+
+        /**
+         * @description get ou view permission organizations by user id
+         * @param userId
+         * @returns {*}
+         */
+        self.getUserViewPermissionOusByUserId = function (userId) {
+            userId = userId && userId.hasOwnProperty('id') ? userId.id : userId;
+            return $http.get(urlService.ouViewPermission + '/lookup/user-id/' + userId).then(function (result) {
+                var ous = generator.generateCollection(result.data.rs, WFOrganization, self._sharedMethods);
+                ous = generator.interceptReceivedCollection('WFOrganization', ous);
+                return ous;
+            });
+        };
+
         /**
          * @description sync organizations
          * @return {*}

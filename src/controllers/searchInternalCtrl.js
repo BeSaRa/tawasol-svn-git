@@ -28,7 +28,8 @@ module.exports = function (app) {
                                                    gridService,
                                                    mailNotificationService,
                                                    favoriteDocumentsService,
-                                                   centralArchives,
+                                                   //centralArchives,
+                                                   registryOrganizations,
                                                    approvers,
                                                    userSubscriptionService,
                                                    printService) {
@@ -72,7 +73,8 @@ module.exports = function (app) {
 
         self.validateLabelsSearchInternal = {};
 
-        self.registryOrganizations = employeeService.isCentralArchive() ? angular.copy(centralArchives) : angular.copy(organizationService.getAllRegistryOrganizations());
+        //self.registryOrganizations = employeeService.isCentralArchive() ? angular.copy(centralArchives) : angular.copy(organizationService.getAllRegistryOrganizations());
+        self.registryOrganizations = registryOrganizations;
 
         /**
          * @description Checks if the field is mandatory
