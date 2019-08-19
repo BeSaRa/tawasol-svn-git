@@ -45,7 +45,7 @@ module.exports = function (app) {
             return $controller('searchOutgoingCtrl', {
                 organizations: [],
                 propertyConfigurations: [],
-                centralArchives: false,
+                registryOrganizations: false,
                 approvers: [],
                 reviewOutgoings: []
             });
@@ -55,7 +55,7 @@ module.exports = function (app) {
             return $controller('searchIncomingCtrl', {
                 organizations: [],
                 propertyConfigurations: [],
-                centralArchives: false,
+                registryOrganizations: false,
                 reviewIncomings: []
             });
         });
@@ -64,7 +64,7 @@ module.exports = function (app) {
             return $controller('searchInternalCtrl', {
                 organizations: [],
                 propertyConfigurations: [],
-                centralArchives: false,
+                registryOrganizations: false,
                 approvers: [],
                 reviewInternals: []
             });
