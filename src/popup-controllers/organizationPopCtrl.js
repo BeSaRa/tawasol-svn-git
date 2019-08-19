@@ -560,10 +560,10 @@ module.exports = function (app) {
 
                     var isValidWFSecurityLevel = true;
 
-                    if (selectedWFSecurityKey > initialWFSecurityKey) {
+                    /*if (selectedWFSecurityKey > initialWFSecurityKey) {
                         isValidWFSecurityLevel = false;
                         dialog.errorMessage(langService.get('error_setting_workflow_security_to_lower_level'));
-                    }
+                    }*/
 
                     //////////////////////// if workflow security level is valid , then update /////////////////////////
                     if (isValidWFSecurityLevel) {
