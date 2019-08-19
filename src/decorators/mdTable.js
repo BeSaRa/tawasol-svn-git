@@ -2,6 +2,12 @@ module.exports = function (app) {
     app.config(function ($provide) {
         'ngInject';
         $provide.decorator('mdTableDirective', ['$delegate', function ($delegate) {
+            var controllersList = [
+                'workflowUsersDirectiveCtrl',
+                'workflowItemsDirectiveCtrl',
+                'employeeHRIntegrationPopCtrl'
+            ];
+
             function Hash() {
                 var keys = {};
 
@@ -84,8 +90,8 @@ module.exports = function (app) {
                     return true;
                 }
 
-                function _checkIfInsideWorkflowUserDirective() {
-                    return $scope.$parent && $scope.$parent.ctrl && $scope.$parent.ctrl.controllerName && ($scope.$parent.ctrl.controllerName === 'workflowUsersDirectiveCtrl' || $scope.$parent.ctrl.controllerName === 'workflowItemsDirectiveCtrl');
+                function _checkIfFromSpecificControllers() {
+                    return $scope.$parent && $scope.$parent.ctrl && $scope.$parent.ctrl.controllerName && (controllersList.indexOf($scope.$parent.ctrl.controllerName) !== -1);
                 }
 
                 self.columnCount = function () {
@@ -115,7 +121,7 @@ module.exports = function (app) {
                 };
 
                 self.enableMultiSelect = function () {
-                    return $attrs.multiple === '' || $scope.$eval($attrs.multiple) || (_checkIfInsideWorkflowUserDirective() && $scope.$eval($attrs.multiple, $scope.$parent));
+                    return !!($attrs.multiple === '' || $scope.$eval($attrs.multiple) || (_checkIfFromSpecificControllers() && $scope.$eval($attrs.multiple, $scope.$parent)));
                 };
 
                 self.waitingOnPromise = function () {
