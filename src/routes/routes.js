@@ -662,10 +662,6 @@ module.exports = function (app) {
                         'ngInject';
                         return correspondenceService.getCorrespondenceLookups('common');
                     },
-                    /*centralArchives: function ($q, employeeService, organizationService) {
-                        'ngInject';
-                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
-                    },*/
                     registryOrganizations: function (employeeService, $q, _, organizationService) {
                         'ngInject';
                         if (employeeService.hasPermissionTo('SEARCH_IN_ALL_OU')) {

@@ -28,7 +28,6 @@ module.exports = function (app) {
                                                    correspondenceService,
                                                    favoriteDocumentsService,
                                                    mailNotificationService,
-                                                   //centralArchives,
                                                    registryOrganizations,
                                                    approvers,
                                                    userSubscriptionService,
