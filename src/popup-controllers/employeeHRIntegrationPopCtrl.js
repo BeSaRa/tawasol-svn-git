@@ -4,7 +4,6 @@ module.exports = function (app) {
                                                              validationService,
                                                              generator,
                                                              $interval,
-                                                             fromApplicationUser,
                                                              dialog,
                                                              managerService,
                                                              linkedEntities,
@@ -24,7 +23,6 @@ module.exports = function (app) {
         self.linkedEntitiesCopy = angular.copy(linkedEntities);
         self.hasEmployees = _isLinkedEntitiesHasEmployee();
         self.selectedExcludedEmployeeNumbers = _.map(self.linkedEntitiesCopy, 'employeeNum');
-        self.fromApplicationUser = fromApplicationUser;
         /**
          * @description Set the current tab name
          * @param tabName

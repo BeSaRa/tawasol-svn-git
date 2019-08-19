@@ -466,7 +466,7 @@ module.exports = function (app) {
                     templateUrl: cmsTemplate.getPopup('hr-employee-integration'),
                     controller: 'employeeHRIntegrationPopCtrl',
                     controllerAs: 'ctrl',
-                    bindToController: false,
+                    bindToController: true,
                     locals: {
                         linkedEntities: linkedEntities,
                         fromApplicationUser: fromApplicationUser
