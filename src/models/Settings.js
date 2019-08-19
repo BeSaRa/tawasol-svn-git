@@ -10,7 +10,7 @@ module.exports = function (app) {
             var requiredFields = [];
 
             if (model) {
-                if (model.theme)
+                if (model.theme && model.theme.hasOwnProperty('id'))
                     model.theme = generator.interceptReceivedInstance('Theme', new Theme(model.theme));
                 angular.extend(this, model);
             }

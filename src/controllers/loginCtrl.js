@@ -44,32 +44,6 @@ module.exports = function (app) {
         // concat public and global announcements
         self.announcements = self.publicAnnouncements.concat(self.globalAnnouncements);
 
-        // self.rows = [
-        //     {name: 'BeSaRa', age: 15, jobTitle: 'AngularJS Developer', active: true},
-        //     {name: 'Sudir', age: 20, jobTitle: 'Web Developer', active: false},
-        //     {name: 'Manish', age: 40, jobTitle: 'Web Developer', active: true},
-        //     {name: 'Navjot', age: 13, jobTitle: 'Web Developer', active: false},
-        //     {name: 'Mohamed', age: 78, jobTitle: 'Web Developer', active: false}
-        // ];
-        //
-        // self.filter = {};
-        //
-        // var filter = new FilterFactory('filter');
-        //
-        // filter.setOptions(
-        //     [
-        //         filter.text('search by name', 'name'),
-        //         filter.select('select age', 'age', [15, 20, 40, 13, 78]),
-        //         filter.switch('select status', 'active', true, false)
-        //     ]
-        // );
-        //
-        // filter
-        //     .openFilter()
-        //     .then(function (result) {
-        //
-        //     });
-
 
         function checkIfLogoutBySession() {
             if ($cookies.get(authenticationService.logoutBySessionsKey)) {

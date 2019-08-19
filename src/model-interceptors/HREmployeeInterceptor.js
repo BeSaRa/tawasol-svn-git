@@ -2,8 +2,7 @@ module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       LinkedObject,
                       HREmployee,
-                      entityTypeService
-    ) {
+                      entityTypeService) {
         'ngInject';
         var modelName = 'HREmployee';
 
@@ -13,11 +12,11 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             model = new HREmployee(model);
-
             return model;
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            var oldModel = angular.copy(model);
             model.typeId = 1; // for employees linked object
             model = new LinkedObject({
                 mobileNumber: model.mobile,
@@ -30,7 +29,9 @@ module.exports = function (app) {
                 typeId: entityTypeService.getEntityTypeById(model.typeId)
             });
 
-
+            if (oldModel.attachDomainName) {
+                model.domainName = oldModel.domainName;
+            }
             return model;
         });
 

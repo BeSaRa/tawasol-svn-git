@@ -178,6 +178,165 @@ module.exports = function (app) {
                 return this[key + 'FullName'] ? this[key + 'FullName'] : null;
             };
 
+            // add setter for application user
+
+            ApplicationUser.prototype.setId = function (id) {
+                this.id = id;
+                return this;
+            };
+            ApplicationUser.prototype.setArFullName = function (arFullName) {
+                this.arFullName = arFullName;
+                return this;
+            };
+            ApplicationUser.prototype.setLoginName = function (loginName) {
+                this.loginName = loginName;
+                return this;
+            };
+            ApplicationUser.prototype.setEnFullName = function (enFullName) {
+                this.enFullName = enFullName;
+                return this;
+            };
+            ApplicationUser.prototype.setEmployeeNo = function (employeeNo) {
+                this.employeeNo = employeeNo;
+                return this;
+            };
+            ApplicationUser.prototype.setQid = function (qid) {
+                this.qid = qid;
+                return this;
+            };
+            ApplicationUser.prototype.setDomainName = function (domainName) {
+                this.domainName = domainName;
+                return this;
+            };
+            ApplicationUser.prototype.setRank = function (rank) {
+                this.rank = rank;
+                return this;
+            };
+            ApplicationUser.prototype.setJobTitle = function (jobTitle) {
+                this.jobTitle = jobTitle;
+                return this;
+            };
+            ApplicationUser.prototype.setSubscriptionsmsNotify = function (subscriptionsmsNotify) {
+                this.subscriptionsmsNotify = subscriptionsmsNotify;
+                return this;
+            };
+            ApplicationUser.prototype.setNewItemEmailNotify = function (newItemEmailNotify) {
+                this.newItemEmailNotify = newItemEmailNotify;
+                return this;
+            };
+            ApplicationUser.prototype.setNewsmsEmailNotify = function (newsmsEmailNotify) {
+                this.newsmsEmailNotify = newsmsEmailNotify;
+                return this;
+            };
+            ApplicationUser.prototype.setDeadlineEmailNotify = function (deadlineEmailNotify) {
+                this.deadlineEmailNotify = deadlineEmailNotify;
+                return this;
+            };
+            ApplicationUser.prototype.setDefaultDisplayLang = function (defaultDisplayLang) {
+                this.defaultDisplayLang = defaultDisplayLang;
+                return this;
+            };
+            ApplicationUser.prototype.setSearchAmountLimit = function (searchAmountLimit) {
+                this.searchAmountLimit = searchAmountLimit;
+                return this;
+            };
+            ApplicationUser.prototype.setSubscriptionEmailNotify = function (subscriptionEmailNotify) {
+                this.subscriptionEmailNotify = subscriptionEmailNotify;
+                return this;
+            };
+            ApplicationUser.prototype.setDeadlinesmsNotify = function (deadlinesmsNotify) {
+                this.deadlinesmsNotify = deadlinesmsNotify;
+                return this;
+            };
+            ApplicationUser.prototype.setReminderEmailNotify = function (reminderEmailNotify) {
+                this.reminderEmailNotify = reminderEmailNotify;
+                return this;
+            };
+            ApplicationUser.prototype.setReminderSmsnotify = function (reminderSmsnotify) {
+                this.reminderSmsnotify = reminderSmsnotify;
+                return this;
+            };
+            ApplicationUser.prototype.setNewItemEmailPriority = function (newItemEmailPriority) {
+                this.newItemEmailPriority = newItemEmailPriority;
+                return this;
+            };
+            ApplicationUser.prototype.setNewItemSmspriority = function (newItemSmspriority) {
+                this.newItemSmspriority = newItemSmspriority;
+                return this;
+            };
+            ApplicationUser.prototype.setEmail = function (email) {
+                this.email = email;
+                return this;
+            };
+            ApplicationUser.prototype.setDeadlineEmailPriority = function (deadlineEmailPriority) {
+                this.deadlineEmailPriority = deadlineEmailPriority;
+                return this;
+            };
+            ApplicationUser.prototype.setDeadlineSmspriority = function (deadlineSmspriority) {
+                this.deadlineSmspriority = deadlineSmspriority;
+                return this;
+            };
+            ApplicationUser.prototype.setReminderEmailPriority = function (reminderEmailPriority) {
+                this.reminderEmailPriority = reminderEmailPriority;
+                return this;
+            };
+            ApplicationUser.prototype.setReminderSmsPriority = function (reminderSmsPriority) {
+                this.reminderSmsPriority = reminderSmsPriority;
+                return this;
+            };
+            ApplicationUser.prototype.setReminderEmailDays = function (reminderEmailDays) {
+                this.reminderEmailDays = reminderEmailDays;
+                return this;
+            };
+            ApplicationUser.prototype.setReminderSmsdays = function (reminderSmsdays) {
+                this.reminderSmsdays = reminderSmsdays;
+                return this;
+            };
+            ApplicationUser.prototype.setMobile = function (mobile) {
+                this.mobile = mobile;
+                return this;
+            };
+            ApplicationUser.prototype.setGender = function (gender) {
+                this.gender = gender;
+                return this;
+            };
+            ApplicationUser.prototype.setInboxRefreshInterval = function (inboxRefreshInterval) {
+                this.inboxRefreshInterval = inboxRefreshInterval;
+                return this;
+            };
+            ApplicationUser.prototype.setDefaultOUID = function (defaultOUID) {
+                this.defaultOUID = defaultOUID;
+                return this;
+            };
+            ApplicationUser.prototype.setDefaultThemeID = function (defaultThemeID) {
+                this.defaultThemeID = defaultThemeID;
+                return this;
+            };
+            ApplicationUser.prototype.setClassificationPermisssions = function (classificationPermisssions) {
+                this.classificationPermisssions = classificationPermisssions;
+                return this;
+            };
+            ApplicationUser.prototype.setActions = function (actions) {
+                this.actions = actions;
+                return this;
+            };
+            ApplicationUser.prototype.setOutOfOffice = function (outOfOffice) {
+                this.outOfOffice = outOfOffice;
+                return this;
+            };
+            ApplicationUser.prototype.setViewInboxAsGrid = function (viewInboxAsGrid) {
+                this.viewInboxAsGrid = viewInboxAsGrid;
+                return this;
+            };
+            ApplicationUser.prototype.setDefaultViewerLang = function (defaultViewerLang) {
+                this.defaultViewerLang = defaultViewerLang;
+                return this;
+            };
+            ApplicationUser.prototype.setDefaultEditMode = function (defaultEditMode) {
+                this.defaultEditMode = defaultEditMode;
+                return this;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('ApplicationUser', 'init', this);

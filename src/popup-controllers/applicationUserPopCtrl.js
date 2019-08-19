@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                        ApplicationUser,
                                                        tokenService,
                                                        validationService,
+                                                       managerService,
                                                        generator,
                                                        dialog,
                                                        langService,
@@ -49,9 +50,6 @@ module.exports = function (app) {
         self.editMode = editMode;
         self.globalSetting = rootEntity.returnRootEntity().settings;
         self.applicationUser = angular.copy(applicationUser);
-        if (!editMode) {
-            self.applicationUser.searchAmountLimit = angular.copy(self.globalSetting.searchAmount);
-        }
 
         self.maxRowCount = angular.copy(self.globalSetting.searchAmountLimit);
         self.model = angular.copy(applicationUser);
@@ -60,6 +58,9 @@ module.exports = function (app) {
         self.rootEntity = rootEntity;
         self.inlineUserOUSearchText = '';
         self.inlineOuSearchText = '';
+
+        self.hrEnabled = self.rootEntity.returnRootEntity().rootEntity.hrEnabled;
+
 
         self.validateLabels = {
             arFullName: 'arabic_full_name',
@@ -110,6 +111,13 @@ module.exports = function (app) {
         self.roles = roles;
         self.organizations = organizations;
         self.organizationsCopy = _sortRegOusSections(angular.copy(self.organizations), true);
+
+
+        if (!editMode) {
+            self.applicationUser.searchAmountLimit = angular.copy(self.globalSetting.searchAmount);
+            self.applicationUser.defaultThemeID = self.globalSetting.theme && self.globalSetting.theme.hasOwnProperty('id') ? self.globalSetting.theme.id : self.globalSetting.theme;
+            self.applicationUser.jobTitle = self.jobTitles && self.jobTitles.length ? self.jobTitles[0].lookupKey : null;
+        }
 
         function _sortRegOusSections(organizations, appendRegOUSection) {
             // filter all regOU
@@ -1471,5 +1479,26 @@ module.exports = function (app) {
         self.closeApplicationUserPopupFromCtrl = function () {
             dialog.cancel();
         };
+        /**
+         * @default get the employee date from HR Service
+         * @param $event
+         * @returns {*}
+         */
+        self.searchInHRIntegration = function ($event) {
+            return managerService
+                .openHREmployeeIntegration($event, [], true)
+                .then(function (user) {
+                    user = user[0];
+                    self.applicationUser
+                        .setArFullName(user.fullNameAr)
+                        .setEnFullName(user.fullNameEn)
+                        .setDomainName(user.domainName)
+                        .setLoginName(user.domainName)
+                        .setEmployeeNo(user.employeeNum)
+                        .setMobile(user.mobileNumber)
+                        .setQid(user.qid)
+                        .setEmail(user.email);
+                });
+        }
     });
 };

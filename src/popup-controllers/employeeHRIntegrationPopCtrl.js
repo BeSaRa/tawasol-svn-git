@@ -42,7 +42,7 @@ module.exports = function (app) {
         }
 
         self.search = function () {
-            managerService.searchForIntegratedHREmployees(self.criteria)
+            managerService.searchForIntegratedHREmployees(self.criteria, self.attachDomainNameToModel)
                 .then(function (result) {
                     if (self.hasEmployees) {
                         self.employees = _.filter(result, function (hrEmployee) {

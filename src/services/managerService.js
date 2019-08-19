@@ -469,7 +469,8 @@ module.exports = function (app) {
                     bindToController: true,
                     locals: {
                         linkedEntities: linkedEntities,
-                        fromApplicationUser: fromApplicationUser
+                        fromApplicationUser: fromApplicationUser,
+                        attachDomainNameToModel: fromApplicationUser
                     }
                 })
         };
@@ -478,10 +479,16 @@ module.exports = function (app) {
         /**
          * @description search for hr employees when hr Enabled
          */
-        self.searchForIntegratedHREmployees = function (criteria) {
+        self.searchForIntegratedHREmployees = function (criteria, attachDomainNameToModel) {
             return $http.post(urlService.hrEmployeeIntegration, generator.interceptSendInstance('HREmployee', criteria))
                 .then(function (result) {
                     var employeeLinkedEntity = generator.generateCollection(result.data.rs, HREmployee, self._sharedMethods);
+                    if (attachDomainNameToModel) {
+                        employeeLinkedEntity = _.map(employeeLinkedEntity, function (item) {
+                            item.attachDomainName = true;
+                            return item;
+                        });
+                    }
                     employeeLinkedEntity = generator.interceptReceivedCollection('HREmployee', employeeLinkedEntity);
                     return employeeLinkedEntity;
                 })

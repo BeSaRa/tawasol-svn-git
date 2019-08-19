@@ -2,8 +2,10 @@
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_application_user: ctrl.model.getNames()}}">
     <div layout="column">
-        <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_application_user}}"></popup-toolbar-directive>
-        <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="!ctrl.editMode"
+                                 header-text="{{lang.add_new_application_user}}"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.editMode"
+                                 header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <form name="applicationUserForm" autocomplete="off">
                 <md-tabs md-dynamic-height>
@@ -37,6 +39,12 @@
                                             <div ng-message="ENSS">{{lang.english_number_space}}</div>
                                             <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
                                         </div>
+                                    </md-input-container>
+                                    <md-input-container ng-if="!ctrl.editMode && ctrl.hrEnabled">
+                                        <md-button tooltip="{{lang.load_user_information_from_hr}}"
+                                                   ng-click="ctrl.searchInHRIntegration($event)" class="md-icon-button">
+                                            <md-icon md-svg-icon="account-arrow-left"></md-icon>
+                                        </md-button>
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
