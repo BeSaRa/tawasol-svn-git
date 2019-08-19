@@ -457,7 +457,22 @@ module.exports = function (app) {
                     }
                 }
             );
-        }
+        };
+
+        self.openHREmployeeIntegration = function ($event, linkedEntities, fromApplicationUser) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    templateUrl: cmsTemplate.getPopup('hr-employee-integration'),
+                    controller: 'employeeHRIntegrationPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: false,
+                    locals: {
+                        linkedEntities: linkedEntities,
+                        fromApplicationUser: fromApplicationUser
+                    }
+                })
+        };
 
 
         /**

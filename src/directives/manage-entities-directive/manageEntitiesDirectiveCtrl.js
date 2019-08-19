@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                             LinkedObject,
                                                             dialog,
                                                             outgoingService,
+                                                            managerService,
                                                             $timeout,
                                                             toast,
                                                             correspondenceService,
@@ -291,17 +292,7 @@ module.exports = function (app) {
          * @returns {promise}
          */
         self.openHREmployeeIntegrationDialog = function ($event) {
-            return dialog
-                .showDialog({
-                    targetEvent: $event,
-                    templateUrl: cmsTemplate.getPopup('hr-employee-integration'),
-                    controller: 'employeeHRIntegrationPopCtrl',
-                    controllerAs: 'ctrl',
-                    bindToController: true,
-                    locals: {
-                        linkedEntities: self.linkedEntities
-                    }
-                });
+            return managerService.openHREmployeeIntegration($event, self.linkedEntities);
         };
 
     });

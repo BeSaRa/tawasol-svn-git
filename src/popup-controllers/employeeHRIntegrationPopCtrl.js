@@ -3,6 +3,8 @@ module.exports = function (app) {
                                                              toast,
                                                              validationService,
                                                              generator,
+                                                             $interval,
+                                                             fromApplicationUser,
                                                              dialog,
                                                              managerService,
                                                              linkedEntities,
@@ -20,7 +22,9 @@ module.exports = function (app) {
         self.selectedTabIndex = 0;
         self.entityTypes = entityTypeService.getEntityTypes();
         self.linkedEntitiesCopy = angular.copy(linkedEntities);
-
+        self.hasEmployees = _isLinkedEntitiesHasEmployee();
+        self.selectedExcludedEmployeeNumbers = _.map(self.linkedEntitiesCopy, 'employeeNum');
+        self.fromApplicationUser = fromApplicationUser;
         /**
          * @description Set the current tab name
          * @param tabName
@@ -29,21 +33,26 @@ module.exports = function (app) {
             self.selectedTabName = tabName;
         };
 
+        self.canSelectMulti = function () {
+            return !!(!self.fromApplicationUser);
+        };
+
+        function _isLinkedEntitiesHasEmployee() {
+            return _.some(self.linkedEntitiesCopy, function (linkedEntity) {
+                return linkedEntity.typeId.lookupStrKey.toLowerCase() === 'employee';
+            });
+        }
+
         self.search = function () {
             managerService.searchForIntegratedHREmployees(self.criteria)
                 .then(function (result) {
-                    var isIncludeEmployeeLinkedEntity = _.some(self.linkedEntitiesCopy, function (linkedEntity) {
-                        return linkedEntity.typeId.lookupStrKey.toLowerCase() === 'employee';
-                    });
-
-                    if (isIncludeEmployeeLinkedEntity) {
+                    if (self.hasEmployees) {
                         self.employees = _.filter(result, function (hrEmployee) {
-                            return _.map(self.linkedEntitiesCopy, 'employeeNum').indexOf(hrEmployee.employeeNum) === -1;
+                            return self.selectedExcludedEmployeeNumbers.indexOf(hrEmployee.employeeNum) === -1;
                         });
                     } else {
                         self.employees = result;
                     }
-
                     if (self.employees.length) {
                         self.selectedTabIndex = 1;
                     } else {
