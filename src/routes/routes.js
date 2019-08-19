@@ -668,19 +668,7 @@ module.exports = function (app) {
                     },*/
                     registryOrganizations: function (employeeService, $q, _, organizationService) {
                         'ngInject';
-                        if (employeeService.isCentralArchive()) {
-                            return organizationService.centralArchiveOrganizations()
-                                .then(function (centralArchives) {
-                                    return organizationService.getUserViewPermissionOusByUserId(employeeService.getEmployee().id)
-                                        .then(function (result) {
-                                            var availableOUIds = _.map(centralArchives, 'id');
-                                            result = _.filter(result, function (ouViewPermission) {
-                                                return availableOUIds.indexOf(ouViewPermission.id) === -1;
-                                            });
-                                            return centralArchives.concat(result);
-                                        })
-                                });
-                        } else if (employeeService.hasPermissionTo('SEARCH_IN_ALL_OU')) {
+                        if (employeeService.hasPermissionTo('SEARCH_IN_ALL_OU')) {
                             return organizationService.loadOrganizations(true);
                         } else {
                             return organizationService.getUserViewPermissionOusByUserId(employeeService.getEmployee().id)
