@@ -35,14 +35,32 @@ module.exports = function (app) {
 
         self.progress = null;
         contextHelpService.setHelpTo('followup-employee-inbox');
+        var gridSearchColumns = {
+            serial: 'generalStepElm.docFullSerial',
+            subject: 'generalStepElm.docSubject',
+            receivedDate: 'generalStepElm.receivedDate',
+            action: function (record) {
+                return self.getSortingKey('action', 'WorkflowAction');
+            },
+            sender: function (record) {
+                return self.getSortingKey('senderInfo', 'SenderInfo');
+            },
+            dueDate: 'generalStepElm.dueDate',
+            corrSite: function (record) {
+                return self.getSortingKey('mainSiteSubSiteString', 'Information');
+            },
+            numberOfDays: 'generalStepElm.numberOfDays',
+
+        };
 
         /**
          * @description All followup employee inbox
          * @type {*}
          */
-        // self.followupEmployeeInboxes = followupEmployeeInboxes;
+
         self.followupEmployeeInboxes = [];
-        /*self.userFolders = userFolders;*/
+        self.followupEmployeeInboxesCopy = [];
+
         self.langService = langService;
 
         /**
@@ -73,6 +91,11 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.followupEmp, self.followupEmployeeInboxes),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.followupEmp, limit);
+            },
+            searchColumns: gridSearchColumns,
+            searchText: '',
+            searchCallback: function (grid) {
+                self.followupEmployeeInboxes = gridService.searchGridData(self.grid, self.followupEmployeeInboxesCopy);
             },
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.followupEmp),
             setTruncateSubject: function ($event) {
@@ -121,6 +144,7 @@ module.exports = function (app) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.followupEmployeeInboxes = result;
+                    self.followupEmployeeInboxesCopy = angular.copy(self.followupEmployeeInboxes);
                     self.selectedFollowupEmployeeInboxes = [];
                     defer.resolve(true);
                     if (pageNumber)
