@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                   cmsTemplate,
                                                   $scope,
                                                   dialog,
+                                                  $element,
                                                   toast,
                                                   organizations,
                                                   organizationChartService,
@@ -95,6 +96,10 @@ module.exports = function (app) {
             }).catch(function (error) {
                 toast.error(error.data.eo[langService.current + 'Name']);
             })
+        };
+
+        self.resetView = function () {
+            $element.find('.orgchart').css('transform', '');
         };
 
         $scope.$watch(function () {

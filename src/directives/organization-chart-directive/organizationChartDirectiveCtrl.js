@@ -17,10 +17,6 @@ module.exports = function (app) {
 
         LangWatcher($scope);
 
-        self.resetView = function () {
-            $element.find('.orgchart').css('transform', '');
-        };
-
         self.toggleHide = function (index) {
             // console.log($scope.nodeList[index]);
         };
