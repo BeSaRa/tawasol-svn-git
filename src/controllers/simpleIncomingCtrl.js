@@ -30,7 +30,8 @@ module.exports = function (app) {
                                                    receive, // available when the normal receive.
                                                    receiveG2G, // available when g2g receive
                                                    mailNotificationService,
-                                                   gridService) {
+                                                   gridService,
+                                                   errorCode) {
         'ngInject';
         var self = this;
         self.controllerName = 'simpleIncomingCtrl';
