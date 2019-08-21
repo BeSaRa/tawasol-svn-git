@@ -306,6 +306,20 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description Archive the document to icn
+         * @param document
+         * @param $event
+         */
+        self.addToIcnArchive = function (document, $event) {
+            document.addToIcnArchiveDialog($event)
+                .then(function () {
+                    counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    self.resetAddCorrespondence();
+                });
+        };
+
         self.docActionManageTasks = function (document, $event) {
             console.log('manage tasks', document);
         };
@@ -414,6 +428,18 @@ module.exports = function (app) {
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
                     isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && !model.isPrivateSecurityLevel() && !model.isInternalPersonal(); //Don't show if its paper outgoing
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // Add To ICN Archive
+            {
+                text: langService.get('grid_action_icn_archive'),
+                callback: self.addToIcnArchive,
+                class: "action-green",
+                permissionKey: 'ICN_ENTRY_TEMPLATE',
+                checkShow: function (action, model, index) {
+                    isVisible = gridService.checkToShowAction(action);
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

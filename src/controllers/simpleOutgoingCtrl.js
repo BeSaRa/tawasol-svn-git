@@ -400,6 +400,20 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Archive the document to icn
+         * @param document
+         * @param $event
+         */
+        self.addToIcnArchive = function (document, $event) {
+            document.addToIcnArchiveDialog($event)
+                .then(function () {
+                    counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    self.resetAddCorrespondence();
+                });
+        };
+
         self.documentAction = null;
         self.performDocumentAction = function ($event) {
             self.documentAction.callback(self.outgoing, $event);
@@ -552,6 +566,18 @@ module.exports = function (app) {
 
                     //Don't show if its paper outgoing or any site is external/g2g or signatures count more than 1 or personal/private security level
                     isVisible = gridService.checkToShowAction(action)  && !model.isPrivateSecurityLevel() && !info.isPaper && !_hasExternalOrG2GSite(model) && _hasContent() && _hasSingleSignature(model);
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // Add To ICN Archive
+            {
+                text: langService.get('grid_action_icn_archive'),
+                callback: self.addToIcnArchive,
+                class: "action-green",
+                permissionKey: 'ICN_ENTRY_TEMPLATE',
+                checkShow: function (action, model, index) {
+                    isVisible = gridService.checkToShowAction(action);
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
