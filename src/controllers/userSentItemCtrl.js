@@ -118,11 +118,15 @@ module.exports = function (app) {
             }
         };
 
-        var _initEventHistoryCriteria = function () {
-            self.searchCriteria = new EventHistoryCriteria({
-                fromActionTime: moment().subtract(3, 'months').toDate(),
-                toActionTime: moment().endOf("day").toDate()
-            })
+        var _initEventHistoryCriteria = function (skipDates) {
+            if (skipDates) {
+                self.searchCriteria = new EventHistoryCriteria();
+            } else {
+                self.searchCriteria = new EventHistoryCriteria({
+                    fromActionTime: moment().subtract(3, 'months').toDate(),
+                    toActionTime: moment().endOf("day").toDate()
+                })
+            }
         };
 
         _initEventHistoryCriteria();
@@ -578,7 +582,7 @@ module.exports = function (app) {
                             'sent_items_serial_number',
                             'label_document_class',
                             'sent_items_document_subject',
-                            'sent_items_receive_date',
+                            'action_date',
                             'sent_items_action',
                             'sent_items_receiver',
                             'comment'
@@ -594,7 +598,7 @@ module.exports = function (app) {
                     ]
                 };
             printService
-                .printData(self.userSentItems, table, printTitle, self.searchCriteria);
+                .printData(self.userSentItems, table, printTitle, (self.searchCriteriaUsed ? self.searchCriteria : new EventHistoryCriteria()));
 
         };
 
@@ -734,7 +738,7 @@ module.exports = function (app) {
                 hide: false,
                 checkShow: function (action, model) {
                     /*workflowActionId == 9(terminated) or (actionType == 3 == broadcast)*/
-                    if (!(model instanceof EventHistory)){
+                    if (!(model instanceof EventHistory)) {
                         model = angular.copy(self.userSentItemCopy);
                     }
                     return (model.workflowActionId !== 9 && model.actionType !== 3 && model.wfId !== null);

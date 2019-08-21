@@ -20,9 +20,10 @@ module.exports = function (app) {
             if (model.selectedSubSite && model.selectedSubSite.id) {
                 model.sitesInfo.subSiteId = model.selectedSubSite.id;
             }
-
-            model.fromActionTime = model.fromActionTime ? moment(model.fromActionTime).startOf("day").valueOf() : moment().subtract(3, 'months').toDate();
-            model.toActionTime = model.toActionTime ? moment(model.toActionTime).endOf("day").valueOf() : moment().endOf("day").toDate();
+            if (model.fromActionTime)
+                model.fromActionTime = moment(model.fromActionTime).startOf("day").valueOf();
+            if (model.toActionTime)
+                model.toActionTime = moment(model.toActionTime).endOf("day").valueOf();
 
             delete model.selectedSiteType;
             delete model.selectedMainSite;

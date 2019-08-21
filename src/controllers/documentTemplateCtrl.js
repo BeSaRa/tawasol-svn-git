@@ -14,18 +14,20 @@ module.exports = function (app) {
                                                      selectedRegOU,
                                                      gridService,
                                                      generator,
-                                                     downloadService) {
+                                                     downloadService,
+                                                     employeeService) {
         'ngInject';
         var self = this;
 
         self.controllerName = 'documentTemplateCtrl';
         self.organizations = _.filter((angular.copy(organizations)), 'hasRegistry');
-
-        self.organizations.unshift(new Organization({
-            id: -1,
-            arName: langService.getKey('global_templates', 'ar'),
-            enName: langService.getKey('global_templates', 'en')
-        }));
+        if (employeeService.isSuperAdminUser()) {
+            self.organizations.unshift(new Organization({
+                id: -1,
+                arName: langService.getKey('global_templates', 'ar'),
+                enName: langService.getKey('global_templates', 'en')
+            }));
+        }
         self.progress = null;
         contextHelpService.setHelpTo('document-templates');
         /**
