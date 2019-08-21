@@ -9,13 +9,17 @@
                     <div layout="row">
                         <!-- Search Area -->
                         <md-card flex="30">
-                            <form class="white-bg" flex layout="column" autocomplete="off">
+                            <form name="watermarkSearchForm" class="white-bg" flex layout="column" autocomplete="off">
                                 <!-- Search Box and button -->
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="watermarkSearchText">{{lang.watermark}}</label>
                                         <input ng-model="ctrl.watermarkSearchText"
-                                               id="watermarkSearchText" name="watermarkSearchText">
+                                               id="watermarkSearchText" name="watermarkSearchText"
+                                               custom-validate-directive="E">
+                                        <div ng-messages="watermarkSearchForm.watermarkSearchText.$error">
+                                            <div ng-message="E">{{lang.english_only}}</div>
+                                        </div>
                                     </md-input-container>
                                     <md-button ng-click="ctrl.searchDocumentByWatermark($event)"
                                                ng-disabled="!ctrl.watermarkSearchText"
