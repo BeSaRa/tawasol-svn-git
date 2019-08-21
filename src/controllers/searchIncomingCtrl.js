@@ -31,7 +31,8 @@ module.exports = function (app) {
                                                    //centralArchives,
                                                    registryOrganizations,
                                                    userSubscriptionService,
-                                                   printService) {
+                                                   printService,
+                                                   $timeout) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchIncomingCtrl';
@@ -216,10 +217,12 @@ module.exports = function (app) {
          * @param $event
          */
         self.resetFilters = function (form, $event) {
-            self.searchIncoming = new IncomingSearch();
-            self.searchIncomingModel = angular.copy(self.searchIncoming);
+            self.searchIncoming = new IncomingSearch({dummySearchDocClass: 'incoming'});
             self.emptyResults = true;
             form.$setUntouched();
+            $timeout(function () {
+                self.searchIncomingModel = angular.copy(self.searchIncoming);
+            });
         };
 
         /**

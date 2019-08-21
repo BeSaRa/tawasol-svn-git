@@ -32,7 +32,8 @@ module.exports = function (app) {
                                                    registryOrganizations,
                                                    approvers,
                                                    userSubscriptionService,
-                                                   printService) {
+                                                   printService,
+                                                   $timeout) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchInternalCtrl';
@@ -202,10 +203,12 @@ module.exports = function (app) {
          * @param form
          */
         self.resetFilters = function (form) {
-            self.searchInternal = new InternalSearch();
-            self.searchInternalModel = angular.copy(self.searchInternal);
+            self.searchInternal = new InternalSearch({dummySearchDocClass: 'internal'});
             self.emptyResults = true;
             form.$setUntouched();
+            $timeout(function () {
+                self.searchInternalModel = angular.copy(self.searchInternal);
+            })
         };
 
         /**

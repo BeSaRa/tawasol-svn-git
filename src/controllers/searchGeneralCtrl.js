@@ -32,7 +32,8 @@ module.exports = function (app) {
                                                   //centralArchives,
                                                   registryOrganizations,
                                                   userSubscriptionService,
-                                                  printService) {
+                                                  printService,
+                                                  $timeout) {
         'ngInject';
 
         var self = this;
@@ -235,10 +236,12 @@ module.exports = function (app) {
          * @param form
          */
         self.resetFilters = function (form) {
-            self.searchGeneral = new GeneralSearch();
-            self.searchGeneralModel = angular.copy(self.searchGeneral);
+            self.searchGeneral = new GeneralSearch({dummySearchDocClass: 'correspondence'});
             self.emptyResults = true;
             form.$setUntouched();
+            $timeout(function () {
+                self.searchGeneralModel = angular.copy(self.searchGeneral);
+            })
         };
 
         /**
