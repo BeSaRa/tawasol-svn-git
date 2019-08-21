@@ -28,6 +28,7 @@ module.exports = function (app) {
             year: new Date().getFullYear()/*,
             registryOU: employeeService.getCurrentOUApplicationUser().ouRegistryID*/
         });
+        self.isViewCorrespondence = !!viewCallback;
 
         self.excludeVsId = excludeVsId;
         self.isAdminSearch = isAdminSearch;
@@ -175,6 +176,7 @@ module.exports = function (app) {
         };
 
         self.grid = {
+            progress: null,
             limit: 5, //self.globalSetting.searchAmount, // default limit
             page: 1, // first page
             order: 'arName', // default sorting order

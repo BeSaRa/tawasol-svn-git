@@ -57,11 +57,28 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Opens the correspondence to view
+         * @param correspondence
+         * @param $event
+         * @param forceStopPropagation
+         */
+        /*self.viewCorrespondence = function (correspondence, $event, forceStopPropagation) {
+            if ($event && forceStopPropagation) {
+                $event.stopPropagation();
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(correspondence, [], true, true);
+        };*/
+
+        /**
          * @description Opens the dialog to search documents to get logs
          * @param $event
          */
         self.showSearchDocumentDialog = function ($event) {
-            documentSecurityService.openSearchDocumentDialog(self.allSearchableRecords, self.viewCorrespondence, $event)
+            documentSecurityService.openSearchDocumentDialog(self.allSearchableRecords, null, $event)
                 .then(function (correspondences) {
                     self.allSearchableRecords = correspondences;
                     self.selectedDocument = null;
@@ -97,23 +114,6 @@ module.exports = function (app) {
                         self.viewerLogs = [];
                     }
                 })
-        };
-
-        /**
-         * @description Opens the correspondence to view
-         * @param correspondence
-         * @param $event
-         * @param forceStopPropagation
-         */
-        self.viewCorrespondence = function (correspondence, $event, forceStopPropagation) {
-            if ($event && forceStopPropagation) {
-                $event.stopPropagation();
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(correspondence, [], true, true);
         };
 
         /**

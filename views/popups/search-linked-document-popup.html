@@ -135,8 +135,9 @@
                             <md-card>
                                 <md-table-container>
                                     <div flex scroll-directive>
-                                        <table md-table md-row-select multiple="ctrl.multiSelect" ng-model="ctrl.selectedCorrespondences"
-                                               md-progress="ctrl.progress">
+                                        <table md-table md-row-select multiple="{{ctrl.multiSelect}}"
+                                               ng-model="ctrl.selectedCorrespondences"
+                                               md-progress="ctrl.grid.progress">
                                             <thead md-head md-order="ctrl.grid.order"
                                                    md-on-reorder="ctrl.getSortedData">
                                             <tr md-row>
@@ -185,46 +186,46 @@
                                                 selected-length="{{ctrl.selectedCorrespondences.length ? ctrl.selectedCorrespondences.length : 0}}"
                                                 ng-repeat="correspondence in ctrl.correspondences | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                                 <td md-cell class="indicator-td">
-                                    <span flex
-                                          ng-class="{'indicator-content': correspondence.securityLevelIndicator}">
-                                        <md-icon ng-if="correspondence.securityLevelIndicator"
-                                                 class="{{correspondence.securityLevelIndicator.class}}"
-                                                 md-svg-icon="{{correspondence.securityLevelIndicator.icon}}"
-                                                 tooltip="{{lang[correspondence.securityLevelIndicator.tooltip].change({name: correspondence.securityLevel.getTranslatedName()})}}"
-                                        ></md-icon>
-                                    </span>
+                                                    <span flex
+                                                          ng-class="{'indicator-content': correspondence.securityLevelIndicator}">
+                                                        <md-icon ng-if="correspondence.securityLevelIndicator"
+                                                                 class="{{correspondence.securityLevelIndicator.class}}"
+                                                                 md-svg-icon="{{correspondence.securityLevelIndicator.icon}}"
+                                                                 tooltip="{{lang[correspondence.securityLevelIndicator.tooltip].change({name: correspondence.securityLevel.getTranslatedName()})}}"
+                                                        ></md-icon>
+                                                    </span>
                                                     <span flex
                                                           ng-class="{'indicator-content': correspondence.priorityLevelIndicator}">
-                                        <md-icon ng-if="correspondence.priorityLevelIndicator"
-                                                 class="{{correspondence.priorityLevelIndicator.class}}"
-                                                 md-svg-icon="{{correspondence.priorityLevelIndicator.icon}}"
-                                                 tooltip="{{lang[correspondence.priorityLevelIndicator.tooltip].change({name: correspondence.priorityLevel.getTranslatedName()})}}"
-                                        ></md-icon>
-                                    </span>
+                                                        <md-icon ng-if="correspondence.priorityLevelIndicator"
+                                                                 class="{{correspondence.priorityLevelIndicator.class}}"
+                                                                 md-svg-icon="{{correspondence.priorityLevelIndicator.icon}}"
+                                                                 tooltip="{{lang[correspondence.priorityLevelIndicator.tooltip].change({name: correspondence.priorityLevel.getTranslatedName()})}}"
+                                                        ></md-icon>
+                                                    </span>
                                                     <span flex
                                                           ng-class="{'indicator-content': correspondence.attachmentsIndicator}">
-                                        <md-icon ng-if="correspondence.attachmentsIndicator"
-                                                 class="{{correspondence.attachmentsIndicator.class}}"
-                                                 md-svg-icon="{{correspondence.attachmentsIndicator.icon}}"
-                                                 tooltip="{{lang[correspondence.attachmentsIndicator.tooltip]}}"
-                                        ></md-icon>
-                                    </span>
+                                                        <md-icon ng-if="correspondence.attachmentsIndicator"
+                                                                 class="{{correspondence.attachmentsIndicator.class}}"
+                                                                 md-svg-icon="{{correspondence.attachmentsIndicator.icon}}"
+                                                                 tooltip="{{lang[correspondence.attachmentsIndicator.tooltip]}}"
+                                                        ></md-icon>
+                                                    </span>
                                                     <span flex
-                                                          ng-class="{'indicator-content': correspondence.linkedDocsIndicator}">
-                                        <md-icon ng-if="correspondence.linkedDocsIndicator"
-                                                 class="{{correspondence.linkedDocsIndicator.class}}"
-                                                 md-svg-icon="{{correspondence.linkedDocsIndicator.icon}}"
-                                                 tooltip="{{lang[correspondence.linkedDocsIndicator.tooltip]}}"
-                                        ></md-icon>
-                                    </span>
+                                                                          ng-class="{'indicator-content': correspondence.linkedDocsIndicator}">
+                                                        <md-icon ng-if="correspondence.linkedDocsIndicator"
+                                                                 class="{{correspondence.linkedDocsIndicator.class}}"
+                                                                 md-svg-icon="{{correspondence.linkedDocsIndicator.icon}}"
+                                                                 tooltip="{{lang[correspondence.linkedDocsIndicator.tooltip]}}"
+                                                        ></md-icon>
+                                                    </span>
                                                     <!--<span flex class="indicator-badge"
                                                           ng-class="{'indicator-content': correspondence.tagsIndicator}">
-                                            <span ng-if="correspondence.tagsIndicator"
-                                                  tooltip="{{lang[correspondence.tagsIndicator.tooltip]}}"
-                                                  class="{{correspondence.tagsIndicator.class}}">
-                                                {{correspondence.tagsIndicator.text}}
-                                            </span>
-                                        </span>-->
+                                                        <span ng-if="correspondence.tagsIndicator"
+                                                              tooltip="{{lang[correspondence.tagsIndicator.tooltip]}}"
+                                                              class="{{correspondence.tagsIndicator.class}}">
+                                                            {{correspondence.tagsIndicator.text}}
+                                                        </span>
+                                                    </span>-->
                                                 </td>
                                                 <!--<td md-cell class="td-data">
                                                     <a href="" ng-if="correspondence.hasContent()" class="view-doc"
@@ -232,22 +233,25 @@
                                                     <span ng-if="!correspondence.hasContent()">{{correspondence.docSubject}}</span>
                                                 </td>-->
                                                 <td md-cell class="subject">
-                                                    <a href="" ng-if="correspondence.hasContent() && ctrl.grid.truncateSubject"
+                                                    <a href=""
+                                                       ng-if="correspondence.hasContent() && ctrl.grid.truncateSubject && ctrl.isViewCorrespondence"
                                                        class="view-doc subject-internal" md-truncate
                                                        tooltip="{{correspondence.docSubject}}"
                                                        ng-click="ctrl.viewCorrespondence(correspondence, $event)">{{correspondence.docSubject}}</a>
-                                                    <span ng-if="!correspondence.hasContent() && ctrl.grid.truncateSubject"
+                                                    <span ng-if="(!correspondence.hasContent() || !ctrl.isViewCorrespondence) && ctrl.grid.truncateSubject"
                                                           class="view-doc subject-internal" md-truncate
                                                           tooltip="{{correspondence.docSubject}}">{{correspondence.docSubject}}</span>
-                                                    <a href="" ng-if="correspondence.hasContent() && !ctrl.grid.truncateSubject"
+                                                    <a href=""
+                                                       ng-if="correspondence.hasContent() && !ctrl.grid.truncateSubject && ctrl.isViewCorrespondence"
                                                        class="view-doc subject-internal"
                                                        tooltip="{{correspondence.docSubject}}"
                                                        ng-click="ctrl.viewCorrespondence(correspondence, $event)">{{correspondence.docSubject}}</a>
-                                                    <span ng-if="!correspondence.hasContent() && !ctrl.grid.truncateSubject"
+                                                    <span ng-if="(!correspondence.hasContent() || !ctrl.isViewCorrespondence) && !ctrl.grid.truncateSubject"
                                                           class="view-doc subject-internal"
                                                           tooltip="{{correspondence.docSubject}}">{{correspondence.docSubject}}</span>
                                                 </td>
-                                                <td md-cell><span class="serial-td">{{correspondence.docFullSerial}}</span></td>
+                                                <td md-cell><span
+                                                        class="serial-td">{{correspondence.docFullSerial}}</span></td>
                                                 <td md-cell>{{correspondence.priorityLevel.getTranslatedName()}}</td>
                                                 <td md-cell>{{correspondence.securityLevel.getTranslatedName()}}</td>
                                                 <td md-cell>{{lang[correspondence.getInfo().documentClass
@@ -275,7 +279,7 @@
         </md-content>
         <div>
             <div layout="row">
-                <md-button ng-if="!ctrl.selectedCorrespondences.length" ng-click="ctrl.searchLinkedDocuments()"
+                <md-button ng-if="ctrl.selectedIndex === 0 && !ctrl.selectedCorrespondences.length" ng-click="ctrl.searchLinkedDocuments()"
                            class="md-raised"
                            ng-disabled="reason_form.$invalid && ctrl.itemNeedReason()">
                     {{lang.linked_document_search_button}}

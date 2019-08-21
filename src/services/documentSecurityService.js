@@ -113,7 +113,7 @@ module.exports = function (app) {
                     targetEvent: $event,
                     locals: {
                         linkedDocs: existingDocs,
-                        viewCallback: self.viewCorrespondence,
+                        viewCallback: viewCorrespondenceCallback,
                         excludeVsId: null,
                         isAdminSearch: true,
                         multiSelect : true
