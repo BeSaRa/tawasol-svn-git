@@ -554,15 +554,15 @@ module.exports = function (app) {
                 route += '?with-check=true';
             }
 
-            $http
+            return $http
                 .put(_createUrlSchema(null, correspondence.docClassName, route),
                     generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence)
                 )
                 .then(function () {
                     return (generator.generateInstance(correspondence, _getModel(correspondence.docClassName)));
                 }).catch(function (error) {
-                return $q.reject(error);
-            });
+                    return $q.reject(error);
+                });
         };
 
         /**
