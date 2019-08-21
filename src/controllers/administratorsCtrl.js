@@ -140,8 +140,11 @@ module.exports = function (app) {
                     .then(function (result) {
                         administratorService.saveAdministrator(record)
                             .then(function () {
-                                _updateEmployeeValue(record);
-                                toast.success(langService.get('save_success'));
+                                self.reloadAdministrators(self.grid.page)
+                                    .then(function () {
+                                        _updateEmployeeValue(record);
+                                        toast.success(langService.get('save_success'));
+                                    });
                             });
                     })
                     .catch(function (error) {
@@ -181,12 +184,10 @@ module.exports = function (app) {
 
         var _updateEmployeeValue = function (administrator) {
             var employee = employeeService.getEmployee();
-            //console.log('before update', employeeService.getEmployee());
             if (employee.id === administrator.getAdministratorUserId()) {
                 employee
                     .setIsSuperAdmin(administrator.isSuperAdmin)
                     .setIsSubAdmin(!administrator.isSuperAdmin);
-                //console.log('after update', employeeService.getEmployee());
             }
         };
 
