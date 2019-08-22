@@ -812,6 +812,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Send Main Document Fax
+         * @param workItem
+         * @param $event
+         */
+        self.sendMainDocumentFax = function (workItem, $event) {
+            workItem.openSendFaxDialog($event);
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -1127,6 +1136,33 @@ module.exports = function (app) {
                         permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
                         hide: false,
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
+            },
+            // Send
+            {
+                type: 'action',
+                icon: 'send',
+                text: 'grid_action_send',
+                checkShow: function (action, model) {
+                    return !model.isBroadcasted();
+                },
+                permissionKey: [
+                    "SEND_DOCUMENT_BY_FAX"
+                ],
+                checkAnyPermission: true,
+                subMenu: [
+                    // Send Document by Fax
+                    {
+                        type: 'action',
+                        icon: 'attachment',
+                        text: 'grid_action_send_document_by_fax',
+                        permissionKey: "SEND_DOCUMENT_BY_FAX",
+                        callback: self.sendMainDocumentFax,
+                        class: "action-green",
                         checkShow: function (action, model) {
                             return true;
                         }
