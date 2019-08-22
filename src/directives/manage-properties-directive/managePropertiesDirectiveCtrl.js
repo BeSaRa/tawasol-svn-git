@@ -458,7 +458,7 @@ module.exports = function (app) {
          * @returns {*|boolean}
          */
         self.enabledSecurityLevel = function () {
-            var actions = ["editafterexport", "duplicateversion", "receive", "review"];
+            var actions = ["editafterexport", "editafterapproved", "duplicateversion", "receive", "review"];
 
             return self.action && actions.indexOf(self.action.toLowerCase()) !== -1;
         };
