@@ -57,7 +57,8 @@
                                             md-limit="ctrl.grid.limit"
                                             md-page="ctrl.grid.page"
                                             md-total="{{ctrl.mergedLinkedDocHistoryEvents.length}}"
-                                            md-page-select></md-table-pagination>
+                                            md-page-select
+                                            md-on-paginate="ctrl.grid.pagingCallback"></md-table-pagination>
                                 </md-table-container>
                             </md-card>
                         </div>

@@ -6,7 +6,8 @@ module.exports = function (app) {
                                                                  contentViewHistoryViewers,
                                                                  contentViewHistorySubject,
                                                                  viewTrackingSheetService,
-                                                                 $filter) {
+                                                                 $filter,
+                                                                 gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'contentViewHistoryViewersPopCtrl';
@@ -14,18 +15,13 @@ module.exports = function (app) {
         self.contentViewHistorySubject = contentViewHistorySubject;
 
         self.grid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.contentViewHistoryViewers) || 5, // default limit
             page: 1, // first page
-            //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.contentViewHistoryViewers.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.contentViewHistoryViewers, self.contentViewHistoryViewers.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.contentViewHistoryViewers, limit);
+            }
         };
 
         /**

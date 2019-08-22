@@ -275,17 +275,13 @@ module.exports = function (app) {
         };
 
         self.documentLinkViewerGrid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.docLinkViewers) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.documentLinkViewerRecords.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.docLinkViewers, self.documentLinkViewerRecords.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.docLinkViewers, limit);
+            }
         };
 
         self.sortMergedLinkedDocs = function () {

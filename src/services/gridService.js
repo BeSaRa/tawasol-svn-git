@@ -130,7 +130,9 @@ module.exports = function (app) {
                 smsLogs: 'vts_smsLogs',
                 outgoingDeliveryReport: 'vts_outDeliveryReport',
                 fullHistory: 'vts_fullHistory',
-                docLinkViewers: 'vts_docLinkViewer'
+                docLinkViewers: 'vts_docLinkViewer',
+                mergedLinkedDocsHistoryActions: 'vts_mergedLinkedDocsHistoryActions',
+                contentViewHistoryViewers: 'vts_contentViewHistoryViewers'
             },
             launch: {
                 favoritesUsers: 'launchFavUsers',

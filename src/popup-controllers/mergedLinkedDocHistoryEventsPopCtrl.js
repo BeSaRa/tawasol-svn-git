@@ -6,7 +6,8 @@ module.exports = function (app) {
                                                                     langService,
                                                                     mergedLinkedDocHistoryEvents,
                                                                     mergedLinkedDocHistorySubject,
-                                                                    viewTrackingSheetService) {
+                                                                    viewTrackingSheetService,
+                                                                    gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'mergedLinkedDocHistoryEventsPopCtrl';
@@ -14,18 +15,13 @@ module.exports = function (app) {
         self.mergedLinkedDocHistorySubject = mergedLinkedDocHistorySubject;
 
         self.grid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.mergedLinkedDocsHistoryActions) || 5, // default limit
             page: 1, // first page
-            //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.mergedLinkedDocHistoryEvents.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.mergedLinkedDocsHistoryActions, self.mergedLinkedDocHistoryEvents.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.mergedLinkedDocsHistoryActions, limit);
+            }
         };
 
         /**
