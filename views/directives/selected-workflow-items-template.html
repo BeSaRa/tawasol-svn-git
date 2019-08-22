@@ -22,7 +22,7 @@
                         {{lang.comment}}
                     </th>
                     <th md-column ng-if="!ctrl.selectedWorkflowItems.length">
-                        {{lang.secure_action}}
+                        {{lang.secure_comment}}
                     </th>
                     <th md-column
                         ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification">
@@ -158,8 +158,8 @@
                         <div ng-if="workflowItem.isUser()" flex>
                             <md-checkbox
                                     ng-model="workflowItem.isSecureAction"
-                                    tooltip="{{lang.secure_action}}"
-                                    aria-label="{{lang.secure_action}}">
+                                    tooltip="{{lang.secure_comment}}"
+                                    aria-label="{{lang.secure_comment}}">
                             </md-checkbox>
                         </div>
                     </td>
