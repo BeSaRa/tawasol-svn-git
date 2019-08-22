@@ -212,6 +212,7 @@ module.exports = function (app) {
         self.resetFilterForm = function (form, $event) {
             self.filter = angular.copy(self.model);
             self.filter.ui['key_8'].value = (self.filter.ui['key_8'].value === '-2000000000000L');
+            self.getMainSites(false);
             form.$setUntouched();
         };
 
