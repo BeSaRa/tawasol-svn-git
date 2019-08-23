@@ -469,11 +469,16 @@ module.exports = function (app) {
          */
         self.onChangeMainClassification = function ($event) {
             if (self.document.mainClassification) {
-                if (self.document.mainClassification && self.document.mainClassification.hasOwnProperty('children')
+                /*if (self.document.mainClassification && self.document.mainClassification.hasOwnProperty('children')
                     && self.document.mainClassification.children && self.document.mainClassification.children.length
                     && self.checkStatus('subClassification') && self.checkMandatory('subClassification')
                 ) {
                     self.document.subClassification = self.document.mainClassification.children[0];
+                }*/
+                if (self.document.mainClassification && self.checkStatus('subClassification')
+                ) {
+                    //self.document.subClassification = self.document.mainClassification.children[0];
+                    self.loadSubClassificationRecords(true, self.checkMandatory('subClassification'));
                 }
             } else {
                 self.document.subClassification = null;
@@ -551,8 +556,8 @@ module.exports = function (app) {
             }
         };
 
-        self.loadSubClassificationRecords = function () {
-            if (self.document.mainClassification && self.subClassificationSearchText) {
+        self.loadSubClassificationRecords = function (skipSearchText, selectFirstValue) {
+            if (self.document.mainClassification && (skipSearchText || self.subClassificationSearchText)) {
                 var mainClassification = _.find(self.classifications, function (classification) {
                         return classification.classification.id === self.document.mainClassification.id;
                     }).classification,
@@ -575,6 +580,9 @@ module.exports = function (app) {
                             self.document.mainClassification.children = _.uniqBy(self.document.mainClassification.children.concat(subClassifications), 'id');
                             mainClassification.children = angular.copy(self.document.mainClassification.children);
                             self.classificationsCopy = angular.copy(self.classifications);
+                            if (selectFirstValue){
+                                self.document.subClassification = self.document.mainClassification.children[0];
+                            }
                         } else {
                             self.document.mainClassification.children = angular.copy(mainClassificationCopy.children);
                         }

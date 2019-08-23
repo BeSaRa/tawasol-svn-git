@@ -203,6 +203,7 @@
                                ng-model="ctrl.document.mainClassification"
                                ng-model-options="{trackBy: '$value.id'}"
                                ng-required="ctrl.checkMandatory('mainClassification')"
+                               ng-change="ctrl.onChangeMainClassification($event)"
                                md-on-close="ctrl.clearSearchText('mainClassification')"
                                data-md-container-class="select-header-container">
                         <md-select-header class="select-header" layout="column">

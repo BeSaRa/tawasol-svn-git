@@ -542,6 +542,21 @@ module.exports = function (app) {
             }
         };
 
+
+        /**
+         * @description Set the sub classification on change of main classification
+         * @param $event
+         */
+        self.onChangeMainClassification = function ($event) {
+            if (self.document.mainClassification) {
+                if (self.document.mainClassification && self.checkStatus('subClassification')) {
+                    self.loadSubClassificationRecords(true, self.checkMandatory('subClassification'));
+                }
+            } else {
+                self.document.subClassification = null;
+            }
+        };
+
         /**
          * @description Get the allowed max and min values for the serial number and values to be displayed in error
          * @param field
@@ -687,8 +702,29 @@ module.exports = function (app) {
             }
         };
 
-        self.loadSubClassificationRecords = function () {
-            if (self.document.mainClassification && self.subClassificationSearchText) {
+        self.loadDocumentFilesRecords = function () {
+            if (self.documentFileSearchText) {
+                documentFileService.loadDocumentFilesBySearchText(self.documentFileSearchText, self.document.securityLevel, null, true)
+                    .then(function (result) {
+                        if (result.first.length || result.second.length) {
+                            var lookups = {documentFiles: result.first, ouDocumentFiles: result.second},
+                                documentFilesUnion = correspondenceService.prepareLookupHierarchy(lookups).documentFiles;
+
+                            self.documentFiles = _.uniqBy(self.documentFiles.concat(documentFilesUnion), 'file.id');
+                            self.documentFilesCopy = angular.copy(self.documentFiles);
+                        } else {
+                            self.documentFiles = angular.copy(self.documentFilesCopy);
+                        }
+                    })
+                    .catch(function (error) {
+                        self.documentFiles = angular.copy(self.documentFilesCopy);
+                    })
+            }
+        };
+
+
+        self.loadSubClassificationRecords = function (skipSearchText, selectFirstValue) {
+            if (self.document.mainClassification && (skipSearchText || self.subClassificationSearchText)) {
                 var mainClassification = _.find(self.classifications, function (classification) {
                         return classification.classification.id === self.document.mainClassification.id;
                     }).classification,
@@ -711,33 +747,15 @@ module.exports = function (app) {
                             self.document.mainClassification.children = _.uniqBy(self.document.mainClassification.children.concat(subClassifications), 'id');
                             mainClassification.children = angular.copy(self.document.mainClassification.children);
                             self.classificationsCopy = angular.copy(self.classifications);
+                            if (selectFirstValue){
+                                self.document.subClassification = self.document.mainClassification.children[0];
+                            }
                         } else {
                             self.document.mainClassification.children = angular.copy(mainClassificationCopy.children);
                         }
                     })
                     .catch(function (error) {
                         self.document.mainClassification.children = angular.copy(mainClassificationCopy.children);
-                    })
-            }
-        };
-
-
-        self.loadDocumentFilesRecords = function () {
-            if (self.documentFileSearchText) {
-                documentFileService.loadDocumentFilesBySearchText(self.documentFileSearchText, self.document.securityLevel, null, true)
-                    .then(function (result) {
-                        if (result.first.length || result.second.length) {
-                            var lookups = {documentFiles: result.first, ouDocumentFiles: result.second},
-                                documentFilesUnion = correspondenceService.prepareLookupHierarchy(lookups).documentFiles;
-
-                            self.documentFiles = _.uniqBy(self.documentFiles.concat(documentFilesUnion), 'file.id');
-                            self.documentFilesCopy = angular.copy(self.documentFiles);
-                        } else {
-                            self.documentFiles = angular.copy(self.documentFilesCopy);
-                        }
-                    })
-                    .catch(function (error) {
-                        self.documentFiles = angular.copy(self.documentFilesCopy);
                     })
             }
         };
