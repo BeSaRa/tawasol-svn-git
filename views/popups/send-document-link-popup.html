@@ -6,59 +6,62 @@
                 header-text="{{lang.send_document_link}} - {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
         <md-content scroll-directive>
             <div layout="column" class="p20">
-                <fieldset>
-                    <legend>{{lang.document_link_options}}</legend>
-                    <div layout="column" flex>
-                        <div layout="row">
-                            <md-input-container flex>
-                                <md-checkbox ng-model="ctrl.documentLink.exportOptionsMap.BOOK"
-                                             aria-label="Books">
-                                    <span>{{lang.book_only}}</span>
-                                </md-checkbox>
-                            </md-input-container>
-                            <md-input-container flex>
-                                <md-checkbox ng-model="ctrl.documentLink.exportOptionsMap.ATTACHMENTS"
-                                             aria-label="attachments">
-                                    <span>{{lang.attachments}}</span>
-                                </md-checkbox>
-                            </md-input-container>
-                            <md-input-container flex>
-                                <md-checkbox ng-model="ctrl.documentLink.exportOptionsMap.RELATED_BOOKS"
-                                             aria-label="Related Books">
-                                    <span>{{lang.related_books}}</span>
-                                </md-checkbox>
-                            </md-input-container>
+                <form name="documentLinkForm" autocomplete="off" flex>
+                    <fieldset>
+                        <legend>{{lang.document_link_options}}</legend>
+                        <div layout="column" flex>
+                            <div layout="row">
+                                <md-input-container flex>
+                                    <md-checkbox ng-model="ctrl.documentLink.exportOptionsMap.BOOK"
+                                                 aria-label="Books">
+                                        <span>{{lang.book_only}}</span>
+                                    </md-checkbox>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <md-checkbox ng-model="ctrl.documentLink.exportOptionsMap.ATTACHMENTS"
+                                                 aria-label="attachments">
+                                        <span>{{lang.attachments}}</span>
+                                    </md-checkbox>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <md-checkbox ng-model="ctrl.documentLink.exportOptionsMap.RELATED_BOOKS"
+                                                 aria-label="Related Books">
+                                        <span>{{lang.related_books}}</span>
+                                    </md-checkbox>
+                                </md-input-container>
+                            </div>
+                            <div layout="row">
+                                <md-input-container flex>
+                                    <label for="expirationTime">{{lang.expiry_date}}</label>
+                                    <md-datepicker id="expirationTime"
+                                                   md-min-date="ctrl.currentDate"
+                                                   ng-model="ctrl.documentLink.expirationTime"
+                                                   md-open-on-focus
+                                                   required
+                                                   name="expirationTime">
+                                    </md-datepicker>
+                                    <div ng-messages="documentLinkForm.expirationTime.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <md-switch ng-model="ctrl.documentLink.status"
+                                               aria-label="{{lang.status}}">
+                                        <label>{{lang.status}} :
+                                            {{ctrl.documentLink.getTranslatedStatus()}}</label>
+                                    </md-switch>
+                                </md-input-container>
+                                <span flex></span>
+                            </div>
                         </div>
-                        <div layout="row">
-                            <md-input-container flex>
-                                <label for="expirationTime">{{lang.expiry_date}}</label>
-                                <md-datepicker id="expirationTime"
-                                               md-min-date="ctrl.currentDate"
-                                               ng-model="ctrl.documentLink.expirationTime"
-                                               md-open-on-focus
-                                               required
-                                               name="expirationTime">
-                                </md-datepicker>
-                            </md-input-container>
-                            <md-input-container flex>
-                                <md-switch ng-model="ctrl.documentLink.status"
-                                           aria-label="{{lang.status}}">
-                                    <label>{{lang.status}} :
-                                        {{ctrl.documentLink.getTranslatedStatus()}}</label>
-                                </md-switch>
-                            </md-input-container>
-                            <span flex></span>
-                        </div>
-                    </div>
-                </fieldset>
-                <div layout="row">
-                    <form name="documentLinkForm" autocomplete="off" layout="row" flex>
+                    </fieldset>
+                    <div layout="row">
                         <!-- User Name -->
                         <md-input-container flex>
                             <label for="sharedToFullName">{{lang.name}}</label>
                             <input id="sharedToFullName" required name="sharedToFullName"
                                    ng-model="ctrl.documentLinkSubscriber.sharedToFullName">
-                            <div ng-messages="documentLinkForm.userName.$error">
+                            <div ng-messages="documentLinkForm.sharedToFullName.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
@@ -68,7 +71,7 @@
                             <input id="sharedToEmail" required name="sharedToEmail"
                                    ng-model="ctrl.documentLinkSubscriber.sharedToEmail"
                                    custom-validate-directive="email">
-                            <div ng-messages="documentLinkForm.email.$error">
+                            <div ng-messages="documentLinkForm.sharedToEmail.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <div ng-message="email">{{lang.invalid_email}}</div>
                             </div>
@@ -79,7 +82,7 @@
                             <input id="sharedToMobileNum" required name="sharedToMobileNum"
                                    ng-model="ctrl.documentLinkSubscriber.sharedToMobileNum"
                                    custom-validate-directive="phone_mobile">
-                            <div ng-messages="documentLinkForm.mobileNumber.$error">
+                            <div ng-messages="documentLinkForm.sharedToMobileNum.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
@@ -89,8 +92,8 @@
                                 {{lang.add}}
                             </md-button>
                         </md-input-container>
-                    </form>
-                </div>
+                    </div>
+                </form>
                 <div layout="row">
                     <md-card layout="column"
                              flex class="card-overlay">
