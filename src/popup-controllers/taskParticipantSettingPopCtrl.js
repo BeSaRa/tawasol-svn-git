@@ -80,6 +80,10 @@ module.exports = function (app) {
 
         self.editTaskParticipantFromCtrl = function () {
             dialog.hide(self.taskParticipant);
+        };
+
+        self.closeTaskParticipantPopupFromCtrl = function () {
+            dialog.cancel();
         }
     });
 };
