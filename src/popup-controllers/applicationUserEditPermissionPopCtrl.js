@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.controller('applicationUserEditPermissionPopCtrl', function (_,
                                                                      toast,
+                                                                     configurationService,
                                                                      $rootScope,
                                                                      layoutService,
                                                                      validationService,
@@ -46,17 +47,47 @@ module.exports = function (app) {
             landingPagePermissionId = _getPermissionIdByPermissionKey('LANDING_PAGE');
 
 
-        if (dynamicMenuItems.length) {
-            self.permissionsList[0][langService.getKey('private_menu_items', 'en')] = _.chunk(_convertMenuItems(dynamicMenuItems), 3);
-            self.permissionsList[1][langService.getKey('private_menu_items', 'ar')] = _.chunk(_convertMenuItems(dynamicMenuItems), 3);
+        if (dynamicMenuItems && _excludeICNTemplates(dynamicMenuItems).length ) {
+            self.permissionsList[0][langService.getKey('private_menu_items', 'en')] = _.chunk(_convertMenuItems(_excludeICNTemplates(dynamicMenuItems)), 3);
+            self.permissionsList[1][langService.getKey('private_menu_items', 'ar')] = _.chunk(_convertMenuItems(_excludeICNTemplates(dynamicMenuItems)), 3);
         }
 
+        if (dynamicMenuItems && _getICNEntryTemplates(dynamicMenuItems).length){
+            self.permissionsList[0][langService.getKey('icn_entry_template', 'en')] = _.chunk(_convertMenuItems(_getICNEntryTemplates(dynamicMenuItems)), 3);
+            self.permissionsList[1][langService.getKey('icn_entry_template', 'ar')] = _.chunk(_convertMenuItems(_getICNEntryTemplates(dynamicMenuItems)), 3);
+        }
+        if (dynamicMenuItems && _getICNSearchTemplates(dynamicMenuItems).length){
+            self.permissionsList[0][langService.getKey('icn_search_template', 'en')] = _.chunk(_convertMenuItems(_getICNSearchTemplates(dynamicMenuItems)), 3);
+            self.permissionsList[1][langService.getKey('icn_search_template', 'ar')] = _.chunk(_convertMenuItems(_getICNSearchTemplates(dynamicMenuItems)), 3);
+        }
+
+        // icn_search_template
+        // icn_entry_template
         function _convertMenuItems(menuItems) {
             return _.map(menuItems, function (item) {
                 item.arName = item.menuItem.arName;
                 item.enName = item.menuItem.enName;
                 item.id = 'dm' + item.menuItem.id;
                 return item;
+            });
+        }
+
+        function _getICNSearchTemplates(menuItems) {
+            return _.filter(menuItems , function (item) {
+                return item.menuItem.menuType === configurationService.ICN_SEARCH_TEMPLATE_MENU_TYPE;
+            });
+        }
+
+        function _getICNEntryTemplates(menuItems) {
+            return _.filter(menuItems , function (item) {
+                return item.menuItem.menuType === configurationService.ICN_ENTRY_TEMPLATE_MENU_TYPE;
+            });
+        }
+
+        function _excludeICNTemplates(menuItems) {
+            var types = [configurationService.ICN_ENTRY_TEMPLATE_MENU_TYPE, configurationService.ICN_SEARCH_TEMPLATE_MENU_TYPE];
+            return _.filter(menuItems, function (item) {
+                return types.indexOf(item.menuItem.menuType) === -1;
             });
         }
 
