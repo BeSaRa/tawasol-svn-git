@@ -107,7 +107,7 @@
                                         </div>
                                     </md-input-container>
                                 </div>
-                                <div layout="row">
+                                <div ng-if="ctrl.correspondenceSite.parent" layout="row">
                                     <md-input-container flex>
                                         <label name="faxNumber">{{lang.fax_number}}</label>
                                         <input id="faxNumber" name="faxNumber"
