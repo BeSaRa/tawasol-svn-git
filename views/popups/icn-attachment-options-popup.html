@@ -17,11 +17,9 @@
                             <md-select id="updateActionStatus"
                                        name="updateActionStatus"
                                        ng-required="true"
-                                       ng-model-options="{trackBy:'$value.lookupKey'}"
+
                                        ng-model="ctrl.attachment.updateActionStatus">
-                                <md-option
-                                        ng-repeat="updateAction in ctrl.attachmentUpdateActions"
-                                        ng-value="updateAction">
+                                <md-option  ng-repeat="updateAction in ctrl.attachmentUpdateActions" ng-value="updateAction">
                                     {{updateAction.getTranslatedName()}}
                                 </md-option>
                             </md-select>
@@ -46,7 +44,7 @@
                                     {{type.getTranslatedName()}}
                                 </md-option>
                                 <md-option ng-repeat="type in ctrl.attachmentTypes"
-                                           ng-value="type"
+                                           ng-value="type.lookupKey"
                                            ng-if="ctrl.attachment.vsId && ctrl.checkAttachmentTypeIsAvailable(type)"
                                            ng-disabled="!type.status">
                                     {{type.getTranslatedName()}}
@@ -80,7 +78,7 @@
                                        id="searchTemplate"
                                        name="searchTemplate"
                                        ng-model="ctrl.attachment.searchTemplate">
-                                <md-option ng-repeat="template in ctrl.icnSearchTemplates track by $index"
+                                <md-option ng-repeat="template in ctrl.icnSearchTemplates"
                                            ng-value="template">
                                     {{template.menuItem.getTranslatedName()}}
                                 </md-option>

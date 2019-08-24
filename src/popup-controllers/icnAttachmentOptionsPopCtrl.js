@@ -23,14 +23,17 @@ module.exports = function (app) {
         self.attachmentUpdateActions = lookupService.returnLookups(lookupService.attachmentUpdateAction);
         self.icnSearchTemplates = icnSearchTemplates;
 
-        self.attachment = {};
+        self.attachment = new Attachment();
         self.searchTemplate = null;
         // get inherit Security for attachment from GlobalSettings
         self.inheritSecurity = rootEntity.getGlobalSettings().attachmentInheritSecurity;
         if (self.inheritSecurity) {
             self.attachment.securityLevel = correspondence.securityLevel;
         }
-
+        // set default lookup keys
+        self.attachment.updateActionStatus = self.attachmentUpdateActions[0];
+        self.attachment.attachmentType = self.attachmentTypes[0].lookupKey;
+        self.attachment.searchTemplate = self.icnSearchTemplates[0];
         /**
          * @description Gets the iframe for icn search template with attachment properties
          * @param $event
