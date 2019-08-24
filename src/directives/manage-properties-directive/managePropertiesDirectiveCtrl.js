@@ -16,12 +16,14 @@ module.exports = function (app) {
                                                               correspondenceService,
                                                               LangWatcher,
                                                               gridService,
-                                                              classificationService) {
+                                                              classificationService,
+                                                              OUClassification,
+                                                              Classification) {
         'ngInject';
         var self = this;
         self.controllerName = 'managePropertiesDirectiveCtrl';
         LangWatcher($scope);
-        var properties = [];
+        var properties = [], mainClassificationOptionFromInfo, subClassificationOptionFromInfo;
         self.document = null;
         self.maxCreateDate = new Date();
 
@@ -38,6 +40,8 @@ module.exports = function (app) {
         self.documentFileSearchText = '';
         self.isSecurityLevelEnabled = false;
 
+        // required fields for the current document class
+        self.required = {};
 
         $timeout(function () {
             // all system organizations
@@ -58,6 +62,32 @@ module.exports = function (app) {
             self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
             self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
             properties = lookupService.getPropertyConfigurations(self.document.docClassName);
+
+            _.map(properties, function (item) {
+                // self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
+                self.required[item.symbolicName.toLowerCase()] = {isMandatory: item.isMandatory, status: item.status};
+            });
+
+            mainClassificationOptionFromInfo = new OUClassification({
+                classification: new Classification({
+                    id: self.document.mainClassificationInfo.id,
+                    arName: self.document.mainClassificationInfo.arName,
+                    enName: self.document.mainClassificationInfo.enName
+                })
+            });
+            subClassificationOptionFromInfo = new Classification({
+                id: self.document.subClassificationInfo.id,
+                arName: self.document.subClassificationInfo.arName,
+                enName: self.document.subClassificationInfo.enName
+            });
+
+            if (typeof self.document.mainClassification === 'number') {
+                self.document.mainClassification = mainClassificationOptionFromInfo.classification;
+            }
+            if (typeof self.document.subClassification === 'number') {
+                self.document.subClassification = subClassificationOptionFromInfo;
+            }
+
             _getClassifications(false);
             _getDocumentFiles(false);
         });
@@ -65,15 +95,6 @@ module.exports = function (app) {
         self.employee = employeeService.getEmployee();
         // for sub organizations
         self.subOrganizations = [];
-        // required fields for the current document class
-        self.required = {};
-        // need  timeout here to start init each property mandatory.
-        $timeout(function () {
-            _.map(properties, function (item) {
-                // self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
-                self.required[item.symbolicName.toLowerCase()] = {isMandatory: item.isMandatory, status: item.status};
-            });
-        });
 
         self.checkMandatory = function (fieldName) {
             return self.required[fieldName.toLowerCase()] && self.required[fieldName.toLowerCase()].isMandatory;
@@ -108,11 +129,13 @@ module.exports = function (app) {
                 return $timeout(function () {
                     self.documentFiles = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'documentFiles'));
                     self.documentFiles = _displayCorrectDocumentFiles(self.documentFiles);
+                    _appendMissingDocumentFile();
                     self.documentFilesCopy = angular.copy(self.documentFiles);
                 });
             } else {
                 self.documentFiles = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'documentFiles'));
                 self.documentFiles = _displayCorrectDocumentFiles(self.documentFiles);
+                _appendMissingDocumentFile();
                 self.documentFilesCopy = angular.copy(self.documentFiles);
             }
         }
@@ -128,15 +151,52 @@ module.exports = function (app) {
                 return $timeout(function () {
                     self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
                     self.classifications = _displayCorrectClassifications(self.classifications);
-                    self.classificationsCopy = angular.copy(self.classifications);
+                    _appendMissingClassification();
+                    self.onChangeMainClassification(null,true);
                 });
             } else {
                 self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
                 self.classifications = _displayCorrectClassifications(self.classifications);
+                _appendMissingClassification();
+                self.onChangeMainClassification(null, true);
+            }
+        }
+
+        var _appendMissingClassification = function () {
+            if (self.isNewDocument || !self.document.mainClassificationInfo || self.document.mainClassificationInfo.id === -1) {
                 self.classificationsCopy = angular.copy(self.classifications);
+                return;
             }
 
-        }
+            var selectedClassification = _.find(self.classifications, function (classification) {
+                return classification.classification.id === self.document.mainClassificationInfo.id;
+            });
+            if (selectedClassification) {
+                self.classificationsCopy = angular.copy(self.classifications);
+                return;
+            }
+
+            self.classifications.push(mainClassificationOptionFromInfo);
+            self.classificationsCopy = angular.copy(self.classifications);
+        };
+
+        var _appendMissingDocumentFile = function () {
+            if (!self.isNewDocument && self.document.documentFileInfo && self.document.documentFileInfo.id > 0) {
+                var selectedDocumentFile = _.find(self.documentFiles, function (documentFile) {
+                    return documentFile.file.id === self.document.documentFileInfo.id;
+                });
+                if (!selectedDocumentFile) {
+                    var newDocumentFile = new OUDocumentFile({
+                        file: new DocumentFile({
+                            id: self.document.documentFileInfo.id,
+                            arName: self.document.documentFileInfo.arName,
+                            enName: self.document.documentFileInfo.enName
+                        })
+                    });
+                    self.documentFiles.push(newDocumentFile)
+                }
+            }
+        };
 
         /**
          * @description filter the sub classifications depend on the security level for document.
@@ -466,59 +526,18 @@ module.exports = function (app) {
         /**
          * @description Set the sub classification on change of main classification
          * @param $event
+         * @param skipResetSub
          */
-        self.onChangeMainClassification = function ($event) {
+        self.onChangeMainClassification = function ($event, skipResetSub) {
             if (self.document.mainClassification) {
-                /*if (self.document.mainClassification && self.document.mainClassification.hasOwnProperty('children')
-                    && self.document.mainClassification.children && self.document.mainClassification.children.length
-                    && self.checkStatus('subClassification') && self.checkMandatory('subClassification')
-                ) {
-                    self.document.subClassification = self.document.mainClassification.children[0];
-                }*/
-                if (self.document.mainClassification && self.checkStatus('subClassification')
-                ) {
-                    //self.document.subClassification = self.document.mainClassification.children[0];
-                    self.loadSubClassificationRecords(true, self.checkMandatory('subClassification'));
+                self.loadSubClassificationRecords(true, self.checkMandatory('subClassification'));
+                if(!skipResetSub){
+                    self.document.subClassification = null;
                 }
             } else {
                 self.document.subClassification = null;
             }
         };
-
-
-        /**
-         * @description Check if the document is approved. If yes, don't allow to change properties and correspondence sites
-         * @param document
-         * @returns {boolean}
-         */
-        /*self.checkIfEditDisabled = function (document) {
-            if (!document)
-                return true;
-            /!*If document is approved, don't allow to edit whether it is any document*!/
-            /!*If electronic outgoing/electronic internal and approved, don't allow to edit*!/
-            /!*If incoming, allow to edit*!/
-            /!*If not approved, allow to edit will depend on permission*!/
-
-            /!*FROM SRS*!/
-            /!*Outgoing properties can be editable at any time in department ready to export *!/
-            /!*Outgoing content can be available if paper outgoing*!/
-            /!*Correspondence Sites can be editable if document is unapproved*!/
-            var info = document.getInfo();
-            var isApproved = info.docStatus >= 24;
-            if (isApproved)
-                return true;
-
-            var hasPermission = false;
-            if (info.documentClass === "outgoing")
-                hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-            else if (info.documentClass === "internal")
-                hasPermission = (employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT"));
-            else if (info.documentClass === "incoming")
-                hasPermission = (employeeService.hasPermissionTo("EDIT_INCOMING'S_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INCOMING'S_CONTENT"));
-            return (isApproved && hasPermission);
-            //return (isApproved && ((info.documentClass === "outgoing" || info.documentClass === "internal") && !info.isPaper) && hasPermission);
-        };*/
-
 
         /**
          * @description Clears the searchText for the given field
@@ -580,7 +599,7 @@ module.exports = function (app) {
                             self.document.mainClassification.children = _.uniqBy(self.document.mainClassification.children.concat(subClassifications), 'id');
                             mainClassification.children = angular.copy(self.document.mainClassification.children);
                             self.classificationsCopy = angular.copy(self.classifications);
-                            if (selectFirstValue){
+                            if (selectFirstValue) {
                                 self.document.subClassification = self.document.mainClassification.children[0];
                             }
                         } else {

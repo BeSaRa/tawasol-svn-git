@@ -861,6 +861,7 @@ module.exports = function (app) {
         /**
          * merge and make hierarchy for lookups
          * @param lookups
+         * @param parentLookup
          * @returns {*}
          */
         self.prepareLookupHierarchy = function (lookups, parentLookup) {

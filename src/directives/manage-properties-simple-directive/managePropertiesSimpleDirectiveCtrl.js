@@ -194,36 +194,21 @@ module.exports = function (app) {
             _getDocumentFiles(false);
         };
 
-        // self.shortcut = {
-        //     /**
-        //      * add new document as shortcut.
-        //      * @param $event
-        //      */
-        //     addNewDocumentType: function ($event) {
-        //         documentTypeService
-        //             .controllerMethod
-        //             .documentTypeAdd($event)
-        //             .then(function (documentType) {
-        //                 toast.success(langService.get('add_success').change({name: documentType.getNames()}));
-        //                 self.documentTypes.unshift(documentType);
-        //                 self.document.docType = documentType;
-        //             });
-        //     },
-        //     /**
-        //      * add new documentFile as shortcut.
-        //      * @param $event
-        //      */
-        //     addNewDocumentFile: function ($event) {
-        //         documentFileService
-        //             .controllerMethod
-        //             .documentFileAdd(null, $event)
-        //             .then(function (documentFile) {
-        //                 toast.success(langService.get('add_success').change({name: documentFile.getNames()}));
-        //                 self.documentFiles.unshift(documentFile);
-        //                 self.document.fileId = documentFile;
-        //             });
-        //     }
-        // };
+        /**
+         * @description Set the sub classification on change of main classification
+         * @param $event
+         * @param skipResetSub
+         */
+        self.onChangeMainClassification = function ($event, skipResetSub) {
+            if (self.document.mainClassification) {
+                self.loadSubClassificationRecords(true, self.checkMandatory('subClassification'));
+                if(!skipResetSub){
+                    self.document.subClassification = null;
+                }
+            } else {
+                self.document.subClassification = null;
+            }
+        };
 
 
         self.onFileChange = function (file) {
@@ -488,8 +473,8 @@ module.exports = function (app) {
             }
         };
 
-        self.loadSubClassificationRecords = function () {
-            if (self.document.mainClassification && self.subClassificationSearchText) {
+        self.loadSubClassificationRecords = function (skipSearchText, selectFirstValue) {
+            if (self.document.mainClassification && (skipSearchText || self.subClassificationSearchText)) {
                 var mainClassification = _.find(self.classifications, function (classification) {
                         return classification.classification.id === self.document.mainClassification.id;
                     }).classification,
@@ -512,6 +497,9 @@ module.exports = function (app) {
                             self.document.mainClassification.children = _.uniqBy(self.document.mainClassification.children.concat(subClassifications), 'id');
                             mainClassification.children = angular.copy(self.document.mainClassification.children);
                             self.classificationsCopy = angular.copy(self.classifications);
+                            if (selectFirstValue) {
+                                self.document.subClassification = self.document.mainClassification.children[0];
+                            }
                         } else {
                             self.document.mainClassification.children = angular.copy(mainClassificationCopy.children);
                         }
