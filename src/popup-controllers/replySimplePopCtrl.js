@@ -47,6 +47,11 @@ module.exports = function (app) {
 
         self.globalSettings = rootEntity.getGlobalSettings();
 
+
+        if (self.globalSettings.allowSendWFRelatedBook) {
+            self.distWorkflowItem.sendRelatedDocs = true;
+        }
+
         /**
          * @description find matched comment if not edited.
          * @param distWorkflowItem
@@ -138,8 +143,8 @@ module.exports = function (app) {
                 })
         };
 
-        self.resetNotifications = function(){
-            if (!self.selectedManagers || !self.selectedManagers.length){
+        self.resetNotifications = function () {
+            if (!self.selectedManagers || !self.selectedManagers.length) {
                 self.distWorkflowItem.sendSMS = replyOn.sendSMS;
                 self.distWorkflowItem.sendEmail = replyOn.sendEmail;
             } else {

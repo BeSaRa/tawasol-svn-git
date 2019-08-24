@@ -87,8 +87,7 @@
                     </div>
                     <div layout="row">
                         <!-- Send Related Documents -->
-                        <div flex
-                             ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification">
+                        <div flex>
                             <md-checkbox ng-if="ctrl.globalSettings.allowSendWFRelatedBook"
                                          ng-model="ctrl.distWorkflowItem.sendRelatedDocs">
                                 {{lang.send_related_documents}}
