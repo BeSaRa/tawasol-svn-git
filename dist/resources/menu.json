@@ -1159,7 +1159,7 @@
         "link": "",
         "state": "app.inbox.tasks",
         "icon_type": "font",
-        "sort_order": 1,
+        "sort_order": 10,
         "active": true,
         "sort_value": 1
     },
