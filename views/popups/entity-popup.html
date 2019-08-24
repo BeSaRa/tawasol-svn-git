@@ -103,16 +103,6 @@
                                     <md-switch flex ng-model="ctrl.entity.status" aria-label="{{lang.status}}">
                                         <label>{{lang.status}} : {{ctrl.entity.getTranslatedStatus()}}</label>
                                     </md-switch>
-
-                                    <md-switch flex ng-model="ctrl.entity.hrEnabled" aria-label="{{lang.status}}">
-                                        <label>{{lang.hr_integration}} : {{ctrl.entity.getTranslatedHRIntegrationStatus()}}</label>
-                                    </md-switch>
-                                </div>
-                                <div layout="row">
-                                    <div flex class="p20">
-
-                                    </div>
-                                    <div flex></div>
                                 </div>
                             </div>
                         </md-content>
@@ -481,6 +471,15 @@
                                                 </div>
                                             </div>
                                         </md-input-container>
+                                    </div>
+                                </fieldset>
+                                <!-- FAX -->
+                                <fieldset>
+                                    <legend class="md-accent">{{lang.hr_integration}}</legend>
+                                    <div layout="row">
+                                        <md-switch flex ng-model="ctrl.entity.hrEnabled" aria-label="{{lang.status}}">
+                                            <label>{{lang.hr_integration}} : {{ctrl.entity.getTranslatedHRIntegrationStatus()}}</label>
+                                        </md-switch>
                                     </div>
                                 </fieldset>
                             </div>
