@@ -16,6 +16,7 @@ module.exports = function (app) {
                 SIZE_EXTENSION_NOT_ALLOWED: 2006,
                 DUPLICATE_ENTRY: 1008,
                 INACTIVE_USER_ENTITY: 9016,
+                ACCESS_DENIED: 9011,
                 PASSWORD_EMPTY: 9017,
                 NO_USER_TO_BROADCAST: 3018,
                 PRINT_BARCODE_ERROR_NO_BARCODE_ELEMENT: 3019,

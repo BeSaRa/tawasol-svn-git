@@ -20,7 +20,8 @@ module.exports = function (app) {
                                                       MergedLinkedDocumentHistory,
                                                       downloadService,
                                                       employeeService,
-                                                      gridService) {
+                                                      gridService,
+                                                      errorCode) {
             'ngInject';
             var self = this;
             self.serviceName = 'viewTrackingSheetService';
@@ -297,8 +298,6 @@ module.exports = function (app) {
                                     ? self.loadContentViewHistory(document)
                                         .then(function (result) {
                                             return result;
-                                        }).catch(function (error) {
-                                            return [];
                                         }) : [];
                             },
                             smsLogRecords: function (organizationService, applicationUserService) {
@@ -463,10 +462,13 @@ module.exports = function (app) {
                     self.eventHistory = generator.generateCollection(result.data.rs, EventHistory, self._sharedMethods);
                     self.eventHistory = generator.interceptReceivedCollection('EventHistory', self.eventHistory);
                     return self.eventHistory;
-                })
-                    .catch(function (error) {
-                        return [];
-                    });
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                        dialog.errorMessage(langService.get('access_denied'));
+                        return $q.reject(false);
+                    }
+                    return [];
+                });
             };
 
             /**
@@ -479,10 +481,13 @@ module.exports = function (app) {
                     self.linkedDocumentHistory = generator.generateCollection(result.data.rs, LinkedDocument, self._sharedMethods);
                     self.linkedDocumentHistory = generator.interceptReceivedCollection('LinkedDocument', self.linkedDocumentHistory);
                     return self.linkedDocumentHistory;
-                })
-                    .catch(function (error) {
-                        return [];
-                    });
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                        dialog.errorMessage(langService.get('access_denied'));
+                        return $q.reject(false);
+                    }
+                    return [];
+                });
             };
 
             /**
@@ -494,10 +499,13 @@ module.exports = function (app) {
                     self.linkedAttachments = generator.generateCollection(result.data.rs, LinkedAttachment, self._sharedMethods);
                     self.linkedAttachments = generator.interceptReceivedCollection('LinkedAttachment', self.linkedAttachments);
                     return self.linkedAttachments;
-                })
-                    .catch(function (error) {
-                        return [];
-                    });
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                        dialog.errorMessage(langService.get('access_denied'));
+                        return $q.reject(false);
+                    }
+                    return [];
+                });
             };
 
             /**
@@ -518,10 +526,13 @@ module.exports = function (app) {
                         self.mergedLinkedDocumentHistory = generator.interceptReceivedCollection('MergedLinkedDocumentHistory', records);
                     }
                     return self.mergedLinkedDocumentHistory;
-                })
-                    .catch(function (error) {
-                        return [];
-                    });
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                        dialog.errorMessage(langService.get('access_denied'));
+                        return $q.reject(false);
+                    }
+                    return [];
+                });
             };
 
             /**
@@ -533,10 +544,13 @@ module.exports = function (app) {
                     self.linkedEntities = generator.generateCollection(result.data.rs, LinkedEntity, self._sharedMethods);
                     self.linkedEntities = generator.interceptReceivedCollection('LinkedEntity', self.linkedEntities);
                     return self.linkedEntities;
-                })
-                    .catch(function (error) {
-                        return [];
-                    });
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                        dialog.errorMessage(langService.get('access_denied'));
+                        return $q.reject(false);
+                    }
+                    return [];
+                });
             };
 
             /**
@@ -548,10 +562,13 @@ module.exports = function (app) {
                     self.destinationHistory = generator.generateCollection(result.data.rs, DestinationHistory, self._sharedMethods);
                     self.destinationHistory = generator.interceptReceivedCollection('DestinationHistory', self.destinationHistory);
                     return self.destinationHistory;
-                })
-                    .catch(function (error) {
-                        return [];
-                    });
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                        dialog.errorMessage(langService.get('access_denied'));
+                        return $q.reject(false);
+                    }
+                    return [];
+                });
             };
 
             /**
@@ -563,10 +580,13 @@ module.exports = function (app) {
                     self.contentViewHistory = generator.generateCollection(result.data.rs, ContentViewHistory, self._sharedMethods);
                     self.contentViewHistory = generator.interceptReceivedCollection('ContentViewHistory', self.contentViewHistory);
                     return self.contentViewHistory;
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                        dialog.errorMessage(langService.get('access_denied'));
+                        return $q.reject(false);
+                    }
+                    return [];
                 })
-                    .catch(function (error) {
-                        return [];
-                    });
             };
 
             /**
@@ -578,10 +598,13 @@ module.exports = function (app) {
                     self.smsLogs = generator.generateCollection(result.data.rs, SmsLog, self._sharedMethods);
                     self.smsLogs = generator.interceptReceivedCollection('SmsLog', self.smsLogs);
                     return self.smsLogs;
-                })
-                    .catch(function (error) {
-                        return [];
-                    });
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                        dialog.errorMessage(langService.get('access_denied'));
+                        return $q.reject(false);
+                    }
+                    return [];
+                });
             };
 
             /**
@@ -593,7 +616,11 @@ module.exports = function (app) {
                     self.outgoingDeliveryReports = generator.generateCollection(result.data.rs, OutgoingDeliveryReport, self._sharedMethods);
                     self.outgoingDeliveryReports = generator.interceptReceivedCollection('OutgoingDeliveryReport', self.outgoingDeliveryReports);
                     return self.outgoingDeliveryReports;
-                }).catch(function () {
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                        dialog.errorMessage(langService.get('access_denied'));
+                        return $q.reject(false);
+                    }
                     return [];
                 });
             };
@@ -607,10 +634,13 @@ module.exports = function (app) {
                     self.fullHistory = generator.generateCollection(result.data.rs, FullHistory, self._sharedMethods);
                     self.fullHistory = generator.interceptReceivedCollection('FullHistory', self.fullHistory);
                     return self.fullHistory;
-                })
-                    .catch(function (error) {
-                        return [];
-                    });
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                        dialog.errorMessage(langService.get('access_denied'));
+                        return $q.reject(false);
+                    }
+                    return [];
+                });
             };
 
             /**
@@ -623,13 +653,16 @@ module.exports = function (app) {
 
                 return $http.get(urlService.documentLink + route)
                     .then(function (result) {
-                        self.documentLinkViewerRecords =  _.map(result.data.rs, function (documentLinkViewer) {
+                        self.documentLinkViewerRecords = _.map(result.data.rs, function (documentLinkViewer) {
                             documentLinkViewer.viewTime = generator.getDateFromTimeStamp(documentLinkViewer.viewTime, true);
                             return documentLinkViewer;
                         });
                         return self.documentLinkViewerRecords;
-                    })
-                    .catch(function (error) {
+                    }).catch(function (error) {
+                        if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                            dialog.errorMessage(langService.get('access_denied'));
+                            return $q.reject(false);
+                        }
                         return [];
                     });
             };
