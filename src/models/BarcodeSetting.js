@@ -12,7 +12,7 @@ module.exports = function (app) {
             self.rows = [];
             self.isElectronic = [];
             self.resolution = 100;
-            self.fontName = null;
+            self.fontName = 'Arial';
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
