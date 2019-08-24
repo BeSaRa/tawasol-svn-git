@@ -398,9 +398,9 @@ module.exports = function (app) {
                 // if ig Global
                 (self.documentComment.commentGlobal()) ||
                 // if not global and not private and not user type
-                (self.documentComment.commentCustomize() && self.documentComment.isPerOU && !self.documentComment.withSubOUs) ||
+                (self.documentComment.commentCustomize() && self.documentComment.isPerOU && self.documentComment.withSubOUs && self.documentComment.excludedIDs.length) /*||
                 // if not private and not global and not with subOUs selected and excludedIDs have length
-                (self.documentComment.commentCustomize() && self.documentComment.excludedIDs.length && self.documentComment.withSubOUs)
+                (self.documentComment.commentCustomize() && self.documentComment.excludedIDs.length && self.documentComment.withSubOUs)*/
             );
         };
         /**
