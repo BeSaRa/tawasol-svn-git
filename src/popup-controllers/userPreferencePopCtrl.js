@@ -48,10 +48,7 @@ module.exports = function (app) {
                                                       cmsTemplate,
                                                       ProxyInfo,
                                                       $compile,
-                                                      organizationService,
-                                                      moment,
-                                                      $sce,
-                                                      listGeneratorService) {
+                                                      organizationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'userPreferencePopCtrl';
@@ -108,7 +105,6 @@ module.exports = function (app) {
          * @description List of ou application users
          */
         self.ouApplicationUsers = ouApplicationUsers;
-        //self.organizationsForAppUser = _.map(self.ouApplicationUsers, 'ouid');
         self.getOrganizationsForAppUser = function (ouAppUser) {
             self.organizationsForAppUser = _.map(self.ouApplicationUsers, function (ouAppUser) {
                 return {

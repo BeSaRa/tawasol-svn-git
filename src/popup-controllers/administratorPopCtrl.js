@@ -41,7 +41,7 @@ module.exports = function (app) {
             _resetSelectedOus($event);
         };
 
-        var _isAlreadySuperAdmin = function (applicationUserId) {
+        self.isAlreadySuperAdmin = function (applicationUserId) {
             applicationUserId = applicationUserId.hasOwnProperty('id') ? applicationUserId.id : applicationUserId;
             return !!(_.find(administratorService.administrators, function (admin) {
                 return admin.userId === applicationUserId && !!admin.isSuperAdmin;
@@ -54,7 +54,7 @@ module.exports = function (app) {
          */
         self.onChangeUser = function ($event) {
             if (self.administrator.userId) {
-                if (_isAlreadySuperAdmin(self.administrator.userId)) {
+                if (self.isAlreadySuperAdmin(self.administrator.userId)) {
                     self.administrator.isSuperAdmin = true;
                     _resetSelectedOus();
                 } else {
