@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                     $q,
                                                     langService,
                                                     gridService,
+                                                    lookupService,
                                                     contextHelpService) {
         'ngInject';
         var self = this;
@@ -20,6 +21,11 @@ module.exports = function (app) {
          * @type {*}
          */
         self.dynamicMenuItems = dynamicMenuItems;
+        self.menuTypes = {};
+
+        _.map(lookupService.returnLookups(lookupService.menuItemType), function (type) {
+             self.menuTypes[type.lookupKey] = type;
+        });
 
         /**
          * @description Contains the selected document types

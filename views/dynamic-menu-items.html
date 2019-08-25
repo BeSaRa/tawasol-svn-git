@@ -47,6 +47,10 @@
                                             <span>{{lang.english_name}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedDynamicMenuItems.length" md-column
+                                            md-order-by="">
+                                            <span>{{lang.menu_item_type}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDynamicMenuItems.length" md-column
                                             md-order-by="status">
                                             <span>{{lang.status}}</span>
                                         </th>
@@ -67,6 +71,7 @@
                                         ng-repeat="dynamicMenuItem in ctrl.dynamicMenuItems  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{dynamicMenuItem.arName}}</td>
                                         <td md-cell>{{dynamicMenuItem.enName}}</td>
+                                        <td md-cell>{{ctrl.menuTypes[dynamicMenuItem.menuType].getTranslatedName()}}</td>
                                         <td md-cell>
                                             <md-switch aria-label="{{lang.status}}"
                                                        title="{{dynamicMenuItem.getTranslatedStatus()}}"
