@@ -126,7 +126,7 @@ module.exports = function (app) {
         };
         // TODO : enhance send method
         self.sendDocument = function () {
-            if (!self.cc.getDocument() || !self.cc.getDocument().pages.length) {
+            if (!self.checkIfScannerHasDocument()) {
                 dialog.errorMessage(langService.get('scanner_has_no_file_to_send'));
                 return;
             }
