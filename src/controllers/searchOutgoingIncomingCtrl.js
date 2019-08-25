@@ -1166,7 +1166,7 @@ module.exports = function (app) {
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
                     "SEND_DOCUMENT_BY_FAX",
                     "SEND_SMS",
-                    "" // document link
+                    "SHARE_BOOK_LINK"
                 ],
                 checkAnyPermission: true,
                 subMenu: [
@@ -1227,7 +1227,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'message',
                         text: 'send_document_link',
-                        permissionKey: "",
+                        permissionKey: "SHARE_BOOK_LINK",
                         callback: self.sendDocumentLink,
                         class: "action-green",
                         checkShow: function (action, model) {

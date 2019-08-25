@@ -688,9 +688,7 @@ module.exports = function (app) {
 
 
             self.getExportData = function (heading, popupHeading) {
-                var headerNames = [];
-                var data = [];
-                var i, record;
+                var headerNames = [], data = [], i, record;
 
                 /* Workflow History */
                 if (heading === 'view_tracking_sheet_work_flow_history') {
