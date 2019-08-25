@@ -69,23 +69,27 @@ module.exports = function (app) {
                 self.required[item.symbolicName.toLowerCase()] = {isMandatory: item.isMandatory, status: item.status};
             });
 
-            mainClassificationOptionFromInfo = new OUClassification({
-                classification: new Classification({
-                    id: self.document.mainClassificationInfo.id,
-                    arName: self.document.mainClassificationInfo.arName,
-                    enName: self.document.mainClassificationInfo.enName
-                })
-            });
-            subClassificationOptionFromInfo = new Classification({
-                id: self.document.subClassificationInfo.id,
-                arName: self.document.subClassificationInfo.arName,
-                enName: self.document.subClassificationInfo.enName
-            });
+            if (self.document.hasVsId() && self.document.mainClassificationInfo.id !== -1) {
+                mainClassificationOptionFromInfo = new OUClassification({
+                    classification: new Classification({
+                        id: self.document.mainClassificationInfo.id,
+                        arName: self.document.mainClassificationInfo.arName,
+                        enName: self.document.mainClassificationInfo.enName
+                    })
+                });
+            }
+            if (self.document.hasVsId() && self.document.subClassificationInfo.id !== -1) {
+                subClassificationOptionFromInfo = new Classification({
+                    id: self.document.subClassificationInfo.id,
+                    arName: self.document.subClassificationInfo.arName,
+                    enName: self.document.subClassificationInfo.enName
+                });
+            }
 
-            if (typeof self.document.mainClassification === 'number') {
+            if (typeof self.document.mainClassification === 'number' && mainClassificationOptionFromInfo) {
                 self.document.mainClassification = mainClassificationOptionFromInfo.classification;
             }
-            if (typeof self.document.subClassification === 'number') {
+            if (typeof self.document.subClassification === 'number' && subClassificationOptionFromInfo) {
                 self.document.subClassification = subClassificationOptionFromInfo;
             }
 
