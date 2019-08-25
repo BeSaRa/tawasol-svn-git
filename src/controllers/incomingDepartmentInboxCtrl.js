@@ -130,7 +130,7 @@ module.exports = function (app) {
         };
 
         self.checkIfQuickReceiveBulkAvailable = function () {
-            if(!employeeService.hasPermissionTo("QUICK_RECEIVE_INCOMING")){
+            if (!employeeService.hasPermissionTo("QUICK_RECEIVE_INCOMING")) {
                 return false;
             }
             self.itemsWithoutQuickReceive = [];
@@ -313,6 +313,12 @@ module.exports = function (app) {
                                     self.reloadIncomingDepartmentInboxes(self.grid.page)
                                         .then(function () {
                                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                                            new ResolveDefer(defer);
+                                        });
+                                })
+                                .catch(function () {
+                                    self.reloadIncomingDepartmentInboxes(self.grid.page)
+                                        .then(function () {
                                             new ResolveDefer(defer);
                                         });
                                 });
