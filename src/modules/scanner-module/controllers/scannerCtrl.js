@@ -120,8 +120,16 @@ module.exports = function (app) {
         self.closeScanner = function () {
             dialog.cancel();
         };
+
+        self.checkIfScannerHasDocument = function () {
+            return self.cc.getDocument() && self.cc.getDocument().pages.length;
+        };
         // TODO : enhance send method
         self.sendDocument = function () {
+            if (!self.cc.getDocument() || !self.cc.getDocument().pages.length) {
+                dialog.errorMessage(langService.get('scanner_has_no_file_to_send'));
+                return;
+            }
             PleaseWaitDialog.show(true, false);
             self.cc.getDocument().save(FileType.Pdf, function (page, data) {
 
@@ -871,7 +879,7 @@ module.exports = function (app) {
         self.createCCSession = function (loadSameScanner) {
             var defer = $q.defer(),
                 licenseId = "Ebla Computer Consultancy Company_2AD47-APRQ8-Y9E64-FSBZH";
-                // licenseId = "EBLA Computer Consultancy Co-CMS_9JBF8-9JKE8-DDE64-XRC22";
+            // licenseId = "EBLA Computer Consultancy Co-CMS_9JBF8-9JKE8-DDE64-XRC22";
             window['SCANNER_LICENSE_ID'] = licenseId;
             CCToolkit.createSession({
                 licenseId: licenseId,

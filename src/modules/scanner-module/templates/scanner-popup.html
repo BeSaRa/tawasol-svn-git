@@ -219,7 +219,7 @@
         </div>
         <div id="scanner-actions">
             <div layout="row">
-                <md-button ng-click="ctrl.sendDocument()" class="md-raised">
+                <md-button ng-disabled="!ctrl.checkIfScannerHasDocument()" ng-click="ctrl.sendDocument()" class="md-raised">
                     {{lang.send}}
                 </md-button>
                 <span flex></span>
