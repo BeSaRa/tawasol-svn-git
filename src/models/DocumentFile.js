@@ -129,6 +129,9 @@ module.exports = function (app) {
 
             DocumentFile.prototype.addBulkToDocumentFiles = function (ouDocumentFiles) {
                 var self = this;
+                _.map(ouDocumentFiles, function (relatedOu) {
+                    relatedOu.file = self.id;
+                });
                 return ouDocumentFileService
                     .addBulkOUDocumentFiles(ouDocumentFiles)
                     .then(function (result) {
