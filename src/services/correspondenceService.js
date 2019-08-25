@@ -3945,7 +3945,7 @@ module.exports = function (app) {
                             if (info.documentClass.toLowerCase() === 'incoming') {
                                 // filter external sites only
                                 return _.filter([correspondence.site], function (site) {
-                                    return configurationService.CORRESPONDENCE_SITES_TYPES_LOOKUPS.indexOf(Number(site.subSiteId.toString().substring(0,1))) === -1;
+                                    return configurationService.CORRESPONDENCE_SITES_TYPES_LOOKUPS.indexOf(Number(site.subSiteId.toString().substring(0, 1))) === -1;
                                 });
                             } else if (info.documentClass.toLowerCase() === 'outgoing') {
                                 return self.loadCorrespondenceSites(correspondence)
@@ -4032,14 +4032,14 @@ module.exports = function (app) {
                 entryTemplateUrl = entryTemplate.hasOwnProperty('menuItem') ? entryTemplate.menuItem : entryTemplate;
 
             entryTemplateUrl = entryTemplateUrl && entryTemplateUrl.hasOwnProperty('url') ? entryTemplateUrl.url : entryTemplateUrl;
-
             return $http.put(archiveIcnUrl, options)
                 .then(function (result) {
-                    entryTemplateUrl = entryTemplateUrl.change({
+                    var variables = '%2C:docId%2C:vsId%2C:refVsId'.change({
                         vsId: result.data.rs.vsId,
                         docId: result.data.rs.id,
                         refVsId: result.data.rs.refVSID
                     });
+                    entryTemplateUrl = entryTemplateUrl.replace('&mimeType', variables + '&mimeType');
                     return _showICNArchiveDialog(correspondence, entryTemplateUrl, $event)
                 });
 

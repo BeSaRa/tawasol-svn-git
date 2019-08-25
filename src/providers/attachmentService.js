@@ -16,7 +16,7 @@ module.exports = function (app) {
             });
             provider.setAllExtensionGroups(groups);*/
 
-            for (var group in groups){
+            for (var group in groups) {
                 groups[group] = groups[group].map(v => v.toLowerCase());
             }
             provider.setAllExtensionGroups(groups);
@@ -635,13 +635,15 @@ module.exports = function (app) {
                 securityLevel = securityLevel.hasOwnProperty('id') ? securityLevel.id : securityLevel;
                 searchTemplateUrl = searchTemplateUrl && searchTemplateUrl.hasOwnProperty('url') ? searchTemplateUrl.url : searchTemplateUrl;
 
-                searchTemplateUrl = searchTemplateUrl.change({
+                var variables = '%2C:token%2C:vsId%2C:attachmentType%2C:securityLevel%2C:attachmentName'.change({
                     token: tokenService.getToken(),
                     vsId: correspondence.getInfo().vsId,
                     attachmentType: attachmentType,
                     securityLevel: securityLevel,
                     attachmentName: attachment.documentTitle ? attachment.documentTitle : ''
                 });
+                searchTemplateUrl = searchTemplateUrl.replace('&mimeType', variables + '&mimeType');
+
                 return dialog
                     .showDialog({
                         controller: 'icnAttachmentPopCtrl',
