@@ -23,6 +23,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'managePropertiesDirectiveCtrl';
         LangWatcher($scope);
+        self.employeeService = employeeService;
         var properties = [], mainClassificationOptionFromInfo, subClassificationOptionFromInfo;
         self.document = null;
         self.maxCreateDate = new Date();
@@ -152,7 +153,7 @@ module.exports = function (app) {
                     self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
                     self.classifications = _displayCorrectClassifications(self.classifications);
                     _appendMissingClassification();
-                    self.onChangeMainClassification(null,true);
+                    self.onChangeMainClassification(null, true);
                 });
             } else {
                 self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
@@ -531,7 +532,7 @@ module.exports = function (app) {
         self.onChangeMainClassification = function ($event, skipResetSub) {
             if (self.document.mainClassification) {
                 self.loadSubClassificationRecords(true, self.checkMandatory('subClassification'));
-                if(!skipResetSub){
+                if (!skipResetSub) {
                     self.document.subClassification = null;
                 }
             } else {
@@ -660,6 +661,15 @@ module.exports = function (app) {
 
         self.getTranslatedEnableDisableSecurityLevel = function () {
             return self.isSecurityLevelEnabled ? langService.get('disable_security_level') : langService.get('enable_security_level');
+        };
+
+        /**
+         * @description Checks if the security level is private/personal for given document
+         * @returns {boolean}
+         */
+        self.isPrivateSecurityLevel = function (securityLevel) {
+            securityLevel = (securityLevel && securityLevel.hasOwnProperty('lookupKey')) ? securityLevel.lookupKey : securityLevel;
+            return securityLevel === 4;
         };
     });
 };

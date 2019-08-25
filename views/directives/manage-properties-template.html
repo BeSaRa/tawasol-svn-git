@@ -107,7 +107,9 @@
                                ng-model-options="{trackBy: '$value.id'}"
                                ng-required="ctrl.checkMandatory('securityLevel')">
                         <md-option ng-value="level"
-                                   ng-repeat="level in ctrl.securityLevels">
+                                   ng-repeat="level in ctrl.securityLevels"
+                                   ng-disabled="ctrl.isPrivateSecurityLevel(level) && ctrl.document.hasVsId()"
+                                   ng-readonly="ctrl.isPrivateSecurityLevel(level) && ctrl.document.hasVsId()">
                             {{level.getTranslatedName()}}
                         </md-option>
                     </md-select>
@@ -115,7 +117,8 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <md-input-container ng-if="ctrl.enabledSecurityLevel() && ctrl.employeeService.hasPermissionTo('CHANGE_BOOK_SECURITY_LEVEL')">
+                <md-input-container
+                        ng-if="ctrl.enabledSecurityLevel() && ctrl.employeeService.hasPermissionTo('CHANGE_BOOK_SECURITY_LEVEL')">
                     <md-checkbox ng-model="ctrl.isSecurityLevelEnabled"
                                  aria-label="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}"
                                  tooltip="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}">
