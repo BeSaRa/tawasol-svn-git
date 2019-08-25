@@ -83,13 +83,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Gets the document templates for selected organization unit
-         */
-        self.getDocumentTemplates = function () {
-            self.reloadDocumentTemplates(self.grid.page);
-        };
-
-        /**
          * @description Opens dialog for add new document template
          * @param $event
          */
@@ -218,6 +211,33 @@ module.exports = function (app) {
             downloadService.controllerMethod
                 .documentTemplateDownload(documentTemplate);
         };
+
+        self.isActionAllowed = function (documentTemplate, checkForAdd) {
+            var isAllowed = false;
+            if (employeeService.isSuperAdminUser()) {
+                isAllowed = true;
+            } else if (employeeService.isSubAdminUser()) {
+                if (checkForAdd) {
+                    isAllowed = self.selectedOrganization && self.selectedOrganization !== -1;
+                } else {
+                    isAllowed = !documentTemplate.isGlobal;
+                }
+            }
+            return isAllowed;
+        };
+
+        self.isBulkActionAllowed = function () {
+            var isAllowed = true;
+            if (employeeService.isSubAdminUser()) {
+                for (var i = 0; i < self.selectedDocumentTemplates.length; i++) {
+                    isAllowed = !self.selectedDocumentTemplates[i].isGlobal;
+                    if (!isAllowed) {
+                        break;
+                    }
+                }
+            }
+            return isAllowed;
+        }
 
     });
 };

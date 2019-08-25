@@ -8,7 +8,8 @@ module.exports = function (app) {
                                                      dialog,
                                                      langService,
                                                      toast,
-                                                     cmsTemplate) {
+                                                     cmsTemplate,
+                                                     employeeService) {
         'ngInject';
         var self = this;
         self.serviceName = 'documentTemplateService';
@@ -30,9 +31,24 @@ module.exports = function (app) {
          * @returns {Promise|documentTemplates}
          */
         self.loadDocumentTemplates = function (organization, documentClass) {
+            /*if (employeeService.isSubAdminUser){
+                return self.loadDocumentTemplatesForSubAdmin();
+            }*/
             organization = organization.hasOwnProperty('id') ? organization.id : organization;
 
             return $http.get(urlService.documentTemplates + ((documentClass) ? ('/active/' + documentClass + '/ou/') : '/ou/') + organization).then(function (result) {
+                self.documentTemplates = generator.generateCollection(result.data.rs, DocumentTemplate, self._sharedMethods);
+                self.documentTemplates = generator.interceptReceivedCollection('DocumentTemplate', self.documentTemplates);
+                return self.documentTemplates;
+            });
+        };
+
+        /**
+         * @description Load the document templates from server for sub admin.
+         * @returns {Promise|documentTemplates}
+         */
+        self.loadDocumentTemplatesForSubAdmin= function () {
+            return $http.get(urlService.documentTemplates + '/sub-admin').then(function (result) {
                 self.documentTemplates = generator.generateCollection(result.data.rs, DocumentTemplate, self._sharedMethods);
                 self.documentTemplates = generator.interceptReceivedCollection('DocumentTemplate', self.documentTemplates);
                 return self.documentTemplates;

@@ -65,7 +65,7 @@ module.exports = function (app) {
                     defaultDisplayLang: 1,
                     isCloudAdmin: result.isCloudAdmin,
                     isSuperAdmin: result.isSuperAdmin,
-                    isSubAdmin: result.isSuperAdmin
+                    isSubAdmin: result.isSubAdmin
                 });
                 if (result.isAdminUser) {
                     employee.setPermissions(result.permissions); // set permissions
@@ -75,7 +75,7 @@ module.exports = function (app) {
                 employee = generator.interceptReceivedInstance('ApplicationUser', new Employee(result.userInfo));
                 employee.isCloudAdmin = result.isCloudAdmin;
                 employee.isSuperAdmin = result.isSuperAdmin;
-                employee.isSubAdmin = result.isSuperAdmin;
+                employee.isSubAdmin = result.isSubAdmin;
                 employee.isAdmin = result.isAdminUser;
             }
             // set globalSetting for root entity

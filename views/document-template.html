@@ -5,6 +5,7 @@
         <div layout="row" layout-align="start center" class="page-header padding-header small">
             <span>{{lang.menu_item_document_templates}}</span>
             <md-button ng-click="ctrl.openAddDocumentTemplateDialog($event)"
+                       ng-if="ctrl.isActionAllowed(null,  true)"
                        class="md-icon-button" ng-if="ctrl.selectedOrganization"
                        tooltip="{{lang.add}}">
                 <md-icon md-svg-icon="plus"></md-icon>
@@ -16,7 +17,7 @@
             <md-input-container flex>
                 <label for="organization">{{ctrl.selectedOrganization > 0 ? lang.organization_unit : "" }}</label>
                 <md-select id="organization" name="organization" aria-label="{{lang.organization_unit}}"
-                           ng-change="ctrl.getDocumentTemplates()"
+                           ng-change="ctrl.reloadDocumentTemplates()"
                            ng-model="ctrl.selectedOrganization">
                     <md-option ng-value="organization.id"
                                ng-repeat="organization in ctrl.organizations track by $index">
@@ -43,8 +44,10 @@
                                                 <span>{{ctrl.selectedDocumentTemplates.length}} {{lang.items_selected}} </span>
                                                 <span flex></span>
                                                 <table-status-directive
+                                                        ng-if="ctrl.isBulkActionAllowed()"
                                                         when-close="ctrl.changeStatusBulkDocumentTemplates"></table-status-directive>
                                                 <md-button class="md-icon-button"
+                                                           ng-if="ctrl.isBulkActionAllowed()"
                                                            ng-click="ctrl.removeBulkDocumentTemplates($event)">
                                                     <md-icon md-svg-icon="delete"></md-icon>
                                                 </md-button>
@@ -93,10 +96,12 @@
                                                     <md-icon md-svg-icon="download"></md-icon>
                                                 </md-button>
                                                 <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                           ng-if="ctrl.isActionAllowed(documentTemplate)"
                                                            ng-click="ctrl.removeDocumentTemplate(documentTemplate, $event)">
                                                     <md-icon md-svg-icon="delete"></md-icon>
                                                 </md-button>
                                                 <md-button class="md-icon-button" title="{{lang.edit}}"
+                                                           ng-if="ctrl.isActionAllowed(documentTemplate)"
                                                            ng-click="ctrl.openEditDocumentTemplateDialog(documentTemplate, $event)">
                                                     <md-icon md-svg-icon="pencil"></md-icon>
                                                 </md-button>
