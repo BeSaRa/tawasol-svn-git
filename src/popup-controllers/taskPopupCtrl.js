@@ -41,6 +41,8 @@ module.exports = function (app) {
         self.startDate = null;
         self.endDate = null;
 
+        self.minDate = _getMinDueDate();
+
         self.selectedParticipant = null;
 
         self.taskParticipantsIds = [];
@@ -65,6 +67,12 @@ module.exports = function (app) {
                 self.taskParticipantsIds.indexOf(user.participantId) === -1 ? user.exclude = false : user.exclude = true;
                 return user;
             });
+        }
+
+        // if in edit mode the due date should be less than the start date
+        // if in add mode the due date should be greater than or equal today
+        function _getMinDueDate() {
+            return self.minDate = self.editMode ? self.task.startDate : (self.task.startDate.valueOf() < Date.now() ? new Date() : self.task.startDate);
         }
 
         function _getParticipantIds() {
@@ -184,6 +192,7 @@ module.exports = function (app) {
 
         self.startDateChange = function () {
             _getSelectedDates();
+            _getMinDueDate();
             // if you have start date greater than due date reset due date
             if (self.startDate && self.endDate && self.startDate > self.endDate) {
                 self.task.dueDate = null;
@@ -271,6 +280,10 @@ module.exports = function (app) {
 
         self.closeTaskPopupFromCtrl = function () {
             dialog.hide(self.task);
+        };
+
+        self.getAvailableDate = function () {
+            return self.task.startDate.valueOf() > Date.now() ? self.task.startDate : new Date();
         };
 
         self.viewCorrespondence = function (correspondence, $event) {

@@ -65,7 +65,7 @@
                                         <div flex layout="row">
                                             <md-input-container flex class="cms-datepicker">
                                                 <label>{{lang.task_end_date}}</label>
-                                                <md-datepicker md-min-date="ctrl.task.startDate" required
+                                                <md-datepicker md-min-date="ctrl.minDate" required
                                                                ng-model="ctrl.task.dueDate"></md-datepicker>
                                                 <div ng-messages="task_form.dueDate.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
