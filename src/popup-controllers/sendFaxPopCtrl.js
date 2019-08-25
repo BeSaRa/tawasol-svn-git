@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                toast,
                                                langService,
                                                dialog,
+                                               $timeout,
                                                correspondence,
                                                correspondenceService) {
         'ngInject';
@@ -11,9 +12,11 @@ module.exports = function (app) {
         self.controllerName = 'sendFaxPopCtrl';
 
         self.correspondence = correspondence;
-        self.correspondence.sitesInfoTo = [];
         self.model = angular.copy(correspondence);
 
+        $timeout(function () {
+            self.correspondence.sitesInfoTo = self.sites;
+        });
         self.faxExportOptions = {
             ATTACHMENTS: true,
             RELATED_BOOKS: true

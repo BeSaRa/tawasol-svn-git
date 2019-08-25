@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('CorrespondenceSiteType', function (CMSModelInterceptor,
                                                     langService,
+                                                    configurationService,
                                                     _) {
         'ngInject';
         return function CorrespondenceSiteType(model) {
@@ -50,13 +51,13 @@ module.exports = function (app) {
             };
 
             CorrespondenceSiteType.prototype.canDelete = function () {
-                var defaultValues = [1, 3, 5]; // 1 - internal, 3 - g2g, 5 - old system, 2 - external
-                return defaultValues.indexOf(this.lookupKey) === -1;
+                //var defaultValues = [1, 3, 5]; // 1 - internal, 3 - g2g, 5 - old system, 2 - external
+                return configurationService.CORRESPONDENCE_SITES_TYPES_LOOKUPS.indexOf(this.lookupKey) === -1;
             };
 
             CorrespondenceSiteType.prototype.isExternalSiteType = function () {
-                var internalAndG2GSites = [1, 3, 5]; // 1 - internal, 3 - g2g, 5 - old system
-                return internalAndG2GSites.indexOf(this.lookupKey) === -1;
+                //var internalAndG2GSites = [1, 3, 5]; // 1 - internal, 3 - g2g, 5 - old system
+                return configurationService.CORRESPONDENCE_SITES_TYPES_LOOKUPS.indexOf(this.lookupKey) === -1;
             };
 
             // don't remove CMSModelInterceptor from last line

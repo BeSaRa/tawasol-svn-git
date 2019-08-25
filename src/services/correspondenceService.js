@@ -3916,11 +3916,11 @@ module.exports = function (app) {
 
         /**
          *@description open send fax dialog
-         * @param correspondence
+         * @param record
          * @param $event
          */
-        self.openSendFaxDialog = function (correspondence, $event) {
-            var info = correspondence.getInfo(),
+        self.openSendFaxDialog = function (record, $event) {
+            var info = record.getInfo(),
                 defer = $q.defer();
 
             return dialog.showDialog({
@@ -3934,10 +3934,32 @@ module.exports = function (app) {
                     correspondence: function () {
                         'ngInject';
                         return self.loadCorrespondenceByVsIdClass(info.vsId, info.documentClass)
-                            .then(function (correspondence) {
-                                defer.resolve(correspondence);
-                                return correspondence;
+                            .then(function (result) {
+                                defer.resolve(result);
+                                return result;
                             });
+                    },
+                    sites: function (configurationService) {
+                        'ngInject';
+                        return defer.promise.then(function (correspondence) {
+                            if (info.documentClass.toLowerCase() === 'incoming') {
+                                // filter external sites only
+                                return _.filter([correspondence.site], function (site) {
+                                    return configurationService.CORRESPONDENCE_SITES_TYPES_LOOKUPS.indexOf(Number(site.subSiteId.toString().substring(0,1))) === -1;
+                                });
+                            } else if (info.documentClass.toLowerCase() === 'outgoing') {
+                                return self.loadCorrespondenceSites(correspondence)
+                                    .then(function (result) {
+                                        // filter external sites only
+                                        return _.filter(result.first.concat(result.second), function (site) {
+                                            return configurationService.CORRESPONDENCE_SITES_TYPES_LOOKUPS.indexOf(site.siteCategory) === -1;
+                                        });
+                                    });
+
+                            } else {
+                                return [];
+                            }
+                        });
                     }
                 }
             })
