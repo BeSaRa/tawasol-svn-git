@@ -5,8 +5,7 @@
         <div layout="row" layout-align="start center" class="page-header padding-header small">
             <span>{{lang.menu_item_document_templates}}</span>
             <md-button ng-click="ctrl.openAddDocumentTemplateDialog($event)"
-                       ng-if="ctrl.isActionAllowed(null,  true)"
-                       class="md-icon-button" ng-if="ctrl.selectedOrganization"
+                       class="md-icon-button" ng-if="ctrl.isActionAllowed(null,  true)"
                        tooltip="{{lang.add}}">
                 <md-icon md-svg-icon="plus"></md-icon>
             </md-button>
@@ -86,6 +85,8 @@
                                             <md-switch aria-label="{{lang.status}}"
                                                        title="{{documentTemplate.getTranslatedStatus()}}"
                                                        ng-change="ctrl.changeStatusDocumentTemplate(documentTemplate)"
+                                                       ng-disabled="!ctrl.isActionAllowed(documentTemplate)"
+                                                       ng-readonly="!ctrl.isActionAllowed(documentTemplate)"
                                                        ng-model="documentTemplate.status">
                                             </md-switch>
                                         </td>

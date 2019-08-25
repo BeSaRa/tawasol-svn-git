@@ -87,6 +87,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.openAddDocumentTemplateDialog = function ($event) {
+            if (!self.isActionAllowed(null, true)){
+                return false;
+            }
             documentTemplateService
                 .controllerMethod
                 .documentTemplateAdd(self.selectedOrganization, $event)
@@ -104,6 +107,9 @@ module.exports = function (app) {
          * @param documentTemplate
          */
         self.openEditDocumentTemplateDialog = function (documentTemplate, $event) {
+            if (!self.isActionAllowed(documentTemplate)){
+                return false;
+            }
             documentTemplateService
                 .controllerMethod
                 .documentTemplateEdit(documentTemplate, $event)
@@ -149,6 +155,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeDocumentTemplate = function (documentTemplate, $event) {
+            if (!self.isActionAllowed(documentTemplate)){
+                return false;
+            }
             documentTemplateService
                 .controllerMethod
                 .documentTemplateDelete(documentTemplate, $event)
@@ -162,6 +171,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkDocumentTemplates = function ($event) {
+            if (!self.isBulkActionAllowed()){
+                return false;
+            }
             documentTemplateService
                 .controllerMethod
                 .documentTemplateDeleteBulk(self.selectedDocumentTemplates, $event)
@@ -178,6 +190,9 @@ module.exports = function (app) {
          * @param documentTemplate
          */
         self.changeStatusDocumentTemplate = function (documentTemplate) {
+            if (!self.isActionAllowed(documentTemplate)){
+                return false;
+            }
             self.statusServices[documentTemplate.status](documentTemplate)
                 .then(function () {
                     toast.success(langService.get('status_success'));
@@ -193,6 +208,9 @@ module.exports = function (app) {
          * @param status
          */
         self.changeStatusBulkDocumentTemplates = function (status) {
+            if (!self.isBulkActionAllowed()){
+                return false;
+            }
             self.statusServices[status](self.selectedDocumentTemplates)
                 .then(function () {
                     self.reloadDocumentTemplates(self.grid.page)
