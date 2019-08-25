@@ -121,12 +121,12 @@ module.exports = function (app) {
             dialog.cancel();
         };
 
-        self.checkIfScannerHasDocument = function () {
+        self.scannerHasDocument = function () {
             return self.cc.getDocument() && self.cc.getDocument().pages.length;
         };
         // TODO : enhance send method
         self.sendDocument = function () {
-            if (!self.checkIfScannerHasDocument()) {
+            if (!self.scannerHasDocument()) {
                 dialog.errorMessage(langService.get('scanner_has_no_file_to_send'));
                 return;
             }
