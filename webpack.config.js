@@ -4,7 +4,11 @@ const NGAnnotate = require('ng-annotate-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = function (env) {
-    const cssResolver = isProduction(env) ? {loader: MiniCssExtractPlugin.loader} : {
+    const cssResolver = isProduction(env) ? {
+        loader: MiniCssExtractPlugin.loader, options: {
+            publicPath: '../../'
+        }
+    } : {
         loader: 'style-loader',
         options: {sourceMap: !isProduction(env)}
     };
