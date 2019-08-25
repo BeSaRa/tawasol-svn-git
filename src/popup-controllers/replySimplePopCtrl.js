@@ -160,7 +160,7 @@ module.exports = function (app) {
         self.getSelectedManagersText = function () {
             if (self.selectedManagers && self.selectedManagers.length) {
                 var map = _.map(self.selectedManagers, function (manager) {
-                    return manager['ou' + self.currentLangUCFirst + 'Name'];
+                    return manager['ou' + self.currentLangUCFirst + 'Name'] + ' - ' +  manager[langService.current + 'Name'];
                 });
                 return map.join(', ');
             }
