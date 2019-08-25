@@ -103,7 +103,7 @@
                                         <label>{{lang.task_state}}</label>
                                         <md-select name="taskState" id="taskState"
                                                    ng-model="ctrl.task.taskState">
-                                            <md-option ng-value="state.lookupKey" ng-repeat="state in ctrl.taskStates">
+                                            <md-option ng-disabled="ctrl.disableStateWhileAdd(state)" ng-value="state.lookupKey" ng-repeat="state in ctrl.taskStates">
                                                 {{state.getTranslatedName()}}
                                             </md-option>
                                         </md-select>

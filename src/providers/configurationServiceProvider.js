@@ -8,9 +8,10 @@ module.exports = function (app) {
             CORRESPONDENCE_SITES_TYPES_LOOKUPS: [1 /* internal sites */, 3 /* g2g sites */, 5 /* internal g2g sites */],
             OFFICE_ONLINE_DELAY: 3000,
             DEFAULT_START_TASK_TIME: '08:00',
-            DEFAULT_SEND_RELATED_DOCS: true ,
+            DEFAULT_SEND_RELATED_DOCS: true,
             ICN_ENTRY_TEMPLATE_MENU_TYPE: 3,
-            ICN_SEARCH_TEMPLATE_MENU_TYPE: 4
+            ICN_SEARCH_TEMPLATE_MENU_TYPE: 4,
+            STATES_DISABLED_WHILE_ADD_TASK: [1]
         };
         var configurationServiceProvider = provider;
         /**

@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('taskPopupCtrl', function (_,
                                               task,
                                               validationService,
+                                              configurationService,
                                               $q,
                                               langService,
                                               WorkItem,
@@ -127,6 +128,14 @@ module.exports = function (app) {
             return self.startDate && self.endDate && self.startDate === self.endDate && self.selectedStartTime && self.selectedEndTime && self.selectedEndTime.compareValue <= self.selectedStartTime.compareValue
         }
 
+        /**
+         * @description to disable specific state while add task.
+         * @param state
+         * @returns {boolean}
+         */
+        self.disableStateWhileAdd = function (state) {
+            return !self.editMode && configurationService.STATES_DISABLED_WHILE_ADD_TASK.indexOf(state.lookupKey) !== -1;
+        };
 
         self.addTaskFromCtrl = function () {
             return validationService
