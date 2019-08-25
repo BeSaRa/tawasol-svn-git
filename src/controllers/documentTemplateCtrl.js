@@ -191,6 +191,7 @@ module.exports = function (app) {
          */
         self.changeStatusDocumentTemplate = function (documentTemplate) {
             if (!self.isActionAllowed(documentTemplate)){
+                documentTemplate.status = !documentTemplate.status;
                 return false;
             }
             self.statusServices[documentTemplate.status](documentTemplate)
