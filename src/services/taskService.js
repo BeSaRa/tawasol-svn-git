@@ -199,10 +199,10 @@ module.exports = function (app) {
                     return result;
                 self.events = _.map(result.data.rs, function (event) {
                     event.title = event.taskTitle;
-                    event.start = event.participantStartDate ? event.participantStartDate : event.taskStartDate;
-                    event.end = event.participantDueDate ? event.participantDueDate : event.taskDueDate;
+                    event.start = event.creator ? event.taskStartDate : event.participantStartDate;
+                    event.end = event.creator ? event.taskDueDate : event.participantDueDate;
                     event.editable = (event.creator && event.taskState !== 3);
-                    event.classNames = (event.participantTaskState !== null) ? self.classes[event.participantTaskState] : self.classes[event.taskState];
+                    event.classNames = event.creator ? self.classes[event.taskState] : self.classes[event.participantTaskState];
                     return event;
                 });
             });
