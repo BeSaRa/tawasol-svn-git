@@ -325,7 +325,7 @@ module.exports = function (app) {
 
 
         self.docActionPrintBarcode = function (document, $event) {
-            document.barcodePrint(document);
+            document.barcodePrint($event);
         };
 
         self.docActionLaunchDistributionWorkflow = function (document, $event) {
