@@ -12,6 +12,7 @@ module.exports = function (app) {
         return function Incoming(model) {
             var self = this, correspondenceService, exportData = {
                 label_serial: 'docFullSerial',
+                document_number: 'refDocNumber',
                 subject: 'docSubject',
                 priority_level: function () {
                     return this.priorityLevel.getTranslatedName();

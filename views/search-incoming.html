@@ -111,7 +111,7 @@
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
                                         md-order-by="docFullSerial">
-                                        <span>{{lang.label_serial}}</span>
+                                        <span>{{lang.label_serial}} / {{lang.document_number}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
                                         md-order-by="docSubject">
@@ -167,7 +167,10 @@
                                                                   record-type="correspondence"></grid-indicator-directive>
                                     </td>
                                     <td md-cell>
-                                        <span class="serial-td">{{searchedIncomingDocument.docFullSerial}}</span></td>
+                                        <span class="serial-td">{{searchedIncomingDocument.docFullSerial}}</span>
+                                        <hr class="m0">
+                                        <span class="serial-td">{{searchedIncomingDocument.refDocNumber}}</span>
+                                    </td>
                                     <td md-cell class="subject">
                                         <!--<grid-document-subject-directive record="searchedIncomingDocument"
                                                                          plain-text-only="!searchedIncomingDocument.hasContent()"

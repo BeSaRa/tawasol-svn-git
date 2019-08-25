@@ -10,7 +10,8 @@ module.exports = function (app) {
                                                  toast,
                                                  cmsTemplate,
                                                  OUDocumentFile,
-                                                 employeeService) {
+                                                 employeeService,
+                                                 errorCode) {
         'ngInject';
         var self = this;
         self.serviceName = 'documentFileService';

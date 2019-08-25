@@ -238,13 +238,16 @@ module.exports = function (app) {
             var printTitle = langService.get("search_module_search_results") + " " + langService.get("from") + " " + generator.convertDateToString(self.searchIncoming.docDateFrom) +
                 " " + langService.get("to") + " " + generator.convertDateToString(self.searchIncoming.docDateTo);
 
-            var headers = ['label_serial',
+            var headers = [
+                'label_serial',
+                'document_number',
                 'subject',
                 'priority_level',
                 'label_document_type',
                 'creator',
                 'created_on',
-                'correspondence_sites'];
+                'correspondence_sites'
+            ];
 
             printService
                 .printData(self.searchedIncomingDocuments, headers, printTitle);
