@@ -18,8 +18,9 @@ module.exports = function (app) {
          * @description Load the application user signature s from server.
          * @returns {Promise|applicationUserSignatures}
          */
-        self.loadApplicationUserSignatures = function (id) {
-            return $http.get(urlService.applicationUserSignatures + '/user-id/' + id).then(function (result) {
+        self.loadApplicationUserSignatures = function (appUserId, isAdmin) {
+            appUserId = appUserId.hasOwnProperty('id') ? appUserId.id : appUserId;
+            return $http.get(urlService.applicationUserSignatures + '/user-id/' + appUserId + '?asAdmin=' + !!isAdmin).then(function (result) {
                 self.applicationUserSignatures = generator.generateCollection(result.data.rs, ApplicationUserSignature, self._sharedMethods);
                 self.applicationUserSignatures = generator.interceptReceivedCollection('ApplicationUserSignature', self.applicationUserSignatures);
                 self.applicationUserSignatures = self.applicationUserSignatures.reverse();
