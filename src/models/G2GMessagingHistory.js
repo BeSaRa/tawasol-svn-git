@@ -9,20 +9,23 @@ module.exports = function (app) {
         return function G2GMessagingHistory(model) {
             var self = this, correspondenceService, managerService,
                 exportData = {
-                    document_number: 'outgoingSerial',
-                    sent_items_document_subject: 'subject',
-                    type: function () {
+                    subject: 'subject',
+                    document_type: function () {
                         return this.typeInfo.getTranslatedName();
                     },
-                    'sent_items_receive_date': 'updateDate',
                     security_level: function () {
                         return this.securityLevel.getTranslatedName()
                     },
                     sent_date: 'sentDate',
+                    document_number: 'outgoingSerial',
+                    g2g_book_number: 'g2GRefNo',
+                    received_date: 'updateDate',
                     status: function () {
                         return this.statusInfo.getTranslatedName()
                     },
-                    'g2g_book_number': 'g2GRefNo'
+                    correspondence_sites: function () {
+                        return this.getTranslatedCorrespondenceSiteInfo();
+                    }
                 };
 
             self.refDocId = null;

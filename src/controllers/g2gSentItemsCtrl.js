@@ -175,14 +175,15 @@ module.exports = function (app) {
         self.printResult = function ($event) {
             var printTitle = langService.get('menu_item_sent_items'),
                 headers = [
-                    'sent_items_document_subject',
-                    'type',
+                    'subject',
+                    'document_type',
                     'security_level',
                     'sent_date',
                     'document_number',
                     'g2g_book_number',
-                    'sent_items_receive_date',
-                    'status'
+                    'received_date',
+                    'status',
+                    'correspondence_sites'
                 ];
             printService
                 .printData(self.g2gItems, headers, printTitle);
