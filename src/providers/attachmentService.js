@@ -8,18 +8,18 @@ module.exports = function (app) {
          */
         function _prepareExtensionGroups() {
             var groups = provider.getAllExtensionGroups();
-            /*_.map(groups, function (extensions, group) {
+            _.map(groups, function (extensions, group) {
                 extensions = _.map(extensions, function (extension) {
                     return extension.toLowerCase();
                 });
                 groups[group] = extensions;
             });
-            provider.setAllExtensionGroups(groups);*/
+            provider.setAllExtensionGroups(groups);
 
-            for (var group in groups) {
+            /*for (var group in groups) {
                 groups[group] = groups[group].map(v => v.toLowerCase());
             }
-            provider.setAllExtensionGroups(groups);
+            provider.setAllExtensionGroups(groups);*/
         }
 
         /**
