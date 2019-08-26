@@ -565,6 +565,7 @@ module.exports = function (app) {
             self.subSearchResult = [];
             self.subSearchSelected = [];
             self.subSiteAdvancedSearchText = '';
+            self.selectedMainSiteSimple = null;
             self.resetSearchStatusAndDate();
         };
         /**
@@ -658,7 +659,9 @@ module.exports = function (app) {
 
 
                     _concatCorrespondenceSites(true).then(function () {
-                        self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+                        if (self.selectedMainSiteSimple) {
+                            self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+                        }
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
                         self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
                     });
