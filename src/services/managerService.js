@@ -107,7 +107,6 @@ module.exports = function (app) {
          */
         self.manageDocumentAttachments = function (document, vsId, documentClass, documentSubject, $event, isSimpleAdd) {
             var defer = $q.defer();
-            var deferDoc = $q.defer();
             documentClass = _checkDocumentClass(documentClass);
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('manage-document-attachments'),
@@ -160,7 +159,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageDocumentComments = function (vsId, documentSubject, $event) {
-            var defer = $q.defer();
+            var commentsDefer = $q.defer(), appUserDefer = $q.defer();
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('manage-document-comments'),
                 controller: 'manageDocumentCommentsPopCtrl',
@@ -176,23 +175,29 @@ module.exports = function (app) {
                 resolve: {
                     documentComments: function (documentCommentService) {
                         'ngInject';
-                        return documentCommentService.loadDocumentCommentsByVsId(vsId)
-                            .then(function (documentComments) {
-                                defer.resolve(documentComments);
-                                return documentComments;
-                            });
+                        return appUserDefer.promise.then(function (appUsers) {
+                            return documentCommentService.loadDocumentCommentsByVsId(vsId)
+                                .then(function (documentComments) {
+                                    commentsDefer.resolve(documentComments);
+                                    return documentComments;
+                                });
+                        });
                     },
                     model: function () {
                         'ngInject';
                         var qDefer = $q.defer();
-                        defer.promise.then(function (documentComments) {
+                        commentsDefer.promise.then(function (documentComments) {
                             qDefer.resolve(angular.copy(documentComments));
                         });
                         return qDefer.promise;
                     },
                     applicationUsers: function (applicationUserService) {
                         'ngInject';
-                        return applicationUserService.getApplicationUsers();
+                        return applicationUserService.getApplicationUsers()
+                            .then(function (applicationUsers) {
+                                appUserDefer.resolve(applicationUsers);
+                                return applicationUsers;
+                            });
                     }
                 }
 
