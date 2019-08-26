@@ -422,6 +422,7 @@ module.exports = function (app) {
             self.subSearchResult = [];
             self.subSearchSelected = [];
             self.subSiteAdvancedSearchText = '';
+            self.selectedMainSiteSimple = null;
         };
         /**
          * @description set all followupStatus for all subSearchResult.
@@ -587,6 +588,7 @@ module.exports = function (app) {
             dialog
                 .confirmMessage(langService.get('confirm_delete_correspondence_site').change({name: self.site.getTranslatedName()}))
                 .then(function () {
+                    self.selectedMainSiteSimple = null;
                     self.site = null;
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.defaultSubSearch, _filterSubSites);
@@ -722,37 +724,37 @@ module.exports = function (app) {
             }
         }
 
-/*
+        /*
 
-        /!**
-         * @description filter the dropdown with searchText or request service if searched record not found
-         * @param $event
-         * @param fieldType
-         *!/
-        self.filterDropdownRecords = function ($event, fieldType) {
-            $timeout(function () {
-                if (fieldType === 'mainSiteSimple' || fieldType === 'mainSiteAdvanced') {
-                    _filterSearchMainSites(fieldType);
-                }
-            })
-        };
+                /!**
+                 * @description filter the dropdown with searchText or request service if searched record not found
+                 * @param $event
+                 * @param fieldType
+                 *!/
+                self.filterDropdownRecords = function ($event, fieldType) {
+                    $timeout(function () {
+                        if (fieldType === 'mainSiteSimple' || fieldType === 'mainSiteAdvanced') {
+                            _filterSearchMainSites(fieldType);
+                        }
+                    })
+                };
 
-        var _filterSearchMainSites = function (fieldType) {
-            var searchText = self.isSimpleCorrespondenceSiteSearchType ? self.mainSiteSimpleSearchText : self.mainSiteAdvancedSearchText;
-            var searchResult = gridService.searchGridData({
-                searchText: searchText,
-                searchColumns: {
-                    arName: langService.current === 'ar' ? 'arName' : '',
-                    enName: langService.current === 'en' ? 'enName' : '',
-                }
-            }, self.mainSitesCopy);
-            if (searchResult && searchResult.length) {
-                self.mainSites = searchResult;
-                //_selectDefaultMainSiteAndGetSubSites();
-            } else {
-                self.mainSites = [];
-            }
-        };*/
+                var _filterSearchMainSites = function (fieldType) {
+                    var searchText = self.isSimpleCorrespondenceSiteSearchType ? self.mainSiteSimpleSearchText : self.mainSiteAdvancedSearchText;
+                    var searchResult = gridService.searchGridData({
+                        searchText: searchText,
+                        searchColumns: {
+                            arName: langService.current === 'ar' ? 'arName' : '',
+                            enName: langService.current === 'en' ? 'enName' : '',
+                        }
+                    }, self.mainSitesCopy);
+                    if (searchResult && searchResult.length) {
+                        self.mainSites = searchResult;
+                        //_selectDefaultMainSiteAndGetSubSites();
+                    } else {
+                        self.mainSites = [];
+                    }
+                };*/
 
     });
 };
