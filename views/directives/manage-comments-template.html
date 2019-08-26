@@ -10,6 +10,7 @@
             </md-button>
         </div>
     </div>
+    <!-- Comments Form -->
     <div layout="column" ng-if="ctrl.showCommentForm">
         <md-content scroll-directive>
             <md-card ng-class="{'remove-shadows':ctrl.fromDialog}">
@@ -55,10 +56,12 @@
                     </form>
                 </div>
 
+                <!-- Includes -->
                 <div ng-if="ctrl.canInclude()" layout="column" class="p20">
                     <fieldset class="size-100" layout-padding>
                         <legend class="md-accent">{{lang.comments_includes}}</legend>
                         <div layout="row" ng-if="ctrl.documentComment.commentCustomize()">
+                            <!-- Type Switch -->
                             <div flex layout="row">
                                 <md-switch ng-change="ctrl.toggleCommentPerOUStatus($event)"
                                            ng-true-value="true"
@@ -68,6 +71,7 @@
                                     <span class="switch-width">{{ctrl.documentComment.getPerOUStatus()}}</span>
                                 </md-switch>
                             </div>
+                            <!-- With sub ous switch -->
                             <div flex layout="row">
                                 <md-switch ng-if="ctrl.documentComment.isPerOU"
                                            ng-true-value="true"
@@ -78,7 +82,9 @@
                                 </md-switch>
                             </div>
                         </div>
+                        <!-- Dropdowns -->
                         <div layout="row">
+                            <!-- OU DDL -->
                             <md-autocomplete
                                     flex
                                     md-no-cache="true"
@@ -92,6 +98,7 @@
                                 <span>{{ item.display.getTranslatedName() }}</span>
                             </md-autocomplete>
                             &nbsp;&nbsp;
+                            <!-- User DDL -->
                             <md-autocomplete
                                     flex
                                     ng-disabled="!ctrl.documentComment.isPerOU && !ctrl.searchOuText"
@@ -107,7 +114,7 @@
                                 <span md-highlight-text="ctrl.includedIDsSearch">{{item.display}}</span>
                             </md-autocomplete>
                         </div>
-
+                        <!-- Included Table -->
                         <div ng-if="ctrl.documentComment.includedIDs.length" layout="row">
                             <md-card flex>
                                 <md-table-container>
@@ -126,11 +133,11 @@
                                                     </div>
                                                 </th>
                                                 <th ng-if="!ctrl.selectedIncludedIDs.length" md-column
-                                                    md-order-by="{{ctrl.documentComment.isPerOU ? 'arName': 'arFullName'}}">
+                                                    md-order-by="arName">
                                                     <span>{{lang.arabic_name}}</span>
                                                 </th>
                                                 <th ng-if="!ctrl.selectedIncludedIDs.length" md-column
-                                                    md-order-by="{{ctrl.documentComment.isPerOU ? 'enName': 'enFullName'}}">
+                                                    md-order-by="enName">
                                                     <span>{{lang.english_name}}</span>
                                                 </th>
                                                 <th ng-if="!ctrl.selectedIncludedIDs.length" md-column md-order-by="">
@@ -148,7 +155,7 @@
                                             </thead>
                                             <tbody md-body>
                                             <tr md-row md-select="include"
-                                                ng-repeat="include in ctrl.documentComment.includedIDs  | filter:ctrl.searchModel | limitTo: ctrl.grid.includedIDs.limit: ((ctrl.grid.includedIDs.page - 1) * ctrl.grid.includedIDs.limit) |orderBy:ctrl.grid.includedIDs.order  track by $index">
+                                                ng-repeat="include in ctrl.documentComment.includedIDs | filter:ctrl.searchModel | limitTo: ctrl.grid.includedIDs.limit: ((ctrl.grid.includedIDs.page - 1) * ctrl.grid.includedIDs.limit) |orderBy:ctrl.grid.includedIDs.order  track by $index">
                                                 <td md-cell>{{include.getNameByLanguage('ar')}}</td>
                                                 <td md-cell>{{include.getNameByLanguage('en')}}</td>
                                                 <td md-cell>
@@ -188,11 +195,13 @@
                     </fieldset>
 
                 </div>
-
+                <!-- Excludes -->
                 <div ng-if="ctrl.canExclude()" layout="column" class="p20">
                     <fieldset class="size-100" layout-padding>
                         <legend class="md-accent">{{lang.comments_excludes}}</legend>
+                        <!-- If global comment -->
                         <div layout="row" ng-if="ctrl.documentComment.isGlobal">
+                            <!-- Type Switch -->
                             <div flex layout="row">
                                 <md-switch ng-change="ctrl.toggleCommentPerOUStatus($event)"
                                            ng-true-value="true"
@@ -202,6 +211,7 @@
                                     <span class="switch-width">{{ctrl.documentComment.getPerOUStatus()}}</span>
                                 </md-switch>
                             </div>
+                            <!-- With sub ous switch -->
                             <div flex layout="row">
                                 <md-switch ng-if="ctrl.documentComment.isPerOU"
                                            ng-true-value="true"
@@ -212,8 +222,10 @@
                                 </md-switch>
                             </div>
                         </div>
+                        <!-- Not Custom comment and not without sub ous -->
                         <div layout="row"
                              ng-if="!(ctrl.documentComment.withSubOUs && ctrl.documentComment.commentCustomize())">
+                            <!-- OU DDL -->
                             <md-autocomplete
                                     flex
                                     md-no-cache="true"
@@ -227,6 +239,7 @@
                                 <span>{{ item.display.getTranslatedName() }}</span>
                             </md-autocomplete>
                             &nbsp;&nbsp;
+                            <!-- User DDL -->
                             <md-autocomplete
                                     flex
                                     ng-disabled="!ctrl.documentComment.isPerOU && !ctrl.searchOuText"
@@ -241,7 +254,7 @@
                                 <span>{{ item.display }}</span>
                             </md-autocomplete>
                         </div>
-
+                        <!-- Excluded Table -->
                         <div layout="row">
                             <md-card flex>
                                 <md-table-container>
@@ -260,11 +273,11 @@
                                                     </div>
                                                 </th>
                                                 <th ng-if="!ctrl.selectedExcludedIDs.length" md-column
-                                                    md-order-by="{{ctrl.documentComment.isPerOU ? 'arName' : 'arFullName'}}">
+                                                    md-order-by="arName">
                                                     <span>{{lang.arabic_name}}</span>
                                                 </th>
                                                 <th ng-if="!ctrl.selectedExcludedIDs.length" md-column
-                                                    md-order-by="{{ctrl.documentComment.isPerOU ? 'enName' : 'enFullName'}}">
+                                                    md-order-by="enName">
                                                     <span>{{lang.english_name}}</span>
                                                 </th>
                                                 <th md-column>
@@ -337,6 +350,7 @@
             </div>
         </div>
     </div>
+    <!-- Comments Table -->
     <div ng-if="!ctrl.showCommentForm && ctrl.documentComments.length">
         <md-card flex>
             <md-table-container>

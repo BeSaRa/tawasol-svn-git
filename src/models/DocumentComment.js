@@ -19,6 +19,9 @@ module.exports = function (app) {
             self.isPerOU = false; // default value
             self.includedIDs = [];
             self.excludedIDs = [];
+            self.includedList = [];
+            self.excludedList = [];
+
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [

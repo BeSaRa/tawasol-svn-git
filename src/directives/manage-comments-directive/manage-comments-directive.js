@@ -1,6 +1,6 @@
 module.exports = function (app) {
     require('./manage-comments-style.scss');
-    app.directive('manageCommentsDirective', function (cmsTemplate) {
+    app.directive('manageCommentsDirective', function (cmsTemplate, $timeout) {
         'ngInject';
         return {
             restrict: 'E',
@@ -28,6 +28,9 @@ module.exports = function (app) {
                     function (newValue, oldValue) {
                         $scope.ctrl.isValid = newValue;
                     });
+                $timeout(function () {
+                    console.log('sourceSaveCallback', $scope.sourceSaveCallback);
+                }, 1000)
             }
         }
     })

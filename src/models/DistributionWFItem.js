@@ -173,6 +173,11 @@ module.exports = function (app) {
                 return this[langService.current + 'Name'];
             };
 
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
             DistributionWFItem.prototype.getNameByLanguage = function (language) {
                 return this[language + 'Name'];
             };

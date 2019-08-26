@@ -159,7 +159,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageDocumentComments = function (vsId, documentSubject, $event) {
-            var commentsDefer = $q.defer(), appUserDefer = $q.defer();
+            var commentsDefer = $q.defer();
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('manage-document-comments'),
                 controller: 'manageDocumentCommentsPopCtrl',
@@ -175,13 +175,11 @@ module.exports = function (app) {
                 resolve: {
                     documentComments: function (documentCommentService) {
                         'ngInject';
-                        return appUserDefer.promise.then(function (appUsers) {
-                            return documentCommentService.loadDocumentCommentsByVsId(vsId)
-                                .then(function (documentComments) {
-                                    commentsDefer.resolve(documentComments);
-                                    return documentComments;
-                                });
-                        });
+                        return documentCommentService.loadDocumentCommentsByVsId(vsId)
+                            .then(function (documentComments) {
+                                commentsDefer.resolve(documentComments);
+                                return documentComments;
+                            });
                     },
                     model: function () {
                         'ngInject';
@@ -190,14 +188,6 @@ module.exports = function (app) {
                             qDefer.resolve(angular.copy(documentComments));
                         });
                         return qDefer.promise;
-                    },
-                    applicationUsers: function (applicationUserService) {
-                        'ngInject';
-                        return applicationUserService.getApplicationUsers()
-                            .then(function (applicationUsers) {
-                                appUserDefer.resolve(applicationUsers);
-                                return applicationUsers;
-                            });
                     }
                 }
 

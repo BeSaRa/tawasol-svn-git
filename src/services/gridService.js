@@ -117,7 +117,10 @@ module.exports = function (app) {
                 linkedDocAttachments: 'linkedDocAttach',
                 versionSelect: 'versionSelect',
                 viewTask: 'viewTask',
-                taskDoc: 'taskDoc'
+                taskDoc: 'taskDoc',
+                comments: 'comment',
+                commentInclude: 'commentInc',
+                commentExclude: 'commentExc'
             },
             trackingSheet: {
                 workflowHistory: 'vts_workflowHistory',

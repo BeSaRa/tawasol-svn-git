@@ -5,7 +5,8 @@ module.exports = function (app) {
                       organizationService,
                       langService,
                       ApplicationUser,
-                      _) {
+                      _,
+                      Information) {
         'ngInject';
 
         var modelName = 'DocumentComment';
@@ -22,13 +23,23 @@ module.exports = function (app) {
                 model.excludedIDs = [];
             }
             model.creator = model.creator.hasOwnProperty('id') ? model.creator.id : model.creator;
-            model.includedIDs = JSON.stringify(_.map(model.includedIDs, 'id'));
-            model.excludedIDs = JSON.stringify(_.map(model.excludedIDs, 'id'));
+            if (angular.isArray(model.includedIDs) && model.includedIDs.length) {
+                model.includedIDs = JSON.stringify(_.map(model.includedIDs, 'id'));
+            } else {
+                model.includedIDs = JSON.stringify([]);
+            }
+            if (angular.isArray(model.excludedIDs) && model.excludedIDs.length) {
+                model.excludedIDs = JSON.stringify(_.map(model.excludedIDs, 'id'));
+            } else {
+                model.excludedIDs = JSON.stringify([]);
+            }
+            delete model.includedList;
+            delete model.excludedList;
             return model;
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.includedIDs = _.map(JSON.parse(model.includedIDs), function (item) {
+            /*model.includedIDs = _.map(JSON.parse(model.includedIDs), function (item) {
                 if (model.isPerOU) {
                     item = organizationService.getOrganizationById(item);
                     item = angular.extend(item, {display: item[langService.current + 'Name']});
@@ -51,7 +62,19 @@ module.exports = function (app) {
                     item = angular.extend(item, {display: item[langService.current + 'FullName']});
                 }
                 return item;
-            });
+            });*/
+            if (model.includedList.length) {
+                model.includedIDs = _.map(model.includedList, function (included) {
+                    included = new Information(included);
+                    return included;
+                });
+            }
+            if (model.excludedList.length) {
+                model.excludedIDs = _.map(model.excludedList, function (excluded) {
+                    excluded = new Information(excluded);
+                    return excluded;
+                });
+            }
             return model;
         });
 

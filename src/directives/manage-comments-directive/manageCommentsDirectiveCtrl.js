@@ -15,7 +15,8 @@ module.exports = function (app) {
                                                             Information,
                                                             ouApplicationUserService,
                                                             $filter,
-                                                            _) {
+                                                            _,
+                                                            generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCommentsDirectiveCtrl';
@@ -108,6 +109,10 @@ module.exports = function (app) {
          */
         self.getSortedData = function (property) {
             self.documentComment[property] = $filter('orderBy')(self.documentComment[property], self.grid[property].order);
+        };
+
+        self.getSortingKey = function (property, modelType) {
+            generator.getColumnSortingKey(property, modelType);
         };
 
 
@@ -254,6 +259,10 @@ module.exports = function (app) {
             self.documentComment
                 .update()
                 .then(function (documentComment) {
+                    index = _.findIndex(self.documentComments, function (comment) {
+                        return comment.id === documentComment.id;
+                    });
+
                     self.documentComments.splice(index, 1, documentComment);
                     toast.success(langService.get('update_success'));
                     self.model = angular.copy(self.documentComments);
@@ -380,6 +389,7 @@ module.exports = function (app) {
          */
         self.closeDocumentComment = function () {
             self.documentComment = null;
+            self.commentPrivacy = null;
             self.editMode = false;
             if (self.fromDialog && !self.showCommentForm) {
                 dialog.cancel(self.model);
@@ -403,41 +413,7 @@ module.exports = function (app) {
                 (self.documentComment.commentCustomize() && self.documentComment.excludedIDs.length && self.documentComment.withSubOUs)*/
             );
         };
-        /**
-         *  query to search for (organization|users) to (exclude|include).
-         * server side search
-         * @param property
-         * @return {*}
-         */
-       /* self.querySearch = function (property) {
-            if (!pendingSearch || !debounceSearch()) {
-                cancelSearch();
-                var criteria = self[property + 'Search'];
-                return pendingSearch = $q(function (resolve, reject) {
-                    cancelSearch = reject;
-                    var searchType = currentType();
-                    var current = self.services[searchType];
-                    $timeout(function () {
-                        refreshDebounce();
-                        current.service[current.method](criteria).then(function (result) {
-                            var ids = _.map(self.documentComment[property], 'id');
-                            var skipIdsFromSearchType = '';
-                            if (property === 'excludedIDs')
-                                skipIdsFromSearchType = 'includedIDs';
-                            else
-                                skipIdsFromSearchType = 'excludedIDs';
-                            resolve(_.filter(_.map(result, current.mapResult), function (item) {
-                                if ((searchType === 'users' && item.id === self.employee.id) || _.map(self.documentComment[skipIdsFromSearchType], 'id').indexOf(item.id) > -1) {
-                                    return false;
-                                }
-                                return ids.indexOf(item.id) === -1;
-                            }));
-                        });
-                    }, 500);
-                });
-            }
-            return pendingSearch;
-        };*/
+
         /**
          * @description search for includes.
          * @param criteria
@@ -542,7 +518,7 @@ module.exports = function (app) {
                     });
             } else {
                 dialog
-                    .confirmMessage(langService.get('confirm_delete').change({name: self.documentComment[property][$index].display}), null, null, $event)
+                    .confirmMessage(langService.get('confirm_delete').change({name: self.documentComment[property][$index].getTranslatedName()}), null, null, $event)
                     .then(function () {
                         self.documentComment[property] = _.filter(self.documentComment[property], function (item) {
                             return item.id !== selected.id;
@@ -636,6 +612,7 @@ module.exports = function (app) {
         self.editDocumentComment = function (documentComment, $event) {
             documentComment.editIndex = true;
             self.documentComment = angular.copy(documentComment);
+            self.commentPrivacy = _getCommentPrivacy(documentComment);
             self.editMode = true;
             self.showCommentForm = true;
         };
@@ -806,26 +783,6 @@ module.exports = function (app) {
             }
         });
 
-        /*self.isValidComment = function () {
-            var isValid = false;
-            if (self.documentComment.isPrivate) {
-                isValid = true;
-                //return true;
-            }
-            else {
-                if (self.documentComment.isGlobal) {
-                    isValid = true;
-                    //return true;
-                }
-                else {
-                    isValid = !!self.documentComment.includedIDs.length;
-                    //return !!self.documentComment.includedIDs.length;
-                }
-            }
-            self.isValid = isValid;
-            return isValid;
-        };*/
-
         self.documentCommentForm = 'documentCommentForm';
 
         self.validateComment = function () {
@@ -889,5 +846,15 @@ module.exports = function (app) {
                 return false;
 
         };
+
+        var _getCommentPrivacy = function (documentComment) {
+            if (documentComment.commentGlobal()) {
+                return 'isGlobal';
+            } else if (documentComment.commentPrivate()) {
+                return 'isPrivate';
+            } else {
+                return 'isCustomize';
+            }
+        }
     });
 };

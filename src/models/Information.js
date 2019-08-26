@@ -45,6 +45,15 @@ module.exports = function (app) {
                 return lang === 'ar' ? this.arName : this.enName;
             };
 
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            Information.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'] || '';
+            };
+
             Information.prototype.setId = function (id) {
                 this.id = id;
                 return this;
