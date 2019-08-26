@@ -1,6 +1,34 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.properties_manage_document_properties}}">
+    <popup-toolbar-directive
+            header-text="{{lang.properties_manage_document_properties}} : {{ctrl.model.docSubject}}"
+            close-callback="ctrl.closeDocumentProperties"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content">
+            <manage-properties-directive
+                    source-form="ctrl.document_properties"
+                    document="ctrl.document"
+                    source-model="ctrl.sourceModel"
+                    from-dialog="true"
+                    action="ctrl.action"></manage-properties-directive>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+            <md-button ng-disabled="ctrl.document_properties.$invalid" class="md-raised"
+                       ng-click="ctrl.saveProperties()">{{lang.properties_save}}
+            </md-button>
+            <span flex></span>
+            <md-button class="md-raised" ng-click="ctrl.closeDocumentProperties()">{{lang.properties_close}}
+            </md-button>
+    </md-dialog-actions>
+</md-dialog>
+
+
+<!--
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.properties_manage_document_properties}}">
     <div layout="column">
         <popup-toolbar-directive
                 header-text="{{lang.properties_manage_document_properties}} : {{ctrl.model.docSubject}}"
@@ -27,3 +55,4 @@
         </div>
     </div>
 </md-dialog>
+-->
