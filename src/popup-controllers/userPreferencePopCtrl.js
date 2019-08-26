@@ -295,9 +295,8 @@ module.exports = function (app) {
         self.setCurrentTab = function (tabName) {
             var defer = $q.defer();
             if (tabName === 'signature') {
-                applicationUserSignatureService.loadApplicationUserSignatures(self.applicationUser.id)
-                    .then(function (result) {
-                        self.applicationUser.signature = result;
+                self.loadSignatures(self.applicationUser.id)
+                    .then(function () {
                         defer.resolve(tabName);
                     });
             } else {
@@ -1137,6 +1136,19 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Loads the signatures
+         * @param appUserId
+         * @returns {Promise<any>}
+         */
+        self.loadSignatures = function (appUserId) {
+            return applicationUserSignatureService.loadApplicationUserSignatures(appUserId || self.applicationUser.id, false)
+                .then(function (result) {
+                    self.applicationUser.signature = result;
+                    return result;
+                });
+        };
+
+        /**
          * @description add signature for application User
          */
         self.addApplicationUserSignatureFromCtrl = function () {
@@ -1176,16 +1188,14 @@ module.exports = function (app) {
                             .addApplicationUserSignature(self.signature, self.selectedFile).then(function () {
                             var defer = $q.defer();
                             self.signatureProgress = defer.promise;
-                            applicationUserSignatureService.loadApplicationUserSignatures(self.ouApplicationUser.applicationUser.id).then(function (result) {
-
-                                self.applicationUser.signature = result;
-                                self.signature = new ApplicationUserSignature();
-                                self.fileUrl = null;
-                                self.enableAdd = false;
-                                defer.resolve(true);
-                                toast.success(langService.get('save_success'));
-                            })
-
+                            self.loadSignatures(self.ouApplicationUser.applicationUser.id)
+                                .then(function(result){
+                                    self.signature = new ApplicationUserSignature();
+                                    self.fileUrl = null;
+                                    self.enableAdd = false;
+                                    defer.resolve(true);
+                                    toast.success(langService.get('save_success'));
+                                });
                         });
                     })
                     .catch(function () {
@@ -1212,11 +1222,11 @@ module.exports = function (app) {
                 .applicationUserSignatureEdit(signature).then(function () {
                 var defer = $q.defer();
                 self.signatureProgress = defer.promise;
-                applicationUserSignatureService.loadApplicationUserSignatures(signature.appUserId).then(function (result) {
-                    self.applicationUser.signature = result;
-                    defer.resolve(true);
-                    toast.success(langService.get('save_success'));
-                })
+                self.loadSignatures(signature.appUserId)
+                    .then(function (result) {
+                        defer.resolve(true);
+                        toast.success(langService.get('save_success'));
+                    });
             });
         };
         /**
@@ -1229,12 +1239,11 @@ module.exports = function (app) {
                     .deleteApplicationUserSignature(signature).then(function () {
                     var defer = $q.defer();
                     self.signatureProgress = defer.promise;
-                    applicationUserSignatureService.loadApplicationUserSignatures(self.ouApplicationUser.applicationUser.id).then(function (result) {
-                        self.applicationUser.signature = result;
-                        defer.resolve(true);
-                        toast.success(langService.get('delete_success'));
-                    })
-
+                    self.loadSignatures(self.ouApplicationUser.applicationUser.id)
+                        .then(function (result) {
+                            defer.resolve(true);
+                            toast.success(langService.get('delete_success'));
+                        });
                 });
             })
         };
