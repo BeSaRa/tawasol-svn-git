@@ -360,7 +360,7 @@
                             <td md-cell ng-if="!ctrl.disableCorrespondence">
                                 <div flex layout="row" layout-align="start center">
                                     <div>
-                                        <md-button ng-click="ctrl.deleteSite()" tooltip="{{lang.delete}}"
+                                        <md-button ng-click="ctrl.deleteSite($event)" tooltip="{{lang.delete}}"
                                                    ng-disabled="!!ctrl.disableCorrespondence" class="md-icon-button">
                                             <md-icon md-svg-icon="delete"></md-icon>
                                         </md-button>
