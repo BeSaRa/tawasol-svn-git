@@ -42,13 +42,24 @@ module.exports = function (app) {
          */
         self.loadOrganizations = function (skipUserRole) {
             var url = urlService.organizations;
-            if (skipUserRole){
+            if (skipUserRole) {
                 url = url + '/lookup';
             }
             return $http.get(url).then(function (result) {
                 self.organizations = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
                 self.organizations = generator.interceptReceivedCollection('Organization', self.organizations);
                 return self.organizations;
+            });
+        };
+        /**
+         *
+         * @returns {*}
+         */
+        self.loadAllOrganizationsStructure = function () {
+            var url = urlService.organizations + '/structure';
+            return $http.get(url).then(function (result) {
+                var organizations = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
+                return generator.interceptReceivedCollection('Organization', organizations);
             });
         };
 

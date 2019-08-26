@@ -35,7 +35,7 @@ module.exports = function (app) {
                 .loadReferencePlanNumbers()
                 .then(function () {
                     organizationService
-                        .loadOrganizations()
+                        .loadAllOrganizationsStructure()
                         .then(function (result) {
                             self.needSync = _checkOrganizationsNeedSync(result);
                             organizationChartService.createHierarchy(result);

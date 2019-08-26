@@ -125,7 +125,7 @@ module.exports = function (app) {
                 },
                 organizations: function (organizationService, correspondenceSiteTypes, applicationUsers, organizationTypes, referencePlanNumbers, escalationProcess) {
                     'ngInject';
-                    return organizationService.loadOrganizations();
+                    return organizationService.loadAllOrganizationsStructure();
                 }
             })
             .bulkResolveToState('app.outgoing.add', {

@@ -89,6 +89,10 @@ module.exports = function (app) {
                             organizationMenuDirective = '';
                         }
 
+                        if (!data.manageable) {
+                            organizationMenuDirective = '';
+                        }
+
 
                         $node
                             .find('.title')
