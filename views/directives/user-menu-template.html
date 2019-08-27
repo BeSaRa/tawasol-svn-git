@@ -33,6 +33,15 @@
                     </div>
                 </md-button>
             </md-menu-item>
+            <md-menu-item
+                    ng-if="!userMenu.employeeService.isAdminUser() && userMenu.employeeService.hasPermissionTo('MANAGE_PREFERENCES')">
+                <md-button ng-click="userMenu.manageDocumentLinks($event)">
+                    <div layout="row" layout-align="start center">
+                        <md-icon md-svg-icon="link-variant"></md-icon>
+                        <span>{{lang.my_links}}</span>
+                    </div>
+                </md-button>
+            </md-menu-item>
             <md-menu-item>
                 <md-menu>
                     <md-button ng-click="$mdMenu.open($event)">

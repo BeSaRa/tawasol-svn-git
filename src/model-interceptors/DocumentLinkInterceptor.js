@@ -4,6 +4,7 @@ module.exports = function (app) {
                       DocumentLinkSubscriber,
                       lookupService,
                       DocumentLink,
+                      moment,
                       generator) {
         'ngInject';
         var modelName = 'DocumentLink';
@@ -20,15 +21,17 @@ module.exports = function (app) {
                 model.creationTime = generator.getTimeStampFromDate(new Date());
             }
 
-            var expirationTime = new Date(model.expirationTime.getFullYear(), model.expirationTime.getMonth(), model.expirationTime.getDate(), 23, 59, 59, 999);
-            model.expirationTime = generator.getTimeStampFromDate(expirationTime);
-
+            model.expirationTime = moment(model.expirationTime).format('Y-MM-DD');
+            model.expirationTime = model.expirationTime + ' ' + (model.expirationHours ? model.expirationHours + ':00' : '00:00:00');
+            model.expirationTime = moment(model.expirationTime).toDate();
+            delete model.expirationHours;
             return model;
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.expirationTime = generator.getDateObjectFromTimeStamp(model.expirationTime);
-
+            var expirationTime = model.expirationTime;
+            model.expirationTime = moment(expirationTime).toDate();
+            model.expirationHours = moment(expirationTime).format('HH:mm');
             return model;
         });
     })

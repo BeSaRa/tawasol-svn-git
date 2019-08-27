@@ -1,188 +1,195 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.send_document_link}}">
-    <div layout="column">
-        <popup-toolbar-directive
-                header-text="{{lang.send_document_link}} - {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <div layout="column" class="p20">
-                <form name="documentLinkForm" autocomplete="off" flex>
-                    <fieldset>
-                        <legend>{{lang.document_link_options}}</legend>
-                        <div layout="column" flex>
-                            <div layout="row">
-                                <md-input-container flex>
-                                    <md-checkbox ng-model="ctrl.documentLink.exportOptionsMap.BOOK"
-                                                 aria-label="Books">
-                                        <span>{{lang.book_only}}</span>
-                                    </md-checkbox>
-                                </md-input-container>
-                                <md-input-container flex>
-                                    <md-checkbox ng-model="ctrl.documentLink.exportOptionsMap.ATTACHMENTS"
-                                                 aria-label="attachments">
-                                        <span>{{lang.attachments}}</span>
-                                    </md-checkbox>
-                                </md-input-container>
-                                <md-input-container flex>
-                                    <md-checkbox ng-model="ctrl.documentLink.exportOptionsMap.RELATED_BOOKS"
-                                                 aria-label="Related Books">
-                                        <span>{{lang.related_books}}</span>
-                                    </md-checkbox>
-                                </md-input-container>
+    <popup-toolbar-directive
+            header-text="{{lang.send_document_link}} - {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div layout="column" class="p20">
+            <form name="documentLinkForm" autocomplete="off" flex>
+                <fieldset>
+                    <legend>{{lang.document_link_options}}</legend>
+                    <div layout="column" flex>
+                        <div layout="row">
+                            <md-input-container>
+                                <md-checkbox ng-model="ctrl.documentLink.exportOptionsMap.BOOK"
+                                             aria-label="Books">
+                                    <span>{{lang.book_only}}</span>
+                                </md-checkbox>
+                            </md-input-container>
+                            <div>
+                                <div class="icon-relative">
+                                    <md-button tooltip="{{lang.attachments}}"
+                                               class="md-raised md-icon-button"
+                                               ng-click="ctrl.selectAttachmentsToSend($event)">
+                                        <md-icon md-svg-icon="attachment"></md-icon>
+                                    </md-button>
+                                    <span class="counter blue">{{ctrl.documentLink.exportOptionsMap.ATTACHMENTS.length}}</span>
+                                </div>
+                                <div class="icon-relative">
+                                    <md-button tooltip="{{lang.linked_documents}}"
+                                               class="md-raised md-icon-button"
+                                               ng-click="ctrl.selectLinkedDocumentsToSend($event)">
+                                        <md-icon md-svg-icon="note-multiple-outline"></md-icon>
+                                    </md-button>
+                                    <span class="counter blue">{{ctrl.documentLink.exportOptionsMap.RELATED_BOOKS.length}}</span>
+                                </div>
                             </div>
-                            <div layout="row">
-                                <md-input-container flex>
-                                    <label for="expirationTime">{{lang.expiry_date}}</label>
-                                    <md-datepicker id="expirationTime"
-                                                   md-min-date="ctrl.currentDate"
-                                                   ng-model="ctrl.documentLink.expirationTime"
-                                                   md-open-on-focus
-                                                   required
-                                                   name="expirationTime">
-                                    </md-datepicker>
-                                    <div ng-messages="documentLinkForm.expirationTime.$error">
-                                        <div ng-message="required">{{lang.field_required}}</div>
-                                    </div>
-                                </md-input-container>
-                                <md-input-container flex>
-                                    <md-switch ng-model="ctrl.documentLink.status"
-                                               aria-label="{{lang.status}}">
-                                        <label>{{lang.status}} :
-                                            {{ctrl.documentLink.getTranslatedStatus()}}</label>
-                                    </md-switch>
-                                </md-input-container>
-                                <span flex></span>
+                            <md-input-container>
+                                <label for="expirationTime">{{lang.expiry_date}}</label>
+                                <md-datepicker id="expirationTime"
+                                               md-min-date="ctrl.currentDate"
+                                               ng-model="ctrl.documentLink.expirationTime"
+                                               md-open-on-focus
+                                               required
+                                               name="expirationTime">
+                                </md-datepicker>
+                                <div ng-messages="documentLinkForm.expirationTime.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>{{lang.time}}</label>
+                                <md-select name="startTime"
+                                           ng-model="ctrl.documentLink.expirationHours">
+                                    <md-option ng-value="hour.value"
+                                               ng-repeat="hour in ctrl.calenderHours">
+                                        {{hour.label}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                            <div flex class="p20">
+                                <md-switch ng-model="ctrl.documentLink.status"
+                                           aria-label="{{lang.status}}">
+                                    <label>{{lang.status}} : {{ctrl.documentLink.getTranslatedStatus()}}</label>
+                                </md-switch>
                             </div>
                         </div>
-                    </fieldset>
-                    <div layout="row">
-                        <!-- User Name -->
-                        <md-input-container flex>
-                            <label for="sharedToFullName">{{lang.name}}</label>
-                            <input id="sharedToFullName" required name="sharedToFullName"
-                                   ng-model="ctrl.documentLinkSubscriber.sharedToFullName">
-                            <div ng-messages="documentLinkForm.sharedToFullName.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
-                        </md-input-container>
-                        <!-- email -->
-                        <md-input-container flex>
-                            <label for="sharedToEmail">{{lang.email}}</label>
-                            <input id="sharedToEmail" required name="sharedToEmail"
-                                   ng-model="ctrl.documentLinkSubscriber.sharedToEmail"
-                                   custom-validate-directive="email">
-                            <div ng-messages="documentLinkForm.sharedToEmail.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                                <div ng-message="email">{{lang.invalid_email}}</div>
-                            </div>
-                        </md-input-container>
-                        <!-- Mobile Number -->
-                        <md-input-container flex>
-                            <label for="sharedToMobileNum">{{lang.mobile_number}}</label>
-                            <input id="sharedToMobileNum" required name="sharedToMobileNum"
-                                   ng-model="ctrl.documentLinkSubscriber.sharedToMobileNum"
-                                   custom-validate-directive="phone_mobile">
-                            <div ng-messages="documentLinkForm.sharedToMobileNum.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
-                        </md-input-container>
-                        <md-input-container>
-                            <md-button class="md-raised" ng-disabled="documentLinkForm.$invalid"
-                                       ng-click="ctrl.addDocumentLinkSubscriber(documentLinkForm)">
-                                {{lang.add}}
-                            </md-button>
-                        </md-input-container>
                     </div>
-                </form>
+                </fieldset>
                 <div layout="row">
-                    <md-card layout="column"
-                             flex class="card-overlay">
-                        <md-table-container>
-                            <table md-table md-row-select multiple
-                                   ng-model="ctrl.selectedDocumentLinkSubscribers"
-                                   md-progress="ctrl.grid.progress">
-                                <thead md-head md-order="ctrl.grid.order"
-                                       md-on-reorder="ctrl.getSortedData">
-                                <tr md-row>
-                                    <th colspan="5" class="table-selector-header"
-                                        ng-if="ctrl.selectedDocumentLinkSubscribers.length" md-column>
-                                        <div layout="row" layout-align="start center">
-                                            <span>{{ctrl.selectedDocumentLinkSubscribers.length}} {{lang.items_selected}} </span>
-                                            <span flex></span>
-                                            <md-button class="md-icon-button"
-                                                       ng-click="ctrl.removeBulkDocumentLinkSubscribers($event)">
-                                                <md-icon md-svg-icon="delete"></md-icon>
-                                            </md-button>
-                                        </div>
-                                    </th>
-                                    <th md-column ng-if="!ctrl.selectedDocumentLinkSubscribers.length"
-                                        md-order-by="sharedToFullName">{{lang.name}}
-                                    </th>
-                                    <th md-column ng-if="!ctrl.selectedDocumentLinkSubscribers.length"
-                                        md-order-by="sharedToMobileNum">{{lang.mobile}}
-                                    </th>
-                                    <th md-column ng-if="!ctrl.selectedDocumentLinkSubscribers.length"
-                                        md-order-by="sharedToEmail">{{lang.email}}
-                                    </th>
-                                    <!-- <th md-column ng-if="!ctrl.selectedDocumentLinkSubscribers.length">
-                                         {{lang.expiry_date}}
-                                     </th>-->
-                                </tr>
-                                </thead>
-                                <tbody md-body>
-                                <tr md-select="subscriber" md-row
-                                    ng-repeat="subscriber in ctrl.documentLink.documentLinkSubscribers | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
-                                    <td md-cell>
-                                        {{subscriber.sharedToFullName}}
-                                    </td>
-                                    <td md-cell>
-                                        {{subscriber.sharedToMobileNum}}
-                                    </td>
-                                    <td md-cell>
-                                        {{subscriber.sharedToEmail}}
-                                    </td>
-                                    <!--   <td md-cell>
-                                           <span layout="row" layout-align="end center">{{ctrl.documentLink.expirationTime | date : 'yyyy/MM/dd'}}</span>
-                                       </td>-->
-                                    <td md-cell>
-                                        <div flex layout="row" layout-align="start center">
-                                            <md-button class="md-icon-button" title="{{lang.delete}}"
-                                                       ng-click="ctrl.removeDocumentLinkSubscriber(subscriber ,$index , $event)">
-                                                <md-icon md-svg-icon="delete"></md-icon>
-                                            </md-button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <md-table-pagination
-                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                    md-limit-options="ctrl.grid.limitOptions"
-                                    md-limit="ctrl.grid.limit"
-                                    md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.documentLink.documentLinkSubscribers | filter:ctrl.searchModel).length}}"
-                                    md-page-select>
-                            </md-table-pagination>
-                        </md-table-container>
-                    </md-card>
+                    <!-- User Name -->
+                    <md-input-container flex>
+                        <label for="sharedToFullName">{{lang.name}}</label>
+                        <input id="sharedToFullName" required name="sharedToFullName"
+                               ng-model="ctrl.documentLinkSubscriber.sharedToFullName">
+                        <div ng-messages="documentLinkForm.sharedToFullName.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                    <!-- email -->
+                    <md-input-container flex>
+                        <label for="sharedToEmail">{{lang.email}}</label>
+                        <input id="sharedToEmail" required name="sharedToEmail"
+                               ng-model="ctrl.documentLinkSubscriber.sharedToEmail"
+                               custom-validate-directive="email">
+                        <div ng-messages="documentLinkForm.sharedToEmail.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="email">{{lang.invalid_email}}</div>
+                        </div>
+                    </md-input-container>
+                    <!-- Mobile Number -->
+                    <md-input-container flex>
+                        <label for="sharedToMobileNum">{{lang.mobile_number}}</label>
+                        <input id="sharedToMobileNum" required name="sharedToMobileNum"
+                               ng-model="ctrl.documentLinkSubscriber.sharedToMobileNum"
+                               custom-validate-directive="phone_mobile">
+                        <div ng-messages="documentLinkForm.sharedToMobileNum.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button class="md-raised" ng-disabled="documentLinkForm.$invalid"
+                                   ng-click="ctrl.addDocumentLinkSubscriber(documentLinkForm)">
+                            {{lang.add}}
+                        </md-button>
+                    </md-input-container>
                 </div>
-            </div>
-        </md-content>
-        <div>
+                <!--                    <pre>{{documentLinkForm|json}}</pre>-->
+            </form>
             <div layout="row">
-                <div>
-                    <md-button class="md-raised"
-                               ng-disabled="!ctrl.documentLink.documentLinkSubscribers.length
-                               || !ctrl.documentLink.expirationTime
-                               || !(ctrl.documentLink.exportOptionsMap.BOOK || ctrl.documentLink.exportOptionsMap.ATTACHMENTS || ctrl.documentLink.exportOptionsMap.RELATED_BOOKS)"
-                               ng-click="ctrl.sendDocumentLink()">
-                        {{lang.send}}
-                    </md-button>
-                </div>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePopup()">{{lang.close}}
-                </md-button>
+                <md-card layout="column"
+                         flex class="card-overlay">
+                    <md-table-container>
+                        <table md-table md-row-select multiple
+                               ng-model="ctrl.selectedDocumentLinkSubscribers"
+                               md-progress="ctrl.grid.progress">
+                            <thead md-head md-order="ctrl.grid.order"
+                                   md-on-reorder="ctrl.getSortedData">
+                            <tr md-row>
+                                <th colspan="5" class="table-selector-header"
+                                    ng-if="ctrl.selectedDocumentLinkSubscribers.length" md-column>
+                                    <div layout="row" layout-align="start center">
+                                        <span>{{ctrl.selectedDocumentLinkSubscribers.length}} {{lang.items_selected}} </span>
+                                        <span flex></span>
+                                        <md-button class="md-icon-button"
+                                                   ng-click="ctrl.removeBulkDocumentLinkSubscribers($event)">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>
+                                    </div>
+                                </th>
+                                <th md-column ng-if="!ctrl.selectedDocumentLinkSubscribers.length"
+                                    md-order-by="sharedToFullName">{{lang.name}}
+                                </th>
+                                <th md-column ng-if="!ctrl.selectedDocumentLinkSubscribers.length"
+                                    md-order-by="sharedToMobileNum">{{lang.mobile}}
+                                </th>
+                                <th md-column ng-if="!ctrl.selectedDocumentLinkSubscribers.length"
+                                    md-order-by="sharedToEmail">{{lang.email}}
+                                </th>
+                                <!-- <th md-column ng-if="!ctrl.selectedDocumentLinkSubscribers.length">
+                                     {{lang.expiry_date}}
+                                 </th>-->
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-select="subscriber" md-row
+                                ng-repeat="subscriber in ctrl.documentLink.documentLinkSubscribers | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                <td md-cell>
+                                    {{subscriber.sharedToFullName}}
+                                </td>
+                                <td md-cell>
+                                    {{subscriber.sharedToMobileNum}}
+                                </td>
+                                <td md-cell>
+                                    {{subscriber.sharedToEmail}}
+                                </td>
+                                <!--   <td md-cell>
+                                       <span layout="row" layout-align="end center">{{ctrl.documentLink.expirationTime | date : 'yyyy/MM/dd'}}</span>
+                                   </td>-->
+                                <td md-cell>
+                                    <div flex layout="row" layout-align="start center">
+                                        <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                   ng-click="ctrl.removeDocumentLinkSubscriber(subscriber ,$index , $event)">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit"
+                                md-page="ctrl.grid.page"
+                                md-total="{{(ctrl.documentLink.documentLinkSubscribers | filter:ctrl.searchModel).length}}"
+                                md-page-select>
+                        </md-table-pagination>
+                    </md-table-container>
+                </md-card>
             </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button class="md-raised"
+                   ng-disabled="!ctrl.documentLink.documentLinkSubscribers.length
+                               || !ctrl.documentLink.expirationTime
+                               || !(ctrl.documentLink.exportOptionsMap.BOOK || ctrl.documentLink.exportOptionsMap.ATTACHMENTS || ctrl.documentLink.exportOptionsMap.RELATED_BOOKS)"
+                   ng-click="ctrl.sendDocumentLink()">
+            {{lang.send}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopup()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

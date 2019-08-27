@@ -3746,7 +3746,6 @@ module.exports = function (app) {
                 templateUrl: cmsTemplate.getPopup('send-document-link'),
                 controllerAs: 'ctrl',
                 eventTarget: $event || null,
-                bindToController: true,
                 controller: 'sendDocumentLinkPopCtrl',
                 locals: {
                     correspondence: correspondence
@@ -3760,7 +3759,7 @@ module.exports = function (app) {
                             });
                     }
                 }
-            })
+            });
         };
 
         self.getDocumentLinkWithSubscribers = function (correspondence) {
@@ -3770,9 +3769,9 @@ module.exports = function (app) {
             var route = "/user-id/" + employee.id + "/ouid/" + employee.getOUID() + "/vsid/" + info.vsId;
             return $http.get(urlService.documentLink + route)
                 .then(function (result) {
-                    result.data.rs = generator.generateInstance(result.data.rs, DocumentLink, self._sharedMethods);
-                    result.data.rs = generator.interceptReceivedInstance('DocumentLink', result.data.rs);
-                    return result.data.rs;
+                    result = generator.generateInstance(result.data.rs, DocumentLink);
+                    result = result.id ? generator.interceptReceivedInstance('DocumentLink', result) : result;
+                    return result;
                 })
         };
 
@@ -3816,8 +3815,32 @@ module.exports = function (app) {
                 });
         };
 
+        self.loadUserLinks = function (userId, ouId) {
+            return $http
+                .get((urlService.documentLink + '/user-id/' + userId + '/ouid/' + ouId))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('DocumentLink', generator.generateCollection(result.data.rs, DocumentLink));
+                });
+        };
+
+        self.openUserLinksPopup = function ($event) {
+            var employee = employeeService.getEmployee();
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('user-links'),
+                    controller: 'userLinksPopupCtrl',
+                    controllerAs: 'ctrl',
+                    resolve: {
+                        userLinks: function () {
+                            'ngInject';
+                            return self.loadUserLinks(employee.id, employee.getOUID());
+                        }
+                    }
+                })
+        };
+
         /**
-         * @description Gets the parsed sms template to display as sms message
+         * @description gets the parsed sms template to display as sms message
          * @param correspondence
          * @param smsObject
          * @returns {*}

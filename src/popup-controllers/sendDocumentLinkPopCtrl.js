@@ -3,11 +3,14 @@ module.exports = function (app) {
                                                         toast,
                                                         langService,
                                                         dialog,
+                                                        attachmentService,
                                                         correspondence,
                                                         documentLink,
                                                         DocumentLinkSubscriber,
+                                                        managerService,
                                                         moment,
                                                         employeeService,
+                                                        generator,
                                                         correspondenceService,
                                                         $filter) {
             'ngInject';
@@ -15,11 +18,24 @@ module.exports = function (app) {
             self.controllerName = 'sendDocumentLinkPopCtrl';
 
             self.correspondence = correspondence;
-            self.model = angular.copy(correspondence);
             self.currentDate = new Date();
             self.documentLinkSubscriber = new DocumentLinkSubscriber();
             self.selectedDocumentLinkSubscribers = [];
+            self.documentLink = documentLink;
+            self.calenderHours = generator.calenderHours;
 
+            self.grid = {
+                limit: 5, // default limit
+                page: 1, // first page
+                //order: 'arName', // default sorting order
+                order: '', // default sorting order
+                limitOptions: [5, 10, 20, {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.documentLink.documentLinkSubscribers.length + 21);
+                    }
+                }]
+            };
             /**
              * @description add link subscriber
              */
@@ -32,6 +48,7 @@ module.exports = function (app) {
                 correspondenceService.sendDocumentLink(self.documentLink, self.correspondence)
                     .then(function () {
                         toast.success(langService.get('successfully_send_document_url'));
+                        dialog.hide();
                     });
             };
 
@@ -87,19 +104,45 @@ module.exports = function (app) {
                 self.documentLink.documentLinkSubscribers = $filter('orderBy')(self.documentLink.documentLinkSubscribers, self.grid.order);
             };
 
-            self.grid = {
-                limit: 5, // default limit
-                page: 1, // first page
-                //order: 'arName', // default sorting order
-                order: '', // default sorting order
-                limitOptions: [5, 10, 20, {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.documentLink.documentLinkSubscribers.length + 21);
-                    }
-                }]
+            self.selectAttachmentsToSend = function () {
+                var info = self.correspondence.getInfo();
+                attachmentService
+                    .loadDocumentAttachments(info.vsId, info.documentClass)
+                    .then(function (attachments) {
+                        if (!attachments.length) {
+                            dialog.infoMessage(langService.get('document_has_no_attachments'));
+                            return;
+                        }
+                        // popupTitle, attachments, selectedItems, selectionCallback
+                        managerService
+                            .attachmentSelector(langService.get('select_attachments'), attachments, info, self.documentLink.exportOptionsMap.ATTACHMENTS, function (item, selectedItems) {
+                                return selectedItems.indexOf(item.vsId) !== -1;
+                            })
+                            .then(function (selectedAttachments) {
+                                self.documentLink.exportOptionsMap.ATTACHMENTS = _.map(selectedAttachments, 'vsId');
+                            });
+                    })
             };
 
+            self.selectLinkedDocumentsToSend = function () {
+                var info = self.correspondence.getInfo();
+                correspondenceService
+                    .getLinkedDocumentsByVsIdClass(info.vsId, info.documentClass)
+                    .then(function (linkedDocuments) {
+                        if (!linkedDocuments.length) {
+                            dialog.infoMessage(langService.get('document_has_no_linked_documents'));
+                            return;
+                        }
+                        managerService
+                            .documentSelector(langService.get('select_linked_documents'), linkedDocuments, info, self.documentLink.exportOptionsMap.RELATED_BOOKS, function (item, selectedItems) {
+                                return selectedItems.indexOf(item.vsId) !== -1;
+                            })
+                            .then(function (selectedAttachments) {
+                                self.documentLink.exportOptionsMap.RELATED_BOOKS = _.map(selectedAttachments, 'vsId');
+                            });
+                    })
+
+            };
             /**
              * @description Close the popup
              */

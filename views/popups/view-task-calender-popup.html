@@ -10,21 +10,21 @@
                         <md-card flex>
                             <md-table-container>
                                 <table md-table>
-                                    <thead md-head>
+                                    <thead md-head md-order="ctrl.grid.order">
                                     <tr md-row>
-                                        <th md-column>
+                                        <th md-column md-order-by="{{ctrl.orderByName('userId')}}">
                                             {{lang.name}}
                                         </th>
-                                        <th md-column>
+                                        <th md-column md-order-by="{{ctrl.orderByName('ouId')}}">
                                             {{lang.department}}
                                         </th>
-                                        <th md-column>
+                                        <th md-column md-order-by="taskState">
                                             {{lang.task_state}}
                                         </th>
-                                        <th md-column>
+                                        <th md-column md-order-by="dueDate">
                                             {{lang.task_due_date}}
                                         </th>
-                                        <th md-column>
+                                        <th md-column md-order-by="completionDate">
                                             {{lang.task_completion_date}}
                                         </th>
                                         <th md-column>
@@ -36,7 +36,7 @@
                                     </tr>
                                     </thead>
                                     <tbody md-body>
-                                    <tr ng-repeat="participant in ctrl.task.taskParticipants track by participant.id"
+                                    <tr ng-repeat="participant in ctrl.task.taskParticipants | orderBy:ctrl.grid.order track by $index"
                                         md-row>
                                         <td md-cell>
                                             {{participant.userId.getTranslatedName()}}
@@ -51,11 +51,13 @@
                                         <td md-cell>{{participant.completionDate|date:'y-MM-dd'}}</td>
                                         <td md-cell>
                                             <div tooltip="{{participant.taskCreatorComment}}" md-truncate
-                                                  style="max-width: 100px;">{{participant.taskCreatorComment}}</div>
+                                                 style="max-width: 100px;">{{participant.taskCreatorComment}}
+                                            </div>
                                         </td>
                                         <td md-cell>
                                             <div tooltip="{{lang.participant_comment}}" md-truncate
-                                                  style="max-width: 100px;">{{participant.participantReply}}</div>
+                                                 style="max-width: 100px;">{{participant.participantReply}}
+                                            </div>
                                         </td>
                                     </tr>
                                     </tbody>

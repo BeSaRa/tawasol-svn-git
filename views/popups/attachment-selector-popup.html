@@ -1,0 +1,100 @@
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{ctrl.title}}">
+    <popup-toolbar-directive
+            header-text="{{ctrl.title}}"
+            close-callback="ctrl.closeItemSelectorPopup"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div layout="column" class="p20">
+            <md-card flex layout="row">
+                <md-table-container flex>
+                    <table md-table md-row-select multiple ng-model="ctrl.selectedItems"
+                           md-progress="ctrl.progress">
+                        <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                        <tr md-row>
+                            <th colspan="6" class="table-selector-header"
+                                ng-if="ctrl.selectedItems.length" md-column>
+                                <div layout="row" layout-align="start center">
+                                    <span>{{ctrl.selectedItems.length}} {{lang.items_selected}} </span>
+                                    <span flex></span>
+                                </div>
+                            </th>
+                            <th ng-if="!ctrl.selectedItems.length" md-column md-order-by="docSubject">
+                                <span>{{lang.attachment_document_title}}</span>
+                            </th>
+                            <th ng-if="!ctrl.selectedItems.length" md-column
+                                md-order-by="{{ctrl.getSortingKey('attachmentType','AttachmentType')}}">
+                                <span>{{lang.attachment_attachment_type}}</span>
+                            </th>
+                            <th ng-if="!ctrl.selectedItems.length" md-column
+                                md-order-by="{{ctrl.getSortingKey('securityLevel','Lookup')}}">
+                                <span>{{lang.attachment_attachment_security_level}}</span>
+                            </th>
+                            <th ng-if="!ctrl.selectedItems.length" md-column>
+                                <span>{{lang.actions}}</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row md-select="attachment"
+                            ng-disabled="ctrl.disableEverything || ctrl.receiveG2g"
+                            ng-repeat="attachment in ctrl.items  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
+                            <!--<td md-cell class="indicator-td">
+                                &lt;!&ndash; Linked Exported Doc &ndash;&gt;
+                                <grid-indicator-directive record="attachment"
+                                                          indicator-type="isLinkedExportedDoc"
+                                                          record-type="Attachment"></grid-indicator-directive>
+                            </td>-->
+                            <td md-cell class="subject">
+                                <!-- Linked Exported Doc (attachment with refVSID) Indicator-->
+                                <grid-indicator-directive record="attachment"
+                                                          indicator-type="isLinkedExportedDoc"
+                                                          record-type="Attachment"></grid-indicator-directive>
+                                {{attachment.getTranslatedName()}}
+                            </td>
+                            <td md-cell>{{attachment.attachmentType.getTranslatedName()}}</td>
+                            <td md-cell>{{attachment.getSecurityLevels()}}</td>
+                            <td md-cell>
+                                <div flex layout="row" layout-align="start center">
+                                    <md-button class="md-icon-button" title="{{lang.attachment_view}}"
+                                               ng-click="ctrl.openViewDocumentAttachment(attachment, $event)">
+                                        <md-icon md-svg-icon="eye"></md-icon>
+                                    </md-button>
+                                    <md-button class="md-icon-button" title="{{lang.download}}"
+                                               ng-click="ctrl.downloadAttachment(attachment, $event)">
+                                        <md-icon md-svg-icon="download"></md-icon>
+                                    </md-button>
+                                    <md-button class="md-icon-button" title="{{lang.attachment_edit}}"
+                                               ng-if="!ctrl.disableEverything && !ctrl.isLinkedExportedDocAttachment && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment) && !ctrl.receiveG2g"
+                                               ng-click="ctrl.openEditDocumentAttachment(attachment, $event)">
+                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                    </md-button>
+                                    <md-button class="md-icon-button" title="{{lang.attachment_delete}}"
+                                               ng-if="!ctrl.disableEverything && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment) && !ctrl.receiveG2g"
+                                               ng-click="ctrl.deleteDocumentAttachment(attachment, $event)">
+                                        <md-icon md-svg-icon="delete"></md-icon>
+                                    </md-button>
+
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <md-table-pagination
+                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                            md-limit-options="ctrl.grid.limitOptions"
+                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                            md-total="{{ctrl.attachments.length}}" md-page-select>
+                    </md-table-pagination>
+                </md-table-container>
+            </md-card>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button class="md-raised" ng-click="ctrl.sendSelectedItems()">{{lang.select}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeItemSelectorPopup()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

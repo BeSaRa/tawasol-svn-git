@@ -11,6 +11,7 @@ module.exports = function (app) {
                                                       moveToFolderService,
                                                       toast,
                                                       langService,
+                                                      correspondenceService,
                                                       errorCode) {
         'ngInject';
         var self = this;
@@ -132,6 +133,7 @@ module.exports = function (app) {
                 })
             })
         }
+
         // first run to take the values to deiplay/hide the guides depend on permissions.
         _prepareUserGuide();
 
@@ -244,6 +246,10 @@ module.exports = function (app) {
                 .append(element);
 
             element[0].click();
+        };
+
+        self.manageDocumentLinks = function ($event) {
+            correspondenceService.openUserLinksPopup($event);
         };
 
         employeeService

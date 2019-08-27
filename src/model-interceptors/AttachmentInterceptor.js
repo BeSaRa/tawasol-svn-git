@@ -3,6 +3,7 @@ module.exports = function (app) {
                       attachmentTypeService,
                       lookupService,
                       AttachmentType,
+                      Information,
                       Lookup) {
         'ngInject';
 
@@ -20,8 +21,7 @@ module.exports = function (app) {
             //model.securityLevel = self.document.securityLevel;
             if (model.securityLevel instanceof Lookup) {
                 model.securityLevel = model.securityLevel.lookupKey;
-            }
-            else if (typeof model.securityLevel !== 'number' && model.securityLevel.hasOwnProperty('id')) {
+            } else if (typeof model.securityLevel !== 'number' && model.securityLevel.hasOwnProperty('id')) {
                 model.securityLevel = model.securityLevel.id;
             }
 
@@ -47,8 +47,7 @@ module.exports = function (app) {
                 model.attachmentType = new AttachmentType();//{enName: 'Linked document', arName: 'Linked document'}
                 model.isLinkedExportedDocIndicator = model.getIsLinkedExportedDocIndicator();
                 self.isLinkedExportedDocAttachment = true;
-            }
-            else {
+            } else {
                 model.attachmentType = attachmentTypeService.getAttachmentTypeByLookupKey(model.attachmentType);
             }
             if (model.securityLevel && typeof model.securityLevel !== 'number' && !(model.securityLevel instanceof Lookup)) {
@@ -62,6 +61,7 @@ module.exports = function (app) {
                 model.updateActionStatus = lookupService.getLookupByLookupKey(lookupService.attachmentUpdateAction, 0);
             }
             model.isDeletable = !!model.isDeletable;
+            model.attachmentTypeInfo = new Information(model.attachmentTypeInfo);
             return model;
         });
 

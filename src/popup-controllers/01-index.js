@@ -90,7 +90,7 @@ module.exports = function (app) {
     require('./searchDocDateRangePopCtrl')(app);
     require('./manageCorrespondenceSitesSearchPopCtrl')(app);
     require('./manageDocumentEntitiesSearchPopCtrl')(app);
-	require('./viewCorrespondenceG2GPopCtrl')(app);
+    require('./viewCorrespondenceG2GPopCtrl')(app);
     require('./g2gDeliveryReportPopCtrl')(app);
     require('./subscriptionPopCtrl')(app);
     require('./manageGridCorrespondenceSitesPopCtrl')(app);
@@ -127,4 +127,6 @@ module.exports = function (app) {
     require('./icnArchiveOptionsPopCtrl')(app);
     require('./icnArchivePopCtrl')(app);
     require('./otpPopCtrl')(app);
+    require('./itemSelectorPopCtrl')(app);
+    require('./userLinksPopupCtrl')(app);
 };

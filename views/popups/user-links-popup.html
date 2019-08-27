@@ -1,0 +1,50 @@
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.my_links}}">
+    <popup-toolbar-directive
+            header-text="{{lang.my_links}}"
+            close-callback="ctrl.closeUserLinksPopup"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div layout="column" class="p20">
+            <md-card flex layout="row">
+                <md-table-container flex>
+                    <table md-table>
+                        <thead md-head md-order="query.order">
+                        <tr md-row>
+                            <th md-column><span>{{lang.document_subject}}</span></th>
+                            <th md-column><span>{{lang.expiry_date}}</span></th>
+                            <th md-column><span>{{lang.status}}</span></th>
+                            <th md-column><span>{{lang.actions}}</span></th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row md-select="link" ng-repeat="link in ctrl.userLinks">
+                            <td md-cell>{{link.docSubject}}</td>
+                            <td md-cell>{{link.expirationTime|date:'y-MM-dd h:mm:ss a'}}</td>
+                            <td md-cell>
+                                <md-switch aria-label="{{lang.status}}"
+                                           title="{{link.getTranslatedStatus()}}"
+                                           ng-change="ctrl.toggleLinkStatus(link)"
+                                           ng-model="link.status">
+                                </md-switch>
+                            </td>
+                            <td md-cell>
+                                <md-button class="md-icon-button" title="{{lang.edit}}"
+                                           ng-click="ctrl.openEditLink(link, $event)">
+                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                </md-button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
+            </md-card>
+
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeUserLinksPopup()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

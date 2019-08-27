@@ -487,7 +487,31 @@ module.exports = function (app) {
                     employeeLinkedEntity = generator.interceptReceivedCollection('HREmployee', employeeLinkedEntity);
                     return employeeLinkedEntity;
                 })
+        };
+
+        self.itemSelectorPopup = function (title, templateName, items, info, selectedItems, selectionCallback) {
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup(templateName),
+                controller: 'itemSelectorPopCtrl',
+                controllerAs: 'ctrl',
+                locals: {
+                    info: info,
+                    title: title,
+                    items: items,
+                    selectedItems: selectedItems,
+                    selectionCallback: selectionCallback
+                }
+            })
+        };
+
+        self.attachmentSelector = function (popupTitle, attachments, info, selectedItems, selectionCallback) {
+            return self.itemSelectorPopup(popupTitle, 'attachment-selector', attachments, info, selectedItems, selectionCallback);
+        };
+
+        self.documentSelector = function (popupTitle, documents, info, selectedItems, selectionCallback) {
+            return self.itemSelectorPopup(popupTitle, 'document-selector', documents, info, selectedItems, selectionCallback);
         }
+
 
     });
 };
