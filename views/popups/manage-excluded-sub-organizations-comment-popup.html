@@ -1,7 +1,7 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.comments_excludes}}">
-    <popup-toolbar-directive full-screen="ctrl.fullScreen" full-screen-button="true"
+    <popup-toolbar-directive
             header-text="{{lang.comments_excludes}} {{lang.from}} {{ctrl.organization.getTranslatedName()}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive>
         <div class="md-dialog-content">
