@@ -1,10 +1,10 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.comments_manage_document_comments}}">
-    <div layout="column">
         <popup-toolbar-directive header-text="{{lang.comments_manage_document_comments}} : {{ctrl.documentSubject}}"
                                  close-callback="ctrl.closeDocumentComments"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <manage-comments-directive
                     vs-id="ctrl.vsId"
                     document-comments="ctrl.documentComments"
@@ -15,24 +15,22 @@
                     source-comment="ctrl.documentComment"
                     from-dialog="ctrl.fromDialog"
                     is-valid="ctrl.isValid"></manage-comments-directive>
-        </md-content>
-        <div>
-            <div layout="row">
-                <div ng-if="!!ctrl.documentComment">
-                    <md-button class="md-raised" ng-if="!ctrl.editMode"
-                               ng-disabled="!ctrl.isValid"
-                               ng-click="ctrl.createDocumentComment()">
-                        {{lang.add}}
-                    </md-button>
-                    <md-button class="md-raised" ng-if="ctrl.editMode"
-                               ng-disabled="!ctrl.isValid"
-                               ng-click="ctrl.saveDocumentComments()">
-                        {{lang.save}}
-                    </md-button>
-                </div>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeDocumentComments()">{{lang.close}}</md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <div ng-if="!!ctrl.documentComment">
+            <md-button class="md-raised" ng-if="!ctrl.editMode"
+                       ng-disabled="!ctrl.isValid"
+                       ng-click="ctrl.createDocumentComment()">
+                {{lang.add}}
+            </md-button>
+            <md-button class="md-raised" ng-if="ctrl.editMode"
+                       ng-disabled="!ctrl.isValid"
+                       ng-click="ctrl.saveDocumentComments()">
+                {{lang.save}}
+            </md-button>
+        </div>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeDocumentComments()">{{lang.close}}</md-button>
+    </md-dialog-actions>
 </md-dialog>

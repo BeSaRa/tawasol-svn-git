@@ -657,19 +657,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description exclude sub ou
-         * @param organization
-         * @param $event
-         */
-        /*self.excludeSubOus = function (organization, $event) {
-            self.openExcludesDialog(organization, $event)
-                .then(function (excludedSubOus) {
-
-                }).catch(function () {
-            });
-        };*/
-
-        /**
          * @description open dialog to exclude sub organizations from selected include
          * @param parentOrganization
          * @param $event
