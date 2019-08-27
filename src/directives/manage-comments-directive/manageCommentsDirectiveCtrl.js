@@ -85,21 +85,24 @@ module.exports = function (app) {
             });
 
             // filter all sections (no registry)
-            var groups = _.filter(organizations, function (item) {
+            var sections = _.filter(organizations, function (item) {
                 return !item.hasRegistry;
-            });
-
+            }), parent;
             // if needed to show regou - section, append the dummy property "display"
-            groups = _.map(groups, function (item) {
+            sections = _.map(sections, function (item) {
+                if (typeof item.registryParentId === 'number') {
+                    parent = _.find(regOus, {'id': item.registryParentId});
+                } else {
+                    parent = item.registryParentId;
+                }
                 // if ou is section(has no registry and has regOuId, add temporary field for regOu)
                 item.display = new Information({
-                    arName: (item.registryParentId ? item.registryParentId.arName : '') + ' - ' + item.arName,
-                    enName: (item.registryParentId ? item.registryParentId.enName : '') + ' - ' + item.enName
+                    arName: (parent ? parent.arName : '') + ' - ' + item.arName,
+                    enName: (parent ? parent.enName : '') + ' - ' + item.enName
                 });
                 return item;
             });
-
-            return _.sortBy([].concat(regOus, groups), [function (ou) {
+            return _.sortBy([].concat(regOus, sections), [function (ou) {
                 return ou.display[langService.current + 'Name'].toLowerCase();
             }]);
         }
@@ -164,22 +167,28 @@ module.exports = function (app) {
             users: {
                 service: ouApplicationUserService,
                 method: 'getOuApplicationUserByOu',
+                param: null,
                 mapResult: function (item) {
-                    var applicationUser = angular.extend(item, {display: item.applicationUser[langService.current + 'FullName']});
+                    //var applicationUser = angular.extend(item, {display: item.applicationUser[langService.current + 'FullName']});
+                    var applicationUser = angular.extend(item, {display: item.applicationUser});
                     return item.applicationUser;
                 }
             },
             organizations: {
                 service: organizationService,
-                method: 'getOrganizations',
+                //method: 'getOrganizations',
+                method: 'getOrganizationsByRegOU',
+                param: employeeService.getEmployee().getRegistryOUID(),
                 mapResult: function (item) {
-                    return angular.extend(item, {display: item[langService.current + 'Name']});
+                    //return angular.extend(item, {display: item.display[langService.current + 'Name']});
+                    return angular.extend(item, {display: item.display});
                 }
             }
         };
         // private variables to debounce the request.
         var pendingSearch, cancelSearch = angular.noop, lastSearch;
-        self.selectedOu = _sortRegOusSections([self.services.organizations.mapResult(self.employee.userOrganization)])[0];
+        //self.selectedOu = _sortRegOusSections([self.services.organizations.mapResult(self.employee.userOrganization)])[0];
+        self.selectedOu = self.services.organizations.mapResult(_sortRegOusSections([self.employee.userOrganization])[0]);
 
         /**
          * to refresh debounce (reset).
@@ -446,9 +455,13 @@ module.exports = function (app) {
             var criteria = self[property + 'Search'];
             var searchType = currentType();
             var current = self.services[searchType];
-            var method = (selectedOu) ? current.service[current.method](selectedOu) : current.service[current.method]();
+            var param = selectedOu ? selectedOu : self.services[searchType].param;
+            var method = (param) ? current.service[current.method](param) : current.service[current.method](param);
 
             return method.then(function (result) {
+                if (searchType === 'organizations'){
+                    result = _sortRegOusSections(result);
+                }
                 var ids = _.map(self.documentComment[property], 'id');
 
                 return _.filter(result, function (item) {
@@ -470,18 +483,13 @@ module.exports = function (app) {
             });
         };
 
-        self.querySearchOrganization = function (query) {
-            query = query.toLowerCase();
-            return self.services.organizations.service[self.services.organizations.method]()
+        self.querySearchOrganization = function (searchText) {
+            searchText = searchText ? searchText.toLowerCase() : '';
+            return self.services.organizations.service[self.services.organizations.method](self.services.organizations.param)
                 .then(function (organizations) {
-                    /*  organizations = _.map(organizations, function (ou) {
-                          return self.services.organizations.mapResult(ou);
-                      });*/
-
                     organizations = _sortRegOusSections(organizations);
-
-                    return query ? organizations.filter(function (item) {
-                        return item.display[langService.current + 'Name'].toLowerCase().indexOf(query) !== -1;
+                    return searchText ? _.filter(organizations, function (item) {
+                        return item.display[langService.current + 'Name'].toLowerCase().indexOf(searchText) !== -1;
                     }) : organizations;
                 })
         };

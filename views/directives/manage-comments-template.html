@@ -61,7 +61,7 @@
                     <fieldset class="size-100" layout-padding>
                         <legend class="md-accent">{{lang.comments_includes}}</legend>
                         <div layout="row" ng-if="ctrl.documentComment.commentCustomize()">
-                            <!-- Type Switch -->
+                            <!-- Type Switch (User/OU) -->
                             <div flex layout="row">
                                 <md-switch ng-change="ctrl.toggleCommentPerOUStatus($event)"
                                            ng-true-value="true"
@@ -84,7 +84,7 @@
                         </div>
                         <!-- Dropdowns -->
                         <div layout="row">
-                            <!-- OU DDL -->
+                            <!-- OU DDL (User Only) -->
                             <md-autocomplete
                                     flex
                                     md-no-cache="true"
@@ -98,7 +98,7 @@
                                 <span>{{ item.display.getTranslatedName() }}</span>
                             </md-autocomplete>
                             &nbsp;&nbsp;
-                            <!-- User DDL -->
+                            <!-- User DDL (disabled if type = ou and no ou selected) -->
                             <md-autocomplete
                                     flex
                                     ng-disabled="!ctrl.documentComment.isPerOU && !ctrl.searchOuText"
@@ -107,11 +107,11 @@
                                     md-selected-item="ctrl.includedIDs"
                                     md-search-text="ctrl.includedIDsSearch"
                                     md-items="item in ctrl.querySearchIncludes('includedIDs')"
-                                    md-item-text="item.display"
+                                    md-item-text="item.display.getTranslatedName()"
                                     md-min-length="0"
                                     md-menu-class="include-exclude-custom-template"
                                     placeholder="{{lang[ctrl.currentSearchKey()]}}">
-                                <span md-highlight-text="ctrl.includedIDsSearch">{{item.display}}</span>
+                                <span md-highlight-text="ctrl.includedIDsSearch">{{item.display.getTranslatedName()}}</span>
                             </md-autocomplete>
                         </div>
                         <!-- Included Table -->
@@ -201,7 +201,7 @@
                         <legend class="md-accent">{{lang.comments_excludes}}</legend>
                         <!-- If global comment -->
                         <div layout="row" ng-if="ctrl.documentComment.isGlobal">
-                            <!-- Type Switch -->
+                            <!-- Type Switch (User/OU) -->
                             <div flex layout="row">
                                 <md-switch ng-change="ctrl.toggleCommentPerOUStatus($event)"
                                            ng-true-value="true"
@@ -225,7 +225,7 @@
                         <!-- Not Custom comment and not without sub ous -->
                         <div layout="row"
                              ng-if="!(ctrl.documentComment.withSubOUs && ctrl.documentComment.commentCustomize())">
-                            <!-- OU DDL -->
+                            <!-- OU DDL (User Only) -->
                             <md-autocomplete
                                     flex
                                     md-no-cache="true"
@@ -239,7 +239,7 @@
                                 <span>{{ item.display.getTranslatedName() }}</span>
                             </md-autocomplete>
                             &nbsp;&nbsp;
-                            <!-- User DDL -->
+                            <!-- User/OU DDL (disabled if type = ou and no ou selected) -->
                             <md-autocomplete
                                     flex
                                     ng-disabled="!ctrl.documentComment.isPerOU && !ctrl.searchOuText"
@@ -248,10 +248,10 @@
                                     md-selected-item="ctrl.excludedIDs"
                                     md-search-text="ctrl.excludedIDsSearch"
                                     md-items="item in ctrl.querySearchExcludes('excludedIDs')"
-                                    md-item-text="item.display"
+                                    md-item-text="item.display.getTranslatedName()"
                                     md-min-length="0"
                                     placeholder="{{lang[ctrl.currentSearchKey()]}}">
-                                <span>{{ item.display }}</span>
+                                <span>{{ item.display.getTranslatedName() }}</span>
                             </md-autocomplete>
                         </div>
                         <!-- Excluded Table -->
