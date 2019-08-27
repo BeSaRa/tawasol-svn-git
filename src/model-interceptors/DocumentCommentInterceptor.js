@@ -63,6 +63,8 @@ module.exports = function (app) {
                 }
                 return item;
             });*/
+            model.includedIDs = [];
+            model.excludedIDs = [];
             if (model.includedList.length) {
                 model.includedIDs = _.map(model.includedList, function (included) {
                     included = new Information(included);
