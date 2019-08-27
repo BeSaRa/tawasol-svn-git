@@ -8,52 +8,49 @@ module.exports = function (app) {
                                                                              organizationService,
                                                                              gridService,
                                                                              $filter,
-                                                                             organizationChilds,
+                                                                             organizationChildren,
                                                                              dialog) {
         'ngInject';
         var self = this;
 
         self.controllerName = 'manageExcludedSubOrganizationsCommentPopCtrl';
-
         self.excludedSubOUs = (self.excludedIDs && self.excludedIDs.length) ? self.excludedIDs : [];
         self.selectedOu = null;
         self.searchText = null;
         self.selectedExcludedSubOUs = [];
 
+        self.searchOuChildren = function (searchText) {
+            return _.filter(organizationChildren, function (item) {
+                if (!searchText)
+                    return _.map(self.excludedSubOUs, 'id').indexOf(item.id) === -1;
+
+                return item.getTranslatedName().toLowerCase().indexOf(searchText.toLowerCase()) !== -1 && self.excludedSubOUs.indexOf(item.id) === -1;
+            });
+        };
 
         /**
-         * @description add excluded sub ous
+         * @description Adds the organization to exclude sub organization list
+         * @param organization
          */
-        self.addExcludedSubOus = function () {
-            dialog.hide(self.excludedSubOUs);
+        self.onOrganizationSelected = function (organization) {
+            if (!organization) {
+                return;
+            }
+            self.excludedSubOUs.push(organization);
+            self.searchText = null;
         };
 
         /**
          * @description remove exclude organization
-         * @param $index
+         * @param organization
          * @param $event
          */
-        self.removeExcluded = function ($index, $event) {
+        self.removeExcluded = function (organization, $event) {
             dialog
-                .confirmMessage(langService.get('confirm_delete').change({name: self.excludedSubOUs[$index].display}), null, null, $event)
+                .confirmMessage(langService.get('confirm_delete').change({name: organization.getTranslatedName()}), null, null, $event)
                 .then(function () {
-                    self.excludedSubOUs.splice($index, 1);
-                });
-        };
-
-        self.querySearch = function (query) {
-            return $q.when(organizationChilds)
-                .then(function (result) {
-                    result = _.map(result, function (item) {
-                        return angular.extend(item, {display: item[langService.current + 'Name']});
-                    });
-
-                    return _.filter(result, function (item) {
-                        if (!query)
-                            return _.map(self.excludedSubOUs, 'id').indexOf(item.id) === -1 && item.id !== self.organization.id;
-
-                        item.display = item[langService.current + 'Name'];
-                        return item.display.toLowerCase().indexOf(query.toLowerCase()) !== -1 && self.excludedSubOUs.indexOf(item.id) === -1;
+                    self.excludedSubOUs = _.filter(self.excludedSubOUs, function (item) {
+                        return item.id !== (organization.hasOwnProperty('id') ? organization.id : organization);
                     });
                 });
         };
@@ -75,14 +72,10 @@ module.exports = function (app) {
         };
 
         /**
-         * @param organization
+         * @description add excluded sub ous
          */
-        self.onOrganizationSelected = function (organization) {
-            if (!organization) {
-                return;
-            }
-            self.excludedSubOUs.push(organization);
-            self.searchText = null;
+        self.addExcludedSubOus = function () {
+            dialog.hide(self.excludedSubOUs);
         };
 
         /**
@@ -103,7 +96,7 @@ module.exports = function (app) {
         self.grid = {
             limit: 5, // default limit
             page: 1, // first page
-            order: 'display', // default sorting order
+            order: '', // default sorting order
             limitOptions: [5, 10, 20, // limit options
                 {
                     label: langService.get('all'),

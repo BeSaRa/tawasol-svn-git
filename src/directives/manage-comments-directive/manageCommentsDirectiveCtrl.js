@@ -60,7 +60,7 @@ module.exports = function (app) {
         ];
 
         // placeholders
-        self.properties = {
+        /*self.properties = {
             includedIDs: {
                 property: 'selectedIncludedItem',
                 reverse: 'excludedIDs'
@@ -69,7 +69,7 @@ module.exports = function (app) {
                 property: 'selectedExcludedItem',
                 reverse: 'includedIDs'
             }
-        };
+        };*/
 
         function _sortRegOusSections(organizations) {
             // filter all regOU
@@ -279,9 +279,9 @@ module.exports = function (app) {
                 });
         };
 
-        /*
-      @description change name to comment privacy
-       */
+        /**
+         * @description On Change privacy
+         */
         self.onCommentPrivacyChange = function () {
             self.checkCommentPrivacy();
             _setCommentPrivacy();
@@ -303,7 +303,6 @@ module.exports = function (app) {
                     break;
             }
         };
-
 
         /**
          * @description check change of privacy for comment
@@ -346,6 +345,7 @@ module.exports = function (app) {
             } else
                 self.commentPrivacyCopy = self.commentPrivacy;
         };
+
         /**
          * @description toggle commentPerOu
          * @param $event
@@ -501,7 +501,7 @@ module.exports = function (app) {
          * @param selected
          */
         self.selectItem = function (property, selected) {
-            var key = self.properties[property];
+            //var key = self.properties[property];
             if (!selected) {
                 return;
             }
@@ -661,27 +661,22 @@ module.exports = function (app) {
          * @param organization
          * @param $event
          */
-        self.excludeSubOus = function (organization, $event) {
+        /*self.excludeSubOus = function (organization, $event) {
             self.openExcludesDialog(organization, $event)
                 .then(function (excludedSubOus) {
-                    // remove old items for open dialog organization
-                    self.documentComment.excludedIDs = _.filter(self.documentComment.excludedIDs, function (item) {
-                        return _.map(self.excludedIDsCopy, 'id').indexOf(item.id) === -1;
-                    });
 
-                    self.documentComment.excludedIDs = self.documentComment.excludedIDs.concat(excludedSubOus);
                 }).catch(function () {
             });
-        };
+        };*/
 
         /**
          * @description open dialog to exclude sub organizations from selected include
-         * @param organization
+         * @param parentOrganization
          * @param $event
          * @returns {promise}
          */
-        self.openExcludesDialog = function (organization, $event) {
-            self.selectedOuChildren = organizationService.getChildren(organization);
+        self.openExcludesDialog = function (parentOrganization, $event) {
+            self.selectedOuChildren = organizationService.getChildren(parentOrganization);
             var _excludedIDsCopy = _.filter(self.selectedOuChildren, function (ouChild) {
                 return _.map(self.documentComment.excludedIDs, 'id').indexOf(ouChild.id) > -1;
             });
@@ -695,16 +690,29 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 bindToController: true,
                 locals: {
-                    organization: organization,
+                    organization: parentOrganization,
                     excludedIDs: self.excludedIDsCopy
-                    // includedIDs: self.documentComment.includedIDs
                 },
                 resolve: {
-                    organizationChilds: function (organizationService) {
+                    organizationChildren: function (organizationService) {
                         'ngInject';
-                        return organizationService.loadOrganizationChildren(organization);
+                        return organizationService.loadOrganizationChildren(parentOrganization)
+                            .then(function (result) {
+                                // remove current ou from child list
+                                result = _.filter(result,function (ou) {
+                                    return ou.id !== parentOrganization.id
+                                });
+                                return result;
+                            });
                     }
                 }
+            }).then(function (selectedExcludedSubOus) {
+                // remove old items for open dialog organization
+                self.documentComment.excludedIDs = _.filter(self.documentComment.excludedIDs, function (item) {
+                    return _.map(self.excludedIDsCopy, 'id').indexOf(item.id) === -1;
+                });
+
+                self.documentComment.excludedIDs = self.documentComment.excludedIDs.concat(selectedExcludedSubOus);
             });
         };
 
