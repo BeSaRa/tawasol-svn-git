@@ -90,13 +90,17 @@ module.exports = function (app) {
 
         langService
             .listeningToChange(function () {
+
                 _changeLabelsTranslation();
             });
 
         function _changeLabelsTranslation() {
             var lists = angular.element('md-select');
+
             _.map(lists, function (element) {
-                element.data('$ngModelController') && element.data('$ngModelController').$render();
+                $timeout(function () {
+                    angular.element(element).data('$ngModelController') && angular.element(element).data('$ngModelController').$render();
+                });
             });
         }
 
