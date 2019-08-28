@@ -240,9 +240,8 @@ module.exports = function (app) {
 
             var headers = [
                 'label_serial',
-                'document_number',
                 'subject',
-                'priority_level',
+                'document_number',
                 'label_document_type',
                 'creator',
                 'created_on',

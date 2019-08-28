@@ -111,15 +111,15 @@
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
                                         md-order-by="docFullSerial">
-                                        <span>{{lang.label_serial}} / {{lang.document_number}}</span>
+                                        <span>{{lang.label_serial}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
                                         md-order-by="docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
-                                        <span>{{lang.priority_level}}</span>
+                                        md-order-by="refDocNumber">
+                                        <span>{{lang.document_number}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
                                         md-order-by="{{ctrl.getSortingKey('docTypeForSearchGrid', 'DocumentType')}}">
@@ -168,8 +168,6 @@
                                     </td>
                                     <td md-cell>
                                         <span class="serial-td">{{searchedIncomingDocument.docFullSerial}}</span>
-                                        <hr class="m0">
-                                        <span class="serial-td">{{searchedIncomingDocument.refDocNumber}}</span>
                                     </td>
                                     <td md-cell class="subject">
                                         <!--<grid-document-subject-directive record="searchedIncomingDocument"
@@ -191,7 +189,7 @@
                                               class="view-doc subject-internal"
                                               tooltip="{{searchedIncomingDocument.docSubject}}">{{searchedIncomingDocument.docSubject}}</span>
                                     </td>
-                                    <td md-cell>{{searchedIncomingDocument.priorityLevel.getTranslatedName()}}</td>
+                                    <td md-cell>{{searchedIncomingDocument.refDocNumber}}</td>
                                     <td md-cell>{{searchedIncomingDocument.docTypeInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{searchedIncomingDocument.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{searchedIncomingDocument.createdOn}}</td>
