@@ -459,7 +459,7 @@ module.exports = function (app) {
             var method = (param) ? current.service[current.method](param) : current.service[current.method](param);
 
             return method.then(function (result) {
-                if (searchType === 'organizations'){
+                if (searchType === 'organizations') {
                     result = _sortRegOusSections(result);
                 }
                 var ids = _.map(self.documentComment[property], 'id');
@@ -536,14 +536,10 @@ module.exports = function (app) {
         };
 
         var _removeInclude = function (property, selected, $event) {
-            self.selectedOuChildren = organizationService.getChildren(selected);
-            //get added ous in the excluded
-            self.selectedExcludedIDs = _.filter(self.selectedOuChildren, function (ouChild) {
-                return _.map(self.documentComment.excludedIDs, 'id').indexOf(ouChild.id) > -1;
-            });
-
             // delete all children from excluded
-            _removeBulkSelected("excludedIDs", "selectedExcludedIDs", $event);
+            self.documentComment.excludedIDs = _.filter(self.documentComment.excludedIDs, function (excluded) {
+                return excluded.parent !== selected.id;
+            });
 
             // remove selected
             self.documentComment[property] = _.filter(self.documentComment[property], function (item) {
@@ -663,13 +659,11 @@ module.exports = function (app) {
          * @returns {promise}
          */
         self.openExcludesDialog = function (parentOrganization, $event) {
-            self.selectedOuChildren = organizationService.getChildren(parentOrganization);
-            var _excludedIDsCopy = _.filter(self.selectedOuChildren, function (ouChild) {
-                return _.map(self.documentComment.excludedIDs, 'id').indexOf(ouChild.id) > -1;
+            var excludedFromCurrentParent = _.filter(self.documentComment.excludedIDs, function (ou) {
+                return ou.parent === parentOrganization.id;
             });
-
-            self.excludedIDsCopy = angular.copy(_excludedIDsCopy);
-
+            var existingExludeIds = _.map(self.documentComment.excludedIDs, 'id'),
+                existingIncludeIds = _.map(self.documentComment.includedIDs, 'id');
             return dialog.showDialog({
                 $event: $event,
                 templateUrl: cmsTemplate.getPopup('manage-excluded-sub-organizations-comment'),
@@ -678,25 +672,26 @@ module.exports = function (app) {
                 bindToController: true,
                 locals: {
                     organization: parentOrganization,
-                    excludedIDs: self.excludedIDsCopy
+                    excludedSubOUs: angular.copy(excludedFromCurrentParent)
                 },
                 resolve: {
                     organizationChildren: function (organizationService) {
                         'ngInject';
                         return organizationService.loadOrganizationChildren(parentOrganization)
                             .then(function (result) {
-                                // remove current ou from child list
-                                result = _.filter(result,function (ou) {
-                                    return ou.id !== parentOrganization.id
+                                // remove current ou and existing exclude from child list
+                                result = _.filter(result, function (ou) {
+                                    return ou.id !== parentOrganization.id && existingExludeIds.indexOf(ou.id) === -1 && existingIncludeIds.indexOf(ou.id) === -1;
                                 });
                                 return result;
                             });
                     }
                 }
             }).then(function (selectedExcludedSubOus) {
+                var excludedFromCurrentParentIds = _.map(excludedFromCurrentParent, 'id');
                 // remove old items for open dialog organization
                 self.documentComment.excludedIDs = _.filter(self.documentComment.excludedIDs, function (item) {
-                    return _.map(self.excludedIDsCopy, 'id').indexOf(item.id) === -1;
+                    return excludedFromCurrentParentIds.indexOf(item.id) === -1;
                 });
 
                 self.documentComment.excludedIDs = self.documentComment.excludedIDs.concat(selectedExcludedSubOus);

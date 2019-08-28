@@ -14,7 +14,6 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'manageExcludedSubOrganizationsCommentPopCtrl';
-        self.excludedSubOUs = (self.excludedIDs && self.excludedIDs.length) ? self.excludedIDs : [];
         self.selectedOu = null;
         self.searchText = null;
         self.selectedExcludedSubOUs = [];
@@ -36,7 +35,9 @@ module.exports = function (app) {
             if (!organization) {
                 return;
             }
-            self.excludedSubOUs.push(organization);
+            var selectedOu = angular.copy(organization);
+            selectedOu.parent = self.organization.id;
+            self.excludedSubOUs.push(selectedOu);
             self.searchText = null;
         };
 
