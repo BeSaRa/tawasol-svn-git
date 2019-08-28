@@ -15,6 +15,8 @@ module.exports = function (app) {
                                                   Correspondence,
                                                   correspondenceService,
                                                   $location,
+                                                  langService,
+                                                  _,
                                                   $cookies,
                                                   $http,
                                                   cmsTemplate,
@@ -85,5 +87,18 @@ module.exports = function (app) {
 
         $scope.bundleVersion = versionService.getVersionNumber();
         $scope.buildNumber = ' ' + versionService.getBuildNumber();
+
+        langService
+            .listeningToChange(function () {
+                _changeLabelsTranslation();
+            });
+
+        function _changeLabelsTranslation() {
+            var lists = angular.element('md-select');
+            _.map(lists, function (element) {
+                element.data('$ngModelController') && element.data('$ngModelController').$render();
+            });
+        }
+
     });
 };
