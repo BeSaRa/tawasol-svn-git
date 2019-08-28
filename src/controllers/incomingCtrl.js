@@ -184,8 +184,7 @@ module.exports = function (app) {
                         return $q.reject(error);
                     }
                     if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
-                        var errorObj = error.data.eo, msg = errorObj[langService.current + 'Name'];
-                        dialog.confirmMessage(msg + "<br/>" + langService.get('confirm_continue_message'))
+                        dialog.confirmMessage(langService.get('incoming_book_exists_same_number_site_year') + "<br/>" + langService.get('confirm_continue_message'))
                             .then(function () {
                                 return self.saveCorrespondence(status, true, isSaveAndPrintBarcode);
                             }).catch(function () {
@@ -209,8 +208,7 @@ module.exports = function (app) {
                 })
                 .catch(function (error) {
                     if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
-                        var errorObj = error.data.eo, msg = errorObj[langService.current + 'Name'];
-                        dialog.confirmMessage(msg + "<br/>" + langService.get('confirm_continue_message'))
+                        dialog.confirmMessage(langService.get('incoming_book_exists_same_number_site_year') + "<br/>" + langService.get('confirm_continue_message'))
                             .then(function () {
                                 self.saveCorrespondence(null, true, true)
                                     .then(function () {

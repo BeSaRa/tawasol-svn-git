@@ -79,6 +79,7 @@ module.exports = function (app) {
                 14012: 'g2g_error_while_remove_transaction',
                 14013: 'g2g_error_can_not_resend_already_pending_book',
                 //14028: 'g2g_error_occurred_while_terminate'
+                2059:'incoming_book_exists_same_number_site_year'
             };
 
         return {
