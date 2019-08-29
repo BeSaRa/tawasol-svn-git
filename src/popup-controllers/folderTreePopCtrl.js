@@ -4,8 +4,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'folderTreePopCtrl';
 
-        self.pregress = false;
-
+        self.progress = false;
         self.folders = _checkInboxFolder(showInbox, folders);
 
         self.selectedWorkItems = workItems;
@@ -13,6 +12,10 @@ module.exports = function (app) {
         self.disableSelected = _checkDisable();
 
         self.showInbox = showInbox;
+        self.fullScreen = false;
+        self.toggleFullScreen = function () {
+            self.fullScreen = !self.fullScreen;
+        };
 
         function _checkDisable() {
             return self.selectedWorkItems.length === 1 ? self.selectedWorkItems[0].getFolderId() : false;
@@ -32,10 +35,10 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.moveSelectedToFolders = function (selectedFolder) {
-            if (self.pregress) {
+            if (self.progress) {
                 return null;
             }
-            self.pregress = true;
+            self.progress = true;
             return correspondenceService
                 .addBulkWorkItemsToFolder(self.selectedWorkItems, selectedFolder)
                 .then(function (value) {

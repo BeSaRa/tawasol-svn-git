@@ -1,12 +1,12 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.admin_add_new_workflow_group : ctrl.model.getNames()}}">
-    <div layout="column">
-        <popup-toolbar-directive ng-if="!ctrl.editMode"
-                                 header-text="{{lang.admin_add_new_workflow_group}}"></popup-toolbar-directive>
-        <popup-toolbar-directive ng-if="ctrl.editMode"
-                                 header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <popup-toolbar-directive ng-if="!ctrl.editMode"
+                             header-text="{{lang.admin_add_new_workflow_group}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode"
+                             header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="workflowGroup_form" autocomplete="off">
                 <md-tabs md-dynamic-height>
                     <md-tab label="{{lang.basic_info}}">
@@ -100,27 +100,25 @@
                     </md-tab>
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised"
-                           ng-disabled="workflowGroup_form.$invalid || ctrl.workflowGroup.groupMembers.length===0"
-                           ng-if="!ctrl.editMode"
-                           ng-click="ctrl.addWorkflowGroupFromCtrl()">{{lang.add}}
-                </md-button>
-                <md-button class="md-raised" ng-if="ctrl.editMode"
-                           ng-disabled="workflowGroup_form.$invalid|| ctrl.workflowGroup.groupMembers.length===0"
-                           ng-click="ctrl.editWorkflowGroupFromCtrl()">{{lang.save}}
-                </md-button>
-                <span flex=""></span>
-                <md-button class="md-raised"
-                           ng-click="ctrl.resetModel()">
-                    {{lang.reset}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeWorkflowGroupPopupFromCtrl()">{{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button class="md-raised"
+                   ng-disabled="workflowGroup_form.$invalid || ctrl.workflowGroup.groupMembers.length===0"
+                   ng-if="!ctrl.editMode"
+                   ng-click="ctrl.addWorkflowGroupFromCtrl()">{{lang.add}}
+        </md-button>
+        <md-button class="md-raised" ng-if="ctrl.editMode"
+                   ng-disabled="workflowGroup_form.$invalid|| ctrl.workflowGroup.groupMembers.length===0"
+                   ng-click="ctrl.editWorkflowGroupFromCtrl()">{{lang.save}}
+        </md-button>
+        <span flex=""></span>
+        <md-button class="md-raised"
+                   ng-click="ctrl.resetModel()">
+            {{lang.reset}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeWorkflowGroupPopupFromCtrl()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

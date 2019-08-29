@@ -1,21 +1,27 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.inbox_add_to_folder}}">
-    <div layout="column">
-        <md-toolbar>
-            <div layout-align="start center" layout="row">
-                <bulk-correspondence-status-directive class="no-focus-bg" ng-if="ctrl.selectedWorkItems.length > 1"
-                                                      delete-callback="ctrl.deleteFromSelectedWorkItem"
-                                                      items="ctrl.selectedWorkItems"></bulk-correspondence-status-directive>
-                <span class="p20">{{ctrl.showInbox  ?  lang.grid_action_move_to_folder : lang.inbox_add_to_folder  }}</span>
-                <close-dialog-directive></close-dialog-directive>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <bulk-correspondence-status-directive class="no-focus-bg" ng-if="ctrl.selectedWorkItems.length > 1"
+                                                  delete-callback="ctrl.deleteFromSelectedWorkItem"
+                                                  items="ctrl.selectedWorkItems"></bulk-correspondence-status-directive>
+            <span md-truncate>{{ctrl.showInbox  ?  lang.grid_action_move_to_folder : lang.inbox_add_to_folder}}</span>
+            <span flex></span>
+            <div ng-if="false">
+                <md-button class="md-icon-button" ng-click="ctrl.toggleFullScreen()">
+                    <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen' }}"></md-icon>
+                </md-button>
             </div>
-        </md-toolbar>
-        <md-content scroll-directive>
-            <div class="p20 first-folder-list">
+            <cms-close-dialog-directive></cms-close-dialog-directive>
+        </div>
+    </md-toolbar>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <div class="first-folder-list">
                 <folders-tree-structure-directive disable-selected="ctrl.disableSelected" folders="ctrl.folders"
                                                   click-callback="ctrl.moveSelectedToFolders"></folders-tree-structure-directive>
             </div>
-        </md-content>
-    </div>
+        </div>
+    </md-dialog-content>
 </md-dialog>

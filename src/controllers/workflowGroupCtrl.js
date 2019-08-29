@@ -22,7 +22,7 @@ module.exports = function (app) {
 
 
         /**
-         * @description Get the sorting key for information or lookup model
+         * @description Get the sorting key for given property
          * @param property
          * @param modelType
          * @returns {*}
@@ -215,6 +215,7 @@ module.exports = function (app) {
         /**
          * open popup to show Group Members
          * @param workflowGroup
+         * @param $event
          */
         self.openPopupWorkflowGroupMembers = function (workflowGroup, $event) {
             return workflowGroupService

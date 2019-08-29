@@ -104,11 +104,9 @@ module.exports = function (app) {
             showGroupMembers: function (groupMembers, $event) {
                 return dialog.showDialog({
                     templateUrl: cmsTemplate.getPopup('group-members'),
-                    bindToController: true,
                     escToCancel: true,
                     targetEvent: $event,
-                    controller: function () {
-                    },
+                    controller: 'groupMembersPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
                         groupMembers: groupMembers
@@ -267,14 +265,11 @@ module.exports = function (app) {
                     if (workflowGroup.arName && workflowGroup.enName) {
                         return existingWorkflowGroup.arName === workflowGroup.arName
                             || existingWorkflowGroup.enName.toLowerCase() === workflowGroup.enName.toLowerCase();
-                    }
-                    else if (!workflowGroup.arName && workflowGroup.enName) {
+                    } else if (!workflowGroup.arName && workflowGroup.enName) {
                         return existingWorkflowGroup.enName.toLowerCase() === workflowGroup.enName.toLowerCase();
-                    }
-                    else if (workflowGroup.arName && !workflowGroup.enName)
+                    } else if (workflowGroup.arName && !workflowGroup.enName)
                         return existingWorkflowGroup.arName === workflowGroup.arName;
-                }
-                else {
+                } else {
                     return existingWorkflowGroup.arName === workflowGroup.arName
                         || existingWorkflowGroup.enName.toLowerCase() === workflowGroup.enName.toLowerCase();
                 }

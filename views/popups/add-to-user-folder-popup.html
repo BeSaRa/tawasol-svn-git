@@ -1,39 +1,36 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.inbox_add_to_folder}}">
-    <div layout="column">
-        <popup-toolbar-directive ng-if="!ctrl.model.id"
-                                 header-text="{{lang.inbox_add_to_folder}}"
-        ></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <popup-toolbar-directive ng-if="!ctrl.model.id"
+                             header-text="{{lang.inbox_add_to_folder}} 1"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="addToFolderForm" autocomplete="off">
-                <div layout="column" class="p20">
-                    <div layout="row">
-                        <user-folders-tree-view-directive flex
-                                                          folders="ctrl.userFolders"
-                                                          current-node="ctrl.currentNode"
-                                                          allow-actions="false"
-                                                          add-root-folder="false">
-                        </user-folders-tree-view-directive>
-                    </div>
-                </div>
                 <div layout="row">
-                    <md-button class="md-raised" ng-if="!ctrl.isBulkAdd"
-                               ng-disabled="!ctrl.currentNode || ctrl.currentNodeCopy===ctrl.currentNode"
-                               ng-click="ctrl.addToFolder($event)">
-                        {{lang.add}}
-                    </md-button>
-                    <md-button class="md-raised" ng-if="ctrl.isBulkAdd"
-                               ng-disabled="!ctrl.currentNode"
-                               ng-click="ctrl.addToFolderBulk($event)">
-                        {{lang.add}}
-                    </md-button>
-                    <span flex></span>
-                    <md-button class="md-raised" ng-click="ctrl.closeAddToUserFolderPopupFromCtrl()">
-                        {{lang.close}}
-                    </md-button>
+                    <user-folders-tree-view-directive flex
+                                                      folders="ctrl.userFolders"
+                                                      current-node="ctrl.currentNode"
+                                                      allow-actions="false"
+                                                      add-root-folder="false">
+                    </user-folders-tree-view-directive>
                 </div>
             </form>
-        </md-content>
-    </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button class="md-raised" ng-if="!ctrl.isBulkAdd"
+                   ng-disabled="!ctrl.currentNode || ctrl.currentNodeCopy===ctrl.currentNode"
+                   ng-click="ctrl.addToFolder($event)">
+            {{lang.add}}
+        </md-button>
+        <md-button class="md-raised" ng-if="ctrl.isBulkAdd"
+                   ng-disabled="!ctrl.currentNode"
+                   ng-click="ctrl.addToFolderBulk($event)">
+            {{lang.add}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeAddToUserFolderPopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

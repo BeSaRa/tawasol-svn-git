@@ -1,25 +1,38 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}">
-    <div layout="column">
-        <popup-toolbar-directive header-text="{{lang.group_members}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <table md-table>
-                <thead md-head>
-                <tr md-row>
-                    <th md-column>{{$parent.lang.arabic_name}}</th>
-                    <th md-column>{{$parent.lang.english_name}}</th>
-                    <th md-column>{{$parent.lang.organization}}</th>
-                </tr>
-                </thead>
-                <tbody md-body>
-                <tr md-row md-select="groupMember"
-                    ng-repeat="groupMember in ctrl.groupMembers">
-                    <td md-cell>{{groupMember.member.arFullName}}</td>
-                    <td md-cell>{{groupMember.member.enFullName}}</td>
-                    <td md-cell>{{groupMember.ouid.getTranslatedName()}}</td>
-                </tr>
-                </tbody>
-            </table>
-        </md-content>
-    </div>
+    <popup-toolbar-directive header-text="{{lang.group_members}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <md-card class="card-overlay">
+                <md-table-container>
+                    <table md-table ng-model="ctrl.selectedGroupMembers"
+                           md-progress="ctrl.grid.progress">
+                        <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                        <tr md-row>
+                            <th md-column md-order-by="member.arFullName">{{lang.arabic_name}}</th>
+                            <th md-column md-order-by="member.enFullName">{{lang.english_name}}</th>
+                            <th md-column md-order-by="{{ctrl.getSortingKey('ouid', 'Organization')}}">{{lang.organization}}</th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row
+                            ng-repeat="groupMember in ctrl.groupMembers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index"
+                            md-select="groupMember">
+                            <td md-cell>{{groupMember.member.arFullName}}</td>
+                            <td md-cell>{{groupMember.member.enFullName}}</td>
+                            <td md-cell>{{groupMember.ouid.getTranslatedName()}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <md-table-pagination
+                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                            md-limit-options="ctrl.grid.limitOptions"
+                            md-limit="ctrl.grid.limit"
+                            md-page="ctrl.grid.page"
+                            md-total="{{ctrl.groupMembers.length}}" md-page-select>
+                    </md-table-pagination>
+                </md-table-container>
+            </md-card>
+        </div>
+    </md-dialog-content>
 </md-dialog>

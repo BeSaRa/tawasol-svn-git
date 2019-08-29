@@ -129,4 +129,5 @@ module.exports = function (app) {
     require('./otpPopCtrl')(app);
     require('./itemSelectorPopCtrl')(app);
     require('./userLinksPopupCtrl')(app);
+    require('./groupMembersPopCtrl')(app);
 };
