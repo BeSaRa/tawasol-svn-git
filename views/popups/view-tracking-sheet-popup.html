@@ -1,7 +1,8 @@
 <md-dialog class="dialog-extend mw60"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="view-tracking-sheet-dialog" aria-label="{{lang[ctrl.popupHeading]}}">
-    <popup-toolbar-directive header-text="{{ctrl.popupHeading}}"></popup-toolbar-directive>
+    <popup-toolbar-directive header-text="{{ctrl.popupHeading}}"
+                             full-screen-button="true" full-screen="ctrl.fullScreen"></popup-toolbar-directive>
     <md-dialog-content scroll-directive>
         <div ng-class="{'md-dialog-content cms-dialog-content' : ctrl.gridType !== 'tabs'}">
             <form name="trackingSheetForm" autocomplete="off">
