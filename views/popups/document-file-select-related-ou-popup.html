@@ -1,92 +1,21 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.select_organization }}">
-    <popup-toolbar-directive header-text="{{lang.select_organization}} - {{ctrl.documentFile.getTranslatedName()}}"></popup-toolbar-directive>
-    <md-content scroll-directive class="p20" layout="column">
-        <div layout="row" layout-align="center center" ng-if="!ctrl.showRelatedOUForm">
-            <md-button class="md-raised" ng-click="ctrl.toggleRelatedOuForm(true)">
-                <div layout="row" layout-align="center center">
-                    <md-icon md-svg-icon="link-variant"></md-icon>
-                    <span>{{lang.link_organization}} </span>
-                </div>
-            </md-button>
-        </div>
-        <div layout="column" class="p20" ng-if="ctrl.showRelatedOUForm">
-            <div layout="row">
-                <md-input-container flex>
-                    <label>{{lang.organization_unit}}</label>
-                    <md-select ng-model="ctrl.ouDocumentFile.ouid" required>
-                        <md-option ng-repeat="organization in ctrl.organizations track by $index"
-                                   ng-model-options="{trackBy: '$value.id'}"
-                                   ng-value="organization"
-                                   tooltip="{{organization.getTranslatedName(true)}}"
-                                   ng-if="!ctrl.excludeOrganizationIfExists(organization)">
-                            {{ organization.getTranslatedName() }}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
-                <md-input-container flex>
-                    <label for="lookupStrKey">{{lang.code}}</label>
-                    <input no-space-directive name="lookupStrKey"
-                           ng-disabled="ctrl.editMode"
-                           id="lookupStrKey" minlength="3"
-                           ng-model="ctrl.ouDocumentFile.code"
-                           custom-validate-directive="EN_"
-                           maxlength="80">
-                    <div ng-messages="doc.lookupStrKey.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                        <div ng-message="EN_">{{lang.english_number_under_score}}</div>
-                        <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
-                        <div ng-message="minlength">{{lang.short}}</div>
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.select_organization}}">
+    <popup-toolbar-directive
+            header-text="{{lang.select_organization}} - {{ctrl.documentFile.getTranslatedName()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="row" layout-align="center center" ng-if="!ctrl.showRelatedOUForm">
+                <md-button class="md-raised" ng-click="ctrl.toggleRelatedOuForm(true)">
+                    <div layout="row" layout-align="center center">
+                        <md-icon md-svg-icon="link-variant"></md-icon>
+                        <span>{{lang.link_organization}} </span>
                     </div>
-                </md-input-container>
-            </div>
-            <div layout="row">
-                <md-input-container flex>
-                    <label for="itemOrder">{{lang.item_order}}</label>
-                    <input name="itemOrder" id="itemOrder" required
-                           ng-model="ctrl.ouDocumentFile.itemOrder"
-                           custom-validate-directive="number" maxlength="5">
-                    <div ng-messages="doc.itemOrder.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                        <div ng-message="number">{{lang.numberonly}}</div>
-                        <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
-                    </div>
-                </md-input-container>
-                <md-input-container flex>
-                    <label for="lookupStrKey">{{lang.label_serial}}</label>
-                    <input no-space-directive name="serial"
-                           id="serial" minlength="3"
-                           ng-model="ctrl.ouDocumentFile.serial"
-                           custom-validate-directive="EN_"
-                           maxlength="80">
-                    <div ng-messages="doc.serial.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                        <div ng-message="EN_">{{lang.english_number_under_score}}</div>
-                        <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
-                        <div ng-message="minlength">{{lang.short}}</div>
-                    </div>
-                </md-input-container>
-            </div>
-            <div layout="row">
-                <md-switch ng-model="ctrl.ouDocumentFile.status">
-                    <label>{{lang.status}} :
-                        {{ctrl.ouDocumentFile.getTranslatedStatus()}}</label>
-                </md-switch>
-            </div>
-            <div layout="row">
-                <md-button class="md-raised" ng-disabled="!ctrl.isRelatedOuFormValid()"
-                           ng-click="ctrl.addOuDocumentFile($event)">
-                    {{lang.add}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.toggleRelatedOuForm()">
-                    {{lang.close}}
                 </md-button>
             </div>
-        </div>
-        <!-- Related OUs grid -->
-        <div scroll-directive ng-if="!ctrl.showRelatedOUForm">
-            <div class="p20">
-                <md-card md-whiteframe="3" layout="column" class="card-overlay">
+            <!-- Related OUs grid -->
+            <div scroll-directive ng-if="!ctrl.showRelatedOUForm">
+                <md-card md-whiteframe="3" class="card-overlay">
                     <md-table-container>
                         <div flex scroll-directive>
                             <table md-table md-progress="ctrl.ouDocumentFilesProgress">
@@ -118,13 +47,91 @@
                     </md-table-container>
                 </md-card>
             </div>
+
+            <div layout="column" ng-if="ctrl.showRelatedOUForm">
+                <div layout="row">
+                    <md-input-container flex>
+                        <label>{{lang.organization_unit}}</label>
+                        <md-select ng-model="ctrl.ouDocumentFile.ouid" required>
+                            <md-option ng-repeat="organization in ctrl.organizations track by $index"
+                                       ng-model-options="{trackBy: '$value.id'}"
+                                       ng-value="organization"
+                                       tooltip="{{organization.getTranslatedName(true)}}"
+                                       ng-if="!ctrl.excludeOrganizationIfExists(organization)">
+                                {{ organization.getTranslatedName() }}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label for="lookupStrKey">{{lang.code}}</label>
+                        <input no-space-directive name="lookupStrKey"
+                               ng-disabled="ctrl.editMode"
+                               id="lookupStrKey" minlength="3"
+                               ng-model="ctrl.ouDocumentFile.code"
+                               custom-validate-directive="EN_"
+                               maxlength="80">
+                        <div ng-messages="doc.lookupStrKey.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="EN_">{{lang.english_number_under_score}}</div>
+                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                            <div ng-message="minlength">{{lang.short}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="itemOrder">{{lang.item_order}}</label>
+                        <input name="itemOrder" id="itemOrder" required
+                               ng-model="ctrl.ouDocumentFile.itemOrder"
+                               custom-validate-directive="number" maxlength="5">
+                        <div ng-messages="doc.itemOrder.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="number">{{lang.numberonly}}</div>
+                            <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label for="lookupStrKey">{{lang.label_serial}}</label>
+                        <input no-space-directive name="serial"
+                               id="serial" minlength="3"
+                               ng-model="ctrl.ouDocumentFile.serial"
+                               custom-validate-directive="EN_"
+                               maxlength="80">
+                        <div ng-messages="doc.serial.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="EN_">{{lang.english_number_under_score}}</div>
+                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                            <div ng-message="minlength">{{lang.short}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div layout="row">
+                    <md-switch ng-model="ctrl.ouDocumentFile.status">
+                        <label>{{lang.status}} :
+                            {{ctrl.ouDocumentFile.getTranslatedStatus()}}</label>
+                    </md-switch>
+                </div>
+            </div>
         </div>
-        <div layout="row" layout-align="center center">
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <div ng-if="!ctrl.showRelatedOUForm" layout="row" flex>
+            <span flex></span>
             <md-button class="md-raised" ng-disabled="!ctrl.documentFile.relatedOus.length"
-                       ng-if="!ctrl.showRelatedOUForm"
                        ng-click="ctrl.saveSelectedOrganizations()">
                 {{lang.save}}
             </md-button>
+            <span flex></span>
         </div>
-    </md-content>
+        <div ng-if="ctrl.showRelatedOUForm" layout="row" flex>
+            <md-button class="md-raised" ng-disabled="!ctrl.isRelatedOuFormValid()"
+                       ng-click="ctrl.addOuDocumentFile($event)">
+                {{lang.add}}
+            </md-button>
+            <span flex></span>
+            <md-button class="md-raised" ng-click="ctrl.toggleRelatedOuForm()">
+                {{lang.close}}
+            </md-button>
+        </div>
+    </md-dialog-actions>
 </md-dialog>

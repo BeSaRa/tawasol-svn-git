@@ -1,10 +1,10 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
-           aria-label="Duplicate Correspondence" >
-    <div layout="column">
-        <popup-toolbar-directive ng-if="!ctrl.model.id"
-                                 header-text="{{lang.duplicate_options}} : {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
-        <md-content class="p20" scroll-directive>
+           aria-label="Duplicate Correspondence">
+    <popup-toolbar-directive ng-if="!ctrl.model.id"
+                             header-text="{{lang.duplicate_options}} : {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <div ng-repeat="rowValue in ctrl.keyRows track by $index" layout="row">
                 <div flex ng-repeat="key  in rowValue track by $index" layout="row">
                     <md-checkbox ng-if="key != 'fake'" ng-model="ctrl.duplicateOption[key]">
@@ -12,17 +12,15 @@
                     </md-checkbox>
                 </div>
             </div>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-click="ctrl.duplicateCorrespondence()">
-                    {{lang.duplicate}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeDuplicateDialog()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-click="ctrl.duplicateCorrespondence()">
+            {{lang.duplicate}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeDuplicateDialog()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

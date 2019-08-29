@@ -1,12 +1,11 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.terms_and_conditions}}">
-    <div layout="column">
         <popup-toolbar-directive header-text="{{lang.terms_and_conditions}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <div class="p20" ng-bind-html="ctrl.termsAndConditions">
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <div ng-bind-html="ctrl.termsAndConditions">
             </div>
-        </md-content>
-    </div>
-
+        </div>
+    </md-dialog-content>
 </md-dialog>

@@ -1,13 +1,12 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_correspondencesite : ctrl.model.getTranslatedName()}}">
-    <div layout="column">
-        <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_correspondencesite}}"
-                                 close-callback="ctrl.closeCorrespondenceSiteDialog"></popup-toolbar-directive>
-        <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getTranslatedName()}}"
-                                 close-callback="ctrl.closeCorrespondenceSiteDialog"></popup-toolbar-directive>
-
-        <md-content scroll-directive>
+    <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_correspondencesite}}"
+                             close-callback="ctrl.closeCorrespondenceSiteDialog"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getTranslatedName()}}"
+                             close-callback="ctrl.closeCorrespondenceSiteDialog"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="correspondenceSiteForm">
                 <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
                     <!-- Basic Info -->
@@ -15,8 +14,8 @@
                             md-on-select="ctrl.setCurrentTab('basic')"
                             ng-click="ctrl.resetOUCorrespondenceSites()"
                             ng-if="ctrl.showTab('basic')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <!-- Arabic Name -->
                                     <md-input-container flex>
@@ -149,8 +148,8 @@
                             md-on-select="ctrl.setCurrentTab('ou')"
                             ng-click="ctrl.getOUCorrespondenceSites()"
                             ng-disabled="ctrl.correspondenceSite.isGlobal || !ctrl.correspondenceSite.status">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <!-- OU Dropdown and Add Button -->
                                 <div layout="row" layout-align="start center">
                                     <md-input-container flex>
@@ -309,32 +308,30 @@
                     </md-tab>
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row" layout-align="start center">
-                <md-button class="md-raised"
-                           ng-disabled="correspondenceSiteForm.$invalid || !ctrl.checkValidGlobal()"
-                           ng-if="!ctrl.editMode"
-                           ng-click="ctrl.saveCorrespondenceSite()">
-                    {{lang.add}}
-                </md-button>
-                <md-button class="md-raised"
-                           ng-disabled="correspondenceSiteForm.$invalid"
-                           ng-if="ctrl.editMode && ctrl.selectedTabName === 'basic'"
-                           ng-click="ctrl.saveCorrespondenceSite()">
-                    {{lang.save}}
-                </md-button>
-                <span flex=""></span>
-                <md-button class="md-raised"
-                           ng-if="((ctrl.editMode && ctrl.selectedTabName === 'basic') || !ctrl.editMode)"
-                           ng-click="ctrl.resetModel(correspondenceSiteForm)">
-                    {{lang.reset}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeCorrespondenceSiteDialog()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised"
+                   ng-disabled="correspondenceSiteForm.$invalid || !ctrl.checkValidGlobal()"
+                   ng-if="!ctrl.editMode"
+                   ng-click="ctrl.saveCorrespondenceSite()">
+            {{lang.add}}
+        </md-button>
+        <md-button class="md-raised"
+                   ng-disabled="correspondenceSiteForm.$invalid"
+                   ng-if="ctrl.editMode && ctrl.selectedTabName === 'basic'"
+                   ng-click="ctrl.saveCorrespondenceSite()">
+            {{lang.save}}
+        </md-button>
+        <span flex=""></span>
+        <md-button class="md-raised"
+                   ng-if="((ctrl.editMode && ctrl.selectedTabName === 'basic') || !ctrl.editMode)"
+                   ng-click="ctrl.resetModel(correspondenceSiteForm)">
+            {{lang.reset}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeCorrespondenceSiteDialog()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

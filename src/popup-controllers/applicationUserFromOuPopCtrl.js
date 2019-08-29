@@ -985,7 +985,7 @@ module.exports = function (app) {
                     return dialog
                         .showDialog({
                             targetEvent: $event,
-                            templateUrl: cmsTemplate.getPopup('application-user-edit-permission'),
+                            templateUrl: cmsTemplate.getPopup('application-user-permission'),
                             controller: 'applicationUserEditPermissionPopCtrl',
                             controllerAs: 'ctrl',
                             locals: {
@@ -1120,22 +1120,36 @@ module.exports = function (app) {
          */
         self.gridActions = [
             {
-                "type": 'action',
-                //"icon": 'delete',
-                'text': langService.get('grid_action_edit_permission'),
-                'callback': self.openEditPermissionDialog
+                type: 'action',
+                text: 'grid_action_edit_permission',
+                callback: self.openEditPermissionDialog,
+                checkShow: function (action, model) {
+                    return true;
+                }
             },
             {
-                "type": 'action',
-                //"icon": 'pencil',
-                'text': langService.get('grid_action_edit_workflow_participation'),
-                'callback': self.openWorkflowParticipationDialog
+                type: 'action',
+                text: 'grid_action_edit_workflow_participation',
+                callback: self.openWorkflowParticipationDialog,
+                checkShow: function (action, model) {
+                    return true;
+                }
             },
             {
-                "type": 'action',
-                //"icon": 'pencil-box',
-                'text': langService.get('grid_action_out_of_office_settings'),
-                'callback': self.openOutOfOfficeSettingsDialog
+                type: 'action',
+                text: 'grid_action_out_of_office_settings',
+                callback: self.openOutOfOfficeSettingsDialog,
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            {
+                type: 'action',
+                text: 'followup_organization',
+                callback: self.openFollowupOrganizationDialog,
+                checkShow: function (action, model) {
+                    return true;
+                }
             }
         ];
 

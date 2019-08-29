@@ -1,59 +1,55 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.grid_action_create_reply}}">
-    <div layout="column">
-        <popup-toolbar-directive
-                header-text="{{lang.grid_action_create_reply}} - {{ctrl.record.getTranslatedName()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <popup-toolbar-directive
+            header-text="{{lang.grid_action_create_reply}} - {{ctrl.record.getTranslatedName()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="create_reply_form" autocomplete="off">
-                <div layout="column" class="p20">
-                    <div layout="row">
-                        <!-- Reply Type -->
-                        <fieldset class="size-50">
-                            <legend class="md-accent">{{lang.reply_type}}</legend>
-                            <div layout="row">
-                                <md-radio-group ng-model="ctrl.replyType">
-                                    <div ng-repeat='replyType in ctrl.replyTypeOptions'>
-                                        <div flex layout='row' layout-padding layout-align="start center">
-                                            <md-radio-button flex ng-value="replyType.id">
-                                                {{lang[replyType.key]}}
-                                            </md-radio-button>
-                                        </div>
+                <div layout="row">
+                    <!-- Reply Type -->
+                    <fieldset class="size-50">
+                        <legend class="md-accent">{{lang.reply_type}}</legend>
+                        <div layout="row">
+                            <md-radio-group ng-model="ctrl.replyType">
+                                <div ng-repeat='replyType in ctrl.replyTypeOptions'>
+                                    <div flex layout-padding layout-align="start center">
+                                        <md-radio-button flex ng-value="replyType.id">
+                                            {{lang[replyType.key]}}
+                                        </md-radio-button>
                                     </div>
-                                </md-radio-group>
-                            </div>
-                        </fieldset>
-                        <!-- Use as attachment or linked doc -->
-                        <fieldset class="size-50">
-                            <legend class="md-accent">{{lang.link_incoming_as}}</legend>
-                            <div layout="row">
-                                <md-radio-group ng-model="ctrl.createAsAttachment">
-                                    <div ng-repeat='useAs in ctrl.createAsOptions'>
-                                        <div flex layout='row' layout-padding layout-align="start center">
-                                            <md-radio-button flex ng-value="useAs.id">
-                                                {{lang[useAs.key]}}
-                                            </md-radio-button>
-                                        </div>
+                                </div>
+                            </md-radio-group>
+                        </div>
+                    </fieldset>
+                    <!-- Use as attachment or linked doc -->
+                    <fieldset class="size-50">
+                        <legend class="md-accent">{{lang.link_incoming_as}}</legend>
+                        <div layout="row">
+                            <md-radio-group ng-model="ctrl.createAsAttachment">
+                                <div ng-repeat='useAs in ctrl.createAsOptions'>
+                                    <div flex layout-padding layout-align="start center">
+                                        <md-radio-button flex ng-value="useAs.id">
+                                            {{lang[useAs.key]}}
+                                        </md-radio-button>
                                     </div>
-                                </md-radio-group>
-                            </div>
-                        </fieldset>
-                    </div>
+                                </div>
+                            </md-radio-group>
+                        </div>
+                    </fieldset>
                 </div>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised"
-                           ng-disabled="reason_form.$invalid"
-                           ng-click="ctrl.setCreateReply($event)">
-                    {{lang.grid_action_create_reply}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePopup()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised"
+                   ng-disabled="reason_form.$invalid"
+                   ng-click="ctrl.setCreateReply($event)">
+            {{lang.grid_action_create_reply}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

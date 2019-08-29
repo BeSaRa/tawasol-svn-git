@@ -10,8 +10,8 @@
             <form name="workflowGroup_form" autocomplete="off">
                 <md-tabs md-dynamic-height>
                     <md-tab label="{{lang.basic_info}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
@@ -102,7 +102,7 @@
             </form>
         </div>
     </md-dialog-content>
-    <md-dialog-actions>
+    <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised"
                    ng-disabled="workflowGroup_form.$invalid || ctrl.workflowGroup.groupMembers.length===0"
                    ng-if="!ctrl.editMode"

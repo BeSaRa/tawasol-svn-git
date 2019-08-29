@@ -1,55 +1,51 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
-           id="ready-to-export-options" ng-attr-aria-label="{{lang.archive}}">
-    <div layout="column">
-        <popup-toolbar-directive
-                header-text="{{lang.archive}} - {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <form name="icnArchiveForm" autocomplete="off">
-                <div layout="column" class="p20">
-                    <div class="p20" ng-if="ctrl.canExportAnyRelatedData()">
-                        <div layout="row">
-                            <div ng-repeat="option in ctrl.exportOptions" flex
-                                 ng-if="ctrl.canExportRelatedData(option)">
-                                <md-checkbox ng-true-value="true" ng-false-value="false" aria-label="{{option}}"
-                                             ng-model="ctrl.model[option]">
-                                    {{lang.get(ctrl.labels[$index])}}
-                                </md-checkbox>
+           id="archive-options" ng-attr-aria-label="{{lang.archive}}">
+    <popup-toolbar-directive
+            header-text="{{lang.archive}} - {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="icnArchiveOptionsForm" autocomplete="off">
+                <div layout="column" ng-if="ctrl.canExportAnyRelatedData()">
+                    <div layout="row">
+                        <div ng-repeat="option in ctrl.exportOptions" flex
+                             ng-if="ctrl.canExportRelatedData(option)">
+                            <md-checkbox ng-true-value="true" ng-false-value="false" aria-label="{{option}}"
+                                         ng-model="ctrl.model[option]">
+                                {{lang.get(ctrl.labels[$index])}}
+                            </md-checkbox>
+                        </div>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="entryTemplate">{{lang.entry_template}}</label>
+                            <md-select aria-label="entryTemplate"
+                                       ng-required="true"
+                                       id="entryTemplate"
+                                       name="entryTemplate"
+                                       ng-model="ctrl.selectedEntryTemplate">
+                                <md-option ng-repeat="template in ctrl.entryTemplates track by $index"
+                                           ng-value="template">
+                                    {{template.menuItem.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="icnArchiveOptionsForm.entryTemplate.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
                             </div>
-                        </div>
-                        <div layout="row">
-                            <md-input-container flex>
-                                <label for="entryTemplate">{{lang.entry_template}}</label>
-                                <md-select aria-label="entryTemplate"
-                                           ng-required="true"
-                                           id="entryTemplate"
-                                           name="entryTemplate"
-                                           ng-model="ctrl.selectedEntryTemplate">
-                                    <md-option ng-repeat="template in ctrl.entryTemplates track by $index"
-                                               ng-value="template">
-                                        {{template.menuItem.getTranslatedName()}}
-                                    </md-option>
-                                </md-select>
-                                <div ng-messages="icnArchiveForm.entryTemplate.$error">
-                                    <div ng-message="required">{{lang.field_required}}</div>
-                                </div>
-                            </md-input-container>
-                        </div>
+                        </md-input-container>
                     </div>
                 </div>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-click="ctrl.archiveCorrespondence()"
-                           ng-disabled="icnArchiveForm.$invalid">
-                    {{lang.archive}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePopup()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-click="ctrl.archiveCorrespondence()"
+                   ng-disabled="icnArchiveOptionsForm.$invalid">
+            {{lang.archive}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

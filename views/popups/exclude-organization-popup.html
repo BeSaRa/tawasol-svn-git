@@ -1,9 +1,10 @@
 <md-dialog class="dialog-extend"
-           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}">
-    <div layout="column">
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           aria-label="{{lang.select_organizations_to_exclude}}">
         <popup-toolbar-directive header-text="{{lang.select_organizations_to_exclude}}"
                                  close-callback="ctrl.closeExcludeOrganizationPopupFromCtrl"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <md-table-container>
                 <table md-table
                        md-row-select="true"
@@ -25,8 +26,6 @@
                     </tbody>
                 </table>
             </md-table-container>
-        </md-content>
-    </div>
+        </div>
+    </md-dialog-content>
 </md-dialog>
-
-

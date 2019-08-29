@@ -1,12 +1,12 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.followup_organization}}">
-    <div layout="column">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.followup_organization}}">
         <popup-toolbar-directive
                 header-text="{{lang.followup_organization}} : {{ctrl.ouApplicationUser.ouid.getTranslatedName()}} - {{ ctrl.ouApplicationUser.applicationUser.getTranslatedName()}}"></popup-toolbar-directive>
-
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="followupOrganizationForm" autocomplete="off">
-                <md-content>
-                    <div layout="column" class="p20">
+                    <div layout="column">
                         <div layout="row">
                             <!-- regOu -->
                             <md-input-container flex>
@@ -70,7 +70,6 @@
                                 </md-button>
                             </div>
                         </div>
-
                         <div layout="row">
                             <md-card md-whiteframe="3" layout="column" class="card-overlay" flex>
                                 <md-table-container>
@@ -139,22 +138,17 @@
                             </md-card>
                         </div>
                     </div>
-
             </form>
-        </md-content>
-
-
-        <div>
-            <div layout="row">
-                <md-button class="md-raised"
-                           ng-disabled="followupOrganizationForm.$invalid"
-                           ng-click="ctrl.saveFollowupOrganizationFromCtrl()">{{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeFollowupUserOrganizationPopup()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised"
+                   ng-disabled="followupOrganizationForm.$invalid"
+                   ng-click="ctrl.saveFollowupOrganizationFromCtrl()">{{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeFollowupUserOrganizationPopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

@@ -1,19 +1,19 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_document_file : ctrl.model.getNames()}}">
-    <div layout="column">
-        <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_document_file}}"
-                                 close-callback="ctrl.closeDocumentFilePopupFromCtrl"></popup-toolbar-directive>
-        <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getNames()}}"
-                                 close-callback="ctrl.closeDocumentFilePopupFromCtrl"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_document_file}}"
+                             close-callback="ctrl.closeDocumentFilePopupFromCtrl"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getNames()}}"
+                             close-callback="ctrl.closeDocumentFilePopupFromCtrl"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="documentFileForm" autocomplete="off">
                 <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
                     <!-- Basic -->
                     <md-tab label="{{lang.basic_info}}" ng-if="ctrl.showTab('basic')"
                             md-on-select="ctrl.setCurrentTab('basic')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
@@ -103,16 +103,52 @@
                             md-on-select="ctrl.setCurrentTab('security')"
                             label="{{lang.security}}"
                             ng-disabled="ctrl.documentFile.global">
-                        <div layout="row" layout-align="center center" ng-if="!ctrl.showRelatedOUForm">
-                            <md-button class="md-raised" ng-click="ctrl.toggleRelatedOuForm(true)">
-                                <div layout="row" layout-align="center center">
-                                    <md-icon md-svg-icon="link-variant"></md-icon>
-                                    <span>{{lang.link_organization}} </span>
-                                </div>
-                            </md-button>
-                        </div>
-                        <md-content>
-                            <div layout="column" class="p20" ng-if="ctrl.showRelatedOUForm">
+                        <md-content class="md-padding">
+                            <div layout="row" layout-align="center center" ng-if="!ctrl.showRelatedOUForm">
+                                <md-button class="md-raised" ng-click="ctrl.toggleRelatedOuForm(true)">
+                                    <div layout="row" layout-align="center center">
+                                        <md-icon md-svg-icon="link-variant"></md-icon>
+                                        <span>{{lang.link_organization}} </span>
+                                    </div>
+                                </md-button>
+                            </div>
+                            <!-- Related OUs grid -->
+                            <div scroll-directive ng-if="!ctrl.showRelatedOUForm">
+                                <md-card md-whiteframe="3" class="card-overlay">
+                                    <md-table-container>
+                                        <div flex scroll-directive>
+                                            <table md-table md-progress="ctrl.ouDocumentFilesProgress">
+                                                <thead md-head>
+                                                <tr md-row>
+                                                    <th md-column><span>{{lang.arabic_name}}</span></th>
+                                                    <th md-column><span>{{lang.english_name}}</span></th>
+                                                    <th md-column><span>{{lang.actions}}</span></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-row
+                                                    ng-repeat="ouDocumentFile in ctrl.documentFile.relatedOus track by $index">
+                                                    <td md-cell>{{ouDocumentFile.getOUTranslate('ar')}}</td>
+                                                    <td md-cell>{{ouDocumentFile.getOUTranslate('en')}}</td>
+                                                    <td md-cell>
+                                                        <md-button
+                                                                ng-disabled="!ctrl.canDeleteOUDocumentFile(ouDocumentFile)"
+                                                                tooltip="{{lang.delete}}"
+                                                                ng-click="ctrl.removeOuDocumentFile(ouDocumentFile)"
+                                                                aria-label="Delete"
+                                                                class="md-icon-button">
+                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                        </md-button>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </md-table-container>
+                                </md-card>
+                            </div>
+
+                            <div layout="column" ng-if="ctrl.showRelatedOUForm">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label>{{lang.organization_unit}}</label>
@@ -175,81 +211,44 @@
                                             {{ctrl.ouDocumentFile.getTranslatedStatus()}}</label>
                                     </md-switch>
                                 </div>
-                                <div layout="row">
-                                    <md-button class="md-raised" ng-disabled="!ctrl.isRelatedOuFormValid()"
-                                               ng-click="ctrl.addOuDocumentFile($event)">
-                                        {{lang.add}}
-                                    </md-button>
-                                    <span flex></span>
-                                    <md-button class="md-raised" ng-click="ctrl.toggleRelatedOuForm()">
-                                        {{lang.close}}
-                                    </md-button>
-                                </div>
-                            </div>
-                            <!-- Related OUs grid -->
-                            <div scroll-directive ng-if="!ctrl.showRelatedOUForm">
-                                <div class="p20">
-                                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                                        <md-table-container>
-                                            <div flex scroll-directive>
-                                                <table md-table md-progress="ctrl.ouDocumentFilesProgress">
-                                                    <thead md-head>
-                                                    <tr md-row>
-                                                        <th md-column><span>{{lang.arabic_name}}</span></th>
-                                                        <th md-column><span>{{lang.english_name}}</span></th>
-                                                        <th md-column><span>{{lang.actions}}</span></th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody md-body>
-                                                    <tr md-row
-                                                        ng-repeat="ouDocumentFile in ctrl.documentFile.relatedOus track by $index">
-                                                        <td md-cell>{{ouDocumentFile.getOUTranslate('ar')}}</td>
-                                                        <td md-cell>{{ouDocumentFile.getOUTranslate('en')}}</td>
-                                                        <td md-cell>
-                                                            <md-button
-                                                                    ng-disabled="!ctrl.canDeleteOUDocumentFile(ouDocumentFile)"
-                                                                    tooltip="{{lang.delete}}"
-                                                                    ng-click="ctrl.removeOuDocumentFile(ouDocumentFile)"
-                                                                    aria-label="Delete"
-                                                                    class="md-icon-button">
-                                                                <md-icon md-svg-icon="delete"></md-icon>
-                                                            </md-button>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </md-table-container>
-                                    </md-card>
-                                </div>
                             </div>
                         </md-content>
                     </md-tab>
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-if="!ctrl.editMode && !ctrl.showRelatedOUForm"
-                           ng-disabled="documentFileForm.$invalid || !ctrl.checkValidGlobal()"
-                           ng-click="ctrl.saveDocumentFile($event)">{{lang.add}}
-                </md-button>
-                <md-button class="md-raised"
-                           ng-if="ctrl.editMode && ctrl.selectedTab === 'basic' && !ctrl.showRelatedOUForm"
-                           ng-disabled="documentFileForm.$invalid || !ctrl.checkValidGlobal()"
-                           ng-click="ctrl.saveDocumentFile($event)">{{lang.save}}
-                </md-button>
-                <span flex=""></span>
-                <md-button class="md-raised" ng-if="ctrl.selectedTab === 'basic'"
-                           ng-click="ctrl.resetModel()">
-                    {{lang.reset}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-if="!ctrl.showRelatedOUForm"
-                           ng-click="ctrl.closePopup()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <div ng-if="!ctrl.showRelatedOUForm" layout="row" flex>
+            <md-button class="md-raised" ng-if="!ctrl.editMode"
+                       ng-disabled="documentFileForm.$invalid || !ctrl.checkValidGlobal()"
+                       ng-click="ctrl.saveDocumentFile($event)">{{lang.add}}
+            </md-button>
+            <md-button class="md-raised"
+                       ng-if="ctrl.editMode && ctrl.selectedTab === 'basic'"
+                       ng-disabled="documentFileForm.$invalid || !ctrl.checkValidGlobal()"
+                       ng-click="ctrl.saveDocumentFile($event)">{{lang.save}}
+            </md-button>
+            <span flex=""></span>
+            <md-button class="md-raised" ng-if="ctrl.selectedTab === 'basic'"
+                       ng-click="ctrl.resetModel()">
+                {{lang.reset}}
+            </md-button>
+            <span flex></span>
+            <md-button class="md-raised"
+                       ng-click="ctrl.closePopup()">
+                {{lang.close}}
+            </md-button>
+        </div>
+        <div ng-if="ctrl.showRelatedOUForm" layout="row" flex>
+            <md-button class="md-raised" ng-disabled="!ctrl.isRelatedOuFormValid()"
+                       ng-click="ctrl.addOuDocumentFile($event)">
+                {{lang.add}}
+            </md-button>
+            <span flex></span>
+            <md-button class="md-raised" ng-click="ctrl.toggleRelatedOuForm()">
+                {{lang.close}}
+            </md-button>
+        </div>
+    </md-dialog-actions>
 </md-dialog>

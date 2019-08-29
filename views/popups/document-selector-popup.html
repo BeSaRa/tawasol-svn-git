@@ -5,8 +5,8 @@
             header-text="{{ctrl.title}}"
             close-callback="ctrl.closeItemSelectorPopup"></popup-toolbar-directive>
     <md-dialog-content scroll-directive>
-        <div layout="column" class="p20">
-            <md-card flex layout="row">
+        <div class="md-dialog-content cms-dialog-content">
+            <md-card flex>
                 <md-table-container>
                     <div flex scroll-directive>
                         <table md-table md-row-select multiple="{{ctrl.multiSelect}}"
@@ -134,7 +134,7 @@
             </md-card>
         </div>
     </md-dialog-content>
-    <md-dialog-actions>
+    <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised" ng-click="ctrl.sendSelectedItems()">{{lang.select}}
         </md-button>
         <span flex></span>

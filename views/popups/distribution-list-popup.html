@@ -1,20 +1,20 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_distribution_list : ctrl.model.getNames()}}">
-    <div layout="column">
-        <popup-toolbar-directive ng-if="!ctrl.editMode"
-                                 header-text="{{lang.add_new_distribution_list}}"></popup-toolbar-directive>
-        <popup-toolbar-directive ng-if="ctrl.editMode"
-                                 header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
-        <md-content>
+    <popup-toolbar-directive ng-if="!ctrl.editMode"
+                             header-text="{{lang.add_new_distribution_list}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode"
+                             header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="distributionList_form" autocomplete="off">
                 <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
                     <md-tab label="{{lang.basic_info}}"
                             md-on-select="ctrl.setCurrentTab('basic')"
                             ng-click="ctrl.resetOUDistributionLists()"
                             ng-if="ctrl.showTab('basic')">
-                        <md-content>
-                            <div layout="column" class="p20" scroll-directive>
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
@@ -41,7 +41,6 @@
                                         </div>
                                     </md-input-container>
                                 </div>
-
                                 <div layout="row">
                                     <div flex class="p20">
                                         <md-switch ng-model="ctrl.distributionList.status">
@@ -65,7 +64,7 @@
                     <md-tab label="{{lang.group_members}}"
                             md-on-select="ctrl.setCurrentTab('members')"
                             ng-if="ctrl.showTab('members')">
-                        <md-content>
+                        <md-content class="md-padding">
                             <manage-distribution-list-directive
                                     distribution-list-members="ctrl.distributionList.distributionListMembers"
                                     selected-site-type="ctrl.selectedSiteType"
@@ -79,8 +78,8 @@
                             ng-disabled="ctrl.distributionList.global"
                             label="{{lang.organization_units}}"
                             ng-if="ctrl.showTab('ou')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row" layout-align="start center">
                                     <md-input-container flex>
                                         <md-select aria-label="{{lang.select_organization}}"
@@ -219,31 +218,29 @@
 
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised"
-                           ng-disabled="distributionList_form.$invalid || !ctrl.checkValidGlobal()"
-                           ng-if="!ctrl.editMode"
-                           ng-click="ctrl.saveDistributionList()">
-                    {{lang.add}}
-                </md-button>
-                <md-button class="md-raised"
-                           ng-disabled="distributionList_form.$invalid || !ctrl.checkValidGlobal()"
-                           ng-if="ctrl.editMode && ctrl.selectedTabName === 'basic'"
-                           ng-click="ctrl.saveDistributionList()">
-                    {{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised"
-                           ng-if="((ctrl.editMode && ctrl.selectedTabName === 'basic') || !ctrl.editMode)"
-                           ng-click="ctrl.resetModel()">
-                    {{lang.reset}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeDistributionListPopup()">{{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised"
+                   ng-disabled="distributionList_form.$invalid || !ctrl.checkValidGlobal()"
+                   ng-if="!ctrl.editMode"
+                   ng-click="ctrl.saveDistributionList()">
+            {{lang.add}}
+        </md-button>
+        <md-button class="md-raised"
+                   ng-disabled="distributionList_form.$invalid || !ctrl.checkValidGlobal()"
+                   ng-if="ctrl.editMode && ctrl.selectedTabName === 'basic'"
+                   ng-click="ctrl.saveDistributionList()">
+            {{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised"
+                   ng-if="((ctrl.editMode && ctrl.selectedTabName === 'basic') || !ctrl.editMode)"
+                   ng-click="ctrl.resetModel()">
+            {{lang.reset}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeDistributionListPopup()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

@@ -1,18 +1,18 @@
 <md-dialog class="dialog-extend mw60"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_application_user: ctrl.model.getNames()}}">
-    <div layout="column">
-        <popup-toolbar-directive ng-if="!ctrl.editMode"
-                                 header-text="{{lang.add_new_application_user}}"></popup-toolbar-directive>
-        <popup-toolbar-directive ng-if="ctrl.editMode"
-                                 header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <popup-toolbar-directive ng-if="!ctrl.editMode"
+                             header-text="{{lang.add_new_application_user}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode"
+                             header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="applicationUserForm" autocomplete="off">
                 <md-tabs md-dynamic-height>
                     <!-- Basic Info Tab -->
                     <md-tab label="{{lang.basic_info}}" md-on-select="ctrl.setCurrentTab('basic')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <!-- Arabic Full Name -->
                                     <md-input-container flex>
@@ -358,8 +358,8 @@
                     </md-tab>
                     <!-- Notification Settings Tab -->
                     <md-tab label="{{lang.notification_settings}}" md-on-select="ctrl.setCurrentTab('ns')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <!-- SMS Notifications -->
                                 <fieldset>
                                     <legend class="md-accent">
@@ -620,23 +620,24 @@
                     <!-- Signature -->
                     <md-tab label="{{lang.signature}}" ng-if="ctrl.editMode"
                             md-on-select="ctrl.setCurrentTab('signature')">
-                        <md-content>
-                            <div layout="column" class="p20">
-                                <ng-form layout="row" name="signatureForm">
-                                    <div layout="column" class="p20" flex>
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <ng-form name="signatureForm">
+                                    <div layout="column" flex>
                                         <div layout="row">
                                             <div flex>
                                                 <label for="upload-sign-app-user"
                                                        class="md-button md-raised alongside-input">
-                                            <span layout="row" layout-align="start center">
-                                                <md-icon md-svg-icon="upload"></md-icon>
-                                                <span>{{lang.upload_signature}}</span>
-                                            </span>
+                                                    <span layout="row" layout-align="start center">
+                                                        <md-icon md-svg-icon="upload"></md-icon>
+                                                        <span>{{lang.upload_signature}}</span>
+                                                    </span>
                                                     <input reset-after-change="true"
                                                            catch-upload-file-directive="ctrl.viewImage"
                                                            class="hide-import-file" type="file"
                                                            id="upload-sign-app-user" name="upload-sign-app-user">
-                                                </label></div>
+                                                </label>
+                                            </div>
                                             <md-input-container flex ng-if="ctrl.enableAdd">
                                                 <label for="docSubject">{{lang.subject}}</label>
                                                 <input name="docSubject" id="docSubject" minlength="4"
@@ -685,7 +686,6 @@
                                     </div>
                                 </ng-form>
 
-
                                 <div layout="row" ng-if="ctrl.applicationUser.signature.length">
                                     <md-card md-whiteframe="3" flex layout="row" class="card-overlay">
                                         <md-table-container flex scroll-directive>
@@ -700,12 +700,6 @@
                                                         <div layout="row" layout-align="start center">
                                                             <span>{{ctrl.selectedSignature.length}} {{lang.items_selected}} </span>
                                                             <span flex></span>
-                                                            <!--<table-status-directive
-                                                                    when-close="ctrl.changeStatusBulkDocumentTemplates"></table-status-directive>-->
-                                                            <!--<md-button class="md-icon-button"
-                                                                       ng-click="ctrl.removeBulkSignatures($event)">
-                                                                <md-icon md-svg-icon="delete"></md-icon>
-                                                            </md-button>-->
                                                         </div>
                                                     </th>
                                                     <th ng-if="!ctrl.selectedSignature.length" md-column
@@ -768,8 +762,8 @@
                     <!-- Classification View Permission Tab -->
                     <md-tab label="{{lang.classification_view_permission}}" ng-if="ctrl.editMode"
                             md-on-select="ctrl.setCurrentTab('cvp')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <!-- Classifications Dropdown -->
                                     <md-input-container flex ng-if="!ctrl.classificationViewPermission.id">
@@ -879,8 +873,8 @@
                     <!-- OU View Permission Tab -->
                     <md-tab label="{{lang.ou_view_permission}}" ng-if="ctrl.editMode"
                             md-on-select="ctrl.setCurrentTab('ouvp')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <!-- Organizations Dropdown-->
                                     <md-input-container flex>
@@ -1006,8 +1000,8 @@
                     <!-- Other Organizations Tab -->
                     <md-tab label="{{lang.other_organizations}}" ng-if="ctrl.editMode"
                             md-on-select="ctrl.setCurrentTab('ot')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <!-- Organizations Dropdown-->
                                     <md-input-container flex ng-if="!ctrl.ouApplicationUserBeforeEdit">
@@ -1127,9 +1121,9 @@
                                                     ng-repeat="ouApplicationUser in ctrl.ouApplicationUsers track by $index">
                                                     <td md-cell>
                                                         <div layout="column">
-                                                            <div layout="row" flex><span flex>{{ouApplicationUser.ouid.arName}}</span>
+                                                            <div><span flex>{{ouApplicationUser.ouid.arName}}</span>
                                                             </div>
-                                                            <div layout="row" flex><span flex>{{ouApplicationUser.ouid.enName}}</span>
+                                                            <div><span flex>{{ouApplicationUser.ouid.enName}}</span>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -1206,12 +1200,11 @@
                                                                 </md-menu-content>
                                                             </md-menu>
                                                             <!--<div flex layout="row" layout-align="start center">
-                                                                 <grid-menu-content-directive menu-direction="vertical"
-                                                                                              grid-actions="ctrl.gridActions"
-                                                                                              model="ouApplicationUser"
-                                                                                              shortcut="false">
-                                                                 </grid-menu-content-directive>
-                                                             </div>-->
+                                                                <grid-actions-directive actions-direction="vertical"
+                                                                                        shortcut-actions="ctrl.shortcutActions"
+                                                                                        model="ouApplicationUser">
+                                                                </grid-actions-directive>
+                                                            </div>-->
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -1225,22 +1218,20 @@
                     </md-tab>
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-disabled="applicationUserForm.$invalid"
-                           ng-if="!ctrl.editMode"
-                           ng-click="ctrl.addApplicationUserFromCtrl()">{{lang.add}}
-                </md-button>
-                <md-button class="md-raised" ng-disabled="applicationUserForm.$invalid"
-                           ng-if="ctrl.editMode && ctrl.selectedTab!=='cvp' && ctrl.selectedTab!=='ot' && ctrl.selectedTab !== 'signature'"
-                           ng-click="ctrl.editApplicationUserFromCtrl()">{{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeApplicationUserPopupFromCtrl()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="applicationUserForm.$invalid"
+                   ng-if="!ctrl.editMode"
+                   ng-click="ctrl.addApplicationUserFromCtrl()">{{lang.add}}
+        </md-button>
+        <md-button class="md-raised" ng-disabled="applicationUserForm.$invalid"
+                   ng-if="ctrl.editMode && ctrl.selectedTab!=='cvp' && ctrl.selectedTab!=='ot' && ctrl.selectedTab !== 'signature'"
+                   ng-click="ctrl.editApplicationUserFromCtrl()">{{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeApplicationUserPopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

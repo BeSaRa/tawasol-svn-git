@@ -624,15 +624,16 @@ module.exports = function (app) {
         self.editSignature = function (signature) {
             applicationUserSignatureService
                 .controllerMethod
-                .applicationUserSignatureEdit(signature).then(function () {
-                var defer = $q.defer();
-                self.signatureProgress = defer.promise;
-                self.loadSignatures(signature.appUserId)
-                    .then(function (result) {
-                        defer.resolve(true);
-                        toast.success(langService.get('save_success'));
-                    });
-            });
+                .applicationUserSignatureEdit(signature)
+                .then(function () {
+                    var defer = $q.defer();
+                    self.signatureProgress = defer.promise;
+                    self.loadSignatures(signature.appUserId)
+                        .then(function (result) {
+                            defer.resolve(true);
+                            toast.success(langService.get('save_success'));
+                        });
+                });
         };
         /**
          * @description remove signature
@@ -954,7 +955,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeOUApplicationUserFromCtrl = function (ouApplicationUser, $event) {
-
+            if (self.disableOUApplicationUserActions(ouApplicationUser)) {
+                return;
+            }
             ouApplicationUserService
                 .deleteOUApplicationUser(ouApplicationUser, $event)
                 .then(function () {
@@ -1021,7 +1024,7 @@ module.exports = function (app) {
                     return dialog
                         .showDialog({
                             targetEvent: $event,
-                            templateUrl: cmsTemplate.getPopup('application-user-edit-permission'),
+                            templateUrl: cmsTemplate.getPopup('application-user-permission'),
                             controller: 'applicationUserEditPermissionPopCtrl',
                             controllerAs: 'ctrl',
                             locals: {
@@ -1427,39 +1430,63 @@ module.exports = function (app) {
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
-        self.gridActions = [
+        self.shortcutActions = [
             {
-                "type": 'action',
-                //"icon": 'delete',
-                'text': langService.get('grid_action_edit_permission'),
-                'callback': self.openEditPermissionDialog
+                type: 'action',
+                text: 'grid_action_edit_permission',
+                callback: self.openEditPermissionDialog,
+                checkShow: function (action, model) {
+                    return true;
+                }
             },
             {
-                "type": 'action',
-                //"icon": 'pencil',
-                'text': langService.get('grid_action_edit_workflow_participation'),
-                'callback': self.openWorkflowParticipationDialog
+                type: 'action',
+                text: 'grid_action_edit_workflow_participation',
+                callback: self.openWorkflowParticipationDialog,
+                checkShow: function (action, model) {
+                    return true;
+                }
             },
             {
-                "type": 'action',
-                //"icon": 'pencil-box',
-                'text': langService.get('grid_action_out_of_office_settings'),
-                'callback': self.openOutOfOfficeSettingsDialog
+                type: 'action',
+                text: 'grid_action_out_of_office_settings',
+                callback: self.openOutOfOfficeSettingsDialog,
+                checkShow: function (action, model) {
+                    return true;
+                }
             },
             {
-                "type": "separator"
+                type: 'action',
+                text: 'followup_organization',
+                callback: self.openFollowupOrganizationDialog,
+                checkShow: function (action, model) {
+                    return true;
+                }
             },
             {
-                "type": 'action',
-                //"icon": 'sitemap',
-                'text': langService.get('grid_action_edit'),
-                'callback': self.editOUApplicationUserFromCtrl
+                type: "separator",
+                checkShow: function (action, model) {
+                    return true;
+                }
             },
             {
-                "type": 'action',
-                //"icon": 'book-open-variant',
-                'text': langService.get('grid_action_delete'),
-                'callback': self.removeOUApplicationUserFromCtrl
+                type: 'action',
+                text: 'grid_action_edit',
+                callback: self.editOUApplicationUserFromCtrl,
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            {
+                type: 'action',
+                text: 'grid_action_delete',
+                callback: self.removeOUApplicationUserFromCtrl,
+                checkShow: function (action, model) {
+                    return true;
+                },
+                disabled: function (model) {
+                    return self.disableOUApplicationUserActions(model);
+                },
             }
         ];
 

@@ -1,16 +1,16 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_theme : ctrl.model.getNames() }}">
-    <div layout="column">
         <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_theme}}"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.editMode"
                                  header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="doc" autocomplete="off">
                 <md-tabs md-dynamic-height>
                     <md-tab label="{{lang.basic_info}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
@@ -96,8 +96,8 @@
                     </md-tab>
 
                     <md-tab label="{{lang.additional_properties}}" ng-disabled="ctrl.theme.colors.length < 8">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <ul class="propertiesBuilder">
                                         <li ng-repeat="(key , value ) in ctrl.theme.themeKeys track by value.id">
@@ -125,18 +125,16 @@
                     </md-tab>
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-disabled="doc.$invalid" ng-if="!ctrl.editMode"
-                           ng-click="ctrl.addThemeFromCtrl()">{{lang.add}}
-                </md-button>
-                <md-button class="md-raised" ng-if="ctrl.editMode"
-                           ng-click="ctrl.editThemeFromCtrl()">{{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePopUp()">{{lang.close}}</md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="doc.$invalid" ng-if="!ctrl.editMode"
+                   ng-click="ctrl.addThemeFromCtrl()">{{lang.add}}
+        </md-button>
+        <md-button class="md-raised" ng-if="ctrl.editMode"
+                   ng-click="ctrl.editThemeFromCtrl()">{{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopUp()">{{lang.close}}</md-button>
+    </md-dialog-actions>
 </md-dialog>

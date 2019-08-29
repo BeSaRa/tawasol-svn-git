@@ -1,10 +1,10 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.select_correspondence_site}}">
-    <div layout="column">
-        <popup-toolbar-directive header-text="{{lang.select_correspondence_site}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <div class="p20" layout="row">
+    <popup-toolbar-directive header-text="{{lang.select_correspondence_site}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="row">
                 <md-input-container flex>
                     <label for="correspondenceSites">{{lang.select_correspondence_site}}</label>
                     <md-select multiple ng-model="ctrl.correspondenceSite"
@@ -24,70 +24,66 @@
                     </md-button>
                 </div>
             </div>
-            <div class="p20">
-                <md-card ng-if="ctrl.selectedCorrespondenceSites.length" layout="column" class="card-overlay">
-                    <md-table-container>
-                        <div flex>
-                            <table md-table
-                                   md-row-select multiple ng-model="ctrl.selectedCorrespondenceSiteGrid">
-                                <thead md-head>
-                                <tr md-row>
-                                    <th ng-if="ctrl.selectedCorrespondenceSiteGrid.length" colspan="4"
-                                        md-column>
-                                        <div layout="row" layout-align="start center">
-                                            <span>{{ctrl.selectedCorrespondenceSiteGrid.length}} {{lang.items_selected}} </span>
-                                            <span flex></span>
-                                            <div>
-                                                <md-button class="md-icon-button"
-                                                           ng-click="ctrl.removeSelectedCorrespondenceSite()">
-                                                    <md-icon md-svg-icon="delete"></md-icon>
-                                                </md-button>
-                                            </div>
-                                        </div>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedCorrespondenceSiteGrid.length" md-column>
-                                        <span>{{lang.arabic_name}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedCorrespondenceSiteGrid.length" md-column>
-                                        <span>{{lang.english_name}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedCorrespondenceSiteGrid.length" md-column>
-                                        <span>{{lang.correspondence_site_type}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedCorrespondenceSiteGrid.length" md-column>
-                                        <span>{{lang.actions}}</span>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody md-body>
-                                <tr md-row md-select="correspondenceSite"
-                                    ng-repeat="correspondenceSite in ctrl.selectedCorrespondenceSites |orderBy:'itemOrder' track by $index">
-                                    <td md-cell>{{correspondenceSite.arName}}</td>
-                                    <td md-cell>{{correspondenceSite.enName}}</td>
-                                    <td md-cell>{{correspondenceSite.correspondenceTypeId.getTranslatedName()}}</td>
-                                    <td md-cell>
-                                        <div layout="row">
-                                            <md-button class="md-icon-button"
-                                                       ng-click="ctrl.removeCorrespondenceSite(correspondenceSite)">
-                                                <md-icon md-svg-icon="delete"></md-icon>
-                                            </md-button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </md-table-container>
-                </md-card>
-            </div>
-        </md-content>
-        <div>
-            <div layout="row" layout-align="center center">
-                <md-button class="md-raised" ng-if="ctrl.selectedCorrespondenceSites.length"
-                           ng-click="ctrl.sendSelectedCorrespondenceSite()">
-                    {{lang.send}}
-                </md-button>
-            </div>
+            <md-card ng-if="ctrl.selectedCorrespondenceSites.length" class="card-overlay">
+                <md-table-container>
+                    <table md-table
+                           md-row-select multiple ng-model="ctrl.selectedCorrespondenceSiteGrid">
+                        <thead md-head>
+                        <tr md-row>
+                            <th ng-if="ctrl.selectedCorrespondenceSiteGrid.length" colspan="4"
+                                md-column>
+                                <div layout="row" layout-align="start center">
+                                    <span>{{ctrl.selectedCorrespondenceSiteGrid.length}} {{lang.items_selected}} </span>
+                                    <span flex></span>
+                                    <div>
+                                        <md-button class="md-icon-button"
+                                                   ng-click="ctrl.removeSelectedCorrespondenceSite()">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>
+                                    </div>
+                                </div>
+                            </th>
+                            <th ng-if="!ctrl.selectedCorrespondenceSiteGrid.length" md-column>
+                                <span>{{lang.arabic_name}}</span>
+                            </th>
+                            <th ng-if="!ctrl.selectedCorrespondenceSiteGrid.length" md-column>
+                                <span>{{lang.english_name}}</span>
+                            </th>
+                            <th ng-if="!ctrl.selectedCorrespondenceSiteGrid.length" md-column>
+                                <span>{{lang.correspondence_site_type}}</span>
+                            </th>
+                            <th ng-if="!ctrl.selectedCorrespondenceSiteGrid.length" md-column>
+                                <span>{{lang.actions}}</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row md-select="correspondenceSite"
+                            ng-repeat="correspondenceSite in ctrl.selectedCorrespondenceSites |orderBy:'itemOrder' track by $index">
+                            <td md-cell>{{correspondenceSite.arName}}</td>
+                            <td md-cell>{{correspondenceSite.enName}}</td>
+                            <td md-cell>{{correspondenceSite.correspondenceTypeId.getTranslatedName()}}</td>
+                            <td md-cell>
+                                <div layout="row">
+                                    <md-button class="md-icon-button"
+                                               ng-click="ctrl.removeCorrespondenceSite(correspondenceSite)">
+                                        <md-icon md-svg-icon="delete"></md-icon>
+                                    </md-button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
+            </md-card>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <span flex></span>
+        <md-button class="md-raised" ng-if="ctrl.selectedCorrespondenceSites.length"
+                   ng-click="ctrl.sendSelectedCorrespondenceSite()">
+            {{lang.send}}
+        </md-button>
+        <span flex></span>
+    </md-dialog-actions>
 </md-dialog>

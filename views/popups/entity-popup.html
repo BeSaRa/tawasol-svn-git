@@ -1,17 +1,17 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_entity: ctrl.model.getTranslatedName()}}">
-    <div layout="column">
         <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_entity}}"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.editMode"
                                  header-text="{{ctrl.model.getTranslatedName()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="entityForm" autocomplete="off">
                 <md-tabs md-dynamic-height>
                     <!-- Basic Info -->
                     <md-tab label="{{lang.basic_info}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.identifier}}</label>
@@ -109,8 +109,8 @@
                     </md-tab>
                     <!-- Connection Settings -->
                     <md-tab label="{{lang.connection_settings}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <!-- LDAP PROVIDERS -->
                                 <fieldset>
                                     <legend class="md-accent">{{lang.ldap_providers}}</legend>
@@ -473,7 +473,7 @@
                                         </md-input-container>
                                     </div>
                                 </fieldset>
-                                <!-- FAX -->
+                                <!-- HR -->
                                 <fieldset>
                                     <legend class="md-accent">{{lang.hr_integration}}</legend>
                                     <div layout="row">
@@ -487,8 +487,8 @@
                     </md-tab>
                     <!-- G2G Settings -->
                     <md-tab label="{{lang.g2g_settings}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="g2gServerAddress">{{lang.server_address}}</label>
@@ -556,8 +556,8 @@
                     </md-tab>
                     <!-- Internal G2G Settings -->
                     <md-tab label="{{lang.internal_g2g_settings}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="internalG2gServerAddress">{{lang.server_address}}</label>
@@ -614,22 +614,20 @@
                     </md-tab>
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-if="!ctrl.editMode"
-                           ng-disabled="entityForm.$invalid"
-                           ng-click="ctrl.addEntityFromCtrl()">{{lang.add}}
-                </md-button>
-                <md-button class="md-raised" ng-if="ctrl.editMode"
-                           ng-disabled="entityForm.$invalid"
-                           ng-click="ctrl.editEntityFromCtrl()">{{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeEntityPopupFromCtrl()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-if="!ctrl.editMode"
+                   ng-disabled="entityForm.$invalid"
+                   ng-click="ctrl.addEntityFromCtrl()">{{lang.add}}
+        </md-button>
+        <md-button class="md-raised" ng-if="ctrl.editMode"
+                   ng-disabled="entityForm.$invalid"
+                   ng-click="ctrl.editEntityFromCtrl()">{{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeEntityPopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

@@ -1,14 +1,16 @@
-<md-dialog class="dialog-extend">
-    <div layout="column">
-        <popup-toolbar-directive
-                header-text="{{ lang.search_for_employee }}"
-                close-callback="ctrl.closePopupFromCtrl"></popup-toolbar-directive>
-        <md-content scroll-directive>
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{ lang.search_for_employee }}">
+    <popup-toolbar-directive
+            header-text="{{ lang.search_for_employee }}"
+            close-callback="ctrl.closePopupFromCtrl"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="HRIntegrationSearchForm" autocomplete="off">
                 <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
                     <md-tab label="{{lang.search_criteria}}" md-on-select="ctrl.setCurrentTab('search')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <!--arabic name-->
                                     <md-input-container flex>
@@ -92,91 +94,87 @@
                     </md-tab>
                     <md-tab label="{{lang.search_module_search_results}}" md-on-select="ctrl.setCurrentTab('result')"
                             ng-disabled="!ctrl.employees.length">
-                        <md-content>
-                            <div layout="column" class="p20">
-                                <md-card md-whiteframe="3" layout="column" class="card-overlay" flex>
-                                    <md-table-container>
-                                        <div flex scroll-directive>
-                                            <table md-table md-row-select multiple="ctrl.canSelectMulti()"
-                                                   ng-model="ctrl.selectedEmployees"
-                                                   md-progress="ctrl.grid.progress">
-                                                <thead md-head md-order="ctrl.grid.order"
-                                                       md-on-reorder="ctrl.getSortedData">
-                                                <tr md-row>
-                                                    <th colspan="4" class="table-selector-header"
-                                                        ng-if="ctrl.selectedEmployees.length" md-column>
-                                                        <div layout="row" layout-align="start center">
-                                                            <span>{{ctrl.selectedEmployees.length}} {{lang.items_selected}} </span>
-                                                        </div>
-                                                    </th>
-                                                    <th ng-if="!ctrl.selectedEmployees.length" md-column
-                                                        md-order-by="employeeNo"><span>{{lang.employee_number}}</span>
-                                                    </th>
-                                                    <th ng-if="!ctrl.selectedEmployees.length && ctrl.attachDomainNameToModel"
-                                                        md-column md-order-by="domainName">
-                                                        <span>{{lang.domain_name}}</span>
-                                                    </th>
-                                                    <th ng-if="!ctrl.selectedEmployees.length" md-column
-                                                        md-order-by="arName"><span>{{lang.arabic_name}}</span>
-                                                    </th>
-                                                    <th ng-if="!ctrl.selectedEmployees.length" md-column
-                                                        md-order-by="enName"><span>{{lang.english_name}}</span>
-                                                    </th>
-                                                    <th ng-if="!ctrl.selectedEmployees.length" md-column
-                                                        md-order-by="qid"><span>{{lang.qid}}</span>
-                                                    </th>
-                                                </tr>
-                                                </thead>
-                                                <tbody md-body>
-                                                <tr md-select="employee" md-row
-                                                    ng-repeat="employee in ctrl.employees | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
-                                                    <td md-cell>{{employee.employeeNum}}</td>
-                                                    <td ng-if="ctrl.attachDomainNameToModel" md-cell>
-                                                        {{employee.domainName}}
-                                                    </td>
-                                                    <td md-cell>{{employee.fullNameAr}}</td>
-                                                    <td md-cell>{{employee.fullNameEn}}</td>
-                                                    <td md-cell>{{employee.qid}}</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <md-table-pagination
-                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                md-limit-options="ctrl.grid.limitOptions"
-                                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                                md-total="{{(ctrl.employees | filter:ctrl.searchModel).length}}"
-                                                md-page-select>
-                                        </md-table-pagination>
-                                    </md-table-container>
-                                </md-card>
-                            </div>
+                        <md-content class="md-padding">
+                            <md-card md-whiteframe="3" class="card-overlay" flex>
+                                <md-table-container>
+                                    <div flex scroll-directive>
+                                        <table md-table md-row-select multiple="ctrl.canSelectMulti()"
+                                               ng-model="ctrl.selectedEmployees"
+                                               md-progress="ctrl.grid.progress">
+                                            <thead md-head md-order="ctrl.grid.order"
+                                                   md-on-reorder="ctrl.getSortedData">
+                                            <tr md-row>
+                                                <th colspan="4" class="table-selector-header"
+                                                    ng-if="ctrl.selectedEmployees.length" md-column>
+                                                    <div layout="row" layout-align="start center">
+                                                        <span>{{ctrl.selectedEmployees.length}} {{lang.items_selected}} </span>
+                                                    </div>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedEmployees.length" md-column
+                                                    md-order-by="employeeNo"><span>{{lang.employee_number}}</span>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedEmployees.length && ctrl.attachDomainNameToModel"
+                                                    md-column md-order-by="domainName">
+                                                    <span>{{lang.domain_name}}</span>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedEmployees.length" md-column
+                                                    md-order-by="arName"><span>{{lang.arabic_name}}</span>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedEmployees.length" md-column
+                                                    md-order-by="enName"><span>{{lang.english_name}}</span>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedEmployees.length" md-column
+                                                    md-order-by="qid"><span>{{lang.qid}}</span>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody md-body>
+                                            <tr md-select="employee" md-row
+                                                ng-repeat="employee in ctrl.employees | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                                <td md-cell>{{employee.employeeNum}}</td>
+                                                <td ng-if="ctrl.attachDomainNameToModel" md-cell>
+                                                    {{employee.domainName}}
+                                                </td>
+                                                <td md-cell>{{employee.fullNameAr}}</td>
+                                                <td md-cell>{{employee.fullNameEn}}</td>
+                                                <td md-cell>{{employee.qid}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <md-table-pagination
+                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                            md-limit-options="ctrl.grid.limitOptions"
+                                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                            md-total="{{(ctrl.employees | filter:ctrl.searchModel).length}}"
+                                            md-page-select>
+                                    </md-table-pagination>
+                                </md-table-container>
+                            </md-card>
                         </md-content>
                     </md-tab>
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-click="ctrl.search()"
-                           ng-disabled="HRIntegrationSearchForm.$invalid"
-                           ng-if="ctrl.selectedTabIndex ===0">
-                    {{lang.search}}
-                </md-button>
-                <md-button class="md-raised" ng-click="ctrl.addEmployeeLinkedEntity()"
-                           ng-disabled="HRIntegrationSearchForm.$invalid || !ctrl.selectedEmployees.length"
-                           ng-if="ctrl.selectedTabIndex ===1">
-                    {{lang.add}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.resetPopupForm($event)" ng-if="ctrl.selectedTabIndex ===1">
-                    {{lang.reset}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePopupFromCtrl($event)">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-click="ctrl.search()"
+                   ng-disabled="HRIntegrationSearchForm.$invalid"
+                   ng-if="ctrl.selectedTabIndex ===0">
+            {{lang.search}}
+        </md-button>
+        <md-button class="md-raised" ng-click="ctrl.addEmployeeLinkedEntity()"
+                   ng-disabled="HRIntegrationSearchForm.$invalid || !ctrl.selectedEmployees.length"
+                   ng-if="ctrl.selectedTabIndex ===1">
+            {{lang.add}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.resetPopupForm($event)" ng-if="ctrl.selectedTabIndex ===1">
+            {{lang.reset}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopupFromCtrl($event)">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

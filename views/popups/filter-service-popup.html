@@ -1,10 +1,11 @@
 <md-dialog class="dialog-extend"
-           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}">
-    <div layout="column">
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.get(Filter.title , true ) ? lang.get(Filter.title)  :  Filter.title }}">
         <popup-toolbar-directive
                 header-text="{{lang.get(Filter.title , true ) ? lang.get(Filter.title)  :  Filter.title }}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <div class="p20" ng-repeat="field in Filter.options track by $index" layout="column">
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <div ng-repeat="field in Filter.options track by $index" layout="column">
                 <md-input-container ng-if="field.type === 'text'">
                     <label>{{lang.get(field.label , true) ? lang.get(field.label , true) : field.label }}</label>
                     <input ng-model="Filter.filter[field.property]">
@@ -22,9 +23,11 @@
                     </md-select>
                 </md-input-container>
             </div>
-        </md-content>
-        <div>
-            <md-button ng-click="Filter.search()">Filter</md-button>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <span flex></span>
+        <md-button ng-click="Filter.search()">Filter</md-button>
+        <span flex></span>
+    </md-dialog-actions>
 </md-dialog>

@@ -1,14 +1,14 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.dashboard_add_layout : ctrl.model.getTranslatedName()}}">
-    <div layout="column">
         <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.dashboard_add_layout}}"
                                  close-callback="ctrl.closeLayoutDialog"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getTranslatedName()}}"
                                  close-callback="ctrl.closeLayoutDialog"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="layout_form">
-                <div layout="column" class="p20">
+                <div layout="column">
                     <div layout="row">
                         <md-input-container flex>
                             <label for="arName">{{lang.dashboard_layout_arabic_name}}</label>
@@ -42,24 +42,22 @@
                     </div>
                 </div>
             </form>
-        </md-content>
-        <div>
-            <div layout="row" layout-align="start center">
-                <md-button class="md-raised" ng-disabled="layout_form.$invalid" ng-if="!ctrl.editMode"
-                           ng-click="ctrl.saveLayout()">
-                    {{lang.add}}
-                </md-button>
-                <md-button class="md-raised"
-                           ng-disabled="layout_form.$invalid"
-                           ng-if="ctrl.editMode"
-                           ng-click="ctrl.saveLayout()">
-                    {{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeLayoutDialog()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="layout_form.$invalid" ng-if="!ctrl.editMode"
+                   ng-click="ctrl.saveLayout()">
+            {{lang.add}}
+        </md-button>
+        <md-button class="md-raised"
+                   ng-disabled="layout_form.$invalid"
+                   ng-if="ctrl.editMode"
+                   ng-click="ctrl.saveLayout()">
+            {{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeLayoutDialog()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

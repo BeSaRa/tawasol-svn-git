@@ -226,7 +226,7 @@ module.exports = function (app) {
         /**
          * @description show related organization
          */
-        self.openOrganizationDialog = function (organization, documentFile, $event) {
+        /*self.openOrganizationDialog = function (organization, documentFile, $event) {
             documentFileService.controllerMethod
                 .openOrganizationPopup(organization, documentFile, $event)
                 .then(function () {
@@ -235,7 +235,7 @@ module.exports = function (app) {
                 .catch(function (error) {
                     self.reloadDocumentFiles(self.grid.page);
                 });
-        };
+        };*/
 
         /**
          * @description show child documentFiles

@@ -1,10 +1,11 @@
 <md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.attachments}} - {{lang.icn_import}}">
-    <div layout="column">
-        <popup-toolbar-directive header-text="{{lang.attachments}} - {{lang.icn_import}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <form name="icnImportForm" autocomplete="off">
-                <div layout="column" class="p20">
+    <popup-toolbar-directive header-text="{{lang.attachments}} - {{lang.icn_import}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="icnAttachmentOptionsForm" autocomplete="off">
+                <div layout="column">
                     <div layout="row">
                         <!-- Title -->
                         <md-input-container flex>
@@ -19,11 +20,12 @@
                                        ng-required="true"
 
                                        ng-model="ctrl.attachment.updateActionStatus">
-                                <md-option  ng-repeat="updateAction in ctrl.attachmentUpdateActions" ng-value="updateAction">
+                                <md-option ng-repeat="updateAction in ctrl.attachmentUpdateActions"
+                                           ng-value="updateAction">
                                     {{updateAction.getTranslatedName()}}
                                 </md-option>
                             </md-select>
-                            <div ng-messages="icnImportForm.updateActionStatus.$error">
+                            <div ng-messages="icnAttachmentOptionsForm.updateActionStatus.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
@@ -50,7 +52,7 @@
                                     {{type.getTranslatedName()}}
                                 </md-option>
                             </md-select>
-                            <div ng-messages="icnImportForm.attachmentType.$error">
+                            <div ng-messages="icnAttachmentOptionsForm.attachmentType.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
@@ -66,7 +68,7 @@
                                     {{level.getTranslatedName()}}
                                 </md-option>
                             </md-select>
-                            <div ng-messages="icnImportForm.securityLevel.$error">
+                            <div ng-messages="icnAttachmentOptionsForm.securityLevel.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
@@ -83,25 +85,20 @@
                                     {{template.menuItem.getTranslatedName()}}
                                 </md-option>
                             </md-select>
-                            <div ng-messages="icnImportForm.searchTemplate.$error">
+                            <div ng-messages="icnAttachmentOptionsForm.searchTemplate.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
                     </div>
-                    <div>
-
-                    </div>
                 </div>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-disabled="icnImportForm.$invalid"
-                           ng-click="ctrl.getICNAttachmentForm($event)">{{lang.attachment_add}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePopup($event)">{{lang.close}}</md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="icnAttachmentOptionsForm.$invalid"
+                   ng-click="ctrl.getICNAttachmentForm($event)">{{lang.attachment_add}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopup($event)">{{lang.close}}</md-button>
+    </md-dialog-actions>
 </md-dialog>

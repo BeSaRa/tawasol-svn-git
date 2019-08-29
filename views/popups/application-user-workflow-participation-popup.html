@@ -1,12 +1,12 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.workflow_participation}}">
-    <div layout="column">
         <popup-toolbar-directive
                 header-text="{{lang.workflow_participation}} : {{ctrl.model.ouid.getTranslatedName()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="applicationUserWorkflowParticipationForm" autocomplete="off">
-                <div layout="column" class="p20">
+                <div layout="column">
                     <div layout="row" flex>
                         <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToPrivateUsers"
                                      aria-label="{{lang.send_to_private_users}}"
@@ -99,18 +99,18 @@
                         <span flex></span>
                     </div>-->
                 </div>
-                <div layout="row">
-                    <md-button class="md-raised" ng-disabled="applicationUserWorkflowParticipationForm.$invalid"
-                               ng-click="ctrl.addApplicationUserWorkflowParticipationPopupFromCtrl()">
-                        {{lang.add}}
-                    </md-button>
-                    <span flex></span>
-                    <md-button class="md-raised"
-                               ng-click="ctrl.closeApplicationUserWorkflowParticipationPopupFromCtrl()">
-                        {{lang.close}}
-                    </md-button>
-                </div>
             </form>
-        </md-content>
-    </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="applicationUserWorkflowParticipationForm.$invalid"
+                   ng-click="ctrl.addApplicationUserWorkflowParticipationPopupFromCtrl()">
+            {{lang.add}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised"
+                   ng-click="ctrl.closeApplicationUserWorkflowParticipationPopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

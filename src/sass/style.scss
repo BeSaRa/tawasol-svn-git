@@ -2182,9 +2182,14 @@ $ta-background-transparent: transparent !important;
   width: 100%;
   height: 100%;
 }
+
 .cms-dialog-content {
   background: rgb(250, 250, 250);
   padding: 20px !important;
+}
+
+.cms-dialog-actions {
+  padding-left: 8px !important;
 }
 
 .orgchart .node.need-sync .title {

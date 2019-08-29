@@ -5,8 +5,8 @@
             header-text="{{lang.my_links}}"
             close-callback="ctrl.closeUserLinksPopup"></popup-toolbar-directive>
     <md-dialog-content scroll-directive>
-        <div layout="column" class="p20">
-            <md-card flex layout="row">
+        <div class="md-dialog-content cms-dialog-content">
+            <md-card layout="row">
                 <md-table-container flex>
                     <table md-table>
                         <thead md-head md-order="query.order">
@@ -39,10 +39,9 @@
                     </table>
                 </md-table-container>
             </md-card>
-
         </div>
     </md-dialog-content>
-    <md-dialog-actions>
+    <md-dialog-actions class="cms-dialog-actions">
         <span flex></span>
         <md-button class="md-raised" ng-click="ctrl.closeUserLinksPopup()">{{lang.close}}
         </md-button>

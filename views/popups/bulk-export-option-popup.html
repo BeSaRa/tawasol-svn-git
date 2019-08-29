@@ -1,10 +1,10 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="ready-to-export-options" ng-attr-aria-label="{{ctrl.resend ? lang.resend_options : lang.export_options}}">
-    <div layout="column">
         <popup-toolbar-directive
                 header-text="{{ctrl.resend ? lang.resend_options : lang.export_options}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="bulkExportOptionsForm" autocomplete="off">
                 <!--<div layout="row" class="p20" flex ng-if="ctrl.canExportAnyRelatedData()">
                     <md-input-container flex>
@@ -17,7 +17,7 @@
                         </md-select>
                     </md-input-container>
                 </div>-->
-                <div ng-if="ctrl.exportType === 1" class="p20" layout="row">
+                <div ng-if="ctrl.exportType === 1" layout="row">
                     <div ng-repeat="option in ctrl.exportOptions" flex
                          ng-if="ctrl.canExportRelatedData(option)">
                         <md-checkbox ng-true-value="true" ng-false-value="false" aria-label="{{option}}"
@@ -27,7 +27,7 @@
                         </md-checkbox>
                     </div>
                 </div>
-                <div layout="column" class="p020">
+                <div layout="column">
                     <md-card ng-repeat="workItem in ctrl.workItems"
                              ng-if="ctrl.canExportAnyRelatedData()">
                         <md-card-title>
@@ -49,22 +49,20 @@
                     </md-card>
                 </div>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-click="ctrl.exportCorrespondenceWorkItem()">
-                    {{ctrl.resend ? lang.resend : lang.export}}
-                </md-button>
-                <span ng-if="!ctrl.hasExternalSite && !ctrl.resend" flex></span>
-                <md-button ng-if="!ctrl.resend" class="md-raised"
-                           ng-click="ctrl.printWithTerminate()">
-                    {{lang.print_with_terminate}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeExportPopupFromCtrl()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-click="ctrl.exportCorrespondenceWorkItem()">
+            {{ctrl.resend ? lang.resend : lang.export}}
+        </md-button>
+        <span ng-if="!ctrl.hasExternalSite && !ctrl.resend" flex></span>
+        <md-button ng-if="!ctrl.resend" class="md-raised"
+                   ng-click="ctrl.printWithTerminate()">
+            {{lang.print_with_terminate}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeExportPopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>
