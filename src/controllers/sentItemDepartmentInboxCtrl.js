@@ -533,21 +533,21 @@ module.exports = function (app) {
                     {
                         headers:
                             [
-                                'sent_items_serial_number',
-                                'sent_items_document_subject',
+                                'department_sent_items_serial',
+                                'subject',
                                 'type',
                                 'action_by',
                                 'main_site_from',
                                 'main_site_to',
                                 'sub_site_from',
                                 'sub_site_to',
-                                'sent_items_receive_date',
+                                'received_date',
                                 'status'
                             ],
                         columns: [
                             'docFullSerial',
                             'docSubject',
-                            'typeOriginalCopy',
+                            'type',
                             'sentByIdInfo',
                             'mainSiteFromIdInfo',
                             'mainSiteToIdInfo',

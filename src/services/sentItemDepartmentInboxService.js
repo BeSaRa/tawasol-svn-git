@@ -9,10 +9,7 @@ module.exports = function (app) {
                                                             langService,
                                                             toast,
                                                             cmsTemplate,
-                                                            errorCode,
-                                                            userCommentService,
-                                                            tokenService,
-                                                            $timeout) {
+                                                            errorCode) {
         'ngInject';
         var self = this;
         self.serviceName = 'sentItemDepartmentInboxService';
