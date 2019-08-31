@@ -1,12 +1,12 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.search}}">
-    <div layout="column">
-        <popup-toolbar-directive ng-if="!ctrl.editMode"
-                                 header-text="{{lang.search}} : {{lang.menu_item_sent_items}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <popup-toolbar-directive ng-if="!ctrl.editMode"
+                             header-text="{{lang.search}} : {{lang.menu_item_sent_items}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="userSentItemSearchForm" autocomplete="off">
-                <div layout="column" class="p20">
+                <div layout="column">
                     <div layout="row">
                         <!-- Doc Subject -->
                         <md-input-container flex>
@@ -167,7 +167,6 @@
                             </md-select>
                         </md-input-container>
                     </div>
-
                     <div layout="row">
                         <!-- From -->
                         <md-input-container flex>
@@ -199,19 +198,17 @@
                     </div>
                 </div>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-disabled="userSentItemSearchForm.$invalid || ctrl.isFilterDisabled()"
-                           ng-click="ctrl.filterUserSentItems($event)">{{lang.filter}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised"
-                           ng-click="ctrl.resetFilter($event)">{{lang.reset}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePopUp()">{{lang.close}}</md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="userSentItemSearchForm.$invalid || ctrl.isFilterDisabled()"
+                   ng-click="ctrl.filterUserSentItems($event)">{{lang.filter}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised"
+                   ng-click="ctrl.resetFilter($event)">{{lang.reset}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopUp()">{{lang.close}}</md-button>
+    </md-dialog-actions>
 </md-dialog>

@@ -1,11 +1,11 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang[ctrl.label]}}">
-    <div layout="column">
         <popup-toolbar-directive
                 header-text="{{lang[ctrl.label]}} : {{ctrl.record.getNames()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <div layout="column" class="p20" id="messageBody">
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="column" id="messageBody">
                 <div>
                     <md-subheader class="md-primary">{{lang.arabic_body_text}}</md-subheader>
                     <div ng-if="ctrl.isHtml" layout="column" layout-align="none end" class="p20"
@@ -18,6 +18,6 @@
                     <div ng-if="!ctrl.isHtml" class="p20">{{ctrl.enBody}}</div>
                 </div>
             </div>
-        </md-content>
-    </div>
+        </div>
+    </md-dialog-content>
 </md-dialog>

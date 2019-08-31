@@ -1,9 +1,10 @@
 <md-dialog class="dialog-extend"
-           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}">
-    <div layout="column">
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.permissions}} - {{ctrl.role.getTranslatedName()}}">
         <popup-toolbar-directive
                 header-text="{{lang.permissions}} - {{ctrl.role.getTranslatedName()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <table md-table>
                 <thead md-head>
                 <tr md-row>
@@ -21,6 +22,6 @@
                 </tr>
                 </tbody>
             </table>
-        </md-content>
-    </div>
+        </div>
+    </md-dialog-content>
 </md-dialog>

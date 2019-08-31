@@ -1,82 +1,70 @@
 <md-dialog class="dialog-extend"
-           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}">
-    <div layout="column">
-        <popup-toolbar-directive
-                header-text="{{lang.view_members}} : {{ctrl.role.getTranslatedName()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <!-- page-header -->
-            <!--<div layout="row" layout-align="start center" class="page-header padding-header small">
-                <span flex></span>
-                <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
-            </div>-->
-            <div layout="row" layout-align="start center" class="p25 small">
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.view_members}} : {{ctrl.role.getTranslatedName()}}">
+    <popup-toolbar-directive
+            header-text="{{lang.view_members}} : {{ctrl.role.getTranslatedName()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="row" class="p20-0">
                 <span flex></span>
                 <grid-search-directive grid="ctrl.grid"></grid-search-directive>
             </div>
-            <div layout="column" flex>
-                <div scroll-directive>
-                    <div class="page-padding">
-                        <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                            <md-table-container>
-                                <div flex scroll-directive>
-                                    <table md-table ng-model="ctrl.selectedRoleMembers"
-                                           md-progress="ctrl.progress">
-                                        <!--md-row-select multiple-->
-                                        <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
-                                        <tr md-row>
-                                            <th md-column md-order-by="loginName">{{lang.login_name}}</th>
-                                            <th md-column md-order-by="arFullName">{{lang.arabic_name}}</th>
-                                            <th md-column md-order-by="enFullName">{{lang.english_name}}
-                                            </th>
-                                            <th md-column md-order-by="employeeNo">
-                                                {{lang.employee_number}}
-                                            </th>
-                                            <th md-column
-                                                md-order-by="{{ctrl.getSortingKey('organization','Organization')}}">
-                                                {{lang.organization_unit}}
-                                            </th>
-                                            <th md-column md-order-by="status">{{lang.status}}</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody md-body>
-                                        <tr md-row md-select="member" md-row-select multiple
-                                            ng-model="ctrl.selectedRoleMembers"
-                                            md-progress="ctrl.progress"
-                                            ng-repeat="member in ctrl.roleMembers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                                            <td md-cell>{{member.loginName}}</td>
-                                            <td md-cell>{{member.arFullName}}</td>
-                                            <td md-cell>{{member.enFullName}}</td>
-                                            <td md-cell>{{member.employeeNo}}</td>
-                                            <td md-cell>{{member.organization.getTranslatedName()}}</td>
-                                            <td md-cell>
-                                                <md-switch aria-label="{{lang.status}}"
-                                                           ng-model="member.status"
-                                                           ng-disabled="true" ng-readonly="true"
-                                                           title="{{member.getTranslatedStatus()}}"></md-switch>
+            <md-card md-whiteframe="3" class="card-overlay">
+                <md-table-container>
+                    <div flex scroll-directive>
+                        <table md-table ng-model="ctrl.selectedRoleMembers"
+                               md-progress="ctrl.progress">
+                            <!--md-row-select multiple-->
+                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                            <tr md-row>
+                                <th md-column md-order-by="loginName">{{lang.login_name}}</th>
+                                <th md-column md-order-by="arFullName">{{lang.arabic_name}}</th>
+                                <th md-column md-order-by="enFullName">{{lang.english_name}}
+                                </th>
+                                <th md-column md-order-by="employeeNo">
+                                    {{lang.employee_number}}
+                                </th>
+                                <th md-column
+                                    md-order-by="{{ctrl.getSortingKey('organization','Organization')}}">
+                                    {{lang.organization_unit}}
+                                </th>
+                                <th md-column md-order-by="status">{{lang.status}}</th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row md-select="member" md-row-select multiple
+                                ng-model="ctrl.selectedRoleMembers"
+                                md-progress="ctrl.progress"
+                                ng-repeat="member in ctrl.roleMembers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                <td md-cell>{{member.loginName}}</td>
+                                <td md-cell>{{member.arFullName}}</td>
+                                <td md-cell>{{member.enFullName}}</td>
+                                <td md-cell>{{member.employeeNo}}</td>
+                                <td md-cell>{{member.organization.getTranslatedName()}}</td>
+                                <td md-cell>
+                                    <md-switch aria-label="{{lang.status}}"
+                                               ng-model="member.status"
+                                               ng-disabled="true" ng-readonly="true"
+                                               title="{{member.getTranslatedStatus()}}"></md-switch>
 
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <md-table-pagination
-                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                        md-limit-options="ctrl.grid.limitOptions"
-                                        md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                        md-total="{{ctrl.roleMembers.length}}"
-                                        md-page-select></md-table-pagination>
-                            </md-table-container>
-                        </md-card>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-            </div>
-        </md-content>
-        <div>
-            <div layout="row">
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeRoleMembersPopup($event)">{{lang.close}}
-                </md-button>
-            </div>
+                    <md-table-pagination
+                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                            md-limit-options="ctrl.grid.limitOptions"
+                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                            md-total="{{ctrl.roleMembers.length}}"
+                            md-page-select></md-table-pagination>
+                </md-table-container>
+            </md-card>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeRoleMembersPopup($event)">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

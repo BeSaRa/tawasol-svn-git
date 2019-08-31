@@ -2,19 +2,19 @@
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="organization-dialog"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_organization : ctrl.model.getTranslatedName()}}">
-    <div layout="column">
         <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_organization}}"
                                  close-callback="ctrl.closeOrganizationDialog"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getTranslatedName()}}"
                                  close-callback="ctrl.closeOrganizationDialog"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="org_form" novalidate autocomplete="off">
                 <md-tabs md-dynamic-height>
                     <!-- Basic Info-->
                     <md-tab label="{{lang.basic_info}}" ng-if="ctrl.showTab('basic')"
                             ng-click="ctrl.setCurrentTab('basic')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div ng-if="!ctrl.rootMode && !ctrl.editMode" layout="row">
                                     <md-input-container tooltip="{{ctrl.parentOrganization.getTranslatedName(true)}}"
                                                         flex>
@@ -397,8 +397,8 @@
                     <!-- Security Settings -->
                     <md-tab label="{{lang.security_settings}}" ng-if="ctrl.showTab('security_settings')"
                             ng-click="ctrl.setCurrentTab('security_settings')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <!-- Security Schema -->
                                     <fieldset class="size-50" ng-if="ctrl.organization.hasRegistry">
@@ -448,8 +448,8 @@
                     <!-- Workflow Settings -->
                     <md-tab label="{{lang.workflow_settings}}" ng-if="ctrl.showTab('workflow_settings')"
                             ng-click="ctrl.setCurrentTab('workflow_settings')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <fieldset class="size-50">
                                         <legend class="md-accent">{{lang.workflow_notification}}</legend>
@@ -515,187 +515,103 @@
                                         </div>
                                     </fieldset>
                                 </div>
-                            </div><!-- column container -->
+                            </div>
                         </md-content>
                     </md-tab>
                     <!-- Children -->
                     <md-tab label="{{lang.childs}}" ng-if="ctrl.editMode && ctrl.showTab('children')"
                             ng-click="ctrl.setCurrentTab('children')">
-                        <!--
-
-                                                <md-content>
-                                                    <div layout="column" class="p20">
-                                                        &lt;!&ndash;<div layout="row" layout-align="center center">&ndash;&gt;
-                                                        &lt;!&ndash;<md-button class="md-raised">&ndash;&gt;
-                                                        &lt;!&ndash;{{lang.add_new_organization}}&ndash;&gt;
-                                                        &lt;!&ndash;</md-button>&ndash;&gt;
-                                                        &lt;!&ndash;</div>&ndash;&gt;
-                                                        <md-card>
-                                                            <md-table-container>
-                                                                <md-table-container>
-                                                                    <table md-table>
-                                                                        <thead md-head>
-                                                                        <tr md-row>
-                                                                            <th md-column><span>{{lang.department_name}}</span></th>
-                                                                            <th md-column><span>{{lang.parent_organization}}</span></th>
-                                                                            <th md-column><span>{{lang.organization_type}}</span></th>
-                                                                            <th md-column><span>{{lang.status}}</span></th>
-                                                                            <th md-column><span>{{lang.actions}}</span></th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody md-body>
-                                                                        <tr md-row
-                                                                            ng-repeat="organization in ctrl.organizationChildren track by organization.id">
-                                                                            <td md-cell>
-                                                                                <div layout="column">
-                                                                                    <span class="names">{{::organization.arName}}</span>
-                                                                                    <span class="names">{{::organization.enName}}</span>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td md-cell>
-                                                                                <div layout="column">
-                                                                                    <span class="names">{{::organization.getParent().arName}}</span>
-                                                                                    <span class="names">{{::organization.getParent().enName}}</span>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td md-cell>
-                                                                                <div layout="column">
-                                                                                    <span class="names">{{organization.getType().arName}}</span>
-                                                                                    <span class="names">{{organization.getType().enName}}</span>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td md-cell>
-                                                                                <md-switch
-                                                                                        ng-change="ctrl.changeOrganizationStatus(organization)"
-                                                                                        aria-label="{{lang.status}}"
-                                                                                        tooltip="{{organization.getTranslatedStatus()}}"
-                                                                                        ng-model="organization.status">
-                                                                                </md-switch>
-                                                                            </td>
-                                                                            <td md-cell>
-                                                                                <div layout="row">
-                                                                                <span class="names">
-                                                                                    <md-button class="md-icon-button"
-                                                                                               ng-click="ctrl.openEditOrganization(organization , $event)">
-                                                                                        <md-icon md-svg-icon="pencil"></md-icon>
-                                                                                    </md-button>
-                                                                                </span>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr ng-if="!ctrl.organizationChildren.length">
-                                                                            <td colspan="5">
-                                                                                <div class="p20" layout="row" layout-align="center center">
-                                                                                    {{lang.get('not_found_to_display').change({name:lang.organization_units})}}
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </md-table-container>
-                                                            </md-table-container>
-                                                        </md-card>
-                                                    </div>&lt;!&ndash; column container &ndash;&gt;
-                                                </md-content>
-                        -->
-
-                        <md-content>
-                            <div layout="column" class="content">
-                                <div layout="row" layout-align="start center" class="p25 small">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div layout="row" class="p20-0">
                                     <span flex></span>
-                                    <!--<search-filter-directive model="ctrl.childrenSearchModel"></search-filter-directive>-->
                                     <grid-search-directive grid="ctrl.childrenGrid"></grid-search-directive>
                                 </div>
                                 <div layout="column">
                                     <div scroll-directive>
-                                        <div class="p20">
-                                            <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                                                <md-table-container>
-                                                    <div flex scroll-directive>
-                                                        <table md-table>
-                                                            <thead md-head>
-                                                            <tr md-row>
-                                                                <th md-column><span>{{lang.department_name}}</span></th>
-                                                                <th md-column><span>{{lang.parent_organization}}</span>
-                                                                </th>
-                                                                <th md-column><span>{{lang.organization_type}}</span>
-                                                                </th>
-                                                                <th md-column><span>{{lang.status}}</span></th>
-                                                                <th md-column><span>{{lang.actions}}</span></th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody md-body>
-                                                            <tr md-row ng-if="ctrl.model.id !== organization.id"
-                                                                ng-repeat="organization in ctrl.organizationChildren track by organization.id">
-                                                                <td md-cell>
-                                                                    <div layout="column">
-                                                                        <span class="names">{{::organization.arName}}</span>
-                                                                        <span class="names">{{::organization.enName}}</span>
-                                                                    </div>
-                                                                </td>
-                                                                <td md-cell>
-                                                                    <div layout="column">
-                                                                        <!--<span class="names">{{::organization.getParent().arName}}</span>
-                                                                        <span class="names">{{::organization.getParent().enName}}</span>-->
-                                                                        <span class="names">{{::organization.parentOrReportingToInfo.arName}}</span>
-                                                                        <span class="names">{{::organization.parentOrReportingToInfo.enName}}</span>
-                                                                    </div>
-                                                                </td>
-                                                                <td md-cell>
-                                                                    <div layout="column">
-                                                                        <!--<span class="names">{{organization.getType().arName}}</span>
-                                                                        <span class="names">{{organization.getType().enName}}</span>-->
-                                                                        <span class="names">{{organization.organizationTypeInfo.arName}}</span>
-                                                                        <span class="names">{{organization.organizationTypeInfo.enName}}</span>
-                                                                    </div>
-                                                                </td>
-                                                                <td md-cell>
-                                                                    <md-switch
-                                                                            ng-change="ctrl.changeOrganizationStatus(organization)"
-                                                                            aria-label="{{lang.status}}"
-                                                                            tooltip="{{organization.getTranslatedStatus()}}"
-                                                                            ng-model="organization.status">
-                                                                    </md-switch>
-                                                                </td>
-                                                                <td md-cell>
-                                                                    <div layout="row">
+                                        <md-card md-whiteframe="3" class="card-overlay">
+                                            <md-table-container>
+                                                <div flex scroll-directive>
+                                                    <table md-table>
+                                                        <thead md-head>
+                                                        <tr md-row>
+                                                            <th md-column><span>{{lang.department_name}}</span></th>
+                                                            <th md-column><span>{{lang.parent_organization}}</span>
+                                                            </th>
+                                                            <th md-column><span>{{lang.organization_type}}</span>
+                                                            </th>
+                                                            <th md-column><span>{{lang.status}}</span></th>
+                                                            <th md-column><span>{{lang.actions}}</span></th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody md-body>
+                                                        <tr md-row ng-if="ctrl.model.id !== organization.id"
+                                                            ng-repeat="organization in ctrl.organizationChildren track by organization.id">
+                                                            <td md-cell>
+                                                                <div layout="column">
+                                                                    <span class="names">{{::organization.arName}}</span>
+                                                                    <span class="names">{{::organization.enName}}</span>
+                                                                </div>
+                                                            </td>
+                                                            <td md-cell>
+                                                                <div layout="column">
+                                                                    <!--<span class="names">{{::organization.getParent().arName}}</span>
+                                                                    <span class="names">{{::organization.getParent().enName}}</span>-->
+                                                                    <span class="names">{{::organization.parentOrReportingToInfo.arName}}</span>
+                                                                    <span class="names">{{::organization.parentOrReportingToInfo.enName}}</span>
+                                                                </div>
+                                                            </td>
+                                                            <td md-cell>
+                                                                <div layout="column">
+                                                                    <!--<span class="names">{{organization.getType().arName}}</span>
+                                                                    <span class="names">{{organization.getType().enName}}</span>-->
+                                                                    <span class="names">{{organization.organizationTypeInfo.arName}}</span>
+                                                                    <span class="names">{{organization.organizationTypeInfo.enName}}</span>
+                                                                </div>
+                                                            </td>
+                                                            <td md-cell>
+                                                                <md-switch
+                                                                        ng-change="ctrl.changeOrganizationStatus(organization)"
+                                                                        aria-label="{{lang.status}}"
+                                                                        tooltip="{{organization.getTranslatedStatus()}}"
+                                                                        ng-model="organization.status">
+                                                                </md-switch>
+                                                            </td>
+                                                            <td md-cell>
+                                                                <div layout="row">
                                                         <span class="names">
                                                             <md-button class="md-icon-button"
                                                                        ng-click="ctrl.openEditOrganization(organization , $event)">
                                                                 <md-icon md-svg-icon="pencil"></md-icon>
                                                             </md-button>
                                                         </span>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr ng-if="!ctrl.organizationChildren.length">
-                                                                <td colspan="5">
-                                                                    <div class="p20" layout="row"
-                                                                         layout-align="center center">
-                                                                        {{lang.get('not_found_to_display').change({name:lang.organization_units})}}
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </md-table-container>
-                                            </md-card>
-                                        </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr ng-if="!ctrl.organizationChildren.length">
+                                                            <td colspan="5">
+                                                                <div class="p20" layout="row"
+                                                                     layout-align="center center">
+                                                                    {{lang.get('not_found_to_display').change({name:lang.organization_units})}}
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </md-table-container>
+                                        </md-card>
                                     </div>
                                 </div>
-                            </div><!-- column container -->
+                            </div>
                         </md-content>
-
-
                     </md-tab>
                     <!-- Classifications -->
                     <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('classifications')"
                             label="{{lang.classifications}}" ng-click="ctrl.setCurrentTab('classifications')">
-                        <md-content>
-                            <div layout="column" class="content">
-                                <div ng-if="!ctrl.classificationEditMode" layout="row" layout-align="start center"
-                                     class="p25 small">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div ng-if="!ctrl.classificationEditMode" layout="row" class="p20-0">
                                     <div layout="row" layout-align="center center">
                                         <md-menu-bar class="menu-grid">
                                             <md-menu>
@@ -732,12 +648,10 @@
                                         </md-menu-bar>
                                     </div>
                                     <span flex></span>
-                                    <!--<search-filter-directive
-                                            model="ctrl.classificationSearchModel"></search-filter-directive>-->
                                     <grid-search-directive grid="ctrl.grid.classifications"></grid-search-directive>
                                 </div>
                                 <div ng-if="ctrl.classificationEditMode">
-                                    <div class="p020" layout="row">
+                                    <div layout="row">
                                         <md-input-container flex>
                                             <label for="classificationName">{{lang.select_classification}}</label>
                                             <input id="classificationName" ng-disabled="true"
@@ -779,124 +693,121 @@
                                 </div>
                                 <div layout="column" ng-if="ctrl.ouClassifications.length">
                                     <div scroll-directive>
-                                        <div class="p20">
-                                            <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                                                <md-table-container>
-                                                    <div flex scroll-directive>
-                                                        <table md-table md-row-select multiple
-                                                               ng-model="ctrl.selectedOUClassifications"
-                                                               md-progress="ctrl.progress">
-                                                            <thead md-head md-order="ctrl.grid.classifications.order"
-                                                                   md-on-reorder="ctrl.getSortedDataClassifications">
-                                                            <tr md-row>
-                                                                <th colspan="6" class="table-selector-header"
-                                                                    ng-if="ctrl.selectedOUClassifications.length"
-                                                                    md-column>
-                                                                    <div layout="row" layout-align="start center">
-                                                                        <span>{{ctrl.selectedOUClassifications.length}} {{lang.items_selected}} </span>
-                                                                        <span flex></span>
-                                                                        <table-status-directive
-                                                                                when-close="ctrl.changeBulkStatusOUClassifications"></table-status-directive>
-                                                                        <md-button class="md-icon-button"
-                                                                                   ng-click="ctrl.removeBulkOUClassifications($event)">
-                                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                                        </md-button>
-                                                                    </div>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUClassifications.length"
-                                                                    md-column
-                                                                    md-order-by="classification.arName">
-                                                                    <span>{{lang.arabic_name}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUClassifications.length"
-                                                                    md-column
-                                                                    md-order-by="classification.enName">
-                                                                    <span>{{lang.english_name}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUClassifications.length"
-                                                                    md-order-by="code"
-                                                                    md-column>
-                                                                    <span>{{lang.code}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUClassifications.length"
-                                                                    md-order-by="itemOrder"
-                                                                    md-column>
-                                                                    <span>{{lang.item_order}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUClassifications.length"
-                                                                    md-column
-                                                                    md-order-by="status">
-                                                                    <span>{{lang.status}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUClassifications.length"
-                                                                    md-column>
-                                                                    <span>{{lang.actions}}</span>
-                                                                </th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody md-body>
-                                                            <tr md-row ng-disabled="ctrl.classificationEditMode"
-                                                                md-select="ouClassification"
-                                                                ng-repeat="ouClassification in ctrl.ouClassifications | limitTo: ctrl.grid.classifications.limit: ((ctrl.grid.classifications.page - 1) * ctrl.grid.classifications.limit) track by $index">
-                                                                <td md-cell>{{ouClassification.classification.arName}}
-                                                                </td>
-                                                                <td md-cell>{{ouClassification.classification.enName}}
-                                                                </td>
-                                                                <td md-cell>{{ouClassification.code}}</td>
-                                                                <td md-cell>{{ouClassification.itemOrder}}</td>
-                                                                <td md-cell>
-                                                                    <md-switch
-                                                                            tooltip="{{ouClassification.getTranslatedStatus()}}"
-                                                                            aria-label="{{lang.status}}"
-                                                                            ng-change="ctrl.changeOUClassificationStatus(ouClassification)"
-                                                                            ng-model="ouClassification.status">
-                                                                    </md-switch>
-                                                                </td>
-                                                                <td md-cell>
-                                                                    <div flex layout="row" layout-align="start center">
-                                                                        <md-button class="md-icon-button"
-                                                                                   title="{{lang.delete}}"
-                                                                                   ng-click="ctrl.removeOUClassification(ouClassification, $event)">
-                                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                                        </md-button>
-                                                                        <md-button class="md-icon-button"
-                                                                                   title="{{lang.edit}}"
-                                                                                   ng-click="ctrl.editOUClassification(ouClassification, $event)">
-                                                                            <md-icon md-svg-icon="table-edit"></md-icon>
-                                                                        </md-button>
-                                                                        <md-button class="md-icon-button"
-                                                                                   title="{{lang.edit}} {{lang.classification}}"
-                                                                                   ng-click="ctrl.editOUClassificationOnly(ouClassification, $event)">
-                                                                            <md-icon md-svg-icon="pencil"></md-icon>
-                                                                        </md-button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <md-table-pagination
-                                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                            md-limit-options="ctrl.grid.classifications.limitOptions"
-                                                            md-limit="ctrl.grid.classifications.limit"
-                                                            md-page="ctrl.grid.classifications.page"
-                                                            md-total="{{ctrl.ouClassifications.length}}" md-page-select>
-                                                    </md-table-pagination>
-                                                </md-table-container>
-                                            </md-card>
-                                        </div>
+                                        <md-card md-whiteframe="3" class="card-overlay">
+                                            <md-table-container>
+                                                <div flex scroll-directive>
+                                                    <table md-table md-row-select multiple
+                                                           ng-model="ctrl.selectedOUClassifications"
+                                                           md-progress="ctrl.progress">
+                                                        <thead md-head md-order="ctrl.grid.classifications.order"
+                                                               md-on-reorder="ctrl.getSortedDataClassifications">
+                                                        <tr md-row>
+                                                            <th colspan="6" class="table-selector-header"
+                                                                ng-if="ctrl.selectedOUClassifications.length"
+                                                                md-column>
+                                                                <div layout="row" layout-align="start center">
+                                                                    <span>{{ctrl.selectedOUClassifications.length}} {{lang.items_selected}} </span>
+                                                                    <span flex></span>
+                                                                    <table-status-directive
+                                                                            when-close="ctrl.changeBulkStatusOUClassifications"></table-status-directive>
+                                                                    <md-button class="md-icon-button"
+                                                                               ng-click="ctrl.removeBulkOUClassifications($event)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUClassifications.length"
+                                                                md-column
+                                                                md-order-by="classification.arName">
+                                                                <span>{{lang.arabic_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUClassifications.length"
+                                                                md-column
+                                                                md-order-by="classification.enName">
+                                                                <span>{{lang.english_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUClassifications.length"
+                                                                md-order-by="code"
+                                                                md-column>
+                                                                <span>{{lang.code}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUClassifications.length"
+                                                                md-order-by="itemOrder"
+                                                                md-column>
+                                                                <span>{{lang.item_order}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUClassifications.length"
+                                                                md-column
+                                                                md-order-by="status">
+                                                                <span>{{lang.status}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUClassifications.length"
+                                                                md-column>
+                                                                <span>{{lang.actions}}</span>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody md-body>
+                                                        <tr md-row ng-disabled="ctrl.classificationEditMode"
+                                                            md-select="ouClassification"
+                                                            ng-repeat="ouClassification in ctrl.ouClassifications | limitTo: ctrl.grid.classifications.limit: ((ctrl.grid.classifications.page - 1) * ctrl.grid.classifications.limit) track by $index">
+                                                            <td md-cell>{{ouClassification.classification.arName}}
+                                                            </td>
+                                                            <td md-cell>{{ouClassification.classification.enName}}
+                                                            </td>
+                                                            <td md-cell>{{ouClassification.code}}</td>
+                                                            <td md-cell>{{ouClassification.itemOrder}}</td>
+                                                            <td md-cell>
+                                                                <md-switch
+                                                                        tooltip="{{ouClassification.getTranslatedStatus()}}"
+                                                                        aria-label="{{lang.status}}"
+                                                                        ng-change="ctrl.changeOUClassificationStatus(ouClassification)"
+                                                                        ng-model="ouClassification.status">
+                                                                </md-switch>
+                                                            </td>
+                                                            <td md-cell>
+                                                                <div flex layout="row" layout-align="start center">
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.delete}}"
+                                                                               ng-click="ctrl.removeOUClassification(ouClassification, $event)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.edit}}"
+                                                                               ng-click="ctrl.editOUClassification(ouClassification, $event)">
+                                                                        <md-icon md-svg-icon="table-edit"></md-icon>
+                                                                    </md-button>
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.edit}} {{lang.classification}}"
+                                                                               ng-click="ctrl.editOUClassificationOnly(ouClassification, $event)">
+                                                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <md-table-pagination
+                                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                        md-limit-options="ctrl.grid.classifications.limitOptions"
+                                                        md-limit="ctrl.grid.classifications.limit"
+                                                        md-page="ctrl.grid.classifications.page"
+                                                        md-total="{{ctrl.ouClassifications.length}}" md-page-select>
+                                                </md-table-pagination>
+                                            </md-table-container>
+                                        </md-card>
                                     </div>
                                 </div>
-                            </div><!-- column container -->
+                            </div>
                         </md-content>
                     </md-tab>
                     <!-- Correspondence Sites -->
                     <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('correspondence_sites')"
                             label="{{lang.correspondence_sites}}" ng-click="ctrl.setCurrentTab('correspondence_sites')">
-                        <md-content>
-                            <div layout="column" class="content">
-                                <div ng-if="!ctrl.correspondenceSiteEditMode" layout="row" layout-align="start center"
-                                     class="p25 small">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div ng-if="!ctrl.correspondenceSiteEditMode" layout="row" class="p20-0">
                                     <div layout="row" layout-align="center center">
                                         <md-menu-bar class="menu-grid">
                                             <md-menu>
@@ -933,12 +844,10 @@
                                         </md-menu-bar>
                                     </div>
                                     <span flex></span>
-                                    <!--<search-filter-directive
-                                            model="ctrl.correspondenceSiteSearchModel"></search-filter-directive>-->
                                     <grid-search-directive grid="ctrl.grid.correspondenceSites"></grid-search-directive>
                                 </div>
                                 <div ng-if="ctrl.correspondenceSiteEditMode">
-                                    <div class="p020" layout="row">
+                                    <div layout="row">
                                         <md-input-container flex>
                                             <label for="correspondenceSiteName">{{lang.select_correspondenceSite}}</label>
                                             <input id="correspondenceSiteName" ng-disabled="true"
@@ -980,128 +889,126 @@
                                 </div>
                                 <div layout="column" ng-if="ctrl.ouCorrespondenceSites.length">
                                     <div scroll-directive>
-                                        <div class="p20">
-                                            <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                                                <md-table-container>
-                                                    <div flex scroll-directive>
-                                                        <table md-table md-row-select multiple
-                                                               ng-model="ctrl.selectedOUCorrespondenceSites"
-                                                               md-progress="ctrl.progress">
-                                                            <thead md-head
-                                                                   md-order="ctrl.grid.correspondenceSites.order"
-                                                                   md-on-reorder="ctrl.getSortedDataCorrespondenceSites">
-                                                            <tr md-row>
+                                        <md-card md-whiteframe="3" class="card-overlay">
+                                            <md-table-container>
+                                                <div flex scroll-directive>
+                                                    <table md-table md-row-select multiple
+                                                           ng-model="ctrl.selectedOUCorrespondenceSites"
+                                                           md-progress="ctrl.progress">
+                                                        <thead md-head
+                                                               md-order="ctrl.grid.correspondenceSites.order"
+                                                               md-on-reorder="ctrl.getSortedDataCorrespondenceSites">
+                                                        <tr md-row>
 
-                                                                <th colspan="6" class="table-selector-header"
-                                                                    ng-if="ctrl.selectedOUCorrespondenceSites.length"
-                                                                    md-column>
-                                                                    <div layout="row" layout-align="start center">
-                                                                        <span>{{ctrl.selectedOUCorrespondenceSites.length}} {{lang.items_selected}} </span>
-                                                                        <span flex></span>
-                                                                        <table-status-directive
-                                                                                when-close="ctrl.changeBulkStatusOUCorrespondenceSites"></table-status-directive>
-                                                                        <md-button class="md-icon-button"
-                                                                                   ng-click="ctrl.removeBulkOUCorrespondenceSites($event)">
-                                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                                        </md-button>
-                                                                    </div>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length"
-                                                                    md-column
-                                                                    md-order-by="correspondenceSite.arName">
-                                                                    <span>{{lang.arabic_name}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length"
-                                                                    md-column
-                                                                    md-order-by="correspondenceSite.enName">
-                                                                    <span>{{lang.english_name}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length"
-                                                                    md-order-by="code"
-                                                                    md-column>
-                                                                    <span>{{lang.code}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length"
-                                                                    md-order-by="itemOrder"
-                                                                    md-column>
-                                                                    <span>{{lang.item_order}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length"
-                                                                    md-column
-                                                                    md-order-by="status">
-                                                                    <span>{{lang.status}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length"
-                                                                    md-column>
-                                                                    <span>{{lang.actions}}</span>
-                                                                </th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody md-body>
-                                                            <tr md-row ng-disabled="ctrl.correspondenceSiteEditMode"
-                                                                md-select="ouCorrespondenceSite"
-                                                                ng-repeat="ouCorrespondenceSite in ctrl.ouCorrespondenceSites | limitTo: ctrl.grid.correspondenceSites.limit: ((ctrl.grid.correspondenceSites.page - 1) * ctrl.grid.correspondenceSites.limit)  track by $index">
-                                                                <td md-cell>
-                                                                    {{ouCorrespondenceSite.correspondenceSite.arName}}
-                                                                </td>
-                                                                <td md-cell>
-                                                                    {{ouCorrespondenceSite.correspondenceSite.enName}}
-                                                                </td>
-                                                                <td md-cell>{{ouCorrespondenceSite.code}}</td>
-                                                                <td md-cell>{{ouCorrespondenceSite.itemOrder}}</td>
-                                                                <td md-cell>
-                                                                    <md-switch
-                                                                            tooltip="{{ouCorrespondenceSite.getTranslatedStatus()}}"
-                                                                            aria-label="{{lang.status}}"
-                                                                            ng-change="ctrl.changeOUCorrespondenceSiteStatus(ouCorrespondenceSite)"
-                                                                            ng-model="ouCorrespondenceSite.status">
-                                                                    </md-switch>
-                                                                </td>
-                                                                <td md-cell>
-                                                                    <div flex layout="row" layout-align="start center">
-                                                                        <md-button class="md-icon-button"
-                                                                                   title="{{lang.delete}}"
-                                                                                   ng-click="ctrl.removeOUCorrespondenceSite(ouCorrespondenceSite, $event)">
-                                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                                        </md-button>
-                                                                        <md-button class="md-icon-button"
-                                                                                   title="{{lang.edit}}"
-                                                                                   ng-click="ctrl.editOUCorrespondenceSite(ouCorrespondenceSite, $event)">
-                                                                            <md-icon md-svg-icon="table-edit"></md-icon>
-                                                                        </md-button>
-                                                                        <md-button class="md-icon-button"
-                                                                                   title="{{lang.edit}} {{lang.correspondence_site}}"
-                                                                                   ng-click="ctrl.editOUCorrespondenceSiteOnly(ouCorrespondenceSite, $event)">
-                                                                            <md-icon md-svg-icon="pencil"></md-icon>
-                                                                        </md-button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <md-table-pagination
-                                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                            md-limit-options="ctrl.grid.correspondenceSites.limitOptions"
-                                                            md-limit="ctrl.grid.correspondenceSites.limit"
-                                                            md-page="ctrl.grid.correspondenceSites.page"
-                                                            md-total="{{ctrl.ouCorrespondenceSites.length}}"
-                                                            md-page-select>
-                                                    </md-table-pagination>
-                                                </md-table-container>
-                                            </md-card>
-                                        </div>
+                                                            <th colspan="6" class="table-selector-header"
+                                                                ng-if="ctrl.selectedOUCorrespondenceSites.length"
+                                                                md-column>
+                                                                <div layout="row" layout-align="start center">
+                                                                    <span>{{ctrl.selectedOUCorrespondenceSites.length}} {{lang.items_selected}} </span>
+                                                                    <span flex></span>
+                                                                    <table-status-directive
+                                                                            when-close="ctrl.changeBulkStatusOUCorrespondenceSites"></table-status-directive>
+                                                                    <md-button class="md-icon-button"
+                                                                               ng-click="ctrl.removeBulkOUCorrespondenceSites($event)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUCorrespondenceSites.length"
+                                                                md-column
+                                                                md-order-by="correspondenceSite.arName">
+                                                                <span>{{lang.arabic_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUCorrespondenceSites.length"
+                                                                md-column
+                                                                md-order-by="correspondenceSite.enName">
+                                                                <span>{{lang.english_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUCorrespondenceSites.length"
+                                                                md-order-by="code"
+                                                                md-column>
+                                                                <span>{{lang.code}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUCorrespondenceSites.length"
+                                                                md-order-by="itemOrder"
+                                                                md-column>
+                                                                <span>{{lang.item_order}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUCorrespondenceSites.length"
+                                                                md-column
+                                                                md-order-by="status">
+                                                                <span>{{lang.status}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUCorrespondenceSites.length"
+                                                                md-column>
+                                                                <span>{{lang.actions}}</span>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody md-body>
+                                                        <tr md-row ng-disabled="ctrl.correspondenceSiteEditMode"
+                                                            md-select="ouCorrespondenceSite"
+                                                            ng-repeat="ouCorrespondenceSite in ctrl.ouCorrespondenceSites | limitTo: ctrl.grid.correspondenceSites.limit: ((ctrl.grid.correspondenceSites.page - 1) * ctrl.grid.correspondenceSites.limit)  track by $index">
+                                                            <td md-cell>
+                                                                {{ouCorrespondenceSite.correspondenceSite.arName}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                {{ouCorrespondenceSite.correspondenceSite.enName}}
+                                                            </td>
+                                                            <td md-cell>{{ouCorrespondenceSite.code}}</td>
+                                                            <td md-cell>{{ouCorrespondenceSite.itemOrder}}</td>
+                                                            <td md-cell>
+                                                                <md-switch
+                                                                        tooltip="{{ouCorrespondenceSite.getTranslatedStatus()}}"
+                                                                        aria-label="{{lang.status}}"
+                                                                        ng-change="ctrl.changeOUCorrespondenceSiteStatus(ouCorrespondenceSite)"
+                                                                        ng-model="ouCorrespondenceSite.status">
+                                                                </md-switch>
+                                                            </td>
+                                                            <td md-cell>
+                                                                <div flex layout="row" layout-align="start center">
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.delete}}"
+                                                                               ng-click="ctrl.removeOUCorrespondenceSite(ouCorrespondenceSite, $event)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.edit}}"
+                                                                               ng-click="ctrl.editOUCorrespondenceSite(ouCorrespondenceSite, $event)">
+                                                                        <md-icon md-svg-icon="table-edit"></md-icon>
+                                                                    </md-button>
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.edit}} {{lang.correspondence_site}}"
+                                                                               ng-click="ctrl.editOUCorrespondenceSiteOnly(ouCorrespondenceSite, $event)">
+                                                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <md-table-pagination
+                                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                        md-limit-options="ctrl.grid.correspondenceSites.limitOptions"
+                                                        md-limit="ctrl.grid.correspondenceSites.limit"
+                                                        md-page="ctrl.grid.correspondenceSites.page"
+                                                        md-total="{{ctrl.ouCorrespondenceSites.length}}"
+                                                        md-page-select>
+                                                </md-table-pagination>
+                                            </md-table-container>
+                                        </md-card>
                                     </div>
                                 </div>
-                            </div><!-- column container -->
+                            </div>
                         </md-content>
                     </md-tab>
                     <!-- Document Templates -->
                     <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('document_templates')"
                             label="{{lang.document_templates}}" ng-click="ctrl.setCurrentTab('document_templates')">
-                        <md-content>
-                            <div layout="column" class="content">
-                                <div layout="row" layout-align="start center" class="p25 small">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div layout="row" class="p20-0">
                                     <md-button ng-click="ctrl.openAddDocumentTemplateDialog($event)"
                                                class="md-icon-button"
                                                tooltip="{{lang.add}}">
@@ -1118,95 +1025,93 @@
                                 </div>
                                 <div layout="column" ng-if="ctrl.documentTemplates.length">
                                     <div scroll-directive>
-                                        <div class="p20">
-                                            <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                                                <md-table-container>
-                                                    <div scroll-directive>
-                                                        <table md-table md-row-select="true"
-                                                               multiple="true"
-                                                               ng-model="ctrl.selectedDocumentTemplates"
-                                                               md-progress="ctrl.documentTemplateProgress">
-                                                            <thead md-head md-order="ctrl.documentTemplateGrid.order"
-                                                                   md-on-reorder="ctrl.getSortedDataTemplate">
-                                                            <tr md-row>
-                                                                <th colspan="5" class="table-selector-header"
-                                                                    ng-if="ctrl.selectedDocumentTemplates.length"
-                                                                    md-column>
-                                                                    <div layout="row" layout-align="start center">
-                                                                        <span>{{ctrl.selectedDocumentTemplates.length}} {{lang.items_selected}} </span>
-                                                                        <span flex></span>
-                                                                    </div>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedDocumentTemplates.length"
-                                                                    md-column
-                                                                    md-order-by="docSubject">
-                                                                    <span>{{lang.document_subject}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedDocumentTemplates.length"
-                                                                    md-column
-                                                                    md-order-by="documentTitle">
-                                                                    <span>{{lang.document_title}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedDocumentTemplates.length"
-                                                                    md-column
-                                                                    md-order-by="{{ctrl.getSortingKey('docTypeInfo', 'Information')}}">
-                                                                    <span>{{lang.label_document_type}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedDocumentTemplates.length"
-                                                                    md-column>
-                                                                    <span>{{lang.actions}}</span>
-                                                                </th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody md-body>
-                                                            <tr md-row md-select="documentTemplate"
-                                                                ng-repeat="documentTemplate in ctrl.documentTemplates | limitTo: ctrl.documentTemplateGrid.limit: ((ctrl.documentTemplateGrid.page - 1) * ctrl.documentTemplateGrid.limit) track by $index">
-                                                                <td md-cell>{{documentTemplate.docSubject}}</td>
-                                                                <td md-cell>{{documentTemplate.documentTitle}}</td>
-                                                                <td md-cell>
-                                                                    {{documentTemplate.docTypeInfo.getTranslatedName()}}
-                                                                </td>
-                                                                <td md-cell>
-                                                                    <div flex layout="row" layout-align="start center">
-                                                                        <md-button class="md-icon-button"
-                                                                                   title="{{lang.delete}}"
-                                                                                   ng-click="ctrl.removeDocumentTemplate(documentTemplate, $event)">
-                                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                                        </md-button>
-                                                                        <md-button class="md-icon-button"
-                                                                                   title="{{lang.edit}}"
-                                                                                   ng-click="ctrl.openEditDocumentTemplateDialog(documentTemplate, $event)">
-                                                                            <md-icon md-svg-icon="pencil"></md-icon>
-                                                                        </md-button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <md-table-pagination
-                                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                            md-limit-options="ctrl.documentTemplateGrid.limitOptions"
-                                                            md-limit="ctrl.documentTemplateGrid.limit"
-                                                            md-page="ctrl.documentTemplateGrid.page"
-                                                            md-total="{{ctrl.documentTemplates.length}}" md-page-select>
-                                                    </md-table-pagination>
-                                                </md-table-container>
-                                            </md-card>
-                                        </div>
+                                        <md-card md-whiteframe="3" class="card-overlay">
+                                            <md-table-container>
+                                                <div scroll-directive>
+                                                    <table md-table md-row-select="true"
+                                                           multiple="true"
+                                                           ng-model="ctrl.selectedDocumentTemplates"
+                                                           md-progress="ctrl.documentTemplateProgress">
+                                                        <thead md-head md-order="ctrl.documentTemplateGrid.order"
+                                                               md-on-reorder="ctrl.getSortedDataTemplate">
+                                                        <tr md-row>
+                                                            <th colspan="5" class="table-selector-header"
+                                                                ng-if="ctrl.selectedDocumentTemplates.length"
+                                                                md-column>
+                                                                <div layout="row" layout-align="start center">
+                                                                    <span>{{ctrl.selectedDocumentTemplates.length}} {{lang.items_selected}} </span>
+                                                                    <span flex></span>
+                                                                </div>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDocumentTemplates.length"
+                                                                md-column
+                                                                md-order-by="docSubject">
+                                                                <span>{{lang.document_subject}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDocumentTemplates.length"
+                                                                md-column
+                                                                md-order-by="documentTitle">
+                                                                <span>{{lang.document_title}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDocumentTemplates.length"
+                                                                md-column
+                                                                md-order-by="{{ctrl.getSortingKey('docTypeInfo', 'Information')}}">
+                                                                <span>{{lang.label_document_type}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDocumentTemplates.length"
+                                                                md-column>
+                                                                <span>{{lang.actions}}</span>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody md-body>
+                                                        <tr md-row md-select="documentTemplate"
+                                                            ng-repeat="documentTemplate in ctrl.documentTemplates | limitTo: ctrl.documentTemplateGrid.limit: ((ctrl.documentTemplateGrid.page - 1) * ctrl.documentTemplateGrid.limit) track by $index">
+                                                            <td md-cell>{{documentTemplate.docSubject}}</td>
+                                                            <td md-cell>{{documentTemplate.documentTitle}}</td>
+                                                            <td md-cell>
+                                                                {{documentTemplate.docTypeInfo.getTranslatedName()}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                <div flex layout="row" layout-align="start center">
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.delete}}"
+                                                                               ng-click="ctrl.removeDocumentTemplate(documentTemplate, $event)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.edit}}"
+                                                                               ng-click="ctrl.openEditDocumentTemplateDialog(documentTemplate, $event)">
+                                                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <md-table-pagination
+                                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                        md-limit-options="ctrl.documentTemplateGrid.limitOptions"
+                                                        md-limit="ctrl.documentTemplateGrid.limit"
+                                                        md-page="ctrl.documentTemplateGrid.page"
+                                                        md-total="{{ctrl.documentTemplates.length}}" md-page-select>
+                                                </md-table-pagination>
+                                            </md-table-container>
+                                        </md-card>
                                     </div>
-                                </div><!-- page-content-->
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>
                     <!-- Property Configuration -->
                     <md-tab ng-if="ctrl.editMode && ctrl.showTab('property_config')"
                             label="{{lang.property_configuration}}" ng-click="ctrl.setCurrentTab('property_config')">
-                        <md-content>
-                            <div layout="column" class="content">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <!-- Dropdown and buttons -->
-                                <div layout="column" class="p25">
-                                    <div layout="row" layout-align="start center" class="small">
+                                <div layout="column">
+                                    <div layout="row">
                                         <md-input-container flex>
                                             <label for="documentClass">{{lang.label_document_class}}</label>
                                             <md-select name="documentClass" id="documentClass"
@@ -1220,7 +1125,7 @@
                                         </md-input-container>
                                         <span flex></span>
                                     </div>
-                                    <div layout="row" layout-align="start center" class="small">
+                                    <div layout="row" class="p20-0">
                                         <md-button ng-click="ctrl.openAddPropertyConfigurationsDialog($event)"
                                                    class="md-icon-button"
                                                    ng-disabled="ctrl.checkDocumentClassSelected()"
@@ -1240,76 +1145,74 @@
                                 <!-- Property configuration table -->
                                 <div layout="column">
                                     <div scroll-directive>
-                                        <div class="page-padding">
-                                            <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                                                <md-table-container>
-                                                    <div scroll-directive>
-                                                        <table md-table md-row-select="true"
-                                                               multiple="true"
-                                                               ng-model="ctrl.selectedPropertyConfigurations"
-                                                               md-progress="ctrl.propertyConfigurationProgress">
-                                                            <thead md-head
-                                                                   md-order="ctrl.propertyConfigurationGrid.order"
-                                                                   md-on-reorder="ctrl.getSortedDataPropertyConfiguration">
-                                                            <tr md-row>
-                                                                <th md-column
-                                                                    md-order-by="dataType">
-                                                                    <span>{{lang.data_type}}</span>
-                                                                </th>
-                                                                <th md-column
-                                                                    md-order-by="defaultOperator">
-                                                                    <span>{{lang.default_operator}}</span>
-                                                                </th>
-                                                                <th md-column
-                                                                    md-order-by="defaultValue">
-                                                                    <span>{{lang.default_value}}</span>
-                                                                </th>
-                                                                <th md-column
-                                                                    md-order-by="spName">
-                                                                    <span>{{lang.sp_name}}</span>
-                                                                </th>
-                                                                <th md-column
-                                                                    md-order-by="symbolicName">
-                                                                    <span>{{lang.symbolic_name}}</span>
-                                                                </th>
-                                                                <th md-column>
-                                                                    <span>{{lang.actions}}</span>
-                                                                </th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody md-body>
-                                                            <tr md-row md-select="propertyConfiguration"
-                                                                ng-repeat="propertyConfiguration in ctrl.propertyConfigurations | filter:ctrl.searchModelPropertyConfigurations | limitTo: ctrl.propertyConfigurationGrid.limit: ((ctrl.propertyConfigurationGrid.page - 1) * ctrl.propertyConfigurationGrid.limit) track by $index">
-                                                                <td md-cell>{{propertyConfiguration.dataType}}</td>
-                                                                <td md-cell>{{propertyConfiguration.defaultOperator}}
-                                                                </td>
-                                                                <td md-cell>{{propertyConfiguration.defaultValue}}</td>
-                                                                <td md-cell>{{propertyConfiguration.spName}}</td>
-                                                                <td md-cell>{{propertyConfiguration.symbolicName}}</td>
-                                                                <td md-cell>
-                                                                    <div flex layout="row" layout-align="start center">
-                                                                        <md-button class="md-icon-button"
-                                                                                   title="{{lang.edit}}"
-                                                                                   ng-click="ctrl.openEditPropertyConfigurationsDialog(propertyConfiguration, $event)">
-                                                                            <md-icon md-svg-icon="pencil"></md-icon>
-                                                                        </md-button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <md-table-pagination
-                                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                            md-limit-options="ctrl.propertyConfigurationGrid.limitOptions"
-                                                            md-limit="ctrl.propertyConfigurationGrid.limit"
-                                                            md-page="ctrl.propertyConfigurationGrid.page"
-                                                            md-total="{{(ctrl.propertyConfigurations | filter:ctrl.searchModelPropertyConfigurations).length}}"
-                                                            md-page-select>
-                                                    </md-table-pagination>
-                                                </md-table-container>
-                                            </md-card>
-                                        </div>
+                                        <md-card md-whiteframe="3" class="card-overlay">
+                                            <md-table-container>
+                                                <div scroll-directive>
+                                                    <table md-table md-row-select="true"
+                                                           multiple="true"
+                                                           ng-model="ctrl.selectedPropertyConfigurations"
+                                                           md-progress="ctrl.propertyConfigurationProgress">
+                                                        <thead md-head
+                                                               md-order="ctrl.propertyConfigurationGrid.order"
+                                                               md-on-reorder="ctrl.getSortedDataPropertyConfiguration">
+                                                        <tr md-row>
+                                                            <th md-column
+                                                                md-order-by="dataType">
+                                                                <span>{{lang.data_type}}</span>
+                                                            </th>
+                                                            <th md-column
+                                                                md-order-by="defaultOperator">
+                                                                <span>{{lang.default_operator}}</span>
+                                                            </th>
+                                                            <th md-column
+                                                                md-order-by="defaultValue">
+                                                                <span>{{lang.default_value}}</span>
+                                                            </th>
+                                                            <th md-column
+                                                                md-order-by="spName">
+                                                                <span>{{lang.sp_name}}</span>
+                                                            </th>
+                                                            <th md-column
+                                                                md-order-by="symbolicName">
+                                                                <span>{{lang.symbolic_name}}</span>
+                                                            </th>
+                                                            <th md-column>
+                                                                <span>{{lang.actions}}</span>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody md-body>
+                                                        <tr md-row md-select="propertyConfiguration"
+                                                            ng-repeat="propertyConfiguration in ctrl.propertyConfigurations | filter:ctrl.searchModelPropertyConfigurations | limitTo: ctrl.propertyConfigurationGrid.limit: ((ctrl.propertyConfigurationGrid.page - 1) * ctrl.propertyConfigurationGrid.limit) track by $index">
+                                                            <td md-cell>{{propertyConfiguration.dataType}}</td>
+                                                            <td md-cell>{{propertyConfiguration.defaultOperator}}
+                                                            </td>
+                                                            <td md-cell>{{propertyConfiguration.defaultValue}}</td>
+                                                            <td md-cell>{{propertyConfiguration.spName}}</td>
+                                                            <td md-cell>{{propertyConfiguration.symbolicName}}</td>
+                                                            <td md-cell>
+                                                                <div flex layout="row" layout-align="start center">
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.edit}}"
+                                                                               ng-click="ctrl.openEditPropertyConfigurationsDialog(propertyConfiguration, $event)">
+                                                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <md-table-pagination
+                                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                        md-limit-options="ctrl.propertyConfigurationGrid.limitOptions"
+                                                        md-limit="ctrl.propertyConfigurationGrid.limit"
+                                                        md-page="ctrl.propertyConfigurationGrid.page"
+                                                        md-total="{{(ctrl.propertyConfigurations | filter:ctrl.searchModelPropertyConfigurations).length}}"
+                                                        md-page-select>
+                                                </md-table-pagination>
+                                            </md-table-container>
+                                        </md-card>
                                     </div>
                                 </div>
                             </div>
@@ -1318,9 +1221,9 @@
                     <!-- Users -->
                     <md-tab ng-if="ctrl.editMode && ctrl.showTab('users')" label="{{lang.users}}"
                             ng-click="ctrl.setCurrentTab('users')">
-                        <md-content>
-                            <div layout="column" class="content">
-                                <div layout="row" layout-align="start center" class="p25 small">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div layout="row" class="p20-0">
                                     <md-button ng-click="ctrl.openAddApplicationUserDialog($event)"
                                                class="md-icon-button"
                                                tooltip="{{lang.add}}">
@@ -1361,124 +1264,119 @@
                                 </div>
                                 <div layout="column" ng-if="ctrl.ouAssignedUsers.length">
                                     <div scroll-directive>
-                                        <div class="page-padding">
-                                            <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                                                <md-table-container>
-                                                    <div flex scroll-directive>
-                                                        <table md-table md-row-select multiple
-                                                               ng-model="ctrl.selectedOUApplicationUsers"
-                                                               md-progress="ctrl.appUserProgress">
-                                                            <thead md-head md-order="ctrl.appUserGrid.order"
-                                                                   md-on-reorder="ctrl.getSortedDataAppUser">
-                                                            <tr md-row>
-                                                                <th colspan="5"
-                                                                    ng-if="ctrl.selectedOUApplicationUsers.length"
-                                                                    md-column>
-                                                                    <div layout="row" layout-align="start center">
-                                                                        <span>{{ctrl.selectedOUApplicationUsers.length}} {{lang.items_selected}} </span>
-                                                                        <span flex></span>
-                                                                        <md-button class="md-icon-button"
-                                                                                   title="{{lang.delete_selected_items}}"
-                                                                                   ng-click="ctrl.removeBulkOUApplicationUsers($event)">
-                                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                                        </md-button>
-                                                                    </div>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUApplicationUsers.length"
-                                                                    md-column
-                                                                    md-order-by="applicationUser.arFullName">
-                                                                    <span>{{lang.arabic_name}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUApplicationUsers.length"
-                                                                    md-column
-                                                                    md-order-by="applicationUser.enFullName">
-                                                                    <span>{{lang.english_name}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUApplicationUsers.length"
-                                                                    md-column
-                                                                    md-order-by="applicationUser.loginName">
-                                                                    <span>{{lang.login_name}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUApplicationUsers.length"
-                                                                    md-column
-                                                                    md-order-by="applicationUser.domainName">
-                                                                    <span>{{lang.domain_name}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedOUApplicationUsers.length"
-                                                                    md-column>
-                                                                    <span>{{lang.actions}}</span>
-                                                                </th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody md-body>
-                                                            <tr md-row md-select="ouApplicationUser"
-                                                                ng-disabled="ctrl.currentEmployee.id === ouApplicationUser.applicationUser.id"
-                                                                ng-repeat="ouApplicationUser in ctrl.ouAssignedUsers | limitTo: ctrl.appUserGrid.limit: ((ctrl.appUserGrid.page - 1) * ctrl.appUserGrid.limit) track by $index">
-                                                                <td md-cell>
-                                                                    {{ouApplicationUser.applicationUser.arFullName}}
-                                                                </td>
-                                                                <td md-cell>
-                                                                    {{ouApplicationUser.applicationUser.enFullName}}
-                                                                </td>
-                                                                <td md-cell>
-                                                                    {{ouApplicationUser.applicationUser.loginName}}
-                                                                </td>
-                                                                <td md-cell>
-                                                                    {{ouApplicationUser.applicationUser.domainName}}
-                                                                </td>
-                                                                <td md-cell>
-                                                                    <div flex layout="row" layout-align="start center">
-                                                                        <md-button class="md-icon-button"
-                                                                                   title="{{lang.delete}}"
-                                                                                   ng-if="ctrl.currentEmployee.id != ouApplicationUser.applicationUser.id"
-                                                                                   ng-click="ctrl.removeOUApplicationUser(ouApplicationUser, $event)">
-                                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                                        </md-button>
-                                                                        <md-button
-                                                                                class="md-icon-button"
-                                                                                title="{{lang.edit}}"
-                                                                                ng-if="ctrl.currentEmployee.id != ouApplicationUser.applicationUser.id"
-                                                                                ng-click="ctrl.openEditApplicationUserDialog(ouApplicationUser.applicationUser, $event)">
-                                                                            <md-icon md-svg-icon="pencil"></md-icon>
-                                                                        </md-button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <md-table-pagination
-                                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                            md-limit-options="ctrl.appUserGrid.limitOptions"
-                                                            md-limit="ctrl.appUserGrid.limit"
-                                                            md-page="ctrl.appUserGrid.page"
-                                                            md-total="{{ctrl.ouAssignedUsers.length}}" md-page-select>
-                                                    </md-table-pagination>
-                                                </md-table-container>
-                                            </md-card>
-                                        </div>
+                                        <md-card md-whiteframe="3" class="card-overlay">
+                                            <md-table-container>
+                                                <div flex scroll-directive>
+                                                    <table md-table md-row-select multiple
+                                                           ng-model="ctrl.selectedOUApplicationUsers"
+                                                           md-progress="ctrl.appUserProgress">
+                                                        <thead md-head md-order="ctrl.appUserGrid.order"
+                                                               md-on-reorder="ctrl.getSortedDataAppUser">
+                                                        <tr md-row>
+                                                            <th colspan="5"
+                                                                ng-if="ctrl.selectedOUApplicationUsers.length"
+                                                                md-column>
+                                                                <div layout="row" layout-align="start center">
+                                                                    <span>{{ctrl.selectedOUApplicationUsers.length}} {{lang.items_selected}} </span>
+                                                                    <span flex></span>
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.delete_selected_items}}"
+                                                                               ng-click="ctrl.removeBulkOUApplicationUsers($event)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUApplicationUsers.length"
+                                                                md-column
+                                                                md-order-by="applicationUser.arFullName">
+                                                                <span>{{lang.arabic_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUApplicationUsers.length"
+                                                                md-column
+                                                                md-order-by="applicationUser.enFullName">
+                                                                <span>{{lang.english_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUApplicationUsers.length"
+                                                                md-column
+                                                                md-order-by="applicationUser.loginName">
+                                                                <span>{{lang.login_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUApplicationUsers.length"
+                                                                md-column
+                                                                md-order-by="applicationUser.domainName">
+                                                                <span>{{lang.domain_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUApplicationUsers.length"
+                                                                md-column>
+                                                                <span>{{lang.actions}}</span>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody md-body>
+                                                        <tr md-row md-select="ouApplicationUser"
+                                                            ng-disabled="ctrl.currentEmployee.id === ouApplicationUser.applicationUser.id"
+                                                            ng-repeat="ouApplicationUser in ctrl.ouAssignedUsers | limitTo: ctrl.appUserGrid.limit: ((ctrl.appUserGrid.page - 1) * ctrl.appUserGrid.limit) track by $index">
+                                                            <td md-cell>
+                                                                {{ouApplicationUser.applicationUser.arFullName}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                {{ouApplicationUser.applicationUser.enFullName}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                {{ouApplicationUser.applicationUser.loginName}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                {{ouApplicationUser.applicationUser.domainName}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                <div flex layout="row" layout-align="start center">
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.delete}}"
+                                                                               ng-if="ctrl.currentEmployee.id != ouApplicationUser.applicationUser.id"
+                                                                               ng-click="ctrl.removeOUApplicationUser(ouApplicationUser, $event)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
+                                                                    <md-button
+                                                                            class="md-icon-button"
+                                                                            title="{{lang.edit}}"
+                                                                            ng-if="ctrl.currentEmployee.id != ouApplicationUser.applicationUser.id"
+                                                                            ng-click="ctrl.openEditApplicationUserDialog(ouApplicationUser.applicationUser, $event)">
+                                                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <md-table-pagination
+                                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                        md-limit-options="ctrl.appUserGrid.limitOptions"
+                                                        md-limit="ctrl.appUserGrid.limit"
+                                                        md-page="ctrl.appUserGrid.page"
+                                                        md-total="{{ctrl.ouAssignedUsers.length}}" md-page-select>
+                                                </md-table-pagination>
+                                            </md-table-container>
+                                        </md-card>
                                     </div>
-                                </div><!-- page-content-->
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>
                 </md-tabs>
-            </form><!-- org_form-->
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-disabled="org_form.$invalid" ng-click="ctrl.editOrganizationFromCtrl()"
-                           ng-if="ctrl.editMode && ctrl.showSaveButton()">
-                    {{lang.save}}
-                </md-button>
-                <md-button ng-disabled="org_form.$invalid" class="md-raised" ng-click="ctrl.addOrganizationFromCtrl()"
-                           ng-if="!ctrl.editMode">
-                    {{lang.add}}
-                </md-button>
-                <span flex></span>
-                <md-button ng-click="ctrl.closeOrganizationDialog()" class="md-raised">{{lang.close}}</md-button>
-            </div>
+            </form>
         </div>
-
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="org_form.$invalid" ng-click="ctrl.editOrganizationFromCtrl()"
+                   ng-if="ctrl.editMode && ctrl.showSaveButton()">
+            {{lang.save}}
+        </md-button>
+        <md-button ng-disabled="org_form.$invalid" class="md-raised" ng-click="ctrl.addOrganizationFromCtrl()"
+                   ng-if="!ctrl.editMode">
+            {{lang.add}}
+        </md-button>
+        <span flex></span>
+        <md-button ng-click="ctrl.closeOrganizationDialog()" class="md-raised">{{lang.close}}</md-button>
+    </md-dialog-actions>
 </md-dialog>

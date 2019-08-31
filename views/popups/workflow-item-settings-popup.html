@@ -1,119 +1,110 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            aria-label="{{ctrl.dialogTitle}}">
-    <div layout="column">
-        <popup-toolbar-directive header-text="{{ctrl.dialogTitle}}"></popup-toolbar-directive>
-        <md-content scroll-directive="">
-            <div class="p20" layout="column">
-                <form name="distWorkflowItem_form">
-                    <div layout="row">
-                        <md-input-container flex>
-                            <label for="action">{{lang.select_action}}</label>
-                            <md-select required id="action" ng-model-options="{trackBy:'$value.id'}" name="action"
-                                       ng-model="ctrl.distWorkflowItem.action"
-                                       md-on-close="ctrl.clearSearchText('action')"
-                                       data-md-container-class="select-header-container">
-                                <md-select-header class="select-header">
-                                    <input ng-model="ctrl.actionSearchText"
-                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
-                                           placeholder="{{lang.search}}"
-                                           class="select-header-input">
-                                </md-select-header>
-                                <md-option ng-value="action"
-                                           ng-repeat="action in ctrl.workflowActions | translatedNameFilter: ctrl.actionSearchText">
+    <popup-toolbar-directive header-text="{{ctrl.dialogTitle}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="distWorkflowItem_form">
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="action">{{lang.select_action}}</label>
+                        <md-select required id="action" ng-model-options="{trackBy:'$value.id'}" name="action"
+                                   ng-model="ctrl.distWorkflowItem.action"
+                                   md-on-close="ctrl.clearSearchText('action')"
+                                   data-md-container-class="select-header-container">
+                            <md-select-header class="select-header">
+                                <input ng-model="ctrl.actionSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option ng-value="action"
+                                       ng-repeat="action in ctrl.workflowActions | translatedNameFilter: ctrl.actionSearchText">
                                     <span
                                             md-highlight-text="ctrl.actionSearchText"
                                             md-highlight-flags="i">{{action.getTranslatedName()}}</span>
-                                </md-option>
-                            </md-select>
-                            <div ng-messages="distWorkflowItem_form.action.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
-                        </md-input-container>
-                        <md-input-container class="cms-datepicker" flex>
-                            <label for="dueDate">{{lang.due_date}}</label>
-                            <md-datepicker id="dueDate" md-open-on-focus
-                                           md-min-date="ctrl.minDate"
-                                           ng-model="ctrl.distWorkflowItem.dueDate"></md-datepicker>
-                        </md-input-container>
-                    </div>
-                    <div ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification"
-                         layout="row">
-                        <div flex>
-                            <md-checkbox ng-disabled="!ctrl.globalSettings.enableSMSNotification"
-                                         ng-model="ctrl.distWorkflowItem.sendSMS">
-                                {{lang.sms_workflow_notification}}
-                            </md-checkbox>
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="distWorkflowItem_form.action.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
                         </div>
-                        <div flex>
-                            <md-checkbox ng-disabled="!ctrl.globalSettings.enableEmailNotification"
-                                         ng-model="ctrl.distWorkflowItem.sendEmail">
-                                {{lang.email_workflow_notification}}
-                            </md-checkbox>
-                        </div>
+                    </md-input-container>
+                    <md-input-container class="cms-datepicker" flex>
+                        <label for="dueDate">{{lang.due_date}}</label>
+                        <md-datepicker id="dueDate" md-open-on-focus
+                                       md-min-date="ctrl.minDate"
+                                       ng-model="ctrl.distWorkflowItem.dueDate"></md-datepicker>
+                    </md-input-container>
+                </div>
+                <div ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification"
+                     layout="row">
+                    <div flex>
+                        <md-checkbox ng-disabled="!ctrl.globalSettings.enableSMSNotification"
+                                     ng-model="ctrl.distWorkflowItem.sendSMS">
+                            {{lang.sms_workflow_notification}}
+                        </md-checkbox>
                     </div>
-                    <div>
-                        <div flex>
-                            <!-- Secure Action -->
-                            <md-checkbox
-                                    ng-model="ctrl.distWorkflowItem.isSecureAction"
-                                    aria-label="{{lang.secure_comment}}">
-                                {{lang.secure_comment}}
-                            </md-checkbox>
-                            <div class="help-text-div">{{lang.secure_comment_note}}</div>
-                        </div>
+                    <div flex>
+                        <md-checkbox ng-disabled="!ctrl.globalSettings.enableEmailNotification"
+                                     ng-model="ctrl.distWorkflowItem.sendEmail">
+                            {{lang.email_workflow_notification}}
+                        </md-checkbox>
                     </div>
-                    <div layout="row">
-                        <md-input-container flex>
-                            <label for="comment">{{lang.select_comment}}</label>
-                            <md-select id="comment" name="comment" ng-change="ctrl.onCommentChange()"
-                                       ng-model="ctrl.comment"
-                                       md-on-close="ctrl.clearSearchText('comment')"
-                                       data-md-container-class="select-header-container">
-                                <md-select-header class="select-header">
-                                    <input ng-model="ctrl.commentSearchText"
-                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
-                                           placeholder="{{lang.search}}"
-                                           class="select-header-input">
-                                </md-select-header>
-                                <md-option ng-value="comment"
-                                           ng-repeat="comment in ctrl.comments | translatedNameFilter: ctrl.commentSearchText">
+                </div>
+                <div>
+                    <div flex>
+                        <!-- Secure Action -->
+                        <md-checkbox
+                                ng-model="ctrl.distWorkflowItem.isSecureAction"
+                                aria-label="{{lang.secure_comment}}">
+                            {{lang.secure_comment}}
+                        </md-checkbox>
+                        <div class="help-text-div">{{lang.secure_comment_note}}</div>
+                    </div>
+                </div>
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="comment">{{lang.select_comment}}</label>
+                        <md-select id="comment" name="comment" ng-change="ctrl.onCommentChange()"
+                                   ng-model="ctrl.comment"
+                                   md-on-close="ctrl.clearSearchText('comment')"
+                                   data-md-container-class="select-header-container">
+                            <md-select-header class="select-header">
+                                <input ng-model="ctrl.commentSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option ng-value="comment"
+                                       ng-repeat="comment in ctrl.comments | translatedNameFilter: ctrl.commentSearchText">
                                     <span
                                             md-highlight-text="ctrl.commentSearchText"
                                             md-highlight-flags="i">{{comment.getCommentTitle()}}</span>
-                                </md-option>
-                            </md-select>
-                        </md-input-container>
-                    </div>
-                    <div layout="row">
-                        <md-input-container flex>
-                            <label for="comments"> {{lang.type_your_comment}}</label>
-                            <textarea rows="5" id="comments" name="comments" class="cms-comment"
-                                      ng-model="ctrl.distWorkflowItem.comments"
-                                      ng-required="ctrl.distWorkflowItem.isSecureAction"></textarea>
-                            <div ng-messages="distWorkflowItem_form.comments.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
-                        </md-input-container>
-                    </div>
-                </form>
-            </div>
-        </md-content>
-        <div>
-            <div layout="row">
-                <div>
-                    <md-button class="md-raised" ng-disabled="distWorkflowItem_form.$invalid"
-                               ng-click="ctrl.setDistWorkflowItemProperties()">
-                        {{lang.set}}
-                    </md-button>
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
                 </div>
-                <span flex></span>
-                <div>
-                    <md-button class="md-raised" ng-click="ctrl.closeDistWorkflowItemProperties()">{{lang.close}}
-                    </md-button>
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="comments"> {{lang.type_your_comment}}</label>
+                        <textarea rows="5" id="comments" name="comments" class="cms-comment"
+                                  ng-model="ctrl.distWorkflowItem.comments"
+                                  ng-required="ctrl.distWorkflowItem.isSecureAction"></textarea>
+                        <div ng-messages="distWorkflowItem_form.comments.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
                 </div>
-            </div>
+            </form>
         </div>
-
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="distWorkflowItem_form.$invalid"
+                   ng-click="ctrl.setDistWorkflowItemProperties()">
+            {{lang.set}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeDistWorkflowItemProperties()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

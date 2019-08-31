@@ -1,29 +1,27 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang[ctrl.label]}}">
-    <div layout="column">
         <popup-toolbar-directive
                 header-text="{{ctrl.record.getNames()}} : {{lang[ctrl.label]}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <form name="relationAppUserForm" class="p20">
-
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="relationAppUserForm">
                 <select-application-users-directive
                         allow-delete="true"
                         edit-mode="true"
                         existing-users="ctrl.record[ctrl.propertyToSetValue]"
                 ></select-application-users-directive>
-
-                <div layout="row">
-                    <md-button class="md-raised" ng-disabled="!ctrl.record[ctrl.propertyToSetValue].length"
-                               ng-click="ctrl.save()">
-                        {{lang.add}}
-                    </md-button>
-                    <span flex></span>
-                    <md-button class="md-raised" ng-click="ctrl.closePopup()">
-                        {{lang.close}}
-                    </md-button>
-                </div>
             </form>
-        </md-content>
-    </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="!ctrl.record[ctrl.propertyToSetValue].length"
+                   ng-click="ctrl.save()">
+            {{lang.add}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

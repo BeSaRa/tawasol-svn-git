@@ -1,17 +1,17 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_sms_template : ctrl.model.getNames()}}">
-    <div layout="column">
         <popup-toolbar-directive ng-if="!ctrl.editMode"
                                  header-text="{{lang.add_new_sms_template}}"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.editMode"
                                  header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="smsTemplateForm" autocomplete="off">
                 <md-tabs md-dynamic-height>
                     <md-tab label="{{lang.basic_info}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <!-- Arabic Name -->
                                     <md-input-container flex>
@@ -85,39 +85,35 @@
                         </md-content>
                     </md-tab>
                     <md-tab label="{{lang.security}}" ng-disabled="ctrl.smsTemplate.isGlobal">
-                        <md-content>
-                            <div layout="column" class="p20" flex>
-                                <select-application-users-directive
-                                        allow-delete="true"
-                                        edit-mode="ctrl.editMode"
-                                        existing-users="ctrl.smsTemplate.smstemplateSubscribers"
-                                ></select-application-users-directive>
-                            </div>
+                        <md-content class="md-padding">
+                            <select-application-users-directive
+                                    allow-delete="true"
+                                    edit-mode="ctrl.editMode"
+                                    existing-users="ctrl.smsTemplate.smstemplateSubscribers"
+                            ></select-application-users-directive>
                         </md-content>
                     </md-tab>
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-if="!ctrl.editMode"
-                           ng-disabled="smsTemplateForm.$invalid || (!ctrl.smsTemplate.isGlobal && !ctrl.smsTemplate.smstemplateSubscribers.length)"
-                           ng-click="ctrl.addSmsTemplateFromCtrl()">{{lang.add}}
-                </md-button>
-                <md-button class="md-raised" ng-if="ctrl.editMode"
-                           ng-disabled="smsTemplateForm.$invalid || (!ctrl.smsTemplate.isGlobal && !ctrl.smsTemplate.smstemplateSubscribers.length)"
-                           ng-click="ctrl.editSmsTemplateFromCtrl()">{{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised"
-                           ng-click="ctrl.resetModel(smsTemplateForm, $event)">
-                    {{lang.reset}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePopup()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-if="!ctrl.editMode"
+                   ng-disabled="smsTemplateForm.$invalid || (!ctrl.smsTemplate.isGlobal && !ctrl.smsTemplate.smstemplateSubscribers.length)"
+                   ng-click="ctrl.addSmsTemplateFromCtrl()">{{lang.add}}
+        </md-button>
+        <md-button class="md-raised" ng-if="ctrl.editMode"
+                   ng-disabled="smsTemplateForm.$invalid || (!ctrl.smsTemplate.isGlobal && !ctrl.smsTemplate.smstemplateSubscribers.length)"
+                   ng-click="ctrl.editSmsTemplateFromCtrl()">{{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised"
+                   ng-click="ctrl.resetModel(smsTemplateForm, $event)">
+            {{lang.reset}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

@@ -1,22 +1,21 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.linked_entities}}">
-    <div layout="column">
         <popup-toolbar-directive header-text="{{lang.linked_entities}} : {{ctrl.documentSubject}}"
                                  close-callback="ctrl.closeDocumentEntities"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <div class="p20">
-                <manage-entities-directive
-                        vs-id="ctrl.vsId"
-                        document-class="ctrl.documentClass"
-                        from-dialog="true"
-                        linked-entities="ctrl.linkedEntities"></manage-entities-directive>
-            </div>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-click="ctrl.closeDocumentEntities()">{{lang.close}}</md-button>
-            </div>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <manage-entities-directive
+                    vs-id="ctrl.vsId"
+                    document-class="ctrl.documentClass"
+                    from-dialog="true"
+                    linked-entities="ctrl.linkedEntities"></manage-entities-directive>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <span flex></span>
+        <div layout="row">
+            <md-button class="md-raised" ng-click="ctrl.closeDocumentEntities()">{{lang.close}}</md-button>
+        </div>
+    </md-dialog-actions>
 </md-dialog>

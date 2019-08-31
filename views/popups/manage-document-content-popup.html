@@ -1,34 +1,32 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.correspondence.contentSize ? lang.create_content : lang.edit_content}}">
-    <div layout="column">
         <popup-toolbar-directive ng-if="!ctrl.correspondence.contentSize"
                                  header-text="{{lang.create_content}} : {{ctrl.documentSubject}}"
         ></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.correspondence.contentSize"
                                  header-text="{{lang.edit_content}} : {{ctrl.documentSubject}}"
         ></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <manage-content-directive
                     from-dialog="ctrl.fromDialog"
-                    display-prepare="!ctrl.correspondence.addMethod && ctrl.documentClass != 'Incoming'"
+                    display-prepare="!ctrl.correspondence.addMethod && ctrl.documentClass.toLowerCase() != 'incoming'"
                     document-information="ctrl.documentInformation"
                     vs-id="ctrl.correspondence.vsId"
                     document="ctrl.correspondence"
                     signatures-count="ctrl.correspondence.signaturesCount"
                     templates="ctrl.templates"></manage-content-directive>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised"
-                           ng-disabled="!(ctrl.documentInformation || ctrl.correspondence.contentFile)"
-                           ng-click="ctrl.saveDocumentContent()">{{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised"
-                           ng-click="ctrl.closePopup()">{{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised"
+                   ng-disabled="!(ctrl.documentInformation || ctrl.correspondence.contentFile)"
+                   ng-click="ctrl.saveDocumentContent()">{{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised"
+                   ng-click="ctrl.closePopup()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

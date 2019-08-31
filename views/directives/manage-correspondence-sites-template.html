@@ -2,8 +2,8 @@
     <!-- CORRESPONDENCE SITES TAB -->
     <md-tab label="{{lang.correspondence_sites}}" ng-if="ctrl.showTab('correspondenceSites')"
             md-on-select="ctrl.setCurrentTab('correspondenceSites')">
-        <md-content class="white-bg">
-            <div scroll-directive class="p20" layout="column">
+        <md-content class="md-padding white-bg">
+            <div scroll-directive layout="column">
                 <!-- Simple Search Box -->
                 <div layout="row" flex
                      ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
@@ -642,8 +642,8 @@
     <!-- DISTRIBUTION LIST TAB -->
     <md-tab label="{{lang.distribution_lists}}" ng-if="ctrl.showTab('distributionLists')"
             md-on-select="ctrl.setCurrentTab('distributionLists')">
-        <md-content class="white-bg">
-            <div scroll-directive class="p20" layout="column">
+        <md-content class="md-padding white-bg">
+            <div scroll-directive layout="column">
                 <!-- Search Box -->
                 <div layout="row" flex ng-if="!ctrl.disableCorrespondence">
                     <!-- Distribution Lists -->

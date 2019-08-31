@@ -1,14 +1,14 @@
 <md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.tasks}}">
-    <div layout="column">
         <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_task}}"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.editMode"
                                  header-text="{{lang.edit_task}} : {{ctrl.model.taskTitle}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form autocomplete="off" name="task_form">
                 <md-tabs md-dynamic-height>
                     <md-tab label="{{lang.basic_info}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label>{{lang.task_title}}</label>
@@ -224,8 +224,8 @@
                     </md-tab>
                     <md-tab label="{{lang.task_linked}}"
                             ng-disabled="!ctrl.task.startDate || !ctrl.task.dueDate || !ctrl.task.taskTitle.length || ctrl.task.withoutParticipant">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-autocomplete
                                             flex
@@ -244,7 +244,7 @@
                                     </md-autocomplete>
                                 </div>
                                 <div layout="row">
-                                    <md-card flex>
+                                    <md-card class="m0">
                                         <md-table-container>
                                             <table md-table>
                                                 <thead md-head>
@@ -321,22 +321,20 @@
                         </md-content>
                     </md-tab>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised"
-                           ng-disabled="task_form.$invalid || !ctrl.canSaveTask()"
-                           ng-if="!ctrl.editMode"
-                           ng-click="ctrl.addTaskFromCtrl()">{{lang.add}}
-                </md-button>
-                <md-button class="md-raised" ng-if="ctrl.editMode"
-                           ng-disabled="task_form.$invalid || !ctrl.canSaveTask()"
-                           ng-click="ctrl.editTaskFromCtrl()">{{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeTaskPopupFromCtrl()">{{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised"
+                   ng-disabled="task_form.$invalid || !ctrl.canSaveTask()"
+                   ng-if="!ctrl.editMode"
+                   ng-click="ctrl.addTaskFromCtrl()">{{lang.add}}
+        </md-button>
+        <md-button class="md-raised" ng-if="ctrl.editMode"
+                   ng-disabled="task_form.$invalid || !ctrl.canSaveTask()"
+                   ng-click="ctrl.editTaskFromCtrl()">{{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeTaskPopupFromCtrl()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

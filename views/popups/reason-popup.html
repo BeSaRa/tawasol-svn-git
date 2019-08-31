@@ -1,12 +1,12 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{ctrl.title ? lang.get(ctrl.title) : lang.terminate_reason}}">
-    <div layout="column">
-        <popup-toolbar-directive
-                header-text="{{ctrl.title ? lang.get(ctrl.title) : lang.terminate_reason}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <popup-toolbar-directive
+            header-text="{{ctrl.title ? lang.get(ctrl.title) : lang.terminate_reason}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="reason_form" autocomplete="off">
-                <div layout="column" class="p20">
+                <div layout="column">
                     <div layout="row">
                         <md-input-container flex>
                             <label for="comment">{{lang.comment}}</label>
@@ -45,19 +45,17 @@
                     </div>
                 </div>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised"
-                           ng-disabled="reason_form.$invalid"
-                           ng-click="ctrl.sendReason()">
-                    {{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeReasonPopup()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised"
+                   ng-disabled="reason_form.$invalid"
+                   ng-click="ctrl.sendReason()">
+            {{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeReasonPopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

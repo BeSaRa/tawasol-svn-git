@@ -1,14 +1,14 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.document_search}}">
-    <div layout="column">
         <popup-toolbar-directive header-text="{{lang.document_search}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <md-tabs md-selected="ctrl.selectedIndex" md-dynamic-height>
                 <!-- Basic Info Tab -->
                 <md-tab label="{{lang.search}}">
-                    <md-content>
-                        <div layout="column" class="p20">
+                    <md-content class="md-padding">
+                        <div layout="column">
                             <div layout="row">
                                 <md-input-container flex>
                                     <label for="docSubject">{{lang.linked_document_subject}}</label>
@@ -120,8 +120,8 @@
                 </md-tab>
                 <md-tab ng-disabled="!ctrl.correspondences.length"
                         label="{{ctrl.correspondences.length ? lang.linked_document_search_result + ' - ' + ctrl.correspondences.length : lang.linked_document_search_result }}">
-                    <md-content>
-                        <div layout="column" class="p20">
+                    <md-content class="md-padding">
+                        <div layout="column">
                             <div layout="row" class="p020">
                                 <span flex></span>
                                 <md-switch aria-label="{{lang.truncate_subject}}"
@@ -211,7 +211,7 @@
                                                         ></md-icon>
                                                     </span>
                                                     <span flex
-                                                                          ng-class="{'indicator-content': correspondence.linkedDocsIndicator}">
+                                                          ng-class="{'indicator-content': correspondence.linkedDocsIndicator}">
                                                         <md-icon ng-if="correspondence.linkedDocsIndicator"
                                                                  class="{{correspondence.linkedDocsIndicator.class}}"
                                                                  md-svg-icon="{{correspondence.linkedDocsIndicator.icon}}"
@@ -275,24 +275,21 @@
                     </md-content>
                 </md-tab>
             </md-tabs>
-
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button ng-if="ctrl.selectedIndex === 0 && !ctrl.selectedCorrespondences.length" ng-click="ctrl.searchLinkedDocuments()"
-                           class="md-raised"
-                           ng-disabled="reason_form.$invalid && ctrl.itemNeedReason()">
-                    {{lang.linked_document_search_button}}
-                </md-button>
-                <md-button ng-if="ctrl.selectedCorrespondences.length" ng-click="ctrl.sendLinkedDocuments()"
-                           class="md-raised md-primary">
-                    {{ctrl.isAdminSearch ? lang.action_submit : lang.linked_document_link_button}}
-                </md-button>
-                <span flex></span>
-                <md-button ng-click="ctrl.closeLinkedDocuments()" class="md-raised">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button ng-if="ctrl.selectedIndex === 0 && !ctrl.selectedCorrespondences.length" ng-click="ctrl.searchLinkedDocuments()"
+                   class="md-raised"
+                   ng-disabled="reason_form.$invalid && ctrl.itemNeedReason()">
+            {{lang.linked_document_search_button}}
+        </md-button>
+        <md-button ng-if="ctrl.selectedCorrespondences.length" ng-click="ctrl.sendLinkedDocuments()"
+                   class="md-raised md-primary">
+            {{ctrl.isAdminSearch ? lang.action_submit : lang.linked_document_link_button}}
+        </md-button>
+        <span flex></span>
+        <md-button ng-click="ctrl.closeLinkedDocuments()" class="md-raised">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

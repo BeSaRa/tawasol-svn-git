@@ -1,29 +1,25 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend mw60"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.grid_action_send_document_by_fax}}">
-    <div layout="column">
         <popup-toolbar-directive
                 header-text="{{lang.fax}} - {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <manage-correspondence-sites-fax-directive
                     vs-id="ctrl.correspondence.vsId"
                     document-class="ctrl.correspondence.docClassName"
                     sites-info-to="ctrl.correspondence.sitesInfoTo"
                     fax-export-options="ctrl.faxExportOptions">
             </manage-correspondence-sites-fax-directive>
-        </md-content>
-        <div>
-            <div layout="row">
-                <div>
-                    <md-button class="md-raised" ng-disabled="!ctrl.correspondence.sitesInfoTo.length"
-                               ng-click="ctrl.sendFax()">
-                        {{lang.send}}
-                    </md-button>
-                </div>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePopup()">{{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="!ctrl.correspondence.sitesInfoTo.length"
+                   ng-click="ctrl.sendFax()">
+            {{lang.send}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopup()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

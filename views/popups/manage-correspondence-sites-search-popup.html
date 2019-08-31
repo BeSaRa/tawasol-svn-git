@@ -1,11 +1,11 @@
 <md-dialog class="dialog-extend"
-           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}">
-    <div layout="column">
-        <popup-toolbar-directive header-text="{{lang.select_correspondence_site}}"
-                                 close-callback="ctrl.closePopup"></popup-toolbar-directive>
-        <md-content scroll-directive>
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.select_correspondence_site}}">
+        <popup-toolbar-directive header-text="{{lang.select_correspondence_site}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="correspondenceSitesForm" autocomplete="off">
-                <div layout="column" class="p20">
+                <div layout="column">
                     <manage-correspondence-sites-search-directive
                             selected-site-type="ctrl.selectedSiteType"
                             document-class="ctrl.document.docClassName"
@@ -14,17 +14,17 @@
                             sites-info-incoming="ctrl.document.sitesInfoIncoming">
                     </manage-correspondence-sites-search-directive>
                 </div>
-                <div layout="row">
-                    <md-button class="md-raised" ng-disabled="correspondenceSitesForm.$invalid || ctrl.checkDisabled()"
-                               ng-click="ctrl.returnCorrespondenceSites($event)">
-                        {{lang.set}}
-                    </md-button>
-                    <span flex></span>
-                    <md-button class="md-raised" ng-click="ctrl.closePopup($event)">
-                        {{lang.close}}
-                    </md-button>
-                </div>
             </form>
-        </md-content>
-    </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="correspondenceSitesForm.$invalid || ctrl.checkDisabled()"
+                   ng-click="ctrl.returnCorrespondenceSites($event)">
+            {{lang.set}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopup($event)">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

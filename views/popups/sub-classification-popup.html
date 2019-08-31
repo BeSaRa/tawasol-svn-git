@@ -1,114 +1,114 @@
-<md-dialog>
-    <div layout="column">
-        <popup-toolbar-directive header-text="{{lang.sub_classifications_to}}  {{ctrl.mainClassification.getNames()}}"
-                                 close-callback="ctrl.closeSubClassificationView"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <div class="p20">
-                <div layout="row" layout-align="start center" class="page-header small">
-                    <md-button ng-click="ctrl.openAddSubClassificationDialog($event)" class="md-icon-button"
-                               tooltip="{{lang.add}}">
-                        <md-icon md-svg-icon="plus"></md-icon>
-                    </md-button>
-                    <md-button ng-click="ctrl.reloadSubClassifications()" class="md-icon-button"
-                               tooltip="{{lang.reload}}">
-                        <md-icon md-svg-icon="refresh"></md-icon>
-                    </md-button>
-                    <span flex></span>
-                    <search-filter-directive change-icon-model="ctrl.searchMode"
-                                             cancel-callback="ctrl.reloadSubClassifications()"
-                                             on-change="ctrl.searchInSubClassifications"
-                                             model="ctrl.searchModel"></search-filter-directive>
-                </div>
-                <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                    <md-table-container scroll-directive>
-                        <table md-table md-row-select multiple ng-model="ctrl.selectedSubClassifications"
-                               md-progress="ctrl.grid.progress">
-                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
-                            <tr md-row>
-                                <th colspan="2" class="table-selector-header"
-                                    ng-if="ctrl.selectedSubClassifications.length" md-column>
-                                    <div layout="row" layout-align="start center">
-                                        <span>{{ctrl.selectedSubClassifications.length}} {{lang.items_selected}} </span>
-                                        <span flex></span>
-                                    </div>
-                                </th>
-                                <th ng-if="!ctrl.selectedSubClassifications.length" md-column md-order-by="arName">
-                                    <span>{{lang.arabic_name}}</span>
-                                </th>
-                                <th ng-class="{'hide-table-header':ctrl.selectedSubClassifications.length}" md-column
-                                    md-order-by="enName">
-                                    <span>{{lang.english_name}}</span>
-                                </th>
-                                <th ng-class="{'hide-table-header':ctrl.selectedSubClassifications.length}" md-column
-                                    md-order-by="status">
-                                    <span>{{lang.status}}</span>
-                                </th>
-                                <th ng-class="{'hide-table-header':ctrl.selectedSubClassifications.length}" md-column
-                                    md-order-by="isGlobal">
-                                    <span>{{lang.global}}</span>
-                                </th>
-                                <th ng-if="!ctrl.selectedSubClassifications.length" md-column>
-                                    <span>{{lang.security_levels}}</span>
-                                </th>
-                                <th ng-if="!ctrl.selectedSubClassifications.length" md-column>
-                                    <span ng-if="!ctrl.selectedSubClassifications.length">{{lang.actions}}</span>
-
-                                </th>
-                                <th colspan="3" ng-if="ctrl.selectedSubClassifications.length" md-column>
-                                    <div layout="row">
-                                        <table-status-directive
-                                                when-close="ctrl.changeBulkStatusSubClassifications"></table-status-directive>
-                                        <md-button class="md-icon-button"
-                                                   ng-click="ctrl.removeBulkSubClassifications($event)">
-                                            <md-icon md-svg-icon="delete"></md-icon>
-                                        </md-button>
-                                    </div>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody md-body>
-                            <tr md-row md-select="subClassification"
-                                ng-repeat="subClassification in ctrl.subClassifications  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
-                                <td md-cell>{{subClassification.arName}}</td>
-                                <td md-cell>{{subClassification.enName}}</td>
-                                <td md-cell>
-                                    <md-switch aria-label="{{lang.status}}"
-                                               title="{{subClassification.getTranslatedStatus()}}"
-                                               ng-change="ctrl.changeStatusSubClassification(subClassification)"
-                                               ng-model="subClassification.status"></md-switch>
-                                </td>
-                                <td md-cell>
-                                    <md-switch aria-label="{{lang.global}}"
-                                               ng-disabled="subClassification.parent"
-                                               title="{{subClassification.getTranslatedGlobal()}}"
-                                               ng-change="ctrl.changeGlobalSubClassification(subClassification)"
-                                               ng-model="subClassification.isGlobal"></md-switch>
-                                </td>
-                                <td md-cell>{{subClassification.getSecurityLevels()}}</td>
-                                <td md-cell>
-                                    <div flex layout="row" layout-align="start center">
-                                        <md-button class="md-icon-button" title="{{lang.delete}}"
-                                                   ng-click="ctrl.removeSubClassification(subClassification, $event)">
-                                            <md-icon md-svg-icon="delete"></md-icon>
-                                        </md-button>
-                                        <md-button class="md-icon-button" title="{{lang.edit}}"
-                                                   ng-click="ctrl.openEditSubClassificationDialog(subClassification, $event)">
-                                            <md-icon md-svg-icon="pencil"></md-icon>
-                                        </md-button>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <md-table-pagination
-                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                md-limit-options="ctrl.grid.limitOptions"
-                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                md-total="{{ctrl.subClassifications.length}}" md-page-select>
-                        </md-table-pagination>
-                    </md-table-container>
-                </md-card>
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.sub_classifications_to}}  {{ctrl.mainClassification.getNames()}}">
+    <popup-toolbar-directive header-text="{{lang.sub_classifications_to}}  {{ctrl.mainClassification.getNames()}}"
+                             close-callback="ctrl.closeSubClassificationView"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="row" class="p20-0">
+                <md-button ng-click="ctrl.openAddSubClassificationDialog($event)" class="md-icon-button"
+                           tooltip="{{lang.add}}">
+                    <md-icon md-svg-icon="plus"></md-icon>
+                </md-button>
+                <md-button ng-click="ctrl.reloadSubClassifications()" class="md-icon-button"
+                           tooltip="{{lang.reload}}">
+                    <md-icon md-svg-icon="refresh"></md-icon>
+                </md-button>
+                <span flex></span>
+                <search-filter-directive change-icon-model="ctrl.searchMode"
+                                         cancel-callback="ctrl.reloadSubClassifications()"
+                                         on-change="ctrl.searchInSubClassifications"
+                                         model="ctrl.searchModel"></search-filter-directive>
             </div>
-        </md-content>
-    </div>
+            <md-card md-whiteframe="3" class="card-overlay">
+                <md-table-container scroll-directive>
+                    <table md-table md-row-select multiple ng-model="ctrl.selectedSubClassifications"
+                           md-progress="ctrl.grid.progress">
+                        <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                        <tr md-row>
+                            <th colspan="2" class="table-selector-header"
+                                ng-if="ctrl.selectedSubClassifications.length" md-column>
+                                <div layout="row" layout-align="start center">
+                                    <span>{{ctrl.selectedSubClassifications.length}} {{lang.items_selected}} </span>
+                                    <span flex></span>
+                                </div>
+                            </th>
+                            <th ng-if="!ctrl.selectedSubClassifications.length" md-column md-order-by="arName">
+                                <span>{{lang.arabic_name}}</span>
+                            </th>
+                            <th ng-class="{'hide-table-header':ctrl.selectedSubClassifications.length}" md-column
+                                md-order-by="enName">
+                                <span>{{lang.english_name}}</span>
+                            </th>
+                            <th ng-class="{'hide-table-header':ctrl.selectedSubClassifications.length}" md-column
+                                md-order-by="status">
+                                <span>{{lang.status}}</span>
+                            </th>
+                            <th ng-class="{'hide-table-header':ctrl.selectedSubClassifications.length}" md-column
+                                md-order-by="isGlobal">
+                                <span>{{lang.global}}</span>
+                            </th>
+                            <th ng-if="!ctrl.selectedSubClassifications.length" md-column>
+                                <span>{{lang.security_levels}}</span>
+                            </th>
+                            <th ng-if="!ctrl.selectedSubClassifications.length" md-column>
+                                <span ng-if="!ctrl.selectedSubClassifications.length">{{lang.actions}}</span>
+
+                            </th>
+                            <th colspan="3" ng-if="ctrl.selectedSubClassifications.length" md-column>
+                                <div layout="row">
+                                    <table-status-directive
+                                            when-close="ctrl.changeBulkStatusSubClassifications"></table-status-directive>
+                                    <md-button class="md-icon-button"
+                                               ng-click="ctrl.removeBulkSubClassifications($event)">
+                                        <md-icon md-svg-icon="delete"></md-icon>
+                                    </md-button>
+                                </div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row md-select="subClassification"
+                            ng-repeat="subClassification in ctrl.subClassifications  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                            <td md-cell>{{subClassification.arName}}</td>
+                            <td md-cell>{{subClassification.enName}}</td>
+                            <td md-cell>
+                                <md-switch aria-label="{{lang.status}}"
+                                           title="{{subClassification.getTranslatedStatus()}}"
+                                           ng-change="ctrl.changeStatusSubClassification(subClassification)"
+                                           ng-model="subClassification.status"></md-switch>
+                            </td>
+                            <td md-cell>
+                                <md-switch aria-label="{{lang.global}}"
+                                           ng-disabled="subClassification.parent"
+                                           title="{{subClassification.getTranslatedGlobal()}}"
+                                           ng-change="ctrl.changeGlobalSubClassification(subClassification)"
+                                           ng-model="subClassification.isGlobal"></md-switch>
+                            </td>
+                            <td md-cell>{{subClassification.getSecurityLevels()}}</td>
+                            <td md-cell>
+                                <div flex layout="row" layout-align="start center">
+                                    <md-button class="md-icon-button" title="{{lang.delete}}"
+                                               ng-click="ctrl.removeSubClassification(subClassification, $event)">
+                                        <md-icon md-svg-icon="delete"></md-icon>
+                                    </md-button>
+                                    <md-button class="md-icon-button" title="{{lang.edit}}"
+                                               ng-click="ctrl.openEditSubClassificationDialog(subClassification, $event)">
+                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                    </md-button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <md-table-pagination
+                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                            md-limit-options="ctrl.grid.limitOptions"
+                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                            md-total="{{ctrl.subClassifications.length}}" md-page-select>
+                    </md-table-pagination>
+                </md-table-container>
+            </md-card>
+        </div>
+    </md-dialog-content>
 </md-dialog>

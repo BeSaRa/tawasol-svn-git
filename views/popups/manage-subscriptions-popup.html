@@ -1,11 +1,11 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.user_subscriptions}}">
-    <div layout="column">
         <popup-toolbar-directive header-text="{{lang.user_subscriptions}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="manageSubscriptionsForm" autocomplete="off">
-                <div layout="column" class="p20">
+                <div layout="column">
                     <div layout="row">
                         <md-input-container flex>
                             <label for="subscriptionEvent">{{lang.user_subscription_event_type}}</label>
@@ -29,7 +29,7 @@
                         <span flex></span>
                         <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
                     </div>
-                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                    <md-card md-whiteframe="3" class="card-overlay">
                         <md-table-container>
                             <div flex scroll-directive>
                                 <table md-table md-row-select="true"
@@ -99,13 +99,13 @@
                         </md-table-container>
                     </md-card>
                 </div>
-                <div layout="row">
-                    <span flex></span>
-                    <md-button class="md-raised" ng-click="ctrl.closeSubscriptionsPopPopup()">
-                        {{lang.close}}
-                    </md-button>
-                </div>
             </form>
-        </md-content>
-    </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeSubscriptionsPopPopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

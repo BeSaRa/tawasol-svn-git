@@ -2,19 +2,19 @@
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="menu-item-dialog"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_dynamic_menu_item : ctrl.model.getNames()}}">
-    <div layout="column">
         <popup-toolbar-directive full-screen="ctrl.fullScreen" full-screen-button="true"
                                  header-text="{{lang.add_new_dynamic_menu_item}}" ng-if="!ctrl.model.id"
         ></popup-toolbar-directive>
         <popup-toolbar-directive full-screen="ctrl.fullScreen" full-screen-button="true"
                                  header-text="{{ctrl.model.getNames()}}" ng-if="ctrl.model.id"
         ></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="dynamicMenuItemForm" autocomplete="off">
                 <md-tabs md-dynamic-height>
                     <md-tab label="{{lang.basic_info}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
@@ -82,8 +82,8 @@
                         </md-content>
                     </md-tab>
                     <md-tab label="{{lang.url_settings}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="url">{{lang.menu_item_url}}</label>
@@ -100,8 +100,8 @@
                         </md-content>
                     </md-tab>
                     <md-tab ng-if="!ctrl.dynamicMenuItem.parent && ctrl.editMode" label="{{lang.sub_menu_items}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout-align="center center" layout="row">
                                     <md-button ng-click="ctrl.addSubDynamicMenuItem($event)" class="md-raised">
                                         {{lang.add_new_sub_menu_item}}
@@ -211,27 +211,25 @@
                     </md-tab>
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-disabled="dynamicMenuItemForm.$invalid" ng-if="!ctrl.editMode"
-                           ng-click="ctrl.addDynamicMenuItemFromCtrl()">
-                    {{lang.add}}
-                </md-button>
-                <md-button class="md-raised" ng-disabled="dynamicMenuItemForm.$invalid" ng-if="ctrl.editMode"
-                           ng-click="ctrl.editDynamicMenuItemFromCtrl()">
-                    {{lang.save}}
-                </md-button>
-                <span flex=""></span>
-                <md-button class="md-raised"
-                           ng-click="ctrl.resetModel()">
-                    {{lang.reset}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeDynamicMenuItemPopupFromCtrl()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="dynamicMenuItemForm.$invalid" ng-if="!ctrl.editMode"
+                   ng-click="ctrl.addDynamicMenuItemFromCtrl()">
+            {{lang.add}}
+        </md-button>
+        <md-button class="md-raised" ng-disabled="dynamicMenuItemForm.$invalid" ng-if="ctrl.editMode"
+                   ng-click="ctrl.editDynamicMenuItemFromCtrl()">
+            {{lang.save}}
+        </md-button>
+        <span flex=""></span>
+        <md-button class="md-raised"
+                   ng-click="ctrl.resetModel()">
+            {{lang.reset}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeDynamicMenuItemPopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

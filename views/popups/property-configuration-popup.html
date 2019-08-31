@@ -1,15 +1,14 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_property_configuration : ctrl.model.getNames()}}">
-    <div layout="column">
         <popup-toolbar-directive ng-if="!ctrl.editMode"
                                  header-text="{{lang.add_new_property_configuration}}"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.editMode"
                                  header-text="{{lang.edit_property_configuration}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="property_configuration_form" autocomplete="off">
-                <div layout="column" class="p20">
-
+                <div layout="column">
                     <div layout="row">
                         <!-- Data Type -->
                         <md-input-container flex>
@@ -128,27 +127,24 @@
                             {{lang.status}}
                         </md-switch>
                     </div>
-
                 </div>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised"
-                           ng-disabled="property_configuration_form.$invalid"
-                           ng-if="!ctrl.editMode"
-                           ng-click="ctrl.addPropertyConfigurationFromCtrl()">{{lang.add}}
-                </md-button>
-                <md-button class="md-raised"
-                           ng-disabled="property_configuration_form.$invalid"
-                           ng-if="ctrl.editMode"
-                           ng-click="ctrl.editPropertyConfigurationFromCtrl()">{{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePropertyConfigurationPopupFromCtrl()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised"
+                   ng-disabled="property_configuration_form.$invalid"
+                   ng-if="!ctrl.editMode"
+                   ng-click="ctrl.addPropertyConfigurationFromCtrl()">{{lang.add}}
+        </md-button>
+        <md-button class="md-raised"
+                   ng-disabled="property_configuration_form.$invalid"
+                   ng-if="ctrl.editMode"
+                   ng-click="ctrl.editPropertyConfigurationFromCtrl()">{{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePropertyConfigurationPopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

@@ -1,14 +1,14 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_organization_type : ctrl.model.getNames()}}">
-    <div layout="column">
         <popup-toolbar-directive ng-if="!ctrl.model.id"
                                  header-text="{{lang.add_new_organization_type}}"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.model.id"
                                  header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="organizationTypeForm" autocomplete="off">
-                <div layout="column" class="p20">
+                <div layout="column">
                     <div layout="row">
                         <md-input-container flex>
                             <label for="arName">{{lang.arabic_name}}</label>
@@ -72,27 +72,25 @@
                     </div>
                 </div>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-disabled="organizationTypeForm.$invalid" ng-if="!ctrl.editMode"
-                           ng-click="ctrl.addOrganizationTypeFromCtrl()">
-                    {{lang.add}}
-                </md-button>
-                <md-button class="md-raised" ng-disabled="organizationTypeForm.$invalid" ng-if="ctrl.editMode"
-                           ng-click="ctrl.editOrganizationTypeFromCtrl()">
-                    {{lang.save}}
-                </md-button>
-                <span flex=""></span>
-                <md-button class="md-raised"
-                           ng-click="ctrl.resetModel()">
-                    {{lang.reset}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeOrganizationTypePopupFromCtrl()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="organizationTypeForm.$invalid" ng-if="!ctrl.editMode"
+                   ng-click="ctrl.addOrganizationTypeFromCtrl()">
+            {{lang.add}}
+        </md-button>
+        <md-button class="md-raised" ng-disabled="organizationTypeForm.$invalid" ng-if="ctrl.editMode"
+                   ng-click="ctrl.editOrganizationTypeFromCtrl()">
+            {{lang.save}}
+        </md-button>
+        <span flex=""></span>
+        <md-button class="md-raised"
+                   ng-click="ctrl.resetModel()">
+            {{lang.reset}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeOrganizationTypePopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

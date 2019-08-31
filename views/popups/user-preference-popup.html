@@ -1,17 +1,17 @@
 <md-dialog class="dialog-extend mw60"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.user_preferences}}">
-    <div layout="column">
         <popup-toolbar-directive
                 header-text="{{lang.user_preferences}} : {{ctrl.model.getNames()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="userPreferencesForm" autocomplete="off">
                 <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
                     <!-- General Tab -->
                     <md-tab label="{{lang.general}}" ng-if="ctrl.showTab('general')"
                             md-on-select="ctrl.setCurrentTab('general')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <!-- Arabic Full Name -->
                                     <md-input-container flex>
@@ -356,8 +356,8 @@
                     <!-- Notification Settings Tab -->
                     <md-tab label="{{lang.notification_settings}}" ng-if="ctrl.showTab('ns')"
                             md-on-select="ctrl.setCurrentTab('ns')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <!-- SMS Notifications -->
                                 <fieldset>
                                     <legend class="md-accent">
@@ -633,9 +633,9 @@
                     <!-- Out Of Office Settings Tab -->
                     <md-tab label="{{lang.out_of_office_settings}}" ng-if="ctrl.showTab('ooos')"
                             md-on-select="ctrl.setCurrentTab('ooos')">
-                        <md-content>
+                        <md-content class="md-padding">
                             <ng-form name="outOfOfficeSettingsForm" autocomplete="off">
-                                <div layout="column" class="p20">
+                                <div layout="column">
                                     <!-- Out of Office -->
                                     <fieldset>
                                         <legend class="md-accent">
@@ -798,9 +798,9 @@
                     <!-- User Comments Tab -->
                     <md-tab label="{{lang.user_comments}}" ng-if="ctrl.showTab('uc')"
                             md-on-select="ctrl.setCurrentTab('uc')">
-                        <md-content>
+                        <md-content class="md-padding">
                             <ng-form name="userCommentsForm" autocomplete="off">
-                                <div layout="column" class="p20" ng-if="ctrl.isUserCommentForm">
+                                <div layout="column" ng-if="ctrl.isUserCommentForm">
                                     <div layout="row">
                                         <!-- Organization Unit -->
                                         <md-input-container flex>
@@ -877,8 +877,8 @@
                                 </div>
                             </ng-form>
 
-                            <div layout="column" class="content" ng-if="!ctrl.isUserCommentForm">
-                                <div layout="row" layout-align="start center" class="p25 small">
+                            <div layout="column" ng-if="!ctrl.isUserCommentForm">
+                                <div layout="row" class="p20-0">
                                     <!--<span>{{lang.user_comment}}</span>-->
                                     <md-button ng-click="ctrl.openUserCommentForm(userCommentsForm, $event)"
                                                class="md-icon-button"
@@ -894,100 +894,98 @@
                                 </div>
                                 <div layout="column" flex>
                                     <div scroll-directive>
-                                        <div class="page-padding">
-                                            <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                                                <md-table-container>
-                                                    <div flex scroll-directive>
-                                                        <table md-table md-row-select="true"
-                                                               multiple="true"
-                                                               ng-model="ctrl.selectedUserComments"
-                                                               md-progress="ctrl.progress">
-                                                            <thead md-head md-order="ctrl.grid.order"
-                                                                   md-on-reorder="ctrl.getSortedDataUserComments">
-                                                            <tr md-row>
-                                                                <th colspan="4" class="table-selector-header"
-                                                                    ng-if="ctrl.selectedUserComments.length" md-column>
-                                                                    <div layout="row" layout-align="start center">
-                                                                        <span>{{ctrl.selectedUserComments.length}} {{lang.items_selected}} </span>
-                                                                        <span flex></span>
-                                                                        <table-status-directive
-                                                                                when-close="ctrl.changeStatusBulkUserComments"></table-status-directive>
-                                                                        <md-button class="md-icon-button"
-                                                                                   ng-click="ctrl.removeBulkUserComments($event)">
-                                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                                        </md-button>
-                                                                    </div>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                    md-order-by="shortComment"><span>{{lang.short_comment}}</span>
-                                                                </th>
-                                                                <!--<th ng-if="!ctrl.selectedUserComments.length" md-column-->
-                                                                <!--md-order-by=""><span>{{lang.comment}}</span>-->
-                                                                <!--</th>-->
-                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                    md-order-by="status"><span>{{lang.status}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                    md-order-by="itemOrder"><span>{{lang.item_order}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                    md-order-by=""><span>{{lang.actions}}</span>
-                                                                </th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody md-body>
-                                                            <tr md-select="userComment" md-row
-                                                                ng-repeat="userComment in ctrl.userComments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
-                                                                <td md-cell><a href=""
-                                                                               ng-click="ctrl.showComment(userComment, $event)">{{userComment.shortComment}}</a>
-                                                                </td>
-                                                                <!--<td md-cell>{{userComment.comment}}</td>-->
-                                                                <td md-cell>
-                                                                    <md-switch aria-label="{{lang.status}}"
-                                                                               ng-model="userComment.status"
-                                                                               ng-change="ctrl.changeStatusUserComment(userComment)"
-                                                                               title="{{userComment.getTranslatedStatus()}}"></md-switch>
-                                                                </td>
-                                                                <td md-cell>{{userComment.itemOrder}}</td>
-                                                                <td md-cell>
-                                                                    <div flex layout="row" layout-align="start center">
-                                                                        <md-button class="md-icon-button"
-                                                                                   ng-click="ctrl.editUserComment(userComment, userCommentsForm, $event)"
-                                                                                   title="{{lang.edit}}">
-                                                                            <md-icon md-svg-icon="pencil"></md-icon>
-                                                                        </md-button>
-                                                                        <md-button class="md-icon-button"
-                                                                                   ng-click="ctrl.removeUserComment(userComment, $event)"
-                                                                                   title="{{lang.delete}}">
-                                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                                        </md-button>
+                                        <md-card md-whiteframe="3" class="card-overlay">
+                                            <md-table-container>
+                                                <div flex scroll-directive>
+                                                    <table md-table md-row-select="true"
+                                                           multiple="true"
+                                                           ng-model="ctrl.selectedUserComments"
+                                                           md-progress="ctrl.progress">
+                                                        <thead md-head md-order="ctrl.grid.order"
+                                                               md-on-reorder="ctrl.getSortedDataUserComments">
+                                                        <tr md-row>
+                                                            <th colspan="4" class="table-selector-header"
+                                                                ng-if="ctrl.selectedUserComments.length" md-column>
+                                                                <div layout="row" layout-align="start center">
+                                                                    <span>{{ctrl.selectedUserComments.length}} {{lang.items_selected}} </span>
+                                                                    <span flex></span>
+                                                                    <table-status-directive
+                                                                            when-close="ctrl.changeStatusBulkUserComments"></table-status-directive>
+                                                                    <md-button class="md-icon-button"
+                                                                               ng-click="ctrl.removeBulkUserComments($event)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                                md-order-by="shortComment"><span>{{lang.short_comment}}</span>
+                                                            </th>
+                                                            <!--<th ng-if="!ctrl.selectedUserComments.length" md-column-->
+                                                            <!--md-order-by=""><span>{{lang.comment}}</span>-->
+                                                            <!--</th>-->
+                                                            <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                                md-order-by="status"><span>{{lang.status}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                                md-order-by="itemOrder"><span>{{lang.item_order}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                                md-order-by=""><span>{{lang.actions}}</span>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody md-body>
+                                                        <tr md-select="userComment" md-row
+                                                            ng-repeat="userComment in ctrl.userComments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                                            <td md-cell><a href=""
+                                                                           ng-click="ctrl.showComment(userComment, $event)">{{userComment.shortComment}}</a>
+                                                            </td>
+                                                            <!--<td md-cell>{{userComment.comment}}</td>-->
+                                                            <td md-cell>
+                                                                <md-switch aria-label="{{lang.status}}"
+                                                                           ng-model="userComment.status"
+                                                                           ng-change="ctrl.changeStatusUserComment(userComment)"
+                                                                           title="{{userComment.getTranslatedStatus()}}"></md-switch>
+                                                            </td>
+                                                            <td md-cell>{{userComment.itemOrder}}</td>
+                                                            <td md-cell>
+                                                                <div flex layout="row" layout-align="start center">
+                                                                    <md-button class="md-icon-button"
+                                                                               ng-click="ctrl.editUserComment(userComment, userCommentsForm, $event)"
+                                                                               title="{{lang.edit}}">
+                                                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                                                    </md-button>
+                                                                    <md-button class="md-icon-button"
+                                                                               ng-click="ctrl.removeUserComment(userComment, $event)"
+                                                                               title="{{lang.delete}}">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
 
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <md-table-pagination
-                                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                            md-limit-options="ctrl.grid.limitOptions"
-                                                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                                            md-total="{{ctrl.userComments.length}}"
-                                                            md-page-select></md-table-pagination>
-                                                </md-table-container>
-                                            </md-card>
-                                        </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <md-table-pagination
+                                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                        md-limit-options="ctrl.grid.limitOptions"
+                                                        md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                                        md-total="{{ctrl.userComments.length}}"
+                                                        md-page-select></md-table-pagination>
+                                            </md-table-container>
+                                        </md-card>
                                     </div>
-                                </div><!-- page-content-->
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>
                     <!-- Workflow Groups Tab -->
                     <md-tab label="{{lang.workflow_groups}}" ng-if="ctrl.showTab('wfg')"
                             md-on-select="ctrl.setCurrentTab('wfg')">
-                        <md-content>
-                            <div layout="column" class="content">
-                                <div layout="row" layout-align="start center" class="p25 small">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div layout="row" class="p20-0">
                                     <md-button ng-click="ctrl.openAddWorkflowGroupDialog($event)" class="md-icon-button"
                                                tooltip="{{lang.add}}">
                                         <md-icon md-svg-icon="plus"></md-icon>
@@ -1001,94 +999,92 @@
                                 </div>
                                 <div layout="column" flex ng-if="ctrl.userWorkflowGroups.length">
                                     <div scroll-directive>
-                                        <div class="page-padding">
-                                            <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                                                <md-table-container>
-                                                    <div flex scroll-directive>
-                                                        <table md-table md-row-select="true"
-                                                               multiple="true"
-                                                               ng-model="ctrl.selectedUserWorkflowGroups"
-                                                               md-progress="ctrl.userWorkflowProgress">
-                                                            <thead md-head md-order="ctrl.userWorkflowGrid.order"
-                                                                   md-on-reorder="ctrl.getSortedDataUserWorkflow">
-                                                            <tr md-row>
-                                                                <th colspan="4" class="table-selector-header"
-                                                                    ng-if="ctrl.selectedUserWorkflowGroups.length"
-                                                                    md-column>
-                                                                    <div layout="row" layout-align="start center">
-                                                                        <span>{{ctrl.selectedUserWorkflowGroups.length}} {{lang.items_selected}} </span>
-                                                                        <span flex></span>
-                                                                        <table-status-directive
-                                                                                when-close="ctrl.changeStatusBulkUserWorkflowGroups"></table-status-directive>
-                                                                        <md-button class="md-icon-button"
-                                                                                   ng-click="ctrl.removeBulkUserWorkflowGroups($event)">
-                                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                                        </md-button>
-                                                                    </div>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
-                                                                    md-column
-                                                                    md-order-by=""><span>{{lang.arabic_name}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
-                                                                    md-column
-                                                                    md-order-by=""><span>{{lang.english_name}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
-                                                                    md-column
-                                                                    md-order-by=""><span>{{lang.status}}</span>
-                                                                </th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody md-body>
-                                                            <tr md-select="userWorkflowGroup" md-row
-                                                                ng-repeat="userWorkflowGroup in ctrl.userWorkflowGroups | limitTo: ctrl.userWorkflowGrid.limit: ((ctrl.userWorkflowGrid.page - 1) * ctrl.userWorkflowGrid.limit)  track by $index">
-                                                                <td md-cell>{{userWorkflowGroup.wfgroup.arName}}</td>
-                                                                <td md-cell>{{userWorkflowGroup.wfgroup.enName}}</td>
-                                                                <td md-cell>
-                                                                    <md-switch aria-label="{{lang.status}}"
-                                                                               ng-model="userWorkflowGroup.wfgroup.status"
-                                                                               ng-change="ctrl.changeStatusUserWorkflowGroup(userWorkflowGroup.wfgroup)"
-                                                                               title="{{userWorkflowGroup.wfgroup.getTranslatedStatus()}}"></md-switch>
-                                                                </td>
-                                                                <td md-cell>
-                                                                    <div flex layout="row" layout-align="start center">
-                                                                        <md-button class="md-icon-button"
-                                                                                   ng-click="ctrl.openEditWorkflowGroupDialog(userWorkflowGroup.wfgroup, $event)"
-                                                                                   title="{{lang.edit}}">
-                                                                            <md-icon md-svg-icon="pencil"></md-icon>
-                                                                        </md-button>
-                                                                        <md-button class="md-icon-button"
-                                                                                   ng-click="ctrl.removeUserWorkflowGroup(userWorkflowGroup, userWorkflowGroup.wfgroup, $event)"
-                                                                                   title="{{lang.delete}}">
-                                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                                        </md-button>
+                                        <md-card md-whiteframe="3" class="card-overlay">
+                                            <md-table-container>
+                                                <div flex scroll-directive>
+                                                    <table md-table md-row-select="true"
+                                                           multiple="true"
+                                                           ng-model="ctrl.selectedUserWorkflowGroups"
+                                                           md-progress="ctrl.userWorkflowProgress">
+                                                        <thead md-head md-order="ctrl.userWorkflowGrid.order"
+                                                               md-on-reorder="ctrl.getSortedDataUserWorkflow">
+                                                        <tr md-row>
+                                                            <th colspan="4" class="table-selector-header"
+                                                                ng-if="ctrl.selectedUserWorkflowGroups.length"
+                                                                md-column>
+                                                                <div layout="row" layout-align="start center">
+                                                                    <span>{{ctrl.selectedUserWorkflowGroups.length}} {{lang.items_selected}} </span>
+                                                                    <span flex></span>
+                                                                    <table-status-directive
+                                                                            when-close="ctrl.changeStatusBulkUserWorkflowGroups"></table-status-directive>
+                                                                    <md-button class="md-icon-button"
+                                                                               ng-click="ctrl.removeBulkUserWorkflowGroups($event)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
+                                                                md-column
+                                                                md-order-by=""><span>{{lang.arabic_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
+                                                                md-column
+                                                                md-order-by=""><span>{{lang.english_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
+                                                                md-column
+                                                                md-order-by=""><span>{{lang.status}}</span>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody md-body>
+                                                        <tr md-select="userWorkflowGroup" md-row
+                                                            ng-repeat="userWorkflowGroup in ctrl.userWorkflowGroups | limitTo: ctrl.userWorkflowGrid.limit: ((ctrl.userWorkflowGrid.page - 1) * ctrl.userWorkflowGrid.limit)  track by $index">
+                                                            <td md-cell>{{userWorkflowGroup.wfgroup.arName}}</td>
+                                                            <td md-cell>{{userWorkflowGroup.wfgroup.enName}}</td>
+                                                            <td md-cell>
+                                                                <md-switch aria-label="{{lang.status}}"
+                                                                           ng-model="userWorkflowGroup.wfgroup.status"
+                                                                           ng-change="ctrl.changeStatusUserWorkflowGroup(userWorkflowGroup.wfgroup)"
+                                                                           title="{{userWorkflowGroup.wfgroup.getTranslatedStatus()}}"></md-switch>
+                                                            </td>
+                                                            <td md-cell>
+                                                                <div flex layout="row" layout-align="start center">
+                                                                    <md-button class="md-icon-button"
+                                                                               ng-click="ctrl.openEditWorkflowGroupDialog(userWorkflowGroup.wfgroup, $event)"
+                                                                               title="{{lang.edit}}">
+                                                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                                                    </md-button>
+                                                                    <md-button class="md-icon-button"
+                                                                               ng-click="ctrl.removeUserWorkflowGroup(userWorkflowGroup, userWorkflowGroup.wfgroup, $event)"
+                                                                               title="{{lang.delete}}">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
 
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <md-table-pagination
-                                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                            md-limit-options="ctrl.userWorkflowGrid.limitOptions"
-                                                            md-limit="ctrl.userWorkflowGrid.limit"
-                                                            md-page="ctrl.userWorkflowGrid.page"
-                                                            md-total="{{ctrl.userWorkflowGroups.length}}"
-                                                            md-page-select></md-table-pagination>
-                                                </md-table-container>
-                                            </md-card>
-                                        </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <md-table-pagination
+                                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                        md-limit-options="ctrl.userWorkflowGrid.limitOptions"
+                                                        md-limit="ctrl.userWorkflowGrid.limit"
+                                                        md-page="ctrl.userWorkflowGrid.page"
+                                                        md-total="{{ctrl.userWorkflowGroups.length}}"
+                                                        md-page-select></md-table-pagination>
+                                            </md-table-container>
+                                        </md-card>
                                     </div>
-                                </div><!-- page-content-->
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>
                     <!--User Folders -->
                     <md-tab label="{{lang.folders}}" ng-if="ctrl.showTab('folders')"
                             md-on-select="ctrl.setCurrentTab('folders')">
-                        <md-content layout-padding>
+                        <md-content class="md-padding">
                             <div>
                                 <user-folders-tree-view-directive
                                         folders="ctrl.userFolderService.userFolders"
@@ -1102,10 +1098,10 @@
                     <!-- Signature -->
                     <md-tab label="{{lang.signature}}" ng-if="ctrl.showTab('signature')"
                             md-on-select="ctrl.setCurrentTab('signature')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <ng-form layout="row" name="signatureForm">
-                                    <div layout="column" flex><!--class="p20"-->
+                                    <div layout="column" flex>
                                         <div layout="row">
                                             <div>
                                                 <label for="add-sign" class="md-button md-raised alongside-input">
@@ -1252,34 +1248,32 @@
                     </md-tab>
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-disabled="userPreferencesForm.$invalid"
-                           ng-if="ctrl.selectedTab==='general' || ctrl.selectedTab==='ns'"
-                           ng-click="ctrl.editApplicationUserFromCtrl()">{{lang.save}}
-                </md-button>
-                <md-button class="md-raised" ng-disabled="outOfOfficeSettingsForm.$invalid || !ctrl.isOutOfOffice"
-                           ng-if="ctrl.selectedTab==='ooos'"
-                           ng-click="ctrl.saveOutOfOfficeSettingsFromCtrl()">{{lang.save}}
-                </md-button>
-                <md-button class="md-raised" ng-disabled="userPreferencesForm.userCommentsForm.$invalid"
-                           ng-if="ctrl.selectedTab==='uc' &&  ctrl.isUserCommentForm && !ctrl.userComment.id"
-                           ng-click="ctrl.addUserCommentFromCtrl()">{{lang.add}}
-                </md-button>
-                <md-button class="md-raised" ng-disabled="userPreferencesForm.userCommentsForm.$invalid"
-                           ng-if="ctrl.selectedTab==='uc' &&  ctrl.isUserCommentForm && ctrl.userComment.id"
-                           ng-click="ctrl.editUserCommentFromCtrl()">{{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeUserPreferencePopupFromCtrl()"
-                           ng-if="!ctrl.isUserCommentForm">
-                    {{lang.close}}
-                </md-button>
-                <md-button class="md-raised" ng-if="ctrl.selectedTab==='uc' && ctrl.isUserCommentForm"
-                           ng-click="ctrl.closeUserCommentForm($event)">{{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="userPreferencesForm.$invalid"
+                   ng-if="ctrl.selectedTab==='general' || ctrl.selectedTab==='ns'"
+                   ng-click="ctrl.editApplicationUserFromCtrl()">{{lang.save}}
+        </md-button>
+        <md-button class="md-raised" ng-disabled="outOfOfficeSettingsForm.$invalid || !ctrl.isOutOfOffice"
+                   ng-if="ctrl.selectedTab==='ooos'"
+                   ng-click="ctrl.saveOutOfOfficeSettingsFromCtrl()">{{lang.save}}
+        </md-button>
+        <md-button class="md-raised" ng-disabled="userPreferencesForm.userCommentsForm.$invalid"
+                   ng-if="ctrl.selectedTab==='uc' &&  ctrl.isUserCommentForm && !ctrl.userComment.id"
+                   ng-click="ctrl.addUserCommentFromCtrl()">{{lang.add}}
+        </md-button>
+        <md-button class="md-raised" ng-disabled="userPreferencesForm.userCommentsForm.$invalid"
+                   ng-if="ctrl.selectedTab==='uc' &&  ctrl.isUserCommentForm && ctrl.userComment.id"
+                   ng-click="ctrl.editUserCommentFromCtrl()">{{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeUserPreferencePopupFromCtrl()"
+                   ng-if="!ctrl.isUserCommentForm">
+            {{lang.close}}
+        </md-button>
+        <md-button class="md-raised" ng-if="ctrl.selectedTab==='uc' && ctrl.isUserCommentForm"
+                   ng-click="ctrl.closeUserCommentForm($event)">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

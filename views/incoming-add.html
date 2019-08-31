@@ -48,14 +48,12 @@
                                 <span>{{lang.manage_correspondence_sites}}</span>
                             </accordion-title>
                             <accordion-content>
-                                <div>
-                                    <manage-correspondence-site-incoming-directive
-                                            vs-id="ctrl.incoming.vsId"
-                                            document-class="ctrl.incoming.docClassName"
-                                            site="ctrl.incoming.site"
-                                            empty-sub-records="ctrl.emptySubSites"
-                                    ></manage-correspondence-site-incoming-directive>
-                                </div>
+                                <manage-correspondence-site-incoming-directive
+                                        vs-id="ctrl.incoming.vsId"
+                                        document-class="ctrl.incoming.docClassName"
+                                        site="ctrl.incoming.site"
+                                        empty-sub-records="ctrl.emptySubSites"
+                                ></manage-correspondence-site-incoming-directive>
                             </accordion-content>
                         </accordion-item>
                         <accordion-item pass-when="ctrl.documentInformation || ctrl.incoming.contentFile">

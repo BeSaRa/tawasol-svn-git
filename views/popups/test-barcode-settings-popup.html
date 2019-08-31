@@ -1,23 +1,21 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.barcode_sample}}">
-    <div layout="column">
-        <popup-toolbar-directive header-text="{{lang.barcode_sample}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <div class="p20" layout="column">
-                <div id="barcode-area" layout="row">
-                    <span flex></span>
-                    <img ng-src="{{ctrl.barcode}}">
-                    <span flex></span>
-                </div>
-                <div layout="row">
-                    <span flex></span>
-                    <md-button ng-click="ctrl.closeBarcodePopup($event)" class="md-raised">
-                        {{lang.close}}
-                    </md-button>
-                    <span flex></span>
-                </div>
+    <popup-toolbar-directive header-text="{{lang.barcode_sample}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <div id="barcode-area" layout="row">
+                <span flex></span>
+                <img ng-src="{{ctrl.barcode}}">
+                <span flex></span>
             </div>
-        </md-content>
-    </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <span flex></span>
+        <md-button ng-click="ctrl.closeBarcodePopup($event)" class="md-raised">
+            {{lang.close}}
+        </md-button>
+        <span flex></span>
+    </md-dialog-actions>
 </md-dialog>

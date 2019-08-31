@@ -1,9 +1,11 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.tasks}}">
-    <div layout="column">
-        <popup-toolbar-directive
-                header-text="{{ctrl.task.taskTitle}} {{ctrl.task.taskDescription.length ? '- ' + ctrl.task.taskDescription : ''}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <div class="p20" layout="column">
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.tasks}}">
+    <popup-toolbar-directive
+            header-text="{{ctrl.task.taskTitle}} {{ctrl.task.taskDescription.length ? '- ' + ctrl.task.taskDescription : ''}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="column">
                 <div layout="row">
                     <fieldset class="size-100">
                         <legend>{{lang.task_linked}}</legend>
@@ -175,6 +177,6 @@
                     </fieldset>
                 </div>
             </div>
-        </md-content>
-    </div>
+        </div>
+    </md-dialog-content>
 </md-dialog>

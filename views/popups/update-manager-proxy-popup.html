@@ -1,12 +1,12 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.manage_users_on_behalf}}">
-    <div layout="column">
-        <popup-toolbar-directive
-                header-text="{{lang.manage_users_on_behalf}} : {{ctrl.currentUser.applicationUser.getTranslatedName()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <popup-toolbar-directive
+            header-text="{{lang.manage_users_on_behalf}} : {{ctrl.currentUser.applicationUser.getTranslatedName()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="managerProxyForm" autocomplete="off">
-                <div layout="column" class="p20">
+                <div layout="column">
                     <div layout="row" ng-repeat="proxyManager in ctrl.proxyManagers">
                         <md-input-container flex>
                             <label for="userName">{{lang.user}}</label>
@@ -35,16 +35,14 @@
                     </div>
                 </div>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised"
-                           ng-disabled="managerProxyForm.$invalid"
-                           ng-click="ctrl.updateManagersProxy($event)">{{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePopup($event)">{{lang.close}}</md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised"
+                   ng-disabled="managerProxyForm.$invalid"
+                   ng-click="ctrl.updateManagersProxy($event)">{{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopup($event)">{{lang.close}}</md-button>
+    </md-dialog-actions>
 </md-dialog>

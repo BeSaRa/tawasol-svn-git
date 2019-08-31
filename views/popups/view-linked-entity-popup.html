@@ -2,27 +2,23 @@
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="view-tracking-sheet-dialog"
            aria-label="{{lang[ctrl.linkedEntity.getTranslatedName()]}}">
-    <div layout="column">
         <popup-toolbar-directive header-text="{{ctrl.linkedEntity.getTranslatedName()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <div class="p20">
-                <form name="linkedEntityForm" autocomplete="off" layout="column">
-                    <div ng-repeat="fields in ctrl.currentFields track by $index" layout="row">
-                        <md-input-container flex ng-repeat="field in fields track by $index">
-                            <label for="{{field.label}}">{{lang[ctrl.labels[field.label]]}}</label>
-                            <input name="{{field.label}}" ng-disabled="true" ng-readonly="true"
-                                   id="{{field.label}}" ng-model="ctrl.linkedEntity[field.label]"/>
-                        </md-input-container>
-                    </div>
-                </form>
-            </div>
-        </md-content>
-        <div>
-            <div layout="row">
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePopup()">{{lang.close}}</md-button>
-                <span flex></span>
-            </div>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="linkedEntityForm" autocomplete="off" layout="column">
+                <div ng-repeat="fields in ctrl.currentFields track by $index" layout="row">
+                    <md-input-container flex ng-repeat="field in fields track by $index">
+                        <label for="{{field.label}}">{{lang[ctrl.labels[field.label]]}}</label>
+                        <input name="{{field.label}}" ng-disabled="true" ng-readonly="true"
+                               id="{{field.label}}" ng-model="ctrl.linkedEntity[field.label]"/>
+                    </md-input-container>
+                </div>
+            </form>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopup()">{{lang.close}}</md-button>
+        <span flex></span>
+    </md-dialog-actions>
 </md-dialog>

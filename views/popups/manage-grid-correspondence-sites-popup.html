@@ -1,10 +1,10 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.correspondence_sites}}">
-    <div layout="column">
         <popup-toolbar-directive header-text="{{lang.correspondence_sites}} : {{ctrl.documentSubject}}"
                                  close-callback="ctrl.closeDocumentCorrespondence"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <manage-correspondence-sites-directive
                     ng-if="ctrl.documentClass.toLowerCase()==='outgoing' && ctrl.type!== 'g2g'"
                     vs-id="ctrl.correspondence.vsId"
@@ -35,11 +35,11 @@
                     ng-if="ctrl.type && ctrl.type === 'g2gmessaginghistory'"
                     record="ctrl.correspondence">
             </manage-correspondence-site-g2g-messaging-history-directive>
-        </md-content>
-        <div>
-            <span flex></span>
-            <md-button class="md-raised" ng-click="ctrl.closeDocumentCorrespondence()">{{lang.close}}
-            </md-button>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeDocumentCorrespondence()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

@@ -1,18 +1,17 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_reference_plan_number: ctrl.model.getNames()}}">
-    <!--id="reference-popup" -->
-    <div layout="column">
         <popup-toolbar-directive ng-if="!ctrl.model.id"
                                  header-text="{{lang.add_new_reference_plan_number}}"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.model.id"
                                  header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="referencePlanNumberForm" autocomplete="off">
                 <md-tabs md-dynamic-height>
                     <md-tab label="{{lang.basic_info}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
@@ -99,8 +98,8 @@
                         </md-content>
                     </md-tab>
                     <md-tab label="{{lang.reference_elements}}">
-                        <md-content>
-                            <div class="p20" layout="column">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div>
                                     <md-button class="md-raised" ng-click="ctrl.addReferencePlanItem()">
                                         {{lang.add_reference_plan_item}}
@@ -146,24 +145,22 @@
                     </md-tab>
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised"
-                           ng-disabled="referencePlanNumberForm.$invalid"
-                           ng-if="!ctrl.editMode"
-                           ng-click="ctrl.addReferencePlanNumberFromCtrl()">
-                    {{lang.add}}
-                </md-button>
-                <md-button class="md-raised" ng-disabled="referencePlanNumberForm.$invalid" ng-if="ctrl.editMode"
-                           ng-click="ctrl.editReferencePlanNumberFromCtrl()">
-                    {{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeReferencePlanNumberPopupFromCtrl()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised"
+                   ng-disabled="referencePlanNumberForm.$invalid"
+                   ng-if="!ctrl.editMode"
+                   ng-click="ctrl.addReferencePlanNumberFromCtrl()">
+            {{lang.add}}
+        </md-button>
+        <md-button class="md-raised" ng-disabled="referencePlanNumberForm.$invalid" ng-if="ctrl.editMode"
+                   ng-click="ctrl.editReferencePlanNumberFromCtrl()">
+            {{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeReferencePlanNumberPopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

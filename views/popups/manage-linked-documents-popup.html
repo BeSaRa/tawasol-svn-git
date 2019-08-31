@@ -1,26 +1,22 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.linked_document_manage}}">
-    <div layout="column">
         <popup-toolbar-directive header-text="{{lang.linked_document_manage}} : {{ctrl.model.docSubject}}"
                                  close-callback="ctrl.closeLinkedDocuments"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <div class="p20">
-                <manage-linked-document-directive
-                        vs-id="ctrl.correspondence.vsId"
-                        document-class="ctrl.correspondence.classDescription"
-                        linked-docs="ctrl.correspondence.linkedDocs">
-                </manage-linked-document-directive>
-            </div>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-click="ctrl.saveLinkedDocumentsFromCtrl()">{{lang.linked_document_save}}
-                </md-button>
-                <span flex></span>
-                <md-button ng-click="ctrl.closeLinkedDocuments()" class="md-raised">{{lang.linked_document_close}}
-                </md-button>
-            </div>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <manage-linked-document-directive
+                    vs-id="ctrl.correspondence.vsId"
+                    document-class="ctrl.correspondence.classDescription"
+                    linked-docs="ctrl.correspondence.linkedDocs">
+            </manage-linked-document-directive>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-click="ctrl.saveLinkedDocumentsFromCtrl()">{{lang.linked_document_save}}
+        </md-button>
+        <span flex></span>
+        <md-button ng-click="ctrl.closeLinkedDocuments()" class="md-raised">{{lang.linked_document_close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

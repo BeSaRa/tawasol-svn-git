@@ -1,26 +1,24 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.select_maip_label}}">
-    <div layout="column">
         <popup-toolbar-directive header-text="{{lang.select_label}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <div class="p20" layout="column">
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="column">
                 <div ng-repeat="label in ctrl.maipLabels" layout="row">
                     <md-button flex class="md-raised" ng-click="ctrl.setProtectionLabel(label)">
                         {{label.getTranslatedName()}}
                     </md-button>
                 </div>
             </div>
-        </md-content>
-        <div>
-            <div layout="row">
-                <span flex></span>
-                <!--<md-button class="md-raised"
-                           ng-click="ctrl.setNoProtection($event)">{{lang.set}}
-                </md-button>
-                <span flex></span>-->
-                <md-button class="md-raised" ng-click="ctrl.closePopup()">{{lang.close}}</md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <span flex></span>
+        <!--<md-button class="md-raised"
+                   ng-click="ctrl.setNoProtection($event)">{{lang.set}}
+        </md-button>
+        <span flex></span>-->
+        <md-button class="md-raised" ng-click="ctrl.closePopup()">{{lang.close}}</md-button>
+    </md-dialog-actions>
 </md-dialog>

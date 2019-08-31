@@ -1,3 +1,47 @@
+<md-dialog class="dialog-extend mw60"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.correspondence_sites}}">
+        <popup-toolbar-directive header-text="{{lang.correspondence_sites}} : {{ctrl.documentSubject}}"
+                                 close-callback="ctrl.closeDocumentCorrespondence"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div>
+            <manage-correspondence-sites-directive
+                    ng-if="ctrl.documentClass.toLowerCase()==='outgoing'"
+                    vs-id="ctrl.correspondence.vsId"
+                    document-class="ctrl.correspondence.docClassName"
+                    sites-info-c-c="ctrl.correspondence.sitesInfoCC"
+                    sites-info-to="ctrl.correspondence.sitesInfoTo">
+            </manage-correspondence-sites-directive>
+            <manage-correspondence-site-incoming-directive
+                    ng-if="ctrl.documentClass.toLowerCase()==='incoming'"
+                    vs-id="ctrl.correspondence.vsId"
+                    document-class="ctrl.correspondence.docClassName"
+                    site="ctrl.correspondence.site">
+            </manage-correspondence-site-incoming-directive>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <div ng-if="ctrl.documentClass.toLowerCase()==='outgoing'">
+            <md-button class="md-raised" ng-disabled="ctrl.checkDisabled()"
+                       ng-click="ctrl.saveCorrespondenceSites()">
+                <!--ng-disabled="!ctrl.correspondence.hasSiteTO()"-->
+                {{lang.save}}
+            </md-button>
+        </div>
+        <div ng-if="ctrl.documentClass.toLowerCase()==='incoming'">
+            <md-button class="md-raised" ng-disabled="ctrl.checkDisabled()"
+                       ng-click="ctrl.saveCorrespondenceSite()">
+                <!--ng-disabled="!ctrl.correspondence.site"-->
+                {{lang.save}}
+            </md-button>
+        </div>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeDocumentCorrespondence()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>
+
+    <!--
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.correspondence_sites}}">
@@ -24,14 +68,14 @@
                 <div ng-if="ctrl.documentClass.toLowerCase()==='outgoing'">
                     <md-button class="md-raised" ng-disabled="ctrl.checkDisabled()"
                                ng-click="ctrl.saveCorrespondenceSites()">
-                        <!--ng-disabled="!ctrl.correspondence.hasSiteTO()"-->
+                        &lt;!&ndash;ng-disabled="!ctrl.correspondence.hasSiteTO()"&ndash;&gt;
                         {{lang.save}}
                     </md-button>
                 </div>
                 <div ng-if="ctrl.documentClass.toLowerCase()==='incoming'">
                     <md-button class="md-raised" ng-disabled="ctrl.checkDisabled()"
                                ng-click="ctrl.saveCorrespondenceSite()">
-                        <!--ng-disabled="!ctrl.correspondence.site"-->
+                        &lt;!&ndash;ng-disabled="!ctrl.correspondence.site"&ndash;&gt;
                         {{lang.save}}
                     </md-button>
                 </div>
@@ -42,3 +86,4 @@
         </div>
     </div>
 </md-dialog>
+-->

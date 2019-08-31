@@ -1,37 +1,33 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.add_signature}}">
-    <div layout="column">
-        <popup-toolbar-directive ng-if="!ctrl.model.id" header-text="{{lang.add_signature}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <popup-toolbar-directive ng-if="!ctrl.model.id" header-text="{{lang.add_signature}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <form name="signaturesForm" id="signature-form" autocomplete="off">
-                <div class="p20">
-                    <div ng-repeat="signatureChunk in ctrl.signatureChunks track by $index">
-                        <div flex layout="row">
-                            <img flex ng-repeat="signature in signatureChunk track by $index"
-                                 ng-src="{{signature.contentElementUrl}}"
-                                 class="cursor-pointer"
-                                 ng-class="{'selected': ctrl.isSignatureSelected(signature)}"
-                                 ng-click="ctrl.setSelectedSignature(signature, $event)"
-                                 width="100" height="100">
-                            <div flex
-                                 ng-repeat="emptySignature in ctrl.getEmptySigns(signatureChunk) track by $index"></div>
-                        </div>
+                <div ng-repeat="signatureChunk in ctrl.signatureChunks track by $index">
+                    <div flex layout="row">
+                        <img flex ng-repeat="signature in signatureChunk track by $index"
+                             ng-src="{{signature.contentElementUrl}}"
+                             class="cursor-pointer"
+                             ng-class="{'selected': ctrl.isSignatureSelected(signature)}"
+                             ng-click="ctrl.setSelectedSignature(signature, $event)"
+                             width="100" height="100">
+                        <div flex
+                             ng-repeat="emptySignature in ctrl.getEmptySigns(signatureChunk) track by $index"></div>
                     </div>
                 </div>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-disabled="!ctrl.selectedSignature"
-                           ng-click="ctrl.signDocumentFromCtrl()">
-                    {{lang.approve}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeSignaturesPopupFromCtrl()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="!ctrl.selectedSignature"
+                   ng-click="ctrl.signDocumentFromCtrl()">
+            {{lang.approve}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeSignaturesPopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

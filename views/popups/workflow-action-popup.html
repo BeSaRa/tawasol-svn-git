@@ -1,17 +1,17 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_workflow_action: ctrl.model.getNames()}}">
-    <div layout="column">
-        <popup-toolbar-directive ng-if="!ctrl.editMode"
-                                 header-text="{{lang.add_new_workflow_action}}"></popup-toolbar-directive>
-        <popup-toolbar-directive ng-if="ctrl.editMode"
-                                 header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <popup-toolbar-directive ng-if="!ctrl.editMode"
+                             header-text="{{lang.add_new_workflow_action}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode"
+                             header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="workflowActionForm" autocomplete="off">
                 <md-tabs md-dynamic-height md-selected="ctrl.tabIndex">
                     <md-tab label="{{lang.basic_info}}" md-on-select="ctrl.changeTabName('basic_info')">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
@@ -66,7 +66,7 @@
                     </md-tab>
                     <md-tab label="{{lang.security}}" md-on-select="ctrl.changeTabName('security')"
                             ng-disabled="ctrl.workflowAction.isGlobal">
-                        <md-content scroll-directive class="p20" layout="column">
+                        <md-content class="md-padding">
                             <div flex layout="row">
                                 <md-input-container id="criteria-list" class="mt0">
                                     <md-select aria-label="select-user" ng-change="ctrl.changeSearchBy($event)"
@@ -124,8 +124,6 @@
                                         </div>
                                     </md-item-template>
                                 </md-autocomplete>
-
-
                                 <md-autocomplete
                                         ng-if="ctrl.searchBy && ctrl.searchBy.key !== 'organizationUnit'"
                                         flex
@@ -167,7 +165,7 @@
                                     </md-item-template>
                                 </md-autocomplete>
                             </div>
-                            <md-card>
+                            <md-card class="m0">
                                 <md-table-container>
                                     <table md-table>
                                         <thead md-head>
@@ -209,27 +207,25 @@
                     </md-tab>
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-disabled="workflowActionForm.$invalid"
-                           ng-if="!ctrl.editMode"
-                           ng-click="ctrl.addWorkflowActionFromCtrl()">{{lang.add}}
-                </md-button>
-                <!--<md-button class="md-raised" ng-if="ctrl.editMode && ctrl.selectedTabName == 'basic_info'"
-                           ng-disabled="workFFflowActionForm.$invalid || (!ctrl.workflowAction.isGlobal && !ctrl.workflowAction.relatedUsers.length)"
-                           ng-click="ctrl.editWorkflowActionFromCtrl()">{{lang.save}}
-                </md-button>-->
-
-                <md-button class="md-raised" ng-if="ctrl.editMode && ctrl.selectedTabName == 'basic_info'"
-                           ng-disabled="ctrl.isWorkflowActionValid(workflowActionForm)"
-                           ng-click="ctrl.editWorkflowActionFromCtrl()">{{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeWorkflowActionPopupFromCtrl()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="workflowActionForm.$invalid"
+                   ng-if="!ctrl.editMode"
+                   ng-click="ctrl.addWorkflowActionFromCtrl()">{{lang.add}}
+        </md-button>
+        <!--<md-button class="md-raised" ng-if="ctrl.editMode && ctrl.selectedTabName == 'basic_info'"
+                   ng-disabled="workFFflowActionForm.$invalid || (!ctrl.workflowAction.isGlobal && !ctrl.workflowAction.relatedUsers.length)"
+                   ng-click="ctrl.editWorkflowActionFromCtrl()">{{lang.save}}
+        </md-button>-->
+
+        <md-button class="md-raised" ng-if="ctrl.editMode && ctrl.selectedTabName == 'basic_info'"
+                   ng-disabled="ctrl.isWorkflowActionValid(workflowActionForm)"
+                   ng-click="ctrl.editWorkflowActionFromCtrl()">{{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeWorkflowActionPopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

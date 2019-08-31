@@ -1,16 +1,16 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new : ctrl.model.getNames()}}">
-    <div layout="column">
         <popup-toolbar-directive ng-if="!ctrl.model.id" header-text="{{lang.add_new}}"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.model.id"
                                  header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <form name="privateAnnouncementForm" autocomplete="off">
                 <md-tabs md-dynamic-height>
                     <md-tab label="{{lang.basic_info}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arSubject">{{lang.arabic_subject}}</label>
@@ -132,8 +132,8 @@
                         </md-content>
                     </md-tab>
                     <md-tab label="{{lang.organization_unit}}">
-                        <md-content>
-                            <div layout="column" class="p20">
+                        <md-content class="md-padding">
+                            <div layout="column">
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="ou">{{lang.organization_unit}}</label>
@@ -201,31 +201,28 @@
 
                                 </tbody>
                             </table>
-
                         </md-content>
                     </md-tab>
                 </md-tabs>
             </form>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised"
-                           ng-disabled="privateAnnouncementForm.$invalid || !ctrl.privateAnnouncement.subscribers.length"
-                           ng-if="!ctrl.editMode"
-                           ng-click="ctrl.addPrivateAnnouncementFromCtrl()">
-                    {{lang.add}}
-                </md-button>
-                <md-button class="md-raised"
-                           ng-disabled="privateAnnouncementForm.$invalid || !ctrl.privateAnnouncement.subscribers.length"
-                           ng-if="ctrl.editMode"
-                           ng-click="ctrl.editPrivateAnnouncementFromCtrl()">
-                    {{lang.save}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePrivateAnnouncementPopupFromCtrl()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised"
+                   ng-disabled="privateAnnouncementForm.$invalid || !ctrl.privateAnnouncement.subscribers.length"
+                   ng-if="!ctrl.editMode"
+                   ng-click="ctrl.addPrivateAnnouncementFromCtrl()">
+            {{lang.add}}
+        </md-button>
+        <md-button class="md-raised"
+                   ng-disabled="privateAnnouncementForm.$invalid || !ctrl.privateAnnouncement.subscribers.length"
+                   ng-if="ctrl.editMode"
+                   ng-click="ctrl.editPrivateAnnouncementFromCtrl()">
+            {{lang.save}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePrivateAnnouncementPopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>

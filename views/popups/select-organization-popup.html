@@ -6,29 +6,30 @@
                              close-callback="ctrl.closeDialog"></popup-toolbar-directive>
     <popup-toolbar-directive ng-if="!ctrl.label" header-text="{{lang.select_organization}}"
                              close-callback="ctrl.closeDialog"></popup-toolbar-directive>
-    <md-content scroll-directive class="p20" layout="column">
-        <div flex layout="row">
-            <md-input-container flex class="mt0">
-                <md-select aria-label="select-organization"
-                           ng-model="ctrl.selectedOrganization">
-                    <md-option ng-if="!ctrl.existsInGrid(organization)" ng-value="organization"
-                               ng-repeat="organization in ctrl.organizations track by $index">
-                        {{organization.getTranslatedName()}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
-            <div>
-                <md-button ng-disabled="!ctrl.selectedOrganization" ng-click="ctrl.addOrganizationToGrid()"
-                           class="md-raised">{{lang.add}}
-                </md-button>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <div flex layout="row">
+                <md-input-container flex class="mt0">
+                    <md-select aria-label="select-organization"
+                               ng-model="ctrl.selectedOrganization">
+                        <md-option ng-if="!ctrl.existsInGrid(organization)" ng-value="organization"
+                                   ng-repeat="organization in ctrl.organizations track by $index">
+                            {{organization.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <div>
+                    <md-button ng-disabled="!ctrl.selectedOrganization" ng-click="ctrl.addOrganizationToGrid()"
+                               class="md-raised">{{lang.add}}
+                    </md-button>
+                </div>
             </div>
-        </div>
-        <md-card ng-if="ctrl.gridOrganizations.length">
-            <md-table-container>
-                <table md-table md-row-select ng-model="ctrl.selectedOrganizations" multiple>
-                    <thead md-head>
-                    <tr md-row>
-                        <th colspan="3" ng-if="ctrl.selectedOrganizations.length" md-column>
+            <md-card ng-if="ctrl.gridOrganizations.length">
+                <md-table-container>
+                    <table md-table md-row-select ng-model="ctrl.selectedOrganizations" multiple>
+                        <thead md-head>
+                        <tr md-row>
+                            <th colspan="3" ng-if="ctrl.selectedOrganizations.length" md-column>
                             <span layout="row" layout-align="start center">
                                 <span>{{ctrl.selectedOrganizations.length}} {{ lang.items_selected }}</span>
                                 <span flex></span>
@@ -39,36 +40,39 @@
                                     </md-button>
                                 </span>
                             </span>
-                        </th>
-                        <th ng-if="!ctrl.selectedOrganizations.length" md-column><span>{{lang.arabic_name}}</span></th>
-                        <th ng-if="!ctrl.selectedOrganizations.length" md-column><span>{{lang.english_name}}</span></th>
-                        <th ng-if="!ctrl.selectedOrganizations.length" md-column><span>{{lang.actions}}</span></th>
-                    </tr>
-                    </thead>
-                    <tbody md-body>
-                    <tr md-row md-select="organization"
-                        ng-repeat="organization in ctrl.gridOrganizations track by $index">
-                        <td md-cell>
-                            <span>{{organization.arName}}</span>
-                        </td>
-                        <td md-cell>
-                            <span>{{organization.enName}}</span>
-                        </td>
-                        <td md-cell layout="row">
-                            <md-button tooltip="{{lang.delete}}" class="md-icon-button"
-                                       ng-click="ctrl.removeOrganizationFromGrid(organization)">
-                                <md-icon md-svg-icon="delete"></md-icon>
-                            </md-button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </md-table-container>
-        </md-card>
-        <div layout="row" layout-align="center center">
-            <md-button class="md-raised" ng-disabled="!ctrl.hasChanges" ng-click="ctrl.saveSelectedOrganizations()">
-                {{lang.save}}
-            </md-button>
+                            </th>
+                            <th ng-if="!ctrl.selectedOrganizations.length" md-column><span>{{lang.arabic_name}}</span></th>
+                            <th ng-if="!ctrl.selectedOrganizations.length" md-column><span>{{lang.english_name}}</span></th>
+                            <th ng-if="!ctrl.selectedOrganizations.length" md-column><span>{{lang.actions}}</span></th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row md-select="organization"
+                            ng-repeat="organization in ctrl.gridOrganizations track by $index">
+                            <td md-cell>
+                                <span>{{organization.arName}}</span>
+                            </td>
+                            <td md-cell>
+                                <span>{{organization.enName}}</span>
+                            </td>
+                            <td md-cell layout="row">
+                                <md-button tooltip="{{lang.delete}}" class="md-icon-button"
+                                           ng-click="ctrl.removeOrganizationFromGrid(organization)">
+                                    <md-icon md-svg-icon="delete"></md-icon>
+                                </md-button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
+            </md-card>
         </div>
-    </md-content>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <span flex></span>
+        <md-button class="md-raised" ng-disabled="!ctrl.hasChanges" ng-click="ctrl.saveSelectedOrganizations()">
+            {{lang.save}}
+        </md-button>
+        <span flex></span>
+    </md-dialog-actions>
 </md-dialog>

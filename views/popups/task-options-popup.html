@@ -1,11 +1,12 @@
 <md-dialog ng-attr-aria-label="{{lang.tasks}}">
-    <div layout="column">
-        <popup-toolbar-directive header-text="{{ctrl.task.taskTitle}}"></popup-toolbar-directive>
-        <md-content class="p20">
+    <popup-toolbar-directive header-text="{{ctrl.task.taskTitle}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <div layout="row" layout-align="center center" ng-if="button.validate(ctrl.task)"
                  ng-repeat="button in ctrl.callbacks track by button.id">
-                <md-button class="md-raised" ng-click="ctrl.runButtonCallback(button)">{{lang.get(button.label)}}</md-button>
+                <md-button class="md-raised" ng-click="ctrl.runButtonCallback(button)">{{lang.get(button.label)}}
+                </md-button>
             </div>
-        </md-content>
-    </div>
+        </div>
+    </md-dialog-content>
 </md-dialog>

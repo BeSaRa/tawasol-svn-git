@@ -1,13 +1,13 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.user_subscription}}">
-    <div layout="column">
-        <popup-toolbar-directive
-                header-text="{{lang.user_subscription}} : {{ctrl.info.title}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
+    <popup-toolbar-directive
+            header-text="{{lang.user_subscription}} : {{ctrl.info.title}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
             <div layout="column">
                 <form name="subscriptionEventTypeForm" autocomplete="off">
-                    <div layout="row" class="p20">
+                    <div layout="row">
                         <md-input-container flex>
                             <label for="eventType">{{lang.user_subscription_event_type}}</label>
                             <md-select id="eventType" name="eventType" multiple
@@ -22,121 +22,108 @@
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
-
                         <div>
                             <md-button class="md-raised"
                                        ng-disabled="subscriptionEventTypeForm.$invalid"
                                        ng-click="ctrl.saveSubscribe(subscriptionEventTypeForm, $event)">
                                 {{lang.add}}
                             </md-button>
-                            <!--<md-button class="md-raised" ng-disabled="!ctrl.selectedOrganization"
-                                       ng-click="ctrl.addOrganizationToCorrespondenceSite()">{{lang.add}}
-                            </md-button>-->
                         </div>
                     </div>
                 </form>
-                <div class="p20">
-                    <div layout="row" layout-align="start center" class="page-header small">
-                        <md-button ng-click="ctrl.reloadUserSubscriptions()" class="md-icon-button"
-                                   tooltip="{{lang.reload}}">
-                            <md-icon md-svg-icon="refresh"></md-icon>
-                        </md-button>
-                        <span flex></span>
-                        <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
-                    </div>
-                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                        <md-table-container>
-                            <div flex scroll-directive>
-                                <table md-table md-row-select="true"
-                                       multiple="true"
-                                       ng-model="ctrl.selectedUserSubscriptions"
-                                       md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
-                                    <tr md-row>
-                                        <th colspan="3" class="table-selector-header"
-                                            ng-if="ctrl.selectedUserSubscriptions.length" md-column>
-                                            <div layout="row" layout-align="start center">
-                                                <span>{{ctrl.selectedUserSubscriptions.length}} {{lang.items_selected}} </span>
-                                                <span flex></span>
-                                                <table-status-directive
-                                                        when-close="ctrl.changeStatusBulkUserSubscriptions"></table-status-directive>
-                                                <md-button class="md-icon-button"
-                                                           ng-click="ctrl.removeBulkUserSubscriptions($event)">
-                                                    <md-icon md-svg-icon="delete"></md-icon>
-                                                </md-button>
-                                            </div>
-                                        </th>
-                                        <th ng-if="!ctrl.selectedUserSubscriptions.length" md-column
-                                            md-order-by="docSubject">
-                                            <span>{{lang.document_subject}}</span>
-                                        </th>
-                                        <th ng-if="!ctrl.selectedUserSubscriptions.length" md-column
-                                            md-order-by="status">
-                                            <span>{{lang.status}}</span>
-                                        </th>
-                                        <th ng-if="!ctrl.selectedUserSubscriptions.length" md-column md-order-by="">
-                                            <span>{{lang.actions}}</span>
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody md-body>
-                                    <tr md-select="userSubscription" md-row
-                                        ng-repeat="userSubscription in searchResults = (ctrl.existingSubscriptions | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
-                                        <td md-cell>{{userSubscription.getSubscriptionEventName()}}</td>
-                                        <td md-cell>
-                                            <md-switch aria-label="{{lang.status}}"
-                                                       ng-model="userSubscription.status"
-                                                       title="{{userSubscription.getTranslatedStatus()}}"
-                                                       ng-change="ctrl.changeStatusUserSubscription(userSubscription)">
-                                            </md-switch>
-                                        </td>
-                                        <td md-cell>
-                                            <div flex layout="row" layout-align="start center">
-                                                <md-button class="md-icon-button"
-                                                           ng-click="ctrl.removeUserSubscription(userSubscription)"
-                                                           title="{{lang.delete}}">
-                                                    <md-icon md-svg-icon="delete"></md-icon>
-                                                </md-button>
-
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr md-row ng-if="!ctrl.existingSubscriptions.length">
-                                        <td md-cell colspan="3" class="red-text text-center">{{lang.no_records_found}}
-                                        </td>
-                                    </tr>
-                                    <tr md-row ng-if="ctrl.existingSubscriptions.length && !searchResults.length">
-                                        <td md-cell colspan="3" class="red-text text-center">
-                                            {{lang.no_records_found_matching_search}}
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <md-table-pagination
-                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                    md-limit-options="ctrl.grid.limitOptions"
-                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.existingSubscriptions | filter:ctrl.searchModel).length}}"
-                                    md-page-select>
-                            </md-table-pagination>
-                        </md-table-container>
-                    </md-card>
+                <div layout="row" layout-align="start center" class="page-header small">
+                    <md-button ng-click="ctrl.reloadUserSubscriptions()" class="md-icon-button"
+                               tooltip="{{lang.reload}}">
+                        <md-icon md-svg-icon="refresh"></md-icon>
+                    </md-button>
+                    <span flex></span>
+                    <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
                 </div>
-            </div>
-        </md-content>
-        <div>
-            <div layout="row">
-                <!--<md-button class="md-raised"
-                           ng-disabled="subscriptionEventTypeForm.$invalid"
-                           ng-click="ctrl.saveSubscribe(subscriptionEventTypeForm, $event)">
-                    {{lang.save}}
-                </md-button>-->
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeEventTypePopup()">
-                    {{lang.close}}
-                </md-button>
+                <md-card md-whiteframe="3" class="card-overlay">
+                    <md-table-container>
+                        <div flex scroll-directive>
+                            <table md-table md-row-select="true"
+                                   multiple="true"
+                                   ng-model="ctrl.selectedUserSubscriptions"
+                                   md-progress="ctrl.progress">
+                                <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                <tr md-row>
+                                    <th colspan="3" class="table-selector-header"
+                                        ng-if="ctrl.selectedUserSubscriptions.length" md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedUserSubscriptions.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                            <table-status-directive
+                                                    when-close="ctrl.changeStatusBulkUserSubscriptions"></table-status-directive>
+                                            <md-button class="md-icon-button"
+                                                       ng-click="ctrl.removeBulkUserSubscriptions($event)">
+                                                <md-icon md-svg-icon="delete"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSubscriptions.length" md-column
+                                        md-order-by="docSubject">
+                                        <span>{{lang.document_subject}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSubscriptions.length" md-column
+                                        md-order-by="status">
+                                        <span>{{lang.status}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSubscriptions.length" md-column md-order-by="">
+                                        <span>{{lang.actions}}</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-select="userSubscription" md-row
+                                    ng-repeat="userSubscription in searchResults = (ctrl.existingSubscriptions | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                    <td md-cell>{{userSubscription.getSubscriptionEventName()}}</td>
+                                    <td md-cell>
+                                        <md-switch aria-label="{{lang.status}}"
+                                                   ng-model="userSubscription.status"
+                                                   title="{{userSubscription.getTranslatedStatus()}}"
+                                                   ng-change="ctrl.changeStatusUserSubscription(userSubscription)">
+                                        </md-switch>
+                                    </td>
+                                    <td md-cell>
+                                        <div flex layout="row" layout-align="start center">
+                                            <md-button class="md-icon-button"
+                                                       ng-click="ctrl.removeUserSubscription(userSubscription)"
+                                                       title="{{lang.delete}}">
+                                                <md-icon md-svg-icon="delete"></md-icon>
+                                            </md-button>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr md-row ng-if="!ctrl.existingSubscriptions.length">
+                                    <td md-cell colspan="3" class="red-text text-center">{{lang.no_records_found}}
+                                    </td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.existingSubscriptions.length && !searchResults.length">
+                                    <td md-cell colspan="3" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                md-total="{{(ctrl.existingSubscriptions | filter:ctrl.searchModel).length}}"
+                                md-page-select>
+                        </md-table-pagination>
+                    </md-table-container>
+                </md-card>
             </div>
         </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closeEventTypePopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>
