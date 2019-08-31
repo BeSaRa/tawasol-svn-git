@@ -96,6 +96,9 @@
                                    custom-validate-directive="phone_mobile">
                             <div ng-messages="documentLinkForm.sharedToMobileNum.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="phone_mobile">
+                                    {{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}
+                                </div>
                             </div>
                         </md-input-container>
                         <md-input-container>
