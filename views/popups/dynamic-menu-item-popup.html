@@ -1,13 +1,14 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
-           id="menu-item-dialog" ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_dynamic_menu_item : ctrl.model.getNames()}}">
+           id="menu-item-dialog"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_dynamic_menu_item : ctrl.model.getNames()}}">
         <popup-toolbar-directive full-screen="ctrl.fullScreen" full-screen-button="true"
                                  header-text="{{lang.add_new_dynamic_menu_item}}" ng-if="!ctrl.model.id"
         ></popup-toolbar-directive>
         <popup-toolbar-directive full-screen="ctrl.fullScreen" full-screen-button="true"
                                  header-text="{{ctrl.model.getNames()}}" ng-if="ctrl.model.id"
         ></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div>
             <form name="dynamicMenuItemForm" autocomplete="off">
                 <md-tabs md-selected="ctrl.tabIndex" md-dynamic-height>

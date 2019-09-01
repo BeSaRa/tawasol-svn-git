@@ -389,19 +389,6 @@ module.exports = function (app) {
              */
             self._sharedMethods = generator.generateSharedMethods(self.deleteAttachment, self.updateAttachment);
 
-            /* self.viewAttachment = function (attachment, $event) {
-                 dialog.showDialog({
-                     templateUrl: cmsTemplate.getPopup('view-attachment'),
-                     targetEvent: $event || false,
-                     locals: {
-                         attachment: attachment
-                     },
-                     controller: 'viewAttachmentPopCtrl',
-                     controllerAs: 'ctrl'
-                 });
-             };*/
-
-
             var _resolveFile = function (defer, file) {
                 $timeout(function () {
                     defer.resolve(file);
