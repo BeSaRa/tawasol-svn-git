@@ -111,95 +111,6 @@
                     <md-tab label="{{lang.connection_settings}}">
                         <md-content class="md-padding">
                             <div layout="column">
-                                <!-- LDAP PROVIDERS -->
-                                <fieldset>
-                                    <legend class="md-accent">{{lang.ldap_providers}}</legend>
-                                    <div layout="row">
-                                        <md-input-container flex>
-                                            <label for="serverAddress">{{lang.server_name_ip}}</label>
-                                            <input name="serverAddress" id="serverAddress" required
-                                                   ng-model="ctrl.entity.serverAddress" maxlength="70">
-                                            <div ng-messages="entityForm.serverAddress.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                                <!--<div ng-message="url|ip">{{lang.invalid_server_name_ip}}</div>-->
-                                                <!--<div ng-message="maxlength">{{lang.max_length.change({length:20})}}-->
-                                                <!--</div>-->
-                                            </div>
-                                        </md-input-container>
-                                        <md-input-container flex>
-                                            <label for="dc">{{lang.domain_controller_name}}</label>
-                                            <input name="dc" id="dc" minlength="2"
-                                                   ng-model="ctrl.entity.dc"
-                                                   maxlength="70"
-                                                   ng-required="ctrl.entity.serverAddress"
-                                                   ng-disabled="!ctrl.entity.serverAddress">
-                                            <div ng-messages="entityForm.dc.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                                <!--<div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
-                                                </div>-->
-                                            </div>
-                                        </md-input-container>
-                                    </div>
-                                    <div layout="row">
-                                        <md-input-container flex>
-                                            <label for="userName">{{lang.username}}</label>
-                                            <input name="userName" id="userName" maxlength="50"
-                                                   ng-model="ctrl.entity.userName" minlength="2"
-                                                   ng-required="ctrl.entity.serverAddress"
-                                                   ng-disabled="!ctrl.entity.serverAddress">
-                                            <div ng-messages="entityForm.userName.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                                <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
-                                                </div>
-                                            </div>
-                                        </md-input-container>
-                                        <md-input-container flex>
-                                            <label for="ldap_password">{{lang.password}}</label>
-                                            <input autocomplete="off" type="password" name="ldap_password"
-                                                   id="ldap_password" no-space-directive
-                                                   minlength="2" ng-model="ctrl.entity.password" maxlength="50"
-                                                   ng-required="ctrl.entity.serverAddress && !ctrl.entity.id"
-                                                   ng-disabled="!ctrl.entity.serverAddress">
-                                            <div ng-messages="entityForm.ldap_password.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                                <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
-                                                </div>
-                                            </div>
-                                            <div class="help-text-div"
-                                                 ng-if="ctrl.entity.id && ctrl.entity.serverAddress">
-                                                {{lang.enter_password_to_override}}
-                                            </div>
-                                        </md-input-container>
-                                    </div>
-                                    <div layout="row">
-                                        <md-input-container flex>
-                                            <label for="tawasolOU">{{lang.tawasol_ou}}</label>
-                                            <input name="tawasolOU" id="tawasolOU" maxlength="100"
-                                                   ng-model="ctrl.entity.tawasolOU" minlength="2"
-                                                   ng-required="ctrl.entity.serverAddress"
-                                                   ng-disabled="!ctrl.entity.serverAddress">
-                                            <div ng-messages="entityForm.tawasolOU.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                                <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:100})}}
-                                                </div>
-                                            </div>
-                                        </md-input-container>
-                                        <md-switch flex ng-model="ctrl.entity.isSSL" aria-label="{{lang.use_ssl}}">
-                                            <label>{{lang.use_ssl}} :
-                                                {{ctrl.entity.getTranslatedIsSSL(ctrl.entity.isSSL)}}</label>
-                                        </md-switch>
-                                    </div>
-                                    <div layout="row">
-                                        <md-button class="md-raised" ng-if="ctrl.editMode"
-                                                   ng-disabled="!ctrl.checkTestLdapConnectionEnabled()"
-                                                   ng-click="ctrl.testLdapConnection()">{{lang.test_connection}}
-                                        </md-button>
-                                    </div>
-                                </fieldset>
                                 <!-- FILE NET -->
                                 <fieldset>
                                     <legend class="md-accent">{{lang.filenet}}</legend>
@@ -295,14 +206,18 @@
                                         </md-input-container>
                                     </div>
                                     <div layout="row">
-                                        <md-button class="md-raised" ng-if="ctrl.editMode"
-                                                   ng-disabled="!ctrl.checkTestFileNetConnectionEnabled()"
-                                                   ng-click="ctrl.testFileNetConnection()">{{lang.test_connection}}
-                                        </md-button>
+                                        <div flex>
+                                            <md-button class="md-raised" ng-if="ctrl.editMode"
+                                                       ng-disabled="!ctrl.checkTestFileNetConnectionEnabled()"
+                                                       ng-click="ctrl.testFileNetConnection()">{{lang.test_connection}}
+                                            </md-button>
+                                        </div>
                                         <span flex></span>
-                                        <md-switch ng-model="ctrl.entity.isSSO">
-                                            {{lang.sso}} : {{ctrl.entity.getTranslatedIsSSL(ctrl.entity.isSSO)}}
-                                        </md-switch>
+                                        <div flex>
+                                            <md-switch ng-model="ctrl.entity.isSSO">
+                                                {{lang.sso}} : {{ctrl.entity.getTranslatedIsSSL(ctrl.entity.isSSO)}}
+                                            </md-switch>
+                                        </div>
                                     </div>
                                 </fieldset>
                                 <!-- TAWASOL SUPPORTING DATABASE -->
@@ -485,6 +400,81 @@
                             </div>
                         </md-content>
                     </md-tab>
+                    <!-- LDAP Settings -->
+                    <md-tab label="{{lang.ldap_providers}}">
+                        <md-content class="md-padding">
+                            <!-- LDAP PROVIDERS -->
+                            <div layout="row" class="p20-0">
+                                <md-button ng-click="ctrl.openAddLDAPDialog($event)"
+                                           class="md-icon-button"
+                                           tooltip="{{lang.add}}">
+                                    <md-icon md-svg-icon="plus"></md-icon>
+                                </md-button>
+                                <span flex></span>
+                                <grid-search-directive grid="ctrl.ldapGrid"></grid-search-directive>
+                            </div>
+                            <div layout="row">
+                                <md-card class="m0">
+                                    <md-table-container>
+                                        <div flex scroll-directive>
+                                            <table md-table md-row-select="true"
+                                                   ng-model="ctrl.selectedLDAPs"
+                                                   md-progress="ctrl.ldapGrid.progress">
+                                                <thead md-head md-order="ctrl.ldapGrid.order" md-on-reorder="ctrl.getSortedLDAPData">
+                                                <tr md-row>
+                                                    <th ng-if="!ctrl.selectedLDAPs.length" md-column md-order-by="server_address"><span>{{lang.arabic_name}}</span>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedLDAPs.length" md-column md-order-by="serverName"><span>{{lang.server_name}}</span>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedLDAPs.length" md-column md-order-by="isDefault"><span>{{lang.default_ldap}}</span>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedLDAPs.length" md-column md-order-by=""><span>{{lang.actions}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-select="ldapProvider" md-row
+                                                    ng-repeat="ldapProvider in ctrl.entity.ldapProviders | limitTo: ctrl.ldapGrid.limit: ((ctrl.ldapGrid.page - 1) * ctrl.ldapGrid.limit) track by $index">
+                                                    <td md-cell>{{ldapProvider.serverAddress}}</td>
+                                                    <td md-cell>{{ldapProvider.serverName}}</td>
+                                                    <td md-cell>
+                                                        <md-switch aria-label="{{lang.isDefault}}"
+                                                                   ng-model="ldapProvider.isDefault"
+                                                                   ng-disabled="ldapProvider.isDefault"
+                                                                   ng-change="ctrl.changeDefaultLDAP(ldapProvider, $index)"
+                                                                   title="{{ldapProvider.getTranslatedYesNo('isDefault')}}"></md-switch>
+                                                    </td>
+                                                    <td md-cell>
+                                                        <div flex layout="row" layout-align="start center">
+                                                            <md-button class="md-icon-button"
+                                                                       ng-click="ctrl.openEditLDAPDialog(ldapProvider, $index, $event)"
+                                                                       title="{{lang.edit}}">
+                                                                <md-icon md-svg-icon="pencil"></md-icon>
+                                                            </md-button>
+                                                            <md-button class="md-icon-button"
+                                                                       ng-click="ctrl.removeLDAP(ldapProvider, $index, $event)"
+                                                                       title="{{lang.delete}}">
+                                                                <md-icon md-svg-icon="delete"></md-icon>
+                                                            </md-button>
+
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <md-table-pagination
+                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                md-limit-options="ctrl.ldapGrid.limitOptions"
+                                                md-limit="ctrl.ldapGrid.limit" md-page="ctrl.ldapGrid.page"
+                                                md-total="{{(ctrl.entity.ldapProviders).length}}" md-page-select
+                                                md-on-paginate="ctrl.ldapGrid.pagingCallback">
+                                        </md-table-pagination>
+                                    </md-table-container>
+                                </md-card>
+                            </div>
+                        </md-content>
+                    </md-tab>
                     <!-- G2G Settings -->
                     <md-tab label="{{lang.g2g_settings}}">
                         <md-content class="md-padding">
@@ -618,11 +608,11 @@
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised" ng-if="!ctrl.editMode"
-                   ng-disabled="entityForm.$invalid"
+                   ng-disabled="entityForm.$invalid || !ctrl.entity.ldapProviders.length"
                    ng-click="ctrl.addEntityFromCtrl()">{{lang.add}}
         </md-button>
         <md-button class="md-raised" ng-if="ctrl.editMode"
-                   ng-disabled="entityForm.$invalid"
+                   ng-disabled="entityForm.$invalid || !ctrl.entity.ldapProviders.length"
                    ng-click="ctrl.editEntityFromCtrl()">{{lang.save}}
         </md-button>
         <span flex></span>

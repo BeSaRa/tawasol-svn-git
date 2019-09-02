@@ -11,13 +11,18 @@ module.exports = function (app) {
                                               dialog,
                                               langService,
                                               entity,
-                                              customValidationService) {
+                                              customValidationService,
+                                              $filter,
+                                              gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'entityPopCtrl';
         self.editMode = editMode;
         self.entity = angular.copy(entity);
         self.model = angular.copy(entity);
+
+        self.ldapProvidersCopy = angular.copy(self.entity.ldapProviders);
+        self.selectedLDAPs = [];
 
         self.validateLabels = {
             identifier: 'identifier',
@@ -36,8 +41,8 @@ module.exports = function (app) {
             osName: 'filenet_object_store_name',
             peRouterName: 'filenet_process_engine_router_name',
             cmsDatabaseName: 'database_name',
-            cmsDataSourceName: 'data_source_name'
-
+            cmsDataSourceName: 'data_source_name',
+            ldapProviders: 'ldap_providers'
         };
 
         self.rootEntity = rootEntity.returnRootEntity();
@@ -46,17 +51,6 @@ module.exports = function (app) {
             var message = result ? 'connection_success' : 'connection_fail';
             var method = result ? 'successMessage' : 'errorMessage';
             dialog[method](langService.get(message));
-            /*if (result)
-                dialog.successMessage(langService.get('connection_success'));
-            else {
-                if (errorCode.checkIf(result, 'SEC_LDAP_ADDING_ENTITY')
-                    || errorCode.checkIf(result, 'SEC_LDAP_OU_NOT_AVAILABLE')
-                    || errorCode.checkIf(result, 'SEC_LDAP_INVALID_SERVER_ADDRESS')
-                    || errorCode.checkIf(result, 'SEC_LDAP_INVALID_OP')
-                    || errorCode.checkIf(result, 'SEC_ERROR_USER_UN_AUHTORIZED_FOR_SERVICE')) {
-
-                }
-            }*/
         }
 
         /**
@@ -88,7 +82,24 @@ module.exports = function (app) {
                 if (!generator.validRequired(model[property]))
                     result.push(property);
             });
+            if (!model.ldapProviders.length) {
+                result.push('ldapProviders');
+            }
             return result;
+        };
+
+        self.checkMissingDefaultLDAPProvider = function (entity) {
+            if (!entity || !entity.ldapProviders.length) {
+                return true;
+            }
+            var isDefault = false;
+            for (var i = 0; i < entity.ldapProviders.length; i++) {
+                isDefault = entity.ldapProviders[i].isDefault;
+                if (isDefault) {
+                    break;
+                }
+            }
+            return !isDefault;
         };
 
         /**
@@ -117,6 +128,12 @@ module.exports = function (app) {
                 }, true)
                 .notifyFailure(function () {
                     toast.error(langService.get('identifier_duplication_message'));
+                })
+                .addStep('check_default_ldap', true, self.checkMissingDefaultLDAPProvider, self.entity, function (result) {
+                    return !result;
+                }, false)
+                .notifyFailure(function () {
+                    toast.error(langService.get('please_set_default_ldap_provider'));
                 })
                 /*.addStep('validate_URL', true, customValidationService.va, [self.entity.helpUrl, "url"], function (result) {
                     return result;
@@ -169,6 +186,12 @@ module.exports = function (app) {
                 .notifyFailure(function () {
                     toast.error(langService.get('identifier_duplication_message'));
                 })
+                .addStep('check_default_ldap', true, self.checkMissingDefaultLDAPProvider, self.entity, function (result) {
+                    return !result;
+                }, false)
+                .notifyFailure(function () {
+                    toast.error(langService.get('please_set_default_ldap_provider'));
+                })
                 .addStep('validate_URL', true, customValidationService.validateInput, [self.entity.helpUrl, "url"], function (result) {
                     return result;
                 }, true)
@@ -201,24 +224,10 @@ module.exports = function (app) {
             dialog.cancel();
         };
 
-        self.checkTestLdapConnectionEnabled = function () {
-            return self.entity.serverAddress && self.entity.dc && self.entity.userName && self.entity.password && self.entity.tawasolOU;
-        };
-
-        /**
-         * @description test LDAP connection
-         */
-        self.testLdapConnection = function () {
-            entityService.ldapConnectionTest(self.entity).then(function (result) {
-                _connectionResult(result);
-            }).catch(function (error) {
-                _connectionResult(false);
-            })
-        };
-
         self.checkTestFileNetConnectionEnabled = function () {
             return self.entity.cmUserName && self.entity.cmPassword && self.entity.cmEJBaddress && self.entity.cmStanza && self.entity.osName && self.entity.peRouterName;
         };
+
         /**
          * @description test file net connection
          */
@@ -267,8 +276,7 @@ module.exports = function (app) {
                     self.entity.internalG2gPassword = null;
                     self.entity.internalG2gGECode = null;
                 }
-            }
-            else if (field === 'g2gServerAddress') {
+            } else if (field === 'g2gServerAddress') {
                 if (!self.entity.g2gServerAddress) {
                     self.entity.g2gUserName = null;
                     self.entity.g2gPassword = null;
@@ -276,6 +284,88 @@ module.exports = function (app) {
                     self.entity.g2gPrivateKey = null;
                 }
             }
+        };
+
+        self.ldapGrid = {
+            progress: null,
+            limit: 5, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20,
+                {
+                    label: langService.get('all'),
+                    value: (self.entity.ldapProviders.length + 21)
+                }
+            ],
+            searchColumns: {
+                serverAddress: 'serverAddress',
+                serverName: 'serverName',
+                code: 'ldapCode'
+            },
+            searchCallback: function (grid) {
+                self.entity.ldapProviders = gridService.searchGridData(self.ldapGrid, self.ldapProvidersCopy);
+            },
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedLDAPData = function () {
+            self.entity.ldapProviders = $filter('orderBy')(self.entity.ldapProviders, self.ldapGrid.order);
+        };
+
+        self.changeDefaultLDAP = function (ldapProvider, index, $event) {
+            if (self.entity.ldapProviders.length && self.entity.ldapProviders.length === 1) {
+                if (!ldapProvider.isDefault) {
+                    return;
+                }
+            }
+            for (var i = 0; i < self.entity.ldapProviders.length; i++) {
+                if (i !== index) {
+                    self.entity.ldapProviders[i].isDefault = false;
+                }
+            }
+        };
+
+        self.openAddLDAPDialog = function ($event) {
+            entityService.controllerMethod.ldapAddDialog($event)
+                .then(function (result) {
+                    self.entity.ldapProviders.push(result);
+                });
+        };
+        self.openEditLDAPDialog = function (ldapProvider, index, $event) {
+            if (!ldapProvider) {
+                return false;
+            }
+            entityService.controllerMethod.ldapEditDialog(ldapProvider, $event)
+                .then(function (result) {
+                    if (result.id) {
+                        self.entity.ldapProviders = _.map(self.entity.ldapProviders, function (provider) {
+                            if (provider.id === ldapProvider.id) {
+                                provider = result;
+                            }
+                            return provider;
+                        })
+                    } else {
+                        self.entity.ldapProviders.splice(index, 1, result);
+                    }
+                });
+        };
+
+        self.removeLDAP = function (ldapProvider, index, $event) {
+            if (!ldapProvider) {
+                return false;
+            }
+            dialog.confirmMessage(langService.get('confirm_delete').change({name: ldapProvider.getNames()}))
+                .then(function () {
+                    if (ldapProvider.id) {
+                        self.entity.ldapProviders = _.filter(self.entity.ldapProviders, function (provider) {
+                            return provider.id !== ldapProvider.id;
+                        })
+                    } else {
+                        self.entity.ldapProviders.splice(index, 1);
+                    }
+                })
         }
 
     });

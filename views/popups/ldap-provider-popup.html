@@ -1,0 +1,137 @@
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_ldap : ctrl.model.getNames()}}">
+    <popup-toolbar-directive ng-if="!ctrl.editMode"
+                             header-text="{{lang.add_ldap}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode"
+                             header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="ldapProviderForm" autocomplete="off">
+                <div layout="column">
+                    <div layout="row">
+                        <!-- Server Address -->
+                        <md-input-container flex>
+                            <label for="serverAddress">{{lang.server_name_ip}}</label>
+                            <input name="serverAddress" id="serverAddress" required
+                                   ng-model="ctrl.ldapProvider.serverAddress" maxlength="70">
+                            <div ng-messages="ldapProviderForm.serverAddress.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <!--<div ng-message="url|ip">{{lang.invalid_server_name_ip}}</div>-->
+                                <!--<div ng-message="maxlength">{{lang.max_length.change({length:20})}}-->
+                                <!--</div>-->
+                            </div>
+                        </md-input-container>
+                        <!-- Server name -->
+                        <md-input-container flex>
+                            <label for="serverName">{{lang.server_name}}</label>
+                            <input name="serverName" id="serverName" required
+                                   ng-model="ctrl.ldapProvider.serverName" maxlength="70">
+                            <div ng-messages="ldapProviderForm.serverName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <!--<div ng-message="url|ip">{{lang.invalid_server_name_ip}}</div>-->
+                                <!--<div ng-message="maxlength">{{lang.max_length.change({length:20})}}-->
+                                <!--</div>-->
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Controller Name -->
+                        <md-input-container flex>
+                            <label for="dc">{{lang.domain_controller_name}}</label>
+                            <input name="dc" id="dc" minlength="2"
+                                   ng-model="ctrl.ldapProvider.dc"
+                                   maxlength="70" required>
+                            <div ng-messages="ldapProviderForm.dc.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <!--<div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
+                                </div>-->
+                            </div>
+                        </md-input-container>
+                        <!-- OU -->
+                        <md-input-container flex>
+                            <label for="tawasolOU">{{lang.tawasol_ou}}</label>
+                            <input name="tawasolOU" id="tawasolOU" maxlength="100"
+                                   ng-model="ctrl.ldapProvider.tawasolOU" minlength="2" required>
+                            <div ng-messages="ldapProviderForm.tawasolOU.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:100})}}
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- User Name-->
+                        <md-input-container flex>
+                            <label for="userName">{{lang.username}}</label>
+                            <input name="userName" id="userName" maxlength="50"
+                                   ng-model="ctrl.ldapProvider.userName" minlength="2" required>
+                            <div ng-messages="ldapProviderForm.userName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <!-- Password -->
+                        <md-input-container flex>
+                            <label for="ldap_password">{{lang.password}}</label>
+                            <input autocomplete="off" type="password" name="ldap_password"
+                                   id="ldap_password" no-space-directive
+                                   minlength="2" ng-model="ctrl.ldapProvider.password" maxlength="50"
+                                   ng-required="!ctrl.ldapProvider.id">
+                            <div ng-messages="ldapProviderForm.ldap_password.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                </div>
+                            </div>
+                            <div class="help-text-div"
+                                 ng-if="ctrl.ldapProvider.id">
+                                {{lang.enter_password_to_override}}
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Use SSL -->
+                        <div flex>
+                            <md-switch flex ng-model="ctrl.ldapProvider.isSSL" aria-label="{{lang.use_ssl}}">
+                                <label>{{lang.use_ssl}} :
+                                    {{ctrl.ldapProvider.getTranslatedYesNo('isSSL')}}</label>
+                            </md-switch>
+                        </div>
+                        <!-- Is Default -->
+                        <div flex>
+                            <md-switch flex ng-model="ctrl.ldapProvider.isDefault" aria-label="{{lang.default_ldap}}">
+                                <label>{{lang.default_ldap}} :
+                                    {{ctrl.ldapProvider.getTranslatedYesNo('isDefault')}}</label>
+                            </md-switch>
+                        </div>
+                    </div>
+                    <div layout="row">
+                        <div>
+                            <!-- Test Connection -->
+                            <md-button class="md-raised" ng-if="ctrl.editMode"
+                                       ng-disabled="!ctrl.checkTestLdapConnectionEnabled()"
+                                       ng-click="ctrl.testLdapConnection()">{{lang.test_connection}}
+                            </md-button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="ldapProviderForm.$invalid"
+                   ng-click="ctrl.sendLDAPProvider($event)">{{lang.set}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised"
+                   ng-click="ctrl.resetLDAPProvider(ldapProviderForm, $event)">{{lang.reset}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopUp($event)">{{lang.close}}</md-button>
+    </md-dialog-actions>
+</md-dialog>

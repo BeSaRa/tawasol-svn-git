@@ -8,7 +8,8 @@ module.exports = function (app) {
                                            dialog,
                                            langService,
                                            toast,
-                                           cmsTemplate) {
+                                           cmsTemplate,
+                                           LDAPProvider) {
         'ngInject';
         var self = this;
         self.serviceName = 'entityService';
@@ -148,6 +149,32 @@ module.exports = function (app) {
                                 }
                                 return response;
                             });
+                    });
+            },
+            ldapAddDialog: function ($event) {
+                return dialog
+                    .showDialog({
+                        targetEvent: $event || null,
+                        templateUrl: cmsTemplate.getPopup('ldap-provider'),
+                        controller: 'ldapProviderPopCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            editMode: false,
+                            ldapProvider: new LDAPProvider()
+                        }
+                    });
+            },
+            ldapEditDialog: function (provider, $event) {
+                return dialog
+                    .showDialog({
+                        targetEvent: $event || null,
+                        templateUrl: cmsTemplate.getPopup('ldap-provider'),
+                        controller: 'ldapProviderPopCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            editMode: true,
+                            ldapProvider: angular.copy(provider)
+                        }
                     });
             }
         };
@@ -323,13 +350,13 @@ module.exports = function (app) {
         /**
          * @description test LDAP connection
          */
-        self.ldapConnectionTest = function (entity) {
+        self.ldapConnectionTest = function (provider) {
             var ldapConnection = {
-                'serverAddress': entity.serverAddress,
-                'dc': entity.dc,
-                'userName': entity.userName,
-                'password': entity.password,
-                'tawasolOU': entity.tawasolOU
+                'serverAddress': provider.serverAddress,
+                'dc': provider.dc,
+                'userName': provider.userName,
+                'password': provider.password,
+                'tawasolOU': provider.tawasolOU
             };
             return $http
                 .post((urlService.connectionTest + '/' + 'ldap'), ldapConnection)
