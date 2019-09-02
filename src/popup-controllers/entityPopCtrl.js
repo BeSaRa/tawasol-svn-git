@@ -330,9 +330,13 @@ module.exports = function (app) {
         self.openAddLDAPDialog = function ($event) {
             entityService.controllerMethod.ldapAddDialog($event)
                 .then(function (result) {
+                    if (!self.entity.ldapProviders.length) {
+                        result.isDefault = true;
+                    }
                     self.entity.ldapProviders.push(result);
                 });
         };
+
         self.openEditLDAPDialog = function (ldapProvider, index, $event) {
             if (!ldapProvider) {
                 return false;
@@ -353,7 +357,7 @@ module.exports = function (app) {
         };
 
         self.removeLDAP = function (ldapProvider, index, $event) {
-            if (!ldapProvider) {
+            if (!ldapProvider || ldapProvider.isDefault) {
                 return false;
             }
             dialog.confirmMessage(langService.get('confirm_delete').change({name: ldapProvider.getNames()}))

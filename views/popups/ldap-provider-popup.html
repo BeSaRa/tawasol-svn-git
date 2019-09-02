@@ -102,15 +102,6 @@
                                     {{ctrl.ldapProvider.getTranslatedYesNo('isSSL')}}</label>
                             </md-switch>
                         </div>
-                        <!-- Is Default -->
-                        <div flex>
-                            <md-switch flex ng-model="ctrl.ldapProvider.isDefault" aria-label="{{lang.default_ldap}}">
-                                <label>{{lang.default_ldap}} :
-                                    {{ctrl.ldapProvider.getTranslatedYesNo('isDefault')}}</label>
-                            </md-switch>
-                        </div>
-                    </div>
-                    <div layout="row">
                         <div>
                             <!-- Test Connection -->
                             <md-button class="md-raised" ng-if="ctrl.editMode"

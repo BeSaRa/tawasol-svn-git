@@ -452,6 +452,7 @@
                                                                 <md-icon md-svg-icon="pencil"></md-icon>
                                                             </md-button>
                                                             <md-button class="md-icon-button"
+                                                                       ng-disabled="ldapProvider.isDefault"
                                                                        ng-click="ctrl.removeLDAP(ldapProvider, $index, $event)"
                                                                        title="{{lang.delete}}">
                                                                 <md-icon md-svg-icon="delete"></md-icon>

@@ -37,6 +37,7 @@ module.exports = function (app) {
             self.escalationProcess = null;
             self.followupUsers = null;
             self.hasRegistry = true;
+            self.ldapCode = null;
             self.ldapPrefix = null;
             self.logo = null;
             self.managerId = null;
@@ -73,6 +74,7 @@ module.exports = function (app) {
                 'hasRegistry',
                 'centralArchive',
                 'status',
+                'ldapCode',
                 // 'ldapPrefix', // must be removed from the ui as per abu Al Nasser.
                 // 'referenceNumberPlanId',
                 'outype',

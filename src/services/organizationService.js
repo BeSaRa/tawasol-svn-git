@@ -484,7 +484,15 @@ module.exports = function (app) {
                             'ngInject';
                             // return documentTemplateService.loadDocumentTemplates(organization.id);
                             return [];
-                        }/*,
+                        },
+                        entityLDAPProviders: function (entityService, rootEntity) {
+                            'ngInject';
+                            return entityService.loadEntityById(rootEntity.returnRootEntity().rootEntity)
+                                .then(function (result) {
+                                    return result.ldapProviders;
+                                });
+                        }
+                        /*,
                          organizations: function(organizationService){
                          return organizationService.getOrganizations()
                          }*/
@@ -574,6 +582,13 @@ module.exports = function (app) {
                         ouAssignedUsers: function (ouApplicationUserService) {
                             'ngInject';
                             return ouApplicationUserService.loadRelatedOUApplicationUsers(organization.id);
+                        },
+                        entityLDAPProviders: function (entityService, rootEntity) {
+                            'ngInject';
+                            return entityService.loadEntityById(rootEntity.returnRootEntity().rootEntity)
+                                .then(function (result) {
+                                    return result.ldapProviders;
+                                });
                         }/*,
                          organizations: function(organizationService){
                          return organizationService.getOrganizations()

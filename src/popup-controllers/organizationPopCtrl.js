@@ -49,7 +49,7 @@ module.exports = function (app) {
                                                     employeeService,
                                                     correspondenceViewService,
                                                     gridService,
-                                                    singleNotifierService) {
+                                                    entityLDAPProviders) {
         'ngInject';
 
         var self = this;
@@ -64,13 +64,15 @@ module.exports = function (app) {
         self.rootMode = rootMode;
         // correspondence sites types
         self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
+        // ldap providers for entity
+        self.entityLDAPProviders = entityLDAPProviders;
         // get permissions
-        //self.permissions = roleService.permission;
         self.permissions = roleService.permissionsByGroup;
         // set copy of current organization if editMode true.
         self.organization = !self.editMode ? new Organization({
             wfsecurity: lookupService.getLookupByLookupKey(lookupService.workflowSecurity, rootEntity.getGlobalSettings().wfsecurity),
-            securitySchema: lookupService.getLookupByLookupKey(lookupService.securitySchema, rootEntity.getGlobalSettings().securitySchema)
+            securitySchema: lookupService.getLookupByLookupKey(lookupService.securitySchema, rootEntity.getGlobalSettings().securitySchema),
+            ldapCode: self.entityLDAPProviders.length === 1 ? self.entityLDAPProviders[0].ldapCode : null
         }) : angular.copy(organization);
         /////////////////////////// capture the current workflow security level before update //////////////////////////
         self.initialWFSecurity = self.organization.wfsecurity;
@@ -179,6 +181,9 @@ module.exports = function (app) {
             },
             ldapPrefix: {
                 lang: 'prefix'
+            },
+            ldapCode: {
+                lang: 'ldap_code'
             },
             deadlineReminder: {
                 lang: 'send_a_reminder_before_deadline_date_with',
@@ -388,8 +393,12 @@ module.exports = function (app) {
         self.hasRegistryChange = function (hasRegistry) {
             dialog.confirmMessage(langService.get('confirm_change_affect_whole_system'))
                 .then(function () {
+                    self.organization.ldapCode = null;
                     if (hasRegistry) {
                         self.organization.setRegistryParentId(null);
+                        if (self.entityLDAPProviders.length === 1){
+                            self.organization.ldapCode = self.entityLDAPProviders[0].ldapCode;
+                        }
                     } else {
                         self.organization.referencePlanItemStartSerialList = [];
                         self.organization.referenceNumberPlanId = null;
@@ -410,6 +419,7 @@ module.exports = function (app) {
          */
         self.registryParentChanged = function (parent) {
             self.organization.referenceNumberPlanId = parent.referenceNumberPlanId;
+            self.organization.ldapCode = parent.ldapCode;
         };
 
         /**

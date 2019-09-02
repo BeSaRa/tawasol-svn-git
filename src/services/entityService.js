@@ -151,6 +151,10 @@ module.exports = function (app) {
                             });
                     });
             },
+            /**
+             * @description Opens popup to add new ldap provider
+             * @param $event
+             */
             ldapAddDialog: function ($event) {
                 return dialog
                     .showDialog({
@@ -164,6 +168,11 @@ module.exports = function (app) {
                         }
                     });
             },
+            /**
+             * @description Opens popup to edit ldap provider
+             * @param provider
+             * @param $event
+             */
             ldapEditDialog: function (provider, $event) {
                 return dialog
                     .showDialog({

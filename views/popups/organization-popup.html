@@ -2,10 +2,10 @@
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="organization-dialog"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_organization : ctrl.model.getTranslatedName()}}">
-        <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_organization}}"
-                                 close-callback="ctrl.closeOrganizationDialog"></popup-toolbar-directive>
-        <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getTranslatedName()}}"
-                                 close-callback="ctrl.closeOrganizationDialog"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_organization}}"
+                             close-callback="ctrl.closeOrganizationDialog"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getTranslatedName()}}"
+                             close-callback="ctrl.closeOrganizationDialog"></popup-toolbar-directive>
     <md-dialog-content scroll-directive>
         <div>
             <form name="org_form" novalidate autocomplete="off">
@@ -141,7 +141,8 @@
                                     </md-input-container>
                                     <md-input-container flex>
                                         <label for="hrCode">{{lang.hr_code}}</label>
-                                        <input id="hrCode" custom-validate-directive="number" name="hrCode" maxlength="4" ng-model="ctrl.organization.hrCode">
+                                        <input id="hrCode" custom-validate-directive="number" name="hrCode"
+                                               maxlength="4" ng-model="ctrl.organization.hrCode">
                                         <div ng-messages="org_form.hrCode.$error">
                                             <div ng-message="number">{{lang.numberonly}}</div>
                                             <div ng-message="required">{{lang.field_required}}</div>
@@ -212,7 +213,10 @@
                                                ng-model="ctrl.organization.hasRegistry">
                                         {{lang.has_registry}} : {{ctrl.organization.getHasRegistryTranslate()}}
                                     </md-switch>
+                                    {{ctrl.organization.ldapCode | json}}
+
                                     <span class="p20"></span>
+                                    <!-- Reg Ous -->
                                     <md-input-container class="input-container-no-top-margin"
                                                         ng-if="!ctrl.organization.hasRegistry"
                                                         flex>
@@ -231,6 +235,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
+                                    <!-- Correspondence Site Type -->
                                     <md-input-container class="input-container-no-top-margin"
                                                         ng-if="ctrl.organization.hasRegistry"
                                                         flex>
@@ -245,6 +250,22 @@
                                             </md-option>
                                         </md-select>
                                         <div ng-messages="org_form.correspondenceTypeId.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- LDAP Code -->
+                                    <md-input-container class="input-container-no-top-margin"
+                                                        ng-if="ctrl.organization.hasRegistry"
+                                                        flex>
+                                        <label for="ldapCode">{{lang.ldap_code}}</label>
+                                        <md-select name="ldapCode" id="ldapCode" required
+                                                   ng-model="ctrl.organization.ldapCode">
+                                            <md-option ng-value="ldapProvider.ldapCode"
+                                                       ng-repeat="ldapProvider in ctrl.entityLDAPProviders track by $index">
+                                                {{ldapProvider.getNames()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="org_form.registryParentId.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
@@ -380,9 +401,11 @@
                                         </md-select>
                                     </md-input-container>
                                     <!-- Empty Container -->
-                                    <md-input-container flex  ng-if="!(ctrl.organization.hasRegistry || ctrl.organization.centralArchive)"></md-input-container>
+                                    <md-input-container flex
+                                                        ng-if="!(ctrl.organization.hasRegistry || ctrl.organization.centralArchive)"></md-input-container>
                                     <!-- Fax Id -->
-                                    <md-input-container flex ng-if="ctrl.organization.hasRegistry || ctrl.organization.centralArchive">
+                                    <md-input-container flex
+                                                        ng-if="ctrl.organization.hasRegistry || ctrl.organization.centralArchive">
                                         <label for="faxId">{{lang.fax_id}}</label>
                                         <input id="faxId" name="faxId"
                                                ng-model="ctrl.organization.faxId">
