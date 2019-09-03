@@ -640,7 +640,6 @@ module.exports = function (app) {
                             .then(function (ous) {
                                 return generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
                             });
-                     //   return generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
                     }
                 });
         };
@@ -656,8 +655,11 @@ module.exports = function (app) {
             return $http
                 .get(urlService.ouApplicationUsers + '/ouid/' + organization)
                 .then(function (result) {
-                    self.ouApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
-                    return self.ouApplicationUsers;
+                    return organizationService.getOrganizations()
+                        .then(function (ous) {
+                            self.ouApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
+                            return self.ouApplicationUsers;
+                        });
                 });
         };
 
