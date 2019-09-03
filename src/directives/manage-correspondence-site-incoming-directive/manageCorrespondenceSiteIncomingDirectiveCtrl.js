@@ -346,7 +346,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.onSiteTypeChangeAdvanced = function ($event) {
-            debugger;
             var siteType = self.selectedSiteTypeAdvanced && self.selectedSiteTypeAdvanced.hasOwnProperty('lookupKey')
                 ? self.selectedSiteTypeAdvanced.lookupKey
                 : self.selectedSiteTypeAdvanced;

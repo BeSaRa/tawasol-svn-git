@@ -274,7 +274,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.openAddUserCommentDialog = function (record, $event) {
-            debugger
             userCommentService.controllerMethod.userCommentAddDialog(employeeService.getEmployee().id, employeeService.getEmployee().getOUID(), $event)
                 .then(function (userComment) {
                     self.workflowComments.push(userComment);

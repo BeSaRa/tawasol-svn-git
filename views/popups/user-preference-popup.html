@@ -1,8 +1,8 @@
 <md-dialog class="dialog-extend mw60"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.user_preferences}}">
-        <popup-toolbar-directive
-                header-text="{{lang.user_preferences}} : {{ctrl.model.getNames()}}"></popup-toolbar-directive>
+    <popup-toolbar-directive
+            header-text="{{lang.user_preferences}} : {{ctrl.model.getNames()}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive>
         <div>
             <form name="userPreferencesForm" autocomplete="off">
@@ -792,90 +792,8 @@
                     <md-tab label="{{lang.user_comments}}" ng-if="ctrl.showTab('uc')"
                             md-on-select="ctrl.setCurrentTab('uc')">
                         <md-content class="md-padding">
-                            <ng-form name="userCommentsForm" autocomplete="off">
-                                <div layout="column" ng-if="ctrl.isUserCommentForm">
-                                    <div layout="row">
-                                        <!-- Organization Unit -->
-                                        <md-input-container flex>
-                                            <label for="ouId">{{lang.organization_unit}}</label>
-                                            <md-select name="ouId" id="ouId"
-                                                       ng-required="ctrl.isUserCommentForm"
-                                                       ng-model="ctrl.userComment.ouId">
-                                                <md-option
-                                                        ng-repeat="organization in ctrl.organizationsForAppUser track by $index"
-                                                        ng-value="organization.ou.id">
-                                                    {{organization.ou.getTranslatedName()}}
-                                                </md-option>
-                                            </md-select>
-                                            <div ng-messages="userCommentsForm.ouId.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                            </div>
-                                        </md-input-container>
-
-                                        <!-- Item Order -->
-                                        <md-input-container flex>
-                                            <label for="itemOrder">{{lang.item_order}}</label>
-                                            <input name="itemOrder" id="itemOrder" maxlength="5"
-                                                   ng-required="ctrl.isUserCommentForm"
-                                                   ng-model="ctrl.userComment.itemOrder"
-                                                   custom-validate-directive="number">
-                                            <div ng-messages="userCommentsForm.itemOrder.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                                <div ng-message="number">{{lang.numberonly}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
-                                            </div>
-                                        </md-input-container>
-                                    </div>
-                                    <div layout="row">
-                                        <!-- Short Comment -->
-                                        <md-input-container flex>
-                                            <label for="shortComment">{{lang.short_comment}}</label>
-                                            <input name="shortComment" id="shortComment" minlength="4"
-                                                   ng-required="ctrl.isUserCommentForm" maxlength="150"
-                                                   ng-model="ctrl.userComment.shortComment">
-                                            <div ng-messages="userCommentsForm.shortComment.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                                <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:150})}}
-                                                </div>
-                                            </div>
-                                        </md-input-container>
-
-                                    </div>
-                                    <div layout="row">
-                                        <!-- Comment -->
-                                        <md-input-container flex>
-                                            <label for="comment">{{lang.comment}}</label>
-                                            <textarea rows="5" name="comment" id="comment" minlength="4"
-                                                      ng-required="ctrl.isUserCommentForm" maxlength="1024"
-                                                      ng-model="ctrl.userComment.comment"></textarea>
-                                            <div ng-messages="userCommentsForm.comment.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                                <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:1024})}}
-                                                </div>
-                                            </div>
-                                        </md-input-container>
-                                    </div>
-                                    <div layout="row">
-                                        <!-- Status -->
-                                        <md-switch flex ng-model="ctrl.userComment.status"
-                                                   aria-label="{{lang.status}}">
-                                            <label>{{lang.status}} : {{ctrl.userComment.getTranslatedStatus()}}</label>
-                                        </md-switch>
-                                        <md-input-container flex>
-
-                                        </md-input-container>
-                                    </div>
-                                </div>
-                            </ng-form>
-
-                            <div layout="column" ng-if="!ctrl.isUserCommentForm">
+                            <div layout="column">
                                 <div layout="row" class="p20-0">
-                        <md-content>
-                            <div layout="column" class="content">
-                                <div layout="row" layout-align="start center" class="p25 small">
-                                    <!--<span>{{lang.user_comment}}</span>-->
                                     <md-button ng-click="ctrl.openAddUserCommentDialog($event)"
                                                class="md-icon-button"
                                                tooltip="{{lang.add}}">
@@ -886,7 +804,8 @@
                                         <md-icon md-svg-icon="refresh"></md-icon>
                                     </md-button>
                                     <span flex></span>
-                                    <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+                                    <search-filter-directive
+                                            model="ctrl.searchModel"></search-filter-directive>
                                 </div>
                                 <div layout="column" flex>
                                     <div scroll-directive>
@@ -901,31 +820,40 @@
                                                                md-on-reorder="ctrl.getSortedDataUserComments">
                                                         <tr md-row>
                                                             <th colspan="4" class="table-selector-header"
-                                                                ng-if="ctrl.selectedUserComments.length" md-column>
-                                                                <div layout="row" layout-align="start center">
+                                                                ng-if="ctrl.selectedUserComments.length"
+                                                                md-column>
+                                                                <div layout="row"
+                                                                     layout-align="start center">
                                                                     <span>{{ctrl.selectedUserComments.length}} {{lang.items_selected}} </span>
                                                                     <span flex></span>
                                                                     <table-status-directive
                                                                             when-close="ctrl.changeStatusBulkUserComments"></table-status-directive>
                                                                     <md-button class="md-icon-button"
                                                                                ng-click="ctrl.removeBulkUserComments($event)">
-                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                        <md-icon
+                                                                                md-svg-icon="delete"></md-icon>
                                                                     </md-button>
                                                                 </div>
                                                             </th>
-                                                            <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                md-order-by="shortComment"><span>{{lang.short_comment}}</span>
+                                                            <th ng-if="!ctrl.selectedUserComments.length"
+                                                                md-column
+                                                                md-order-by="shortComment">
+                                                                <span>{{lang.short_comment}}</span>
                                                             </th>
                                                             <!--<th ng-if="!ctrl.selectedUserComments.length" md-column-->
                                                             <!--md-order-by=""><span>{{lang.comment}}</span>-->
                                                             <!--</th>-->
-                                                            <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                md-order-by="status"><span>{{lang.status}}</span>
+                                                            <th ng-if="!ctrl.selectedUserComments.length"
+                                                                md-column
+                                                                md-order-by="status">
+                                                                <span>{{lang.status}}</span>
                                                             </th>
-                                                            <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                            <th ng-if="!ctrl.selectedUserComments.length"
+                                                                md-column
                                                                 md-order-by="itemOrder"><span>{{lang.item_order}}</span>
                                                             </th>
-                                                            <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                            <th ng-if="!ctrl.selectedUserComments.length"
+                                                                md-column
                                                                 md-order-by=""><span>{{lang.actions}}</span>
                                                             </th>
                                                         </tr>
@@ -945,84 +873,20 @@
                                                             </td>
                                                             <td md-cell>{{userComment.itemOrder}}</td>
                                                             <td md-cell>
-                                                                <div flex layout="row" layout-align="start center">
+                                                                <div flex layout="row"
+                                                                     layout-align="start center">
                                                                     <md-button class="md-icon-button"
-                                                                               ng-click="ctrl.editUserComment(userComment, userCommentsForm, $event)"
+                                                                               ng-click="ctrl.openEditUserCommentDialog(userComment, $event)"
                                                                                title="{{lang.edit}}">
-                                                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                                                        <md-icon
+                                                                                md-svg-icon="pencil"></md-icon>
                                                                     </md-button>
                                                                     <md-button class="md-icon-button"
                                                                                ng-click="ctrl.removeUserComment(userComment, $event)"
                                                                                title="{{lang.delete}}">
-                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                        <md-icon
+                                                                                md-svg-icon="delete"></md-icon>
                                                                     </md-button>
-                                        <div class="page-padding">
-                                            <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                                                <md-table-container>
-                                                    <div flex scroll-directive>
-                                                        <table md-table md-row-select="true"
-                                                               multiple="true"
-                                                               ng-model="ctrl.selectedUserComments"
-                                                               md-progress="ctrl.progress">
-                                                            <thead md-head md-order="ctrl.grid.order"
-                                                                   md-on-reorder="ctrl.getSortedDataUserComments">
-                                                            <tr md-row>
-                                                                <th colspan="4" class="table-selector-header"
-                                                                    ng-if="ctrl.selectedUserComments.length" md-column>
-                                                                    <div layout="row" layout-align="start center">
-                                                                        <span>{{ctrl.selectedUserComments.length}} {{lang.items_selected}} </span>
-                                                                        <span flex></span>
-                                                                        <table-status-directive
-                                                                                when-close="ctrl.changeStatusBulkUserComments"></table-status-directive>
-                                                                        <md-button class="md-icon-button"
-                                                                                   ng-click="ctrl.removeBulkUserComments($event)">
-                                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                                        </md-button>
-                                                                    </div>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                    md-order-by="shortComment"><span>{{lang.short_comment}}</span>
-                                                                </th>
-                                                                <!--<th ng-if="!ctrl.selectedUserComments.length" md-column-->
-                                                                <!--md-order-by=""><span>{{lang.comment}}</span>-->
-                                                                <!--</th>-->
-                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                    md-order-by="status"><span>{{lang.status}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                    md-order-by="itemOrder"><span>{{lang.item_order}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                    md-order-by=""><span>{{lang.actions}}</span>
-                                                                </th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody md-body>
-                                                            <tr md-select="userComment" md-row
-                                                                ng-repeat="userComment in ctrl.userComments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
-                                                                <td md-cell><a href=""
-                                                                               ng-click="ctrl.showComment(userComment, $event)">{{userComment.shortComment}}</a>
-                                                                </td>
-                                                                <!--<td md-cell>{{userComment.comment}}</td>-->
-                                                                <td md-cell>
-                                                                    <md-switch aria-label="{{lang.status}}"
-                                                                               ng-model="userComment.status"
-                                                                               ng-change="ctrl.changeStatusUserComment(userComment)"
-                                                                               title="{{userComment.getTranslatedStatus()}}"></md-switch>
-                                                                </td>
-                                                                <td md-cell>{{userComment.itemOrder}}</td>
-                                                                <td md-cell>
-                                                                    <div flex layout="row" layout-align="start center">
-                                                                        <md-button class="md-icon-button"
-                                                                                   ng-click="ctrl.openEditUserCommentDialog(userComment, $event)"
-                                                                                   title="{{lang.edit}}">
-                                                                            <md-icon md-svg-icon="pencil"></md-icon>
-                                                                        </md-button>
-                                                                        <md-button class="md-icon-button"
-                                                                                   ng-click="ctrl.removeUserComment(userComment, $event)"
-                                                                                   title="{{lang.delete}}">
-                                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                                        </md-button>
 
                                                                 </div>
                                                             </td>
