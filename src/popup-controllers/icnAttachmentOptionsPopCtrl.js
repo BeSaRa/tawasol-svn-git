@@ -9,7 +9,8 @@ module.exports = function (app) {
                                                             rootEntity,
                                                             langService,
                                                             icnSearchTemplates,
-                                                            toast) {
+                                                            toast,
+                                                            defaultAttachmentName) {
         'ngInject';
         var self = this;
         self.controllerName = 'icnAttachmentOptionsPopCtrl';
@@ -39,6 +40,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.getICNAttachmentForm = function ($event) {
+            if (!self.attachment.documentTitle) {
+                self.attachment.documentTitle = defaultAttachmentName;
+            }
             attachmentService.openICNAttachmentDialog(correspondence, self.attachment, $event)
                 .then(function (result) {
                     if (result === 'icnAttachmentSuccess') {

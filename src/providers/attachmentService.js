@@ -579,10 +579,11 @@ module.exports = function (app) {
             /**
              * @description Opens the dialog to select search template and fill mandatory information
              * @param correspondence
+             * @param defaultAttachmentName
              * @param $event
              * @returns {promise}
              */
-            self.openIcnAttachmentOptionsDialog = function (correspondence, $event) {
+            self.openIcnAttachmentOptionsDialog = function (correspondence, defaultAttachmentName, $event) {
                 return dialog
                     .showDialog({
                         controller: 'icnAttachmentOptionsPopCtrl',
@@ -590,7 +591,8 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         targetEvent: $event,
                         locals: {
-                            correspondence: correspondence
+                            correspondence: correspondence,
+                            defaultAttachmentName: defaultAttachmentName
                         },
                         resolve: {
                             icnSearchTemplates: function (dynamicMenuItemService) {

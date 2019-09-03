@@ -167,9 +167,11 @@ module.exports = function (app) {
             });
         };
 
-        self.setNameToAttachment = function (attachment) {
+        self.setNameToAttachment = function (attachment, forIcn) {
             var name = langService.get('attachment_file');
-
+            if (forIcn) {
+                attachment = {documentTitle: '', docSubject: ''};
+            }
             if (attachment.documentTitle.trim() === '') {
                 var count = 1;
                 while (self.attachmentNameExists(name + ' ' + count)) {
@@ -453,7 +455,7 @@ module.exports = function (app) {
             if (!self.vsId || !employeeService.hasPermissionTo('ICN_SEARCH_TEMPLATE')) {
                 return;
             }
-            attachmentService.openIcnAttachmentOptionsDialog(self.document, $event)
+            attachmentService.openIcnAttachmentOptionsDialog(self.document, self.setNameToAttachment(null, true).documentTitle, $event)
                 .then(function (result) {
                     self.reloadAttachments()
                         .then(function (result) {
