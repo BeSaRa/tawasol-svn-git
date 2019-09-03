@@ -3789,7 +3789,7 @@ module.exports = function (app) {
             var info = correspondence.getInfo();
             documentLink.docSubject = info.title;
             documentLink.vsid = info.vsId;
-            documentLink.docClassId = info.docType;
+            documentLink.docClassId = info.docClassId;
 
             return $http.post(urlService.documentLink,
                 generator.interceptSendInstance('DocumentLink', documentLink))
