@@ -131,4 +131,5 @@ module.exports = function (app) {
     require('./userLinksPopupCtrl')(app);
     require('./groupMembersPopCtrl')(app);
     require('./ldapProviderPopCtrl')(app);
+    require('./userCommentPopCtrl')(app);
 };

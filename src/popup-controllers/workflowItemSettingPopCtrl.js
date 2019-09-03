@@ -1,5 +1,13 @@
 module.exports = function (app) {
-    app.controller('workflowItemSettingPopCtrl', function (distWorkflowItem, rootEntity ,_, comments, workflowActions, dialogTitle, dialog) {
+    app.controller('workflowItemSettingPopCtrl', function (distWorkflowItem,
+                                                           rootEntity,
+                                                           _,
+                                                           comments,
+                                                           workflowActions,
+                                                           dialogTitle,
+                                                           dialog,
+                                                           userCommentService,
+                                                           employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'workflowItemSettingPopCtrl';
@@ -64,14 +72,27 @@ module.exports = function (app) {
          * @param $event
          */
         self.preventSearchKeyDown = function ($event) {
-            if ($event){
+            if ($event) {
                 var code = $event.which || $event.keyCode;
                 if (code !== 38 && code !== 40)
                     $event.stopPropagation();
             }
         };
 
-
+        /**
+         * @description Opens the add user comment(private and active)
+         * @param $event
+         */
+        self.openAddUserCommentDialog = function ($event) {
+            userCommentService.controllerMethod.userCommentAddDialog(employeeService.getEmployee().id, employeeService.getEmployee().getOUID(), $event)
+                .then(function (userComment) {
+                    self.comments.push(userComment);
+                    self.comment = userComment;
+                    self.onCommentChange();
+                    // reload comments to use in user preference
+                    userCommentService.loadUserComments();
+                })
+        };
 
     });
 };

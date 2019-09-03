@@ -694,12 +694,6 @@ module.exports = function (app) {
                 });
         };
 
-
-        self.userComment = new UserComment({
-            userId: applicationUser.id,
-            itemOrder: generator.createNewID(self.userComments, 'itemOrder')
-        });
-
         /**
          * @description Contains the labels for the fields for validation purpose
          */
@@ -713,8 +707,6 @@ module.exports = function (app) {
 
 
         self.selectedUserComments = [];
-        self.isUserCommentForm = false;
-        self.userCommentForm = null;
 
         /**
          * @description Gets the grid records by sorting
@@ -784,68 +776,26 @@ module.exports = function (app) {
 
         /**
          * @description Opens the form to add user comment and hides the user comment grid
-         * @param userCommentForm
          * @param $event
          */
-        self.openUserCommentForm = function (userCommentForm, $event) {
-            self.isUserCommentForm = true;
-            self.userComment = new UserComment({
-                userId: applicationUser.id,
-                itemOrder: generator.createNewID(self.userComments, 'itemOrder')
-            });
-            userCommentForm.$setUntouched();
-        };
-
-        /**
-         * @description Closes the user comment form and reset it.
-         * @param $event
-         */
-        self.closeUserCommentForm = function ($event) {
-            self.isUserCommentForm = false;
-        };
-
-        /**
-         * @description Add the new user comment
-         */
-        self.addUserCommentFromCtrl = function () {
-            userCommentService
-                .addUserComment(self.userComment)
+        self.openAddUserCommentDialog = function ($event) {
+            userCommentService.controllerMethod.userCommentAddDialog(applicationUser.id, null, $event)
                 .then(function () {
-                    self.reloadUserComments(self.grid.page)
-                        .then(function () {
-                            self.closeUserCommentForm();
-                            toast.success(langService.get('save_success'));
-                        });
-                });
+                    self.reloadUserComments(self.grid.page);
+                })
         };
 
         /**
          * @description Opens the edit user comment form
          * @param {UserComment} userComment
-         * @param userCommentForm
          * @param $event
          */
-        self.editUserComment = function (userComment, userCommentForm, $event) {
-            self.isUserCommentForm = true;
-            self.userComment = angular.copy(userComment);
-            userCommentForm.$setUntouched();
-        };
-
-        /**
-         * @description Updates the user comment
-         */
-        self.editUserCommentFromCtrl = function () {
-            userCommentService
-                .updateUserComment(self.userComment)
+        self.openEditUserCommentDialog = function (userComment, $event) {
+            userCommentService.controllerMethod.userCommentEditDialog(userComment, $event)
                 .then(function () {
-                    self.reloadUserComments(self.grid.page)
-                        .then(function () {
-                            self.closeUserCommentForm();
-                            toast.success(langService.get('update_success'));
-                        });
-                });
+                    self.reloadUserComments(self.grid.page);
+                })
         };
-
 
         /**
          * @description Delete single user comment

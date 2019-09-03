@@ -123,34 +123,43 @@
                         </md-select>
                     </td>
                     <td md-cell>
-                        <div md-truncate style="max-width: 100px;" ng-if="!workflowItem.showCommentDropdown"
-                             class="select-wf-action-text"
-                             ng-class="{'no-value': !workflowItem.getComments()}"
-                             ng-click="ctrl.toggleCommentDropdown(workflowItem, $event)"
-                             tooltip="{{ctrl.getCommentText(workflowItem)}}">
-                            {{ctrl.getCommentText(workflowItem)}}
-                        </div>
-                        <md-select ng-if="workflowItem.showCommentDropdown"
-                                   ng-model="workflowItem.selectedWFComment"
-                                   class="select-wf-action" style="width: 150px !important;"
-                                   ng-change="ctrl.setWFComment(workflowItem, $event)"
-                                   aria-label="workflow action"
-                                   md-on-close="ctrl.onCloseCommentsDropdown(workflowItem)"
-                                   data-md-container-class="select-header-container"
-                                   placeholder="{{workflowItem.getCommentMessage()}}"
-                                   md-selected-text="ctrl.getCommentText(workflowItem)">
-                            <md-select-header class="select-header">
-                                <input ng-model="workflowItem.commentSearchText"
-                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
-                                       placeholder="{{lang.search}}"
-                                       class="select-header-input">
-                            </md-select-header>
-                            <md-option
-                                    ng-repeat="comment in ctrl.workflowComments | translatedNameFilter: workflowItem.commentSearchText"
-                                    ng-value="comment">
+                        <div layout="row">
+                            <div md-truncate style="max-width: 100px;"  ng-if="!workflowItem.showCommentDropdown"
+                                 class="select-wf-action-text"
+                                 ng-class="{'no-value': !workflowItem.getComments()}"
+                                 ng-click="ctrl.toggleCommentDropdown(workflowItem, $event)"
+                                 tooltip="{{ctrl.getCommentText(workflowItem)}}">
+                                {{ctrl.getCommentText(workflowItem)}}
+                            </div>
+                            <md-select ng-if="workflowItem.showCommentDropdown"
+                                       ng-model="workflowItem.selectedWFComment"
+                                       class="select-wf-action" style="width: 150px !important;"
+                                       ng-change="ctrl.setWFComment(workflowItem, $event)"
+                                       aria-label="workflow action"
+                                       md-on-close="ctrl.onCloseCommentsDropdown(workflowItem)"
+                                       data-md-container-class="select-header-container"
+                                       placeholder="{{workflowItem.getCommentMessage()}}"
+                                       md-selected-text="ctrl.getCommentText(workflowItem)">
+                                <md-select-header class="select-header">
+                                    <input ng-model="workflowItem.commentSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option
+                                        ng-repeat="comment in ctrl.workflowComments | translatedNameFilter: workflowItem.commentSearchText"
+                                        ng-value="comment">
                                 <span
                                         md-highlight-text="workflowItem.commentSearchText"
                                         md-highlight-flags="i">{{comment.getCommentTitle()}}</span>
+                                </md-option>
+                            </md-select>
+                            <md-button ng-if="workflowItem.showCommentDropdown"
+                                       class="md-icon-button"
+                                       ng-click="ctrl.openAddUserCommentDialog(workflowItem, $event)">
+                                <md-icon md-svg-icon="plus"></md-icon>
+                            </md-button>
+                        </div>
                             </md-option>
                         </md-select>
                     </td>

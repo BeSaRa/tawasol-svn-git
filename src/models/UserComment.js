@@ -34,6 +34,23 @@ module.exports = function (app) {
             };
 
             /**
+             * @description get shortComment
+             * @param separator
+             * @returns {string}
+             */
+            UserComment.prototype.getNames = function (separator) {
+                return this.shortComment;
+            };
+
+            /**
+             * @description get shortComment
+             * @param reverse
+             * @returns {string}
+             */
+            UserComment.prototype.getTranslatedName = function (reverse) {
+                return this.shortComment;
+            };
+            /**
              * @description Get the status of user comment as Active or Inactive instead of true or false.
              * @returns {string}
              */

@@ -1,0 +1,101 @@
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.comment}}">
+    <div layout="column">
+        <popup-toolbar-directive ng-if="!ctrl.editMode"
+                                 header-text="{{lang.add}} {{lang.comment}}"></popup-toolbar-directive>
+        <popup-toolbar-directive ng-if="ctrl.editMode"
+                                 header-text="{{ctrl.model.shortComment}}"></popup-toolbar-directive>
+        <md-content scroll-directive>
+            <form name="userCommentsForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <!-- Organization Unit -->
+                        <md-input-container flex>
+                            <label for="ouId">{{lang.organization_unit}}</label>
+                            <md-select name="ouId" id="ouId"
+                                       required
+                                       ng-model="ctrl.userComment.ouId">
+                                <md-option
+                                        ng-repeat="organization in ctrl.organizationsForAppUser track by $index"
+                                        ng-value="organization.id">
+                                    {{organization.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="userCommentsForm.ouId.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+
+                        <!-- Item Order -->
+                        <md-input-container flex>
+                            <label for="itemOrder">{{lang.item_order}}</label>
+                            <input name="itemOrder" id="itemOrder" maxlength="5"
+                                   required
+                                   ng-model="ctrl.userComment.itemOrder"
+                                   custom-validate-directive="number">
+                            <div ng-messages="userCommentsForm.itemOrder.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="number">{{lang.numberonly}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Short Comment -->
+                        <md-input-container flex>
+                            <label for="shortComment">{{lang.short_comment}}</label>
+                            <input name="shortComment" id="shortComment" minlength="4"
+                                   required maxlength="150"
+                                   ng-model="ctrl.userComment.shortComment">
+                            <div ng-messages="userCommentsForm.shortComment.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:150})}}
+                                </div>
+                            </div>
+                        </md-input-container>
+
+                    </div>
+                    <div layout="row">
+                        <!-- Comment -->
+                        <md-input-container flex>
+                            <label for="comment">{{lang.comment}}</label>
+                            <textarea rows="5" name="comment" id="comment" minlength="4"
+                                      required maxlength="1024"
+                                      ng-model="ctrl.userComment.comment"></textarea>
+                            <div ng-messages="userCommentsForm.comment.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:1024})}}
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" ng-if="!ctrl.skipAddDisabled">
+                        <!-- Status -->
+                        <md-switch flex ng-model="ctrl.userComment.status"
+                                   aria-label="{{lang.status}}">
+                            <label>{{lang.status}} : {{ctrl.userComment.getTranslatedStatus()}}</label>
+                        </md-switch>
+                        <md-input-container flex>
+
+                        </md-input-container>
+                    </div>
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-disabled="userCommentsForm.$invalid"
+                           ng-click="ctrl.saveUserComment($event)">
+                    {{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closePopup($event)">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

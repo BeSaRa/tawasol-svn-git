@@ -46,9 +46,12 @@ module.exports = function (app) {
          */
         self.loadOUApplicationUsers = function () {
             return $http.get(urlService.ouApplicationUsers).then(function (result) {
-                self.ouApplicationUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
-                self.ouApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', self.ouApplicationUsers);
-                return self.ouApplicationUsers;
+                return organizationService.getOrganizations()
+                    .then(function (ous) {
+                        self.ouApplicationUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
+                        self.ouApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', self.ouApplicationUsers);
+                        return self.ouApplicationUsers;
+                    });
             });
         };
 
@@ -61,7 +64,7 @@ module.exports = function (app) {
             organization = organization.hasOwnProperty('id') ? organization.id : organization;
             return $http.get(urlService.relatedApplicationUsersByOUId.change({OUId: organization})).then(function (result) {
                 return organizationService.getOrganizations()
-                    .then(function () {
+                    .then(function (ous) {
                         self.ouApplicationUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
                         self.ouApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', self.ouApplicationUsers);
                         return self.ouApplicationUsers;
@@ -74,9 +77,12 @@ module.exports = function (app) {
 
             return $http.get(urlService.ouApplicationUsers + '/reg-ou/' + regOuId)
                 .then(function (result) {
-                    result = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
-                    result = generator.interceptReceivedCollection('OUApplicationUser', result);
-                    return result;
+                    return organizationService.getOrganizations()
+                        .then(function (ous) {
+                            result = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
+                            result = generator.interceptReceivedCollection('OUApplicationUser', result);
+                            return result;
+                        });
                 })
         };
 
@@ -90,9 +96,12 @@ module.exports = function (app) {
 
         self.loadAllPrivateUsers = function () {
             return $http.get(urlService.allPrivateUsers).then(function (result) {
-                self.allPrivateUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
-                self.allPrivateUsers = generator.interceptReceivedCollection('OUApplicationUser', self.allPrivateUsers);
-                return self.allPrivateUsers;
+                return organizationService.getOrganizations()
+                    .then(function (ous) {
+                        self.allPrivateUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
+                        self.allPrivateUsers = generator.interceptReceivedCollection('OUApplicationUser', self.allPrivateUsers);
+                        return self.allPrivateUsers;
+                    });
             })
         };
 
@@ -269,9 +278,12 @@ module.exports = function (app) {
                 enName: enFullName,
                 loginName: loginName
             }).then(function (result) {
-                self.searchOUApplicationUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
-                self.searchOUApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', self.searchOUApplicationUsers);
-                return self.searchOUApplicationUsers;
+                return organizationService.getOrganizations()
+                    .then(function (ous) {
+                        self.searchOUApplicationUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
+                        self.searchOUApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', self.searchOUApplicationUsers);
+                        return self.searchOUApplicationUsers;
+                    });
             });
         };
 
@@ -393,9 +405,12 @@ module.exports = function (app) {
         self.loadOUApplicationUsersByUserId = function (applicationUserId) {
             applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;
             return $http.get(urlService.ouApplicationUsersByUserId.change({userId: applicationUserId})).then(function (result) {
-                self.ouApplicationUsersByUserId = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
-                self.ouApplicationUsersByUserId = generator.interceptReceivedCollection('OUApplicationUser', self.ouApplicationUsersByUserId);
-                return self.ouApplicationUsersByUserId;
+                return organizationService.getOrganizations()
+                    .then(function (ous) {
+                        self.ouApplicationUsersByUserId = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
+                        self.ouApplicationUsersByUserId = generator.interceptReceivedCollection('OUApplicationUser', self.ouApplicationUsersByUserId);
+                        return self.ouApplicationUsersByUserId;
+                    })
             });
         };
 
@@ -618,9 +633,15 @@ module.exports = function (app) {
             return $http
                 .post(urlService.ouApplicationUsers + '/search', criteria)
                 .then(function (result) {
-                    if (ignoreInterceptor)
+                    if (ignoreInterceptor) {
                         return result.data.rs;
-                    return generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
+                    } else {
+                        return organizationService.getOrganizations()
+                            .then(function (ous) {
+                                return generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
+                            });
+                     //   return generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
+                    }
                 });
         };
 

@@ -1,5 +1,16 @@
 module.exports = function (app) {
-    app.controller('selectedWorkflowItemsDirectiveCtrl', function ($scope, _, rootEntity, dialog, cmsTemplate, langService, DistributionWFItem, LangWatcher, $filter) {
+    app.controller('selectedWorkflowItemsDirectiveCtrl', function ($scope,
+                                                                   _,
+                                                                   $q,
+                                                                   rootEntity,
+                                                                   dialog,
+                                                                   cmsTemplate,
+                                                                   langService,
+                                                                   DistributionWFItem,
+                                                                   LangWatcher,
+                                                                   $filter,
+                                                                   userCommentService,
+                                                                   employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'selectedWorkflowItemsDirectiveCtrl';
@@ -214,7 +225,7 @@ module.exports = function (app) {
          * @param record
          * @param $event
          */
-        self.toggleCommentDropdown = function(record, $event){
+        self.toggleCommentDropdown = function (record, $event) {
             record.showCommentDropdown = !record.showCommentDropdown;
         };
 
@@ -223,7 +234,7 @@ module.exports = function (app) {
          * @param record
          * @param $event
          */
-        self.onCloseCommentsDropdown = function(record, $event){
+        self.onCloseCommentsDropdown = function (record, $event) {
             record.clearWFCommentSearchText();
             self.toggleCommentDropdown(record);
         };
@@ -233,7 +244,7 @@ module.exports = function (app) {
          * @param workflowItem
          * @returns {*}
          */
-        self.getCommentText = function(workflowItem){
+        self.getCommentText = function (workflowItem) {
             return workflowItem.getComments() || workflowItem.getCommentMessage();
         };
 
@@ -257,6 +268,22 @@ module.exports = function (app) {
             self.workflowItems = $filter('orderBy')(self.workflowItems, self.grid.order);
         };
 
+        /**
+         * @description Opens the add user comment(private and active)
+         * @param record
+         * @param $event
+         */
+        self.openAddUserCommentDialog = function (record, $event) {
+            debugger
+            userCommentService.controllerMethod.userCommentAddDialog(employeeService.getEmployee().id, employeeService.getEmployee().getOUID(), $event)
+                .then(function (userComment) {
+                    self.workflowComments.push(userComment);
+                    record.selectedWFComment = userComment;
+                    self.setWFComment(record);
+                    // reload comments to use in user preference
+                    userCommentService.loadUserComments();
+                })
+        };
 
     });
 };

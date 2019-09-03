@@ -3,7 +3,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'localizationCtrl';
-        contextHelpService.setHelpTo('Localization');
+        contextHelpService.setHelpTo('localization');
         // current localizations
         self.localizations = [];
         // all localization Modules

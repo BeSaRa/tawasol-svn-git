@@ -67,6 +67,7 @@
                         <label for="comment">{{lang.select_comment}}</label>
                         <md-select id="comment" name="comment" ng-change="ctrl.onCommentChange()"
                                    ng-model="ctrl.comment"
+                                   ng-model-options="{trackBy:'$value.id'}"
                                    md-on-close="ctrl.clearSearchText('comment')"
                                    data-md-container-class="select-header-container">
                             <md-select-header class="select-header">
@@ -83,6 +84,10 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
+                    <md-button class="md-icon-button"
+                               ng-click="ctrl.openAddUserCommentDialog($event)">
+                        <md-icon md-svg-icon="plus"></md-icon>
+                    </md-button>
                 </div>
                 <div layout="row">
                     <md-input-container flex>

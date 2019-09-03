@@ -48,47 +48,87 @@ module.exports = function (app) {
             });
         };
 
+        self.filterUserCommentsByAppUserId = function (appUserId) {
+            appUserId = appUserId && appUserId.hasOwnProperty('id') ? appUserId.id : appUserId;
+            return self.getUserComments().then(function () {
+                return _.filter(self.userComments, function (userComment) {
+                    return userComment.userId === appUserId;
+                });
+            })
+        };
+
         /**
          * @description Contains methods for CRUD operations for user comments
          */
         self.controllerMethod = {
             /**
              * @description Opens popup to add new user comment
+             * @param appUserId
+             * @param ouId
              * @param $event
              */
-            userCommentAdd: function ($event) {
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('user-comment'),
-                        controller: 'userCommentPopCtrl',
-                        controllerAs: 'ctrl',
-                        locals: {
-                            editMode: false,
-                            userComment: new UserComment(
-                                {
-                                    itemOrder: generator.createNewID(self.userComments, 'itemOrder')
-                                }),
-                            userComments: self.userComments
+            userCommentAddDialog: function (appUserId, ouId, $event) {
+                appUserId = appUserId && appUserId.hasOwnProperty('id') ? appUserId.id : appUserId;
+                return self.filterUserCommentsByAppUserId(appUserId)
+                    .then(function (userComments) {
+                        var userComment = new UserComment({
+                            userId: appUserId,
+                            itemOrder: generator.createNewID(userComments, 'itemOrder'),
+                            ouId: ouId ? ouId : null
+                        });
+                        // just to verify/override if default status changed to false in model
+                        if (ouId) {
+                            userComment.status = true;
                         }
+                        return dialog
+                            .showDialog({
+                                targetEvent: $event || null,
+                                templateUrl: cmsTemplate.getPopup('user-comment'),
+                                controller: 'userCommentPopCtrl',
+                                controllerAs: 'ctrl',
+                                locals: {
+                                    userComment: userComment
+                                },
+                                resolve: {
+                                    organizationsForAppUser: function (organizationService, ouApplicationUserService) {
+                                        'ngInject';
+                                        return ouApplicationUserService.loadOUApplicationUsersByUserId(appUserId)
+                                            .then(function (result) {
+                                                return _.map(result, function (ouAppUser) {
+                                                    return ouAppUser.ouid;
+                                                })
+                                            });
+                                    }
+                                }
+                            });
                     });
+
             },
             /**
              * @description Opens popup to edit user comment
              * @param userComment
              * @param $event
              */
-            userCommentEdit: function (userComment, $event) {
+            userCommentEditDialog: function (userComment, $event) {
                 return dialog
                     .showDialog({
-                        targetEvent: $event,
+                        targetEvent: $event || null,
                         templateUrl: cmsTemplate.getPopup('user-comment'),
                         controller: 'userCommentPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
-                            editMode: true,
-                            userComment: userComment,
-                            userComments: self.userComments
+                            userComment: angular.copy(userComment)
+                        },
+                        resolve: {
+                            organizationsForAppUser: function (organizationService, ouApplicationUserService) {
+                                'ngInject';
+                                return ouApplicationUserService.getOUApplicationUsersByUserId(userComment.userId)
+                                    .then(function (result) {
+                                        return _.map(result, function (ouAppUser) {
+                                            return ouAppUser.ouid;
+                                        })
+                                    });
+                            }
                         }
                     });
             },
@@ -145,7 +185,8 @@ module.exports = function (app) {
             return $http
                 .post(urlService.userComments,
                     generator.interceptSendInstance('UserComment', userComment))
-                .then(function () {
+                .then(function (result) {
+                    userComment.id = result.data.rs;
                     return userComment;
                 });
         };
