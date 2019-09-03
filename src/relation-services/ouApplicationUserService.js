@@ -736,7 +736,10 @@ module.exports = function (app) {
             var path = ('/composite/user/{userId}/ou/{ouId}').replace('{userId}', userId).replace('{ouId}', ouId);
             return $http.get(urlService.ouApplicationUsers + path)
                 .then(function (result) {
-                    return generator.interceptReceivedInstance('OUApplicationUser', generator.generateInstance(result.data.rs, OUApplicationUser, self._sharedMethods));
+                    return organizationService.getOrganizations()
+                        .then(function (ous) {
+                            return generator.interceptReceivedInstance('OUApplicationUser', generator.generateInstance(result.data.rs, OUApplicationUser, self._sharedMethods));
+                        });
                 });
         };
         /**
