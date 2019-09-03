@@ -14,7 +14,9 @@ module.exports = function (app) {
                                                    langService,
                                                    DistributionUserWFItem,
                                                    DistributionWF,
-                                                   distributionWFService) {
+                                                   distributionWFService,
+                                                   userCommentService,
+                                                   employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'replySimplePopCtrl';
@@ -187,6 +189,21 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description Opens the add user comment(private and active)
+         * @param record
+         * @param $event
+         */
+        self.openAddUserCommentDialog = function (record, $event) {
+            userCommentService.controllerMethod.userCommentAddDialog(employeeService.getEmployee().id, employeeService.getEmployee().getOUID(), $event)
+                .then(function (userComment) {
+                    self.comments.push(userComment);
+                    self.comment = userComment;
+                    self.onCommentChange();
+                    // reload comments to use in user preference
+                    userCommentService.loadUserComments();
+                })
+        };
 
     });
 };
