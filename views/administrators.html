@@ -67,7 +67,7 @@
                                         ng-repeat="record in ctrl.administrators  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
                                         <td md-cell>{{record.userInfo.arName}}</td>
                                         <td md-cell>{{record.userInfo.enName}}</td>
-                                        <td md-cell>
+                                        <td md-cell layout="row">
                                             <md-switch aria-label="{{lang.super_admin}}"
                                                        tooltip="{{record.isSuperAdminText}}"
                                                        ng-model="record.isSuperAdmin"
@@ -75,10 +75,11 @@
                                                        ng-change="ctrl.onChangeIsSuperAdmin(record, $event)"></md-switch>
                                         </td>
                                         <td md-cell>
-                                            <md-button ng-disabled="record.isSuperAdmin" ng-readonly="record.isSuperAdmin"
-                                                    ng-click="ctrl.openAdminOUsDialog(record, $event)"
-                                                    class="md-icon-button md-raised"
-                                                    tooltip="{{lang.organizations}}">
+                                            <md-button ng-disabled="record.isSuperAdmin"
+                                                       ng-readonly="record.isSuperAdmin"
+                                                       ng-click="ctrl.openAdminOUsDialog(record, $event)"
+                                                       class="md-icon-button md-raised"
+                                                       tooltip="{{lang.organizations}}">
                                                 <md-icon md-svg-icon="coins"></md-icon>
                                             </md-button>
                                         </td>

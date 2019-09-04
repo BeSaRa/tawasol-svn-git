@@ -29,7 +29,7 @@ module.exports = function (app) {
             arName: 'arabic_name',
             enName: 'english_name',
             status: 'status',
-            serverAddress: 'server_name_ip',
+            serverAddress: 'server_host',
             dc: 'domain_controller_name',
             userName: 'username',
             password: 'password',

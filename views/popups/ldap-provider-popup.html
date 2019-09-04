@@ -12,26 +12,23 @@
                     <div layout="row">
                         <!-- Server Address -->
                         <md-input-container flex>
-                            <label for="serverAddress">{{lang.server_name_ip}}</label>
+                            <label for="serverAddress">{{lang.server_host}}</label>
                             <input name="serverAddress" id="serverAddress" required
                                    ng-model="ctrl.ldapProvider.serverAddress" maxlength="70">
                             <div ng-messages="ldapProviderForm.serverAddress.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <!--<div ng-message="url|ip">{{lang.invalid_server_name_ip}}</div>-->
-                                <!--<div ng-message="maxlength">{{lang.max_length.change({length:20})}}-->
-                                <!--</div>-->
+                                <div ng-message="maxlength">{{lang.max_length.change({length:70})}}
+                                </div>
                             </div>
                         </md-input-container>
                         <!-- Server name -->
                         <md-input-container flex>
                             <label for="serverName">{{lang.server_name}}</label>
                             <input name="serverName" id="serverName" required
-                                   ng-model="ctrl.ldapProvider.serverName" maxlength="70">
+                                   ng-model="ctrl.ldapProvider.serverName">
                             <div ng-messages="ldapProviderForm.serverName.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
-                                <!--<div ng-message="url|ip">{{lang.invalid_server_name_ip}}</div>-->
-                                <!--<div ng-message="maxlength">{{lang.max_length.change({length:20})}}-->
-                                <!--</div>-->
                             </div>
                         </md-input-container>
                     </div>
