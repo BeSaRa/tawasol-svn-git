@@ -19,23 +19,10 @@ module.exports = function (app) {
         self.serviceName = 'organizationService';
 
         self.organizations = [];
+        self.allOrganizationsStructure = [];
 
         self.rootOrganization = {};
         self.childrenOrganizations = {};
-
-        /**
-         * @description load organization by id.
-         * @param organizationId
-         */
-        self.loadOrganizationById = function (organizationId) {
-            organizationId = organizationId.hasOwnProperty('id') ? organizationId.id : organizationId;
-            return $http
-                .get((urlService.organizations + '/' + organizationId))
-                .then(function (result) {
-                    var organization = generator.generateInstance(result.data.rs, Organization, self._sharedMethods);
-                    return generator.interceptReceivedInstance('Organization', organization);
-                });
-        };
         /**
          * @description load organizations from server.
          * @returns {Promise|organizations}
@@ -51,16 +38,72 @@ module.exports = function (app) {
                 return self.organizations;
             });
         };
+
         /**
-         *
+         * @description get organizations from self.organizations if found and if not load it from server again.
+         * @returns {Promise|organizations}
+         */
+        self.getOrganizations = function () {
+            return self.organizations.length ? $q.when(self.organizations) : self.loadOrganizations();
+        };
+
+        /**
+         * @description return back the loaded organizations.
+         * @return {Array|*}
+         */
+        self.returnOrganizations = function () {
+            return self.organizations;
+        };
+
+        /**
+         * @description load organization by id.
+         * @param organizationId
+         */
+        self.loadOrganizationById = function (organizationId) {
+            organizationId = organizationId.hasOwnProperty('id') ? organizationId.id : organizationId;
+            return $http
+                .get((urlService.organizations + '/' + organizationId))
+                .then(function (result) {
+                    var organization = generator.generateInstance(result.data.rs, Organization, self._sharedMethods);
+                    return generator.interceptReceivedInstance('Organization', organization);
+                });
+        };
+
+        /**
+         * @description get organization by organizationId
+         * @param organizationId
+         * @returns {Organization|undefined} return Organization Model or undefined if not found.
+         */
+        self.getOrganizationById = function (organizationId) {
+            if (!organizationId)
+                return;
+
+            var id = organizationId.hasOwnProperty('id') ? organizationId.id : organizationId;
+
+            return _.find(self.organizations, function (organization) {
+                return Number(organization.id) === Number(id);
+            });
+        };
+
+        /**
+         * @description Load all organizations structure
          * @returns {*}
          */
         self.loadAllOrganizationsStructure = function () {
             var url = urlService.organizations + '/structure';
             return $http.get(url).then(function (result) {
-                var organizations = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
-                return generator.interceptReceivedCollection('Organization', organizations);
+                self.allOrganizationsStructure = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
+                self.allOrganizationsStructure =  generator.interceptReceivedCollection('Organization', self.allOrganizationsStructure);
+                return self.allOrganizationsStructure;
             });
+        };
+
+        /**
+         * @description Get/Load all organizations structure
+         * @returns {Promise}
+         */
+        self.getAllOrganizationsStructure = function () {
+            return self.allOrganizationsStructure.length ? $q.when(self.allOrganizationsStructure) : self.loadAllOrganizationsStructure();
         };
 
         /**
@@ -78,20 +121,7 @@ module.exports = function (app) {
             }
             return regOus;
         };
-        /**
-         * @description get organizations from self.organizations if found and if not load it from server again.
-         * @returns {Promise|organizations}
-         */
-        self.getOrganizations = function () {
-            return self.organizations.length ? $q.when(self.organizations) : self.loadOrganizations();
-        };
-        /**
-         * @description return back the loaded organizations.
-         * @return {Array|*}
-         */
-        self.returnOrganizations = function () {
-            return self.organizations;
-        };
+
         /**
          * @description add new organization to service
          * @param organization
@@ -163,21 +193,6 @@ module.exports = function (app) {
          */
         self._sharedMethods = generator.generateSharedMethods(self.deleteOrganization, self.updateOrganization);
 
-        /**
-         * @description get organization by organizationId
-         * @param organizationId
-         * @returns {Organization|undefined} return Organization Model or undefined if not found.
-         */
-        self.getOrganizationById = function (organizationId) {
-            if (!organizationId)
-                return;
-
-            var id = organizationId.hasOwnProperty('id') ? organizationId.id : organizationId;
-
-            return _.find(self.organizations, function (organization) {
-                return Number(organization.id) === Number(id);
-            });
-        };
 
         /**
          * @description Activate organization

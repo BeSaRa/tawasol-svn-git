@@ -46,7 +46,7 @@ module.exports = function (app) {
          */
         self.loadOUApplicationUsers = function () {
             return $http.get(urlService.ouApplicationUsers).then(function (result) {
-                return organizationService.getOrganizations()
+                return organizationService.getAllOrganizationsStructure()
                     .then(function (ous) {
                         self.ouApplicationUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
                         self.ouApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', self.ouApplicationUsers);
@@ -63,7 +63,7 @@ module.exports = function (app) {
         self.loadRelatedOUApplicationUsers = function (organization) {
             organization = organization.hasOwnProperty('id') ? organization.id : organization;
             return $http.get(urlService.relatedApplicationUsersByOUId.change({OUId: organization})).then(function (result) {
-                return organizationService.getOrganizations()
+                return organizationService.getAllOrganizationsStructure()
                     .then(function (ous) {
                         self.ouApplicationUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
                         self.ouApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', self.ouApplicationUsers);
@@ -77,7 +77,7 @@ module.exports = function (app) {
 
             return $http.get(urlService.ouApplicationUsers + '/reg-ou/' + regOuId)
                 .then(function (result) {
-                    return organizationService.getOrganizations()
+                    return organizationService.getAllOrganizationsStructure()
                         .then(function (ous) {
                             result = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
                             result = generator.interceptReceivedCollection('OUApplicationUser', result);
@@ -96,7 +96,7 @@ module.exports = function (app) {
 
         self.loadAllPrivateUsers = function () {
             return $http.get(urlService.allPrivateUsers).then(function (result) {
-                return organizationService.getOrganizations()
+                return organizationService.getAllOrganizationsStructure()
                     .then(function (ous) {
                         self.allPrivateUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
                         self.allPrivateUsers = generator.interceptReceivedCollection('OUApplicationUser', self.allPrivateUsers);
@@ -141,7 +141,7 @@ module.exports = function (app) {
                         resolve: {
                             organizations: function (organizationService) {
                                 'ngInject';
-                                return organizationService.getOrganizations();
+                                return organizationService.getAllOrganizationsStructure();
                             }
                         }
                     });
@@ -217,7 +217,7 @@ module.exports = function (app) {
                         resolve: {
                             organizations: function (organizationService) {
                                 'ngInject';
-                                return organizationService.getOrganizations();
+                                return organizationService.getAllOrganizationsStructure();
                             },
                             organizationGroups: function (distributionWFService) {
                                 'ngInject';
@@ -225,7 +225,7 @@ module.exports = function (app) {
                                     return distributionWFService
                                         .loadDistWorkflowOrganizations('organizations');
                                 } else {
-                                    return organizationService.getOrganizations();
+                                    return organizationService.getAllOrganizationsStructure();
                                 }
                             }
 
@@ -278,7 +278,7 @@ module.exports = function (app) {
                 enName: enFullName,
                 loginName: loginName
             }).then(function (result) {
-                return organizationService.getOrganizations()
+                return organizationService.getAllOrganizationsStructure()
                     .then(function (ous) {
                         self.searchOUApplicationUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
                         self.searchOUApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', self.searchOUApplicationUsers);
@@ -405,7 +405,7 @@ module.exports = function (app) {
         self.loadOUApplicationUsersByUserId = function (applicationUserId) {
             applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;
             return $http.get(urlService.ouApplicationUsersByUserId.change({userId: applicationUserId})).then(function (result) {
-                return organizationService.getOrganizations()
+                return organizationService.getAllOrganizationsStructure()
                     .then(function (ous) {
                         self.ouApplicationUsersByUserId = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
                         self.ouApplicationUsersByUserId = generator.interceptReceivedCollection('OUApplicationUser', self.ouApplicationUsersByUserId);
@@ -636,7 +636,7 @@ module.exports = function (app) {
                     if (ignoreInterceptor) {
                         return result.data.rs;
                     } else {
-                        return organizationService.getOrganizations()
+                        return organizationService.getAllOrganizationsStructure()
                             .then(function (ous) {
                                 return generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
                             });
@@ -655,7 +655,7 @@ module.exports = function (app) {
             return $http
                 .get(urlService.ouApplicationUsers + '/ouid/' + organization)
                 .then(function (result) {
-                    return organizationService.getOrganizations()
+                    return organizationService.getAllOrganizationsStructure()
                         .then(function (ous) {
                             self.ouApplicationUsers = generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
                             return self.ouApplicationUsers;
@@ -738,7 +738,7 @@ module.exports = function (app) {
             var path = ('/composite/user/{userId}/ou/{ouId}').replace('{userId}', userId).replace('{ouId}', ouId);
             return $http.get(urlService.ouApplicationUsers + path)
                 .then(function (result) {
-                    return organizationService.getOrganizations()
+                    return organizationService.getAllOrganizationsStructure()
                         .then(function (ous) {
                             return generator.interceptReceivedInstance('OUApplicationUser', generator.generateInstance(result.data.rs, OUApplicationUser, self._sharedMethods));
                         });

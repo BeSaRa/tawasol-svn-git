@@ -76,7 +76,7 @@ module.exports = function (app) {
 
             var defer = $q.defer();
             var organizations = [];
-            organizationService.getOrganizations().then(function (result) {
+            organizationService.getAllOrganizationsStructure().then(function (result) {
                 organizations = result;
                 defer.resolve(true);
             });
