@@ -2062,7 +2062,7 @@ module.exports = function (app) {
                                 return [];
 
                             return $http.get(urlService.distributionWFManagers).then(function (result) {
-                                return self['managerUsers'] = generator.generateCollection(result.data.rs, WFUser);
+                                return generator.generateCollection(result.data.rs, WFUser);
                             }).catch(function (e) {
                                 return [];
                             });

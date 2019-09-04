@@ -17,7 +17,7 @@
                         </div>
                     </md-input-container>
                     <!-- Managers -->
-                    <md-input-container flex ng-if="ctrl.canSendToManagers">
+                    <md-input-container flex ng-if="ctrl.canSendToManagers && !ctrl.getApprovedStatus()">
                         <label for="managers">{{lang.managers}}</label>
                         <md-select multiple name="managers" id="managers"
                                    ng-model="ctrl.selectedManagers"

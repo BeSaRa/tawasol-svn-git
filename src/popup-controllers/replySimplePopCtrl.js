@@ -15,8 +15,7 @@ module.exports = function (app) {
                                                    DistributionUserWFItem,
                                                    DistributionWF,
                                                    distributionWFService,
-                                                   userCommentService,
-                                                   employeeService) {
+                                                   userCommentService) {
         'ngInject';
         var self = this;
         self.controllerName = 'replySimplePopCtrl';
@@ -48,7 +47,7 @@ module.exports = function (app) {
         self.commentSearchText = '';
 
         self.globalSettings = rootEntity.getGlobalSettings();
-
+        var approvedStatus = self.record.getInfo().needToApprove();
 
         if (self.globalSettings.allowSendWFRelatedBook) {
             self.distWorkflowItem.sendRelatedDocs = true;
@@ -162,7 +161,7 @@ module.exports = function (app) {
         self.getSelectedManagersText = function () {
             if (self.selectedManagers && self.selectedManagers.length) {
                 var map = _.map(self.selectedManagers, function (manager) {
-                    return manager['ou' + self.currentLangUCFirst + 'Name'] + ' - ' +  manager[langService.current + 'Name'];
+                    return manager['ou' + self.currentLangUCFirst + 'Name'] + ' - ' + manager[langService.current + 'Name'];
                 });
                 return map.join(', ');
             }
@@ -204,6 +203,19 @@ module.exports = function (app) {
                     userCommentService.loadUserComments();
                 })
         };
+
+
+        function _getApprovedStatus() {
+            return approvedStatus;
+        }
+
+        /**
+         * @description to get approved status for multi document or one document.
+         */
+        self.getApprovedStatus = function () {
+            return _getApprovedStatus();
+        };
+
 
     });
 };
