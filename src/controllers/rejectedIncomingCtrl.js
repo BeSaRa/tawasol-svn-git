@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                      rejectedIncomingService,
                                                      rejectedIncomings,
                                                      $q,
+                                                     _,
                                                      $filter,
                                                      counterService,
                                                      langService,
@@ -24,8 +25,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'rejectedIncomingCtrl';
-        self.currentEmployee = employeeService.getEmployee();
-        self.progress = null;
+
         contextHelpService.setHelpTo('incoming-rejected');
         // employee service to check the permission in html
         self.employeeService = employeeService;
@@ -35,6 +35,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.rejectedIncomings = rejectedIncomings;
+        self.rejectedIncomingsCopy = angular.copy(self.rejectedIncomings);
 
         /**
          * @description Contains the selected rejected incoming mails
@@ -47,6 +48,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.incoming.rejected) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -57,6 +59,23 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.incoming.rejected),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.incoming.rejected, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                subject: 'docSubject',
+                priorityLevel: function (record) {
+                    return self.getSortingKey('priorityLevel', 'Lookup');
+                },
+                securityLevel: function (record) {
+                    return self.getSortingKey('securityLevel', 'Lookup');
+                },
+                creator: function () {
+                    return self.getSortingKey('creatorInfo', 'Information');
+                },
+                createdOn: 'createdOn'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.rejectedIncomings = gridService.searchGridData(self.grid, self.rejectedIncomingsCopy);
             }
         };
 
@@ -137,12 +156,13 @@ module.exports = function (app) {
          */
         self.reloadRejectedIncomings = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return rejectedIncomingService
                 .loadRejectedIncomings()
                 .then(function (result) {
                     counterService.loadCounters();
                     self.rejectedIncomings = result;
+                    self.rejectedIncomingsCopy = angular.copy(self.rejectedIncomings);
                     self.selectedRejectedIncomings = [];
                     defer.resolve(true);
                     if (pageNumber)

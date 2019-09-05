@@ -28,8 +28,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'reviewIncomingCtrl';
-        self.currentEmployee = employeeService.getEmployee();
-        self.progress = null;
+
         contextHelpService.setHelpTo('incoming-review');
         // employee service to check the permission in html
         self.employeeService = employeeService;
@@ -39,6 +38,8 @@ module.exports = function (app) {
          * @type {*}
          */
         self.reviewIncomings = reviewIncomings;
+        self.reviewIncomingsCopy = angular.copy(self.reviewIncomings);
+        console.log(self.reviewIncomings);
 
         /**
          * @description Contains the selected review incoming emails
@@ -51,6 +52,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.incoming.review) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -61,6 +63,26 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.incoming.review),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.incoming.review, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                subject: 'docSubject',
+                priorityLevel: function (record) {
+                    return self.getSortingKey('priorityLevel', 'Lookup');
+                },
+                securityLevel: function (record) {
+                    return self.getSortingKey('securityLevel', 'Lookup');
+                },
+                mainSite: function(record){
+                    return self.getSortingKey('mainSite', 'Site');
+                },
+                subSite: function(record){
+                    return self.getSortingKey('subSite', 'Site');
+                },
+                createdOn: 'createdOn'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.reviewIncomings = gridService.searchGridData(self.grid, self.reviewIncomingsCopy);
             }
         };
 
@@ -72,10 +94,10 @@ module.exports = function (app) {
          */
         self.getSortingKey = function (property, modelType) {
             var currentLang = langService.current === 'en' ? 'En' : 'Ar';
-            if (property === 'mainsite') {
-                return 'main' + currentLang + 'SiteText';
-            } else if (property === 'subsite') {
-                return 'sub' + currentLang + 'SiteText';
+            if (property === 'mainSite') {
+                return 'site.' + 'main' + currentLang + 'SiteText';
+            } else if (property === 'subSite') {
+                return 'site.' + 'sub' + currentLang + 'SiteText';
             }
             return generator.getColumnSortingKey(property, modelType);
         };
@@ -104,12 +126,13 @@ module.exports = function (app) {
          */
         self.reloadReviewIncomings = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return reviewIncomingService
                 .loadReviewIncomings()
                 .then(function (result) {
                     counterService.loadCounters();
                     self.reviewIncomings = result;
+                    self.reviewIncomingsCopy = angular.copy(self.reviewIncomings);
                     self.selectedReviewIncomings = [];
                     defer.resolve(true);
                     if (pageNumber)

@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                         readyToSendIncomingService,
                                                         readyToSendIncomings,
                                                         $q,
+                                                        _,
                                                         $filter,
                                                         langService,
                                                         toast,
@@ -24,8 +25,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'readyToSendIncomingCtrl';
-        self.currentEmployee = employeeService.getEmployee();
-        self.progress = null;
+
         contextHelpService.setHelpTo('incoming-ready-to-send');
         // employee service to check the permission in html
         self.employeeService = employeeService;
@@ -35,6 +35,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.readyToSendIncomings = readyToSendIncomings;
+        self.readyToSendIncomingsCopy = angular.copy(self.readyToSendIncomings);
 
         /**
          * @description Contains the selected ready to send incoming mails
@@ -47,6 +48,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.incoming.readyToSend) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -57,6 +59,23 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.incoming.readyToSend),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.incoming.readyToSend, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                subject: 'docSubject',
+                priorityLevel: function (record) {
+                    return self.getSortingKey('priorityLevel', 'Lookup');
+                },
+                securityLevel: function (record) {
+                    return self.getSortingKey('securityLevel', 'Lookup');
+                },
+                creator: function () {
+                    return self.getSortingKey('creatorInfo', 'Information');
+                },
+                createdOn: 'createdOn'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.readyToSendIncomings = gridService.searchGridData(self.grid, self.readyToSendIncomingsCopy);
             }
         };
 
@@ -94,12 +113,13 @@ module.exports = function (app) {
          */
         self.reloadReadyToSendIncomings = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return readyToSendIncomingService
                 .loadReadyToSendIncomings()
                 .then(function (result) {
                     counterService.loadCounters();
                     self.readyToSendIncomings = result;
+                    self.readyToSendIncomingsCopy = angular.copy(self.readyToSendIncomings);
                     self.selectedReadyToSendIncomings = [];
                     defer.resolve(true);
                     if (pageNumber)

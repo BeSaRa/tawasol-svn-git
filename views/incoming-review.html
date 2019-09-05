@@ -16,7 +16,7 @@
                     {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
                 </md-switch>
             </div>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -27,7 +27,7 @@
                         <md-table-container>
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedReviewIncomings"
-                                       md-progress="ctrl.progress">
+                                       md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedReviewIncomings.length > 1 ? 8 : 9}}"
@@ -81,12 +81,12 @@
                                             <span>{{lang.security_level}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedReviewIncomings.length"
-                                            md-order-by="{{ctrl.getSortingKey('mainsite', 'Site')}}"
+                                            md-order-by="{{ctrl.getSortingKey('mainSite', 'Site')}}"
                                             md-column="">
                                             <span>{{lang.main_site}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('subsite', 'Site')}}">
+                                            md-order-by="{{ctrl.getSortingKey('subSite', 'Site')}}">
                                             <span>{{lang.sub_site}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
@@ -103,7 +103,7 @@
                                     <tr md-row md-select="reviewIncoming" grid-right-click-directive
                                         model="reviewIncoming"
                                         selected-length="{{ctrl.selectedReviewIncomings.length ? ctrl.selectedReviewIncomings.length : 0}}"
-                                        ng-repeat="reviewIncoming in searchResults = (ctrl.reviewIncomings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))  track by $index">
+                                        ng-repeat="reviewIncoming in searchResults = (ctrl.reviewIncomings | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))  track by $index">
                                         <td md-cell class="subject">
                                             <!--<grid-document-subject-directive record="reviewIncoming"
                                                                              plain-text-only="!reviewIncoming.hasContent()"
@@ -154,7 +154,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.reviewIncomings  | filter:ctrl.searchModel).length}}"
+                                    md-total="{{(ctrl.reviewIncomings).length}}"
                                     md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>
