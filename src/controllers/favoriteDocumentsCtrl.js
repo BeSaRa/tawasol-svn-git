@@ -24,13 +24,13 @@ module.exports = function (app) {
 
         self.controllerName = 'favoriteDocumentsCtrl';
         contextHelpService.setHelpTo('favorite-documents');
-        self.progress = null;
 
         /**
          * @description All favorite documents
          * @type {*}
          */
         self.favoriteDocuments = favoriteDocuments;
+        self.favoriteDocumentsCopy = angular.copy(self.favoriteDocuments);
         self.favoriteDocumentsService = favoriteDocumentsService;
 
         /**
@@ -44,6 +44,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.favorite) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -55,6 +56,24 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.favorite),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.favorite, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                serial: 'docFullSerial',
+                subject: 'docSubject',
+                docType: function (record) {
+                    return self.getSortingKey('docTypeInfo','Information');
+                },
+                securityLevel: function(record){
+                    return self.getSortingKey('securityLevelInfo', 'Lookup');
+                },
+                priorityLevel: function(record){
+                    return self.getSortingKey('priorityLevelInfo', 'Lookup');
+                },
+                documentDate: 'createdOn'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.favoriteDocuments = gridService.searchGridData(self.grid, self.favoriteDocumentsCopy);
             }
         };
 
@@ -83,14 +102,14 @@ module.exports = function (app) {
          */
         self.reloadFavoriteDocuments = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return favoriteDocumentsService
                 .loadFavoriteDocuments(self.grid.page, self.grid.limit)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.favoriteDocuments = result;
-
+                    self.favoriteDocumentsCopy = angular.copy(self.favoriteDocuments);
                     self.selectedFavoriteDocuments = [];
                     defer.resolve(true);
                     if (pageNumber)

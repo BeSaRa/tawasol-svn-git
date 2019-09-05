@@ -27,7 +27,7 @@
                     </md-option>
                 </md-select>
             </md-input-container>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -38,7 +38,7 @@
                         <md-table-container>
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedProxyMailInboxes"
-                                       md-progress="ctrl.progress">
+                                       md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedProxyMailInboxes.length > 1 ? 11 : 12}}"
@@ -98,7 +98,7 @@
                                             <span>{{lang.action}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('senderInfo', 'Information')}}">
+                                            md-order-by="{{ctrl.getSortingKey('senderInfo', 'SenderInfo')}}">
                                             <span>{{lang.sender}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column
@@ -122,7 +122,7 @@
                                     <tr md-row md-select="proxyMailInbox" grid-right-click-directive="proxyMailInbox"
                                         model="proxyMailInbox"
                                         selected-length="{{ctrl.selectedProxyMailInboxes.length ? ctrl.selectedProxyMailInboxes.length : 0}}"
-                                        ng-repeat="proxyMailInbox in searchResults = (ctrl.proxyMailInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        ng-repeat="proxyMailInbox in searchResults = (ctrl.proxyMailInboxes | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
                                             <grid-indicator-directive record="proxyMailInbox"
@@ -239,7 +239,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.proxyMailInboxes | filter:ctrl.searchModel).length}}"
+                                    md-total="{{(ctrl.proxyMailInboxes).length}}"
                                     md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>

@@ -33,7 +33,6 @@ module.exports = function (app) {
 
         self.controllerName = 'proxyMailInboxCtrl';
 
-        self.progress = null;
         self.proxyUsers = angular.copy(proxyUsers);
         contextHelpService.setHelpTo('proxy-mail-inbox');
 
@@ -42,6 +41,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.proxyMailInboxes = [];
+        self.proxyMailInboxesCopy = angular.copy(self.proxyMailInboxes);
         self.userFolders = userFolders;
 
         /**
@@ -66,6 +66,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.proxy) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -76,6 +77,26 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.proxy),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.proxy, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                serial: 'generalStepElm.docFullSerial',
+                subject: 'generalStepElm.docSubject',
+                receivedDate: 'generalStepElm.receivedDate',
+                action: function(record){
+                    return self.getSortingKey('action', 'WorkflowAction');
+                },
+                sender: function(record){
+                    return self.getSortingKey('senderInfo', 'SenderInfo');
+                },
+                dueDate: 'generalStepElm.dueDate',
+                mainSiteSubSiteString: function (record) {
+                    return self.getSortingKey('mainSiteSubSiteString', 'Information');
+                },
+                numberOfDays: 'generalStemElm.numberOfDays'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.proxyMailInboxes = gridService.searchGridData(self.grid, self.proxyMailInboxesCopy);
             }
         };
 
@@ -127,13 +148,14 @@ module.exports = function (app) {
             var ouId = self.selectUser.hasOwnProperty('proxyUserOU') ? self.selectUser.proxyUserOU : null;
 
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return proxyMailInboxService
                 .loadProxyMailInboxes(userId, ouId)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.proxyMailInboxes = result;
+                    self.proxyMailInboxesCopy = angular.copy(self.proxyMailInboxes);
                     self.selectedProxyMailInboxes = [];
                     defer.resolve(true);
                     if (pageNumber)

@@ -16,7 +16,7 @@
                     {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
                 </md-switch>
             </div>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -27,7 +27,7 @@
                         <md-table-container>
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedFavoriteDocuments"
-                                       md-progress="ctrl.progress">
+                                       md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order"  md-on-reorder="ctrl.getSortedData">
                                     <!-- md-on-reorder="ctrl.reloadFavoriteDocuments"-->
                                     <tr md-row>
@@ -79,7 +79,7 @@
                                         grid-right-click-directive="favoriteDocument"
                                         model="favoriteDocument"
                                         selected-length="{{ctrl.selectedFavoriteDocuments.length ? ctrl.selectedFavoriteDocuments.length : 0}}"
-                                        ng-repeat="favoriteDocument in searchResults = (ctrl.favoriteDocuments  | filter:ctrl.searchModel) track by $index" >
+                                        ng-repeat="favoriteDocument in searchResults = (ctrl.favoriteDocuments) track by $index" >
                                         <!-- | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) -->
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->

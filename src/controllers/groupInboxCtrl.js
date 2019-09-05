@@ -2,7 +2,6 @@ module.exports = function (app) {
     app.controller('groupInboxCtrl', function (langService,
                                                $q,
                                                $filter,
-                                               $timeout,
                                                userInboxService,
                                                ResolveDefer,
                                                generator,
@@ -39,14 +38,15 @@ module.exports = function (app) {
         self.langService = langService;
 
         self.workItems = workItems;
+        self.workItemsCopy = angular.copy(self.workItems);
 
-        self.progress = null;
         contextHelpService.setHelpTo('group-inbox');
         /**
          * @description Contains options for grid configuration
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.group) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -57,6 +57,22 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.group),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.group, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                serial: 'generalStepElm.docFullSerial',
+                subject: 'generalStepElm.docSubject',
+                receivedDate: 'generalStepElm.receivedDate',
+                action: function(record){
+                    return self.getSortingKey('action', 'WorkflowAction');
+                },
+                sender: function(record){
+                    return self.getSortingKey('senderInfo', 'SenderInfo');
+                },
+                dueDate: 'generalStepElm.dueDate'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.workItems = gridService.searchGridData(self.grid, self.workItemsCopy);
             }
         };
 
@@ -121,13 +137,14 @@ module.exports = function (app) {
          */
         self.reloadGroupInbox = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return correspondenceService
                 .loadGroupInbox()
                 .then(function (workItems) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.workItems = workItems;
+                    self.workItemsCopy = angular.copy(self.workItems);
                     self.selectedWorkItems = [];
                     defer.resolve(true);
                     if (pageNumber)

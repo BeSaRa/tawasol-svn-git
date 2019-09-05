@@ -29,12 +29,11 @@ module.exports = function (app) {
         contextHelpService.setHelpTo('folders');
         self.employeeService = employeeService;
 
-        self.employeeService = employeeService;
-
         self.workItems = [];
+        self.workItemsCopy = angular.copy(self.workItems);
         self.selectedWorkItems = [];
         self.folders = folders;
-        self.progress = null;
+
         self.sidebarStatus = false;
         // to display the user Inbox folder
         self.inboxFolders = [new UserFolder({
@@ -61,6 +60,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.folder) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -71,6 +71,22 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.folder),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.folder, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                serial: 'generalStepElm.docFullSerial',
+                subject: 'generalStepElm.docSubject',
+                receivedDate: 'generalStepElm.receivedDate',
+                action: function(record){
+                  return self.getSortingKey('action', 'WorkflowAction');
+                },
+                sender: function(record){
+                    return self.getSortingKey('senderInfo', 'SenderInfo');
+                },
+                dueDate: 'generalStepElm.dueDate'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.workItems = gridService.searchGridData(self.grid, self.workItemsCopy);
             }
         };
 
@@ -122,13 +138,14 @@ module.exports = function (app) {
             if (!self.selectedFolder)
                 return;
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return correspondenceService
                 .loadUserInboxByFolder(self.selectedFolder)
                 .then(function (workItems) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.workItems = workItems;
+                    self.workItemsCopy = angular.copy(self.workItems);
                     self.selectedWorkItems = [];
                     defer.resolve(true);
                     if (pageNumber)
