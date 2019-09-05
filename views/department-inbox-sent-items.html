@@ -26,7 +26,7 @@
                        ng-click="ctrl.printResult($event)" class="md-icon-button" tooltip="{{lang.print}}">
                 <md-icon md-svg-icon="printer"></md-icon>
             </md-button>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div>
         <!-- end page-header -->
 
@@ -40,7 +40,7 @@
                         <md-table-container>
                             <div flex overlay-scroll-bar-directive>
                                 <table md-table ng-model="ctrl.selectedSentItemDepartmentInboxes"
-                                       md-progress="ctrl.progress"><!--md-row-select--><!--md-row-select-->
+                                       md-progress="ctrl.grid.progress"><!--md-row-select--><!--md-row-select-->
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedSentItemDepartmentInboxes.length > 1 ? 12 : 13}}"
@@ -76,23 +76,23 @@
                                             <span>{{lang.type}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}">
+                                            md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'SenderInfo')}}">
                                             <span>{{lang.action_by}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'Information')}}">
+                                            md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'CorrespondenceSite')}}">
                                             <span>{{lang.main_site_from}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'Information')}}">
+                                            md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'CorrespondenceSite')}}">
                                             <span>{{lang.main_site_to}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'Information')}}">
+                                            md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'CorrespondenceSite')}}">
                                             <span>{{lang.sub_site_from}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}">
+                                            md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'CorrespondenceSite')}}">
                                             <span>{{lang.sub_site_to}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
@@ -113,7 +113,7 @@
                                         grid-right-click-directive="sentItemDepartmentInbox"
                                         model="sentItemDepartmentInbox"
                                         selected-length="{{ctrl.selectedSentItemDepartmentInboxes.length ? ctrl.selectedSentItemDepartmentInboxes.length : 0}}"
-                                        md-virtual-repeat="sentItemDepartmentInbox in searchResults = (ctrl.sentItemDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))">
+                                        md-virtual-repeat="sentItemDepartmentInbox in searchResults = (ctrl.sentItemDepartmentInboxes | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))">
 
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
@@ -227,7 +227,7 @@
                             md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                             md-limit-options="ctrl.grid.limitOptions"
                             md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                            md-total="{{(ctrl.sentItemDepartmentInboxes | filter:ctrl.searchModel).length}}"
+                            md-total="{{(ctrl.sentItemDepartmentInboxes).length}}"
                             md-page-select
                             md-on-paginate="ctrl.grid.pagingCallback">
                     </md-table-pagination>

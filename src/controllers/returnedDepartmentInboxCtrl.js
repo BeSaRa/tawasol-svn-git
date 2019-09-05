@@ -35,7 +35,6 @@ module.exports = function (app) {
          */
         self.controllerName = 'returnedDepartmentInboxCtrl';
 
-        self.progress = null;
         contextHelpService.setHelpTo('department-inbox-returned');
         // employee service to check the permission in html
         self.employeeService = employeeService;
@@ -45,6 +44,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.returnedDepartmentInboxes = returnedDepartmentInboxes;
+        self.returnedDepartmentInboxesCopy = angular.copy(self.returnedDepartmentInboxes);
 
         /**
          * @description Contains the selected returned department inbox items
@@ -58,6 +58,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.department.returned) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -68,6 +69,26 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.department.returned),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.department.returned, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                serial: 'generalStepElm.docFullSerial',
+                subject: 'generalStepElm.docSubject',
+                receivedDate: 'generalStepElm.receivedDate',
+                department: function (record) {
+                    return self.getSortingKey('toOU', 'Information');
+                },
+                sender: function (record) {
+                    return self.getSortingKey('senderInfo', 'SenderInfo');
+                },
+                correspondence_sites: function (record) {
+                    return self.getSortingKey('fromOU', 'Information');
+                },
+                type: 'type',
+                numberOfDays: 'generalStepElm.numberOfDays'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.returnedDepartmentInboxes = gridService.searchGridData(self.grid, self.returnedDepartmentInboxesCopy);
             }
         };
 
@@ -105,13 +126,14 @@ module.exports = function (app) {
          */
         self.reloadReturnedDepartmentInboxes = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return returnedDepartmentInboxService
                 .loadReturnedDepartmentInboxes()
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.returnedDepartmentInboxes = result;
+                    self.returnedDepartmentInboxesCopy = angular.copy(self.returnedDepartmentInboxes);
                     self.selectedReturnedDepartmentInboxes = [];
                     defer.resolve(true);
                     if (pageNumber)
@@ -183,7 +205,7 @@ module.exports = function (app) {
             var info = workItem.getInfo();
             viewDocumentService.loadDocumentViewUrlWithOutEdit(info.vsId).then(function (result) {
                 //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
-                dialog.successMessage(langService.get('link_message').change({result: result}),null,null,null,null,true);
+                dialog.successMessage(langService.get('link_message').change({result: result}), null, null, null, null, true);
                 return true;
             });
         };
@@ -753,8 +775,8 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // view
             {
@@ -771,8 +793,8 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // Preview
                     {
@@ -834,8 +856,8 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Add To Favorite
@@ -851,8 +873,8 @@ module.exports = function (app) {
                 callback: self.addToFavorite,
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Terminate
             {
@@ -866,8 +888,8 @@ module.exports = function (app) {
                 },
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Get Link
             {
@@ -883,8 +905,8 @@ module.exports = function (app) {
                 class: "action-green",
                 hide: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Subscribe
             {
@@ -899,8 +921,8 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Resend
             {
@@ -914,8 +936,8 @@ module.exports = function (app) {
                 },
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Launch New Distribution Workflow
             {
@@ -931,8 +953,8 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 hide: false, /*As discussed with Mr. Ahmed Abu Al Nassr*/
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // View Tracking Sheet
             {
@@ -942,8 +964,8 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
             },
             // Manage
@@ -957,8 +979,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
@@ -1073,8 +1095,8 @@ module.exports = function (app) {
                 text: 'grid_action_download',
                 shortcut: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
                     "DOWNLOAD_COMPOSITE_BOOK" // Composite Document
@@ -1116,8 +1138,8 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
@@ -1262,8 +1284,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",
                     "DUPLICATE_BOOK_FROM_VERSION"

@@ -34,7 +34,6 @@ module.exports = function (app) {
 
         self.controllerName = 'readyToExportDepartmentInboxCtrl';
 
-        self.progress = null;
         contextHelpService.setHelpTo('department-inbox-ready-to-export');
 
         /**
@@ -42,6 +41,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.readyToExports = readyToExports;
+        self.readyToExportsCopy = angular.copy(self.readyToExports);
 
         /**
          * @description Contains the selected ready To Exports
@@ -61,6 +61,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.department.readyToExport) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -71,6 +72,22 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.department.readyToExport),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.department.readyToExport, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                serial: 'generalStepElm.docFullSerial',
+                subject: 'generalStepElm.docSubject',
+                receivedDate: 'generalStepElm.receivedDate',
+                sender: function (record) {
+                    return self.getSortingKey('senderInfo', 'SenderInfo');
+                },
+                mainSiteSubSiteString: function (record) {
+                    return self.getSortingKey('mainSiteSubSiteString', 'Information');
+                },
+                numberOfDays: 'generalStepElm.numberOfDays'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.readyToExports = gridService.searchGridData(self.grid, self.readyToExportsCopy);
             }
         };
 
@@ -135,13 +152,14 @@ module.exports = function (app) {
          */
         self.reloadReadyToExports = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return readyToExportService
                 .loadReadyToExports()
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.readyToExports = result;
+                    self.readyToExportsCopy = angular.copy(self.readyToExports);
                     self.selectedReadyToExports = [];
                     defer.resolve(true);
                     if (pageNumber)
@@ -228,7 +246,7 @@ module.exports = function (app) {
                     new ResolveDefer(defer);
                 })
                 .catch(function (error) {
-                    if (error && error !=='close')
+                    if (error && error !== 'close')
                         toast.error(langService.get('export_failed'));
                 });
         };
@@ -272,8 +290,7 @@ module.exports = function (app) {
                                 else
                                     toast.success(langService.get("unstar_specific_success").change({name: readyToExport.getTranslatedName()}));
                             });
-                    }
-                    else {
+                    } else {
                         dialog.errorMessage(langService.get('something_happened_when_update_starred'));
                     }
                 })
@@ -342,8 +359,7 @@ module.exports = function (app) {
                                         name: readyToExport.getTranslatedName()
                                     }));
                                 });
-                        }
-                        else {
+                        } else {
                             dialog.alertMessage(langService.get(result.message));
                         }
                     }
@@ -675,8 +691,8 @@ module.exports = function (app) {
                 .then(function () {
                     correspondenceService.unlockWorkItem(workItem, true, $event)
                         .then(function () {
-                             self.reloadReadyToExports(self.grid.page);
-                    });
+                            self.reloadReadyToExports(self.grid.page);
+                        });
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -784,8 +800,7 @@ module.exports = function (app) {
                     if (self.selectedReadyToExports.length)
                         _unlockBulk(selectedItems, $event);
                 })
-            }
-            else {
+            } else {
                 _unlockBulk(selectedItems, $event);
             }
         };
@@ -1315,8 +1330,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Duplicate
             {
@@ -1326,8 +1341,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",
                     "DUPLICATE_BOOK_FROM_VERSION"

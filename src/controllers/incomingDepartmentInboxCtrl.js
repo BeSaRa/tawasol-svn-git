@@ -30,13 +30,14 @@ module.exports = function (app) {
 
         self.controllerName = 'incomingDepartmentInboxCtrl';
 
-        self.progress = null;
         contextHelpService.setHelpTo('department-inbox-incoming');
         /**
          * @description All incoming department inbox items
          * @type {*}
          */
         self.incomingDepartmentInboxes = incomingDepartmentInboxes;
+        self.incomingDepartmentInboxesCopy = angular.copy(self.incomingDepartmentInboxes);
+
         /**
          * @description Contains the selected incoming department inbox items
          * @type {Array}
@@ -61,6 +62,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.department.incoming) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -71,6 +73,23 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.department.incoming),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.department.incoming, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                serial: 'generalStepElm.docFullSerial',
+                subject: 'generalStepElm.docSubject',
+                receivedDate: 'generalStepElm.receivedDate',
+                type: 'type',
+                senderRegOu: function(record){
+                  return self.getSortingKey('fromOU','Information');
+                },
+                numberOfDays: 'generalStepElm.numberOfDays',
+                sender: function(record){
+                    return self.getSortingKey('sender', 'Information');
+                }
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.incomingDepartmentInboxes = gridService.searchGridData(self.grid, self.incomingDepartmentInboxesCopy);
             }
         };
 
@@ -103,13 +122,14 @@ module.exports = function (app) {
          */
         self.reloadIncomingDepartmentInboxes = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return incomingDepartmentInboxService
                 .loadIncomingDepartmentInboxes()
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.incomingDepartmentInboxes = result;
+                    self.incomingDepartmentInboxesCopy = angular.copy(self.incomingDepartmentInboxes);
                     self.selectedIncomingDepartmentInboxes = [];
                     defer.resolve(true);
                     if (pageNumber)

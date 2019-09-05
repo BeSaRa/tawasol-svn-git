@@ -34,7 +34,6 @@ module.exports = function (app) {
          IT WILL ALWAYS GET OUTGOING DOCUMENTS ONLY
          */
 
-        self.progress = null;
         contextHelpService.setHelpTo('central-archive-ready-to-export');
 
         /**
@@ -42,6 +41,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.workItems = workItems;
+        self.workItemsCopy = angular.copy(self.workItems);
 
         /**
          * @description Contains the selected ready To Exports
@@ -61,6 +61,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.centralArchive.readyToExport) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -71,6 +72,22 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.centralArchive.readyToExport),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.centralArchive.readyToExport, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                serial: 'generalStepElm.docFullSerial',
+                subject: 'generalStepElm.docSubject',
+                receivedDate: 'generalStepElm.receivedDate',
+                sender: function (record) {
+                    return self.getSortingKey('fromOuInfo', 'Information');
+                },
+                mainSiteSubSiteString: function (record) {
+                    return self.getSortingKey('mainSiteSubSiteString', 'Information');
+                },
+                numberOfDays: 'generalStepElm.numberOfDays'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.workItems = gridService.searchGridData(self.grid, self.workItemsCopy);
             }
         };
 
@@ -135,13 +152,14 @@ module.exports = function (app) {
          */
         self.reloadReadyToExports = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return correspondenceService
                 .loadCentralArchiveWorkItems()
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.workItems = result;
+                    self.workItemsCopy = angular.copy(self.workItems);
                     self.selectedWorkItems = [];
                     defer.resolve(true);
                     if (pageNumber)

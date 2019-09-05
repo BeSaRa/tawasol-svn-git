@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('sentItemDepartmentInboxCtrl', function (lookupService,
                                                             sentItemDepartmentInboxService,
                                                             $q,
+                                                            _,
                                                             $filter,
                                                             $state,
                                                             listGeneratorService,
@@ -34,14 +35,13 @@ module.exports = function (app) {
         self.controllerName = 'sentItemDepartmentInboxCtrl';
         contextHelpService.setHelpTo('sent-items-department');
 
-        self.progress = null;
-
         self.docClassName = 'outgoing';
         /**
          * @description All sent items
          * @type {*}
          */
         self.sentItemDepartmentInboxes = [];
+        self.sentItemDepartmentInboxesCopy = angular.copy(self.sentItemDepartmentInboxes);
 
         /**
          * @description Contains the selected sent items
@@ -55,6 +55,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.department.sentItem) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -65,6 +66,34 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.department.sentItem),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.department.sentItem, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                serial: 'docFullSerial',
+                subject: 'docSubject',
+                type: 'typeOriginalCopy',
+                actionBy: function(record){
+                  return self.getSortingKey('sentByIdInfo', 'SenderInfo');
+                },
+                mainSiteFrom: function (record) {
+                    return self.getSortingKey('mainSiteFromIdInfo', 'CorrespondenceSite')
+                },
+                mainSiteTo: function(record){
+                    return self.getSortingKey('mainSiteToIdInfo', 'CorrespondenceSite')
+                },
+                subSiteFrom: function(record){
+                    return self.getSortingKey('subSiteFromIdInfo', 'CorrespondenceSite')
+                },
+                subSiteTo: function (record) {
+                    return self.getSortingKey('subSiteToIdInfo', 'CorrespondenceSite')
+                },
+                receivedDate: 'deliveryDate',
+                status: function (record) {
+                    return self.getSortingKey('messageStatus', 'Information');
+                }
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.returnedDepartmentInboxes = gridService.searchGridData(self.grid, self.returnedDepartmentInboxesCopy);
             }
         };
 
@@ -92,13 +121,14 @@ module.exports = function (app) {
          */
         self.reloadSentItemDepartmentInboxes = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return sentItemDepartmentInboxService
                 .loadSentItemDepartmentInboxes(self.selectedMonth, self.selectedYear)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.sentItemDepartmentInboxes = result;
+                    self.sentItemDepartmentInboxesCopy = angular.copy(self.sentItemDepartmentInboxes);
                     self.selectedSentItemDepartmentInboxes = [];
                     defer.resolve(true);
                     if (pageNumber)
