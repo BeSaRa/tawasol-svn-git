@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                     prepareInternals,
                                                     generator,
                                                     $q,
+                                                    _,
                                                     $state,
                                                     $filter,
                                                     langService,
@@ -21,8 +22,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'prepareInternalCtrl';
-        self.currentEmployee = employeeService.getEmployee();
-        self.progress = null;
+
         // employee service to check the permission in html
         self.employeeService = employeeService;
         contextHelpService.setHelpTo('internal-prepare');
@@ -32,6 +32,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.prepareInternals = prepareInternals;
+        self.prepareInternalsCopy = angular.copy(self.prepareInternals);
 
         /**
          * @description Contains the selected prepare internal items
@@ -44,6 +45,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.internal.prepare) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -54,6 +56,23 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.internal.prepare),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.internal.prepare, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                subject: 'docSubject',
+                priorityLevel: function (record) {
+                    return self.getSortingKey('priorityLevel', 'Lookup');
+                },
+                securityLevel: function (record) {
+                    return self.getSortingKey('securityLevel', 'Lookup');
+                },
+                creator: function () {
+                    return self.getSortingKey('creatorInfo', 'Information');
+                },
+                createdOn: 'createdOn'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.prepareInternals = gridService.searchGridData(self.grid, self.prepareInternalsCopy);
             }
         };
 
@@ -81,12 +100,13 @@ module.exports = function (app) {
          */
         self.reloadPrepareInternals = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return prepareInternalService
                 .loadPrepareInternals()
                 .then(function (result) {
                     counterService.loadCounters();
                     self.prepareInternals = result;
+                    self.prepareInternalsCopy = angular.copy(self.prepareInternals);
                     self.selectedPrepareInternals = [];
                     defer.resolve(true);
                     if (pageNumber)

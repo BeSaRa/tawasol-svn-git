@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                   draftOutgoingService,
                                                   draftOutgoings,
                                                   $q,
+                                                  _,
                                                   $filter,
                                                   langService,
                                                   generator,
@@ -15,7 +16,6 @@ module.exports = function (app) {
                                                   managerService,
                                                   validationService,
                                                   employeeService,
-                                                  $timeout,
                                                   viewTrackingSheetService,
                                                   contextHelpService,
                                                   broadcastService,
@@ -27,8 +27,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'draftOutgoingCtrl';
-        self.currentEmployee = employeeService.getEmployee();
-        self.progress = null;
+
         contextHelpService.setHelpTo('outgoing-draft');
         // employee service to check the permission in html
         self.employeeService = employeeService;
@@ -38,6 +37,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.draftOutgoings = draftOutgoings;
+        self.draftOutgoingsCopy = angular.copy(self.draftOutgoings);
 
         /**
          * @description Contains the selected draft outgoing mails
@@ -58,6 +58,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.outgoing.draft) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -68,6 +69,23 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.outgoing.draft),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.outgoing.draft, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                subject: 'docSubject',
+                priorityLevel: function (record) {
+                    return self.getSortingKey('priorityLevel', 'Lookup');
+                },
+                securityLevel: function (record) {
+                    return self.getSortingKey('securityLevel', 'Lookup');
+                },
+                creator: function () {
+                    return self.getSortingKey('creatorInfo', 'Information');
+                },
+                createdOn: 'createdOn'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.draftOutgoings = gridService.searchGridData(self.grid, self.draftOutgoingsCopy);
             }
         };
 
@@ -115,12 +133,13 @@ module.exports = function (app) {
          */
         self.reloadDraftOutgoings = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return draftOutgoingService
                 .loadDraftOutgoings()
                 .then(function (result) {
                     counterService.loadCounters();
                     self.draftOutgoings = result;
+                    self.draftOutgoingsCopy = angular.copy(self.draftOutgoings);
                     self.selectedDraftOutgoings = [];
                     defer.resolve(true);
                     if (pageNumber)

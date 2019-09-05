@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                     prepareOutgoingService,
                                                     prepareOutgoings,
                                                     $q,
+                                                    _,
                                                     $filter,
                                                     langService,
                                                     toast,
@@ -13,7 +14,6 @@ module.exports = function (app) {
                                                     managerService,
                                                     validationService,
                                                     employeeService,
-                                                    $timeout,
                                                     contextHelpService,
                                                     viewTrackingSheetService,
                                                     broadcastService,
@@ -24,8 +24,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'prepareOutgoingCtrl';
-        self.currentEmployee = employeeService.getEmployee();
-        self.progress = null;
+
         // employee service to check the permission in html
         self.employeeService = employeeService;
 
@@ -35,6 +34,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.prepareOutgoings = prepareOutgoings;
+        self.prepareOutgoingsCopy = angular.copy(self.prepareOutgoings);
 
         /**
          * @description Contains the selected prepare outgoing mails
@@ -49,6 +49,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.outgoing.prepare) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -59,6 +60,23 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.outgoing.prepare),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.outgoing.prepare, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                subject: 'docSubject',
+                priorityLevel: function (record) {
+                    return self.getSortingKey('priorityLevel', 'Lookup');
+                },
+                securityLevel: function (record) {
+                    return self.getSortingKey('securityLevel', 'Lookup');
+                },
+                creator: function () {
+                    return self.getSortingKey('creatorInfo', 'Information');
+                },
+                createdOn: 'createdOn'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.prepareOutgoings = gridService.searchGridData(self.grid, self.prepareOutgoingsCopy);
             }
         };
 
@@ -96,12 +114,13 @@ module.exports = function (app) {
          */
         self.reloadPrepareOutgoings = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return prepareOutgoingService
-                .loadPrepareOutgoings()//self.currentEmployee.defaultOUID
+                .loadPrepareOutgoings()
                 .then(function (result) {
                     counterService.loadCounters();
                     self.prepareOutgoings = result;
+                    self.prepareOutgoingsCopy = angular.copy(self.prepareOutgoings);
                     self.selectedPrepareOutgoings = [];
                     defer.resolve(true);
                     if (pageNumber)

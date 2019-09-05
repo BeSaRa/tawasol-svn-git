@@ -16,7 +16,7 @@
                     {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
                 </md-switch>
             </div>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -27,7 +27,7 @@
                         <md-table-container>
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedDraftInternals"
-                                       md-progress="ctrl.progress">
+                                       md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedDraftInternals.length > 1 ? 6 : 7}}"
@@ -89,7 +89,7 @@
                                     <tr md-row md-select="draftInternal" grid-right-click-directive="draftInternal"
                                         model="draftInternal"
                                         selected-length="{{ctrl.selectedDraftInternals.length ? ctrl.selectedDraftInternals.length : 0}}"
-                                        ng-repeat="draftInternal in searchResults = (ctrl.draftInternals | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        ng-repeat="draftInternal in searchResults = (ctrl.draftInternals | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td md-cell class="indicator-td">
                                             <!-- Electronic/Paper Document -->
                                             <grid-indicator-directive record="draftInternal"
@@ -145,7 +145,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.draftInternals | filter:ctrl.searchModel).length}}"
+                                    md-total="{{(ctrl.draftInternals).length}}"
                                     md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>

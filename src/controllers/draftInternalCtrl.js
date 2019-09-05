@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                   draftInternalService,
                                                   draftInternals,
                                                   $q,
+                                                  _,
                                                   $filter,
                                                   langService,
                                                   generator,
@@ -11,12 +12,10 @@ module.exports = function (app) {
                                                   dialog,
                                                   $state,
                                                   viewDocumentService,
-                                                  //outgoingService,
                                                   managerService,
                                                   validationService,
                                                   employeeService,
                                                   contextHelpService,
-                                                  $timeout,
                                                   viewTrackingSheetService,
                                                   broadcastService,
                                                   correspondenceService,
@@ -27,8 +26,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'draftInternalCtrl';
-        self.currentEmployee = employeeService.getEmployee();
-        self.progress = null;
+
         // employee service to check the permission in html
         self.employeeService = employeeService;
 
@@ -39,6 +37,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.draftInternals = draftInternals;
+        self.draftInternalsCopy = angular.copy(self.draftInternals);
 
         /**
          * @description Contains the selected draft internal mails
@@ -59,6 +58,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.internal.draft) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -69,6 +69,23 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.internal.draft),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.internal.draft, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                subject: 'docSubject',
+                priorityLevel: function (record) {
+                    return self.getSortingKey('priorityLevel', 'Lookup');
+                },
+                securityLevel: function (record) {
+                    return self.getSortingKey('securityLevel', 'Lookup');
+                },
+                creator: function () {
+                    return self.getSortingKey('creatorInfo', 'Information');
+                },
+                createdOn: 'createdOn'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.draftInternals = gridService.searchGridData(self.grid, self.draftInternalsCopy);
             }
         };
 
@@ -106,12 +123,13 @@ module.exports = function (app) {
          */
         self.reloadDraftInternals = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return draftInternalService
                 .loadDraftInternals()// self.currentEmployee.defaultOUID
                 .then(function (result) {
                     counterService.loadCounters();
                     self.draftInternals = result;
+                    self.draftInternalsCopy = angular.copy(self.draftInternals);
                     self.selectedDraftInternals = [];
                     defer.resolve(true);
                     if (pageNumber)

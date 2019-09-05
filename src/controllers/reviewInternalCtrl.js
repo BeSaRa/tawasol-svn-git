@@ -27,8 +27,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'reviewInternalCtrl';
-        self.currentEmployee = employeeService.getEmployee();
-        self.progress = null;
+
         // employee service to check the permission in html
         self.employeeService = employeeService;
 
@@ -39,6 +38,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.reviewInternals = reviewInternals;
+        self.reviewInternalsCopy = angular.copy(self.reviewInternals);
 
         /**
          * @description Contains the selected review internal emails
@@ -59,6 +59,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.internal.review) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -69,6 +70,23 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.internal.review),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.internal.review, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                subject: 'docSubject',
+                priorityLevel: function (record) {
+                    return self.getSortingKey('priorityLevel', 'Lookup');
+                },
+                securityLevel: function (record) {
+                    return self.getSortingKey('securityLevel', 'Lookup');
+                },
+                creator: function () {
+                    return self.getSortingKey('creatorInfo', 'Information');
+                },
+                createdOn: 'createdOn'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.reviewInternals = gridService.searchGridData(self.grid, self.reviewInternalsCopy);
             }
         };
 
@@ -106,12 +124,13 @@ module.exports = function (app) {
          */
         self.reloadReviewInternals = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return reviewInternalService
                 .loadReviewInternals()
                 .then(function (result) {
                     counterService.loadCounters();
                     self.reviewInternals = result;
+                    self.reviewInternalsCopy = angular.copy(self.reviewInternals);
                     self.selectedReviewInternals = [];
                     defer.resolve(true);
                     if (pageNumber)

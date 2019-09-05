@@ -16,7 +16,7 @@
                     {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
                 </md-switch>
             </div>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -27,7 +27,7 @@
                         <md-table-container>
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedApprovedInternals"
-                                       md-progress="ctrl.progress">
+                                       md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedApprovedInternals.length > 1 ? 6 : 7}}"
@@ -51,7 +51,7 @@
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedApprovedInternals.length" md-column
-                                            md-order-by="generalStepElm.docSerial">
+                                            md-order-by="generalStepElm.docFullSerial">
                                             <span>{{lang.approved_serial}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedApprovedInternals.length" md-column
@@ -63,7 +63,7 @@
                                             <span>{{lang.received_date}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedApprovedInternals.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('sender', 'Information')}}">
+                                            md-order-by="{{ctrl.getSortingKey('senderInfo', 'SenderInfo')}}">
                                             <span>{{lang.sender}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedApprovedInternals.length" md-column
@@ -89,7 +89,7 @@
                                         model="approvedInternal"
                                         ng-class="!approvedInternal.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                                         selected-length="{{ctrl.selectedApprovedInternals.length ? ctrl.selectedApprovedInternals.length : 0}}"
-                                        ng-repeat="approvedInternal in searchResults = (ctrl.approvedInternals  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        ng-repeat="approvedInternal in searchResults = (ctrl.approvedInternals | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td md-cell>
                                             <span class="serial-td">{{approvedInternal.generalStepElm.docFullSerial}}</span>
                                         </td>
@@ -164,7 +164,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.approvedInternals | filter: ctrl.searchModel).length}}"
+                                    md-total="{{(ctrl.approvedInternals).length}}"
                                     md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>
