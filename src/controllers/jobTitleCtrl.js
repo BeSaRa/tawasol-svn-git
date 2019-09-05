@@ -15,23 +15,33 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'jobTitleCtrl';
         self.jobTitles = jobTitles;
+        self.jobTitlesCopy = angular.copy(self.jobTitles);
 
         contextHelpService.setHelpTo('job-titles');
+
+        self.selectedJobTitles = [];
 
         /**
          *@description All job titles
          *  @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
-        self.promise = null;
-        self.selectedJobTitles = [];
-
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.jobTitle) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.jobTitle, self.jobTitles),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.jobTitle, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName',
+                itemOrder: 'itemOrder'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.jobTitles = gridService.searchGridData(self.grid, self.jobTitlesCopy);
             }
         };
         /**
@@ -89,11 +99,12 @@ module.exports = function (app) {
          */
         self.reloadJobTitles = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return jobTitleService
                 .loadJobTitles()
                 .then(function (result) {
                     self.jobTitles = result;
+                    self.jobTitlesCopy = angular.copy(self.jobTitles);
                     self.selectedJobTitles = [];
                     defer.resolve(true);
                     if (pageNumber)

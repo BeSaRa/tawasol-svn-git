@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                     $filter,
                                                     layoutService,
                                                     $q,
+                                                    _,
                                                     langService,
                                                     gridService,
                                                     lookupService,
@@ -14,17 +15,18 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'dynamicMenuItemCtrl';
         contextHelpService.setHelpTo('dynamic-menu-items');
-        self.progress = null;
 
         /**
          * @description All document  types
          * @type {*}
          */
         self.dynamicMenuItems = dynamicMenuItems;
+        self.dynamicMenuItemsCopy = angular.copy(self.dynamicMenuItems);
+
         self.menuTypes = {};
 
         _.map(lookupService.returnLookups(lookupService.menuItemType), function (type) {
-             self.menuTypes[type.lookupKey] = type;
+            self.menuTypes[type.lookupKey] = type;
         });
 
         /**
@@ -38,12 +40,21 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.dynamicMenuItem) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.dynamicMenuItem, self.dynamicMenuItems),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.dynamicMenuItem, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.dynamicMenuItems = gridService.searchGridData(self.grid, self.dynamicMenuItemsCopy);
             }
         };
 
@@ -118,12 +129,13 @@ module.exports = function (app) {
          */
         self.reloadDynamicMenuItems = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return dynamicMenuItemService
                 .loadParentDynamicMenuItems()
                 .then(function (result) {
                     layoutService.loadLandingPage();
                     self.dynamicMenuItems = result;
+                    self.dynamicMenuItemsCopy = angular.copy(self.dynamicMenuItems);
                     self.selectedDynamicMenuItems = [];
                     defer.resolve(true);
                     if (pageNumber)

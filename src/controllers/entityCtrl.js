@@ -16,7 +16,6 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'entityCtrl';
-        self.progress = null;
 
         contextHelpService.setHelpTo('entities');
         self.employeeService = employeeService;
@@ -26,6 +25,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.entities = entities;
+        self.entitiesCopy = angular.copy(self.entities);
 
         /**
          * @description Contains the selected entities
@@ -38,12 +38,24 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.entity) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.entity, self.entities),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.entity, limit);
+            },
+            searchColumns: {
+                identifier: 'identifier',
+                arabicName: 'arName',
+                englishName: 'enName',
+                appArabicName: 'appArName',
+                appEnglishName: 'appEnName'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.entities = gridService.searchGridData(self.grid, self.entitiesCopy);
             }
         };
 
@@ -106,11 +118,12 @@ module.exports = function (app) {
          */
         self.reloadEntities = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return entityService
                 .loadEntities()
                 .then(function (result) {
                     self.entities = result;
+                    self.entitiesCopy = angular.copy(self.entities);
                     self.selectedEntities = [];
                     defer.resolve(true);
                     if (pageNumber)
