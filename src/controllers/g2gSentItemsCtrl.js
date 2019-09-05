@@ -18,13 +18,13 @@ module.exports = function (app) {
 
         self.controllerName = 'g2gSentItemsCtrl';
         contextHelpService.setHelpTo('sent-items-g2g');
-        self.progress = null;
 
         /**
          * @description All g2g inbox items
          * @type {*}
          */
         self.g2gItems = [];
+        self.g2gItemsCopy = angular.copy(self.g2gItems);
 
         /**
          * @description Contains the selected g2g inbox items
@@ -37,6 +37,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.g2g.sentItem) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -47,6 +48,29 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.g2g.sentItem),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.g2g.sentItem, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                subject: 'subject',
+                docType: function (record) {
+                    return self.getSortingKey('typeInfo', 'Information');
+                },
+                securityLevel: function (record) {
+                    return self.getSortingKey('securityLevel', 'Information');
+                },
+                sentDate: 'sentDate',
+                documentNumber: 'outgoingSerial',
+                g2gBookNumber: 'g2GRefNo',
+                receivedDate: 'updateDate',
+                status: function(record){
+                  return self.getSortingKey('statusInfo', 'Lookup');
+                },
+                mainSiteSubSiteString: function (record) {
+                    return self.getSortingKey('mainSiteSubSiteString', 'Information');
+                }
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.g2gItems = gridService.searchGridData(self.grid, self.g2gItemsCopy);
             }
         };
 
@@ -74,11 +98,12 @@ module.exports = function (app) {
          */
         self.reloadG2gItems = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return g2gSentItemsService
                 .loadG2gItems(self.selectedMonth, self.selectedYear)
                 .then(function (result) {
                     self.g2gItems = result;
+                    self.g2gItemsCopy = angular.copy(self.g2gItems);
                     self.selectedG2gItems = [];
                     defer.resolve(true);
                     if (pageNumber)

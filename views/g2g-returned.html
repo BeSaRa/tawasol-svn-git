@@ -16,7 +16,7 @@
                     {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
                 </md-switch>
             </div>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -28,7 +28,7 @@
                             <div flex overlay-scroll-bar-directive>
                                 <table md-table
                                        ng-model="ctrl.selectedG2gItems"
-                                       md-progress="ctrl.progress"><!-- md-row-select multiple-->
+                                       md-progress="ctrl.grid.progress"><!-- md-row-select multiple-->
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedG2gItems.length > 1 ? 7 : 8}}"
@@ -77,7 +77,7 @@
                                         grid-right-click-directive="g2gItem"
                                         model="g2gItem"
                                         selected-length="{{ctrl.selectedG2gItems.length ? ctrl.selectedG2gItems.length : 0}}"
-                                        ng-repeat="g2gItem in ctrl.g2gItems | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        ng-repeat="g2gItem in ctrl.g2gItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell class="indicator-td">
                                             <grid-indicator-directive record="g2gItem"
                                                                       indicator-type="isInternalG2G"
@@ -122,7 +122,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.g2gItems | filter:ctrl.searchModel).length}}" md-page-select
+                                    md-total="{{(ctrl.g2gItems).length}}" md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>
                         </md-table-container>

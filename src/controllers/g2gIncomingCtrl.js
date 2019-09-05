@@ -23,13 +23,12 @@ module.exports = function (app) {
         contextHelpService.setHelpTo('incoming-g2g');
         counterService.loadG2GCounters();
 
-        self.progress = null;
-
         /**
          * @description All g2g inbox items
          * @type {*}
          */
         self.g2gItems = g2gItems;
+        self.g2gItemsCopy = angular.copy(self.g2gItems);
 
         /**
          * @description Contains the selected g2g inbox items
@@ -42,6 +41,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.g2g.incoming) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -52,6 +52,25 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.g2g.incoming),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.g2g.incoming, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                subject: 'correspondence.docSubject',
+                docType: function (record) {
+                    return self.getSortingKey('typeInfo', 'Information');
+                },
+                securityLevel: function (record) {
+                    return self.getSortingKey('securityLevel', 'Information');
+                },
+                documentNumber: 'correspondence.refDocNumber',
+                g2gBookNumber: 'correspondence.g2gRefNO',
+                receivedDate: 'correspondence.lastModifiedString',
+                mainSiteSubSiteString: function (record) {
+                    return self.getSortingKey('mainSiteSubSiteString', 'Information');
+                }
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.g2gItems = gridService.searchGridData(self.grid, self.g2gItemsCopy);
             }
         };
 
@@ -79,11 +98,12 @@ module.exports = function (app) {
          */
         self.reloadG2gItems = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return g2gIncomingService
                 .loadG2gItems()
                 .then(function (result) {
                     self.g2gItems = result;
+                    self.g2gItemsCopy = angular.copy(self.g2gItems);
                     self.selectedG2gItems = [];
                     counterService.loadG2GCounters();
                     defer.resolve(true);
