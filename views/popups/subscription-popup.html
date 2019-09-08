@@ -37,7 +37,7 @@
                         <md-icon md-svg-icon="refresh"></md-icon>
                     </md-button>
                     <span flex></span>
-                    <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+                    <grid-search-directive grid="ctrl.grid"></grid-search-directive>
                 </div>
                 <md-card md-whiteframe="3" class="card-overlay">
                     <md-table-container>
@@ -45,7 +45,7 @@
                             <table md-table md-row-select="true"
                                    multiple="true"
                                    ng-model="ctrl.selectedUserSubscriptions"
-                                   md-progress="ctrl.progress">
+                                   md-progress="ctrl.grid.progress">
                                 <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                 <tr md-row>
                                     <th colspan="3" class="table-selector-header"
@@ -62,8 +62,8 @@
                                         </div>
                                     </th>
                                     <th ng-if="!ctrl.selectedUserSubscriptions.length" md-column
-                                        md-order-by="docSubject">
-                                        <span>{{lang.document_subject}}</span>
+                                        md-order-by="{{ctrl.getSortingKey('subscriptionEventLookup', 'Lookup')}}">
+                                        <span>{{lang.user_subscription_event_type}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedUserSubscriptions.length" md-column
                                         md-order-by="status">
@@ -76,8 +76,8 @@
                                 </thead>
                                 <tbody md-body>
                                 <tr md-select="userSubscription" md-row
-                                    ng-repeat="userSubscription in searchResults = (ctrl.existingSubscriptions | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
-                                    <td md-cell>{{userSubscription.getSubscriptionEventName()}}</td>
+                                    ng-repeat="userSubscription in searchResults = (ctrl.existingSubscriptions | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                    <td md-cell>{{userSubscription.subscriptionEventLookup.getTranslatedName()}}</td>
                                     <td md-cell>
                                         <md-switch aria-label="{{lang.status}}"
                                                    ng-model="userSubscription.status"
@@ -112,7 +112,7 @@
                                 md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                 md-limit-options="ctrl.grid.limitOptions"
                                 md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                md-total="{{(ctrl.existingSubscriptions | filter:ctrl.searchModel).length}}"
+                                md-total="{{(ctrl.existingSubscriptions).length}}"
                                 md-page-select>
                         </md-table-pagination>
                     </md-table-container>

@@ -21,16 +21,26 @@ module.exports = function (app) {
          */
 
         self.correspondenceSiteTypes = correspondenceSiteTypes;
-        self.model = angular.copy(self.correspondenceSiteTypes);
-        self.promise = null;
+        self.correspondenceSiteTypesCopy = angular.copy(self.correspondenceSiteTypes);
+
         self.selectedCorrespondenceSiteTypes = [];
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.correspondenceSiteType) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.correspondenceSiteType, self.correspondenceSiteTypes),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.correspondenceSiteType, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName',
+                itemOrder: 'itemOrder'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.correspondenceSiteTypes = gridService.searchGridData(self.grid, self.correspondenceSiteTypesCopy);
             }
         };
         /**
@@ -88,11 +98,12 @@ module.exports = function (app) {
          */
         self.reloadCorrespondenceSiteTypes = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return correspondenceSiteTypeService
                 .loadCorrespondenceSiteTypes()
                 .then(function (result) {
                     self.correspondenceSiteTypes = result;
+                    self.correspondenceSiteTypesCopy = angular.copy(self.correspondenceSiteTypes);
                     self.selectedCorrespondenceSiteTypes = [];
                     defer.resolve(true);
                     if (pageNumber)

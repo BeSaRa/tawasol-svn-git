@@ -804,8 +804,7 @@
                                         <md-icon md-svg-icon="refresh"></md-icon>
                                     </md-button>
                                     <span flex></span>
-                                    <search-filter-directive
-                                            model="ctrl.searchModel"></search-filter-directive>
+                                    <grid-search-directive grid="ctrl.grid"></grid-search-directive>
                                 </div>
                                 <div layout="column" flex>
                                     <div scroll-directive>
@@ -815,7 +814,7 @@
                                                     <table md-table md-row-select="true"
                                                            multiple="true"
                                                            ng-model="ctrl.selectedUserComments"
-                                                           md-progress="ctrl.progress">
+                                                           md-progress="ctrl.grid.progress">
                                                         <thead md-head md-order="ctrl.grid.order"
                                                                md-on-reorder="ctrl.getSortedDataUserComments">
                                                         <tr md-row>
@@ -860,7 +859,7 @@
                                                         </thead>
                                                         <tbody md-body>
                                                         <tr md-select="userComment" md-row
-                                                            ng-repeat="userComment in ctrl.userComments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                                            ng-repeat="userComment in ctrl.userComments | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                                             <td md-cell><a href=""
                                                                            ng-click="ctrl.showComment(userComment, $event)">{{userComment.shortComment}}</a>
                                                             </td>
@@ -932,7 +931,7 @@
                                                     <table md-table md-row-select="true"
                                                            multiple="true"
                                                            ng-model="ctrl.selectedUserWorkflowGroups"
-                                                           md-progress="ctrl.userWorkflowProgress">
+                                                           md-progress="ctrl.userWorkflowGrid.progress">
                                                         <thead md-head md-order="ctrl.userWorkflowGrid.order"
                                                                md-on-reorder="ctrl.getSortedDataUserWorkflow">
                                                         <tr md-row>
@@ -1097,7 +1096,7 @@
                                             <div flex scroll-directive>
                                                 <table md-table md-row-select
                                                        ng-model="ctrl.selectedSignature"
-                                                       md-progress="ctrl.signatureProgress">
+                                                       md-progress="ctrl.signatureGrid.progress">
                                                     <thead md-head md-order="ctrl.signatureGrid.order"
                                                            md-on-reorder="ctrl.getSortedDataSignature">
                                                     <tr md-row>
@@ -1106,8 +1105,6 @@
                                                             <div layout="row" layout-align="start center">
                                                                 <span>{{ctrl.selectedSignature.length}} {{lang.items_selected}} </span>
                                                                 <span flex></span>
-                                                                <!--<table-status-directive
-                                                                        when-close="ctrl.changeStatusBulkDocumentTemplates"></table-status-directive>-->
                                                                 <!--<md-button class="md-icon-button"
                                                                            ng-click="ctrl.removeBulkSignatures($event)">
                                                                     <md-icon md-svg-icon="delete"></md-icon>
@@ -1122,14 +1119,6 @@
                                                             md-order-by="documentTitle">
                                                             <span>{{lang.title}}</span>
                                                         </th>
-                                                        <!--<th ng-if="!ctrl.selectedSignature.length" md-column
-                                                            md-order-by="docType">
-                                                            <span>{{lang.label_document_type}}</span>
-                                                        </th>
-                                                        <th ng-if="!ctrl.selectedSignature.length" md-column
-                                                            md-order-by="templateType">
-                                                            <span>{{lang.template_type}}</span>
-                                                        </th>-->
                                                         <th ng-if="!ctrl.selectedSignature.length" md-column>
                                                             <span>{{lang.actions}}</span>
                                                         </th>
@@ -1137,11 +1126,9 @@
                                                     </thead>
                                                     <tbody md-body>
                                                     <tr md-row
-                                                        ng-repeat="signature in ctrl.applicationUser.signature | filter:ctrl.searchModel | limitTo: ctrl.signatureGrid.limit: ((ctrl.signatureGrid.page - 1) * ctrl.signatureGrid.limit) track by $index">
+                                                        ng-repeat="signature in ctrl.applicationUser.signature | limitTo: ctrl.signatureGrid.limit: ((ctrl.signatureGrid.page - 1) * ctrl.signatureGrid.limit) track by $index">
                                                         <td md-cell>{{signature.docSubject}}</td>
                                                         <td md-cell>{{signature.documentTitle}}</td>
-                                                        <!--<td md-cell>{{documentTemplate.docType}}</td>
-                                                        <td md-cell>{{documentTemplate.templateType}}</td>-->
                                                         <td md-cell>
                                                             <div flex layout="row" layout-align="start center">
                                                                 <md-button class="md-icon-button" title="{{lang.edit}}"

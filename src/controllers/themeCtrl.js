@@ -21,19 +21,29 @@ module.exports = function (app) {
          *@description All themes
          */
         self.themes = themes;
-        self.promise = null;
+        self.themesCopy = angular.copy(self.themes);
+
         self.selectedThemes = [];
         /**
          *@description Grid Bind
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.theme) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.theme, self.themes),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.theme, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.themes = gridService.searchGridData(self.grid, self.themesCopy);
             }
         };
         /**
@@ -102,11 +112,12 @@ module.exports = function (app) {
          */
         self.reloadThemes = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return themeService
                 .loadThemes()
                 .then(function (result) {
                     self.themes = result;
+                    self.themesCopy = angular.copy(self.themes);
                     self.selectedThemes = [];
                     defer.resolve(true);
                     if (pageNumber)

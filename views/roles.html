@@ -10,7 +10,7 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div><!-- page-header -->
         <div layout="column" flex>
             <div scroll-directive>
@@ -22,7 +22,7 @@
                                        md-row-select="true"
                                        multiple="true"
                                        ng-model="ctrl.selectedRoles"
-                                       md-progress="ctrl.progress">
+                                       md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="6" class="table-selector-header"
@@ -44,11 +44,9 @@
                                         </th>
                                         <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="enName">
                                             <span>{{lang.english_name}}</span></th>
-                                        <!--<th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="description">-->
-                                        <!--<span>{{lang.description}}</span></th>-->
                                         <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="status">
                                             <span>{{lang.status}}</span></th>
-                                        <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="updatedBy">
+                                        <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="{{ctrl.getSortingKey('updatedByInfo', 'Information')}}">
                                             <span>{{lang.updated_by}}</span></th>
                                         <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="updatedOn">
                                             <span>{{lang.updated_date}}</span></th>
@@ -58,10 +56,9 @@
                                     <tbody md-body>
                                     <tr md-row
                                         md-select="role"
-                                        ng-repeat="role in ctrl.roles | roleFilter: ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        ng-repeat="role in ctrl.roles | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{role.arName}}</td>
                                         <td md-cell>{{role.enName}}</td>
-                                        <!--<td md-cell>{{role.description}}</td>-->
                                         <td md-cell>
                                             <md-switch aria-label="{{lang.status}}"
                                                        title="{{role.getTranslatedStatus()}}"
@@ -70,13 +67,6 @@
                                         </td>
                                         <td md-cell>{{role.updatedByInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{role.updatedOn}}</td>
-                                        <!--<td md-cell
-                                            ng-if="role.customRolePermission.length===1 || role.customRolePermission.length===0">
-                                            &lt;!&ndash; {{role.customRolePermission[0].permission? role.getTranslatedPermissionName():
-                                             ""}}&ndash;&gt;
-                                            {{role.customRolePermission[0]? role.getTranslatedPermissionName():
-                                            ""}}
-                                        </td>-->
                                         <td md-cell>
                                             <div flex layout="row" layout-align="start center">
                                                 <md-button tooltip="{{(role.customRolePermission.length === 1)
@@ -112,7 +102,7 @@
                                         md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                         md-limit-options="ctrl.grid.limitOptions"
                                         md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                        md-total="{{(ctrl.roles | roleFilter: ctrl.searchModel).length}}"
+                                        md-total="{{(ctrl.roles).length}}"
                                         md-page-select
                                         md-on-paginate="ctrl.grid.pagingCallback">
                                 </md-table-pagination>

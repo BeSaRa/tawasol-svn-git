@@ -775,6 +775,9 @@ module.exports = function (app) {
         };
 
         var _getPropertyValue = function (record, property) {
+            if (!record)
+                return null;
+
             if (property.indexOf('.') > -1) {
                 var arr = property.split('.');
                 for (var i = 0; i < arr.length; i++) {

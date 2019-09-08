@@ -95,6 +95,7 @@ module.exports = function (app) {
         self.documentClasses = lookupService.returnLookups(lookupService.documentClass);
         self.allPropertyConfigurations = allPropertyConfigurations;
         self.propertyConfigurations = [];
+        self.propertyConfigurationsCopy = angular.copy(self.propertyConfigurations);
 
         if (self.editMode && !self.rootMode) {
             self.parentOrganization = organizationService.getOrganizationById(self.organization.parent);
@@ -248,6 +249,7 @@ module.exports = function (app) {
         self.grid = {
             classifications: {
                 name: 'ouClassificationsGrid',
+                progress: null,
                 limit: 5, // default limit
                 page: 1, // first page
                 //order: 'arName', // default sorting order
@@ -272,6 +274,7 @@ module.exports = function (app) {
             },
             correspondenceSites: {
                 name: 'ouCorrespondenceSitesGrid',
+                progress: null,
                 limit: 5, // default limit
                 page: 1, // first page
                 //order: 'arName', // default sorting order
@@ -615,6 +618,7 @@ module.exports = function (app) {
 
         self.childrenGrid = {
             name: 'childrenGrid',
+            progress: null,
             searchColumns: {
                 depNameAr: 'arName',
                 depNameEn: 'enName',
@@ -1109,9 +1113,9 @@ module.exports = function (app) {
          */
         self.documentTemplateGrid = {
             name: 'documentTemplateGrid',
+            progress: null,
             limit: 5, // default limit
             page: 1, // first page
-            //order: 'arName', // default sorting order
             order: '', // default sorting order
             limitOptions: [5, 10, 20, // limit options
                 {
@@ -1174,7 +1178,7 @@ module.exports = function (app) {
          */
         self.reloadDocumentTemplates = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.documentTemplateGrid.progress = defer.promise;
             return documentTemplateService
                 .loadDocumentTemplates(organization)
                 .then(function (result) {
@@ -1220,6 +1224,7 @@ module.exports = function (app) {
          */
         self.propertyConfigurationGrid = {
             name: 'propertyConfigurationGrid',
+            progress: null,
             limit: 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
@@ -1231,7 +1236,18 @@ module.exports = function (app) {
                         return (self.propertyConfigurations.length + 21)
                     }
                 }
-            ]
+            ],
+            searchColumns: {
+                dataType: 'dataType',
+                defaultOperator: 'defaultOperator',
+                defaultValue: 'defaultValue',
+                spName: 'spName',
+                symbolicName: 'symbolicName'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.propertyConfigurations = gridService.searchGridData(self.propertyConfigurationGrid, self.propertyConfigurationsCopy);
+            }
         };
 
         self.searchModelPropertyConfigurations = {
@@ -1249,10 +1265,10 @@ module.exports = function (app) {
             return true;
         };
 
-        self.propertyConfigurationProgress = null;
+
         self.reloadPropertyConfigurations = function (pageNumber) {
             var defer = $q.defer();
-            self.propertyConfigurationProgress = defer.promise;
+            self.propertyConfigurationGrid.progress = defer.promise;
 
             var docClass = (self.selectedDocumentClass.hasOwnProperty('lookupKey') ? self.selectedDocumentClass.lookupStrKey : self.selectedDocumentClass);
             return propertyConfigurationService
@@ -1260,6 +1276,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.allPropertyConfigurations[docClass.toLowerCase()] = result;
                     self.propertyConfigurations = result;
+                    self.propertyConfigurationsCopy = angular.copy(self.propertyConfigurations);
                     defer.resolve(true);
                     var currentUserOrg = employeeService.getEmployee().userOrganization;
                     var loggedInOuId = currentUserOrg.hasOwnProperty('id') ? currentUserOrg.id : currentUserOrg;
@@ -1277,6 +1294,7 @@ module.exports = function (app) {
         self.filterPropertyConfigurationsForOUByDocumentClass = function () {
             var docClass = (self.selectedDocumentClass.hasOwnProperty('lookupKey') ? self.selectedDocumentClass.lookupStrKey : self.selectedDocumentClass);
             self.propertyConfigurations = self.allPropertyConfigurations[docClass.toLowerCase()];
+            self.propertyConfigurationsCopy = angular.copy(self.propertyConfigurations);
         };
 
         self.openAddPropertyConfigurationsDialog = function ($event) {
@@ -1315,7 +1333,6 @@ module.exports = function (app) {
          * @type {Array}
          */
         self.selectedOUApplicationUsers = [];
-        self.appUserProgress = null;
 
         self.ouAssignedUsers = ouAssignedUsers;
         self.ouAssignedUsersCopy = angular.copy(self.ouAssignedUsers);
@@ -1336,6 +1353,7 @@ module.exports = function (app) {
          */
         self.appUserGrid = {
             name: 'appUserGrid',
+            progress: null,
             limit: 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
@@ -1367,7 +1385,7 @@ module.exports = function (app) {
          */
         self.reloadOuApplicationUsers = function (pageNumber) {
             var defer = $q.defer();
-            self.appUserProgress = defer.promise;
+            self.appUserGrid.progress = defer.promise;
 
 
             ouApplicationUserService

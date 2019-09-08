@@ -17,7 +17,6 @@ module.exports = function (app) {
             self.controllerName = 'distributionListCtrl';
             self.organizations = organizations;
 
-            self.progress = null;
             contextHelpService.setHelpTo('distribution-list');
 
             /**
@@ -37,6 +36,7 @@ module.exports = function (app) {
              * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
              */
             self.grid = {
+                progress: null,
                 limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.distributionList) || 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order
@@ -119,7 +119,7 @@ module.exports = function (app) {
              */
             self.reloadDistributionLists = function (pageNumber) {
                 var defer = $q.defer();
-                self.progress = defer.promise;
+                self.grid.progress = defer.promise;
 
                 return ouDistributionListService
                     .loadOUDistributionLists()

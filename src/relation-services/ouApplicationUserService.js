@@ -162,7 +162,7 @@ module.exports = function (app) {
                         controller: 'selectOUApplicationUserSinglePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
-                            ouApplicationUser: organization[property],
+                            applicationUser: organization[property],
                             label: label,
                             organization: organization
                         },

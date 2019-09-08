@@ -534,7 +534,7 @@ module.exports = function (app) {
          * @param skipResetSub
          */
         self.onChangeMainClassification = function ($event, skipResetSub) {
-            if (self.document.mainClassification) {
+            if (self.document && self.document.mainClassification) {
                 self.loadSubClassificationRecords(true, self.checkMandatory('subClassification'));
                 if (!skipResetSub) {
                     self.document.subClassification = null;
@@ -581,7 +581,7 @@ module.exports = function (app) {
         };
 
         self.loadSubClassificationRecords = function (skipSearchText, selectFirstValue) {
-            if (self.document.mainClassification && (skipSearchText || self.subClassificationSearchText)) {
+            if (self.document && self.document.mainClassification && (skipSearchText || self.subClassificationSearchText)) {
                 var mainClassification = _.find(self.classifications, function (classification) {
                         return classification.classification.id === self.document.mainClassification.id;
                     }).classification,

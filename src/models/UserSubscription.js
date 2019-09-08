@@ -48,10 +48,18 @@ module.exports = function (app) {
 
             UserSubscription.prototype.getSubscriptionEventName = function () {
                 var eventTypes = lookupService.returnLookups(lookupService.documentSubscription);
-                var eventToFind = angular.copy(this.trigerId);
+                var eventToFind = angular.copy(this.trigerId || this.triggerId);
                 return _.find(eventTypes, function (eventType) {
                     return eventType.lookupKey === eventToFind;
                 }).getTranslatedName();
+            };
+
+            UserSubscription.prototype.getSubscriptionEventLookup = function () {
+                var eventTypes = lookupService.returnLookups(lookupService.documentSubscription);
+                var eventToFind = angular.copy(this.trigerId || this.triggerId);
+                return _.find(eventTypes, function (eventType) {
+                    return eventType.lookupKey === eventToFind;
+                });
             };
 
             // don't remove CMSModelInterceptor from last line

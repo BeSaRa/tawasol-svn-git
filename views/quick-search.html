@@ -16,7 +16,7 @@
                     {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
                 </md-switch>
             </div>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div><!-- page-header -->
         <div layout="column" flex>
             <div scroll-directive>
@@ -28,7 +28,7 @@
                                        md-row-select="true"
                                        multiple="true"
                                        ng-model="ctrl.selectedQuickSearchCorrespondence"
-                                       md-progress="ctrl.progress">
+                                       md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedQuickSearchCorrespondence.length > 1 ? 8 : 9}}"
@@ -73,7 +73,7 @@
                                         grid-right-click-directive model="quickSearch"
                                         selected-length="{{ctrl.selectedQuickSearchCorrespondence.length ? ctrl.selectedQuickSearchCorrespondence.length : 0}}"
                                         md-select="quickSearch"
-                                        ng-repeat="quickSearch in searchResults = (ctrl.quickSearchCorrespondence  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        ng-repeat="quickSearch in searchResults = (ctrl.quickSearchCorrespondence | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
                                             <grid-indicator-directive record="quickSearch"
@@ -134,7 +134,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.quickSearchCorrespondence  | filter:ctrl.searchModel).length}}"
+                                    md-total="{{(ctrl.quickSearchCorrespondence).length}}"
                                     md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>

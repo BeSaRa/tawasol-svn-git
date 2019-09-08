@@ -14,13 +14,13 @@ module.exports = function (app) {
 
         self.controllerName = 'referencePlanNumberCtrl';
 
-        self.progress = null;
         contextHelpService.setHelpTo('reference-number-plans');
         /**
          * @description All reference plan numbers
          * @type {*}
          */
         self.referencePlanNumbers = referencePlanNumbers;
+        self.referencePlanNumbersCopy = angular.copy(self.referencePlanNumbers);
 
         /**
          * @description Contains the selected reference plan numbers
@@ -33,12 +33,21 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.referenceNumberPlan) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.referenceNumberPlan, self.referencePlanNumbers),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.referenceNumberPlan, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.referencePlanNumbers = gridService.searchGridData(self.grid, self.referencePlanNumbersCopy);
             }
         };
 
@@ -113,11 +122,12 @@ module.exports = function (app) {
          */
         self.reloadReferencePlanNumbers = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return referencePlanNumberService
                 .loadReferencePlanNumbers()
                 .then(function (result) {
                     self.referencePlanNumbers = result;
+                    self.referencePlanNumbersCopy = angular.copy(self.referencePlanNumbers);
                     self.selectedReferencePlanNumbers = [];
                     defer.resolve(true);
                     if (pageNumber)

@@ -5,22 +5,24 @@ module.exports = function (app) {
                                                     info,
                                                     generator,
                                                     $q,
+                                                    $filter,
                                                     toast,
                                                     $timeout,
                                                     langService,
                                                     //errorCode,
                                                     UserSubscription,
                                                     existingSubscriptions,
-                                                    userSubscriptionService) {
+                                                    userSubscriptionService,
+                                                    gridService) {
             'ngInject';
             var self = this;
             self.controllerName = 'subscriptionPopCtrl';
             self.subscribingFor = null;
 
-            $timeout(function () {
-                self.existingSubscriptions = existingSubscriptions;
-            });
+            self.existingSubscriptions = existingSubscriptions;
             self.existingSubscriptionsCopy = angular.copy(self.existingSubscriptions);
+
+            self.selectedUserSubscriptions = [];
 
             /**
              * @description Checks if event is already subscribed
@@ -58,16 +60,14 @@ module.exports = function (app) {
                     });
             };
 
-            self.selectedUserSubscriptions = [];
-
             /**
              * @description Contains options for grid configuration
              * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
              */
             self.grid = {
+                progress: null,
                 limit: 5, // default limit
                 page: 1, // first page
-                //order: 'arName', // default sorting order
                 order: '', // default sorting order
                 limitOptions: [5, 10, 20, // limit options
                     {
@@ -76,7 +76,16 @@ module.exports = function (app) {
                             return (self.existingSubscriptions.length + 21);
                         }
                     }
-                ]
+                ],
+                searchColumns: {
+                    eventType: function (record) {
+                        return self.getSortingKey('subscriptionEventLookup', 'Lookup');
+                    }
+                },
+                searchText: '',
+                searchCallback: function (grid) {
+                    self.existingSubscriptions = gridService.searchGridData(self.grid, self.existingSubscriptionsCopy);
+                }
             };
 
             self.getSortedData = function () {
@@ -90,7 +99,7 @@ module.exports = function (app) {
              */
             self.reloadUserSubscriptions = function (pageNumber) {
                 var defer = $q.defer();
-                self.progress = defer.promise;
+                self.grid.progress = defer.promise;
                 return userSubscriptionService
                     .getSubscriptionsByVsId(info.vsId)
                     .then(function (result) {
@@ -168,6 +177,16 @@ module.exports = function (app) {
                 self.statusServices[status](self.selectedUserSubscriptions).then(function () {
                     self.reloadUserSubscriptions(self.grid.page);
                 });
+            };
+
+            /**
+             * @description Get the sorting key for information or lookup model
+             * @param property
+             * @param modelType
+             * @returns {*}
+             */
+            self.getSortingKey = function (property, modelType) {
+                return generator.getColumnSortingKey(property, modelType);
             };
 
             /**

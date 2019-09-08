@@ -28,13 +28,14 @@ module.exports = function (app) {
                 enName: langService.getKey('global_templates', 'en')
             }));
         }
-        self.progress = null;
+
         contextHelpService.setHelpTo('document-templates');
         /**
          * @description All document templates
          * @type {*}
          */
         self.documentTemplates = documentTemplates;
+        self.documentTemplatesCopy = angular.copy(self.documentTemplates);
 
         /**
          * @description Contains the selected organization unit to filter grid
@@ -53,12 +54,24 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.documentTemplate) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.documentTemplate, self.documentTemplates),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.documentTemplate, limit);
+            },
+            searchColumns: {
+                arabicName: 'docSubject',
+                englishName: 'documentTitle',
+                documentType: function (record) {
+                    return self.getSortingKey('docTypeInfo', 'Information');
+                }
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.documentTemplates = gridService.searchGridData(self.grid, self.documentTemplatesCopy);
             }
         };
 
@@ -135,11 +148,12 @@ module.exports = function (app) {
          */
         self.reloadDocumentTemplates = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return documentTemplateService
                 .loadDocumentTemplates(self.selectedOrganization)
                 .then(function (result) {
                     self.documentTemplates = result;
+                    self.documentTemplatesCopy = angular.copy(self.documentTemplates);
                     self.selectedDocumentTemplates = [];
                     defer.resolve(true);
                     if (pageNumber)

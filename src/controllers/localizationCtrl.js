@@ -6,25 +6,31 @@ module.exports = function (app) {
         contextHelpService.setHelpTo('localization');
         // current localizations
         self.localizations = [];
+        self.localizationsCopy = angular.copy(self.localizations);
         // all localization Modules
         self.localizationModules = lookupService.returnLookups(lookupService.localizationModule);
         // the current selected localization module
         self.selectedLocalizationModule = null;
-        // progress bar for grid
-        self.progress = null;
         // all selected localization
         self.selectedLocalizations = [];
-        // search model to search inside the grid
-        //self.searchModel = '';
-
 
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.localization) || 20, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.localization),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.localization, limit);
+            },
+            searchColumns: {
+                localizationKey: 'localizationKey',
+                arabicName: 'arName',
+                englishName: 'enName'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.localizations = gridService.searchGridData(self.grid, self.localizationsCopy);
             }
         };
 
@@ -68,7 +74,7 @@ module.exports = function (app) {
          */
         self.reloadLocalizationModule = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             self.selectedLocalizations = [];
             if (!pageNumber)
                 pageNumber = self.grid.page;
@@ -77,6 +83,7 @@ module.exports = function (app) {
                 .loadLocalizationByModule(self.selectedLocalizationModule)
                 .then(function (result) {
                     self.localizations = result;
+                    self.localizationsCopy = angular.copy(self.localizations);
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;

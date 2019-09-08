@@ -10,7 +10,8 @@ module.exports = function (app) {
                                          ouApplicationUsers,
                                          contextHelpService,
                                          dialog,
-                                         gridService) {
+                                         gridService,
+                                         generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'roleCtrl';
@@ -18,21 +19,35 @@ module.exports = function (app) {
         self.permissions = permissions;
         // all roles
         self.roles = roles;
-        _prepareRoleMemebers(); // run prepareRoleMember for the first time.
-        self.promise = null;
+        _prepareRoleMembers(); // run prepareRoleMember for the first time.
+        self.rolesCopy = angular.copy(self.roles);
+
         self.selectedRoles = [];
 
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.role) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.role, self.roles),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.role, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName',
+                updatedBy: function (record) {
+                    return self.getSortingKey('updatedByInfo', 'Information');
+                },
+                updatedOn: 'updatedOn'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.roles = gridService.searchGridData(self.grid, self.rolesCopy);
             }
         };
 
-        function _prepareRoleMemebers() {
+        function _prepareRoleMembers() {
             self.roles = _.map(self.roles, function (role) {
                 role.members = _.filter(ouApplicationUsers, function (ouApplicationUser) {
                     var id = ouApplicationUser.customRoleId.hasOwnProperty('id') ? ouApplicationUser.customRoleId.id : ouApplicationUser.customRoleId;
@@ -41,6 +56,16 @@ module.exports = function (app) {
                 return role;
             });
         }
+
+        /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function (property, modelType) {
+            return generator.getColumnSortingKey(property, modelType);
+        };
 
         self.statusServices = {
             'activate': roleService.activateBulkRoles,
@@ -62,11 +87,12 @@ module.exports = function (app) {
          */
         self.reloadRoles = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return roleService.loadRoles().then(function (result) {
                 self.selectedRoles = [];
                 self.roles = result;
-                _prepareRoleMemebers();
+                _prepareRoleMembers();
+                self.rolesCopy = angular.copy(self.roles);
                 defer.resolve(true);
 
                 if (pageNumber)

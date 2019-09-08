@@ -17,13 +17,13 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'workflowActionCtrl';
         contextHelpService.setHelpTo('workflow-actions');
-        self.progress = null;
 
         /**
          * @description All workflow actions
          * @type {*}
          */
         self.workflowActions = workflowActions;
+        self.workflowActionsCopy = angular.copy(self.workflowActions);
 
         /**
          * @description Contains the selected workflow actions
@@ -36,12 +36,21 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.workflowAction) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.workflowAction, self.workflowActions),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.workflowAction, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.workflowActions = gridService.searchGridData(self.grid, self.workflowActionsCopy);
             }
         };
 
@@ -75,6 +84,7 @@ module.exports = function (app) {
          * @description Opens dialog for edit workflow action
          * @param $event
          * @param workflowAction
+         * @param tabIndex
          */
         self.openEditWorkflowActionDialog = function (workflowAction, tabIndex, $event) {
             workflowActionService
@@ -103,18 +113,18 @@ module.exports = function (app) {
          */
         self.reloadWorkflowActions = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return userWorkflowActionService.loadUserWorkflowActions().then(function () {
                 return workflowActionService
                     .loadWorkflowActions()
                     .then(function (result) {
                         self.workflowActions = result;
+                        self.workflowActionsCopy = angular.copy(self.workflowActions);
                         self.selectedWorkflowActions = [];
                         defer.resolve(true);
                         if (pageNumber)
                             self.grid.page = pageNumber;
                         self.getSortedData();
-                        return self.workflowActions = result;
                     });
             });
         };

@@ -14,7 +14,7 @@
                 <md-icon md-svg-icon="coins"></md-icon>
             </md-button>-->
             <span flex></span>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -25,7 +25,7 @@
                         <md-table-container>
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedDocumentTypes"
-                                       md-progress="ctrl.progress">
+                                       md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="6" class="table-selector-header"
@@ -51,7 +51,7 @@
                                             <span>{{lang.status}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedDocumentTypes.length" md-column
-                                            md-order-by="lookupStrKey">
+                                            md-order-by="documentClassesString">
                                             <span>{{lang.label_document_class}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedDocumentTypes.length" md-column
@@ -65,7 +65,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="documentType"
-                                        ng-repeat="documentType in ctrl.documentTypes  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        ng-repeat="documentType in ctrl.documentTypes | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{documentType.arName}}</td>
                                         <td md-cell>{{documentType.enName}}</td>
                                         <td md-cell>
@@ -75,7 +75,7 @@
                                                        ng-model="documentType.status">
                                             </md-switch>
                                         </td>
-                                        <td md-cell>{{documentType.getDocumentClass()}}</td>
+                                        <td md-cell>{{documentType.documentClassesString}}</td>
                                         <td md-cell>{{documentType.itemOrder}}</td>
                                         <td md-cell>
                                             <div flex layout="row" layout-align="start center">
@@ -97,7 +97,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.documentTypes | filter:ctrl.searchModel).length}}" md-page-select
+                                    md-total="{{(ctrl.documentTypes).length}}" md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>
                         </md-table-container>

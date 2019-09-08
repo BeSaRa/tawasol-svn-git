@@ -24,7 +24,7 @@
                            class="notification-subject" ng-click="ctrl.viewDocument(item,$event)">{{item.docSubject}}</a>
                     </div>
                     <div layout="column">
-                        <div class="notification-subject" >{{ ctrl.getSubscriptionEventType(item.triggerId) }}</div>
+                        <div class="notification-subject" >{{ ctrl.getSubscriptionEventType(item) }}</div>
                         <div class="notification-subject" ><span class="serial-td">{{ item.docFullSerial}}</span></div>
                     </div>
                 </div>

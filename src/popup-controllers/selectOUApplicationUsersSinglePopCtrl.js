@@ -1,7 +1,7 @@
 module.exports = function (app) {
     app.controller('selectOUApplicationUserSinglePopCtrl', function (dialog,
                                                                      label,
-                                                                     ouApplicationUser,
+                                                                     applicationUser,
                                                                      ouApplicationUsers,
                                                                      ouApplicationUserService,
                                                                      ApplicationUser,
@@ -17,15 +17,13 @@ module.exports = function (app) {
             var self = this;
             self.controllerName = 'selectOUApplicationUserSinglePopCtrl';
 
-            self.progress = null;
-
             // label for popup
             self.label = label;
             // all selected application Users
             self.ouApplicationUsers = ouApplicationUsers;
 
             // current selected application user.
-            self.ouApplicationUser = ouApplicationUser;
+            self.ouApplicationUser = applicationUser;
             self.ouApplicationUserCopy = angular.copy(self.ouApplicationUser);
 
             self.ouApplicationUserSelected = self.ouApplicationUser ? _.filter(self.ouApplicationUsers, function (ouAppUser) {
@@ -57,6 +55,7 @@ module.exports = function (app) {
              * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
              */
             self.grid = {
+                progress: null,
                 limit: 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order

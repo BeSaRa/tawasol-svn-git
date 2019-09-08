@@ -721,7 +721,7 @@
                                                 <div flex scroll-directive>
                                                     <table md-table md-row-select multiple
                                                            ng-model="ctrl.selectedOUClassifications"
-                                                           md-progress="ctrl.progress">
+                                                           md-progress="ctrl.grid.classifications.progress">
                                                         <thead md-head md-order="ctrl.grid.classifications.order"
                                                                md-on-reorder="ctrl.getSortedDataClassifications">
                                                         <tr md-row>
@@ -917,7 +917,7 @@
                                                 <div flex scroll-directive>
                                                     <table md-table md-row-select multiple
                                                            ng-model="ctrl.selectedOUCorrespondenceSites"
-                                                           md-progress="ctrl.progress">
+                                                           md-progress="ctrl.grid.correspondenceSites.progress">
                                                         <thead md-head
                                                                md-order="ctrl.grid.correspondenceSites.order"
                                                                md-on-reorder="ctrl.getSortedDataCorrespondenceSites">
@@ -1042,8 +1042,6 @@
                                         <md-icon md-svg-icon="refresh"></md-icon>
                                     </md-button>
                                     <span flex></span>
-                                    <!--<search-filter-directive
-                                            model="ctrl.documentTemplateSearchModel"></search-filter-directive>-->
                                     <grid-search-directive grid="ctrl.documentTemplateGrid"></grid-search-directive>
                                 </div>
                                 <div layout="column" ng-if="ctrl.documentTemplates.length">
@@ -1054,7 +1052,7 @@
                                                     <table md-table md-row-select="true"
                                                            multiple="true"
                                                            ng-model="ctrl.selectedDocumentTemplates"
-                                                           md-progress="ctrl.documentTemplateProgress">
+                                                           md-progress="ctrl.documentTemplateGrid.progress">
                                                         <thead md-head md-order="ctrl.documentTemplateGrid.order"
                                                                md-on-reorder="ctrl.getSortedDataTemplate">
                                                         <tr md-row>
@@ -1161,8 +1159,7 @@
                                             <md-icon md-svg-icon="refresh"></md-icon>
                                         </md-button>
                                         <span flex></span>
-                                        <search-filter-directive
-                                                model="ctrl.searchModelPropertyConfigurations.symbolicName"></search-filter-directive>
+                                        <grid-search-directive grid="ctrl.propertyConfigurationGrid"></grid-search-directive>
                                     </div>
                                 </div>
                                 <!-- Property configuration table -->
@@ -1174,7 +1171,7 @@
                                                     <table md-table md-row-select="true"
                                                            multiple="true"
                                                            ng-model="ctrl.selectedPropertyConfigurations"
-                                                           md-progress="ctrl.propertyConfigurationProgress">
+                                                           md-progress="ctrl.propertyConfigurationGrid.progress">
                                                         <thead md-head
                                                                md-order="ctrl.propertyConfigurationGrid.order"
                                                                md-on-reorder="ctrl.getSortedDataPropertyConfiguration">
@@ -1206,7 +1203,7 @@
                                                         </thead>
                                                         <tbody md-body>
                                                         <tr md-row md-select="propertyConfiguration"
-                                                            ng-repeat="propertyConfiguration in ctrl.propertyConfigurations | filter:ctrl.searchModelPropertyConfigurations | limitTo: ctrl.propertyConfigurationGrid.limit: ((ctrl.propertyConfigurationGrid.page - 1) * ctrl.propertyConfigurationGrid.limit) track by $index">
+                                                            ng-repeat="propertyConfiguration in ctrl.propertyConfigurations | limitTo: ctrl.propertyConfigurationGrid.limit: ((ctrl.propertyConfigurationGrid.page - 1) * ctrl.propertyConfigurationGrid.limit) track by $index">
                                                             <td md-cell>{{propertyConfiguration.dataType}}</td>
                                                             <td md-cell>{{propertyConfiguration.defaultOperator}}
                                                             </td>
@@ -1231,7 +1228,7 @@
                                                         md-limit-options="ctrl.propertyConfigurationGrid.limitOptions"
                                                         md-limit="ctrl.propertyConfigurationGrid.limit"
                                                         md-page="ctrl.propertyConfigurationGrid.page"
-                                                        md-total="{{(ctrl.propertyConfigurations | filter:ctrl.searchModelPropertyConfigurations).length}}"
+                                                        md-total="{{(ctrl.propertyConfigurations).length}}"
                                                         md-page-select>
                                                 </md-table-pagination>
                                             </md-table-container>
@@ -1281,8 +1278,6 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
-                                    <!--<search-filter-directive
-                                            model="ctrl.searchModelOUAppUser"></search-filter-directive>-->
                                     <grid-search-directive grid="ctrl.appUserGrid"></grid-search-directive>
                                 </div>
                                 <div layout="column" ng-if="ctrl.ouAssignedUsers.length">
@@ -1292,7 +1287,7 @@
                                                 <div flex scroll-directive>
                                                     <table md-table md-row-select multiple
                                                            ng-model="ctrl.selectedOUApplicationUsers"
-                                                           md-progress="ctrl.appUserProgress">
+                                                           md-progress="ctrl.appUserGrid.progress">
                                                         <thead md-head md-order="ctrl.appUserGrid.order"
                                                                md-on-reorder="ctrl.getSortedDataAppUser">
                                                         <tr md-row>

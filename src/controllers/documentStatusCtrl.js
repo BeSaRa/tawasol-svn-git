@@ -15,6 +15,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'documentStatusCtrl';
         self.documentStatuses = documentStatuses;
+        self.documentStatusesCopy = angular.copy(self.documentStatuses);
 
         contextHelpService.setHelpTo('document-status');
 
@@ -25,12 +26,23 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.documentStatus) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.documentStatus, self.documentStatuses),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.documentStatus, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName',
+                documentClasses: 'documentClassesString',
+                itemOrder: 'itemOrder'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.documentStatuses = gridService.searchGridData(self.grid, self.documentStatusesCopy);
             }
         };
 
@@ -53,9 +65,10 @@ module.exports = function (app) {
          */
         self.reloadDocumentStatuses = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return documentStatusService.loadDocumentStatuses().then(function (result) {
                 self.documentStatuses = result;
+                self.documentStatusesCopy = angular.copy(self.documentStatuses);
                 self.selectedDocumentStatus = [];
                 defer.resolve(true);
                 if (pageNumber)
@@ -98,6 +111,7 @@ module.exports = function (app) {
 
         /**
          * @description open popup to add document status
+         * @param documentStatus
          * @param $event
          */
         self.openEditDocumentStatusDialog = function (documentStatus, $event) {
@@ -115,6 +129,7 @@ module.exports = function (app) {
         /**
          * @description delete the document status
          * @param documentStatus
+         * @param $event
          */
         self.removeDocumentStatus = function (documentStatus, $event) {
             return documentStatusService

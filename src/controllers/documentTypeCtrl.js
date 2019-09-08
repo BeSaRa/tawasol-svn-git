@@ -14,13 +14,13 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'documentTypeCtrl';
         contextHelpService.setHelpTo('document-types');
-        self.progress = null;
 
         /**
          * @description All document  types
          * @type {*}
          */
         self.documentTypes = documentTypes;
+        self.documentTypesCopy = angular.copy(self.documentTypes);
 
         /**
          * @description Contains the selected document types
@@ -33,12 +33,23 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.documentType) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.documentType, self.documentTypes),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.documentType, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName',
+                documentClasses: 'documentClassesString',
+                itemOrder: 'itemOrder'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.documentTypes = gridService.searchGridData(self.grid, self.documentTypesCopy);
             }
         };
 
@@ -96,11 +107,12 @@ module.exports = function (app) {
          */
         self.reloadDocumentTypes = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return documentTypeService
                 .loadDocumentTypes()
                 .then(function (result) {
                     self.documentTypes = result;
+                    self.documentTypesCopy = angular.copy(self.documentTypes);
                     self.selectedDocumentTypes = [];
                     defer.resolve(true);
                     if (pageNumber)

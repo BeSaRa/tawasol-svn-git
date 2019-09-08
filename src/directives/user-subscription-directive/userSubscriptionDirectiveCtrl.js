@@ -41,6 +41,9 @@ module.exports = function (app) {
 
         self.getSubscriptionEventType = function (subscription) {
             subscription = subscription.hasOwnProperty('triggerId') ? subscription.triggerId : subscription;
+            if (!subscription) {
+                subscription = subscription.hasOwnProperty('trigerId') ? subscription.trigerId : subscription;
+            }
             var lang = generator.ucFirst(langService.current);
 
             return lookupService.returnLookups(lookupService.documentSubscription).filter(function (item) {

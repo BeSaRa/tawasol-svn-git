@@ -18,8 +18,8 @@ module.exports = function (app) {
          *@description All entity types
          */
         self.entityTypes = entityTypes;
+        self.entityTypesCopy = angular.copy(self.entityTypes);
 
-        self.promise = null;
         self.selectedEntityTypes = [];
 
         /**
@@ -27,12 +27,22 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.entityType) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.entityType, self.entityTypes),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.entityType, limit);
+            },
+            searchColumns: {
+                arName: 'arName',
+                enName: 'enName',
+                itemOrder: 'itemOrder'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.entityTypes = gridService.searchGridData(self.grid, self.entityTypesCopy);
             }
         };
         /**
@@ -57,7 +67,6 @@ module.exports = function (app) {
                     self.reloadEntityTypes(self.grid.page).then(function () {
                         toast.success(langService.get('add_success').change({name: result.getNames()}));
                     });
-
                 });
         };
 
@@ -91,11 +100,12 @@ module.exports = function (app) {
          */
         self.reloadEntityTypes = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return entityTypeService
                 .loadEntityTypes()
                 .then(function (result) {
                     self.entityTypes = result;
+                    self.entityTypesCopy = angular.copy(self.entityTypes);
                     self.selectedEntityTypes = [];
                     defer.resolve(true);
                     if (pageNumber)

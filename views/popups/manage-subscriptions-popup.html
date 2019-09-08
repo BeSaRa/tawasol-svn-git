@@ -27,7 +27,7 @@
                             <md-icon md-svg-icon="refresh"></md-icon>
                         </md-button>
                         <span flex></span>
-                        <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+                        <grid-search-directive grid="ctrl.grid"></grid-search-directive>
                     </div>
                     <md-card md-whiteframe="3" class="card-overlay">
                         <md-table-container>
@@ -35,7 +35,7 @@
                                 <table md-table md-row-select="true"
                                        multiple="true"
                                        ng-model="ctrl.selectedUserSubscriptions"
-                                       md-progress="ctrl.progress">
+                                       md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="6" class="table-selector-header"

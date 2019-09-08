@@ -13,7 +13,6 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'attachmentTypeCtrl';
 
-        self.progress = null;
         contextHelpService.setHelpTo('attachment-types');
 
         /**
@@ -21,6 +20,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.attachmentTypes = attachmentTypes;
+        self.attachmentTypesCopy = angular.copy(self.attachmentTypes);
 
         /**
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
@@ -29,12 +29,23 @@ module.exports = function (app) {
         self.selectedAttachmentTypes = [];
 
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.attachmentType) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.attachmentType, self.attachmentTypes),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.attachmentType, limit);
+            },
+            searchColumns: {
+                arabicName: 'docSubject',
+                englishName: 'documentTitle',
+                documentClasses: 'documentClassesString',
+                itemOrder: 'itemOrder'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.attachmentTypes = gridService.searchGridData(self.grid, self.attachmentTypesCopy);
             }
         };
 
@@ -92,11 +103,12 @@ module.exports = function (app) {
          */
         self.reloadAttachmentTypes = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return attachmentTypeService
                 .loadAttachmentTypes()
                 .then(function (result) {
                     self.attachmentTypes = result;
+                    self.attachmentTypesCopy = angular.copy(self.attachmentTypes);
                     self.selectedAttachmentTypes = [];
                     defer.resolve(true);
                     if (pageNumber)

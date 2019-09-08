@@ -16,21 +16,14 @@ module.exports = function (app) {
 
         self.controllerName = 'smsTemplateCtrl';
 
-        self.progress = null;
         contextHelpService.setHelpTo('sms-templates');
-
-        /*$scope.smsVariables = [
-            'DocumentFile',
-            'DocumentType',
-            'EntityName',
-            'OrganizationName'
-        ];*/
 
         /**
          * @description All sms templates
          * @type {*}
          */
         self.smsTemplates = smsTemplates;
+        self.smsTemplatesCopy = angular.copy(self.smsTemplates);
 
         /**
          * @description Contains the selected sms templates
@@ -43,12 +36,21 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.smsTemplate) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.smsTemplate, self.smsTemplates),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.smsTemplate, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.smsTemplates = gridService.searchGridData(self.grid, self.smsTemplatesCopy);
             }
         };
 
@@ -117,11 +119,12 @@ module.exports = function (app) {
          */
         self.reloadSmsTemplates = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return smsTemplateService
                 .loadSmsTemplates()
                 .then(function (result) {
                     self.smsTemplates = result;
+                    self.smsTemplatesCopy = angular.copy(self.smsTemplates);
                     self.selectedSmsTemplates = [];
                     defer.resolve(true);
                     if (pageNumber)

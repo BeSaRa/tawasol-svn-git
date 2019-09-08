@@ -11,7 +11,7 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div><!-- page-header -->
 
         <div layout="column" flex>
@@ -23,7 +23,7 @@
                                 <table md-table md-row-select="true"
                                        multiple="true"
                                        ng-model="ctrl.selectedThemes"
-                                       md-progress="ctrl.progress">
+                                       md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="6" class="table-selector-header"
@@ -54,7 +54,7 @@
                                     <tbody md-body>
                                     <tr md-select="theme" md-row
                                         ng-class="{'background-warning': ctrl.isDefaultTheme(theme, $event)}"
-                                        ng-repeat="theme in ctrl.themes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        ng-repeat="theme in ctrl.themes | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{theme.arName}}</td>
                                         <td md-cell>{{theme.enName}}</td>
                                         <td md-cell>
@@ -111,7 +111,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.themes | filter:ctrl.searchModel).length}}" md-page-select
+                                    md-total="{{(ctrl.themes).length}}" md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>
                         </md-table-container>

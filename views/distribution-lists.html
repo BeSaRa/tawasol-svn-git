@@ -11,7 +11,6 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
-            <!--<search-filter-directive model="ctrl.searchModel"></search-filter-directive>-->
             <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div><!-- page-header -->
         <div layout="column" flex>
@@ -24,7 +23,7 @@
                                        md-row-select="true"
                                        multiple="true"
                                        ng-model="ctrl.selectedDistributionLists"
-                                       md-progress="ctrl.progress">
+                                       md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="5" class="table-selector-header"
@@ -100,7 +99,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.distributionLists | filter:ctrl.searchModel).length}}"
+                                    md-total="{{(ctrl.distributionLists).length}}"
                                     md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>

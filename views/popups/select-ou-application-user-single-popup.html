@@ -14,7 +14,7 @@
             </div>
             <md-card class="m0">
                 <md-table-container>
-                    <table md-table md-row-select ng-model="ctrl.ouApplicationUserSelected" md-progress="ctrl.progress">
+                    <table md-table md-row-select ng-model="ctrl.ouApplicationUserSelected" md-progress="ctrl.grid.progress">
                         <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                         <tr md-row>
                             <th md-column md-order-by="{{ctrl.getSortingKey('applicationUser', 'ApplicationUser')}}"><span>{{lang.name}}</span>

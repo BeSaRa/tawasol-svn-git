@@ -16,13 +16,13 @@ module.exports = function (app) {
 
         self.controllerName = 'publicAnnouncementCtrl';
 
-        self.progress = null;
         contextHelpService.setHelpTo('public-announcements');
         /**
          * @description All public announcements
          * @type {*}
          */
         self.publicAnnouncements = publicAnnouncements;
+        self.publicAnnouncementsCopy = angular.copy(self.publicAnnouncements);
 
         /**
          * @description Contains the selected public announcements
@@ -35,12 +35,22 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.publicAnnouncement) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.publicAnnouncement, self.publicAnnouncements),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.publicAnnouncement, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName',
+                itemOrder: 'itemOrder'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.publicAnnouncements = gridService.searchGridData(self.grid, self.publicAnnouncementsCopy);
             }
         };
 
@@ -95,12 +105,13 @@ module.exports = function (app) {
          */
         self.reloadPublicAnnouncements = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             rootEntity.loadInformation(rootEntity.getRootEntityIdentifier());
             return publicAnnouncementService
                 .loadPublicAnnouncements()
                 .then(function (result) {
                     self.publicAnnouncements = result;
+                    self.publicAnnouncementsCopy = angular.copy(self.publicAnnouncements);
                     self.selectedPublicAnnouncements = [];
                     defer.resolve(true);
                     if (pageNumber)

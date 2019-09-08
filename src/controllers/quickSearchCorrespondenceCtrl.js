@@ -27,13 +27,12 @@ module.exports = function (app) {
 
         self.controllerName = 'quickSearchCorrespondenceCtrl';
 
-        self.progress = null;
-
         /**
          * @description All Correspondence
          * @type {*}
          */
         self.quickSearchCorrespondence = _mapResultToAvoidCorrespondenceCheck(quickSearchCorrespondence);
+        self.quickSearchCorrespondenceCopy = angular.copy(self.quickSearchCorrespondence);
 
         /**
          * @description Contains the selected Correspondence
@@ -46,6 +45,7 @@ module.exports = function (app) {
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.search.quick) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -56,6 +56,22 @@ module.exports = function (app) {
             truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.search.quick),
             setTruncateSubject: function ($event) {
                 gridService.setGridSubjectTruncateByGridName(gridService.grids.search.quick, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                serial: 'docFullSerial',
+                subject: 'docSubject',
+                priorityLevel: function (record) {
+                    return self.getSortingKey('priorityLevel', 'Lookup');
+                },
+                documentType: function (record) {
+                    return self.getSortingKey('docType', 'DocumentType');
+                },
+                createdBy: 'createdBy',
+                createdOn: 'createdOn'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.quickSearchCorrespondence = gridService.searchGridData(self.grid, self.quickSearchCorrespondenceCopy);
             }
         };
 
@@ -97,7 +113,7 @@ module.exports = function (app) {
          */
         self.reloadQuickSearchCorrespondence = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
 
             var searchJSON = {};
             searchJSON[$stateParams.key] = $stateParams.q;
@@ -106,6 +122,7 @@ module.exports = function (app) {
                 .loadQuickSearchCorrespondence(searchJSON)
                 .then(function (result) {
                     self.quickSearchCorrespondence = _mapResultToAvoidCorrespondenceCheck(result);
+                    self.quickSearchCorrespondenceCopy = angular.copy(self.quickSearchCorrespondence);
                     self.selectedQuickSearchCorrespondence = [];
                     defer.resolve(true);
                     if (pageNumber)

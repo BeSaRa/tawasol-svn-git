@@ -13,27 +13,37 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'organizationTypeCtrl';
 
-        self.progress = null;
         contextHelpService.setHelpTo('organization-types');
         /**
          * @description All organization  types
          * @type {*}
          */
         self.organizationTypes = organizationTypes;
+        self.organizationTypesCopy = angular.copy(self.organizationTypes);
+
+        self.selectedOrganizationTypes = [];
 
         /**
          * @description Contains the selected organization types
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
-        self.selectedOrganizationTypes = [];
-
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.organizationType) || 10, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.organizationType, self.organizationTypes),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.organizationType, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName',
+                itemOrder: 'itemOrder'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.organizationTypes = gridService.searchGridData(self.grid, self.organizationTypesCopy);
             }
         };
 
@@ -91,11 +101,12 @@ module.exports = function (app) {
          */
         self.reloadOrganizationTypes = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return organizationTypeService
                 .loadOrganizationTypes()
                 .then(function (result) {
                     self.organizationTypes = result;
+                    self.organizationTypesCopy= angular.copy(self.organizationTypes);
                     self.selectedOrganizationTypes = [];
                     defer.resolve(true);
                     if (pageNumber)

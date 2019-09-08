@@ -11,12 +11,14 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             model.lookupStrKey = generator.getResultFromSelectedCollectionDocumentClass(model.lookupStrKey);
+            delete model.documentClassesString;
             return model;
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             var documentClass = lookupService.returnLookups(lookupService.documentClass);
             model.lookupStrKey = generator.getSelectedCollectionFromResultDocumentClass(documentClass, model.lookupStrKey, 'lookupKey');
+            model.documentClassesString = model.getDocumentClass();
             return model;
         });
 

@@ -44,7 +44,7 @@ module.exports = function (app) {
             DocumentStatus.prototype.getDocumentClass = function () {
                 return _.map(_.map(this.lookupStrKey , 'lookupStrKey'),function (documentClass) {
                     return langService.get(documentClass.toLowerCase());
-                }).join(' , ');
+                }).join(', ');
             };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

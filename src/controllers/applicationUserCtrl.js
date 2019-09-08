@@ -23,13 +23,14 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'applicationUserCtrl';
 
-        self.progress = null;
         contextHelpService.setHelpTo('application-users');
         /**
          * @description All application users
          * @type {*}
          */
         self.applicationUsers = applicationUsers;
+        self.applicationUsersCopy = angular.copy(self.applicationUsers);
+
         /**
          * @description Current logged in applicationUser
          * @type {*}
@@ -47,6 +48,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.applicationUser) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -54,7 +56,16 @@ module.exports = function (app) {
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.applicationUser, limit);
             },
-            filter: {search: {}}
+            searchColumns: {
+                arabicName: 'arFullName',
+                englishName: 'enFullName',
+                loginName: 'loginName',
+                domainName: 'domainName'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.applicationUsers = gridService.searchGridData(self.grid, self.applicationUsersCopy);
+            }
         };
 
         /**
@@ -114,11 +125,12 @@ module.exports = function (app) {
          */
         self.reloadApplicationUsers = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return applicationUserService
                 .loadApplicationUsers()
                 .then(function (result) {
                     self.applicationUsers = result;
+                    self.applicationUsersCopy = angular.copy(self.applicationUsers);
                     self.selectedApplicationUsers = [];
                     defer.resolve(true);
                     if (pageNumber)

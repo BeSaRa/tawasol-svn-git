@@ -20,12 +20,12 @@ module.exports = function (app) {
          * @returns {Promise|userSubscriptions}
          */
         self.loadUserSubscriptions = function () {
-            $http.get(urlService.notifications.change({count: 10}), {
+            return $http.get(urlService.notifications.change({count: 10}), {
                 excludeLoading: true
             })
                 .then(function (result) {
-                    var  subscriptions = result.data.rs.second;
-                    self.userSubscriptions = generator.interceptReceivedCollection('UserSubscription', generator.generateCollection(subscriptions,UserSubscription));
+                    var subscriptions = result.data.rs.second;
+                    self.userSubscriptions = generator.interceptReceivedCollection('UserSubscription', generator.generateCollection(subscriptions, UserSubscription));
 
                     return self.userSubscriptions;
                 });
@@ -49,6 +49,7 @@ module.exports = function (app) {
             return $http.get(urlService.userSubscriptions + '/vsid/' + vsId)
                 .then(function (result) {
                     result = generator.generateCollection(result.data.rs, UserSubscription, self._sharedMethods);
+                    result = generator.interceptReceivedCollection('UserSubscription', result);
                     return result;
                 });
         };
@@ -87,7 +88,7 @@ module.exports = function (app) {
                 var info = record.getInfo();
                 return dialog
                     .showDialog({
-                        templateUrl: cmsTemplate.getPopup('subscription-event-type'),
+                        templateUrl: cmsTemplate.getPopup('subscription'),
                         controller: 'subscriptionPopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,

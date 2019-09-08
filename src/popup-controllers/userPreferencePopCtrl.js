@@ -72,6 +72,7 @@ module.exports = function (app) {
         self.globalSetting = rootEntity.returnRootEntity().settings;
         self.maxRowCount = angular.copy(self.globalSetting.searchAmountLimit);
         self.userComments = userComments;
+        self.userCommentsCopy = angular.copy(self.userComments);
         self.workflowGroups = workflowGroups;
         self.userWorkflowGroups = userWorkflowGroups;
         self.userWorkflowGroupsCopy = angular.copy(userWorkflowGroups);
@@ -716,6 +717,7 @@ module.exports = function (app) {
         };
 
         self.grid = {
+            progress: null,
             limit: 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
@@ -727,7 +729,15 @@ module.exports = function (app) {
                         return (self.userComments.length + 21);
                     }
                 }
-            ]
+            ],
+            searchColumns: {
+                shortComment: 'shortComment',
+                itemOrder: 'itemOrder'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.userComments = gridService.searchGridData(self.grid, self.userCommentsCopy);
+            }
         };
 
         /**
@@ -758,13 +768,14 @@ module.exports = function (app) {
          */
         self.reloadUserComments = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return userCommentService
                 .loadUserComments()
                 .then(function (result) {
                     self.userComments = _.filter(result, function (userComment) {
                         return userComment.userId === applicationUser.id;
                     });
+                    self.userCommentsCopy = angular.copy(self.userComments);
                     self.selectedUserComments = [];
                     defer.resolve(true);
                     if (pageNumber)
@@ -862,9 +873,9 @@ module.exports = function (app) {
         };
 
         self.userWorkflowGrid = {
+            progress: null,
             limit: 5, // default limit
             page: 1, // first page
-            //order: 'arName', // default sorting order
             order: '', // default sorting order
             limitOptions: [5, 10, 20,
                 {
@@ -995,7 +1006,7 @@ module.exports = function (app) {
          */
         self.reloadUserWorkflowGroups = function (pageNumber, $event) {
             var defer = $q.defer();
-            self.userWorkflowProgress = defer.promise;
+            self.userWorkflowGrid.progress = defer.promise;
 
             return userWorkflowGroupService
                 .getUserWorkflowGroupsByUser($event)
@@ -1005,7 +1016,7 @@ module.exports = function (app) {
                     self.selectedUserWorkflowGroups = [];
                     defer.resolve(true);
                     if (pageNumber)
-                        self.grid.page = pageNumber;
+                        self.userWorkflowGrid.page = pageNumber;
                     self.getSortedDataUserWorkflow();
                 });
         };
@@ -1137,9 +1148,9 @@ module.exports = function (app) {
                         applicationUserSignatureService
                             .addApplicationUserSignature(self.signature, self.selectedFile).then(function () {
                             var defer = $q.defer();
-                            self.signatureProgress = defer.promise;
+                            self.signatureGrid.progress = defer.promise;
                             self.loadSignatures(self.ouApplicationUser.applicationUser.id)
-                                .then(function(result){
+                                .then(function (result) {
                                     self.signature = new ApplicationUserSignature();
                                     self.fileUrl = null;
                                     self.enableAdd = false;
@@ -1171,7 +1182,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .applicationUserSignatureEdit(signature).then(function () {
                 var defer = $q.defer();
-                self.signatureProgress = defer.promise;
+                self.signatureGrid.progress = defer.promise;
                 self.loadSignatures(signature.appUserId)
                     .then(function (result) {
                         defer.resolve(true);
@@ -1188,7 +1199,7 @@ module.exports = function (app) {
                 applicationUserSignatureService
                     .deleteApplicationUserSignature(signature).then(function () {
                     var defer = $q.defer();
-                    self.signatureProgress = defer.promise;
+                    self.signatureGrid.progress = defer.promise;
                     self.loadSignatures(self.ouApplicationUser.applicationUser.id)
                         .then(function (result) {
                             defer.resolve(true);
@@ -1206,6 +1217,7 @@ module.exports = function (app) {
         };
 
         self.signatureGrid = {
+            progress: null,
             limit: 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order

@@ -17,7 +17,6 @@ module.exports = function (app) {
         self.workflowGroups = workflowGroups;
         self.workflowGroupsCopy = angular.copy(self.workflowGroups);
 
-        self.promise = null;
         self.selectedWorkflowGroups = [];
 
 
@@ -32,6 +31,7 @@ module.exports = function (app) {
         };
 
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.workflowGroup) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -80,7 +80,7 @@ module.exports = function (app) {
          */
         self.reloadWorkflowGroups = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return workflowGroupService.loadWorkflowGroups().then(function (result) {
                 self.selectedWorkflowGroups = [];
                 self.workflowGroups = result;

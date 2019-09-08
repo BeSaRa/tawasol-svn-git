@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                         privateAnnouncementService,
                                                         privateAnnouncements,
                                                         $q,
+                                                        _,
                                                         $filter,
                                                         langService,
                                                         toast,
@@ -19,7 +20,6 @@ module.exports = function (app) {
         self.controllerName = 'privateAnnouncementCtrl';
         contextHelpService.setHelpTo('private-announcements');
 
-        self.progress = null;
         self.organizations = organizations;
         self.organizationsHasRegistry = organizationsHasRegistry;
 
@@ -28,6 +28,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.privateAnnouncements = privateAnnouncements;
+        self.privateAnnouncementsCopy = angular.copy(self.privateAnnouncements);
 
         function _checkCurrentOu(model) {
             var ouId = employeeService.getEmployee().organization.ouid;
@@ -47,12 +48,22 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.privateAnnouncement) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.privateAnnouncement, self.privateAnnouncements),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.privateAnnouncement, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName',
+                itemOrder: 'itemOrder'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.privateAnnouncements = gridService.searchGridData(self.grid, self.privateAnnouncementsCopy);
             }
         };
 
@@ -107,11 +118,12 @@ module.exports = function (app) {
          */
         self.reloadPrivateAnnouncements = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return privateAnnouncementService
                 .loadPrivateAnnouncements()
                 .then(function (result) {
                     self.privateAnnouncements = result;
+                    self.privateAnnouncementsCopy = angular.copy(self.privateAnnouncements);
                     self.selectedPrivateAnnouncements = [];
                     defer.resolve(true);
                     if (pageNumber)

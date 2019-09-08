@@ -91,7 +91,7 @@ module.exports = function (app) {
             Theme.prototype.getDocumentClass = function () {
                 return _.map(_.map(this.lookupStrKey, 'lookupStrKey'), function (documentClass) {
                     return langService.get(documentClass.toLowerCase());
-                }).join(' , ');
+                }).join(', ');
             };
             /**
              * Set arFontFamily

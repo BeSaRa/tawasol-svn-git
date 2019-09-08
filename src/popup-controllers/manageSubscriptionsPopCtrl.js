@@ -3,20 +3,23 @@ module.exports = function (app) {
                                                            lookupService,
                                                            userSubscriptions,
                                                            $q,
+                                                           _,
                                                            langService,
                                                            userSubscriptionService,
                                                            employeeService,
                                                            toast,
-                                                           generator) {
+                                                           generator,
+                                                           gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageSubscriptionsPopCtrl';
         self.documentSubscriptions = lookupService.returnLookups(lookupService.documentSubscription);
+        self.model = angular.copy(userSubscriptions);
         self.userSubscriptions = [];    //by default, set it to [], because we will filter it on change of event
-        self.userSubscriptionsCopy = angular.copy(userSubscriptions);
+        self.userSubscriptionsCopy = angular.copy(self.userSubscriptions);
 
         self.selectedUserSubscriptions = [];
-        self.progress = null;
+
         self.subscriptionEvent = null;
 
         /**
@@ -24,6 +27,8 @@ module.exports = function (app) {
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
          */
         self.grid = {
+            name: 'userSubscriptionsGrid',
+            progress: null,
             limit: 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
@@ -35,7 +40,14 @@ module.exports = function (app) {
                         return (self.userSubscriptions.length + 21);
                     }
                 }
-            ]
+            ],
+            searchColumns: {
+                subject: 'docSubject'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.userSubscriptions = gridService.searchGridData(self.grid, self.userSubscriptionsCopy);
+            }
         };
 
         /**
@@ -43,13 +55,14 @@ module.exports = function (app) {
          */
         self.filterUserSubscriptions = function () {
             if (self.subscriptionEvent) {
-                self.userSubscriptions = _.filter(self.userSubscriptionsCopy, function (subscription) {
+                self.userSubscriptions = _.filter(self.model, function (subscription) {
                     return subscription.trigerId === self.subscriptionEvent.lookupKey;
                 });
             }
             else {
                 self.userSubscriptions = [];
             }
+            self.userSubscriptionsCopy = angular.copy(self.userSubscriptions);
             self.selectedUserSubscriptions = [];
             self.grid.page = 1;
         };
@@ -61,12 +74,11 @@ module.exports = function (app) {
          */
         self.reloadUserSubscriptions = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return userSubscriptionService
                 .loadUserSubscriptionsByUserId(employeeService.getEmployee().id)
                 .then(function (result) {
-                    self.userSubscriptions = result;
-                    self.userSubscriptionsCopy = angular.copy(result);
+                    self.model = angular.copy(result);
                     self.filterUserSubscriptions();
 
                     defer.resolve(true);
