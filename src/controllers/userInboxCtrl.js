@@ -44,7 +44,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'userInboxCtrl';
         self.employeeService = employeeService;
-        self.progress = null;
+
         self.excludeMe = fromNotification;
         contextHelpService.setHelpTo('user-inbox', self.excludeMe);
         var timeoutRefresh = false;
@@ -134,6 +134,7 @@ module.exports = function (app) {
          */
         self.grid = {
             name: 'inboxGrid',
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.userInbox) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -154,6 +155,7 @@ module.exports = function (app) {
 
         self.starredGrid = {
             name: 'starredGrid',
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.starred) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -210,6 +212,7 @@ module.exports = function (app) {
             for (var i = 0; i < self.userFilters.length; i++) {
                 self.filterGrid.push({
                     name: 'filterGrid_' + i,
+                    progress: null,
                     limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.inboxFilter) || 5, //self.globalSetting.searchAmount, // default limit
                     page: 1, // first page
                     order: '', // default sorting order
@@ -391,13 +394,17 @@ module.exports = function (app) {
          */
         self.reloadUserInboxes = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
             if (self.selectedFilter) {
+                self.filterGrid[self.selectedFilter.index].progress = defer.promise;
                 var selectedFilterSortOrder = angular.copy(self.filterGrid[self.selectedFilter.index].order);
                 self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index, selectedFilterSortOrder);
                 return;
             }
 
+            self.grid.progress = defer.promise;
+            if (self.selectedGridType === 'starred') {
+                self.starredGrid.progress = defer.promise;
+            }
             return userInboxService
                 .loadUserInboxes(true)
                 .then(function (result) {
@@ -409,8 +416,10 @@ module.exports = function (app) {
                     self.starredUserInboxesCopy = angular.copy(self.starredUserInboxes);
                     self.selectedUserInboxes = [];
                     defer.resolve(true);
-                    if (pageNumber)
+                    if (pageNumber) {
                         self.grid.page = pageNumber;
+                        self.starredGrid.page = pageNumber;
+                    }
                     self.getSortedDataForInbox();
                     self.getSortedDataForStarred();
                     return result;
