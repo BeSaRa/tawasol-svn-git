@@ -2,6 +2,16 @@
     <div layout="column" class="content">
         <div layout="row" layout-align="start center" class="page-header nmb padding-header small">
             <span>{{lang.menu_item_search_viewers_log}}</span>
+            <md-button ng-if="ctrl.selectedDocument" ng-click="ctrl.reloadViewerLog()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <md-switch aria-label="{{lang.truncate_subject}}"
+                       ng-model="ctrl.grid.truncateSubject"
+                       ng-change="ctrl.grid.setTruncateSubject($event)">
+                <span>{{lang.truncate_subject}} : </span>
+                {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+            </md-switch>
         </div>
         <div layout="column" flex>
             <div scroll-directive>
@@ -70,8 +80,15 @@
                         <!-- Viewers Log -->
                         <md-card flex>
                             <md-subheader class="md-no-sticky">
-                                <div class="cms-subheader-text">{{lang.menu_item_search_viewers_log}} <span
-                                        ng-if="ctrl.selectedDocument"> - {{ctrl.selectedDocument.getTranslatedName()}}</span>
+                                <div class="cms-subheader-text">
+                                    <span ng-if="!ctrl.selectedDocument">{{lang.menu_item_search_viewers_log}}</span>
+                                    <!--<span ng-if="ctrl.selectedDocument">{{ctrl.selectedDocument.getTranslatedName()}}</span>-->
+                                    <span ng-if="ctrl.grid.truncateSubject && ctrl.selectedDocument"
+                                          class="view-doc subject-internal" md-truncate
+                                          tooltip="{{ctrl.selectedDocument.getTranslatedName()}}">{{ctrl.selectedDocument.getTranslatedName()}}</span>
+                                    <span ng-if="!ctrl.grid.truncateSubject && ctrl.selectedDocument"
+                                          class="view-doc subject-internal"
+                                          tooltip="{{ctrl.selectedDocument.getTranslatedName()}}">{{ctrl.selectedDocument.getTranslatedName()}}</span>
                                 </div>
                                 <!--<md-icon md-svg-icon="file-excel" ng-if="ctrl.selectedDocument"
                                          title="{{lang.export_to_excel}}"
@@ -85,7 +102,7 @@
                             <md-table-container>
                                 <div flex scroll-directive>
                                     <table md-table ng-model="ctrl.selectedLogs"
-                                           md-progress="ctrl.progress"><!-- md-row-select multiple-->
+                                           md-progress="ctrl.grid.progress">
                                         <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                         <tr md-row>
                                             <th ng-if="ctrl.selectedLogs.length" md-column

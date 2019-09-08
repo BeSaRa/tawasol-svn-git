@@ -2267,7 +2267,10 @@ $ta-background-transparent: transparent !important;
 .md-subheader {
   .cms-subheader-text {
     display: inline-block !important;
-    width: 91% !important;
+    //width: 91% !important;
+  }
+  .subject-internal{
+    max-width: 930px !important;
   }
 }
 

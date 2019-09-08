@@ -25,14 +25,38 @@ module.exports = function (app) {
 
         self.watermarkSearchText = '';
         self.allSearchableRecords = [];
+
         self.viewerLogs = [];
+        self.viewerLogsCopy = angular.copy(self.viewerLogs);
+
         self.grid = {
+            name: 'viewersLogGrid',
+            progress: null,
             limit: 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions:gridService.getGridLimitOptions(gridService.grids.administration.viewersLog, self.viewerLogs),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.viewersLog, limit);
+            },
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.administration.viewersLog),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.administration.viewersLog, self.grid.truncateSubject);
+            },
+            searchColumns: {
+                viewer: function (record) {
+                    return self.getSortingKey('userInfo', 'Information');
+                },
+                action: function (record) {
+                    return self.getSortingKey('itemTypeInfo', 'Information');
+                },
+                actionDate: 'updatedOnString',
+                watermark: 'key',
+                ipAddress: 'clientIP'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.viewerLogs = gridService.searchGridData(self.grid, self.viewerLogsCopy);
             }
         };
         self.selectedLogs = [];
@@ -57,23 +81,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Opens the correspondence to view
-         * @param correspondence
-         * @param $event
-         * @param forceStopPropagation
-         */
-        /*self.viewCorrespondence = function (correspondence, $event, forceStopPropagation) {
-            if ($event && forceStopPropagation) {
-                $event.stopPropagation();
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(correspondence, [], true, true);
-        };*/
-
-        /**
          * @description Opens the dialog to search documents to get logs
          * @param $event
          */
@@ -83,6 +90,7 @@ module.exports = function (app) {
                     self.allSearchableRecords = correspondences;
                     self.selectedDocument = null;
                     self.viewerLogs = [];
+                    self.viewerLogsCopy = angular.copy(self.viewerLogs);
                 });
         };
 
@@ -96,6 +104,7 @@ module.exports = function (app) {
                     self.allSearchableRecords = correspondences;
                     self.selectedDocument = null;
                     self.viewerLogs = [];
+                    self.viewerLogsCopy = angular.copy(self.viewerLogs);
                 });
         };
 
@@ -112,6 +121,7 @@ module.exports = function (app) {
                     if (self.selectedDocument.getInfo().vsId === correspondence.getInfo().vsId) {
                         self.selectedDocument = null;
                         self.viewerLogs = [];
+                        self.viewerLogsCopy = angular.copy(self.viewerLogs);
                     }
                 })
         };
@@ -127,9 +137,24 @@ module.exports = function (app) {
                 $event.stopPropagation();
             }
             self.selectedDocument = record;
-            documentSecurityService.loadViewerLogsByVsId(record, $event)
+            self.reloadViewerLog();
+        };
+
+        self.reloadViewerLog = function(pageNumber, $event){
+            if (!self.selectedDocument)
+                return;
+
+            var defer = $q.defer();
+            self.grid.progress = defer.promise;
+            documentSecurityService.loadViewerLogsByVsId(self.selectedDocument, $event)
                 .then(function (result) {
                     self.viewerLogs = result;
+                    self.viewerLogsCopy = angular.copy(self.viewerLogs);
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.grid.page = pageNumber;
+                    self.getSortedData();
+                    return result;
                 });
         };
 
