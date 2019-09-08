@@ -1834,7 +1834,7 @@ module.exports = function (app) {
                         organizations: function (organizationService, employeeService) {
                             'ngInject';
                             // get all child organizations for current logged in user department.
-                            return organizationService.loadOrganizationChildren(employeeService.getEmployee().getRegistryOUID());
+                            return organizationService.loadOrganizationChildren(employeeService.getEmployee().getRegistryOUID(), false);
                         },
                         actions: function (employeeService) {
                             'ngInject';

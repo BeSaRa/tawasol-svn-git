@@ -93,7 +93,7 @@ module.exports = function (app) {
             var url = urlService.organizations + '/structure';
             return $http.get(url).then(function (result) {
                 self.allOrganizationsStructure = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
-                self.allOrganizationsStructure =  generator.interceptReceivedCollection('Organization', self.allOrganizationsStructure);
+                self.allOrganizationsStructure = generator.interceptReceivedCollection('Organization', self.allOrganizationsStructure);
                 return self.allOrganizationsStructure;
             });
         };
@@ -367,7 +367,7 @@ module.exports = function (app) {
         self.findOrganizationChildrenByText = function (searchText, searchKey, ou) {
             // service-request: need service to return collection of users from backend-team based on search text.
             searchText = searchText.toLowerCase().trim();
-            return self.loadOrganizationChildren(ou).then(function (result) {
+            return self.loadOrganizationChildren(ou, false).then(function (result) {
                 return _.filter(result, function (organization) {
                         var properties = [
                             'arName',
@@ -401,16 +401,23 @@ module.exports = function (app) {
          * @param organization
          * @param type
          * If available, it will exclude regOus from response
+         * @param skipCurrentRegOu
          */
-        self.loadOrganizationChildren = function (organization, type) {
-            var id = organization.hasOwnProperty('id') ? organization.id : organization;
+        self.loadOrganizationChildren = function (organization, type, skipCurrentRegOu) {
+            var parentOuId = organization.hasOwnProperty('id') ? organization.id : organization;
 
             // type query parameter is used to exclude reg Ous.
             return $http
-                .get((urlService.organizations + '/' + id + '/childs' + (type ? '?type=1' : '')))
+                .get((urlService.organizations + '/' + parentOuId + '/childs' + (type ? '?type=1' : '')))
                 .then(function (result) {
                     var children = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
-                    return generator.interceptReceivedCollection('Organization', children);
+                    children =  generator.interceptReceivedCollection('Organization', children);
+                    if (skipCurrentRegOu) {
+                        children = _.filter(children, function (ou) {
+                            return ou.id !== parentOuId;
+                        })
+                    }
+                    return children;
                 }).catch(function (reason) {
                     console.log(reason);
                 });
@@ -418,14 +425,21 @@ module.exports = function (app) {
         /**
          * @description load children  for Central archive
          * @param organization
+         * @param skipCurrentRegOu
          */
-        self.loadChildrenOrganizations = function (organization) {
-            var id = organization.hasOwnProperty('id') ? organization.id : organization;
+        self.loadChildrenOrganizations = function (organization, skipCurrentRegOu) {
+            var parentOuId = organization.hasOwnProperty('id') ? organization.id : organization;
             return $http
-                .get(urlService.organizations + '/' + id + '/childs-reg-parent')
+                .get(urlService.organizations + '/' + parentOuId + '/childs-reg-parent')
                 .then(function (result) {
                     var children = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
-                    return generator.interceptReceivedCollection('Organization', children);
+                    children = generator.interceptReceivedCollection('Organization', children);
+                    if (skipCurrentRegOu) {
+                        children = _.filter(children, function (ou) {
+                            return ou.id !== parentOuId;
+                        })
+                    }
+                    return children;
                 }).catch(function (reason) {
                     console.log(reason);
                 });
@@ -536,7 +550,7 @@ module.exports = function (app) {
                     resolve: {
                         children: function () {
                             'ngInject';
-                            return self.loadOrganizationChildren(organization);
+                            return self.loadOrganizationChildren(organization, false);
                         },
                         ouClassifications: function (ouClassificationService) {
                             'ngInject';

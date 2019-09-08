@@ -677,7 +677,7 @@ module.exports = function (app) {
                 resolve: {
                     organizationChildren: function (organizationService) {
                         'ngInject';
-                        return organizationService.loadOrganizationChildren(parentOrganization)
+                        return organizationService.loadOrganizationChildren(parentOrganization, false)
                             .then(function (result) {
                                 // remove current ou and existing exclude from child list
                                 result = _.filter(result, function (ou) {

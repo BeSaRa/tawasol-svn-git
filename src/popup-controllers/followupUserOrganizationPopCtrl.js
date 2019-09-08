@@ -110,7 +110,7 @@ module.exports = function (app) {
         self.onRegistryChanged = function () {
             self.subOrganizations = [];
             organizationService
-                .loadChildrenOrganizations(self.regOu)
+                .loadChildrenOrganizations(self.regOu, true)
                 .then(function (result) {
                     // sort sections/sub-organizations
                      result = _.sortBy(result, [function (ou) {
