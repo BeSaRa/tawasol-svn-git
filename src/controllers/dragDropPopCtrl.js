@@ -164,19 +164,28 @@ module.exports = function (app) {
                         self.validFiles.push(attachment);
                     }
                 } else {
-                    for (var i = 0; i < files.length; i++) {
-                        if (attachmentService.validateBeforeUpload('attachmentUpload', files[i], true)) {
-                            self.validFiles.push(new Attachment({
-                                file: files[i],
-                                securityLevel: self.securityLevel,
-                                attachmentType: self.attachmentType,
-                                updateActionStatus: self.updateActionStatus,
-                                documentTitle: files[i].name,
-                                docSubject: files[i].name,
-                                progress: 0
-                            }));
-                        }
-                    }
+                    attachmentService.validateBeforeUploadBulk('attachmentUpload', files)
+                        .then(function (resultExtension) {
+                            var failedFiles = [];
+                            for (var i = 0; i < files.length; i++) {
+                                if (resultExtension.result[i]) {
+                                    self.validFiles.push(new Attachment({
+                                        file: files[i],
+                                        securityLevel: self.securityLevel,
+                                        attachmentType: self.attachmentType,
+                                        updateActionStatus: self.updateActionStatus,
+                                        documentTitle: files[i].name,
+                                        docSubject: files[i].name,
+                                        progress: 0
+                                    }));
+                                } else {
+                                    failedFiles.push(files[i]);
+                                }
+                            }
+                            if (failedFiles.length){
+                                dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(resultExtension.allowedExtensions.join(', ')));
+                            }
+                        })
                 }
             });
 
