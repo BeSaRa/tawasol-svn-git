@@ -1425,12 +1425,11 @@ module.exports = function (app) {
                     return !model.isBroadcasted()
                         && !info.isPaper
                         && (info.documentClass !== 'incoming')
-                        && model.needApprove()
-                        && (employeeService.hasPermissionTo("ELECTRONIC_SIGNATURE") || employeeService.hasPermissionTo("DIGITAL_SIGNATURE"));
+                        && model.needApprove();
                 },
                 permissionKey: [
                     "ELECTRONIC_SIGNATURE",
-                    "DIGITAL_SIGNATURE"
+                    // "DIGITAL_SIGNATURE"
                 ],
                 checkAnyPermission: true,
                 subMenu: [

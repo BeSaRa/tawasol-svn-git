@@ -1463,7 +1463,7 @@ module.exports = function (app) {
                 },
                 permissionKey: [
                     "ELECTRONIC_SIGNATURE",
-                    "DIGITAL_SIGNATURE"
+                    // "DIGITAL_SIGNATURE"
                 ],
                 checkAnyPermission: true,
                 subMenu: [
