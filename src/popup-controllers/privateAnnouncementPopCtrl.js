@@ -47,6 +47,12 @@ module.exports = function (app) {
             status: 'status'
         };
 
+
+        self.checkBodyLength = function (announcement) {
+            return !announcement.arBody || announcement.arBody.length > 2500
+                || !announcement.enBody || announcement.enBody.length > 2500;
+        };
+
         /**
          * @description Add new private announcement
          */
@@ -79,6 +85,12 @@ module.exports = function (app) {
                 })
                 .notifyFailure(function (step, result) {
                     toast.error(langService.get('max_current_date').change({today: generator.convertDateToString(self.currentDate)}));
+                })
+                .addStep('check_body_length', true, self.checkBodyLength, self.privateAnnouncement, function (result) {
+                    return !result;
+                })
+                .notifyFailure(function (step, result) {
+                    toast.error(langService.get('max_length').change({length: 2500}));
                 })
                 .validate()
                 .then(function () {
@@ -125,6 +137,12 @@ module.exports = function (app) {
                 })
                 .notifyFailure(function (step, result) {
                     toast.error(langService.get('max_current_date').change({today: generator.convertDateToString(self.currentDate)}));
+                })
+                .addStep('check_body_length', true, self.checkBodyLength, self.privateAnnouncement, function (result) {
+                    return !result;
+                })
+                .notifyFailure(function (step, result) {
+                    toast.error(langService.get('max_length').change({length: 2500}));
                 })
                 .validate()
                 .then(function () {

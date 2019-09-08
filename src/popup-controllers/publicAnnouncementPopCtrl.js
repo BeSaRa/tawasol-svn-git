@@ -34,6 +34,11 @@ module.exports = function (app) {
             status: 'status'
         };
 
+        self.checkBodyLength = function (announcement) {
+            return !announcement.arBody || announcement.arBody.length > 2500
+                || !announcement.enBody || announcement.enBody.length > 2500;
+        };
+
         /**
          * @description Add new public announcement
          */
@@ -59,7 +64,13 @@ module.exports = function (app) {
                     return result;
                 })
                 .notifyFailure(function (step, result) {
-                    toast.error(langService.get('max_current_date').change({today : generator.convertDateToString(self.currentDate)}));
+                    toast.error(langService.get('max_current_date').change({today: generator.convertDateToString(self.currentDate)}));
+                })
+                .addStep('check_body_length', true, self.checkBodyLength, self.publicAnnouncement, function (result) {
+                    return !result;
+                })
+                .notifyFailure(function (step, result) {
+                    toast.error(langService.get('max_length').change({length: 2500}));
                 })
                 .validate()
                 .then(function () {
@@ -102,18 +113,24 @@ module.exports = function (app) {
                     return result;
                 })
                 .notifyFailure(function (step, result) {
-                    toast.error(langService.get('max_current_date').change({today : generator.convertDateToString(self.currentDate)}));
+                    toast.error(langService.get('max_current_date').change({today: generator.convertDateToString(self.currentDate)}));
+                })
+                .addStep('check_body_length', true, self.checkBodyLength, self.publicAnnouncement, function (result) {
+                    return !result;
+                })
+                .notifyFailure(function (step, result) {
+                    toast.error(langService.get('max_length').change({length: 2500}));
                 })
                 .validate()
                 .then(function () {
-                    if (self.alwaysActive) {
-                        self.publicAnnouncement.startDate = null;
-                        self.publicAnnouncement.endDate = null;
-                    }
-                    publicAnnouncementService.updatePublicAnnouncement(self.publicAnnouncement).then(function () {
-                        toast.success(langService.get('edit_success').change({name: self.publicAnnouncement.getNames()}));
-                        dialog.hide();
-                    });
+                     if (self.alwaysActive) {
+                         self.publicAnnouncement.startDate = null;
+                         self.publicAnnouncement.endDate = null;
+                     }
+                     publicAnnouncementService.updatePublicAnnouncement(self.publicAnnouncement).then(function () {
+                         toast.success(langService.get('edit_success').change({name: self.publicAnnouncement.getNames()}));
+                         dialog.hide();
+                     });
                 })
                 .catch(function () {
 
@@ -161,8 +178,7 @@ module.exports = function (app) {
             if (self.publicAnnouncement.startDate) {
                 var endDate = angular.copy(self.publicAnnouncement.startDate);
                 self.minEndDate = new Date(endDate.setDate(endDate.getDate() + 1));
-            }
-            else {
+            } else {
                 self.publicAnnouncement.endDate = null;
                 self.minEndDate = null;
             }
