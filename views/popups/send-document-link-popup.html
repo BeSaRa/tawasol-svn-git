@@ -108,7 +108,6 @@
                             </md-button>
                         </md-input-container>
                     </div>
-                    <!--                    <pre>{{documentLinkForm|json}}</pre>-->
                 </form>
                 <div layout="row">
                     <md-card layout="column"
@@ -189,7 +188,7 @@
         <md-button class="md-raised"
                    ng-disabled="!ctrl.documentLink.documentLinkSubscribers.length
                                || !ctrl.documentLink.expirationTime
-                               || !(ctrl.documentLink.exportOptionsMap.BOOK || ctrl.documentLink.exportOptionsMap.ATTACHMENTS || ctrl.documentLink.exportOptionsMap.RELATED_BOOKS)"
+                               || !(ctrl.documentLink.exportOptionsMap.BOOK || ctrl.documentLink.exportOptionsMap.ATTACHMENTS.length || ctrl.documentLink.exportOptionsMap.RELATED_BOOKS.length)"
                    ng-click="ctrl.sendDocumentLink()">
             {{lang.send}}
         </md-button>
