@@ -90,7 +90,7 @@
                         <div flex scroll-directive>
                             <table md-table md-row-select multiple
                                    ng-model="ctrl.selectedSearchedOutgoingIncomingDocuments"
-                                   md-progress="ctrl.progress">
+                                   md-progress="ctrl.grid.progress">
                                 <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                 <tr md-row>
                                     <th colspan="{{ctrl.selectedSearchedOutgoingIncomingDocuments.length > 1 ? 9 : 10}}"

@@ -151,7 +151,6 @@ module.exports = function (app) {
          */
         self.searchedOutgoingDocuments = [];
 
-        self.progress = null;
         /**
          * @description Contains the selected search results
          * @type {Array}
@@ -227,6 +226,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.search.outgoing) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
@@ -265,7 +265,7 @@ module.exports = function (app) {
          */
         self.reloadSearchedOutgoingDocument = function (pageNumber) {
             var defer = $q.defer();
-            self.progress = defer.promise;
+            self.grid.progress = defer.promise;
             return searchOutgoingService
                 .searchOutgoingDocuments(self.searchOutgoingModel, self.propertyConfigurations)
                 .then(function (result) {
