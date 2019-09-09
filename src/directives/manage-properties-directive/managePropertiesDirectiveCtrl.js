@@ -517,17 +517,6 @@ module.exports = function (app) {
             _selectFirstOptionForRequired();
         });
 
-
-        /**
-         * enable edit security level when its on action list
-         * @returns {*|boolean}
-         */
-        self.enabledSecurityLevel = function () {
-            var actions = ["editafterexport", "editafterapproved", "duplicateversion", "receive", "review"];
-
-            return self.action && actions.indexOf(self.action.toLowerCase()) !== -1;
-        };
-
         /**
          * @description Set the sub classification on change of main classification
          * @param $event
@@ -675,5 +664,21 @@ module.exports = function (app) {
             securityLevel = (securityLevel && securityLevel.hasOwnProperty('lookupKey')) ? securityLevel.lookupKey : securityLevel;
             return securityLevel === 4;
         };
+
+        self.isShowSecurityLevelInput = function () {
+            return self.document.hasVsId() && !self.isSecurityLevelEnabled;
+        };
+
+        self.isShowSecurityLevelDDL = function () {
+            return !self.document.hasVsId() || self.isSecurityLevelEnabled
+        };
+
+        self.isShowSecurityLevelCheckbox = function () {
+            var actions = ["editafterexport", "editafterapproved", "duplicateversion", "receive", "review"];
+
+            return self.action && actions.indexOf(self.action.toLowerCase()) !== -1
+                && employeeService.hasPermissionTo('CHANGE_BOOK_SECURITY_LEVEL');
+        };
+
     });
 };

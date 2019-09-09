@@ -87,22 +87,21 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <!-- Security Level (Disabled Input)-->
-                <md-input-container ng-if="ctrl.document.hasVsId() && !ctrl.enabledSecurityLevel()" flex>
-                    <label for="securityLevel">{{lang.security_level}}</label>
-                    <input id="securityLevel" name="securityLevel"
+                <!-- Security Level (Disabled Input) -->
+                <md-input-container ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelInput()" flex>
+                    <label for="securityLevelInput">{{lang.security_level}}</label>
+                    <input id="securityLevelInput" name="securityLevel"
                            ng-disabled="true"
                            ng-readonly="true"
                            ng-value="ctrl.sourceModel.securityLevel.getTranslatedName()">
                 </md-input-container>
                 <!-- Security Level (Select) -->
-                <md-input-container ng-if="(!ctrl.document.hasVsId() && ctrl.checkStatus('securityLevel')) ||
-                                            (ctrl.enabledSecurityLevel())" flex>
+                <md-input-container ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelDDL()" flex>
                     <label for="securityLevel">{{lang.security_level}}</label>
                     <md-select name="securityLevel"
                                id="securityLevel"
                                ng-change="ctrl.onSecurityLevelChange()"
-                               ng-disabled="!!ctrl.disableProperties || (ctrl.enabledSecurityLevel() && !ctrl.isSecurityLevelEnabled)"
+                               ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.securityLevel"
                                ng-model-options="{trackBy: '$value.id'}"
                                ng-required="ctrl.checkMandatory('securityLevel')">
@@ -117,8 +116,8 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <md-input-container
-                        ng-if="ctrl.enabledSecurityLevel() && ctrl.employeeService.hasPermissionTo('CHANGE_BOOK_SECURITY_LEVEL')">
+                <!-- Security Level Checkbox -->
+                <md-input-container ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelCheckbox()">
                     <md-checkbox ng-model="ctrl.isSecurityLevelEnabled"
                                  aria-label="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}"
                                  tooltip="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}">
