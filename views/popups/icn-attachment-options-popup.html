@@ -10,7 +10,10 @@
                         <!-- Title -->
                         <md-input-container flex>
                             <label for="documentTitle">{{lang.attachment_document_title}}</label>
-                            <input ng-model="ctrl.attachment.documentTitle" name="documentTitle" id="documentTitle">
+                            <input required ng-model="ctrl.attachment.documentTitle" name="documentTitle" id="documentTitle">
+                            <div ng-messages="icnAttachmentOptionsForm.documentTitle.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
                         </md-input-container>
                         <!-- Update Action Status -->
                         <md-input-container flex>
@@ -74,7 +77,7 @@
                         </md-input-container>
                         <!-- Search Templates -->
                         <md-input-container flex>
-                            <label for="searchTemplate">{{lang.search_template}}</label>
+                            <label for="searchTemplate">{{lang.templates}}</label>
                             <md-select aria-label="searchTemplate"
                                        ng-required="true"
                                        id="searchTemplate"
