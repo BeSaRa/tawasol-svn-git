@@ -577,7 +577,7 @@ module.exports = function (app) {
                         columns: [
                             'docFullSerial',
                             'docSubject',
-                            'type',
+                            'typeInfo',
                             'sentByIdInfo',
                             'mainSiteFromIdInfo',
                             'mainSiteToIdInfo',
