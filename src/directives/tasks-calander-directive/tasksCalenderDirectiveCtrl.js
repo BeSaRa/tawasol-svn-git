@@ -131,7 +131,7 @@ module.exports = function (app) {
                         var scope = $rootScope.$new(true);
                         var menu = angular.element('<md-menu />', {class: 'menu-calender'});
 
-                        menu.append('<md-button ng-click="$mdMenu.open()" class="md-icon-button menu-button-calender" ><md-icon class="fc-task-icon" tooltip="{{lang.im_task_owner}}" md-svg-icon="dots-vertical"></md-icon></md-button>');
+                        menu.append('<md-button ng-click="$mdMenu.open()" class="md-icon-button menu-button-calender" ><md-icon class="fc-task-icon" md-svg-icon="dots-vertical"></md-icon></md-button>');
                         menu.append('<md-menu-content></md-menu-content>');
                         var menuContent = menu.find('md-menu-content');
 
