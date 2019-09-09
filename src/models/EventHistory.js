@@ -4,7 +4,8 @@ module.exports = function (app) {
                                           Indicator,
                                           correspondenceService,
                                           Information,
-                                          managerService) {
+                                          managerService,
+                                          rootEntity) {
         'ngInject';
         return function EventHistory(model) {
             var self = this, viewDocumentService,
@@ -232,6 +233,10 @@ module.exports = function (app) {
 
             EventHistory.prototype.openSendFaxDialog = function ($event) {
                 return correspondenceService.openSendFaxDialog(this, $event);
+            };
+
+            EventHistory.prototype.canSendByFax = function () {
+                return rootEntity.returnRootEntity().rootEntity.faxEnabled;
             };
 
             // don't remove CMSModelInterceptor from last line

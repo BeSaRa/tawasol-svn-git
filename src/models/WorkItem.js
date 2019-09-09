@@ -16,6 +16,7 @@ module.exports = function (app) {
                                       Internal,
                                       moment,
                                       employeeService,
+                                      rootEntity,
                                       lookupService,
                                       cmsTemplate,
                                       Lookup) {
@@ -836,6 +837,10 @@ module.exports = function (app) {
                     contentSize: true
                 }));
 
+            };
+
+            WorkItem.prototype.canSendByFax = function () {
+                return rootEntity.returnRootEntity().rootEntity.faxEnabled;
             };
 
 

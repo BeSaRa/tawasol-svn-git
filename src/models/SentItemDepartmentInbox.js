@@ -4,7 +4,8 @@ module.exports = function (app) {
                                                      langService,
                                                      managerService,
                                                      lookupService,
-                                                     _) {
+                                                     _,
+                                                     rootEntity) {
         'ngInject';
         return function SentItemDepartmentInbox(model) {
             var self = this, correspondenceService = null, viewDocumentService;
@@ -201,6 +202,9 @@ module.exports = function (app) {
                 return _.startsWith(this.subSiteToId, "1");
             };
 
+            SentItemDepartmentInbox.prototype.canSendByFax = function () {
+                return rootEntity.returnRootEntity().rootEntity.faxEnabled;
+            };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('SentItemDepartmentInbox', 'init', this);

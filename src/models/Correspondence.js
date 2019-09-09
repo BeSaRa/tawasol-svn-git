@@ -17,6 +17,7 @@ module.exports = function (app) {
                                             Indicator,
                                             Information,
                                             lookupService,
+                                            rootEntity,
                                             Lookup,
                                             ResolveDefer,
                                             cmsTemplate) {
@@ -797,6 +798,11 @@ module.exports = function (app) {
                 return taskService
                     .controllerMethod
                     .addCorrespondenceTask(this, $event);
+            };
+
+
+            Correspondence.prototype.canSendByFax = function () {
+                return rootEntity.returnRootEntity().rootEntity.faxEnabled;
             };
 
             // don't remove CMSModelInterceptor from last line

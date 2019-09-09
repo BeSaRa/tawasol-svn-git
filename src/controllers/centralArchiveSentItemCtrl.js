@@ -888,7 +888,7 @@ module.exports = function (app) {
                         callback: self.sendMainDocumentFax,
                         class: "action-red",
                         checkShow: function (action, model) {
-                            return true;
+                            return model.canSendByFax();
                         }
                     },
                     // SMS

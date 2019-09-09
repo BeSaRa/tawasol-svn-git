@@ -1132,7 +1132,7 @@ module.exports = function (app) {
                         callback: self.sendMainDocumentFax,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            return true;
+                            return model.canSendByFax();
                         },
                         permissionKey: "SEND_DOCUMENT_BY_FAX"
                     },
