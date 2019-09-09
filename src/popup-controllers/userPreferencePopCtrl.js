@@ -102,10 +102,7 @@ module.exports = function (app) {
 
         self.rootEntity = rootEntity;
 
-        /**
-         * @description List of ou application users
-         */
-        self.ouApplicationUsers = ouApplicationUsers;
+        /*self.ouApplicationUsers = ouApplicationUsers;
         self.getOrganizationsForAppUser = function (ouAppUser) {
             self.organizationsForAppUser = _.map(self.ouApplicationUsers, function (ouAppUser) {
                 return {
@@ -116,7 +113,8 @@ module.exports = function (app) {
             });
         };
 
-        self.getOrganizationsForAppUser();
+        self.getOrganizationsForAppUser();*/
+        self.organizationsForAppUser = employeeService.getEmployee().ouList;
         /**
          * @description Current ou application user
          */

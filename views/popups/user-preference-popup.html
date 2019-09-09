@@ -305,11 +305,17 @@
                                         <label for="defaultOUID">{{lang.organization_unit}}</label>
                                         <md-select id="defaultOUID" name="defaultOUID" required
                                                    ng-model="ctrl.applicationUser.defaultOUID">
-                                            <md-option ng-value="organization.ou.id"
+                                            <!--<md-option ng-value="organization.ou.id"
                                                        ng-disabled="!organization.status"
                                                        tooltip="{{(!organization.status) ? lang.inactive_organization : ''}}"
                                                        ng-repeat="organization in ctrl.organizationsForAppUser track by $index">
                                                 {{organization.ou.getTranslatedName()}}
+                                            </md-option>-->
+                                            <md-option ng-value="organization.id"
+                                                       ng-disabled="!organization.status"
+                                                       tooltip="{{(!organization.status) ? lang.inactive_organization : ''}}"
+                                                       ng-repeat="organization in ctrl.organizationsForAppUser track by $index">
+                                                {{organization.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
                                         <div ng-messages="userPreferencesForm.defaultOUID.$error">
