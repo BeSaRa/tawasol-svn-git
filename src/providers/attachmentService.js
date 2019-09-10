@@ -119,7 +119,8 @@ module.exports = function (app) {
                                       rootEntity,
                                       correspondenceService,
                                       fileTypeService,
-                                      tokenService) {
+                                      tokenService,
+                                      langService) {
                 'ngInject';
                 var self = this;
                 self.serviceName = 'attachmentService';
@@ -662,12 +663,13 @@ module.exports = function (app) {
                     securityLevel = securityLevel.hasOwnProperty('id') ? securityLevel.id : securityLevel;
                     searchTemplateUrl = searchTemplateUrl && searchTemplateUrl.hasOwnProperty('url') ? searchTemplateUrl.url : searchTemplateUrl;
 
-                    var variables = '%2C:token%2C:vsId%2C:attachmentType%2C:securityLevel%2C:attachmentName'.change({
+                    var variables = '%2C:token%2C:vsId%2C:attachmentType%2C:securityLevel%2C:attachmentName%2C:locale'.change({
                         token: tokenService.getToken(),
                         vsId: correspondence.getInfo().vsId,
                         attachmentType: attachmentType,
                         securityLevel: securityLevel,
-                        attachmentName: attachment.documentTitle ? attachment.documentTitle : ''
+                        attachmentName: attachment.documentTitle ? attachment.documentTitle : '',
+                        locale: langService.current
                     });
                     searchTemplateUrl = searchTemplateUrl.replace('&mimeType', variables + '&mimeType');
 

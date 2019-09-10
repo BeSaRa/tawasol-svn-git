@@ -4057,10 +4057,11 @@ module.exports = function (app) {
             entryTemplateUrl = entryTemplateUrl && entryTemplateUrl.hasOwnProperty('url') ? entryTemplateUrl.url : entryTemplateUrl;
             return $http.put(archiveIcnUrl, options)
                 .then(function (result) {
-                    var variables = '%2C:docId%2C:vsId%2C:refVsId'.change({
+                    var variables = '%2C:docId%2C:vsId%2C:refVsId%2C:locale'.change({
                         vsId: result.data.rs.vsId,
                         docId: result.data.rs.id,
-                        refVsId: result.data.rs.refVSID
+                        refVsId: result.data.rs.refVSID,
+                        locale: langService.current
                     });
                     entryTemplateUrl = entryTemplateUrl.replace('&mimeType', variables + '&mimeType');
                     return _showICNArchiveDialog(correspondence, entryTemplateUrl, $event)
