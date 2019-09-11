@@ -1174,5 +1174,17 @@
         "sort_order": 1,
         "active": true,
         "sort_value": 0
+    },
+    {
+        "ID": 112,
+        "lang_key": "menu_item_pending_g2g",
+        "icon": "account-supervisor-circle",
+        "parent": 8,
+        "link": "#pending-g2g",
+        "state": "app.administration.pending-g2g",
+        "icon_type": "font",
+        "sort_order": 1,
+        "active": true,
+        "sort_value": 0
     }
 ]

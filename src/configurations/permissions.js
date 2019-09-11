@@ -38,6 +38,9 @@ module.exports = function (app) {
             .addMenuPermissions('menu_item_administrators', function (employee) {
                 return employee.isSuperAdmin;
             })
+            .addMenuPermissions('menu_item_pending_g2g', function (employee) {
+                return employee.isSuperAdmin;
+            })
             .addMenuPermission('menu_item_search_viewers_log', function (employee) {
                 return employee.isSuperAdmin && !employee.isAdmin;
             })

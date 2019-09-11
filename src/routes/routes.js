@@ -1632,5 +1632,18 @@ module.exports = function (app) {
                     }
                 }
             })
+            .state('app.administration.pending-g2g', {
+                url: '/pending-g2g',
+                templateUrl: templateProvider.getView('g2g-pending'),
+                controller: 'g2gPendingCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_pending_g2g',
+                resolve: {
+                    g2gItems: function (g2gPendingService) {
+                        'ngInject';
+                        return g2gPendingService.loadG2gPendingItems(null);
+                    }
+                }
+            })
     });
 };

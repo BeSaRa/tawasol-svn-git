@@ -196,6 +196,21 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Opens the new viewer for department sent items
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @returns {*}
+             */
+            SentItemDepartmentInbox.prototype.viewNewG2GPendingItem = function (actions, queueName, $event) {
+                var model = {
+                    vsId: this.vsId,
+                    docClassName: 'outgoing'
+                };
+                return viewDocumentService.viewG2GPendingItemDocument(model, actions, queueName, $event);
+            };
+
+            /**
              * @description check if subSiteTo internal RegOu
              */
             SentItemDepartmentInbox.prototype.isSubSiteToInternalRegOu = function () {

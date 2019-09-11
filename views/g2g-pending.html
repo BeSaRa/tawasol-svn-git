@@ -1,0 +1,221 @@
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_pending_g2g}}</span>
+            <md-button ng-click="ctrl.reloadG2GPendingItems()" class="md-icon-button"
+                       tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <div class="p020">
+                <md-switch aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.grid.truncateSubject"
+                           ng-change="ctrl.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
+            <span ng-if="!!(ctrl.selectedMonthText && ctrl.selectedYear)">{{lang[ctrl.selectedMonthText]}}, {{ctrl.selectedYear}}</span>
+            <md-button ng-click="ctrl.openFilterDialog($event)" class="md-icon-button"
+                       tooltip="{{lang.select_month_and_year}}">
+                <md-icon md-svg-icon="calendar"></md-icon>
+            </md-button>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
+        </div>
+
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table ng-model="ctrl.selectedG2gItems"
+                                       md-progress="ctrl.grid.progress"><!-- md-row-select multiple-->
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                    <tr md-row>
+                                        <th colspan="{{ctrl.selectedG2gItems.length > 1 ? 12 : 13}}"
+                                            ng-if="ctrl.selectedG2gItems.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedG2gItems.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+
+                                                <md-button class="md-icon-button"
+                                                           aria-label="{{lang.grid_action_export}}"
+                                                           tooltip="{{lang.grid_action_export}}"
+                                                           ng-click="ctrl.exportBulk($event)">
+                                                    <md-icon md-svg-icon="export" class="action-green"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('securityLevelLookup', 'Lookup')}}">
+                                            <!-- Security Level, Document type, Re-assigned Indicators -->
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
+                                            md-order-by="docFullSerial">
+                                            <span>{{lang.department_sent_items_serial}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column>
+                                            <!-- Priority Level, Has Attachment Indicators -->
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
+                                            md-order-by="docSubject">
+                                            <span>{{lang.subject}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
+                                            md-order-by="typeOriginalCopy">
+                                            <span>{{lang.type}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'SenderInfo')}}">
+                                            <span>{{lang.action_by}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'CorrespondenceSite')}}">
+                                            <span>{{lang.main_site_from}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'CorrespondenceSite')}}">
+                                            <span>{{lang.main_site_to}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'CorrespondenceSite')}}">
+                                            <span>{{lang.sub_site_from}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'CorrespondenceSite')}}">
+                                            <span>{{lang.sub_site_to}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column>
+                                            <!-- Grid Actions -->
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="g2gItem"
+                                        grid-right-click-directive
+                                        model="g2gItem"
+                                        selected-length="{{ctrl.selectedG2gItems.length ? ctrl.selectedG2gItems.length : 0}}"
+                                        ng-repeat="g2gItem in searchResults = (ctrl.g2gItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))">
+                                        <td md-cell class="indicator-td">
+                                            <!-- Security Level -->
+                                            <grid-indicator-directive record="g2gItem"
+                                                                      indicator-type="securityLevel"
+                                                                      record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                            <!-- Linked Documents -->
+                                            <grid-indicator-directive record="g2gItem"
+                                                                      indicator-type="hasLinkedDocuments"
+                                                                      record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                            <!-- Follow up Status -->
+                                            <grid-indicator-directive record="g2gItem"
+                                                                      indicator-type="followupStatus"
+                                                                      record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                            <!-- Original/Copy -->
+                                            <grid-indicator-directive record="g2gItem"
+                                                                      indicator-type="originalCopy"
+                                                                      record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                        </td>
+                                        <td md-cell><span
+                                                class="serial-td">{{g2gItem.docFullSerial}}</span>
+                                        </td>
+                                        <td md-cell class="indicator-td text-right"
+                                            style="padding-right:0 !important; padding-left:0px !important;">
+                                            <!-- Priority Level -->
+                                            <grid-indicator-directive record="g2gItem"
+                                                                      indicator-type="priorityLevel"
+                                                                      record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                            <!-- Has Attachments -->
+                                            <grid-indicator-directive record="g2gItem"
+                                                                      span-class="float-right"
+                                                                      indicator-type="hasAttachment"
+                                                                      record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                        </td>
+                                        <td md-cell class="subject">
+                                            <!--<grid-document-subject-directive record="g2gItem"
+                                                                             plain-text-only="!g2gItem.hasContent()"
+                                                                             click-callback="ctrl.viewDocument">
+                                            </grid-document-subject-directive>-->
+                                            <a href=""
+                                               ng-if="g2gItem.hasContent() && ctrl.grid.truncateSubject"
+                                               class="view-doc subject-internal" md-truncate
+                                               tooltip="{{g2gItem.docSubject}}"
+                                               ng-click="ctrl.viewDocument(g2gItem, $event)">{{g2gItem.docSubject}}</a>
+                                            <span ng-if="!g2gItem.hasContent() && ctrl.grid.truncateSubject"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{g2gItem.docSubject}}">{{g2gItem.docSubject}}</span>
+                                            <a href=""
+                                               ng-if="g2gItem.hasContent() && !ctrl.grid.truncateSubject"
+                                               class="view-doc subject-internal"
+                                               tooltip="{{g2gItem.docSubject}}"
+                                               ng-click="ctrl.viewDocument(g2gItem, $event)">{{g2gItem.docSubject}}</a>
+                                            <span ng-if="!g2gItem.hasContent() && !ctrl.grid.truncateSubject"
+                                                  class="view-doc subject-internal"
+                                                  tooltip="{{g2gItem.docSubject}}">{{g2gItem.docSubject}}</span>
+                                        </td>
+                                        <td md-cell>{{g2gItem.typeOriginalCopy}}</td>
+                                        <td md-cell class="td-data">
+                                            <div layout="row">
+                                                <span flex>{{g2gItem.sentByIdInfo.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell class="td-data">
+                                            <div layout="row">
+                                                <span flex>{{g2gItem.mainSiteFromIdInfo.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell class="td-data">
+                                            <div layout="row">
+                                                <span flex>{{g2gItem.mainSiteToIdInfo.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell class="td-data">
+                                            <div layout="row">
+                                                <span flex>{{g2gItem.subSiteFromIdInfo.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell class="td-data">
+                                            <div layout="row">
+                                                <span flex>{{g2gItem.subSiteToIdInfo.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell class="p-r0"
+                                            ng-if="ctrl.selectedG2gItems.length < 2">
+                                            <div layout-align="start center" flex ng-if="!ctrl.selectedG2gItems.length
+                                                          || ctrl.selectedG2gItems.length===1 && ctrl.selectedG2gItems[0].workObjectNumber === g2gItem.workObjectNumber">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="g2gItem">
+                                                </grid-actions-directive>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="!ctrl.g2gItems.length">
+                                        <td md-cell colspan="12" class="red-text text-center">
+                                            {{lang.no_records_found}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row
+                                        ng-if="ctrl.g2gItems.length && !searchResults.length">
+                                        <td md-cell colspan="12" class="red-text text-center">
+                                            {{lang.no_records_found_matching_search}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{(ctrl.g2gItems).length}}"
+                                    md-page-select
+                                    md-on-paginate="ctrl.grid.pagingCallback">
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -63,7 +63,8 @@ module.exports = function (app) {
             // G2G
             .addPageName('g2gIncoming')
             .addPageName('g2gSentItem')
-            .addPageName('g2gReturned');
+            .addPageName('g2gReturned')
+            .addPageName('g2gPending');
 
     });
 };

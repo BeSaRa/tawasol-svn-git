@@ -359,6 +359,8 @@
                 .addToAllWithBase('resendG2GKuwait', 'g2g/correspondence/g2gActionId/{g2gActionId}/prepare-export')
                 // refresh cache service from UI
                 .addToAllWithBase('deliveryReportG2GKuwait', 'g2g/get-delivery-report/g2gActionId/{g2gActionId}')
+                // g2g pending items
+                .addToAllWithBase('messagingHistory', 'cms-entity/user/messaging-history')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

@@ -1175,6 +1175,74 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Open the view popup for g2g pending item document
+             * @param g2gItem
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
+            self.viewG2GPendingItemDocument = function (g2gItem, actions, pageName, $event) {
+                var info = typeof g2gItem.getInfo === 'function' ? g2gItem.getInfo() : new Outgoing(g2gItem).getInfo();
+                var disabled = _checkDisabled(pageName, g2gItem);
+
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+
+                var desktop = new EditInDesktopCallback({
+                    url: _createUrlSchema(info.vsId, info.documentClass, 'with-content'),
+                    type: 'correspondence'
+                });
+
+                return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
+                    .then(function (result) {
+                        var documentClass = result.data.rs.metaData.classDescription;
+                        result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                        return result.data.rs;
+                    })
+                    .then(function (result) {
+                        result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        result.content.desktop = desktop;
+                        generator.addPopupNumber();
+                        return dialog.showDialog({
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: result.metaData,
+                                content: result.content,
+                                actions: actions,
+                                workItem: false,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                popupNumber: generator.getPopupNumber(),
+                                disableEverything: disabled.disableAll,
+                                pageName: pageName
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        }).then(function () {
+                            generator.removePopupNumber();
+                            return true;
+                        }).catch(function () {
+                            generator.removePopupNumber();
+                            return false;
+                        });
+                    });
+            };
+
+            /**
              * @description Open the view popup for department ready to export
              * @param workItem
              * @param actions

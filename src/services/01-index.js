@@ -117,4 +117,5 @@ module.exports = function (app) {
 	require('./taskService')(app);
 	require('./administratorService')(app);
 	require('./cacheService')(app);
+	require('./g2gPendingService')(app);
 };

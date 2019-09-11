@@ -83,6 +83,7 @@ module.exports = function (app) {
             },
             administration: {
                 administrators: 'administrators',
+                g2gPending: 'g2gPending',
                 viewersLog: 'viewersLog',
                 entity: 'entity',
                 classification: 'classification',

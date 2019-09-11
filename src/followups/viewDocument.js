@@ -277,6 +277,17 @@ module.exports = function (app) {
                     return true;
                 }
             })
+            .getPageNameOverride('g2gPending', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    return true;
+                },
+                disableSites: function (model) {
+                    return true;
+                },
+                disableAll: function (model) {
+                    return true;
+                }
+            })
             .getPageNameOverride('departmentReadyToExport', 'draftOutgoing', {
                 disableProperties: function (model) {
                     var info = model.getInfo();

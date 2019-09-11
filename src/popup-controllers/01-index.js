@@ -132,4 +132,5 @@ module.exports = function (app) {
     require('./groupMembersPopCtrl')(app);
     require('./ldapProviderPopCtrl')(app);
     require('./userCommentPopCtrl')(app);
+    require('./g2gPendingFilterPopCtrl')(app);
 };

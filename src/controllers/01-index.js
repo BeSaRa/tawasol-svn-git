@@ -76,4 +76,5 @@ module.exports = function (app) {
     require('./viewersLogCtrl')(app);
     require('./taskCtrl')(app);
     require('./administratorsCtrl')(app);
+    require('./g2gPendingCtrl')(app);
 };
