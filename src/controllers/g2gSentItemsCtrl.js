@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                  toast,
                                                  dialog,
                                                  employeeService,
+                                                 configurationService,
                                                  generator,
                                                  contextHelpService,
                                                  correspondenceService,
@@ -186,7 +187,6 @@ module.exports = function (app) {
                         });
                 })
         };
-
         /**
          * @description View Delivery Report
          * @param g2gItem
@@ -194,6 +194,9 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.viewDeliveryReport = function (g2gItem, $event) {
+            if (!configurationService.G2G_QATAR_SOURCE){
+                return viewDeliveryReportService.viewG2GNewDeliveryReport(g2gItem, $event);
+            }
             return viewDeliveryReportService.viewDeliveryReport(g2gItem, $event);
         };
 
@@ -306,7 +309,7 @@ module.exports = function (app) {
                 //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
                 checkShow: function (action, model) {
-                    return true;
+                    return configurationService.G2G_QATAR_SOURCE;
                 }
             },
             // View Delivery Report

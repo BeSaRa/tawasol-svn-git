@@ -36,7 +36,8 @@ module.exports = function (app) {
             model.securityLevels = generator.getResultFromSelectedCollection(model.securityLevels, 'lookupKey');
 
             var privateUsersCopy = angular.copy(model.privateUsers);
-            model.privateUsers = (model.sendToPrivateUsers) ? JSON.stringify(getPrivateUsersToSend(model, privateUsersCopy)) : "[]";
+            model.privateUsers = (model.sendToPrivateUsers && angular.isArray(model.privateUsers) && typeof model.privateUsers[0] !== 'undefined') ? JSON.stringify(getPrivateUsersToSend(model, privateUsersCopy)) : "{}";
+
 
             model.managers = (model.sendToManagers) ? JSON.stringify(_.map(model.managers, function (manager) {
                 return manager.organization.id;
@@ -101,14 +102,15 @@ module.exports = function (app) {
                 model.privateUsers = (model.privateUsers && angular.isString(model.privateUsers)) ? JSON.parse(model.privateUsers) : {};
                 if (model.sendToPrivateUsers && model.privateUsers.hasOwnProperty('appUserIds') && model.privateUsers.appUserIds.length) {
                     var ouApplicationUsers = ouApplicationUserService.ouApplicationUsers;
-                    model.privateUsers = _.map(model.privateUsers.ouAppUserIds, function (privateUser) {
+                    model.privateUsers = _.filter(_.map(model.privateUsers.ouAppUserIds, function (privateUser) {
                         return _.find(ouApplicationUsers, function (ouApplicationUser) {
                             var ouId = ouApplicationUser.ouid.hasOwnProperty('id') ? ouApplicationUser.ouid.id : ouApplicationUser.ouid;
                             return ouId === privateUser.ouId && ouApplicationUser.applicationUser.id === privateUser.id;
                         })
+                    }), function (item) {
+                        return typeof item !== 'undefined';
                     });
                 }
-
                 model.managers = (model.managers && !angular.isArray(model.managers)) ? JSON.parse(model.managers) : [];
                 if (model.sendToManagers && model.managers.length) {
                     model.managers = _.map(model.managers, function (ouId) {

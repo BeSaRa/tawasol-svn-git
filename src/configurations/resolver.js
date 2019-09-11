@@ -407,7 +407,7 @@ module.exports = function (app) {
                 },
                 centralArchives: function ($q, organizations, employeeService, organizationService) {
                     'ngInject';
-                    return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                    return !employeeService.isCentralArchiveHasRegistry() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                 }
             })
             .bulkResolveToState('app.incoming.simple-add', {

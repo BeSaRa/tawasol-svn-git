@@ -355,6 +355,10 @@
                 .addToAllWithBase('viewDocumentLink', 'no-auth/view-link/:subscriberId/entity/:entity?otp=:otp')
                 // refresh cache service from UI
                 .addToAllWithBase('refreshCache', 'cloud/root-entity/refresh-cache')
+                // resend G2G Kuwait
+                .addToAllWithBase('resendG2GKuwait', 'g2g/correspondence/g2gActionId/{g2gActionId}/prepare-export')
+                // refresh cache service from UI
+                .addToAllWithBase('deliveryReportG2GKuwait', 'g2g/get-delivery-report/g2gActionId/{g2gActionId}')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

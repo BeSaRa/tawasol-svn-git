@@ -239,6 +239,12 @@ module.exports = function (app) {
         self.isCentralArchive = function () {
             return employee && employee.inCentralArchive();
         };
+        self.isCentralArchiveHasNotRegistry = function () {
+            return employee && employee.inCentralArchiveAndNotHasRegistry();
+        };
+        self.isCentralArchiveHasRegistry = function () {
+            return employee && employee.inCentralArchiveAndHasRegistry();
+        };
 
         self.setSignatureService = function (service) {
             applicationUserSignatureService = service;

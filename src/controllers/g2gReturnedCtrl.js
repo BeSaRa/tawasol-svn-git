@@ -11,6 +11,7 @@ module.exports = function (app) {
                                                 dialog,
                                                 ResolveDefer,
                                                 correspondenceStorageService,
+                                                configurationService,
                                                 contextHelpService,
                                                 counterService,
                                                 employeeService,
@@ -161,6 +162,21 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.resend = function (g2gItem, $event, defer) {
+
+            if (!configurationService.G2G_QATAR_SOURCE){
+                return g2gItem
+                    .resendNewG2GItem($event)
+                    .then(function (result) {
+                        if (result) {
+                            new ResolveDefer(defer);
+                            self.reloadG2gItems(self.grid.page)
+                                .then(function () {
+                                    toast.success(langService.get('resend_specific_success').change({name: g2gItem.getTranslatedName()}));
+                                });
+                        }
+                    })
+            }
+
             return g2gItem
                 .resendG2GItem($event)
                 .then(function (result) {
@@ -199,6 +215,9 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.viewDeliveryReport = function (g2gItem, $event) {
+            if (!configurationService.G2G_QATAR_SOURCE){
+                return viewDeliveryReportService.viewG2GNewDeliveryReport(g2gItem, $event);
+            }
             return viewDeliveryReportService.viewDeliveryReport(g2gItem, $event);
         };
         /**
@@ -538,7 +557,7 @@ module.exports = function (app) {
                         callback: self.manageAttachments,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            return true;
+                            return configurationService.G2G_QATAR_SOURCE;
                         }
                     },
                     // Linked Documents
@@ -550,7 +569,7 @@ module.exports = function (app) {
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            return true;
+                            return configurationService.G2G_QATAR_SOURCE;
                         }
                     },
                     // Linked Entities
@@ -562,7 +581,7 @@ module.exports = function (app) {
                         class: "action-green",
                         permissionKey: "MANAGE_LINKED_ENTITIES",
                         checkShow: function (action, model) {
-                            return true;
+                            return configurationService.G2G_QATAR_SOURCE;
                         }
                     },
                     // Destinations

@@ -174,6 +174,10 @@ module.exports = function (app) {
                 return correspondenceService.openExportCorrespondenceDialog(correspondence, $event, true, this);
             };
 
+            G2GMessagingHistory.prototype.resendNewG2GItem = function ($event) {
+                return correspondenceService.openExportNewCorrespondenceDialog(this, $event);
+            };
+
 
             G2GMessagingHistory.prototype.manageDocumentComments = function ($event) {
                 var info = this.getInfo();

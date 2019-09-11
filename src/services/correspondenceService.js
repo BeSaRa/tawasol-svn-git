@@ -561,6 +561,10 @@ module.exports = function (app) {
                 .then(function () {
                     return (generator.generateInstance(correspondence, _getModel(correspondence.docClassName)));
                 }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ERROR_SAVE_DOC_ALREADY_MODIFIED_BY_OTHER_USER') === true) {
+                        dialog.infoMessage(langService.get('error_save_document_already_modified_by_other_user'));
+                        return $q.reject(error);
+                    }
                     return $q.reject(error);
                 });
         };
@@ -613,6 +617,10 @@ module.exports = function (app) {
                     return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
                 })
                 .catch(function (error) {
+                    if (errorCode.checkIf(error, 'ERROR_SAVE_DOC_ALREADY_MODIFIED_BY_OTHER_USER') === true) {
+                        dialog.infoMessage(langService.get('error_save_document_already_modified_by_other_user'));
+                        return $q.reject(error);
+                    }
                     return $q.reject(error);
                 });
         };
@@ -633,6 +641,10 @@ module.exports = function (app) {
                     correspondence.vsId = result.data.rs;
                     return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
                 }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ERROR_SAVE_DOC_ALREADY_MODIFIED_BY_OTHER_USER') === true) {
+                        dialog.infoMessage(langService.get('error_save_document_already_modified_by_other_user'));
+                        return $q.reject(error);
+                    }
                     return $q.reject(self.getTranslatedError(error));
                 });
         };
@@ -650,6 +662,10 @@ module.exports = function (app) {
                     correspondence.vsId = result.data.rs;
                     return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
                 }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ERROR_SAVE_DOC_ALREADY_MODIFIED_BY_OTHER_USER') === true) {
+                        dialog.infoMessage(langService.get('error_save_document_already_modified_by_other_user'));
+                        return $q.reject(error);
+                    }
                     return $q.reject(self.getTranslatedError(error));
                 });
         };
@@ -2728,11 +2744,6 @@ module.exports = function (app) {
                         g2gData: g2gData
                     },
                     resolve: {
-                        /*sites: function (correspondenceService) {
-                            'ngInject';
-                            return correspondenceService
-                                .loadCorrespondenceSites(workItem);
-                        },*/
                         entityTypes: function (entityTypeService) {
                             'ngInject';
                             return entityTypeService
@@ -2741,6 +2752,37 @@ module.exports = function (app) {
                         prepareExport: function () {
                             'ngInject';
                             return self.prepareExportedDataFromBackend(workItem)
+                        }
+                    }
+                });
+        };
+        /**
+         * @description open dialog for export workItem.
+         * @param g2gItem
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.openExportNewCorrespondenceDialog = function (g2gItem, $event) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    templateUrl: cmsTemplate.getPopup('ready-to-export-option'),
+                    controller: 'readyToExportOptionPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        readyToExport: {},
+                        resend: true,
+                        g2gData: g2gItem
+                    },
+                    resolve: {
+                        entityTypes: function (entityTypeService) {
+                            'ngInject';
+                            return entityTypeService
+                                .loadEntityTypes();
+                        },
+                        prepareExport: function () {
+                            'ngInject';
+                            return self.prepareExportedNewDataFromBackend(g2gItem.g2gActionID)
                         }
                     }
                 });
@@ -2756,6 +2798,23 @@ module.exports = function (app) {
                     });
                     result.data.rs.sitesCCList = _.map(result.data.rs.sitesCCList, function (site) {
                         site.docClassName = info.documentClass;
+                        return site;
+                    });
+                    result.data.rs.sitesitesToList = generator.interceptReceivedCollection('Site', generator.generateCollection(result.data.rs.sitesitesToList, Site));
+                    result.data.rs.sitesCCList = generator.interceptReceivedCollection('Site', generator.generateCollection(result.data.rs.sitesCCList, Site));
+                    return result.data.rs;
+                })
+        };
+
+        self.prepareExportedNewDataFromBackend = function (g2gActionId) {
+            return $http.get(urlService.resendG2GKuwait.replace('{g2gActionId}', g2gActionId))
+                .then(function (result) {
+                    result.data.rs.sitesitesToList = _.map(result.data.rs.sitesitesToList, function (site) {
+                        site.docClassName = 'Outgoing';
+                        return site;
+                    });
+                    result.data.rs.sitesCCList = _.map(result.data.rs.sitesCCList, function (site) {
+                        site.docClassName = 'Outgoing';
                         return site;
                     });
                     result.data.rs.sitesitesToList = generator.interceptReceivedCollection('Site', generator.generateCollection(result.data.rs.sitesitesToList, Site));

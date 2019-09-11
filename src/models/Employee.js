@@ -272,6 +272,14 @@ module.exports = function (app) {
                 return this.userOrganization && this.userOrganization.centralArchive;
             };
 
+            Employee.prototype.inCentralArchiveAndNotHasRegistry = function () {
+                return this.userOrganization && this.userOrganization.centralArchive && !this.userOrganization.hasRegistry;
+            };
+
+            Employee.prototype.inCentralArchiveAndHasRegistry = function () {
+                return this.userOrganization && this.userOrganization.centralArchive && this.userOrganization.hasRegistry;
+            };
+
             Employee.prototype.mapSend = function () {
                 var self = this;
 

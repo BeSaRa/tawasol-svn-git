@@ -57,9 +57,10 @@ module.exports = function (app) {
                 SEC_LDAP_INVALID_SERVER_ADDRESS: 13010,
                 SEC_LDAP_INVALID_OP: 13011,
                 SEC_ERROR_USER_UN_AUHTORIZED_FOR_SERVICE: 13012,
-                INVALID_DOC_STATUS_TO_EXPORT: 3036,
                 ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER:2059,
+                INVALID_DOC_STATUS_TO_EXPORT: 3036,
                 // entity connection errors end
+                ERROR_SAVE_DOC_ALREADY_MODIFIED_BY_OTHER_USER: 4019
                 INVALID_LINK: 3041
             },
             errorLangKeys = {
@@ -79,6 +80,7 @@ module.exports = function (app) {
                 14012: 'g2g_error_while_remove_transaction',
                 14013: 'g2g_error_can_not_resend_already_pending_book',
                 //14028: 'g2g_error_occurred_while_terminate'
+                4019: 'error_save_document_already_modified_by_other_user'
                 2059:'incoming_book_exists_same_number_site_year'
             };
 

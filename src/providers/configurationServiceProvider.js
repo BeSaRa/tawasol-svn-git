@@ -11,7 +11,9 @@ module.exports = function (app) {
             DEFAULT_SEND_RELATED_DOCS: true,
             ICN_ENTRY_TEMPLATE_MENU_TYPE: 3,
             ICN_SEARCH_TEMPLATE_MENU_TYPE: 4,
-            STATES_DISABLED_WHILE_ADD_TASK: [1]
+            STATES_DISABLED_WHILE_ADD_TASK: [1],
+            G2G_QATAR_SOURCE: true,
+            ENABLE_ACTIVE_SENDER_LINKS: false
         };
         var configurationServiceProvider = provider;
         /**

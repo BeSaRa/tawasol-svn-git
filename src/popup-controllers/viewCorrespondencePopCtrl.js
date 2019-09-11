@@ -194,6 +194,7 @@ module.exports = function (app) {
          * @description save correspondence Changes for content.
          * @param $event
          * @param ignoreMessage
+         * @param saveBeforeApprove
          * @returns {*}
          */
         self.saveCorrespondenceChanges = function ($event, ignoreMessage, saveBeforeApprove) {
