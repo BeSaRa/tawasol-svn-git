@@ -242,6 +242,7 @@ module.exports = function (app) {
                         shortcut: true,
                         callback: self.previewDocument,
                         class: "action-green",
+                        hide: true,
                         showInView: false,
                         permissionKey: 'VIEW_DOCUMENT',
                         checkShow: function (action, model) {
