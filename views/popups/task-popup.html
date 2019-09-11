@@ -1,7 +1,7 @@
 <md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.tasks}}">
-        <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_task}}"></popup-toolbar-directive>
-        <popup-toolbar-directive ng-if="ctrl.editMode"
-                                 header-text="{{lang.edit_task}} : {{ctrl.model.taskTitle}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_task}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode"
+                             header-text="{{lang.edit_task}} : {{ctrl.model.taskTitle}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive>
         <div>
             <form autocomplete="off" name="task_form">
@@ -29,7 +29,7 @@
                                     </md-input-container>
                                     <span flex></span>
                                     <md-input-container>
-                                        <md-switch ng-model="ctrl.task.withoutParticipant">
+                                        <md-switch ng-disabled="ctrl.editMode" ng-model="ctrl.task.withoutParticipant">
                                             {{lang.task_without_participant}} : {{ ctrl.task.withoutParticipant ?
                                             lang.yes : lang.no}}
                                         </md-switch>
@@ -103,7 +103,8 @@
                                         <label>{{lang.task_state}}</label>
                                         <md-select name="taskState" id="taskState"
                                                    ng-model="ctrl.task.taskState">
-                                            <md-option ng-disabled="ctrl.disableStateWhileAdd(state)" ng-value="state.lookupKey" ng-repeat="state in ctrl.taskStates">
+                                            <md-option ng-disabled="ctrl.disableStateWhileAdd(state)"
+                                                       ng-value="state.lookupKey" ng-repeat="state in ctrl.taskStates">
                                                 {{state.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
@@ -291,11 +292,14 @@
                                                     <td md-cell>{{participant.completionDate|date:'y-MM-dd'}}</td>
                                                     <td md-cell>
                                                         <div tooltip="{{participant.taskCreatorComment}}" md-truncate
-                                                             style="max-width: 100px;">{{participant.taskCreatorComment}}</div>
+                                                             style="max-width: 100px;">
+                                                            {{participant.taskCreatorComment}}
+                                                        </div>
                                                     </td>
                                                     <td md-cell>
                                                         <div tooltip="{{lang.participant_comment}}" md-truncate
-                                                             style="max-width: 100px;">{{participant.participantReply}}</div>
+                                                             style="max-width: 100px;">{{participant.participantReply}}
+                                                        </div>
                                                     </td>
                                                     <td md-cell>
                                                         <div flex layout="row">
