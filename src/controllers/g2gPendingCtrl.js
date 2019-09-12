@@ -81,10 +81,6 @@ module.exports = function (app) {
                 },
                 subSiteTo: function (record) {
                     return self.getSortingKey('subSiteToIdInfo', 'CorrespondenceSite')
-                },
-                receivedDate: 'deliveryDate',
-                status: function (record) {
-                    return self.getSortingKey('messageStatus', 'Information');
                 }
             },
             searchText: '',
