@@ -169,110 +169,112 @@
             <md-icon md-svg-icon="close" class="red-text"></md-icon>
         </md-button>
     </div>
-    <md-dialog-content flex scroll-directive>
-        <div>
-            <div layout="row" flex>
-                <md-sidenav md-is-locked-open="true" ng-if="true">
-                    <div class="p020" layout="column" scroll-directive>
-                        <ul layout="column" flex id="document-properties">
-                            <work-item-properties-directive section-title="workitem_information" ng-if="ctrl.workItem"
-                                                            item="ctrl.workItem"></work-item-properties-directive>
-                            <correspondence-item-properties-directive
-                                    section-title="general_information"
-                                    item="ctrl.correspondence"></correspondence-item-properties-directive>
-                            <!-- Quick Actions -->
-                            <li>
-                                <div class="viewer-actions">
-                                    <md-button
-                                            ng-repeat="quickAction in ctrl.stickyActions track by $index"
-                                            ng-if="ctrl.isShowViewerAction(quickAction)" class="md-fab md-mini"
-                                            aria-label="{{ctrl.getViewerActionText(quickAction, true)}}"
-                                            ng-click="ctrl.callbackViewerAction(quickAction, $event)"
-                                            tooltip="{{ctrl.getViewerActionText(quickAction, true)}}"
-                                            tooltip-direction="{{lang.current === 'ar' ? 'left': 'right'}}">
-                                        <md-icon md-svg-icon="{{quickAction.icon}}"
-                                                 class="{{quickAction.class}}"
-                                        ></md-icon>
+    <md-dialog-content layout="column" flex scroll-directive>
+        <div layout="row" layout-fill flex>
+            <md-sidenav md-is-locked-open="true" ng-if="true">
+                <div class="p020" layout="column" scroll-directive>
+                    <ul layout="column" flex id="document-properties">
+                        <work-item-properties-directive section-title="workitem_information" ng-if="ctrl.workItem"
+                                                        item="ctrl.workItem"></work-item-properties-directive>
+                        <correspondence-item-properties-directive
+                                section-title="general_information"
+                                item="ctrl.correspondence"></correspondence-item-properties-directive>
+                        <!-- Quick Actions -->
+                        <li>
+                            <div class="viewer-actions">
+                                <md-button
+                                        ng-repeat="quickAction in ctrl.stickyActions track by $index"
+                                        ng-if="ctrl.isShowViewerAction(quickAction)" class="md-fab md-mini"
+                                        aria-label="{{ctrl.getViewerActionText(quickAction, true)}}"
+                                        ng-click="ctrl.callbackViewerAction(quickAction, $event)"
+                                        tooltip="{{ctrl.getViewerActionText(quickAction, true)}}"
+                                        tooltip-direction="{{lang.current === 'ar' ? 'left': 'right'}}">
+                                    <md-icon md-svg-icon="{{quickAction.icon}}"
+                                             class="{{quickAction.class}}"
+                                    ></md-icon>
+                                </md-button>
+                            </div>
+                        </li>
+
+                        <li class="document-properties linked document-attachments">
+                            <ul class="work-item-properties">
+                                <li class="section-title">{{lang.get('attachments')}}</li>
+                                <li ng-class="{'selected':ctrl.checkSelected($index , 'attachments')}"
+                                    layout-align="start center" layout="row"
+                                    ng-repeat="attachment in ctrl.correspondence.attachments track by $index">
+                                    <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">{{attachment.getTranslatedName()}}</a>
+                                    <md-button class="md-icon-button view-icon-button"
+                                               ng-click="ctrl.showAttachment(attachment , $index , $event)">
+                                        <md-icon md-svg-icon="eye"></md-icon>
                                     </md-button>
-                                </div>
-                            </li>
-
-                            <li class="document-properties linked document-attachments">
-                                <ul class="work-item-properties">
-                                    <li class="section-title">{{lang.get('attachments')}}</li>
-                                    <li ng-class="{'selected':ctrl.checkSelected($index , 'attachments')}"
-                                        layout-align="start center" layout="row"
-                                        ng-repeat="attachment in ctrl.correspondence.attachments track by $index">
-                                        <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">{{attachment.getTranslatedName()}}</a>
-                                        <md-button class="md-icon-button view-icon-button"
-                                                   ng-click="ctrl.showAttachment(attachment , $index , $event)">
-                                            <md-icon md-svg-icon="eye"></md-icon>
-                                        </md-button>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="document-properties linked linked-documents">
-                                <ul class="work-item-properties">
-                                    <li class="section-title">{{lang.get('linked_documents')}}</li>
-                                    <li ng-class="{'selected':ctrl.checkSelected($index , 'linkedDocs')}"
-                                        layout-align="start center" layout="row"
-                                        ng-repeat="doc in ctrl.correspondence.linkedDocs track by $index">
-                                        <a flex href="#" ng-click="ctrl.showLinkedDocument(doc , $index ,  $event)">{{doc.getTranslatedName()}}</a>
-                                        <md-button class="md-icon-button view-icon-button"
-                                                   ng-click="ctrl.showLinkedDocument(doc, $index ,  $event , true)">
-                                            <md-icon md-svg-icon="eye"></md-icon>
-                                        </md-button>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </md-sidenav>
-                <div layout="column" class="relative" flex>
-                    <div ng-if="ctrl.content.desktop && ctrl.content.desktop.overlay" ng-click="ctrl.reloadMainDocument($event)" layout="column" layout-align="center center" id="overlay-to-reload-document">
-                        <p>{{lang.reload_document_after_edit_in_desktop}}</p>
-                        <md-button   id="reload-main-document" ng-click="ctrl.reloadMainDocument($event)" class="md-icon-button md-primary md-raised">
-                            <md-icon md-svg-icon="reload"></md-icon>
-                        </md-button>
-                    </div>
-                    <iframe ng-if="ctrl.mainDocument && !ctrl.editMode" id="iframe-main-document"
-                            class="iframe-main-document"
-                            ng-src="{{ctrl.content.viewURL}}" flex
-                            frameborder="0"></iframe>
-
-                    <iframe ng-if="ctrl.mainDocument && ctrl.editMode" id="iframe-main-document"
-                            class="iframe-main-document"
-                            ng-src="{{ctrl.content.editURL}}" flex
-                            frameborder="0"></iframe>
-
-                    <div ng-if="!ctrl.mainDocument" class="absolute-back-button">
-                        <md-button tooltip="{{lang.back_to_main_document}}" class="md-icon-button md-raised"
-                                   ng-click="ctrl.backToCorrespondence()">
-                            <md-icon md-svg-icon="backup-restore"></md-icon>
-                        </md-button>
-                    </div>
-
-                    <div ng-if="!ctrl.mainDocument && ctrl.hasMoreThanOne()"
-                         class="absolute-back-button navigate-next">
-                        <md-button ng-disabled="!ctrl.hasNext()" tooltip="{{lang.next}}" class="md-icon-button md-raised"
-                                   ng-click="ctrl.nextItemList()">
-                            <md-icon md-svg-icon="chevron-right"></md-icon>
-                        </md-button>
-                    </div>
-
-                    <div ng-if="!ctrl.mainDocument && ctrl.hasMoreThanOne()"
-                         class="absolute-back-button navigate-prev">
-                        <md-button ng-disabled="!ctrl.hasPrevious()" tooltip="{{lang.previous}}"
-                                   class="md-icon-button md-raised"
-                                   ng-click="ctrl.prevItemList()">
-                            <md-icon md-svg-icon="chevron-left"></md-icon>
-                        </md-button>
-                    </div>
-
-                    <iframe ng-if="!ctrl.mainDocument" class="iframe-main-document" ng-src="{{ctrl.secondURL}}" flex
-                            frameborder="0"></iframe>
-
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="document-properties linked linked-documents">
+                            <ul class="work-item-properties">
+                                <li class="section-title">{{lang.get('linked_documents')}}</li>
+                                <li ng-class="{'selected':ctrl.checkSelected($index , 'linkedDocs')}"
+                                    layout-align="start center" layout="row"
+                                    ng-repeat="doc in ctrl.correspondence.linkedDocs track by $index">
+                                    <a flex href="#" ng-click="ctrl.showLinkedDocument(doc , $index ,  $event)">{{doc.getTranslatedName()}}</a>
+                                    <md-button class="md-icon-button view-icon-button"
+                                               ng-click="ctrl.showLinkedDocument(doc, $index ,  $event , true)">
+                                        <md-icon md-svg-icon="eye"></md-icon>
+                                    </md-button>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
+            </md-sidenav>
+            <div layout="column" class="relative" flex>
+                <div ng-if="ctrl.content.desktop && ctrl.content.desktop.overlay"
+                     ng-click="ctrl.reloadMainDocument($event)" layout="column" layout-align="center center"
+                     id="overlay-to-reload-document">
+                    <p>{{lang.reload_document_after_edit_in_desktop}}</p>
+                    <md-button id="reload-main-document" ng-click="ctrl.reloadMainDocument($event)"
+                               class="md-icon-button md-primary md-raised">
+                        <md-icon md-svg-icon="reload"></md-icon>
+                    </md-button>
+                </div>
+                <iframe ng-if="ctrl.mainDocument && !ctrl.editMode" id="iframe-main-document"
+                        class="iframe-main-document"
+                        ng-src="{{ctrl.content.viewURL}}" flex
+                        frameborder="0"></iframe>
+
+                <iframe ng-if="ctrl.mainDocument && ctrl.editMode" id="iframe-main-document"
+                        class="iframe-main-document"
+                        ng-src="{{ctrl.content.editURL}}" flex
+                        frameborder="0"></iframe>
+
+                <div ng-if="!ctrl.mainDocument" class="absolute-back-button">
+                    <md-button tooltip="{{lang.back_to_main_document}}" class="md-icon-button md-raised"
+                               ng-click="ctrl.backToCorrespondence()">
+                        <md-icon md-svg-icon="backup-restore"></md-icon>
+                    </md-button>
+                </div>
+
+                <div ng-if="!ctrl.mainDocument && ctrl.hasMoreThanOne()"
+                     class="absolute-back-button navigate-next">
+                    <md-button ng-disabled="!ctrl.hasNext()" tooltip="{{lang.next}}"
+                               class="md-icon-button md-raised"
+                               ng-click="ctrl.nextItemList()">
+                        <md-icon md-svg-icon="chevron-right"></md-icon>
+                    </md-button>
+                </div>
+
+                <div ng-if="!ctrl.mainDocument && ctrl.hasMoreThanOne()"
+                     class="absolute-back-button navigate-prev">
+                    <md-button ng-disabled="!ctrl.hasPrevious()" tooltip="{{lang.previous}}"
+                               class="md-icon-button md-raised"
+                               ng-click="ctrl.prevItemList()">
+                        <md-icon md-svg-icon="chevron-left"></md-icon>
+                    </md-button>
+                </div>
+
+                <iframe ng-if="!ctrl.mainDocument" class="iframe-main-document" ng-src="{{ctrl.secondURL}}" flex
+                        frameborder="0"></iframe>
+
             </div>
         </div>
     </md-dialog-content>
