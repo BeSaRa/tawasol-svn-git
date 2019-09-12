@@ -175,6 +175,14 @@ module.exports = function (app) {
                     return self.loadDocumentAttachmentsByVsId(document);
                 };
 
+                self.loadG2GDocumentAttachmentsByActionId = function (g2gActionID) {
+                    return $http.get(urlService.g2gAttachments.replace('{g2gActionID}', g2gActionID)).then(function (result) {
+                        self.attachments = generator.generateCollection(result.data.rs, Attachment, self._sharedMethods);
+                        self.attachments = generator.interceptReceivedCollection('Attachment', self.attachments);
+                        return self.attachments;
+                    });
+                };
+
                 self.checkAttachmentIsDeletable = function (documentInfo, attachment) {
                     if (attachment.createReplyDisableDelete) {
                         return false;
@@ -503,7 +511,7 @@ module.exports = function (app) {
                                 });
                                 bulkResult.push(position !== -1);
                             }
-                            return { result: bulkResult, allowedExtensions: allowedExtensionsWithDot};
+                            return {result: bulkResult, allowedExtensions: allowedExtensionsWithDot};
                         });
                 };
 

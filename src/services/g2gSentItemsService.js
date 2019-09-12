@@ -134,6 +134,24 @@ module.exports = function (app) {
                     });
                 });
         };
+        /**
+         * @description recall and terminate.
+         * @returns {*}
+         * @param g2gItem
+         */
+        self.recallG2GTerminate = function (g2gItem) {
+            var info = g2gItem.getInfo();
+            return self
+                .showReasonDialog(info.title)
+                .then(function (comment) {
+                    return $http.put(urlService.recallAndTerminate, {
+                        first: g2gItem.g2gActionID,
+                        second: comment
+                    }).then(function (result) {
+                        return result.data.rs;
+                    });
+                });
+        };
 
 
         /**

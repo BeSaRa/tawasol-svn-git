@@ -238,14 +238,14 @@ module.exports = function (app) {
                 editAfterReturnG2G: function ($q, $timeout, $stateParams, correspondenceStorageService) {
                     'ngInject';
                     var action = $stateParams.action;
-                    if (action !== 'editAfterReturnG2G') {
+                    if (action !== 'editAfterReturnG2G' || action !== 'recallAndForwardG2G') {
                         return $timeout(function () {
                             return false;
                         });
                     }
 
                     return correspondenceStorageService
-                        .getCorrespondence('editAfterReturnG2G')
+                        .getCorrespondence(action)
                         .catch(function () {
                             return $timeout(function () {
                                 return false;

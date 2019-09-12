@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.service('managerService', function (dialog,
                                             $q,
                                             cmsTemplate,
+                                            Outgoing,
                                             _,
                                             generator,
                                             correspondenceService,
@@ -152,6 +153,63 @@ module.exports = function (app) {
             })
         };
 
+
+        self.manageDocumentAttachmentsG2GKuwait = function (g2gItem, $event) {
+            var defer = $q.defer();
+            var attachmentDefer = $q.defer();
+            var info = g2gItem.getInfo();
+
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('manage-document-attachments'),
+                controller: 'manageDocumentAttachmentsPopCtrl',
+                targetEvent: $event || false,
+                controllerAs: 'ctrl',
+                bindToController: true,
+                escapeToClose: false,
+                locals: {
+                    fromDialog: true,
+                    documentClass: 'outgoing',
+                    documentSubject: info.title,
+                },
+                resolve: {
+                    vsId: function () {
+                        return defer.promise.then(function (vsId) {
+                            return vsId;
+                        });
+                    },
+                    document: function () {
+                        return correspondenceService
+                            .loadG2GCorrespondenceByG2GActionID(g2gItem.g2gActionID)
+                            .then(function (document) {
+                                defer.resolve(document.vsId);
+                                return document;
+                            })
+                    },
+                    attachments: function (attachmentService) {
+                        'ngInject';
+                        return attachmentService
+                            .loadG2GDocumentAttachmentsByActionId(g2gItem.g2gActionID)
+                            .then(function (attachments) {
+                                attachmentDefer.resolve(attachments);
+                                return attachments;
+                            });
+                    },
+                    model: function () {
+                        'ngInject';
+                        var qDefer = $q.defer();
+                        attachmentDefer.promise.then(function (attachments) {
+                            qDefer.resolve(self.deepCopyAttachments(attachments));
+                        });
+                        return qDefer.promise;
+                    },
+                    attachmentTypes: function (attachmentTypeService, employeeService) {
+                        'ngInject';
+                        return !employeeService.isCloudUser() ? attachmentTypeService.getAttachmentTypes() : [];
+                    }
+                }
+            })
+        };
+
         /**
          * @description manage document comment for any given document
          * @param vsId
@@ -226,6 +284,79 @@ module.exports = function (app) {
                             return deferCorrespondence.promise.then(function () {
                                 return correspondenceService
                                     .loadCorrespondenceByVsIdClass(vsId, documentClass)
+                                    .then(function (result) {
+                                        document = result;
+                                        defer.resolve(document);
+                                        return result
+                                    });
+                            })
+                        },
+                        resolveAll: function (generator,
+                                              organizationService,
+                                              correspondenceService) {
+                            'ngInject';
+                            var qDefer = $q.defer();
+                            var organizations = organizationService.loadOrganizations();
+                            var lookups = correspondenceService.loadCorrespondenceLookups(documentClass);
+                            $q.all([organizations, lookups]).then(function (result) {
+                                deferCorrespondence.resolve(true);
+                                qDefer.resolve(true);
+                                return result;
+                            });
+                            return qDefer.promise;
+                        },
+                        document: function () {
+                            'ngInject';
+                            var qDefer = $q.defer();
+                            defer.promise.then(function (document) {
+                                qDefer.resolve(angular.copy(document));
+                            });
+                            return qDefer.promise;
+                        },
+                        model: function () {
+                            'ngInject';
+                            var qDefer = $q.defer();
+                            defer.promise.then(function (document) {
+                                qDefer.resolve(angular.copy(document));
+                            });
+                            return qDefer.promise;
+                        },
+                        centralArchives: function (organizationService, employeeService) {
+                            'ngInject';
+                            return employeeService.isCentralArchive() && (documentClass.toLowerCase() === 'incoming' || documentClass.toLowerCase() === 'outgoing') ? organizationService.centralArchiveOrganizations() : false
+                        }
+                    }
+                }).catch(function (e) {
+                    console.log(e);
+                });
+        };
+        /**
+         * manage document properties g2g Kuwait
+         * @param g2gItem
+         * @param $event
+         * @return {promise}
+         */
+        self.manageG2GKuwaitDocumentProperties = function (g2gItem, $event) {
+            var defer = $q.defer(), deferCorrespondence = $q.defer();
+            var document = null;
+            var documentClass = _checkDocumentClass('Outgoing');
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('manage-document-properties'),
+                    controller: 'manageDocumentPropertiesPopCtrl',
+                    targetEvent: $event || false,
+                    controllerAs: 'ctrl',
+                    escapeToClose: false,
+                    bindToController: true,
+                    locals: {
+                        fromDialog: true
+                    },
+                    resolve: {
+                        documentProperties: function () {
+                            'ngInject';
+                            return deferCorrespondence.promise.then(function () {
+                                return correspondenceService
+                                    .loadG2GCorrespondenceByG2GActionID(g2gItem.g2gActionID)
                                     .then(function (result) {
                                         document = result;
                                         defer.resolve(document);

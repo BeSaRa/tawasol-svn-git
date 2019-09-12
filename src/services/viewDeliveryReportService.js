@@ -32,7 +32,7 @@ module.exports = function (app) {
          * @returns {Promise|viewDeliveryReports}
          */
         self.loadNewDeliveryReport = function (g2gActionID) {
-            return $http.get(urlService.deliveryReportG2GKuwait.replace('{g2gActionId}', g2gActionID)).then(function (result) {
+            return $http.get(urlService.deliveryReportG2GKuwait.replace('{g2gActionID}', g2gActionID)).then(function (result) {
                 var viewDeliveryReports = generator.generateCollection(result.data.rs, G2GMessagingHistory);
                 viewDeliveryReports = generator.interceptReceivedCollection('G2GMessagingHistory', viewDeliveryReports);
                 return viewDeliveryReports;

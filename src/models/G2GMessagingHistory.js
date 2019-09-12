@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.factory('G2GMessagingHistory', function (CMSModelInterceptor,
                                                  Information,
                                                  viewDocumentService,
+                                                 configurationService,
                                                  Outgoing,
                                                  Indicator,
                                                  langService) {
@@ -174,8 +175,18 @@ module.exports = function (app) {
                 return correspondenceService.openExportCorrespondenceDialog(correspondence, $event, true, this);
             };
 
-            G2GMessagingHistory.prototype.resendNewG2GItem = function ($event) {
-                return correspondenceService.openExportNewCorrespondenceDialog(this, $event);
+            G2GMessagingHistory.prototype.resendNewG2GItem = function () {
+                return correspondenceService.resendG2GItemNew(this);
+            };
+
+            G2GMessagingHistory.prototype.manageG2GDocumentProperties = function ($event) {
+                var info = this.getInfo();
+
+                if (configurationService.G2G_QATAR_SOURCE) {
+                    return managerService.manageDocumentProperties(g2gItem.refDocId, 'outgoing', info.title, $event)
+                } else {
+                    return managerService.manageG2GKuwaitDocumentProperties(this, $event);
+                }
             };
 
 
@@ -192,7 +203,10 @@ module.exports = function (app) {
                     vsId: this.refDocId,
                     securityLevel: this.securityLevel
                 });
-                return managerService.manageDocumentAttachments.apply(managerService, [correspondence, this.refDocId, info.documentClass, info.title, $event]);
+                if (configurationService.G2G_QATAR_SOURCE) {
+                    return managerService.manageDocumentAttachments.apply(managerService, [correspondence, this.refDocId, info.documentClass, info.title, $event]);
+                }
+                return managerService.manageDocumentAttachmentsG2GKuwait(this, $event);
             };
             G2GMessagingHistory.prototype.manageDocumentLinkedDocuments = function ($event) {
                 var info = this.getInfo();

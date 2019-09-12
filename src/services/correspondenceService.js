@@ -2788,6 +2788,12 @@ module.exports = function (app) {
                 });
         };
 
+        self.resendG2GItemNew = function (g2gActionID) {
+            return $http.get(urlService.resendG2GKuwait.replace('{g2gActionID}', g2gActionID)).then(function (result) {
+                return result.data.rs;
+            })
+        };
+
         self.prepareExportedDataFromBackend = function (workItem) {
             var info = workItem.getInfo();
             return $http.get(urlService.correspondence + '/' + info.documentClass + '/vsid/' + info.vsId + '/prepare-export')
@@ -2807,7 +2813,7 @@ module.exports = function (app) {
         };
 
         self.prepareExportedNewDataFromBackend = function (g2gActionId) {
-            return $http.get(urlService.resendG2GKuwait.replace('{g2gActionId}', g2gActionId))
+            return $http.get(urlService.resendG2GKuwait.replace('{g2gActionID}', g2gActionId))
                 .then(function (result) {
                     result.data.rs.sitesitesToList = _.map(result.data.rs.sitesitesToList, function (site) {
                         site.docClassName = 'Outgoing';
@@ -3684,6 +3690,23 @@ module.exports = function (app) {
                     return errorCode.showErrorDialog(error);
                 });
         };
+        /**
+         * @description recall and forward for g2g Kuwait
+         * @param g2gActionID
+         * @returns {*}
+         */
+        self.recallAndForwardG2G = function (g2gActionID) {
+            var documentClass = 'outgoing';
+            return $http
+                .get(urlService.recallAndForward.replace('{g2gActionID}', g2gActionID))
+                .then(function (result) {
+                    result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                    return result.data.rs;
+                })
+                .catch(function (error) {
+                    return errorCode.showErrorDialog(error);
+                });
+        };
 
         self.viewCorrespondenceSites = function (correspondence, recordType, $event) {
             var info = correspondence.getInfo();
@@ -3994,6 +4017,18 @@ module.exports = function (app) {
                         return _bulkMessages(result, correspondences, ignoreMessage, 'failed_archive_selected', 'archive_success', 'archive_success_except_following');
                     });
             }
+        };
+        /**
+         * @description load correspondence by g2gActionID
+         * @param g2gActionID
+         * @returns {*}
+         */
+        self.loadG2GCorrespondenceByG2GActionID = function (g2gActionID) {
+            return $http
+                .get(urlService.g2gCorrespondenceByActionID.replace('{g2gActionID}', g2gActionID))
+                .then(function (result) {
+                    return generator.interceptReceivedInstance(['Correspondence', _getModelName('Outgoing')], result.data.rs);
+                });
         };
 
         /**

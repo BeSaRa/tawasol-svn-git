@@ -356,9 +356,17 @@
                 // refresh cache service from UI
                 .addToAllWithBase('refreshCache', 'cloud/root-entity/refresh-cache')
                 // resend G2G Kuwait
-                .addToAllWithBase('resendG2GKuwait', 'g2g/correspondence/g2gActionId/{g2gActionId}/prepare-export')
+                .addToAllWithBase('resendG2GKuwait', 'g2g/correspondence/g2gActionID/{g2gActionID}/resend')
                 // refresh cache service from UI
-                .addToAllWithBase('deliveryReportG2GKuwait', 'g2g/get-delivery-report/g2gActionId/{g2gActionId}')
+                .addToAllWithBase('deliveryReportG2GKuwait', 'g2g/get-delivery-report/g2gActionID/{g2gActionId}')
+                // recallAndTerminate
+                .addToAllWithBase('recallAndTerminate', 'g2g/correspondence/recall-and-terminate')
+                // recall and resend
+                .addToAllWithBase('recallAndForward', 'g2g/correspondence/g2gActionID/{g2gActionID}/recall-and-forward')
+                // recall and resend
+                .addToAllWithBase('g2gAttachments', 'g2g/correspondence/g2gActionID/{g2gActionID}/update-document-attachments')
+                // get correspondnce by g2gActionID
+                .addToAllWithBase('g2gCorrespondenceByActionID', 'g2g/correspondence/g2gActionID/{g2gActionID}/update-document-properties')
                 // g2g pending items
                 .addToAllWithBase('messagingHistory', 'cms-entity/user/messaging-history')
         })

@@ -2,6 +2,8 @@ module.exports = function (app) {
     app.controller('g2gSentItemsCtrl', function (lookupService,
                                                  g2gSentItemsService,
                                                  $q,
+                                                 correspondenceStorageService,
+                                                 listGeneratorService,
                                                  $filter,
                                                  langService,
                                                  ResolveDefer,
@@ -188,13 +190,57 @@ module.exports = function (app) {
                 })
         };
         /**
+         * @description recall and terminate for g2gKuwait
+         * @param g2gItem
+         * @param $event
+         * @param defer
+         * @returns {*}
+         */
+        self.recallAndTerminate = function (g2gItem, $event, defer) {
+            return g2gSentItemsService
+                .recallG2GTerminate(g2gItem)
+                .then(function (result) {
+                    if (result) {
+                        toast.success(langService.get('recall_terminate_success').change({name: g2gItem.getTranslatedName()}));
+                    } else {
+                        toast.success(langService.get('error_messages'));
+                    }
+                })
+        };
+        /***
+         * @description recall and forward for g2gKuwait
+         * @param g2gItem
+         * @param $event
+         */
+        self.recallAndForward = function (g2gItem, $event) {
+            var action = 'recallAndForwardG2G';
+            var list = listGeneratorService.createUnOrderList(),
+                langKeys = ['signature_serial_will_removed', 'the_book_will_go_to_audit', 'serial_retained', 'exported_not_received_documents_will_be_recalled'];
+            _.map(langKeys, function (item) {
+                list.addItemToList(langService.get(item));
+            });
+            dialog.confirmMessage(list.getList(), null, null, $event)
+                .then(function () {
+                    correspondenceService
+                        .recallAndForwardG2G(g2gItem.g2gActionID)
+                        .then(function (correspondence) {
+                            new ResolveDefer(defer);
+                            correspondenceStorageService.storeCorrespondence(action, correspondence);
+                            $state.go('app.outgoing.add', {
+                                vsId: g2gItem.g2gActionID,
+                                action: action
+                            });
+                        });
+                });
+        };
+        /**
          * @description View Delivery Report
          * @param g2gItem
          * @param $event
          * @returns {*}
          */
         self.viewDeliveryReport = function (g2gItem, $event) {
-            if (!configurationService.G2G_QATAR_SOURCE){
+            if (!configurationService.G2G_QATAR_SOURCE) {
                 return viewDeliveryReportService.viewG2GNewDeliveryReport(g2gItem, $event);
             }
             return viewDeliveryReportService.viewDeliveryReport(g2gItem, $event);
@@ -310,6 +356,34 @@ module.exports = function (app) {
                 showInView: true,
                 checkShow: function (action, model) {
                     return configurationService.G2G_QATAR_SOURCE;
+                }
+            },
+            // Recall
+            {
+                type: 'action',
+                icon: 'reload-alert',
+                text: 'grid_action_recall_terminate',
+                shortcut: true,
+                callback: self.recallAndTerminate,
+                class: "action-green",
+                //permissionKey: 'VIEW_DOCUMENT',
+                showInView: true,
+                checkShow: function (action, model) {
+                    return !configurationService.G2G_QATAR_SOURCE;
+                }
+            },
+            // Recall
+            {
+                type: 'action',
+                icon: 'call-missed',
+                text: 'grid_action_recall_forward',
+                shortcut: true,
+                callback: self.recallAndForward,
+                class: "action-green",
+                //permissionKey: 'VIEW_DOCUMENT',
+                showInView: true,
+                checkShow: function (action, model) {
+                    return !configurationService.G2G_QATAR_SOURCE;
                 }
             },
             // View Delivery Report
