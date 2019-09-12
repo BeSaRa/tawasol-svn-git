@@ -411,7 +411,7 @@ module.exports = function (app) {
                 .get((urlService.organizations + '/' + parentOuId + '/childs' + (type ? '?type=1' : '')))
                 .then(function (result) {
                     var children = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
-                    children =  generator.interceptReceivedCollection('Organization', children);
+                    children = generator.interceptReceivedCollection('Organization', children);
                     if (skipCurrentRegOu) {
                         children = _.filter(children, function (ou) {
                             return ou.id !== parentOuId;
@@ -520,6 +520,13 @@ module.exports = function (app) {
                                 .then(function (result) {
                                     return result.ldapProviders;
                                 });
+                        },
+                        departmentUsers: function (ouApplicationUserService) {
+                            'ngInject';
+                            if (!organization.hasRegistry) {
+                                return [];
+                            }
+                            return ouApplicationUserService.loadOuApplicationUserByRegOu(organization.id);
                         }
                         /*,
                          organizations: function(organizationService){
@@ -618,10 +625,14 @@ module.exports = function (app) {
                                 .then(function (result) {
                                     return result.ldapProviders;
                                 });
-                        }/*,
-                         organizations: function(organizationService){
-                         return organizationService.getOrganizations()
-                         }*/
+                        },
+                        departmentUsers: function (ouApplicationUserService) {
+                            'ngInject';
+                            if (!organization.hasRegistry) {
+                                return [];
+                            }
+                            return ouApplicationUserService.loadOuApplicationUserByRegOu(organization.id);
+                        }
                     }
                 });
             },

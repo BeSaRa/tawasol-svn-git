@@ -1330,7 +1330,7 @@
                                                         </thead>
                                                         <tbody md-body>
                                                         <tr md-row md-select="ouApplicationUser"
-                                                            ng-disabled="ctrl.currentEmployee.id === ouApplicationUser.applicationUser.id"
+                                                            ng-disabled="ctrl.employeeService.getEmployee().id === ouApplicationUser.applicationUser.id"
                                                             ng-repeat="ouApplicationUser in ctrl.ouAssignedUsers | limitTo: ctrl.appUserGrid.limit: ((ctrl.appUserGrid.page - 1) * ctrl.appUserGrid.limit) track by $index">
                                                             <td md-cell>
                                                                 {{ouApplicationUser.applicationUser.arFullName}}
@@ -1348,14 +1348,14 @@
                                                                 <div flex layout="row" layout-align="start center">
                                                                     <md-button class="md-icon-button"
                                                                                title="{{lang.delete}}"
-                                                                               ng-if="ctrl.currentEmployee.id != ouApplicationUser.applicationUser.id"
+                                                                               ng-if="ctrl.employeeService.getEmployee().id != ouApplicationUser.applicationUser.id"
                                                                                ng-click="ctrl.removeOUApplicationUser(ouApplicationUser, $event)">
                                                                         <md-icon md-svg-icon="delete"></md-icon>
                                                                     </md-button>
                                                                     <md-button
                                                                             class="md-icon-button"
                                                                             title="{{lang.edit}}"
-                                                                            ng-if="ctrl.currentEmployee.id != ouApplicationUser.applicationUser.id"
+                                                                            ng-if="ctrl.employeeService.getEmployee().id != ouApplicationUser.applicationUser.id"
                                                                             ng-click="ctrl.openEditApplicationUserDialog(ouApplicationUser.applicationUser, $event)">
                                                                         <md-icon md-svg-icon="pencil"></md-icon>
                                                                     </md-button>
@@ -1371,6 +1371,128 @@
                                                         md-limit="ctrl.appUserGrid.limit"
                                                         md-page="ctrl.appUserGrid.page"
                                                         md-total="{{ctrl.ouAssignedUsers.length}}" md-page-select>
+                                                </md-table-pagination>
+                                            </md-table-container>
+                                        </md-card>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <!-- Department Users -->
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('departmentUsers')" label="{{lang.department}} {{lang.users}}"
+                            ng-click="ctrl.setCurrentTab('departmentUsers')">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div layout="row" class="p20-0">
+                                    <md-button ng-click="ctrl.reloadDepartmentUsers()" class="md-icon-button"
+                                               tooltip="{{lang.reload}}">
+                                        <md-icon md-svg-icon="refresh"></md-icon>
+                                    </md-button>
+                                    <span flex></span>
+                                    <grid-search-directive grid="ctrl.departmentUsersGrid"></grid-search-directive>
+                                </div>
+                                <div layout="column">
+                                    <div scroll-directive>
+                                        <md-card md-whiteframe="3" class="card-overlay">
+                                            <md-table-container>
+                                                <div flex scroll-directive>
+                                                    <table md-table md-row-select multiple
+                                                           ng-model="ctrl.selectedDepartmentUsers"
+                                                           md-progress="ctrl.departmentUsersGrid.progress">
+                                                        <thead md-head md-order="ctrl.departmentUsersGrid.order"
+                                                               md-on-reorder="ctrl.getSortedDataDepartmentUser">
+                                                        <tr md-row>
+                                                            <th colspan="6"
+                                                                ng-if="ctrl.selectedDepartmentUsers.length"
+                                                                md-column>
+                                                                <div layout="row" layout-align="start center">
+                                                                    <span>{{ctrl.selectedDepartmentUsers.length}} {{lang.items_selected}} </span>
+                                                                    <span flex></span>
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.delete_selected_items}}"
+                                                                               ng-click="ctrl.removeBulkOUApplicationUsers($event)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDepartmentUsers.length"
+                                                                md-column
+                                                                md-order-by="applicationUser.arFullName">
+                                                                <span>{{lang.arabic_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDepartmentUsers.length"
+                                                                md-column
+                                                                md-order-by="applicationUser.enFullName">
+                                                                <span>{{lang.english_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDepartmentUsers.length"
+                                                                md-column
+                                                                md-order-by="applicationUser.loginName">
+                                                                <span>{{lang.login_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDepartmentUsers.length"
+                                                                md-column
+                                                                md-order-by="applicationUser.domainName">
+                                                                <span>{{lang.domain_name}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDepartmentUsers.length"
+                                                                md-column
+                                                                md-order-by="{{ctrl.getSortingKey('ouid', 'Organization')}}">
+                                                                <span>{{lang.organization}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDepartmentUsers.length"
+                                                                md-column>
+                                                                <span>{{lang.actions}}</span>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody md-body>
+                                                        <tr md-row md-select="ouApplicationUser"
+                                                            ng-disabled="ctrl.employeeService.getEmployee().id === ouApplicationUser.applicationUser.id"
+                                                            ng-repeat="ouApplicationUser in ctrl.departmentUsers | limitTo: ctrl.departmentUsersGrid.limit: ((ctrl.departmentUsersGrid.page - 1) * ctrl.departmentUsersGrid.limit) track by $index">
+                                                            <td md-cell>
+                                                                {{ouApplicationUser.applicationUser.arFullName}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                {{ouApplicationUser.applicationUser.enFullName}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                {{ouApplicationUser.applicationUser.loginName}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                {{ouApplicationUser.applicationUser.domainName}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                {{ouApplicationUser.ouid.getTranslatedName()}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                <div flex layout="row" layout-align="start center">
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.delete}}"
+                                                                               ng-if="ctrl.employeeService.getEmployee().id != ouApplicationUser.applicationUser.id"
+                                                                               ng-click="ctrl.removeOUApplicationUser(ouApplicationUser, $event)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
+                                                                    <md-button
+                                                                            class="md-icon-button"
+                                                                            title="{{lang.edit}}"
+                                                                            ng-if="ctrl.employeeService.getEmployee().id != ouApplicationUser.applicationUser.id"
+                                                                            ng-click="ctrl.openEditApplicationUserDialog(ouApplicationUser, $event)">
+                                                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <md-table-pagination
+                                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                        md-limit-options="ctrl.departmentUsersGrid.limitOptions"
+                                                        md-limit="ctrl.departmentUsersGrid.limit"
+                                                        md-page="ctrl.departmentUsersGrid.page"
+                                                        md-total="{{ctrl.departmentUsers.length}}" md-page-select>
                                                 </md-table-pagination>
                                             </md-table-container>
                                         </md-card>

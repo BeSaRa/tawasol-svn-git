@@ -49,7 +49,8 @@ module.exports = function (app) {
                                                     employeeService,
                                                     correspondenceViewService,
                                                     gridService,
-                                                    entityLDAPProviders) {
+                                                    entityLDAPProviders,
+                                                    departmentUsers) {
         'ngInject';
 
         var self = this;
@@ -202,7 +203,8 @@ module.exports = function (app) {
             'correspondence_sites',
             'document_templates',
             'property_config',
-            'users'
+            'users',
+            'departmentUsers'
         ];
 
         self.selectedOUClassifications = [];
@@ -314,6 +316,9 @@ module.exports = function (app) {
         };
 
         self.showTab = function (tabName) {
+            if (tabName === 'departmentUsers') {
+                return self.tabsToShow.indexOf(tabName) > -1 && self.organization.hasRegistry;
+            }
             return self.tabsToShow.indexOf(tabName) > -1;
         };
 
@@ -323,6 +328,7 @@ module.exports = function (app) {
                 || self.selectedTab === 'correspondence_sites'
                 || self.selectedTab === 'classifications'
                 || self.selectedTab === 'users'
+                || self.selectedTab === 'departmentUsers'
                 || self.selectedTab === 'children');
         };
 
@@ -381,7 +387,7 @@ module.exports = function (app) {
                     } else {
                         self.organization.setCentralArchiveUnitId(self.listParentsHasCentralArchive[0])
                     }
-                    if (!(self.organization.hasRegistry || self.organization.centralArchive)){
+                    if (!(self.organization.hasRegistry || self.organization.centralArchive)) {
                         self.organization.faxId = '';
                     }
                 })
@@ -399,7 +405,7 @@ module.exports = function (app) {
                     self.organization.ldapCode = null;
                     if (hasRegistry) {
                         self.organization.setRegistryParentId(null);
-                        if (self.entityLDAPProviders.length === 1){
+                        if (self.entityLDAPProviders.length === 1) {
                             self.organization.ldapCode = self.entityLDAPProviders[0].ldapCode;
                         }
                     } else {
@@ -408,7 +414,7 @@ module.exports = function (app) {
                         self.organization.centralArchiveUnitId = null;
                     }
 
-                    if (!(self.organization.hasRegistry || self.organization.centralArchive)){
+                    if (!(self.organization.hasRegistry || self.organization.centralArchive)) {
                         self.organization.faxId = '';
                     }
                 })
@@ -1339,7 +1345,6 @@ module.exports = function (app) {
         self.unAssignedUsers = unAssignedUsers;
         self.selectedUnassignedUser = null;
 
-
         /**
          * @description Gets the grid records by sorting
          */
@@ -1421,22 +1426,35 @@ module.exports = function (app) {
                 .applicationUserFromOuAdd(self.jobTitles, self.ranks, organizations, classifications, self.themes, self.roles, self.permissions, null, self.organization, $event)
                 .then(function () {
                     self.reloadOuApplicationUsers(self.appUserGrid.page);
+                    self.reloadDepartmentUsers(self.departmentUsersGrid.page);
                 })
                 .catch(function () {
                     self.reloadOuApplicationUsers(self.appUserGrid.page);
+                    self.reloadDepartmentUsers(self.departmentUsersGrid.page);
                 });
         };
 
         /**
          * @description Opens dialog for edit application user
          * @param $event
-         * @param {ApplicationUser} applicationUser
+         * @param {ApplicationUser} ouApplicationUser
          */
-        self.openEditApplicationUserDialog = function (applicationUser, $event) {
-            var ouId = self.organization.hasOwnProperty('id') ? self.organization.id : self.organization;
+        self.openEditApplicationUserDialog = function (ouApplicationUser, $event) {
+            if (!ouApplicationUser instanceof OUApplicationUser) {
+                return;
+            }
+            var organization = ouApplicationUser.ouid || ouApplicationUser.ouId;
+            if (!organization instanceof Organization && typeof organization === 'number') {
+                organization = _.find(organizationService.allOrganizationsStructure, function (ou) {
+                    return ou.id === organization;
+                })
+            }
+            var applicationUser = ouApplicationUser.applicationUser;
+            applicationUser = (applicationUser instanceof ApplicationUser) ? applicationUser : new ApplicationUser(applicationUser);
+
             validationService
                 .createValidation('LOAD_USER_CLASSIFICATION_VIEW_PERMISSIONS')
-                .addStep('load_user_classification', true, userClassificationViewPermissionService.loadUserClassificationViewPermissions, ouId, function (result) {
+                .addStep('load_user_classification', true, userClassificationViewPermissionService.loadUserClassificationViewPermissions, organization.id, function (result) {
                     self.userClassificationViewPermissions = result;
                     return result;
                 })
@@ -1447,9 +1465,10 @@ module.exports = function (app) {
                 .then(function () {
                     applicationUserService
                         .controllerMethod
-                        .applicationUserFromOuEdit(new ApplicationUser(applicationUser), self.jobTitles, self.ranks, organizations, classifications, self.themes, self.roles, self.permissions, self.userClassificationViewPermissions, self.organization, $event)
+                        .applicationUserFromOuEdit(applicationUser, self.jobTitles, self.ranks, organizations, classifications, self.themes, self.roles, self.permissions, self.userClassificationViewPermissions, organization, $event)
                         .then(function () {
                             self.reloadOuApplicationUsers(self.appUserGrid.page);
+                            self.reloadDepartmentUsers(self.departmentUsersGrid.page);
                         });
                 })
                 .catch(function () {
@@ -1479,6 +1498,7 @@ module.exports = function (app) {
                     }
                 }).then(function (ouApplicationUser) {
                     self.ouAssignedUsers.unshift(ouApplicationUser);
+                    self.departmentUsers.unshift(ouApplicationUser);
                     self.userAdded = !self.userAdded;
                 });
         };
@@ -1499,6 +1519,7 @@ module.exports = function (app) {
                 .deleteOUApplicationUser(ouApplicationUser, $event)
                 .then(function () {
                     self.reloadOuApplicationUsers(self.appUserGrid.page);
+                    self.reloadDepartmentUsers(self.departmentUsersGrid.page);
                     toast.success(langService.get('delete_success'));
                 });
         };
@@ -1508,13 +1529,93 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkOUApplicationUsers = function ($event) {
+            var selectedOuAppUsers = angular.copy(self.selectedOUApplicationUsers);
+            if (self.selectedTab === 'departmentUsers') {
+                selectedOuAppUsers = angular.copy(self.selectedDepartmentUsers);
+            }
             ouApplicationUserService
-                .deleteBulkOUApplicationUsers(self.selectedOUApplicationUsers, $event)
+                .deleteBulkOUApplicationUsers(selectedOuAppUsers, $event)
                 .then(function () {
                     self.reloadOuApplicationUsers(self.appUserGrid.page);
+                    self.reloadDepartmentUsers(self.departmentUsersGrid.page);
                     toast.success(langService.get('delete_success'));
                 });
         };
+
+
+        self.departmentUsers = departmentUsers;
+        self.departmentUsersCopy = angular.copy(self.departmentUsers);
+        self.selectedDepartmentUsers = [];
+
+        /**
+         * @description Contains options for grid configuration
+         * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
+         */
+        self.departmentUsersGrid = {
+            name: 'departmentUsersGrid',
+            progress: null,
+            limit: 5, // default limit
+            page: 1, // first page
+            //order: 'arName', // default sorting order
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.departmentUsers.length + 21)
+                    }
+                }
+            ],
+            searchColumns: {
+                arabicName: 'applicationUser.arFullName',
+                englishName: 'applicationUser.enFullName',
+                loginName: 'applicationUser.loginName',
+                domainName: 'applicationUser.domainName',
+                organization: function (record) {
+                    return self.getSortingKey('ouId', 'Organization');
+                }
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.departmentUsers = gridService.searchGridData(self.departmentUsersGrid, self.departmentUsersCopy);
+            }
+        };
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataDepartmentUser = function () {
+            self.departmentUsers = $filter('orderBy')(self.departmentUsers, self.departmentUsersGrid.order);
+        };
+
+        /**
+         * @description Reload the grid of application user
+         * @param pageNumber
+         * @return {*|Promise<U>}
+         */
+        self.reloadDepartmentUsers = function (pageNumber) {
+            var defer = $q.defer();
+            self.departmentUsersGrid.progress = defer.promise;
+
+            ouApplicationUserService
+                .loadUnassignedOUApplicationUsers(organization.id)
+                .then(function (result) {
+                    self.unAssignedUsers = result;
+                });
+
+            ouApplicationUserService
+                .loadOuApplicationUserByRegOu(organization.id)
+                .then(function (result) {
+                    self.departmentUsers = result;
+                    self.departmentUsersCopy = angular.copy(self.departmentUsers);
+                    self.selectedDepartmentUsers = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.departmentUsersGrid.page = pageNumber;
+                    self.getSortedDataDepartmentUser();
+                    self.departmentUsersGrid.searchCallback();
+                });
+        };
+
         /**
          * @description to catch reference plan changes.
          */
