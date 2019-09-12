@@ -17,7 +17,7 @@
                 </md-switch>
             </div>
             <span ng-if="!!(ctrl.selectedMonthText && ctrl.selectedYear)">{{lang[ctrl.selectedMonthText]}}, {{ctrl.selectedYear}}</span>
-            <md-button ng-click="ctrl.openFilterDialog($event)" class="md-icon-button"
+            <md-button ng-click="ctrl.filterDialog($event)" class="md-icon-button"
                        tooltip="{{lang.select_month_and_year}}">
                 <md-icon md-svg-icon="calendar"></md-icon>
             </md-button>

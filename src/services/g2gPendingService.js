@@ -41,8 +41,13 @@ module.exports = function (app) {
             return self.g2gPendingItems.length ? $q.when(self.g2gPendingItems) : self.loadG2gPendingItems();
         };
 
-
-        self.openPendingItemsFilterDialog = function (criteria, $event) {
+        /**
+         * @description Opens the filter dialog
+         * @param criteria
+         * @param $event
+         * @returns {promise}
+         */
+        self.openFilterDialog = function (criteria, $event) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('g2g-pending-filter'),
@@ -62,6 +67,33 @@ module.exports = function (app) {
                                 excludeOuSites: false
                             });
                         }
+                    }
+                });
+        };
+
+        /**
+         * @description Opens the exception message body dialog
+         * @param record
+         * @param $event
+         * @returns {promise}
+         */
+        self.openExceptionDialog = function (record, $event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('exception-body'),
+                    targetEvent: event,
+                    bindToController: true,
+                    controller: function (dialog) {
+                        'ngInject';
+                        var self = this;
+
+                        self.closePopup = function () {
+                            dialog.cancel();
+                        }
+                    },
+                    controllerAs: 'ctrl',
+                    locals: {
+                        record: record
                     }
                 });
         };

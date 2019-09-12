@@ -128,8 +128,12 @@ module.exports = function (app) {
                 });
         };
 
-        self.openFilterDialog = function ($event) {
-            g2gPendingService.openPendingItemsFilterDialog(self.filterCriteria)
+        /**
+         * @description Opens the filter dialog to select date range and main site
+         * @param $event
+         */
+        self.filterDialog = function ($event) {
+            g2gPendingService.openFilterDialog(self.filterCriteria)
                 .then(function (criteria) {
                     self.filterCriteria = criteria;
                     self.reloadG2GPendingItems(1);
@@ -171,13 +175,24 @@ module.exports = function (app) {
                 return;
             }
 
+            self.recordCopy = angular.copy(record);
             record.viewNewG2GPendingItem(self.gridActions, 'g2gPending', $event)
                 .then(function () {
+                    self.recordCopy = null;
                     self.reloadG2GPendingItems(self.grid.page);
                 })
                 .catch(function () {
+                    self.recordCopy = null;
                     self.reloadG2GPendingItems(self.grid.page);
                 });
+        };
+
+        self.getExceptionMessage = function (model, $event) {
+            if (self.recordCopy){
+                g2gPendingService.openExceptionDialog(self.recordCopy, $event);
+            }else {
+                g2gPendingService.openExceptionDialog(model, $event);
+            }
         };
 
         /**
@@ -222,8 +237,7 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: false,
                 permissionKey: [
-                    'VIEW_DOCUMENT',
-                    'VIEW_DOCUMENT_VERSION'
+                    'VIEW_DOCUMENT'
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
@@ -268,6 +282,21 @@ module.exports = function (app) {
                     return true;
                 },
                 showInView: false
+            },
+            // Error
+            {
+                type: 'action',
+                icon: 'message-alert-outline',
+                text: 'error_message',
+                callback: self.getExceptionMessage,
+                class: "action-green",
+                shortcut: true,
+                checkShow: function (action, model) {
+                    if (action.actionFrom === gridService.gridActionOptions.location.popup) {
+                        return !!self.recordCopy.exception;
+                    }
+                    return !!model.exception;
+                }
             },
             // Export
             {
