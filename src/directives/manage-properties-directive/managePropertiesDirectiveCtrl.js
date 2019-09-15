@@ -24,7 +24,8 @@ module.exports = function (app) {
         self.controllerName = 'managePropertiesDirectiveCtrl';
         LangWatcher($scope);
         self.employeeService = employeeService;
-        var properties = [], mainClassificationOptionFromInfo, subClassificationOptionFromInfo;
+        var properties = [], mainClassificationOptionFromInfo, subClassificationOptionFromInfo,
+            documentFileOptionFromInfo, documentSecurityLevelLookupKey;
         self.document = null;
         self.maxCreateDate = new Date();
 
@@ -62,6 +63,10 @@ module.exports = function (app) {
             // all document types
             self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
             self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
+            documentSecurityLevelLookupKey = angular.copy(self.document.securityLevel);
+            if (documentSecurityLevelLookupKey.hasOwnProperty('lookupKey')){
+                documentSecurityLevelLookupKey = documentSecurityLevelLookupKey.lookupKey;
+            }
             properties = lookupService.getPropertyConfigurations(self.document.docClassName);
 
             _.map(properties, function (item) {
@@ -74,7 +79,8 @@ module.exports = function (app) {
                     classification: new Classification({
                         id: self.document.mainClassificationInfo.id,
                         arName: self.document.mainClassificationInfo.arName,
-                        enName: self.document.mainClassificationInfo.enName
+                        enName: self.document.mainClassificationInfo.enName,
+                        securityLevels: documentSecurityLevelLookupKey
                     })
                 });
             }
@@ -82,15 +88,29 @@ module.exports = function (app) {
                 subClassificationOptionFromInfo = new Classification({
                     id: self.document.subClassificationInfo.id,
                     arName: self.document.subClassificationInfo.arName,
-                    enName: self.document.subClassificationInfo.enName
+                    enName: self.document.subClassificationInfo.enName,
+                    securityLevels: documentSecurityLevelLookupKey,
+                    parent: mainClassificationOptionFromInfo.classification.id
                 });
             }
-
+            if (self.document.hasVsId() && self.document.documentFileInfo.id !== -1) {
+                documentFileOptionFromInfo = new OUDocumentFile({
+                    file: new DocumentFile({
+                        id: self.document.documentFileInfo.id,
+                        arName: self.document.documentFileInfo.arName,
+                        enName: self.document.documentFileInfo.enName,
+                        securityLevels: documentSecurityLevelLookupKey
+                    })
+                });
+            }
             if (typeof self.document.mainClassification === 'number' && mainClassificationOptionFromInfo) {
                 self.document.mainClassification = mainClassificationOptionFromInfo.classification;
             }
             if (typeof self.document.subClassification === 'number' && subClassificationOptionFromInfo) {
                 self.document.subClassification = subClassificationOptionFromInfo;
+            }
+            if (typeof self.document.fileId === 'number' && documentFileOptionFromInfo) {
+                self.document.fileId = documentFileOptionFromInfo.file;
             }
 
             _getClassifications(false);
@@ -119,7 +139,8 @@ module.exports = function (app) {
         function _securityLevelExist(securityLevel, securityLevels) {
             var Id = securityLevel && securityLevel.hasOwnProperty('id') ? securityLevel.id : securityLevel;
             return _.find(securityLevels, function (item) {
-                return item.id === Id;
+                item = item.hasOwnProperty('id') ? item.id : item;
+                return item === Id;
             });
         }
 
@@ -135,13 +156,11 @@ module.exports = function (app) {
                     self.documentFiles = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'documentFiles'));
                     self.documentFiles = _displayCorrectDocumentFiles(self.documentFiles);
                     _appendMissingDocumentFile();
-                    self.documentFilesCopy = angular.copy(self.documentFiles);
                 });
             } else {
                 self.documentFiles = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'documentFiles'));
                 self.documentFiles = _displayCorrectDocumentFiles(self.documentFiles);
                 _appendMissingDocumentFile();
-                self.documentFilesCopy = angular.copy(self.documentFiles);
             }
         }
 
@@ -156,51 +175,84 @@ module.exports = function (app) {
                 return $timeout(function () {
                     self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
                     self.classifications = _displayCorrectClassifications(self.classifications);
-                    _appendMissingClassification();
+                    appendMissingMainClassification();
                     self.onChangeMainClassification(null, true);
                 });
             } else {
                 self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
                 self.classifications = _displayCorrectClassifications(self.classifications);
-                _appendMissingClassification();
+                appendMissingMainClassification();
                 self.onChangeMainClassification(null, true);
             }
         }
 
-        var _appendMissingClassification = function () {
+        var appendMissingMainClassification = function () {
+            // if new document or Info is empty, return;
             if (self.isNewDocument || !self.document.mainClassificationInfo || self.document.mainClassificationInfo.id === -1) {
                 self.classificationsCopy = angular.copy(self.classifications);
                 return;
             }
 
             var selectedClassification = _.find(self.classifications, function (classification) {
-                return classification.classification.id === self.document.mainClassificationInfo.id;
+                return classification.classification.id === mainClassificationOptionFromInfo.classification.id;
             });
+            // if selected option exists in list, return. Otherwise, push option from info.
             if (selectedClassification) {
                 self.classificationsCopy = angular.copy(self.classifications);
                 return;
             }
+            if (mainClassificationOptionFromInfo.classification.securityLevels === documentSecurityLevelLookupKey) {
+                self.classifications.push(mainClassificationOptionFromInfo);
+            }
+            self.classificationsCopy = angular.copy(self.classifications);
+        };
 
-            self.classifications.push(mainClassificationOptionFromInfo);
+        var _appendMissingSubClassification = function () {
+            // if new document or Info is empty, return;
+            if (self.isNewDocument || !self.document.subClassificationInfo || self.document.subClassificationInfo.id === -1) {
+                self.classificationsCopy = angular.copy(self.classifications);
+                return;
+            }
+
+            var selectedSubClassification = _.find(self.document.mainClassification.children, function (subClassification) {
+                return subClassification.id === subClassificationOptionFromInfo.id;
+            });
+            // if selected option exists in list, return. Otherwise, push option from info.
+            if (selectedSubClassification) {
+                self.classificationsCopy = angular.copy(self.classifications);
+                return;
+            }
+
+            var mainClassificationId = angular.copy(self.document.mainClassification);
+            if (mainClassificationId && mainClassificationId.hasOwnProperty('id')){
+                mainClassificationId = mainClassificationId.id;
+            }
+            if (subClassificationOptionFromInfo.securityLevels === documentSecurityLevelLookupKey && mainClassificationId === subClassificationOptionFromInfo.parent) {
+                self.document.mainClassification.children.push(subClassificationOptionFromInfo);
+            }
             self.classificationsCopy = angular.copy(self.classifications);
         };
 
         var _appendMissingDocumentFile = function () {
-            if (!self.isNewDocument && self.document.documentFileInfo && self.document.documentFileInfo.id > 0) {
-                var selectedDocumentFile = _.find(self.documentFiles, function (documentFile) {
-                    return documentFile.file.id === self.document.documentFileInfo.id;
-                });
-                if (!selectedDocumentFile) {
-                    var newDocumentFile = new OUDocumentFile({
-                        file: new DocumentFile({
-                            id: self.document.documentFileInfo.id,
-                            arName: self.document.documentFileInfo.arName,
-                            enName: self.document.documentFileInfo.enName
-                        })
-                    });
-                    self.documentFiles.push(newDocumentFile)
-                }
+            // if new document or Info is empty, return;
+            if (self.isNewDocument || !self.document.documentFileInfo || self.document.documentFileInfo.id === -1) {
+                self.documentFilesCopy = angular.copy(self.documentFiles);
+                return;
             }
+
+            var selectedDocumentFile = _.find(self.documentFiles, function (documentFile) {
+                return documentFile.file.id === documentFileOptionFromInfo.file.id;
+            });
+            // if selected option exists in list, return. Otherwise, push option from info.
+            if (selectedDocumentFile) {
+                self.documentFilesCopy = angular.copy(self.documentFiles);
+                return;
+            }
+
+            if (documentFileOptionFromInfo.file.securityLevels === documentSecurityLevelLookupKey) {
+                self.documentFiles.push(documentFileOptionFromInfo);
+            }
+            self.documentFilesCopy = angular.copy(self.documentFiles);
         };
 
         /**
@@ -258,6 +310,11 @@ module.exports = function (app) {
 
             if (self.document.hasDocumentClass('outgoing') && self.document.isPrivateSecurityLevel())
                 self.document.isComposite = false;
+
+            documentSecurityLevelLookupKey = angular.copy(self.document.securityLevel);
+            if (documentSecurityLevelLookupKey.hasOwnProperty('lookupKey')){
+                documentSecurityLevelLookupKey = documentSecurityLevelLookupKey.lookupKey;
+            }
 
             _getClassifications(false);
             _getDocumentFiles(false);
@@ -539,13 +596,13 @@ module.exports = function (app) {
          */
         self.clearSearchText = function (fieldType) {
             self[fieldType + 'SearchText'] = '';
-            $timeout(function () {
+            /*$timeout(function () {
                 if (fieldType === 'mainClassification' || fieldType === 'subClassification') {
                     self.classifications = angular.copy(self.classificationsCopy);
                 } else if (fieldType === 'documentFiles') {
                     self.documentFiles = angular.copy(self.documentFilesCopy);
                 }
-            })
+            })*/
         };
 
 
@@ -596,8 +653,10 @@ module.exports = function (app) {
                             if (selectFirstValue) {
                                 self.document.subClassification = self.document.mainClassification.children[0];
                             }
+                            _appendMissingSubClassification();
                         } else {
                             self.document.mainClassification.children = angular.copy(mainClassificationCopy.children);
+                            _appendMissingSubClassification();
                         }
                     })
                     .catch(function (error) {
