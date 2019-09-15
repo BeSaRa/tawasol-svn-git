@@ -48,6 +48,8 @@ module.exports = function (app) {
 
         self.taskParticipantsIds = [];
 
+        self.searchText = '';
+
         self.validateLabels = {
             taskTitle: 'task_title',
             creationDate: 'task_start_date',
@@ -64,9 +66,8 @@ module.exports = function (app) {
         }
 
         function _excludeSelect() {
-            self.availableUsers = _.map(self.availableUsers, function (user) {
-                self.taskParticipantsIds.indexOf(user.participantId) === -1 ? user.exclude = false : user.exclude = true;
-                return user;
+            self.availableUsers = _.filter(self.availableUsers, function (user) {
+                return self.taskParticipantsIds.indexOf(user.participantId) !== -1;
             });
         }
 
@@ -229,14 +230,14 @@ module.exports = function (app) {
 
 
         self.personQuerySearch = function (query) {
+            query = ('' + query).toLowerCase().trim();
             return self.availableUsers.filter(function (item) {
-                return self.taskParticipantsIds.indexOf(item.participantId) === -1;
+                return item.display.toLowerCase().trim().indexOf(query) !== -1;
             });
         };
 
 
         self.selectedItemChange = function (autoCompleteId) {
-            var clearButton = angular.element('#' + autoCompleteId);
             if (self.selectedParticipant) {
                 taskService
                     .openSettingForParticipant(self.selectedParticipant, self.task)
@@ -245,16 +246,12 @@ module.exports = function (app) {
                             .addParticipant(participant)
                             .then(function () {
                                 _getParticipantIds();
-                                $timeout(function () {
-                                    clearButton.find('button').click();
-                                });
                                 if (self.task.hasId()) {
                                     toast.success(langService.get('task_participant_added_successfully'));
+                                    self.selectedParticipant = null;
                                 }
                             });
                     })
-            } else {
-                clearButton = undefined;
             }
 
         };
