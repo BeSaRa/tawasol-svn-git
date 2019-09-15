@@ -4152,22 +4152,14 @@ module.exports = function (app) {
             return $http.put(archiveIcnUrl, options)
                 .then(function (result) {
                     var variables = '%2C:docId%2C:vsId%2C:refVsId%2C:locale'.change({
-                        vsId: result.data.rs.vsId,
+                        vsId: result.data.rs.vsId, // icn plugin will use to fetch content
                         docId: result.data.rs.id,
-                        refVsId: result.data.rs.refVSID,
+                        refVsId: result.data.rs.refVSID, // icn plugin will use to fetch metadata(vsId of original document)
                         locale: langService.current
                     });
                     entryTemplateUrl = entryTemplateUrl.replace('&mimeType', variables + '&mimeType');
                     return _showICNArchiveDialog(correspondence, entryTemplateUrl, $event)
                 });
-
-            /* // static vsId, docId, refVsId (just for testing)
-             entryTemplateUrl = entryTemplateUrl.change({
-                 vsId: '{C73D894C-69CA-C364-8EE3-6BF04D300000}',
-                 docId: '{3943901C-7CDE-C745-85E6-6BF0C5400000}',
-                 refVsId: '{3BD4C023-1275-CB20-8716-6ACFA4D00000}'
-             });
-             return _showICNArchiveDialog(correspondence, entryTemplateUrl, $event);*/
         };
 
         var _showICNArchiveDialog = function (correspondence, entryTemplateUrl, $event) {
