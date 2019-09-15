@@ -37,10 +37,10 @@
                                     md-order-by="priorityLevel">
                                     <span>{{lang.priority_level}}</span>
                                 </th>
-                                <th md-column ng-if="!ctrl.selectedItems.length"
+                                <!--<th md-column ng-if="!ctrl.selectedItems.length"
                                     md-order-by="securityLevel">
                                     <span>{{lang.security_level}}</span>
-                                </th>
+                                </th>-->
                                 <th md-column ng-if="!ctrl.selectedItems.length"
                                     md-order-by="docType">
                                     <span>{{lang.label_document_type}}</span>
@@ -114,7 +114,7 @@
                                 <td md-cell><span
                                         class="serial-td">{{correspondence.docFullSerial}}</span></td>
                                 <td md-cell>{{correspondence.priorityLevel.getTranslatedName()}}</td>
-                                <td md-cell>{{correspondence.securityLevel.getTranslatedName()}}</td>
+                                <!--<td md-cell>{{correspondence.securityLevel.getTranslatedName()}}</td>-->
                                 <td md-cell>{{lang[correspondence.getInfo().documentClass
                                     +"_document_class"]}}
                                 </td>
