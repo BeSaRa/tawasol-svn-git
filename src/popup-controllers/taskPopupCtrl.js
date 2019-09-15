@@ -33,7 +33,6 @@ module.exports = function (app) {
         self.taskStatesMap = _generateTaskStatesMap();
 
         self.availableUsers = _prepareAvailableUsers(availableUsers);
-
         self.calenderHours = generator.calenderHours;
 
         self.selectedStartTime = _getSelectTime(self.task.startTime);
@@ -66,8 +65,8 @@ module.exports = function (app) {
         }
 
         function _excludeSelect() {
-            self.availableUsers = _.filter(self.availableUsers, function (user) {
-                return self.taskParticipantsIds.indexOf(user.participantId) !== -1;
+            return _.filter(self.availableUsers, function (user) {
+                return self.taskParticipantsIds.indexOf(user.participantId) === -1;
             });
         }
 
@@ -81,7 +80,6 @@ module.exports = function (app) {
             self.taskParticipantsIds = _.map(self.task.taskParticipants, function (participant) {
                 return participant.participantId;
             });
-            _excludeSelect();
         }
 
         _getParticipantIds();
@@ -222,16 +220,9 @@ module.exports = function (app) {
             return (self.startDate && self.endDate && self.startDate === self.endDate) && hour.compareValue <= self.selectedStartTime.compareValue;
         };
 
-        function filterSelected() {
-            return self.availableUsers.filter(function (user) {
-                return self.taskParticipantsIds.indexOf(user.participantId) === -1;
-            });
-        }
-
-
         self.personQuerySearch = function (query) {
-            query = ('' + query).toLowerCase().trim();
-            return self.availableUsers.filter(function (item) {
+            _getParticipantIds();
+            return _excludeSelect().filter(function (item) {
                 return item.display.toLowerCase().trim().indexOf(query) !== -1;
             });
         };
@@ -248,8 +239,8 @@ module.exports = function (app) {
                                 _getParticipantIds();
                                 if (self.task.hasId()) {
                                     toast.success(langService.get('task_participant_added_successfully'));
-                                    self.selectedParticipant = null;
                                 }
+                                self.selectedParticipant = null;
                             });
                     })
             }
@@ -280,6 +271,7 @@ module.exports = function (app) {
             self.task
                 .deleteParticipant(participant)
                 .then(function () {
+                    _getParticipantIds();
                     toast.success(langService.get('delete_success'));
                 });
         };

@@ -281,7 +281,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody md-body>
-                                                <tr ng-repeat="participant in ctrl.task.taskParticipants track by participant.id"
+                                                <tr ng-repeat="participant in ctrl.task.taskParticipants track by participant.participantId"
                                                     md-row>
                                                     <td md-cell>
                                                         {{participant.userId.getTranslatedName()}}
