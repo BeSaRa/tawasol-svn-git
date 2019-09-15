@@ -409,7 +409,9 @@ module.exports = function (app) {
             var searchTextCopy = angular.copy(self.gridToSearch.searchText.trim().toLowerCase());
             var propertyToSearch, propertyValue, result;
             for (var property in self.gridToSearch.searchColumns) {
-                propertyToSearch = self.gridToSearch.searchColumns[property];
+                if (self.gridToSearch.searchColumns.hasOwnProperty(property)) {
+                    propertyToSearch = self.gridToSearch.searchColumns[property];
+                }
                 if (typeof propertyToSearch === 'function') {
                     propertyToSearch = propertyToSearch(item);
                 }

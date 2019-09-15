@@ -38,8 +38,8 @@ module.exports = function (app) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.attachmentType, limit);
             },
             searchColumns: {
-                arabicName: 'docSubject',
-                englishName: 'documentTitle',
+                arabicName: 'arName',
+                englishName: 'enName',
                 documentClasses: 'documentClassesString',
                 itemOrder: 'itemOrder'
             },
