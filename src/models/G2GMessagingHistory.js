@@ -183,7 +183,7 @@ module.exports = function (app) {
                 var info = this.getInfo();
 
                 if (configurationService.G2G_QATAR_SOURCE) {
-                    return managerService.manageDocumentProperties(g2gItem.refDocId, 'outgoing', info.title, $event)
+                    return managerService.manageDocumentProperties(this.refDocId, 'outgoing', info.title, $event)
                 } else {
                     return managerService.manageG2GKuwaitDocumentProperties(this, $event);
                 }
