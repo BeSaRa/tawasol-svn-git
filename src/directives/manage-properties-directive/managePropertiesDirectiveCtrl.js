@@ -733,7 +733,7 @@ module.exports = function (app) {
         };
 
         self.isShowSecurityLevelCheckbox = function () {
-            var actions = ["editafterexport", "editafterapproved", "duplicateversion", "receive", "review"];
+            var actions = ["editafterexport", "editafterapproved", "duplicateversion", "receive", "review", "editafterreturng2g"];
 
             return self.action && actions.indexOf(self.action.toLowerCase()) !== -1
                 && employeeService.hasPermissionTo('CHANGE_BOOK_SECURITY_LEVEL');
