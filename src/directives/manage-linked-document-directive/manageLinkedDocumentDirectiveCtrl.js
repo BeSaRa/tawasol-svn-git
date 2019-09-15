@@ -85,6 +85,17 @@ module.exports = function (app) {
                         excludeVsId: self.vsId,
                         isAdminSearch: false,
                         multiSelect : true
+                    },
+                    resolve: {
+                        organizations: function (organizationService) {
+                            'ngInject';
+                            return organizationService.getAllOrganizationsStructure()
+                                .then(function (organizations) {
+                                    return _.filter(organizations, function (organization) {
+                                        return organization.hasRegistry;
+                                    })
+                                });
+                        }
                     }
                 })
                 .then(function (correspondences) {

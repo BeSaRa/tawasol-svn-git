@@ -1,6 +1,5 @@
 module.exports = function (app) {
     app.controller('searchLinkedDocumentPopCtrl', function (lookupService,
-                                                            organizationService,
                                                             documentFileService,
                                                             rootEntity,
                                                             langService,
@@ -17,7 +16,8 @@ module.exports = function (app) {
                                                             _,
                                                             employeeService,
                                                             isAdminSearch,
-                                                            gridService) {
+                                                            gridService,
+                                                            organizations) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchLinkedDocumentPopCtrl';
@@ -39,11 +39,8 @@ module.exports = function (app) {
         //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
 
-        // all organization organizations -> pop resolve.
-        //self.organizations = organizationService.organizations;
-        self.organizations = _.filter(organizationService.organizations, function (organization) {
-            return organization.hasRegistry;
-        });
+        // all registry organizations.
+        self.organizations = organizations;
 
         self.classesMap = {
             1: 'outgoing',
@@ -182,10 +179,6 @@ module.exports = function (app) {
             order: 'arName', // default sorting order
             limitOptions: [5, 10, 20, // limit options
                 {
-                    /*label: self.globalSetting.searchAmountLimit.toString(),
-                     value: function () {
-                     return self.globalSetting.searchAmountLimit
-                     }*/
                     label: langService.get('all'),
                     value: function () {
                         return (self.correspondences.length + 21);

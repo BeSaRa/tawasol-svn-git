@@ -117,6 +117,17 @@ module.exports = function (app) {
                         excludeVsId: null,
                         isAdminSearch: true,
                         multiSelect : true
+                    },
+                    resolve: {
+                        organizations: function (organizationService) {
+                            'ngInject';
+                            return organizationService.getAllOrganizationsStructure()
+                                .then(function (organizations) {
+                                    return _.filter(organizations, function (organization) {
+                                        return organization.hasRegistry;
+                                    })
+                                });
+                        }
                     }
                 }).then(function (correspondences) {
                     var vsIds = _.map(existingDocs, 'vsId'); // get current documents vsIds
