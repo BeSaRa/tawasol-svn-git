@@ -3952,7 +3952,7 @@ module.exports = function (app) {
         self.sendSMSMessage = function (correspondence, smsObject) {
             var info = correspondence.getInfo(),
                 smsObjectCopy = angular.copy(smsObject),
-                url = urlService.correspondence + '/' + info.documentClass + '/vsid/' + info.vsId + '/send-sms';
+                url = urlService.correspondence + '/' + info.documentClass + '/' + info.vsId + '/send-sms';
 
             if (smsObjectCopy.linkedEntity)
                 smsObjectCopy.linkedEntity = generator.interceptSendInstance('LinkedObject', smsObjectCopy.linkedEntity);
