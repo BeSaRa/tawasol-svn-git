@@ -335,6 +335,16 @@ module.exports = function (app) {
                 });
         };
 
+        self.removeCorrespondence = function ($event) {
+            dialog
+                .confirmMessage(langService.get('confirm_remove').change({name: self.task.correspondence.docSubject}))
+                .then(function () {
+                    self.task.correspondence = null;
+                    self.task.documentVSID = null;
+                    self.task.docClassId = null;
+                });
+        };
+
         self.canSaveTask = function () {
             return self.hasMinimumValues() && (self.task.withoutParticipant || (!self.task.withoutParticipant && self.task.taskParticipants.length))
         };

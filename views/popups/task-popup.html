@@ -150,6 +150,9 @@
                                                     <th md-column>
                                                         <span>{{lang.security_level}}</span>
                                                     </th>
+                                                    <th md-column>
+                                                        <span>{{lang.actions}}</span>
+                                                    </th>
                                                 </tr>
                                                 </thead>
                                                 <tbody md-body>
@@ -206,6 +209,11 @@
                                                     </td>
                                                     <td md-cell>
                                                         {{ctrl.task.correspondence.securityLevel.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        <md-button class="md-icon-button" ng-click="ctrl.removeCorrespondence($event)">
+                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                        </md-button>
                                                     </td>
                                                 </tr>
                                                 </tbody>
