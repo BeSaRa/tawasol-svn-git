@@ -12,7 +12,8 @@ module.exports = function (app) {
                                                     title,
                                                     items,
                                                     selectedItems,
-                                                    selectionCallback) {
+                                                    selectionCallback,
+                                                    downloadService) {
         'ngInject';
         var self = this;
         self.controllerName = 'itemSelectorPopCtrl';
@@ -99,6 +100,11 @@ module.exports = function (app) {
         self.openViewDocumentAttachment = function (attachment, $event) {
             $event.preventDefault();
             attachmentService.viewAttachment(attachment, info.documentClass);
+        };
+
+        self.downloadAttachment = function (attachment, $event) {
+            downloadService.controllerMethod
+                .attachmentDownload(attachment.vsId);
         };
 
 
