@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('taskParticipantSettingPopCtrl', function (task, dialog, editMode, lookupService, taskParticipant, moment, generator) {
+    app.controller('taskParticipantSettingPopCtrl', function (task, fromView, dialog, editMode, lookupService, taskParticipant, moment, generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'taskParticipantSettingPopCtrl';
@@ -15,6 +15,8 @@ module.exports = function (app) {
         self.editMode = editMode;
 
         self.taskParticipant = angular.copy(taskParticipant);
+
+        self.fromView = fromView;
 
         self.taskStartDate = moment(self.task.startDate).format('Y-MM-DD');
         self.taskEndDate = moment(self.task.dueDate).format('Y-MM-DD');

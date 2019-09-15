@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('viewTaskCalenderPopCtrl', function (taskItem,
                                                         langService,
                                                         _,
+                                                        toast,
                                                         WorkItem,
                                                         employeeService,
                                                         lookupService,
@@ -86,6 +87,24 @@ module.exports = function (app) {
             self.orderByName = function (propertyName) {
                 return propertyName + '.' + langService.current + 'Name';
             };
+
+            self.openTaskParticipantFromView = function (participant, $event) {
+                $event.preventDefault();
+
+                taskService
+                    .openSettingForParticipant(participant, self.task, true, true)
+                    .then(function (participant) {
+                        self.task
+                            .editTaskParticipant(participant)
+                            .then(function () {
+                                toast.success(langService.get('task_participant_updated_successfully'));
+                            });
+                    });
+            };
+
+            self.isCurrentParticipant = function (participant) {
+                return participant.participantId === self.employee.getCombinedEmployeeId();
+            }
         }
     );
 };

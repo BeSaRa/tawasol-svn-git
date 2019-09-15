@@ -41,7 +41,16 @@
                                     <tr ng-repeat="participant in ctrl.task.taskParticipants | orderBy:ctrl.grid.order track by $index"
                                         md-row>
                                         <td md-cell>
-                                            {{participant.userId.getTranslatedName()}}
+                                            <a layout="row" layout-align="start center" href="#"
+                                               ng-if="ctrl.isCurrentParticipant(participant)"
+                                               ng-click="ctrl.openTaskParticipantFromView(participant,$event)">
+                                                <span>{{participant.userId.getTranslatedName()}}</span>
+                                                <md-button class="md-icon-button"
+                                                           ng-if="ctrl.isCurrentParticipant(participant)">
+                                                    <md-icon md-svg-icon="account"></md-icon>
+                                                </md-button>
+                                            </a>
+                                            <span ng-if="!ctrl.isCurrentParticipant(participant)">{{participant.userId.getTranslatedName()}}</span>
                                         </td>
                                         <td md-cell>
                                             {{participant.ouId.getTranslatedName()}}
@@ -71,7 +80,7 @@
                 <br>
                 <br>
                 <br>
-                <div layout="row">
+                <div ng-if="ctrl.task.correspondence" layout="row">
                     <fieldset class="size-100">
                         <legend>{{lang.task_linked_document}}</legend>
                         <div flex layout="column">
@@ -87,7 +96,7 @@
                                     </md-switch>
                                 </div>
                             </div>
-                            <div ng-if="ctrl.task.correspondence" layout="row">
+                            <div layout="row">
                                 <md-card flex>
                                     <md-table-container>
                                         <table md-table>

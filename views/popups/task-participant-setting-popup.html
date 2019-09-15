@@ -1,8 +1,5 @@
 <md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.tasks}}">
-    <popup-toolbar-directive ng-if="!ctrl.editMode"
-                             header-text="{{lang.add_new_task_participant}}"></popup-toolbar-directive>
-    <popup-toolbar-directive ng-if="ctrl.editMode"
-                             header-text="{{lang.edit_task_participant}}"></popup-toolbar-directive>
+    <popup-toolbar-directive header-text="{{lang.edit_task_participant}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive>
         <div class="md-dialog-content cms-dialog-content">
             <form autocomplete="off" name="participant_form">
@@ -35,7 +32,7 @@
                             </md-select>
                         </md-input-container>
                         <md-input-container>
-                            <md-switch ng-model="ctrl.taskParticipant.allDay">
+                            <md-switch ng-disabled="ctrl.fromView" ng-model="ctrl.taskParticipant.allDay">
                                 {{lang.task_all_day}}
                             </md-switch>
                         </md-input-container>
@@ -45,7 +42,7 @@
                             <div layout="row" flex>
                                 <md-input-container flex class="cms-datepicker">
                                     <label>{{lang.task_start_date}}</label>
-                                    <md-datepicker md-min-date="ctrl.task.startDate"
+                                    <md-datepicker ng-disabled="ctrl.fromView" md-min-date="ctrl.task.startDate"
                                                    md-max-date="ctrl.task.dueDate"
                                                    ng-change="ctrl.startDateChange()" required
                                                    ng-model="ctrl.taskParticipant.startDate"></md-datepicker>
@@ -57,7 +54,7 @@
                             <div ng-if="!ctrl.taskParticipant.allDay">
                                 <md-input-container flex>
                                     <label>{{lang.time}}</label>
-                                    <md-select ng-disabled="!ctrl.taskParticipant.startDate"
+                                    <md-select ng-disabled="!ctrl.taskParticipant.startDate || ctrl.fromView"
                                                ng-change="ctrl.participantTimeChange('startTime')"
                                                name="startTime"
                                                ng-model="ctrl.taskParticipant.startTime">
@@ -73,7 +70,7 @@
                             <div flex layout="row">
                                 <md-input-container flex class="cms-datepicker">
                                     <label>{{lang.task_end_date}}</label>
-                                    <md-datepicker md-min-date="ctrl.taskParticipant.startDate"
+                                    <md-datepicker ng-disabled="ctrl.fromView" md-min-date="ctrl.taskParticipant.startDate"
                                                    md-max-date="ctrl.task.dueDate"
                                                    required
                                                    ng-model="ctrl.taskParticipant.dueDate"></md-datepicker>
@@ -86,7 +83,7 @@
                                 <md-input-container flex>
                                     <label>{{lang.time}}</label>
                                     <md-select ng-change="ctrl.participantTimeChange('endTime')"
-                                               ng-disabled="!ctrl.taskParticipant.dueDate"
+                                               ng-disabled="!ctrl.taskParticipant.dueDate || ctrl.fromView"
                                                ng-model="ctrl.taskParticipant.endTime">
                                         <md-option ng-value="hour.value"
                                                    ng-repeat="hour in ctrl.calenderHours">
@@ -97,11 +94,18 @@
                             </div>
                         </div>
                     </div>
-                    <div layout="row">
+                    <div ng-if="!ctrl.fromView" layout="row">
                         <md-input-container flex>
                             <label for="taskCreatorComment">{{lang.task_owner_comment}}</label>
                             <textarea rows="3" name="taskCreatorComment" id="taskCreatorComment"
                                       ng-model="ctrl.taskParticipant.taskCreatorComment"></textarea>
+                        </md-input-container>
+                    </div>
+                    <div ng-if="ctrl.fromView" layout="row">
+                        <md-input-container flex>
+                            <label for="participantReply">{{lang.task_owner_comment}}</label>
+                            <textarea rows="3" name="participantReply" id="participantReply"
+                                      ng-model="ctrl.taskParticipant.participantReply"></textarea>
                         </md-input-container>
                     </div>
                 </div>

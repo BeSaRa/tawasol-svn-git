@@ -171,6 +171,7 @@ module.exports = function (app) {
             return $http
                 .put(urlService.tasks + '/task-id/' + task.id + '/participant', generator.interceptSendInstance('TaskParticipant', taskParticipant))
                 .then(function (result) {
+                    taskParticipant.id = result.data.rs.id;
                     return taskParticipant;
                 });
         };
@@ -208,7 +209,7 @@ module.exports = function (app) {
             });
         };
 
-        self.openSettingForParticipant = function (taskParticipant, task, editMode) {
+        self.openSettingForParticipant = function (taskParticipant, task, editMode, fromView) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('task-participant-setting'),
@@ -217,7 +218,8 @@ module.exports = function (app) {
                     locals: {
                         editMode: editMode,
                         taskParticipant: taskParticipant,
-                        task: task
+                        task: task,
+                        fromView: fromView
                     }
                 });
         };

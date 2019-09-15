@@ -264,7 +264,7 @@ module.exports = function (app) {
                     proxyUsers: self.proxyUsers,
                     permissions: self.permissions,
                     ouList: self.ouList,
-                    ouInfo : self.userOrganization
+                    ouInfo: self.userOrganization
                 }
             };
 
@@ -386,6 +386,13 @@ module.exports = function (app) {
                     // for notify
                     callback(employee);
                 });
+            };
+            /**
+             * return (userId + current ouID ) converted to integer
+             * @returns {number}
+             */
+            Employee.prototype.getCombinedEmployeeId = function () {
+                return Number(this.id + '' + this.getOUID());
             };
 
 
