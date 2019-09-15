@@ -36,6 +36,7 @@ module.exports = function (app) {
             root.children = nodes;
             root.itIsRoot = true;
             root.isFnSynched = true;
+            root.manageable = true;
 
             $timeout(function () {
                 $scope.orgChart = $($element.children()).orgchart({

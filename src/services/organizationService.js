@@ -80,7 +80,7 @@ module.exports = function (app) {
 
             var id = organizationId.hasOwnProperty('id') ? organizationId.id : organizationId;
 
-            return _.find(self.organizations, function (organization) {
+            return _.find(self.allOrganizationsStructure, function (organization) {
                 return Number(organization.id) === Number(id);
             });
         };
@@ -498,7 +498,7 @@ module.exports = function (app) {
                         allPropertyConfigurations: [],
                         unAssignedUsers: [],
                         ouAssignedUsers: [],
-                        organizations: self.organizations
+                        organizations: self.allOrganizationsStructure
                     },
                     resolve: {
                         classifications: function (classificationService) {
@@ -552,7 +552,7 @@ module.exports = function (app) {
                         rootMode: !organization.parent,
                         editMode: true,
                         organization: organization,
-                        organizations: self.organizations
+                        organizations: self.allOrganizationsStructure
                     },
                     resolve: {
                         children: function () {

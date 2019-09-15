@@ -20,10 +20,11 @@
                                                         flex>
                                         <label for="parentOrganization">{{lang.parent_organization}}</label>
                                         <md-select id="parentOrganization" ng-model-options="{trackBy: '$value.id'}"
-                                                   ng-disabled="true" required name="parent"
+                                                   required name="parent"
+                                                   ng-disabled="true"
                                                    ng-model="ctrl.parentOrganization">
                                             <md-option md-truncate ng-value="organization"
-                                                       ng-repeat="organization in ctrl.organizations track by $index">
+                                                       ng-repeat="organization in ctrl.organizations">
                                                 {{organization.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
@@ -35,19 +36,9 @@
                                 <div ng-if="ctrl.editMode && !ctrl.rootMode" layout="row">
                                     <md-input-container tooltip="{{ctrl.parentOrganization.getTranslatedName(true)}}"
                                                         flex>
-                                        <label for="parentOrganization">{{lang.parent_organization}}</label>
-                                        <md-select id="parentOrganization"
-                                                   ng-model-options="{trackBy: '$value.id'}"
-                                                   ng-disabled="true" required name="parent"
-                                                   ng-model="ctrl.parentOrganization">
-                                            <md-option md-truncate ng-value="organization"
-                                                       ng-repeat="organization in ctrl.organizations track by $index">
-                                                {{organization.getTranslatedName()}}
-                                            </md-option>
-                                        </md-select>
-                                        <div ng-messages="org_form.parent.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                        </div>
+                                        <label for="parent">{{lang.parent_organization}}</label>
+                                        <input ng-disabled="true" name="parent"
+                                               ng-value="ctrl.parentOrganization.getTranslatedName()" id="parent">
                                     </md-input-container>
                                 </div><!-- row -->
                                 <div layout="row">
@@ -1157,7 +1148,8 @@
                                             <md-icon md-svg-icon="refresh"></md-icon>
                                         </md-button>
                                         <span flex></span>
-                                        <grid-search-directive grid="ctrl.propertyConfigurationGrid"></grid-search-directive>
+                                        <grid-search-directive
+                                                grid="ctrl.propertyConfigurationGrid"></grid-search-directive>
                                     </div>
                                 </div>
                                 <!-- Property configuration table -->
@@ -1380,7 +1372,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Department Users -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('departmentUsers')" label="{{lang.department}} {{lang.users}}"
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('departmentUsers')"
+                            label="{{lang.department}} {{lang.users}}"
                             ng-click="ctrl.setCurrentTab('departmentUsers')">
                         <md-content class="md-padding">
                             <div layout="column">

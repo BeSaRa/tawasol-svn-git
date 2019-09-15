@@ -108,7 +108,7 @@ module.exports = function (app) {
         // all available parents
         // self.availableParents = organizationService.getAllAvailableParents(organization, organization);
         // all organizations
-        self.organizations = organizationService.organizations;
+        self.organizations = organizationService.allOrganizationsStructure;
         // all organization Types
         self.organizationTypes = organizationTypeService.organizationTypes;
         // all security schema
