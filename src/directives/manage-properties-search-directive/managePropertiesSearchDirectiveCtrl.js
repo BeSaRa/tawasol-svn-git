@@ -604,10 +604,13 @@ module.exports = function (app) {
             organizationService
                 .loadChildrenOrganizations(self.document.registryOU)
                 .then(function (result) {
+                    var resultIds = _.map(result, 'id');
                     if (!self.employee.hasPermissionTo('SEARCH_IN_ALL_OU') && self.employee.isInDepartment()) {
-                        result.push(angular.copy(self.employee.userOrganization));
+                        if (resultIds.indexOf(self.employee.userOrganization.id) === -1)
+                            result.push(angular.copy(self.employee.userOrganization));
                     } else {
-                        result.unshift(angular.copy(organizationService.getOrganizationById(self.document.registryOU)));
+                        if (resultIds.indexOf(angular.copy(organizationService.getOrganizationById(self.document.registryOU)).id) === -1)
+                            result.unshift(angular.copy(organizationService.getOrganizationById(self.document.registryOU)));
                     }
                     if (!skipResetOu) {
                         self.document.ou = null;
@@ -747,7 +750,7 @@ module.exports = function (app) {
                             self.document.mainClassification.children = _.uniqBy(self.document.mainClassification.children.concat(subClassifications), 'id');
                             mainClassification.children = angular.copy(self.document.mainClassification.children);
                             self.classificationsCopy = angular.copy(self.classifications);
-                            if (selectFirstValue){
+                            if (selectFirstValue) {
                                 self.document.subClassification = self.document.mainClassification.children[0];
                             }
                         } else {
