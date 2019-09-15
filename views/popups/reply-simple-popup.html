@@ -16,7 +16,7 @@
                             <div ng-message="required">{{lang.field_required}}</div>
                         </div>
                     </md-input-container>
-                    <!-- Managers -->
+                    <!-- Managers (Approved document/can send to many) -->
                     <md-input-container flex ng-if="ctrl.canSendToManagers && !ctrl.getApprovedStatus()">
                         <label for="managers">{{lang.managers}}</label>
                         <md-select multiple name="managers" id="managers"
@@ -27,6 +27,23 @@
                             <md-option ng-value="manager" ng-repeat="manager in ctrl.managers">
                                 {{manager['ou' + ctrl.currentLangUCFirst + 'Name']}} - {{manager[lang.current + 'Name']}}
                             </md-option>
+                        </md-select>
+                        <div ng-messages="distWorkflowItem_form.managers.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                    <!-- Managers (UnApproved document/can send to one) -->
+                    <md-input-container flex ng-if="ctrl.canSendToManagers && ctrl.getApprovedStatus()">
+                        <label for="managers">{{lang.managers}}</label>
+                        <md-select name="managers" id="managers"
+                                   ng-model="ctrl.selectedManagers"
+                                   ng-change="ctrl.resetNotifications()"
+                                   md-selected-text="ctrl.getSelectedManagersText()"
+                                   ng-model-options="{trackBy: '$value.id'}">
+                            <md-option ng-value="manager" ng-repeat="manager in ctrl.managers">
+                                {{manager['ou' + ctrl.currentLangUCFirst + 'Name']}} - {{manager[lang.current + 'Name']}}
+                            </md-option>
+                            <md-option ng-value="-1">{{lang.none}}</md-option>
                         </md-select>
                         <div ng-messages="distWorkflowItem_form.managers.$error">
                             <div ng-message="required">{{lang.field_required}}</div>

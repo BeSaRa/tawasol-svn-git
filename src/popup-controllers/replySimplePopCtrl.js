@@ -21,11 +21,6 @@ module.exports = function (app) {
         self.controllerName = 'replySimplePopCtrl';
         self.currentLangUCFirst = generator.ucFirst(langService.current);
         self.canSendToManagers = employeeService.getEmployee().canSendToManagers();
-        // skip reply to user from managers list
-        self.managers = _.filter(managers, function (manager) {
-            return manager.id !== replyOn.id;
-        });
-
         // dialog title
         self.dialogTitle = dialogTitle || replyOn.getTranslatedName();
         // all comments
@@ -37,17 +32,27 @@ module.exports = function (app) {
         self.replyToText = replyOn['ou' + self.currentLangUCFirst + 'Name'] + ' - ' + replyOn.getTranslatedName();
         // current date minimum date for the due date.
         self.minDate = new Date();
+
+        self.record = record;
+
         // selected comment
         self.comment = _getMatchedComment(self.distWorkflowItem);
         // selected managers
         self.selectedManagers = [];
+        var approvedStatus = self.record.getInfo().needToApprove();
+        if (_getApprovedStatus()) {
+            // -1 is value of none option in manager ddl
+            self.selectedManagers = -1;
+        }
+        // skip reply to user from managers list
+        self.managers = _.filter(managers, function (manager) {
+            return manager.id !== replyOn.id;
+        });
 
-        self.record = record;
         self.actionSearchText = '';
         self.commentSearchText = '';
 
         self.globalSettings = rootEntity.getGlobalSettings();
-        var approvedStatus = self.record.getInfo().needToApprove();
 
         if (self.globalSettings.allowSendWFRelatedBook) {
             self.distWorkflowItem.sendRelatedDocs = true;
@@ -76,18 +81,27 @@ module.exports = function (app) {
         self.launch = function ($event) {
             var sendRelatedDocs = self.distWorkflowItem.sendRelatedDocs,
                 user = (new DistributionUserWFItem()).mapFromWFUser(self.distWorkflowItem),
-                managers = _.map(self.selectedManagers, function (manager) {
-                    return (new DistributionUserWFItem()).mapFromWFUser(manager);
-                }),
+                managers = angular.copy(self.selectedManagers),
                 allUsers = [],
                 distributionWF = new DistributionWF();
             user.sendRelatedDocs = sendRelatedDocs;
+            if (self.getApprovedStatus()) {
+                if (managers === -1) {
+                    managers = [];
+                } else {
+                    managers = [managers];
+                }
+            }
+            managers = _.map(managers, function (manager) {
+                return (new DistributionUserWFItem()).mapFromWFUser(manager);
+            });
 
-            _setDistWorkflowItem(user, self.distWorkflowItem);
-            allUsers = allUsers.concat([user]);
             if (managers && managers.length) {
                 _setDistWorkflowItem(managers, self.distWorkflowItem);
                 allUsers = allUsers.concat(managers);
+            } else {
+                _setDistWorkflowItem(user, self.distWorkflowItem);
+                allUsers = allUsers.concat([user]);
             }
             distributionWF.setNormalUsers(allUsers);
             distributionWFService.startLaunchWorkflow(distributionWF, record)
@@ -95,12 +109,6 @@ module.exports = function (app) {
                     toast.success(langService.get('launch_success_distribution_workflow'));
                     dialog.hide();
                 })
-        };
-        /**
-         * @description close the dialog.
-         */
-        self.closeLaunchPopup = function () {
-            dialog.cancel();
         };
 
         function _setDistWorkflowItem(distWorkflowItem, result) {
@@ -145,7 +153,14 @@ module.exports = function (app) {
         };
 
         self.resetNotifications = function () {
-            if (!self.selectedManagers || !self.selectedManagers.length) {
+            var setReplyOn = false;
+            if (self.getApprovedStatus()) {
+                setReplyOn = (self.selectedManagers !== -1);
+            } else {
+                setReplyOn = !self.selectedManagers || !self.selectedManagers.length;
+            }
+
+            if (setReplyOn) {
                 self.distWorkflowItem.sendSMS = replyOn.sendSMS;
                 self.distWorkflowItem.sendEmail = replyOn.sendEmail;
             } else {
@@ -159,7 +174,13 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.getSelectedManagersText = function () {
-            if (self.selectedManagers && self.selectedManagers.length) {
+            if (self.getApprovedStatus() && self.selectedManagers) {
+                if (self.selectedManagers === -1) {
+                    return langService.get('none');
+                }
+                var manager = self.selectedManagers;
+                return manager['ou' + self.currentLangUCFirst + 'Name'] + ' - ' + manager[langService.current + 'Name']
+            } else if (self.selectedManagers && self.selectedManagers.length) {
                 var map = _.map(self.selectedManagers, function (manager) {
                     return manager['ou' + self.currentLangUCFirst + 'Name'] + ' - ' + manager[langService.current + 'Name'];
                 });
@@ -214,6 +235,13 @@ module.exports = function (app) {
          */
         self.getApprovedStatus = function () {
             return _getApprovedStatus();
+        };
+
+        /**
+         * @description close the dialog.
+         */
+        self.closeLaunchPopup = function () {
+            dialog.cancel();
         };
 
 
