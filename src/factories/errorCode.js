@@ -61,7 +61,8 @@ module.exports = function (app) {
                 INVALID_DOC_STATUS_TO_EXPORT: 3036,
                 // entity connection errors end
                 ERROR_SAVE_DOC_ALREADY_MODIFIED_BY_OTHER_USER: 4019,
-                INVALID_LINK: 3041
+                INVALID_LINK: 3041,
+                ERROR_RUNNING_JOB: 3029
             },
             errorLangKeys = {
                 3023: 'can_not_edit_after_export_because_received_by_one_site',
