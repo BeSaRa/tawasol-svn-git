@@ -374,6 +374,10 @@ module.exports = function (app) {
             self.documentAction.callback(self.incoming, $event);
         };
 
+        var _hasContent = function () {
+            return (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+        };
+
         self.visibilityArray = [];
         self.isActionsAvailable = false;
 
@@ -400,7 +404,7 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model, index) {
                     //Show if content is uploaded
-                    isVisible = gridService.checkToShowAction(action) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -437,7 +441,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'ICN_ENTRY_TEMPLATE',
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action);
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

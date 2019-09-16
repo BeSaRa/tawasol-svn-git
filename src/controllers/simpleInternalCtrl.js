@@ -439,7 +439,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'ICN_ENTRY_TEMPLATE',
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action);
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
