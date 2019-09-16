@@ -17,7 +17,8 @@ module.exports = function (app) {
                                                            attachmentService,
                                                            correspondenceService,
                                                            employeeService,
-                                                           $timeout) {
+                                                           $timeout,
+                                                           documentTemplateService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageContentDirectiveCtrl';
@@ -134,17 +135,28 @@ module.exports = function (app) {
          * @param $event
          */
         self.startPrepareCorrespondence = function ($event) {
-            return officeWebAppService
-                .displayTemplates(self.templates, $event)
-                .then(function (template) {
-                    self.template = template;
+            var defer = $q.defer();
+            if (self.templates && self.templates.length) {
+                defer.resolve(self.templates);
+            } else {
+                documentTemplateService.loadDocumentTemplates(employeeService.getEmployee().getRegistryOUID(), self.document.getInfo().documentClass)
+                    .then(function (templates) {
+                        defer.resolve(templates);
+                    })
+            }
+            defer.promise.then(function (templates) {
+                return officeWebAppService
+                    .displayTemplates(templates, $event)
+                    .then(function (template) {
+                        self.template = template;
 
-                    if (self.isSimpleAdd) {
-                        return self.getTrustViewUrl(template.getSubjectTitle(), $event);
-                    } else {
-                        return self.openPreparedTemplate(template.getSubjectTitle(), $event);
-                    }
-                });
+                        if (self.isSimpleAdd) {
+                            return self.getTrustViewUrl(template.getSubjectTitle(), $event);
+                        } else {
+                            return self.openPreparedTemplate(template.getSubjectTitle(), $event);
+                        }
+                    });
+            })
         };
         /**
          * @description Checks the file for the allowed file formats
@@ -259,7 +271,7 @@ module.exports = function (app) {
          * @description open edit correspondence when editAfterApproved = true.
          */
         self.openCorrespondenceToEdit = function () {
-            if (!self.trusted){
+            if (!self.trusted) {
                 self.documentInformation.viewURL = $sce.trustAsResourceUrl(self.documentInformation.viewURL);
                 self.documentInformation.editURL = $sce.trustAsResourceUrl(self.documentInformation.editURL);
             }
