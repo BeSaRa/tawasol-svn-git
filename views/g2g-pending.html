@@ -31,8 +31,8 @@
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
                         <md-table-container>
                             <div flex scroll-directive>
-                                <table md-table ng-model="ctrl.selectedG2gItems"
-                                       md-progress="ctrl.grid.progress"><!-- md-row-select multiple-->
+                                <table md-table md-row-select multiple ng-model="ctrl.selectedG2gItems"
+                                       md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedG2gItems.length > 1 ? 12 : 13}}"

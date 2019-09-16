@@ -6,7 +6,8 @@ module.exports = function (app) {
                                                SentItemDepartmentInbox,
                                                cmsTemplate,
                                                dialog,
-                                               moment) {
+                                               moment,
+                                               _) {
         'ngInject';
         var self = this;
         self.serviceName = 'g2gPendingService';
@@ -96,6 +97,14 @@ module.exports = function (app) {
                         record: record
                     }
                 });
+        };
+
+        self.exportPendingBooks = function(g2gItems){
+            if (!angular.isArray(g2gItems)){
+                g2gItems = [g2gItems];
+            }
+
+            return $http.put(urlService.g2gInbox + 'export/pending', _.map(g2gItems, 'id'));
         };
 
         /**

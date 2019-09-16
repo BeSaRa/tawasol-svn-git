@@ -140,8 +140,22 @@ module.exports = function (app) {
                 })
         };
 
+        /**
+         * @description Export bulk pending g2g items
+         * @param $event
+         * @returns {boolean}
+         */
         self.exportBulk = function ($event) {
-
+            if (!self.selectedG2gItems || !self.selectedG2gItems.length){
+                return false;
+            }
+            g2gPendingService.exportPendingBooks(self.selectedG2gItems)
+                .then(function (result) {
+                    self.reloadG2GPendingItems(1)
+                        .then(function () {
+                            toast.success(langService.get('export_success'));
+                        });
+                })
         };
 
         /**
@@ -196,10 +210,16 @@ module.exports = function (app) {
         };
 
         /**
-         * @description export book
+         * @description Export pending g2g items
          */
         self.exportG2gItem = function (model, $event) {
-            console.log(model);
+            g2gPendingService.exportPendingBooks(model)
+                .then(function (result) {
+                    self.reloadG2GPendingItems(1)
+                        .then(function () {
+                            toast.success(langService.get('export_success'));
+                        });
+                })
         };
 
         /**
@@ -233,7 +253,6 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_view',
                 shortcut: false,
-                callback: self.previewDocument,
                 class: "action-green",
                 showInView: false,
                 permissionKey: [
@@ -244,21 +263,6 @@ module.exports = function (app) {
                     return true;
                 },
                 subMenu: [
-                    // Preview
-                    {
-                        type: 'action',
-                        icon: 'book-open-variant',
-                        text: 'grid_action_preview_document',
-                        shortcut: true,
-                        callback: self.previewDocument,
-                        class: "action-green",
-                        hide: true,
-                        showInView: false,
-                        permissionKey: 'VIEW_DOCUMENT',
-                        checkShow: function (action, model) {
-                            return true;
-                        }
-                    },
                     // Open
                     {
                         type: 'action',
@@ -305,7 +309,6 @@ module.exports = function (app) {
                 text: 'grid_action_export',
                 callback: self.exportG2gItem,
                 class: "action-green",
-                hide: true,
                 sticky: true,
                 shortcut: true,
                 checkShow: function (action, model) {
