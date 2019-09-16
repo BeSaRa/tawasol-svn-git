@@ -675,13 +675,13 @@ module.exports = function (app) {
          */
         self.clearSearchText = function (fieldType) {
             self[fieldType + 'SearchText'] = '';
-            $timeout(function () {
+            /*$timeout(function () {
                 if (fieldType === 'mainClassification' || fieldType === 'subClassification') {
                     self.classifications = angular.copy(self.classificationsCopy);
                 } else if (fieldType === 'documentFiles') {
                     self.documentFiles = angular.copy(self.documentFilesCopy);
                 }
-            })
+            })*/
         };
 
 

@@ -457,13 +457,12 @@
                                     <md-icon md-svg-icon="magnify-plus"></md-icon>
                                 </md-button>
                             </div>
-                            <div class="help-text-div" ng-if="ctrl.mainClassificationSearchText">
+                            <div class="help-text-div" ng-if="ctrl.documentFileSearchText">
                                 {{lang.press_enter_to_load_more_records}}
                             </div>
                         </md-select-header>
                         <md-option ng-value="file.file"
-                                   ng-repeat="file in ctrl.documentFiles">
-                            <!-- | translatedNameFilter: ctrl.documentFileSearchText:null:'file'-->
+                                   ng-repeat="file in ctrl.documentFiles | translatedNameFilter: ctrl.documentFileSearchText:null:'file'">
                             <span
                                     md-highlight-text="ctrl.documentFileSearchText"
                                     md-highlight-flags="i">{{file.file.getTranslatedName()}}</span>

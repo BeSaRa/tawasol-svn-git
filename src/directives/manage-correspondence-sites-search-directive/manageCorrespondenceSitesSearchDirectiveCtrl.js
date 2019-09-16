@@ -560,7 +560,7 @@ module.exports = function (app) {
                 }
             } else {
                 if (!!self.selectedMainSiteAdvanced) {
-                    self.onSubSiteSearchAdvanced(true);
+                    self.onSubSiteSearchAdvanced(true, null);
                 }
             }
         };
@@ -715,7 +715,7 @@ module.exports = function (app) {
          * search in sub correspondence sites related to mainSites.
          * @return {*}
          */
-        self.onSubSiteSearchAdvanced = function (skipSubSiteText) {
+        self.onSubSiteSearchAdvanced = function (skipSubSiteText, $event) {
             if (!skipSubSiteText) {
                 if (self.subSiteAdvancedSearchText.length < 3) {
                     self.subSearchResult = [];

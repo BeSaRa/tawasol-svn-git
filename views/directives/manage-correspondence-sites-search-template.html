@@ -150,8 +150,8 @@
         <md-input-container flex ng-if="!ctrl.searchByMain">
             <label for="subSiteSearchAdvanced">{{lang.sites_select_sub_site}}</label>
             <input id="subSiteSearchAdvanced" ng-model="ctrl.subSiteAdvancedSearchText"
-                   ng-enter="ctrl.onSubSiteSearchAdvanced($event)"
-                   ng-change="ctrl.onSubSiteSearchAdvanced($event)">
+                   ng-enter="ctrl.onSubSiteSearchAdvanced(false, $event)"
+                   ng-change="ctrl.onSubSiteSearchAdvanced(false, $event)">
         </md-input-container>
     </div>
 
