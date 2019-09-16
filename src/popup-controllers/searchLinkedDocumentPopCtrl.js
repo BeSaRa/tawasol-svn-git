@@ -57,6 +57,10 @@ module.exports = function (app) {
 
         self.selectedIndex = 0;
 
+        self.mainClassificationSearchText = '';
+        self.subClassificationSearchText = '';
+        self.documentFileSearchText = '';
+
         /**
          * @description get available documentFiles for the document by security level.
          * @param timeout
@@ -69,10 +73,12 @@ module.exports = function (app) {
                 return $timeout(function () {
                     self.documentFiles = angular.copy(correspondenceService.getLookup(docClass, 'documentFiles'));
                     self.documentFiles = _displayCorrectDocumentFiles(self.documentFiles);
+                    self.documentFilesCopy = angular.copy(self.documentFiles);
                 });
             } else {
                 self.documentFiles = angular.copy(correspondenceService.getLookup(docClass, 'documentFiles'));
                 self.documentFiles = _displayCorrectDocumentFiles(self.documentFiles);
+                self.documentFilesCopy = angular.copy(self.documentFiles);
             }
         }
 
@@ -88,10 +94,14 @@ module.exports = function (app) {
                 return $timeout(function () {
                     self.classifications = angular.copy(correspondenceService.getLookup(docClass, 'classifications'));
                     self.classifications = _displayCorrectClassifications(self.classifications);
+                    self.classificationsCopy = angular.copy(self.classifications);
+                    self.onChangeMainClassification(null, true);
                 });
             } else {
                 self.classifications = angular.copy(correspondenceService.getLookup(docClass, 'classifications'));
                 self.classifications = _displayCorrectClassifications(self.classifications);
+                self.classificationsCopy = angular.copy(self.classifications);
+                self.onChangeMainClassification(null, true);
             }
         }
 
@@ -248,5 +258,134 @@ module.exports = function (app) {
 
         _getClassifications(true);
         _getDocumentFiles(true);
+
+
+        /**
+         * @description Set the sub classification on change of main classification
+         * @param $event
+         * @param skipResetSub
+         */
+        self.onChangeMainClassification = function ($event, skipResetSub) {
+            if (self.correspondence && self.correspondence.mainClassification) {
+                self.loadSubClassificationRecords(true, false);
+                if (!skipResetSub) {
+                    self.correspondence.subClassification = null;
+                }
+            } else {
+                self.correspondence.subClassification = null;
+            }
+        };
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+
+        self.loadMainClassificationRecords = function () {
+            if (self.mainClassificationSearchText) {
+                classificationService.loadClassificationsPairBySearchText(self.mainClassificationSearchText, self.correspondence.securityLevel, null, false)
+                    .then(function (result) {
+                        if (result.first.length || result.second.length) {
+                            var lookups = {classifications: result.first, ouClassifications: result.second},
+                                classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups).classifications;
+
+                            self.classifications = _.uniqBy(self.classifications.concat(classificationsUnion), 'classification.id');
+                            self.classificationsCopy = angular.copy(self.classifications);
+                        } else {
+                            self.classifications = angular.copy(self.classificationsCopy);
+                        }
+                    })
+                    .catch(function (error) {
+                        self.classifications = angular.copy(self.classificationsCopy);
+                    })
+            }
+        };
+
+        self.loadSubClassificationRecords = function (skipSearchText, selectFirstValue) {
+            if (self.correspondence && self.correspondence.mainClassification && (skipSearchText || self.subClassificationSearchText)) {
+                var mainClassification = _.find(self.classifications, function (classification) {
+                        return classification.classification.id === self.correspondence.mainClassification.id;
+                    }).classification,
+                    mainClassificationCopy = _.find(self.classificationsCopy, function (classification) {
+                        return classification.classification.id === self.correspondence.mainClassification.id;
+                    }).classification;
+
+                classificationService.loadClassificationsPairBySearchText(self.subClassificationSearchText, self.correspondence.securityLevel, self.correspondence.mainClassification, false)
+                    .then(function (result) {
+                        if (result.first.length || result.second.length) {
+                            var lookups = {classifications: result.first, ouClassifications: result.second},
+                                classificationsUnion = correspondenceService.prepareLookupHierarchy(lookups, self.correspondence.mainClassification).classifications,
+                                subClassifications = [];
+
+                            _.map(classificationsUnion, function (ouClassification) {
+                                subClassifications = subClassifications.concat(ouClassification.classification.children);
+                                return ouClassification;
+                            });
+
+                            self.correspondence.mainClassification.children = _.uniqBy(self.correspondence.mainClassification.children.concat(subClassifications), 'id');
+                            mainClassification.children = angular.copy(self.correspondence.mainClassification.children);
+                            self.classificationsCopy = angular.copy(self.classifications);
+                            if (selectFirstValue) {
+                                self.correspondence.subClassification = self.correspondence.mainClassification.children[0];
+                            }
+                        } else {
+                            self.correspondence.mainClassification.children = angular.copy(mainClassificationCopy.children);
+                        }
+                    })
+                    .catch(function (error) {
+                        self.correspondence.mainClassification.children = angular.copy(mainClassificationCopy.children);
+                    })
+            }
+        };
+
+        self.loadDocumentFilesRecords = function () {
+            if (self.documentFileSearchText) {
+                documentFileService.loadDocumentFilesBySearchText(self.documentFileSearchText, self.correspondence.securityLevel, null, false)
+                    .then(function (result) {
+                        if (result.first.length || result.second.length) {
+                            var lookups = {documentFiles: result.first, ouDocumentFiles: result.second},
+                                documentFilesUnion = correspondenceService.prepareLookupHierarchy(lookups).documentFiles;
+
+                            self.documentFiles = _.uniqBy(self.documentFiles.concat(documentFilesUnion), 'file.id');
+                            self.documentFilesCopy = angular.copy(self.documentFiles);
+                        } else {
+                            self.documentFiles = angular.copy(self.documentFilesCopy);
+                        }
+                    })
+                    .catch(function (error) {
+                        self.documentFiles = angular.copy(self.documentFilesCopy);
+                    })
+            }
+        };
+
+
+        /**
+         * @description Handles the default dropdown behavior of selecting option on keydown inside the search box of dropdown
+         * @param $event
+         * @param fieldType
+         */
+        self.handleSearchKeyDown = function ($event, fieldType) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                // if enter key pressed, load from server with search text
+                if (code === 13) {
+                    if (fieldType === 'mainClassification') {
+                        self.loadMainClassificationRecords($event);
+                    } else if (fieldType === 'subClassification') {
+                        self.loadSubClassificationRecords($event);
+                    } else if (fieldType === 'documentFile') {
+                        self.loadDocumentFilesRecords($event);
+                    }
+                }
+                // prevent keydown except arrow up and arrow down keys
+                else if (code !== 38 && code !== 40) {
+                    $event.stopPropagation();
+                }
+            }
+        };
     });
 };

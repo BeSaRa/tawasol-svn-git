@@ -66,36 +66,102 @@
                                     <md-select name="mainClassification"
                                                id="mainClassification"
                                                ng-model="ctrl.correspondence.mainClassification"
-                                               ng-model-options="{trackBy: '$value.id'}">
+                                               ng-model-options="{trackBy: '$value.id'}"
+                                               ng-change="ctrl.onChangeMainClassification($event)"
+                                               md-on-close="ctrl.clearSearchText('mainClassification')"
+                                               data-md-container-class="select-header-container">
+                                        <md-select-header class="select-header" layout="column">
+                                            <div layout="row" flex class="size-100">
+                                                <input ng-model="ctrl.mainClassificationSearchText"
+                                                       ng-keydown="ctrl.handleSearchKeyDown($event, 'mainClassification')"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                                <md-button ng-if="ctrl.mainClassificationSearchText"
+                                                           ng-click="ctrl.loadMainClassificationRecords($event)"
+                                                           class="select-header-icon md-icon-button"
+                                                           tooltip="{{lang.load_more_records}}">
+                                                    <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                </md-button>
+                                            </div>
+                                            <div class="help-text-div" ng-if="ctrl.mainClassificationSearchText">
+                                                {{lang.press_enter_to_load_more_records}}
+                                            </div>
+                                        </md-select-header>
                                         <md-option ng-value="classification.classification"
-                                                   ng-repeat="classification in ctrl.classifications">
-                                            {{classification.classification.getTranslatedName()}}
+                                                   ng-repeat="classification in ctrl.classifications | translatedNameFilter: ctrl.mainClassificationSearchText:null:'classification'">
+                                            <span
+                                                    md-highlight-text="ctrl.mainClassificationSearchText"
+                                                    md-highlight-flags="i">{{classification.classification.getTranslatedName()}}</span>
                                         </md-option>
                                         <md-option ng-value="null">{{lang.all}}</md-option>
                                     </md-select>
                                 </md-input-container>
+                                <!-- Sub Classification-->
                                 <md-input-container flex>
                                     <label for="subClassification">{{lang.linked_document_sub_classification}}</label>
                                     <md-select ng-disabled="!ctrl.correspondence.mainClassification"
                                                name="subClassification"
                                                id="subClassification"
                                                ng-model="ctrl.correspondence.subClassification"
-                                               ng-model-options="{trackBy: '$value.id'}">
+                                               ng-model-options="{trackBy: '$value.id'}"
+                                               md-on-close="ctrl.clearSearchText('subClassification')"
+                                               data-md-container-class="select-header-container">
+                                        <md-select-header class="select-header" layout="column">
+                                            <div layout="row" flex class="size-100">
+                                                <input ng-model="ctrl.subClassificationSearchText"
+                                                       ng-keydown="ctrl.handleSearchKeyDown($event, 'subClassification')"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                                <md-button ng-if="ctrl.subClassificationSearchText"
+                                                           ng-click="ctrl.loadSubClassificationRecords($event)"
+                                                           class="select-header-icon md-icon-button"
+                                                           tooltip="{{lang.load_more_records}}">
+                                                    <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                </md-button>
+                                            </div>
+                                            <div class="help-text-div" ng-if="ctrl.subClassificationSearchText">
+                                                {{lang.press_enter_to_load_more_records}}
+                                            </div>
+                                        </md-select-header>
                                         <md-option ng-value="classification"
-                                                   ng-repeat="classification in ctrl.correspondence.mainClassification.children">
-                                            {{classification.getTranslatedName()}}
+                                                   ng-repeat="classification in ctrl.correspondence.mainClassification.children | translatedNameFilter: ctrl.subClassificationSearchText">
+                                            <span
+                                                    md-highlight-text="ctrl.subClassificationSearchText"
+                                                    md-highlight-flags="i">{{classification.getTranslatedName()}}</span>
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
+                                <!-- Document File -->
                                 <md-input-container flex>
                                     <label for="fileId">{{lang.linked_document_file}}</label>
                                     <md-select name="fileId"
                                                id="fileId"
                                                ng-model="ctrl.correspondence.fileId"
-                                               ng-model-options="{trackBy: '$value.id'}">
+                                               ng-model-options="{trackBy: '$value.id'}"
+                                               md-on-close="ctrl.clearSearchText('documentFile')"
+                                               data-md-container-class="select-header-container">
+                                        <md-select-header class="select-header" layout="column">
+                                            <div layout="row" flex class="size-100">
+                                                <input ng-model="ctrl.documentFileSearchText"
+                                                       ng-keydown="ctrl.handleSearchKeyDown($event, 'documentFile')"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                                <md-button ng-if="ctrl.documentFileSearchText"
+                                                           ng-click="ctrl.loadDocumentFilesRecords($event)"
+                                                           class="select-header-icon md-icon-button"
+                                                           tooltip="{{lang.load_more_records}}">
+                                                    <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                </md-button>
+                                            </div>
+                                            <div class="help-text-div" ng-if="ctrl.documentFileSearchText">
+                                                {{lang.press_enter_to_load_more_records}}
+                                            </div>
+                                        </md-select-header>
                                         <md-option ng-value="file.file"
-                                                   ng-repeat="file in ctrl.documentFiles">
-                                            {{file.file.getTranslatedName()}}
+                                                   ng-repeat="file in ctrl.documentFiles | translatedNameFilter: ctrl.documentFileSearchText:null:'file'">
+                                            <span
+                                                    md-highlight-text="ctrl.documentFileSearchText"
+                                                    md-highlight-flags="i">{{file.file.getTranslatedName()}}</span>
                                         </md-option>
                                         <md-option ng-value="null">{{lang.all}}</md-option>
                                     </md-select>
