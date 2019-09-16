@@ -1,13 +1,17 @@
 module.exports = function (app) {
     app
-        .directive('enterSubmitDirective', function () {
+        .directive('enterSubmitDirective', function (_) {
             'ngInject';
             return function (scope, element, attrs, ctrl) {
                 var form = angular.element(element);
                 form.on('keydown', function (e) {
                     var code = e.keyCode || e.which;
                     var formInScope = scope[attrs.name];
-                    if (code === 13 && formInScope.$valid) {
+                    var hasNgEnter = _.find(e.target.attributes, function (attribute) {
+                        return attribute.name === 'ng-enter';
+                    });
+                    // don't click submit button if element has ng-enter directive.
+                    if (code === 13 && formInScope.$valid && !hasNgEnter) {
                         e.preventDefault();
                         angular.element('#' + attrs['enterSubmitDirective']).click();
                     }
