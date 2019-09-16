@@ -238,7 +238,9 @@ module.exports = function (app) {
                 editAfterReturnG2G: function ($q, $timeout, $stateParams, correspondenceStorageService) {
                     'ngInject';
                     var action = $stateParams.action;
-                    if (action !== 'editAfterReturnG2G' || action !== 'recallAndForwardG2G') {
+
+                    var actions = ['recallAndForwardG2G', 'editAfterReturnG2G'];
+                    if (actions.indexOf(action) === -1) {
                         return $timeout(function () {
                             return false;
                         });
