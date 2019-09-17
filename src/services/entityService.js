@@ -54,37 +54,6 @@ module.exports = function (app) {
                         locals: {
                             editMode: false,
                             entity: new Entity(),
-                            /*entity: new Entity(
-                             {
-                             "identifier": "identifier",
-                             "enName": "en11",
-                             "arName": "شق11",
-                             "appArName": "شق22",
-                             "appEnName": "en22",
-                             "groupPrefix": "gp",
-                             "status": true,
-                             "helpUrl": "http://test.com",
-                             "cmUserName": "username",
-                             "cmPassword": "password",
-                             "cmEJBaddress": "100.100.0.3",
-                             "cmStanza": "cm stanza",
-                             "osName": "object store name",
-                             "peRouterName": "pe router name",
-                             "cmsDatabaseName": "db name",
-                             "cmsDataSourceName": "datasource name",
-                             "smtpServerAddress": "http://test.com",
-                             "smtpUserName": "username",
-                             "smtpPassword": "password",
-                             "smtpFromEmail": "email@email.com",
-                             "smtpSubject": "subject",
-                             "smtpPort": 123,
-                             "serverAddress": "198.168.1.1",
-                             "dc": "domain controller name",
-                             "tawasolOU": "tawasol ou",
-                             "userName": "username",
-                             "password": "password"
-                             }
-                             ),*/
                             entities: self.entities
                         }
                     });
@@ -95,7 +64,6 @@ module.exports = function (app) {
              * @param $event
              */
             entityEdit: function (entity, $event) {
-
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -199,6 +167,9 @@ module.exports = function (app) {
                     generator.interceptSendInstance('Entity', entity))
                 .then(function (result) {
                     return generator.interceptReceivedInstance('Entity', generator.generateInstance(result.data.rs, Entity, self._sharedMethods));
+                })
+                .catch(function (error) {
+                    return $q.reject(false);
                 });
         };
 
@@ -213,6 +184,9 @@ module.exports = function (app) {
                     generator.interceptSendInstance('Entity', entity))
                 .then(function () {
                     return entity;
+                })
+                .catch(function (error) {
+                    return $q.reject(false);
                 });
         };
 
