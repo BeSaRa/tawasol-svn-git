@@ -36,7 +36,9 @@ module.exports = function (app) {
             var isICNEntryOrSearchTemplate = false, index;
             self.dynamicMenuItems = _.filter(dynamicMenuItems, function (menuItem) {
                 isICNEntryOrSearchTemplate = menuItem.isICNEntryTemplateOrSearchType();
-                if (isICNEntryOrSearchTemplate) {
+                if (!isICNEntryOrSearchTemplate) {
+                    return true;
+                } else {
                     if (menuItem.getMenuType() === 'icnEntryTemplate') {
                         index = _.findIndex(employeeService.getEmployee().permissions, function (permission) {
                             return permission.id === -1;
@@ -58,8 +60,8 @@ module.exports = function (app) {
                             });
                         }
                     }
+                    return false;
                 }
-                return !(isICNEntryOrSearchTemplate);
             });
             self.prepareDynamicMenuItems();
         };
