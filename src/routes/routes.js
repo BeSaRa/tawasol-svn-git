@@ -685,7 +685,7 @@ module.exports = function (app) {
                 resolve: {
                     organizations: function (organizationService, _) {
                         'ngInject';
-                        return organizationService.loadOrganizations()
+                        return organizationService.loadAllOrganizationsStructure()
                             .then(function (result) {
                                 return _.filter(result, function (organization) {
                                     return organization.hasRegistry;
@@ -721,7 +721,7 @@ module.exports = function (app) {
                 resolve: {
                     organizations: function (organizationService, _) {
                         'ngInject';
-                        return organizationService.loadOrganizations()
+                        return organizationService.loadAllOrganizationsStructure()
                             .then(function (result) {
                                 return _.filter(result, function (organization) {
                                     return organization.hasRegistry;
@@ -750,7 +750,7 @@ module.exports = function (app) {
                 resolve: {
                     organizations: function (organizationService, _) {
                         'ngInject';
-                        return organizationService.loadOrganizations()
+                        return organizationService.loadAllOrganizationsStructure()
                             .then(function (result) {
                                 return _.filter(result, function (organization) {
                                     return organization.hasRegistry;
@@ -786,7 +786,7 @@ module.exports = function (app) {
                 resolve: {
                     organizations: function (organizationService, _) {
                         'ngInject';
-                        return organizationService.loadOrganizations()
+                        return organizationService.loadAllOrganizationsStructure()
                             .then(function (result) {
                                 return _.filter(result, function (organization) {
                                     return organization.hasRegistry;
@@ -815,7 +815,7 @@ module.exports = function (app) {
                 resolve: {
                     organizations: function (organizationService, _) {
                         'ngInject';
-                        return organizationService.loadOrganizations()
+                        return organizationService.loadAllOrganizationsStructure()
                             .then(function (result) {
                                 return _.filter(result, function (organization) {
                                     return organization.hasRegistry;

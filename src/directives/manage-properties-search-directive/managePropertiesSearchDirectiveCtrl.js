@@ -100,7 +100,7 @@ module.exports = function (app) {
 
         $timeout(function () {
             // all system organizations
-            self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
+            self.organizations = self.centralArchives ? self.centralArchives : organizationService.allOrganizationsStructure;
             // sort organizations
             if (self.organizations && self.organizations.length) {
                 self.organizations = _.sortBy(self.organizations, [function (ou) {
