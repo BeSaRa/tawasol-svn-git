@@ -6,6 +6,6 @@
         <input flex ng-model="ctrl.grid.searchText"
                ng-change="ctrl.search($event)" autocomplete="off"
                placeholder="{{ctrl.placeholder ? ctrl.placeholder : ''}}"
-               name="search_header_query" id="search_header_query">
+               name="search_header_query" id="{{ctrl.searchBoxId}}">
     </div>
 </div>

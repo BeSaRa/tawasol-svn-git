@@ -2,11 +2,13 @@ module.exports = function (app) {
     app.controller('gridSearchDirectiveCtrl', function (LangWatcher,
                                                         $scope,
                                                         $q,
-                                                        $timeout) {
+                                                        $timeout,
+                                                        moment) {
         'ngInject';
         var self = this;
         self.controllerName = 'gridSearchDirectiveCtrl';
         LangWatcher($scope);
+        self.searchBoxId = 'search_header_query_' + moment().valueOf();
 
         self.search = function () {
             if (!!self.serverSide) {
