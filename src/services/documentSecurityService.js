@@ -127,6 +127,10 @@ module.exports = function (app) {
                                         return organization.hasRegistry;
                                     })
                                 });
+                        },
+                        lookups: function (correspondenceService) {
+                            'ngInject';
+                            return correspondenceService.loadCorrespondenceLookups('common');
                         }
                     }
                 }).then(function (correspondences) {
