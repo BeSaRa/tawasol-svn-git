@@ -248,7 +248,9 @@
                                                         flex>
                                         <label for="ldapCode">{{lang.ldap_code}}</label>
                                         <md-select name="ldapCode" id="ldapCode" required
-                                                   ng-model="ctrl.organization.ldapCode">
+                                                   ng-model="ctrl.organization.ldapCode"
+                                                   ng-disabled="ctrl.editMode"
+                                                   ng-readonly="ctrl.editMode">
                                             <md-option ng-value="ldapProvider.ldapCode"
                                                        ng-repeat="ldapProvider in ctrl.entityLDAPProviders track by $index">
                                                 {{ldapProvider.getNames()}}
