@@ -1492,7 +1492,7 @@ module.exports = function (app) {
                 abstract: false,
                 template: '<iframe id="icn-login" ng-hide="true" width="0" height="0" ng-src="{{ctrl.loginURL}}"></iframe>' +
                     '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
-                controller: function ($scope, credentials, $stateParams, urlService, sidebarService, $timeout, $sce) {
+                controller: function ($scope, langService, credentials, $stateParams, urlService, sidebarService, $timeout, $sce) {
                     'ngInject';
                     var self = this, menuId = $stateParams.menuId,
                         menuItem = sidebarService.getDynamicMenuItemByID(menuId),
@@ -1510,11 +1510,21 @@ module.exports = function (app) {
                     };
                     self.createLoginIframe();
 
+
+                    self.prepareUrl = function () {
+                        var url = menuItem.getMenuUrlAfterReplacement();
+                        self.url = $sce.trustAsResourceUrl(url);
+                    };
+
                     $timeout(function () {
                         self.removeLoginIframe();
-                        self.url = $sce.trustAsResourceUrl(menuURL);
+                        self.prepareUrl();
                     }, 2000);
 
+                    // to change the report language
+                    langService.listeningToChange(function () {
+                        self.prepareUrl();
+                    });
 
                 },
                 controllerAs: 'ctrl',
