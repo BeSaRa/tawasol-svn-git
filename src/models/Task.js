@@ -83,7 +83,7 @@ module.exports = function (app) {
                 } else {
                     return taskService
                         .updateTaskParticipant(this, taskParticipant)
-                        .then(function () {
+                        .then(function (taskParticipant) {
                             self.taskParticipants.splice(index, 1, taskParticipant);
                             return taskParticipant;
                         });
