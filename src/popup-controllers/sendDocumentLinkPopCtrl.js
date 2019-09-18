@@ -71,7 +71,7 @@ module.exports = function (app) {
                     .then(function () {
                         self.documentLink.documentLinkSubscribers.splice($index, 1);
                         self.selectedDocumentLinkSubscribers = [];
-                        toast.success(langService.get('delete_success'));
+                        //toast.success(langService.get('delete_success'));
                     });
             };
 
@@ -95,7 +95,7 @@ module.exports = function (app) {
                                 self.documentLink.documentLinkSubscribers.splice(index, 1);
                         }
                         _resetDocumentLinkSubscriber();
-                        toast.success(langService.get('delete_success'));
+                        //toast.success(langService.get('delete_success'));
                     });
             };
 
