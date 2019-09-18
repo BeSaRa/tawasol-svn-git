@@ -2,7 +2,6 @@ module.exports = function (app) {
     app.controller('searchOutgoingCtrl', function (lookupService,
                                                    langService,
                                                    viewDocumentService,
-                                                   organizations,
                                                    ResolveDefer,
                                                    searchOutgoingService,
                                                    Organization,

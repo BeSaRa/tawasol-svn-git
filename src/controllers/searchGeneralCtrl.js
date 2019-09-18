@@ -3,7 +3,6 @@ module.exports = function (app) {
                                                   langService,
                                                   ResolveDefer,
                                                   viewDocumentService,
-                                                  organizations,
                                                   searchGeneralService,
                                                   $q,
                                                   _,
