@@ -666,18 +666,20 @@ module.exports = function (app) {
                     var securityLevel = attachment.securityLevel && attachment.securityLevel.hasOwnProperty('lookupKey') ? attachment.securityLevel.lookupKey : attachment.securityLevel,
                         attachmentType = attachment.attachmentType && attachment.attachmentType.hasOwnProperty('lookupKey') ? attachment.attachmentType.lookupKey : attachment.attachmentType,
                         searchTemplate = attachment.searchTemplate.menuItem,
-                        searchTemplateUrl = searchTemplate.hasOwnProperty('menuItem') ? searchTemplate.menuItem : searchTemplate;
+                        searchTemplateUrl = searchTemplate.hasOwnProperty('menuItem') ? searchTemplate.menuItem : searchTemplate,
+                        updateActionStatus = attachment.updateActionStatus && attachment.updateActionStatus.hasOwnProperty('lookupKey') ? attachment.updateActionStatus.lookupKey : attachment.updateActionStatus;
 
                     securityLevel = securityLevel.hasOwnProperty('id') ? securityLevel.id : securityLevel;
                     searchTemplateUrl = searchTemplateUrl && searchTemplateUrl.hasOwnProperty('url') ? searchTemplateUrl.url : searchTemplateUrl;
 
-                    var variables = '%2C:token%2C:vsId%2C:attachmentType%2C:securityLevel%2C:attachmentName%2C:locale'.change({
+                    var variables = '%2C:token%2C:vsId%2C:attachmentType%2C:securityLevel%2C:attachmentName%2C:locale%2C:updateActionStatus'.change({
                         token: tokenService.getToken(),
                         vsId: correspondence.getInfo().vsId,
                         attachmentType: attachmentType,
                         securityLevel: securityLevel,
                         attachmentName: attachment.documentTitle ? attachment.documentTitle : '',
-                        locale: langService.current
+                        locale: langService.current,
+                        updateActionStatus: updateActionStatus
                     });
                     searchTemplateUrl = searchTemplateUrl.replace('&mimeType', variables + '&mimeType');
 
