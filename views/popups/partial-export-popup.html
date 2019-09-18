@@ -1,15 +1,14 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="partial-export" ng-attr-aria-label="{{lang.partial_export}}">
-    <div layout="column">
-        <popup-toolbar-directive
-                header-text="{{lang.partial_export}} : {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
-        <md-content scroll-directive>
-
+    <popup-toolbar-directive
+            header-text="{{lang.partial_export}} : {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div>
             <md-tabs class="content white-bg" md-dynamic-height>
                 <md-tab label="{{lang.export_options}}" ng-if="ctrl.showTab('exportOptions')">
-                    <md-content class="white-bg">
-                        <div class="p20" layout="column">
+                    <md-content class="md-padding white-bg">
+                        <div layout="column">
                             <div layout="row" flex>
                                 <md-input-container flex>
                                     <label for="exportType">{{lang.select_export_type}}</label>
@@ -58,9 +57,8 @@
                 <!-- CORRESPONDENCE SITES TAB -->
                 <md-tab label="{{lang.correspondence_sites}}" ng-if="ctrl.showTab('correspondenceSites')"
                         md-on-select="ctrl.setCurrentTab('correspondenceSites')">
-                    <md-content scroll-directive class="white-bg">
-                        <div class="p20" layout="column">
-
+                    <md-content class="md-padding white-bg">
+                        <div layout="column">
                             <!-- Simple Search Box -->
                             <div layout="row" flex
                                  ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
@@ -118,7 +116,6 @@
                                            ng-change="ctrl.onSubSearch($event)">
                                 </md-input-container>
                             </div>
-
 
                             <!-- Search Results -->
                             <div flex layout="column">
@@ -597,8 +594,8 @@
                 <!-- DISTRIBUTION LIST TAB -->
                 <md-tab label="{{lang.distribution_lists}}" ng-if="ctrl.showTab('distributionLists')"
                         md-on-select="ctrl.setCurrentTab('distributionLists')">
-                    <md-content scroll-directive class="white-bg">
-                        <div class="p20" layout="column">
+                    <md-content class="md-padding white-bg">
+                        <div layout="column">
                             <!-- Search Box -->
                             <div layout="row" flex ng-if="!ctrl.disableCorrespondence">
                                 <!-- Distribution Lists -->
@@ -1087,18 +1084,17 @@
                     </md-content>
                 </md-tab>
             </md-tabs>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-disabled="!ctrl.partialExportList.hasSites()"
-                           ng-click="ctrl.partialExportDocument()">
-                    {{lang.grid_action_send_to_ready_to_export}}
-                </md-button>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closePartialExportDialog()">
-                    {{lang.close}}
-                </md-button>
-            </div>
         </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="!ctrl.partialExportList.hasSites()"
+                   ng-click="ctrl.partialExportDocument()">
+            {{lang.grid_action_send_to_ready_to_export}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePartialExportDialog()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
     </div>
 </md-dialog>
