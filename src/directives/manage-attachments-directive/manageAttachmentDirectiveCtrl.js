@@ -267,6 +267,15 @@ module.exports = function (app) {
                 });
         };
 
+        self.isAttachmentDeletable = function (attachment, editAttachment) {
+            var isDeletable = !self.disableEverything && !attachment.refVSID && !_checkReceiveG2G() && attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment);
+            if (editAttachment) {
+                isDeletable = isDeletable && !self.isLinkedExportedDocAttachment;
+            }
+            return isDeletable;
+            //return attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment);
+        };
+
         self.isEnabledDeleteBulkAttachments = function ($event) {
             return _.every(self.selectedAttachments, function (attachment) {
                 return attachment.isDeletable;
@@ -309,10 +318,6 @@ module.exports = function (app) {
                 .attachmentDownload(attachment.vsId);
         };
 
-        self.isAttachmentDeletable = function (attachment) {
-            return attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment);
-        };
-
         /**
          * to upload the files
          * @param files
@@ -342,7 +347,7 @@ module.exports = function (app) {
                 })
         };
 
-        self.openEditDocumentAttachment = function (attachment) {
+        self.openEditDocumentAttachment = function (attachment, $event) {
             if (_checkReceiveG2G()) {
                 return;
             }

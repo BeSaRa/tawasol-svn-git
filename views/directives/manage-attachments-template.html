@@ -205,13 +205,15 @@
                                        ng-click="ctrl.downloadAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="download"></md-icon>
                             </md-button>
+                            <!-- ng-if="!ctrl.disableEverything && !ctrl.isLinkedExportedDocAttachment && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment) && !ctrl.receiveG2g"-->
                             <md-button class="md-icon-button" title="{{lang.attachment_edit}}"
-                                       ng-if="!ctrl.disableEverything && !ctrl.isLinkedExportedDocAttachment && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment) && !ctrl.receiveG2g"
+                                       ng-if="ctrl.isAttachmentDeletable(attachment, true)"
                                        ng-click="ctrl.openEditDocumentAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="pencil"></md-icon>
                             </md-button>
+                            <!-- ng-if="!ctrl.disableEverything && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment) && !ctrl.receiveG2g"-->
                             <md-button class="md-icon-button" title="{{lang.attachment_delete}}"
-                                       ng-if="!ctrl.disableEverything && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment) && !ctrl.receiveG2g"
+                                       ng-if="ctrl.isAttachmentDeletable(attachment, false)"
                                        ng-click="ctrl.deleteDocumentAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="delete"></md-icon>
                             </md-button>
