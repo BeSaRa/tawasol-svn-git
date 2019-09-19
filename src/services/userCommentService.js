@@ -90,14 +90,9 @@ module.exports = function (app) {
                                     userComment: userComment
                                 },
                                 resolve: {
-                                    organizationsForAppUser: function (organizationService, ouApplicationUserService) {
+                                    organizationsForAppUser: function (employeeService) {
                                         'ngInject';
-                                        return ouApplicationUserService.loadOUApplicationUsersByUserId(appUserId)
-                                            .then(function (result) {
-                                                return _.map(result, function (ouAppUser) {
-                                                    return ouAppUser.ouid;
-                                                })
-                                            });
+                                        return employeeService.getEmployee().ouList;
                                     }
                                 }
                             });
@@ -120,14 +115,9 @@ module.exports = function (app) {
                             userComment: angular.copy(userComment)
                         },
                         resolve: {
-                            organizationsForAppUser: function (organizationService, ouApplicationUserService) {
+                            organizationsForAppUser: function (employeeService) {
                                 'ngInject';
-                                return ouApplicationUserService.getOUApplicationUsersByUserId(userComment.userId)
-                                    .then(function (result) {
-                                        return _.map(result, function (ouAppUser) {
-                                            return ouAppUser.ouid;
-                                        })
-                                    });
+                                return employeeService.getEmployee().ouList;
                             }
                         }
                     });
