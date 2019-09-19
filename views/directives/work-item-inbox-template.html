@@ -187,7 +187,8 @@
                 <td md-cell>{{userInbox.action.getTranslatedName()}}</td>
                 <td md-cell class="td-data">
                     <div layout="row">
-                        <span flex>{{userInbox.senderInfo.getTranslatedName()}}</span>
+                        <span ng-if="!ctrl.configurationService.ENABLE_ACTIVE_SENDER_LINKS" flex>{{userInbox.senderInfo.getTranslatedName()}}</span>
+                        <a target="_blank" href="{{ctrl.userUrl[$index%2]}}" ng-if="ctrl.configurationService.ENABLE_ACTIVE_SENDER_LINKS" flex>{{userInbox.senderInfo.getTranslatedName()}}</a>
                     </div>
                 </td>
                 <td md-cell class="td-data">
