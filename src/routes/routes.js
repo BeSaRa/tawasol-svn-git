@@ -664,14 +664,23 @@ module.exports = function (app) {
                     },
                     registryOrganizations: function (employeeService, $q, _, organizationService) {
                         'ngInject';
+                        var defer = $q.defer();
                         if (employeeService.hasPermissionTo('SEARCH_IN_ALL_OU')) {
-                            return organizationService.loadOrganizations(true);
-                        } else {
-                            return organizationService.getUserViewPermissionOusByUserId(employeeService.getEmployee().id)
+                            organizationService.loadOrganizations(true)
                                 .then(function (result) {
-                                    return result;
+                                    defer.resolve(result);
+                                });
+                        } else {
+                            organizationService.getUserViewPermissionOusByUserId(employeeService.getEmployee().id)
+                                .then(function (result) {
+                                    defer.resolve(result);
                                 })
                         }
+                        return defer.promise.then(function (organizations) {
+                            return _.filter(organizations, function (organization) {
+                                return organization.hasRegistry;
+                            })
+                        })
                     }
                 }
             })
