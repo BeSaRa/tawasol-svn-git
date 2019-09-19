@@ -268,18 +268,25 @@ module.exports = function (app) {
         };
 
         self.isAttachmentDeletable = function (attachment, editAttachment) {
-            var isDeletable = !self.disableEverything && !attachment.refVSID && !_checkReceiveG2G() && attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment);
+            var isDeletable = !self.disableEverything && !attachment.refVSID && !_checkReceiveG2G()
+                && attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment);
             if (editAttachment) {
                 isDeletable = isDeletable && !self.isLinkedExportedDocAttachment;
             }
             return isDeletable;
-            //return attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment);
         };
 
         self.isEnabledDeleteBulkAttachments = function ($event) {
-            return _.every(self.selectedAttachments, function (attachment) {
-                return attachment.isDeletable;
+            var isDeletableMap = _.map(self.selectedAttachments, function (attachment) {
+                return self.isAttachmentDeletable(attachment, false);
+            });
+            return _.some(isDeletableMap, function (isDeletable) {
+                return isDeletable;
             })
+
+            /*return _.every(self.selectedAttachments, function (attachment) {
+                return attachment.isDeletable;
+            });*/
         };
 
         self.deleteBulkAttachments = function ($event) {

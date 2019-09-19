@@ -184,27 +184,25 @@ module.exports = function (app) {
                 };
 
                 self.checkAttachmentIsDeletable = function (documentInfo, attachment) {
+                    // if create reply as attachment
                     if (attachment.createReplyDisableDelete) {
                         return false;
                     }
                     // if no vsId for document, means, document is not added yet. so user can edit/delete
-                    if (!documentInfo.vsId) {
+                    else if (!documentInfo.vsId) {
                         return true;
                     }
-                    var updateActionStatus = attachment.updateActionStatus;
+                    return attachment.isDeletable;
+                    /*var updateActionStatus = attachment.updateActionStatus;
                     if (attachment.updateActionStatus.hasOwnProperty('lookupKey')) {
                         updateActionStatus = updateActionStatus.lookupKey;
                     }
                     // if attachment is free to edit or edit by author of attachment, allow delete and edit
-                    // if not edit mode, allow delete and edit
-                    /*if (!documentInfo.vsId || updateActionStatus === 0 || updateActionStatus === 2) {
-                        return true;
-                    }*/
                     if (updateActionStatus === 0 || (updateActionStatus === 2 && attachment.createdBy === _getEmployeeDomainName())) {
                         return true;
                     }
                     var isApproved = !!(documentInfo.isPaper || documentInfo.docStatus >= 24);
-                    return (updateActionStatus === 1 && !isApproved)
+                    return (updateActionStatus === 1 && !isApproved);*/
                 };
 
                 /**
@@ -230,8 +228,8 @@ module.exports = function (app) {
                         }
                     }).then(function (result) {
                         attachment.vsId = result.data.rs;
-                        attachment.isDeletable = self.checkAttachmentIsDeletable(document, attachment);
                         attachment.createdBy = _getEmployeeDomainName();
+                        attachment.isDeletable = self.checkAttachmentIsDeletable(document, attachment);
                         attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
                         attachment = generator.interceptReceivedInstance('Attachment', attachment);
                         return attachment;//generator.generateInstance(attachment, Attachment, self._sharedMethods);

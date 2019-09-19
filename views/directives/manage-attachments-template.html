@@ -178,8 +178,8 @@
                 </thead>
                 <tbody md-body>
                 <tr md-row md-select="attachment"
-                    ng-disabled="ctrl.disableEverything || ctrl.receiveG2g"
-                    ng-repeat="attachment in ctrl.attachments  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
+                    ng-repeat="attachment in ctrl.attachments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index"
+                    ng-disabled="!ctrl.isAttachmentDeletable(attachment, false)">
                     <!--<td md-cell class="indicator-td">
                         &lt;!&ndash; Linked Exported Doc &ndash;&gt;
                         <grid-indicator-directive record="attachment"
@@ -205,13 +205,11 @@
                                        ng-click="ctrl.downloadAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="download"></md-icon>
                             </md-button>
-                            <!-- ng-if="!ctrl.disableEverything && !ctrl.isLinkedExportedDocAttachment && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment) && !ctrl.receiveG2g"-->
                             <md-button class="md-icon-button" title="{{lang.attachment_edit}}"
                                        ng-if="ctrl.isAttachmentDeletable(attachment, true)"
                                        ng-click="ctrl.openEditDocumentAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="pencil"></md-icon>
                             </md-button>
-                            <!-- ng-if="!ctrl.disableEverything && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment) && !ctrl.receiveG2g"-->
                             <md-button class="md-icon-button" title="{{lang.attachment_delete}}"
                                        ng-if="ctrl.isAttachmentDeletable(attachment, false)"
                                        ng-click="ctrl.deleteDocumentAttachment(attachment, $event)">
