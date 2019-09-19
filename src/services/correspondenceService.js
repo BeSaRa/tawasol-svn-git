@@ -4151,7 +4151,8 @@ module.exports = function (app) {
             entryTemplateUrl = entryTemplateUrl && entryTemplateUrl.hasOwnProperty('url') ? entryTemplateUrl.url : entryTemplateUrl;
             return $http.put(archiveIcnUrl, options)
                 .then(function (result) {
-                    var variables = '%2C:docId%2C:vsId%2C:refVsId%2C:locale'.change({
+                    //var variables = '%2C:docId%2C:vsId%2C:refVsId%2C:locale'.change({
+                    var variables = ['', 'docId', 'vsId', 'refVsId', 'locale'].join('%2C:').change({
                         vsId: result.data.rs.vsId, // icn plugin will use to fetch content
                         docId: result.data.rs.id,
                         refVsId: result.data.rs.refVSID, // icn plugin will use to fetch metadata(vsId of original document)
