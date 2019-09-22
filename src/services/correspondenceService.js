@@ -3911,7 +3911,7 @@ module.exports = function (app) {
          */
         self.deleteDocumentLinkSubscriber = function (subscriberId) {
             subscriberId = subscriberId.hasOwnProperty('id') ? subscriberId.id : subscriberId;
-            return $http.delete(urlService.documentLink + '/' + subscriberId)
+            return $http.delete(urlService.documentLink + '/delete-subscriber/' + subscriberId)
                 .then(function (result) {
                     return result.data.rs;
                 }).catch(function (error) {

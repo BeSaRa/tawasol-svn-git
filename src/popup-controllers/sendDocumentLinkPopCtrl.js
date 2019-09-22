@@ -69,8 +69,17 @@ module.exports = function (app) {
                 return dialog
                     .confirmMessage(langService.get('confirm_remove').change({name: subscriber.sharedToFullName}), null, null, $event)
                     .then(function () {
-                        self.documentLink.documentLinkSubscribers.splice($index, 1);
-                        self.selectedDocumentLinkSubscribers = [];
+                        if (!self.documentLink.id) {
+                            self.documentLink.documentLinkSubscribers.splice($index, 1);
+                            self.selectedDocumentLinkSubscribers = [];
+                        } else {
+                            correspondenceService.deleteDocumentLinkSubscriber(subscriber)
+                                .then(function (result) {
+                                    self.documentLink.documentLinkSubscribers.splice($index, 1);
+                                    self.selectedDocumentLinkSubscribers = [];
+                                    toast.success(langService.get('delete_success'));
+                                })
+                        }
                     });
             };
 
