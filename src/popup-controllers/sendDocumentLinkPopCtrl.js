@@ -71,7 +71,6 @@ module.exports = function (app) {
                     .then(function () {
                         self.documentLink.documentLinkSubscribers.splice($index, 1);
                         self.selectedDocumentLinkSubscribers = [];
-                        //toast.success(langService.get('delete_success'));
                     });
             };
 
@@ -94,7 +93,6 @@ module.exports = function (app) {
                             if (index > -1)
                                 self.documentLink.documentLinkSubscribers.splice(index, 1);
                         }
-                        _resetDocumentLinkSubscriber();
                         //toast.success(langService.get('delete_success'));
                     });
             };
@@ -143,6 +141,13 @@ module.exports = function (app) {
                     })
 
             };
+
+            self.checkDocumentLinkDisabled = function () {
+                return (!self.documentLink.documentLinkSubscribers.length
+                    || !self.documentLink.expirationTime
+                    || !(self.documentLink.exportOptionsMap.BOOK || self.documentLink.exportOptionsMap.ATTACHMENTS.length || self.documentLink.exportOptionsMap.RELATED_BOOKS.length))
+            };
+
             /**
              * @description Close the popup
              */

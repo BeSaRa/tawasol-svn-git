@@ -3897,6 +3897,39 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Delete document link subscriber
+         * @param subscriberId
+         * @returns {*}
+         */
+        self.deleteDocumentLinkSubscriber = function (subscriberId) {
+            subscriberId = subscriberId.hasOwnProperty('id') ? subscriberId.id : subscriberId;
+            return $http.delete(urlService.documentLink + '/' + subscriberId)
+                .then(function (result) {
+                    return result.data.rs;
+                }).catch(function (error) {
+                    if (errorCode.checkIf('FAILED_DUE_TO_LINKED_OBJECT') === true) {
+                        dialog.errorMessage(langService.get('cannot_delete_subscriber_he_opened_book'));
+                        return $q.reject(error);
+                    }
+                    return errorCode.showErrorDialog(error);
+                });
+        };
+
+        /**
+         * @description Delete bulk document link subscribers
+         * @param subscribers
+         * @returns {*}
+         */
+        self.deleteBulkDocumentLinkSubscriber = function (subscribers) {
+            var subscriberIds = _.map(subscribers, 'id');
+            return $http
+                .put((urlService.documentLink + "/bulk"), subscriberIds)
+                .then(function (result) {
+                    return generator.getBulkActionResponse(result, subscribers, false, 'failed_delete_selected', 'delete_success', 'delete_success_except_following');
+                });
+        };
+
         self.loadUserLinks = function (userId, ouId) {
             return $http
                 .get((urlService.documentLink + '/user-id/' + userId + '/ouid/' + ouId))

@@ -186,11 +186,9 @@
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised"
-                   ng-disabled="!ctrl.documentLink.documentLinkSubscribers.length
-                               || !ctrl.documentLink.expirationTime
-                               || !(ctrl.documentLink.exportOptionsMap.BOOK || ctrl.documentLink.exportOptionsMap.ATTACHMENTS.length || ctrl.documentLink.exportOptionsMap.RELATED_BOOKS.length)"
+                   ng-disabled="ctrl.checkDocumentLinkDisabled()"
                    ng-click="ctrl.sendDocumentLink()">
-            {{lang.send}}
+            {{lang.save}}
         </md-button>
         <span flex></span>
         <md-button class="md-raised" ng-click="ctrl.closePopup()">{{lang.close}}

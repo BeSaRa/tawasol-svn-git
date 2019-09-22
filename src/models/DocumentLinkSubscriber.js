@@ -27,6 +27,14 @@ module.exports = function (app) {
                 return requiredFields;
             };
 
+            /**
+             * @description Get the full name of subscriber
+             * @returns {string}
+             */
+            DocumentLinkSubscriber.prototype.getTranslatedName = function () {
+                return this.sharedToFullName;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('DocumentLinkSubscriber', 'init', this);
