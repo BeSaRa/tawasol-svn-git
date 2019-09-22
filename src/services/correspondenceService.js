@@ -3894,6 +3894,13 @@ module.exports = function (app) {
                 generator.interceptSendInstance('DocumentLink', documentLink))
                 .then(function (result) {
                     return result.data.rs;
+                })
+                .catch(function(error){
+                    if (errorCode.checkIf('FAILED_DUE_TO_LINKED_OBJECT') === true) {
+                        dialog.errorMessage(langService.get('cannot_delete_subscriber_he_opened_book'));
+                        return $q.reject(error);
+                    }
+                    return errorCode.showErrorDialog(error);
                 });
         };
 
