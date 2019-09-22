@@ -69,7 +69,7 @@ module.exports = function (app) {
                 return dialog
                     .confirmMessage(langService.get('confirm_remove').change({name: subscriber.sharedToFullName}), null, null, $event)
                     .then(function () {
-                        if (!self.documentLink.id) {
+                        if (!subscriber.id) {
                             self.documentLink.documentLinkSubscribers.splice($index, 1);
                             self.selectedDocumentLinkSubscribers = [];
                         } else {
