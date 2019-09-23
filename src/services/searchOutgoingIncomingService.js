@@ -22,11 +22,19 @@ module.exports = function (app) {
             return value;
         }
 
-        function _checkPropertyConfiguration(model, properties) {
+        function _checkPropertyConfiguration(model, properties, ignoredProperties) {
             var criteria = {};
             _.map(properties, function (item) {
                 criteria[item.symbolicName] = _findProperty(item.symbolicName.toLowerCase(), model);
             });
+
+            //add ignored properties
+            if (ignoredProperties && ignoredProperties.length) {
+                _.map(ignoredProperties, function (item) {
+                    criteria[item] = _findProperty(item.toLowerCase(), model);
+                });
+            }
+
             return criteria;
         }
 
@@ -38,7 +46,9 @@ module.exports = function (app) {
          */
         self.searchOutgoingIncomingDocuments = function (model, properties) {
             var criteria = generator.interceptSendInstance('SearchOutgoingIncoming', model);
-            criteria = _checkPropertyConfiguration(criteria, properties);
+            var ignoredPropertyConfiguration = ["FromRegOUId", "ToRegOUId"];
+            criteria = _checkPropertyConfiguration(criteria, properties, ignoredPropertyConfiguration);
+
             return $http
                 .post(urlService.searchDocument.change({searchType: 'correspondence'}),
                     generator.interceptSendInstance('SearchCriteria', criteria))
