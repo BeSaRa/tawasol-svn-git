@@ -36,17 +36,17 @@ module.exports = function (app) {
 
             InternalSearch.prototype.prepareApproved = function () {
                 model = this;
-                if (model.approvers) {
+                if (model.approvers || model.approveDateFrom) {
                     var toDate = angular.copy(model.approveDateTo);
-                    toDate = toDate ? new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate(), 23, 59, 59, 999) : null ;
-                    model.approvers = model.approvers ? angular.toJson({
-                        userId: model.approvers.applicationUser.id,
-                        userOuId: model.approvers.ouid.id,
+                    toDate = toDate ? new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate(), 23, 59, 59, 999) : null;
+                    model.approvers = angular.toJson({
+                        userId: (model.approvers) ? model.approvers.applicationUser.id : null,
+                        userOuId: (model.approvers) ? model.approvers.ouid.id : null,
                         approveDate: {
                             first: generator.getTimeStampFromDate(model.approveDateFrom),
                             second: generator.getTimeStampFromDate(toDate)
                         }
-                    }) : null;
+                    });
                 }
                 return model;
             };

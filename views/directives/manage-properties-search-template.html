@@ -627,7 +627,7 @@
                     </div>
                 </md-input-container>
                 <!-- Approver Date From -->
-                <md-input-container ng-if="ctrl.document.approvers">
+                <md-input-container>
                     <label for="approverFrom">{{lang.search_module_start_date}}</label>
                     <md-datepicker id="approverFrom" name="approverFrom" md-open-on-focus
                                    ng-required="ctrl.document.approveDateTo"
@@ -639,7 +639,7 @@
                     </div>
                 </md-input-container>
                 <!-- Approver Date To -->
-                <md-input-container ng-if="ctrl.document.approvers">
+                <md-input-container>
                     <label for="approverTo">{{lang.search_module_end_date}}</label>
                     <md-datepicker id="approverTo" name="approverTo" md-open-on-focus
                                    ng-required="ctrl.document.approveDateFrom"
