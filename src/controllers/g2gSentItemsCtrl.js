@@ -200,6 +200,7 @@ module.exports = function (app) {
             return g2gSentItemsService
                 .recallG2GTerminate(g2gItem)
                 .then(function (result) {
+                    self.reloadG2gItems(self.grid.page);
                     if (result) {
                         toast.success(langService.get('recall_terminate_success').change({name: g2gItem.getTranslatedName()}));
                     } else {

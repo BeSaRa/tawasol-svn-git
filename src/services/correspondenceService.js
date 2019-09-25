@@ -4067,7 +4067,8 @@ module.exports = function (app) {
             return $http
                 .get(urlService.g2gCorrespondenceByActionID.replace('{g2gActionID}', g2gActionID))
                 .then(function (result) {
-                    return generator.interceptReceivedInstance(['Correspondence', _getModelName('Outgoing')], result.data.rs);
+                    var model = generator.generateInstance(result.data.rs, _getModel('Outgoing'));
+                    return generator.interceptReceivedInstance(['Correspondence', _getModelName('Outgoing')], model);
                 });
         };
 
