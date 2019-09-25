@@ -94,10 +94,10 @@
                                                     </div>
                                                 </th>
                                                 <th ng-if="!ctrl.selectedFollowupOrganizations.length" md-column
-                                                    md-order-by="followeeOUId.arName"><span>{{lang.arabic_name}}</span>
+                                                    md-order-by="ouInfo.arName"><span>{{lang.arabic_name}}</span>
                                                 </th>
                                                 <th ng-if="!ctrl.selectedFollowupOrganizations.length" md-column
-                                                    md-order-by="followeeOUId.enName"><span>{{lang.english_name}}</span>
+                                                    md-order-by="ouInfo.enName"><span>{{lang.english_name}}</span>
                                                 </th>
                                                 <th ng-if="!ctrl.selectedFollowupOrganizations.length" md-column
                                                     md-order-by="withSubs"><span>{{lang.with_subs_ou}}</span>
@@ -106,18 +106,20 @@
                                             </thead>
                                             <tbody md-body>
                                             <tr md-select="followupOu" md-row
-                                                ng-repeat="followupOu in ctrl.followupOrganizations | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
-                                                <td md-cell>{{followupOu.followeeOUId.arName}}</td>
-                                                <td md-cell>{{followupOu.followeeOUId.enName}}</td>
+                                                ng-repeat="followupOu in ctrl.followupOrganizations | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index"
+                                                ng-disabled="!followupOu.canEditDelete">
+                                                <td md-cell>{{followupOu.ouInfo.arName}}</td>
+                                                <td md-cell>{{followupOu.ouInfo.enName}}</td>
                                                 <td md-cell>
                                                     <md-switch aria-label="{{lang.with_subs_ou}}"
                                                                ng-model="followupOu.withSubs"
-                                                               ng-if="followupOu.followeeOUId.hasRegistry"
+                                                               ng-if="followupOu.ouInfo.hasRegistry && followupOu.canEditDelete"
                                                                title="{{ctrl.getTranslatedWithSubs(followupOu)}}"></md-switch>
                                                 </td>
                                                 <td md-cell>
                                                     <div flex layout="row" layout-align="start center">
                                                         <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                                   ng-if="followupOu.canEditDelete"
                                                                    ng-click="ctrl.removeFollowupEmployee(followupOu,$index ,$event)">
                                                             <md-icon md-svg-icon="delete"></md-icon>
                                                         </md-button>

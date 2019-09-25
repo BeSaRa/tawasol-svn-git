@@ -42,12 +42,12 @@ module.exports = function (app) {
          * @description add followup organization
          */
         self.addFollowupOrganizationFromCtrl = function ($event) {
-
             self.followupOrganization.followeeOUId = (self.Ou) ? self.Ou : self.regOu;
             if (self.Ou) {
                 self.followupOrganization.followeeOUId.hasRegistry = false;
             }
-
+            self.followupOrganization.canEditDelete = true;
+            self.followupOrganization.ouInfo = angular.copy(self.followupOrganization.followeeOUId);
             self.followupOrganizations.push(self.followupOrganization);
 
             _resetFollowupOUModel();
@@ -84,7 +84,7 @@ module.exports = function (app) {
          */
         self.removeFollowupEmployee = function (followupOu, $index, $event) {
             return dialog
-                .confirmMessage(langService.get('confirm_remove').change({name: followupOu.followeeOUId.getTranslatedName()}), null, null, $event)
+                .confirmMessage(langService.get('confirm_remove').change({name: followupOu.ouInfo.getTranslatedName()}), null, null, $event)
                 .then(function () {
                     self.followupOrganizations.splice($index, 1);
                 });
@@ -97,9 +97,9 @@ module.exports = function (app) {
             return dialog
                 .confirmMessage(langService.get('confirm_remove_selected_multiple'), null, null, $event || null)
                 .then(function () {
-                    var ids = _.map(self.selectedFollowupOrganizations, 'followeeOUId.id');
+                    var ids = _.map(self.selectedFollowupOrganizations, 'ouInfo.id');
                     self.followupOrganizations = _.filter(self.followupOrganizations, function (followupOrganization) {
-                        return ids.indexOf(followupOrganization.followeeOUId.id) === -1;
+                        return ids.indexOf(followupOrganization.ouInfo.id) === -1;
                     });
 
                     self.selectedFollowupOrganizations = [];
@@ -131,7 +131,7 @@ module.exports = function (app) {
          */
         self.includeOrganizationsIfNotExists = function (organization) {
             return _.map(self.followupOrganizations, function (ou) {
-                return ou.followeeOUId.id
+                return ou.ouInfo.id
             }).indexOf(organization.id) === -1;
         };
 
@@ -140,14 +140,14 @@ module.exports = function (app) {
             return !self.regOu ||
                 (!self.Ou &&
                     _.map(self.followupOrganizations, function (ou) {
-                        return ou.followeeOUId.id;
+                        return ou.ouInfo.id;
                     }).indexOf(self.regOu.id) !== -1);
         };
 
         self.isRegOuDisabled = function (organization) {
             return !organization.status ||
                 _.some(self.followupOrganizations, function (ou) {
-                    return ou.followeeOUId.id === organization.id && ou.withSubs;
+                    return ou.ouInfo.id === organization.id && ou.withSubs;
                 });
         };
 

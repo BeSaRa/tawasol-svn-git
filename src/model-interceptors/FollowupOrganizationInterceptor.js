@@ -1,14 +1,12 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       organizationService,
-                      Information,
-                      _) {
+                      _,
+                      WFOrganization) {
         'ngInject';
-        var modelName = 'FollowupOrganization',
-            organizations ;
+        var modelName = 'FollowupOrganization';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
-            organizations = organizationService.returnOrganizations();
             return model;
         });
 
@@ -24,8 +22,10 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.followeeOUId = _.find(organizations , function (regOU) {
-                return regOU.id === model.followeeOUId;
+            // ouInfo contains the ou information of followeeOUId
+            model.ouInfo = new WFOrganization(model.ouInfo);
+            model.canEditDelete = !!_.find(organizationService.organizations, function (ou) {
+                return ou.id === model.followeeOUId;
             });
             return model;
         });
