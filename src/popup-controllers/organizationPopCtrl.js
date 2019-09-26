@@ -1440,7 +1440,7 @@ module.exports = function (app) {
          * @param {ApplicationUser} ouApplicationUser
          */
         self.openEditApplicationUserDialog = function (ouApplicationUser, $event) {
-            if (!ouApplicationUser instanceof OUApplicationUser) {
+            if (!(ouApplicationUser instanceof OUApplicationUser)) {
                 return;
             }
             var organization = ouApplicationUser.ouid || ouApplicationUser.ouId;

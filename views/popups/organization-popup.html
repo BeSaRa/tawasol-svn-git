@@ -1230,7 +1230,7 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <!-- Users -->
+                    <!-- Organization Users -->
                     <md-tab ng-if="ctrl.editMode && ctrl.showTab('users')" label="{{lang.organization_users}}"
                             ng-click="ctrl.setCurrentTab('users')">
                         <md-content class="md-padding">
@@ -1350,7 +1350,7 @@
                                                                             class="md-icon-button"
                                                                             title="{{lang.edit}}"
                                                                             ng-if="ctrl.employeeService.getEmployee().id != ouApplicationUser.applicationUser.id"
-                                                                            ng-click="ctrl.openEditApplicationUserDialog(ouApplicationUser.applicationUser, $event)">
+                                                                            ng-click="ctrl.openEditApplicationUserDialog(ouApplicationUser, $event)">
                                                                         <md-icon md-svg-icon="pencil"></md-icon>
                                                                     </md-button>
                                                                 </div>
