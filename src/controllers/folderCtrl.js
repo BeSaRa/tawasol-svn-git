@@ -1450,7 +1450,7 @@ module.exports = function (app) {
                     // Digital Signature
                     {
                         type: 'action',
-                        //icon: 'attachment',
+                        icon: 'draw',
                         text: 'grid_action_digital',//digital_signature
                         shortcut: false,
                         callback: self.signDigitalSignature,

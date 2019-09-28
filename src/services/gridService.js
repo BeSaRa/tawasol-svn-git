@@ -820,5 +820,76 @@ module.exports = function (app) {
         self.removeAllGridSubjectTruncate = function () {
             localStorageService.remove(_getStorageKey(self.storageKeys.truncateSubject));
         };
+
+        self.gridIcons = {
+            actions: {
+                info: 'information-variant',
+                previewBook: 'book-open-variant',
+                openBook: 'book-open-page-variant',
+                version: 'animation',
+                viewInDeskTop: 'monitor',
+                terminate: 'stop',
+                addToFolder: 'folder-plus',
+                addToFavorite: 'star',
+                addToIcnArchive: 'archive',
+                createReply: 'pen',
+                forward: 'share',
+                reply: 'reply',
+                broadcast: 'bullhorn',
+                link: 'link',
+                subscribe: 'bell-plus',
+                sendToExport: 'export',
+                addTask: 'calendar-check-outline',
+                trackingSheet: 'eye',
+                manageTags: 'tag',
+                manageComments: 'comment',
+                manageTasks: 'note-multiple',
+                manageAttachments: 'attachment',
+                manageLinkedDocs: 'file-document',
+                manageLinkedEntities: 'link-variant',
+                manageDestinations: 'stop',
+                download: 'download',
+                send: 'send',
+                sms: 'message',
+                approve: 'check-decagram',
+                electronicApprove: 'account-check',
+                digitalSignature: 'draw',
+                approveAndExport: 'account-multiple-check',
+                edit: 'pencil',
+                editContent: 'pencil-box',
+                editProperties: 'pencil',
+                editInDesktop: 'desktop-classic',
+                duplicate: 'settings',
+                duplicateCurrentVersion: 'content-copy',
+                duplicateSpecificVersion: 'content-duplicate',
+
+            },
+            indicators: {
+                securityLevel: 'security',
+                priorityLevel_0: '',
+                priorityLevel_1: 'arrow-up',
+                priorityLevel_2: 'exclamation',
+                followupStatus0: 'reply',
+                attachment: 'paperclip',
+                linkedDocs: 'link-variant',
+                reassigned: 'transfer',
+                bookOpened: 'email-open',
+                bookNotOpened: 'email',
+                outgoing: 'arrow-up-bold-box',
+                incoming: 'arrow-down-bold-box',
+                internal: 'recycle',
+                paperDocument: 'file-document',
+                electronicDocument: 'tablet',//cellphone-dock';
+                exportViaCentralArchive: 'archive',
+                linkedExportedDoc: 'link',
+                dueDate: 'calendar',
+                copy: 'content-copy',
+                lockedG2g: 'lock',
+                versionHasContent: 'file-check',
+                internalG2g: 'recycle',
+                lockedWorkItem: 'lock',
+                transferredDocument: 'bank-transfer-in'
+            }
+        };
     });
 };

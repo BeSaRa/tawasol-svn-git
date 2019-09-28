@@ -1880,7 +1880,7 @@ module.exports = function (app) {
                     // Digital Signature
                     {
                         type: 'action',
-                        //icon: 'attachment',
+                        icon: 'draw',
                         text: 'grid_action_digital',//digital_signature
                         callback: self.signDigitalSignature,
                         class: "action-red",

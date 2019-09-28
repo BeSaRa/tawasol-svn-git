@@ -3,8 +3,7 @@ module.exports = function (app) {
                                        lookupService,
                                        Lookup,
                                        moment,
-                                       employeeService,
-                                       langService) {
+                                       gridService) {
         'ngInject';
         return function Indicator(model) {
             var self = this;
@@ -210,18 +209,6 @@ module.exports = function (app) {
                     tooltip: 'indicator_' + docClass,
                     value: docClassCopy
                 });
-
-
-                /*docClass = docClass.toLowerCase();
-                var docClass = 'indicator ' + (docType === 'incoming' ? 'inc' : (docType === 'outgoing' ? 'out' : 'int'));
-                var text = (docType === 'incoming' ? 'indicator_incoming' : (docType === 'outgoing' ? 'indicator_outgoing' : 'indicator_internal'));
-                var icon = (docType === 'incoming' ? icons['incoming'] : (docType === 'outgoing' ? icons['outgoing'] : icons['internal']));
-                return new Indicator({
-                    class: docClass,
-                    text: text,
-                    icon: icon,
-                    tooltip: text
-                });*/
             };
 
             /**
