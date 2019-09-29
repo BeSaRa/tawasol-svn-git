@@ -161,7 +161,7 @@ module.exports = function (app) {
             return $http
                 .post(urlService.tasks + '/task-id/' + task.id + '/participant', generator.interceptSendInstance('TaskParticipant', taskParticipant))
                 .then(function (result) {
-                    taskParticipant.id = result.data.rs;
+                    taskParticipant.id = result.data.rs.id;
                     return taskParticipant;
                 });
         };
