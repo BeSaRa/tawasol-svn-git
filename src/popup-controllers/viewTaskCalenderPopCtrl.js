@@ -90,7 +90,6 @@ module.exports = function (app) {
 
             self.openTaskParticipantFromView = function (participant, $event) {
                 $event.preventDefault();
-
                 taskService
                     .openSettingForParticipant(participant, self.task, true, true)
                     .then(function (participant) {

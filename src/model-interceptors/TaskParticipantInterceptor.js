@@ -20,6 +20,8 @@ module.exports = function (app) {
                 model.startDate = moment(model.startDate).toDate();
                 model.dueDate = moment(model.dueDate).toDate();
             }
+
+            model.completionDate = model.taskState === 2 ? null : (model.completionDate ? model.completionDate : new Date());
             // delete extra properties
             delete model.ouInfo;
             delete model.userInfo;

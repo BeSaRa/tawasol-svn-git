@@ -172,6 +172,7 @@ module.exports = function (app) {
                 .put(urlService.tasks + '/task-id/' + task.id + '/participant', generator.interceptSendInstance('TaskParticipant', taskParticipant))
                 .then(function (result) {
                     taskParticipant.id = result.data.rs.id;
+                    taskParticipant.completionDate = result.data.rs.completionDate;
                     return taskParticipant;
                 });
         };
@@ -208,7 +209,14 @@ module.exports = function (app) {
                 });
             });
         };
-
+        /**
+         *  open setting for task participant
+         * @param taskParticipant
+         * @param task
+         * @param editMode
+         * @param fromView
+         * @returns {promise}
+         */
         self.openSettingForParticipant = function (taskParticipant, task, editMode, fromView) {
             return dialog
                 .showDialog({
