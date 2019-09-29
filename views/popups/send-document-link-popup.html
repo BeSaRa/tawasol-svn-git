@@ -113,7 +113,7 @@
                     <md-card layout="column"
                              flex class="card-overlay">
                         <md-table-container>
-                            <table md-table md-row-select
+                            <table md-table
                                    ng-model="ctrl.selectedDocumentLinkSubscribers"
                                    md-progress="ctrl.grid.progress">
                                 <thead md-head md-order="ctrl.grid.order"
@@ -124,10 +124,10 @@
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedDocumentLinkSubscribers.length}} {{lang.items_selected}} </span>
                                             <span flex></span>
-                                            <md-button class="md-icon-button"
+                                            <!--<md-button class="md-icon-button"
                                                        ng-click="ctrl.removeBulkDocumentLinkSubscribers($event)">
                                                 <md-icon md-svg-icon="delete"></md-icon>
-                                            </md-button>
+                                            </md-button>-->
                                         </div>
                                     </th>
                                     <th md-column ng-if="!ctrl.selectedDocumentLinkSubscribers.length"
