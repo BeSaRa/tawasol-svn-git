@@ -322,7 +322,7 @@ module.exports = function (app) {
          */
         self.viewOTPDocument = function (otp) {
             if (!$stateParams.subscriberId || !$stateParams.entity || !otp) {
-                toast.error(langService.get('failed_to_download'));
+                toast.error(langService.get('otp_failed_to_download'));
                 return $q.reject('INVALID_LINK_OTP');
             }
             //var url = urlService.documentLink + "/view-link/" + $stateParams.subscriberId + "/entity/" + $stateParams.entity + '?otp=' + otp;
@@ -339,7 +339,7 @@ module.exports = function (app) {
                 return true;
             }).catch(function (error) {
                 errorCode.checkIf(error, "INVALID_LINK", function () {
-                    toast.error(langService.get('failed_to_download'));
+                    toast.error(langService.get('otp_failed_to_download'));
                 });
                 return $q.reject('INVALID_LINK');
             })
