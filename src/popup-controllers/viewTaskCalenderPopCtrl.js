@@ -88,6 +88,7 @@ module.exports = function (app) {
                 return propertyName + '.' + langService.current + 'Name';
             };
 
+            
             self.openTaskParticipantFromView = function (participant, $event) {
                 $event.preventDefault();
                 taskService
