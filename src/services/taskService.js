@@ -210,7 +210,7 @@ module.exports = function (app) {
             });
         };
         /**
-         *  open setting for task participant
+         * @description open setting for task participant
          * @param taskParticipant
          * @param task
          * @param editMode
