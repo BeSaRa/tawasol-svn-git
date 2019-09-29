@@ -295,10 +295,10 @@ module.exports = function (app) {
                             contentViewHistoryRecords: function () {
                                 'ngInject';
                                 return (heading === 'view_tracking_sheet_content_view_history' || gridType === 'tabs')
-                                    ? self.loadContentViewHistory(document)
+                                    ? (employeeService.hasPermissionTo('VIEW_CONTENT_LOG') ? self.loadContentViewHistory(document)
                                         .then(function (result) {
                                             return result;
-                                        }) : [];
+                                        }) : [] ) : [];
                             },
                             smsLogRecords: function (organizationService, applicationUserService) {
                                 'ngInject';
@@ -317,14 +317,6 @@ module.exports = function (app) {
                                 } else {
                                     return [];
                                 }
-
-                                /*return appUserDefer.promise.then(function () {
-                                    return (heading === 'view_tracking_sheet_sms_logs' || gridType === 'tabs')
-                                        ? self.loadSmsLogs(document)
-                                            .then(function (result) {
-                                                return result;
-                                            }) : [];
-                                })*/
                             },
                             outgoingDeliveryReportRecords: function () {
                                 'ngInject';
@@ -353,26 +345,6 @@ module.exports = function (app) {
                                             return result;
                                         }) : [];
                             }
-                            /*docUpdateHistoryRecords: function () {
-                             'ngInject';
-                             return (heading === 'view_tracking_sheet_doc_update_history' || gridType === 'tabs')
-                             ? self.loadDocumentUpdateHistory(document)
-                             .then(function (result) {
-                             return result;
-                             }).catch(function(error){
-                             return [];
-                             }) : [];
-                             },
-                             docStatusHistoryRecords: function () {
-                             'ngInject';
-                             return (heading === 'view_tracking_sheet_doc_status_history' || gridType === 'tabs')
-                             ? self.loadDocumentStatusHistory(document)
-                             .then(function (result) {
-                             return result;
-                             }).catch(function(error){
-                             return [];
-                             }) : [];
-                             }*/
                         }
                     });
                 },
