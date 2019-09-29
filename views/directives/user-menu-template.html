@@ -25,7 +25,7 @@
                 </md-button>
             </md-menu-item>
             <md-menu-item
-                    ng-if="!userMenu.employeeService.isAdminUser() && userMenu.employeeService.hasPermissionTo('MANAGE_PREFERENCES')">
+                    ng-if="!userMenu.employeeService.isAdminUser()">
                 <md-button ng-click="userMenu.manageSubscriptions($event)">
                     <div layout="row" layout-align="start center">
                         <md-icon md-svg-icon="bell-plus"></md-icon>
@@ -34,8 +34,7 @@
                 </md-button>
             </md-menu-item>
             <md-menu-item
-                    ng-if="!userMenu.employeeService.isAdminUser() && userMenu.employeeService.hasPermissionTo('MANAGE_PREFERENCES') &&
-                            userMenu.employeeService.hasPermissionTo('SHARE_BOOK_LINK')">
+                    ng-if="!userMenu.employeeService.isAdminUser() && userMenu.employeeService.hasPermissionTo('SHARE_BOOK_LINK')">
                 <md-button ng-click="userMenu.manageDocumentLinks($event)">
                     <div layout="row" layout-align="start center">
                         <md-icon md-svg-icon="link-variant"></md-icon>
