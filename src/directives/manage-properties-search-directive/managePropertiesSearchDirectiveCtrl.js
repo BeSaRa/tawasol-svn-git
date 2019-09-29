@@ -528,12 +528,6 @@ module.exports = function (app) {
             }
         };
 
-
-        self.onChangeApprover = function ($event) {
-            self.document.approveDateFrom = null;
-            self.document.approveDateTo = null;
-        };
-
         self.onChangeAddMethod = function ($event) {
             if (self.document.addMethod === 1) {
                 self.document.approvers = null;

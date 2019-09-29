@@ -613,7 +613,6 @@
                     <label for="approvers">{{lang.approver}}</label>
                     <md-select name="approvers"
                                id="approvers"
-                               ng-change="ctrl.onChangeApprover($event)"
                                ng-model="ctrl.document.approvers"
                                ng-required="ctrl.checkMandatory('approvers')">
                         <md-option ng-value="approver"
