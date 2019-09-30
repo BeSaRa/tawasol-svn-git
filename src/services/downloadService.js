@@ -12,7 +12,9 @@ module.exports = function (app) {
                                              rootEntity,
                                              generator,
                                              $stateParams,
-                                             errorCode) {
+                                             errorCode,
+                                             Information,
+                                             $sce) {
         'ngInject';
         var self = this;
         self.serviceName = 'downloadService';
@@ -333,9 +335,27 @@ module.exports = function (app) {
             });
             tokenService.excludeUrlInRuntime(url);
 
-            return $http.get(url).then(function (result) {
-                var fileName = result.data.rs.substring(result.data.rs.lastIndexOf('/') + 1);
-                self.downloadRemoteFile(result.data.rs, fileName);
+            return $http.get(url, {
+                responseType: 'blob'
+            }).then(function (result) {
+                var urlObj = window.URL.createObjectURL(result.data);
+                var fileName = urlObj.substring(urlObj.lastIndexOf('/') + 1);
+                if (helper.browser.isIE()) {
+                    window.navigator.msSaveOrOpenBlob(result.data);
+                } else {
+                    dialog.showDialog({
+                        templateUrl: cmsTemplate.getPopup('view-document-readonly'),
+                        controller: 'viewDocumentReadOnlyPopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        escapeToCancel: false,
+                        locals: {
+                            document: new Information({arName: fileName, enName: fileName}),
+                            content: {viewURL: $sce.trustAsResourceUrl(urlObj)}
+                        }
+                    });
+                }
+
                 return true;
             }).catch(function (error) {
                 errorCode.checkIf(error, "INVALID_LINK", function () {
