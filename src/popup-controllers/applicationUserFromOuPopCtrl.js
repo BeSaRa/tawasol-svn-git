@@ -48,6 +48,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'applicationUserFromOuPopCtrl';
         self.editMode = editMode;
+        self.employeeService = employeeService;
         self.globalSetting = rootEntity.returnRootEntity().settings;
         self.applicationUser = angular.copy(applicationUser);
         if (!editMode) {
@@ -282,6 +283,9 @@ module.exports = function (app) {
         };
 
         self.disabledFields = [];
+        if (self.editMode && !employeeService.getEmployee().isAdmin) {
+            self.disabledFields.push('loginName', 'domainName');
+        }
 
         if (!self.globalSetting.enableSMSNotification) {
             self.disabledFields.push(
@@ -739,6 +743,9 @@ module.exports = function (app) {
          * @description Add new application user and add to organization
          */
         self.addApplicationUserAndOUFromCtrl = function () {
+            if (self.disabledFields.length)
+                generator.replaceWithOriginalValues(self.applicationUser, self.model, self.disabledFields);
+
             validationService
                 .createValidation('ADD_APPLICATION_USER')
                 .addStep('check_required', true, self.checkRequiredFieldsAppUser, self.applicationUser, function (result) {
@@ -802,6 +809,9 @@ module.exports = function (app) {
          * @description Edit application user and update organization
          */
         self.editApplicationUserAndOUFromCtrl = function () {
+            if (self.disabledFields.length)
+                generator.replaceWithOriginalValues(self.applicationUser, self.model, self.disabledFields);
+
             validationService
                 .createValidation('EDIT_APPLICATION_USER')
                 .addStep('check_required', true, self.checkRequiredFieldsAppUser, self.applicationUser, function (result) {

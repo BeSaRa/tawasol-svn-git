@@ -48,6 +48,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'applicationUserPopCtrl';
         self.editMode = editMode;
+        self.employeeService = employeeService;
         self.globalSetting = rootEntity.returnRootEntity().settings;
         self.applicationUser = angular.copy(applicationUser);
 
@@ -301,6 +302,9 @@ module.exports = function (app) {
         };
 
         self.disabledFields = [];
+        if (self.editMode && !employeeService.getEmployee().isAdmin) {
+            self.disabledFields.push('loginName', 'domainName');
+        }
 
         if (!self.globalSetting.enableSMSNotification) {
             self.disabledFields.push(
