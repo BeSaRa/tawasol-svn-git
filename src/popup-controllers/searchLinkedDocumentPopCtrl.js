@@ -26,7 +26,7 @@ module.exports = function (app) {
         // the search criteria for correspondence
         self.correspondence = new Correspondence({
             year: new Date().getFullYear(),
-            ou: employeeService.getCurrentOUApplicationUser().ouRegistryID
+            registryOU: employeeService.getCurrentOUApplicationUser().ouRegistryID
         });
 
         self.disableSelectedOrganization = !employeeService.hasPermissionTo('SEARCH_IN_ALL_OU');
