@@ -117,6 +117,7 @@ module.exports = function (app) {
                     dir: 'ltr',
                     eventLimit: true,
                     selectable: true,
+                    eventResizableFromStart: false,
                     select: self.openAddEventDialog,
                     plugins: ['interaction', 'dayGrid', 'timeGrid'],
                     events: function (fetchInfo, successCallback, failCallback) {
@@ -167,55 +168,31 @@ module.exports = function (app) {
                             // send reminder for all participant
                             menuContent.append('<md-menu-item><md-button ng-click="ctrl.sendReminderForAll(ctrl.task)">{{lang.send_reminder_for_all}}</md-button></md-menu-item>');
                         }
-
                         content.append(menu);
                         $compile(element)(scope);
                     },
-                    eventDrop: function (info) {
-                        var taskParticipant = new TaskParticipant();
-                        taskParticipant
-                            .setId(info.event.extendedProps.taskParticipantId)
-                            .setTaskDetailsId(info.event.extendedProps.taskId)
-                            .setStartDate(info.event.start)
-                            .setDueDate(info.event.end)
-                            .setOuId(info.event.extendedProps.participantOuInfo.id)
-                            .setUserId(info.event.extendedProps.participantInfo.id)
-                            .setAllDay(info.event.allDay);
-
-                        if (info.event.end.valueOf() < (new Date).valueOf()) {
-                            toast.error(langService.get('due_date_less_than_today'));
-                            info.revert();
-                            return;
-                        }
-
-                        taskService
-                            .changeTaskParticipantDuration(info.event.extendedProps.taskId, taskParticipant)
-                            .then(function () {
-                                toast.success(langService.get('task_updated_successfully'));
-                            });
-                    },
                     eventResize: function (info) {
-                        var taskParticipant = new TaskParticipant();
-                        taskParticipant
-                            .setId(info.event.extendedProps.taskParticipantId)
-                            .setTaskDetailsId(info.event.extendedProps.taskId)
-                            .setStartDate(info.event.start)
-                            .setDueDate(info.event.end)
-                            .setOuId(info.event.extendedProps.participantOuInfo.id)
-                            .setUserId(info.event.extendedProps.participantInfo.id)
-                            .setAllDay(info.event.allDay);
+                        // var taskParticipant = new TaskParticipant();
+                        // taskParticipant
+                        //     .setId(info.event.extendedProps.taskParticipantId)
+                        //     .setTaskDetailsId(info.event.extendedProps.taskId)
+                        //     .setStartDate(info.event.start)
+                        //     .setDueDate(info.event.end)
+                        //     .setOuId(info.event.extendedProps.ouInfo.id)
+                        //     .setUserId(info.event.extendedProps.participantInfo.id)
+                        //     .setAllDay(info.event.allDay);
 
-                        if (info.event.end.valueOf() < (new Date).valueOf()) {
-                            toast.error(langService.get('due_date_less_than_today'));
-                            info.revert();
-                            return;
-                        }
-
-                        taskService
-                            .changeTaskParticipantDuration(info.event.extendedProps.taskId, taskParticipant)
-                            .then(function () {
-                                toast.success(langService.get('task_updated_successfully'));
-                            });
+                        // if (info.event.end.valueOf() < (new Date).valueOf()) {
+                        //     toast.error(langService.get('due_date_less_than_today'));
+                        //     info.revert();
+                        //     return;
+                        // }
+                        //
+                        // taskService
+                        //     .changeTaskParticipantDuration(info.event.extendedProps.taskId, taskParticipant)
+                        //     .then(function () {
+                        //         toast.success(langService.get('task_updated_successfully'));
+                        //     });
                     }
                 });
                 self.calender.render();

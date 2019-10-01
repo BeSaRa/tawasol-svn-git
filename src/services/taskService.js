@@ -205,6 +205,7 @@ module.exports = function (app) {
                     event.end = event.creator ? event.taskDueDate : event.participantDueDate;
                     event.editable = (event.creator && event.taskState !== 3);
                     event.classNames = event.creator ? self.classes[event.taskState] : self.classes[event.participantTaskState];
+                    event.startEditable = false;
                     return event;
                 });
             });

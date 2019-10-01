@@ -80,6 +80,8 @@ module.exports = function (app) {
             self.taskParticipantsIds = _.map(self.task.taskParticipants, function (participant) {
                 return participant.participantId;
             });
+            if (self.taskParticipantsIds.indexOf(employeeService.getEmployee().getCombinedEmployeeId()) === -1)
+                self.taskParticipantsIds.push(employeeService.getEmployee().getCombinedEmployeeId());
         }
 
         _getParticipantIds();
