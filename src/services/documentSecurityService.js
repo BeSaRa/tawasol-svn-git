@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                      $q,
                                                      _,
                                                      errorCode,
+                                                     helper,
                                                      tokenService,
                                                      langService,
                                                      DocumentSecurity,
@@ -49,12 +50,16 @@ module.exports = function (app) {
             var defer = $q.defer();
             var xhr = new XMLHttpRequest();
             xhr.open("POST", urlService.documentSecurity + '/previewSettings');
-            xhr.setRequestHeader('tawasol-auth-header', tokenService.getToken());
-            xhr.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+            xhr.setRequestHeader('tawasol-auth-header', encodeURI(tokenService.getToken()));
+            xhr.setRequestHeader('Content-type', encodeURI('application/json;charset=UTF-8'));
             xhr.responseType = "blob";
             xhr.send(JSON.stringify(generator.interceptSendInstance('DocumentSecurity', documentSecurity)));
             xhr.onload = function (ev) {
-                defer.resolve(xhr.response);
+                if (helper.browser.isIE()) {
+                    window.navigator.msSaveOrOpenBlob(xhr.response);
+                } else {
+                    defer.resolve(xhr.response);
+                }
             };
             return defer.promise;
         };
@@ -116,7 +121,7 @@ module.exports = function (app) {
                         viewCallback: viewCorrespondenceCallback,
                         excludeVsId: null,
                         isAdminSearch: true,
-                        multiSelect : true
+                        multiSelect: true
                     },
                     resolve: {
                         organizations: function (organizationService) {
