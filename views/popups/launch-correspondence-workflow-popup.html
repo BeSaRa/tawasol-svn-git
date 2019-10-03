@@ -49,17 +49,24 @@
                 <!-- Content -->
                 <md-content flex scroll-directive class="relative" layout="row">
                     <div class="p20">
-                        <!-- Favorite Users -->
+                        <!-- Favorites -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('favorites')">
-                            <current-tab-label-directive selected-tab="ctrl.selectedTab"
-                                                         workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                            <!--<current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                         workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>-->
+                            <div layout="row">
+                                <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <span flex></span>
+                                <grid-search-directive grid="ctrl.grid.favoriteUsers" ng-if="ctrl.selectedFavoriteTab === 'users'"></grid-search-directive>
+                                <grid-search-directive grid="ctrl.grid.favoriteOus" ng-if="ctrl.selectedFavoriteTab === 'ou'"></grid-search-directive>
+                            </div>
                             <div>
                                 <br/>
                             </div>
-                            <md-card layout="row">
+                            <md-card layout="row" class="m0">
                                 <md-tabs md-dynamic-height flex id="favorites-tabs">
                                     <!-- Users -->
-                                    <md-tab label="{{lang.users}}">
+                                    <md-tab label="{{lang.users}}" md-on-select="ctrl.setCurrentFavoriteTab('users')">
                                         <div>
                                             <workflow-users-directive
                                                     apply-notification-settings="ctrl.applyNotificationSettings"
@@ -87,6 +94,7 @@
                                     </md-tab>
                                     <!-- Organizations -->
                                     <md-tab ng-disabled="ctrl.getApprovedStatus() || ctrl.isPrivateDoc()"
+                                            md-on-select="ctrl.setCurrentFavoriteTab('ou')"
                                             label="{{lang.organizations}}">
                                         <div>
                                             <workflow-items-directive
@@ -101,7 +109,8 @@
                                                     workflow-comments="ctrl.comments"
                                                     selected="ctrl.selectedWorkflowItems"
                                                     workflow-items="ctrl.favoriteOrganizations"
-                                                    grid-name="favoriteOUs"></workflow-items-directive>
+                                                    grid-name="favoriteOUs"
+                                                    grid="ctrl.grid.favoriteOus"></workflow-items-directive>
                                         </div>
                                     </md-tab>
                                 </md-tabs>
@@ -217,8 +226,14 @@
                         </div>
                         <!-- Private Users -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('private_users')">
-                            <current-tab-label-directive selected-tab="ctrl.selectedTab"
-                                                         workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                            <!--<current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                         workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>-->
+                            <div layout="row">
+                                <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <span flex></span>
+                                <grid-search-directive grid="ctrl.grid.privateUsers"></grid-search-directive>
+                            </div>
                             <div>
                                 <br/>
                             </div>
@@ -309,8 +324,14 @@
                         </div>
                         <!-- Head of government entities -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('heads_of_government_entities')">
-                            <current-tab-label-directive selected-tab="ctrl.selectedTab"
-                                                         workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                            <!--<current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                         workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>-->
+                            <div layout="row">
+                                <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <span flex></span>
+                                <grid-search-directive grid="ctrl.grid.governmentEntitiesHeads"></grid-search-directive>
+                            </div>
                             <div>
                                 <br/>
                             </div>
@@ -353,8 +374,14 @@
                         </div>
                         <!-- Workflow Groups -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('workflow_groups')">
-                            <current-tab-label-directive selected-tab="ctrl.selectedTab"
-                                                         workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                            <!--<current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                         workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>-->
+                            <div layout="row">
+                                <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <span flex></span>
+                                <grid-search-directive grid="ctrl.grid.workflowGroups"></grid-search-directive>
+                            </div>
                             <div>
                                 <br/>
                             </div>
@@ -370,7 +397,8 @@
                                     workflow-comments="ctrl.comments"
                                     selected="ctrl.selectedWorkflowItems"
                                     workflow-items="ctrl.workflowGroups"
-                                    grid-name="workflowGroups"></workflow-items-directive>
+                                    grid-name="workflowGroups"
+                                    grid="ctrl.grid.workflowGroups"></workflow-items-directive>
                             <div>
                                 <br/>
                             </div>
@@ -388,8 +416,14 @@
                         </div>
                         <!-- Organization Units -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('registry_organizations')">
-                            <current-tab-label-directive selected-tab="ctrl.selectedTab"
-                                                         workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                            <!--<current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                         workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>-->
+                            <div layout="row">
+                                <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <span flex></span>
+                                <grid-search-directive grid="ctrl.grid.ous"></grid-search-directive>
+                            </div>
                             <div>
                                 <br/>
                             </div>
@@ -406,7 +440,8 @@
                                     workflow-comments="ctrl.comments"
                                     selected="ctrl.selectedWorkflowItems"
                                     workflow-items="ctrl.registryOrganizations"
-                                    grid-name="Ous"></workflow-items-directive>
+                                    grid-name="Ous"
+                                    grid="ctrl.grid.ous"></workflow-items-directive>
                             <div>
                                 <br/>
                             </div>

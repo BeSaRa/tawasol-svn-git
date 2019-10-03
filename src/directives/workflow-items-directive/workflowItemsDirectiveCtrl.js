@@ -7,7 +7,9 @@ module.exports = function (app) {
                                                            langService,
                                                            LangWatcher,
                                                            $filter,
-                                                           $timeout) {
+                                                           $timeout,
+                                                           _,
+                                                           gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'workflowItemsDirectiveCtrl';
@@ -31,27 +33,51 @@ module.exports = function (app) {
             return langService.current === 'ar' ? 'arName' : 'enName';
         };
 
-        self.grid = {
-            limit: 5, // default limit
-            page: 1, // first page
-            order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.workflowItems.length + 21);
+
+        var _initGrid = function () {
+            self.workflowItemsCopy = angular.copy(self.workflowItems);
+            self.grid = {
+                limit: 5, // default limit
+                page: 1, // first page
+                order: '', // default sorting order
+                limitOptions: [5, 10, 20, // limit options
+                    {
+                        label: langService.get('all'),
+                        value: function () {
+                            return (self.workflowItems.length + 21);
+                        }
                     }
+                ],
+                searchColumns: {
+                    name: function (record) {
+                        return record.getTranslatedKey();
+                    }
+                },
+                searchText: '',
+                searchCallback: function (grid) {
+                    self.workflowItems = gridService.searchGridData(self.grid, self.workflowItemsCopy);
                 }
-            ]
-        };
-        var _getGridLimit = function () {
-            if (self.gridName === 'favoriteOUs')
-                self.grid.limit = (self.workflowItems.length + 21);
-            else
-                self.grid.limit = 5;
+            };
         };
 
-        $timeout(_getGridLimit);
+        var _getGridLimit = function () {
+            if (self.gridName.toLowerCase() === 'favoriteous') {
+                self.grid.limit = (self.workflowItems.length + 21);
+                self.grid.name = gridService.grids.launch.favoritesOUs;
+            } else {
+                self.grid.limit = 5;
+                if (self.gridName.toLowerCase() === 'workflowgroups') {
+                    self.grid.name = gridService.grids.launch.wfGroups;
+                } else if (self.gridName.toLowerCase() === 'ous') {
+                    self.grid.name = gridService.grids.launch.ous;
+                }
+            }
+        };
+
+        $timeout(function () {
+            _initGrid();
+            _getGridLimit();
+        });
 
         function _setDistWorkflowItem(distWorkflowItem, result) {
             distWorkflowItem

@@ -23,7 +23,7 @@
                                      md-svg-icon="{{ctrl.callbackAllInFavorites(ctrl.workflowItems) ? 'star' :  'star-outline' }}"></md-icon>
                         </md-button>
                     </th>
-                    <th colspan="3" ng-if="ctrl.selectedWorkflowItems.length" md-column>
+                    <th colspan="5" ng-if="ctrl.selectedWorkflowItems.length" md-column>
                         <span>{{ctrl.selectedWorkflowItems.length}} {{lang.items_selected}} </span>
                     </th>
                     <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="">

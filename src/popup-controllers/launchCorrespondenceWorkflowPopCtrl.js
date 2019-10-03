@@ -127,18 +127,24 @@ module.exports = function (app) {
 
         // favorite Users
         self.favoriteUsers = _mapWFUser(distributionWFService.favoriteUsers);
+        self.favoriteUsersCopy = angular.copy(self.favoriteUsers);
         // favorite Organizations
         self.favoriteOrganizations = _mapOrganizationByType(distributionWFService.favoriteOrganizations);
+        self.favoriteOrganizationsCopy = angular.copy(self.favoriteOrganizations);
         // all private users
         self.privateUsers = _mapWFUser(distributionWFService.privateUsers);
+        self.privateUsersCopy = angular.copy(self.privateUsers);
         // all managers users
         self.managerUsers = _mapWFUser(distributionWFService.managerUsers);
+        self.managerUsersCopy = angular.copy(self.managerUsers);
         // all available workflow users related to securitySchema.
         self.workflowUsers = angular.copy(self.users);
         // all government entities heads
         self.governmentEntitiesHeads = _mapWFUser(distributionWFService.governmentEntitiesHeads);
+        self.governmentEntitiesHeadsCopy = angular.copy(self.governmentEntitiesHeads);
         // all workflow groups
         self.workflowGroups = _mapWFGroup(distributionWFService.workflowGroups);
+        self.workflowGroupsCopy = angular.copy(self.workflowGroups);
         // all registry organizations
         self.registryOrganizations = _mapWFOrganization(distributionWFService.registryOrganizations, 'OUReg');
         // all organizations for users tab -> organization mail unit dropdown
@@ -154,6 +160,16 @@ module.exports = function (app) {
         // selected workflowItems
         self.selectedWorkflowItems = [];
         self.textButton = 'send';
+        self.selectedFavoriteTab = 'users';
+
+
+        /**
+         * @description Set the current tab name
+         * @param tabName
+         */
+        self.setCurrentFavoriteTab = function (tabName) {
+            self.selectedFavoriteTab = tabName;
+        };
 
         /**
          * @description select clicked tab
@@ -220,6 +236,7 @@ module.exports = function (app) {
         // grid options for all grids
         self.grid = {
             users: {
+                name: gridService.grids.launch.users,
                 limit: 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order
@@ -234,6 +251,7 @@ module.exports = function (app) {
                 selected: []
             },
             favoriteUsers: {
+                name: gridService.grids.launch.favoritesUsers,
                 limit: (self.favoriteUsers.length + 21), // default limit
                 page: 1, // first page
                 order: '', // default sorting order
@@ -245,9 +263,23 @@ module.exports = function (app) {
                         }
                     }
                 ],
-                selected: []
+                selected: [],
+                searchColumns: {
+                    domainName: 'toUserDomain',
+                    name: function (record) {
+                        return record.getTranslatedKey();
+                    },
+                    ou: function (record) {
+                        return langService.current + 'OUName';
+                    }
+                },
+                searchText: '',
+                searchCallback: function (grid) {
+                    self.favoriteUsers = gridService.searchGridData(self.grid.favoriteUsers, self.favoriteUsersCopy);
+                }
             },
             privateUsers: {
+                name: gridService.grids.launch.privateUsers,
                 limit: 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order
@@ -259,10 +291,23 @@ module.exports = function (app) {
                         }
                     }
                 ],
-                selected: []
+                selected: [],
+                searchColumns: {
+                    domainName: 'toUserDomain',
+                    name: function (record) {
+                        return record.getTranslatedKey();
+                    },
+                    ou: function (record) {
+                        return langService.current + 'OUName';
+                    }
+                },
+                searchText: '',
+                searchCallback: function (grid) {
+                    self.privateUsers = gridService.searchGridData(self.grid.privateUsers, self.privateUsersCopy);
+                }
             },
             managerUsers: {
-                name: 'launchManagers',
+                name: gridService.grids.launch.managers,
                 limit: gridService.getGridPagingLimitByGridName(gridService.grids.launch.managers) || 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order
@@ -283,9 +328,10 @@ module.exports = function (app) {
                 searchText: '',
                 searchCallback: function (grid) {
                     self.managerUsers = gridService.searchGridData(self.grid.managerUsers, self.managerUsersCopy);
-                },
+                }
             },
             governmentEntitiesHeads: {
+                name: gridService.grids.launch.presidentMinisters,
                 limit: 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order
@@ -297,22 +343,24 @@ module.exports = function (app) {
                         }
                     }
                 ],
-                selected: []
-            },
-            workflowGroups: {
-                limit: 5, // default limit
-                page: 1, // first page
-                order: '', // default sorting order
-                limitOptions: [5, 10, 20, // limit options
-                    {
-                        label: langService.get('all'),
-                        value: function () {
-                            return (self.workflowGroups.length + 21);
-                        }
+                selected: [],
+                searchColumns: {
+                    domainName: 'toUserDomain',
+                    name: function (record) {
+                        return record.getTranslatedKey();
+                    },
+                    ou: function (record) {
+                        return langService.current + 'OUName';
                     }
-                ],
-                selected: []
-            }
+                },
+                searchText: '',
+                searchCallback: function (grid) {
+                    self.governmentEntitiesHeads = gridService.searchGridData(self.grid.governmentEntitiesHeads, self.governmentEntitiesHeadsCopy);
+                }
+            },
+            workflowGroups: null,
+            favoriteOus: null,
+            ous: null
         };
 
         // to display alert to inform the user this document not approved and will not send it to many users.
@@ -775,7 +823,9 @@ module.exports = function (app) {
         function _loadFavorites(type) {
             return distributionWFService.loadFavorites(type)
                 .then(function (result) {
-                    return self[self.favoritesTypes[type].modelName] = self.favoritesTypes[type].map(result);
+                    self[self.favoritesTypes[type].modelName] = self.favoritesTypes[type].map(result);
+                    self[self.favoritesTypes[type].modelName + 'Copy'] = angular.copy(self[self.favoritesTypes[type].modelName]);
+                    return self[self.favoritesTypes[type].modelName];
                 });
         }
 
