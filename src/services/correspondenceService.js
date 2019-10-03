@@ -3061,7 +3061,7 @@ module.exports = function (app) {
          */
         self.showApprovedDialog = function (workItem, $event, ignoreMessage, additionalData) {
             return applicationUserSignatureService
-                .getApplicationUserSignatures(employeeService.getEmployee().id)
+                .loadApplicationUserSignatures(employeeService.getEmployee().id)
                 .then(function (signatures) {
                     if (signatures && signatures.length === 1) {
                         var isComposite = workItem.isWorkItem() ? workItem.isComposite() : workItem.isCompositeSites();
