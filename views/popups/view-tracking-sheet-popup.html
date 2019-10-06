@@ -66,6 +66,90 @@
                             </md-table-container>
                         </md-card>
                     </div>
+                    <!-- Outgoing Delivery Reports / Messaging History -->
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_outgoing_delivery_reports' && ctrl.showTab('view_tracking_sheet_outgoing_delivery_reports')">
+                        <md-card>
+                            <md-table-container>
+                                <div flex scroll-directive>
+                                    <table md-table>
+                                        <thead md-head md-order="ctrl.outgoingDeliveryReportGrid.order"
+                                               md-on-reorder="ctrl.getSortedDataOutgoingDeliveryReport">
+                                        <tr md-row>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}">
+                                                <span>{{lang.view_tracking_sheet_sent_by}}</span></th>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'Information')}}">
+                                                <span>{{lang.view_tracking_sheet_main_site_from}}</span></th>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'Information')}}">
+                                                <span>{{lang.view_tracking_sheet_sub_site_from}}</span></th>
+                                            <!--<th md-column md-order-by="priorityLevelInfo"><span>{{lang.view_tracking_sheet_priority_level}}</span></th>-->
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('receivedByIdInfo', 'Information')}}">
+                                                <span>{{lang.view_tracking_sheet_received_by}}</span></th>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'Information')}}">
+                                                <span>{{lang.view_tracking_sheet_main_site_to}}</span></th>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}">
+                                                <span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
+                                            <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            </th>
+                                            <th md-column md-order-by="deliveryDate_vts"><span>{{lang.view_tracking_sheet_delivery_date}}</span>
+                                            </th>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('messageStatus','Information')}}">
+                                                <span>{{lang.view_tracking_sheet_message_status}}</span></th>
+                                            <th md-column md-order-by="comment"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-row
+                                            ng-repeat="outgoingDeliveryReportRecord in ctrl.outgoingDeliveryReportRecords | filter:ctrl.searchModelOutgoingDeliveryReports | limitTo: ctrl.outgoingDeliveryReportGrid.limit: ((ctrl.outgoingDeliveryReportGrid.page - 1) * ctrl.outgoingDeliveryReportGrid.limit)  track by $index">
+                                            <td md-cell>
+                                                {{outgoingDeliveryReportRecord.sentByIdInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>
+                                                {{outgoingDeliveryReportRecord.mainSiteFromIdInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>
+                                                {{outgoingDeliveryReportRecord.subSiteFromIdInfo.getTranslatedName()}}
+                                            </td>
+                                            <!--<td md-cell>{{outgoingDeliveryReportRecord.priorityLevelInfo.getTranslatedName()}}</td>-->
+                                            <td md-cell>
+                                                {{outgoingDeliveryReportRecord.receivedByIdInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>
+                                                {{outgoingDeliveryReportRecord.mainSiteToIdInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>
+                                                {{outgoingDeliveryReportRecord.subSiteToIdInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>{{outgoingDeliveryReportRecord.actionDate_vts}}</td>
+                                            <td md-cell>{{outgoingDeliveryReportRecord.deliveryDate_vts}}</td>
+                                            <td md-cell>
+                                                {{outgoingDeliveryReportRecord.messageStatus.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell class="cms-comment">
+                                                {{outgoingDeliveryReportRecord.comment}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <md-table-pagination
+                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                        md-limit-options="ctrl.outgoingDeliveryReportGrid.limitOptions"
+                                        md-limit="ctrl.outgoingDeliveryReportGrid.limit"
+                                        md-page="ctrl.outgoingDeliveryReportGrid.page"
+                                        md-total="{{ctrl.outgoingDeliveryReportRecords.length}}"
+                                        md-page-select
+                                        md-on-paginate="ctrl.outgoingDeliveryReportGrid.pagingCallback"></md-table-pagination>
+                            </md-table-container>
+                        </md-card>
+                    </div>
                     <!-- Full History -->
                     <div ng-if="ctrl.heading === 'view_tracking_sheet_full_history' && ctrl.showTab('view_tracking_sheet_full_history')">
                         <md-card>
@@ -119,147 +203,7 @@
                             </md-table-container>
                         </md-card>
                     </div>
-                    <!-- Linked Documents History Grid -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_linked_documents_history' && ctrl.showTab('view_tracking_sheet_linked_documents_history')">
-                        <div layout="row" class="p020">
-                            <span flex></span>
-                            <md-switch aria-label="{{lang.truncate_subject}}"
-                                       class="m0"
-                                       ng-model="ctrl.linkedDocumentsHistoryGrid.truncateSubject"
-                                       ng-change="ctrl.linkedDocumentsHistoryGrid.setTruncateSubject($event)">
-                                <span>{{lang.truncate_subject}} : </span>
-                                {{ctrl.linkedDocumentsHistoryGrid.truncateSubject ? lang.yes : lang.no }}
-                            </md-switch>
-                        </div>
-                        <md-card>
-                            <md-table-container>
-                                <div flex scroll-directive>
-                                    <table md-table>
-                                        <thead md-head md-order="ctrl.linkedDocumentsHistoryGrid.order"
-                                               md-on-reorder="ctrl.getSortedDataLinkedDocumentsHistory">
-                                        <tr md-row>
-                                            <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
-                                            </th>
-                                            <th md-column
-                                                md-order-by="{{ctrl.getSortingKey('eventTypeInfo', 'Information')}}">
-                                                <span>{{lang.view_tracking_sheet_action}}</span>
-                                            </th>
-                                            <th md-column
-                                                md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
-                                                <span>{{lang.view_tracking_sheet_action_by}}</span>
-                                            </th>
-                                            <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
-                                            </th>
-                                            <th md-column md-order-by="itemFullSerial"><span>{{lang.view_tracking_sheet_full_serial_number}}</span>
-                                            </th>
-                                            <!--<th md-column md-order-by="itemType"><span>{{lang.view_tracking_sheet_type}}</span>
-                                            </th>-->
-                                        </tr>
-                                        </thead>
-                                        <tbody md-body>
-                                        <tr md-select="linkedDocumentHistoryRecord" md-row
-                                            ng-repeat="linkedDocumentHistoryRecord in ctrl.linkedDocumentsHistoryRecords | filter:ctrl.searchModelLinkedDocsHistory | limitTo: ctrl.linkedDocumentsHistoryGrid.limit: ((ctrl.linkedDocumentsHistoryGrid.page - 1) * ctrl.linkedDocumentsHistoryGrid.limit) track by $index">
-                                            <!--<td md-cell>{{linkedDocumentHistoryRecord.itemName}}</td>-->
-                                            <td md-cell class="subject">
-                                                        <span ng-if="ctrl.linkedDocumentsHistoryGrid.truncateSubject"
-                                                              class="view-doc subject-internal" md-truncate
-                                                              tooltip="{{linkedDocumentHistoryRecord.itemName}}">{{linkedDocumentHistoryRecord.itemName}}</span>
-                                                <span ng-if="!ctrl.linkedDocumentsHistoryGrid.truncateSubject"
-                                                      class="view-doc subject-internal"
-                                                      tooltip="{{linkedDocumentHistoryRecord.itemName}}">{{linkedDocumentHistoryRecord.itemName}}</span>
-                                            </td>
-                                            <td md-cell>
-                                                {{linkedDocumentHistoryRecord.eventTypeInfo.getTranslatedName()}}
-                                            </td>
-                                            <td md-cell>
-                                                {{linkedDocumentHistoryRecord.actionByInfo.getTranslatedName()}}
-                                            </td>
-                                            <td md-cell>{{linkedDocumentHistoryRecord.actionDate}}</td>
-                                            <td md-cell>{{linkedDocumentHistoryRecord.itemFullSerial}}</td>
-                                            <!--<td md-cell>{{linkedDocumentHistoryRecord.itemType}}</td>-->
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <md-table-pagination
-                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                        md-limit-options="ctrl.linkedDocumentsHistoryGrid.limitOptions"
-                                        md-limit="ctrl.linkedDocumentsHistoryGrid.limit"
-                                        md-page="ctrl.linkedDocumentsHistoryGrid.page"
-                                        md-total="{{ctrl.linkedDocumentsHistoryRecords.length}}"
-                                        md-page-select
-                                        md-on-paginate="ctrl.linkedDocumentsHistoryGrid.pagingCallback"></md-table-pagination>
-                            </md-table-container>
-                        </md-card>
-                    </div>
-                    <!-- Attachments History Grid -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_attachments_history' && ctrl.showTab('view_tracking_sheet_attachments_history')">
-                        <div layout="row" class="p020">
-                            <span flex></span>
-                            <md-switch aria-label="{{lang.truncate_subject}}"
-                                       class="m0"
-                                       ng-model="ctrl.attachmentsHistoryGrid.truncateSubject"
-                                       ng-change="ctrl.attachmentsHistoryGrid.setTruncateSubject($event)">
-                                <span>{{lang.truncate_subject}} : </span>
-                                {{ctrl.attachmentsHistoryGrid.truncateSubject ? lang.yes : lang.no }}
-                            </md-switch>
-                        </div>
-                        <md-card>
-                            <md-table-container>
-                                <div flex scroll-directive>
-                                    <table md-table>
-                                        <thead md-head md-order="ctrl.attachmentsHistoryGrid.order"
-                                               md-on-reorder="ctrl.getSortedDataAttachmentsHistory">
-                                        <tr md-row>
-                                            <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
-                                            </th>
-                                            <th md-column
-                                                md-order-by="{{ctrl.getSortingKey('eventTypeInfo','Information')}}">
-                                                <span>{{lang.view_tracking_sheet_action}}</span>
-                                            </th>
-                                            <th md-column
-                                                md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
-                                                <span>{{lang.view_tracking_sheet_action_by}}</span>
-                                            </th>
-                                            <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
-                                            </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody md-body>
-                                        <tr md-select="attachmentHistoryRecord" md-row
-                                            ng-repeat="attachmentHistoryRecord in ctrl.attachmentsHistoryRecords | filter:ctrl.searchModelAttachmentsHistory | limitTo: ctrl.attachmentsHistoryGrid.limit: ((ctrl.attachmentsHistoryGrid.page - 1) * ctrl.attachmentsHistoryGrid.limit)  track by $index">
-                                            <!--<td md-cell>{{attachmentHistoryRecord.itemName}}</td>-->
-                                            <td md-cell class="subject">
-                                                        <span ng-if="ctrl.attachmentsHistoryGrid.truncateSubject"
-                                                              class="view-doc subject-internal" md-truncate
-                                                              tooltip="{{attachmentHistoryRecord.itemName}}">{{attachmentHistoryRecord.itemName}}</span>
-                                                <span ng-if="!ctrl.attachmentsHistoryGrid.truncateSubject"
-                                                      class="view-doc subject-internal"
-                                                      tooltip="{{attachmentHistoryRecord.itemName}}">{{attachmentHistoryRecord.itemName}}</span>
-                                            </td>
-                                            <td md-cell>
-                                                {{attachmentHistoryRecord.eventTypeInfo.getTranslatedName()}}
-                                            </td>
-                                            <td md-cell>
-                                                {{attachmentHistoryRecord.actionByInfo.getTranslatedName()}}
-                                            </td>
-                                            <td md-cell>{{attachmentHistoryRecord.actionDate}}</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <md-table-pagination
-                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                        md-limit-options="ctrl.attachmentsHistoryGrid.limitOptions"
-                                        md-limit="ctrl.attachmentsHistoryGrid.limit"
-                                        md-page="ctrl.attachmentsHistoryGrid.page"
-                                        md-total="{{ctrl.attachmentsHistoryRecords.length}}"
-                                        md-page-select
-                                        md-on-paginate="ctrl.attachmentsHistoryGrid.pagingCallback"></md-table-pagination>
-                            </md-table-container>
-                        </md-card>
-                    </div>
-                    <!-- Merged Linked Document History Grid -->
+                    <!-- LINKED DOCUMENT WORKFLOW History Grid (Prev. Merged Linked Document)-->
                     <div ng-if="ctrl.heading === 'view_tracking_sheet_merged_linked_document_history' && ctrl.showTab('view_tracking_sheet_merged_linked_document_history')">
                         <div layout="row" class="p020">
                             <span flex></span>
@@ -335,6 +279,225 @@
                                         md-total="{{ctrl.mergedLinkedDocumentHistoryRecords.length}}"
                                         md-page-select
                                         md-on-paginate="ctrl.mergedLinkedDocHistoryGrid.pagingCallback"></md-table-pagination>
+                            </md-table-container>
+                        </md-card>
+                    </div>
+                    <!-- Attachments History Grid -->
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_attachments_history' && ctrl.showTab('view_tracking_sheet_attachments_history')">
+                        <div layout="row" class="p020">
+                            <span flex></span>
+                            <md-switch aria-label="{{lang.truncate_subject}}"
+                                       class="m0"
+                                       ng-model="ctrl.attachmentsHistoryGrid.truncateSubject"
+                                       ng-change="ctrl.attachmentsHistoryGrid.setTruncateSubject($event)">
+                                <span>{{lang.truncate_subject}} : </span>
+                                {{ctrl.attachmentsHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                            </md-switch>
+                        </div>
+                        <md-card>
+                            <md-table-container>
+                                <div flex scroll-directive>
+                                    <table md-table>
+                                        <thead md-head md-order="ctrl.attachmentsHistoryGrid.order"
+                                               md-on-reorder="ctrl.getSortedDataAttachmentsHistory">
+                                        <tr md-row>
+                                            <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                            </th>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('eventTypeInfo','Information')}}">
+                                                <span>{{lang.view_tracking_sheet_action}}</span>
+                                            </th>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
+                                                <span>{{lang.view_tracking_sheet_action_by}}</span>
+                                            </th>
+                                            <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-select="attachmentHistoryRecord" md-row
+                                            ng-repeat="attachmentHistoryRecord in ctrl.attachmentsHistoryRecords | filter:ctrl.searchModelAttachmentsHistory | limitTo: ctrl.attachmentsHistoryGrid.limit: ((ctrl.attachmentsHistoryGrid.page - 1) * ctrl.attachmentsHistoryGrid.limit)  track by $index">
+                                            <!--<td md-cell>{{attachmentHistoryRecord.itemName}}</td>-->
+                                            <td md-cell class="subject">
+                                                        <span ng-if="ctrl.attachmentsHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{attachmentHistoryRecord.itemName}}">{{attachmentHistoryRecord.itemName}}</span>
+                                                <span ng-if="!ctrl.attachmentsHistoryGrid.truncateSubject"
+                                                      class="view-doc subject-internal"
+                                                      tooltip="{{attachmentHistoryRecord.itemName}}">{{attachmentHistoryRecord.itemName}}</span>
+                                            </td>
+                                            <td md-cell>
+                                                {{attachmentHistoryRecord.eventTypeInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>
+                                                {{attachmentHistoryRecord.actionByInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>{{attachmentHistoryRecord.actionDate}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <md-table-pagination
+                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                        md-limit-options="ctrl.attachmentsHistoryGrid.limitOptions"
+                                        md-limit="ctrl.attachmentsHistoryGrid.limit"
+                                        md-page="ctrl.attachmentsHistoryGrid.page"
+                                        md-total="{{ctrl.attachmentsHistoryRecords.length}}"
+                                        md-page-select
+                                        md-on-paginate="ctrl.attachmentsHistoryGrid.pagingCallback"></md-table-pagination>
+                            </md-table-container>
+                        </md-card>
+                    </div>
+                    <!-- Content View History -->
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_content_view_history' && ctrl.showTab('view_tracking_sheet_content_view_history')">
+                        <div layout="row" class="p020">
+                            <span flex></span>
+                            <md-switch aria-label="{{lang.truncate_subject}}"
+                                       class="m0"
+                                       ng-model="ctrl.contentViewHistoryGrid.truncateSubject"
+                                       ng-change="ctrl.contentViewHistoryGrid.setTruncateSubject($event)">
+                                <span>{{lang.truncate_subject}} : </span>
+                                {{ctrl.contentViewHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                            </md-switch>
+                        </div>
+                        <md-card>
+                            <md-table-container>
+                                <div flex scroll-directive>
+                                    <table md-table>
+                                        <thead md-head md-order="ctrl.contentViewHistoryGrid.order"
+                                               md-on-reorder="ctrl.getSortedDataContentViewHistory">
+                                        <tr md-row>
+                                            <!--<th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                            </th>
+                                            <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            </th>
+                                            <th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                            </th>
+                                            <th md-column md-order-by="ouInfo"><span>{{lang.view_tracking_sheet_organization}}</span>
+                                            </th>-->
+                                            <th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                            </th>
+                                            <th md-column md-order-by="documentType"><span>{{lang.view_tracking_sheet_document_type}}</span>
+                                            </th>
+                                            <th md-column><span>{{lang.view_tracking_sheet_viewers}}</span></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-select="contentViewHistoryRecord" md-row
+                                            ng-repeat="contentViewHistoryRecord in ctrl.contentViewHistoryRecords | filter:ctrl.searchModelContentViewHistory | limitTo: ctrl.contentViewHistoryGrid.limit: ((ctrl.contentViewHistoryGrid.page - 1) * ctrl.contentViewHistoryGrid.limit) track by $index">
+                                            <!-- <td md-cell>{{contentViewHistoryRecord.getTranslatedActionBy()}}</td>
+                                             <td md-cell>{{contentViewHistoryRecord.actionDate}}</td>
+                                             <td md-cell>{{contentViewHistoryRecord.docSubject}}</td>
+                                             <td md-cell>{{contentViewHistoryRecord.getTranslatedOUInfo()}}</td>-->
+                                            <!--<td md-cell>{{contentViewHistoryRecord.docSubject}}</td>-->
+                                            <td md-cell class="subject">
+                                                        <span ng-if="ctrl.contentViewHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{contentViewHistoryRecord.docSubject}}">{{contentViewHistoryRecord.docSubject}}</span>
+                                                <span ng-if="!ctrl.contentViewHistoryGrid.truncateSubject"
+                                                      class="view-doc subject-internal"
+                                                      tooltip="{{contentViewHistoryRecord.docSubject}}">{{contentViewHistoryRecord.docSubject}}</span>
+                                            </td>
+                                            <td md-cell>{{contentViewHistoryRecord.documentType}}</td>
+                                            <td md-cell>
+                                                <div flex layout="row" layout-align="start center">
+                                                    <md-button class="md-icon-button"
+                                                               title="{{lang.view_tracking_sheet_viewers}}"
+                                                               ng-if="contentViewHistoryRecord.events && contentViewHistoryRecord.events.length"
+                                                               ng-click="ctrl.viewContentViewHistoryViewers(contentViewHistoryRecord, $event)">
+                                                        <md-icon md-svg-icon="account-multiple"></md-icon>
+                                                    </md-button>
+                                                    <md-icon md-svg-icon="coins"
+                                                             ng-if="!contentViewHistoryRecord.events || !contentViewHistoryRecord.events.length"
+                                                             aria-label="{{lang.view_tracking_sheet_viewers}}"></md-icon>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <md-table-pagination
+                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                        md-limit-options="ctrl.contentViewHistoryGrid.limitOptions"
+                                        md-limit="ctrl.contentViewHistoryGrid.limit"
+                                        md-page="ctrl.contentViewHistoryGrid.page"
+                                        md-total="{{ctrl.contentViewHistoryRecords.length}}"
+                                        md-page-select
+                                        md-on-paginate="ctrl.contentViewHistoryGrid.pagingCallback"></md-table-pagination>
+                            </md-table-container>
+                        </md-card>
+                    </div>
+                    <!-- Linked Documents History Grid -->
+                    <div ng-if="ctrl.heading === 'view_tracking_sheet_linked_documents_history' && ctrl.showTab('view_tracking_sheet_linked_documents_history')">
+                        <div layout="row" class="p020">
+                            <span flex></span>
+                            <md-switch aria-label="{{lang.truncate_subject}}"
+                                       class="m0"
+                                       ng-model="ctrl.linkedDocumentsHistoryGrid.truncateSubject"
+                                       ng-change="ctrl.linkedDocumentsHistoryGrid.setTruncateSubject($event)">
+                                <span>{{lang.truncate_subject}} : </span>
+                                {{ctrl.linkedDocumentsHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                            </md-switch>
+                        </div>
+                        <md-card>
+                            <md-table-container>
+                                <div flex scroll-directive>
+                                    <table md-table>
+                                        <thead md-head md-order="ctrl.linkedDocumentsHistoryGrid.order"
+                                               md-on-reorder="ctrl.getSortedDataLinkedDocumentsHistory">
+                                        <tr md-row>
+                                            <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                            </th>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('eventTypeInfo', 'Information')}}">
+                                                <span>{{lang.view_tracking_sheet_action}}</span>
+                                            </th>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
+                                                <span>{{lang.view_tracking_sheet_action_by}}</span>
+                                            </th>
+                                            <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            </th>
+                                            <th md-column md-order-by="itemFullSerial"><span>{{lang.view_tracking_sheet_full_serial_number}}</span>
+                                            </th>
+                                            <!--<th md-column md-order-by="itemType"><span>{{lang.view_tracking_sheet_type}}</span>
+                                            </th>-->
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-select="linkedDocumentHistoryRecord" md-row
+                                            ng-repeat="linkedDocumentHistoryRecord in ctrl.linkedDocumentsHistoryRecords | filter:ctrl.searchModelLinkedDocsHistory | limitTo: ctrl.linkedDocumentsHistoryGrid.limit: ((ctrl.linkedDocumentsHistoryGrid.page - 1) * ctrl.linkedDocumentsHistoryGrid.limit) track by $index">
+                                            <!--<td md-cell>{{linkedDocumentHistoryRecord.itemName}}</td>-->
+                                            <td md-cell class="subject">
+                                                        <span ng-if="ctrl.linkedDocumentsHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{linkedDocumentHistoryRecord.itemName}}">{{linkedDocumentHistoryRecord.itemName}}</span>
+                                                <span ng-if="!ctrl.linkedDocumentsHistoryGrid.truncateSubject"
+                                                      class="view-doc subject-internal"
+                                                      tooltip="{{linkedDocumentHistoryRecord.itemName}}">{{linkedDocumentHistoryRecord.itemName}}</span>
+                                            </td>
+                                            <td md-cell>
+                                                {{linkedDocumentHistoryRecord.eventTypeInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>
+                                                {{linkedDocumentHistoryRecord.actionByInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>{{linkedDocumentHistoryRecord.actionDate}}</td>
+                                            <td md-cell>{{linkedDocumentHistoryRecord.itemFullSerial}}</td>
+                                            <!--<td md-cell>{{linkedDocumentHistoryRecord.itemType}}</td>-->
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <md-table-pagination
+                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                        md-limit-options="ctrl.linkedDocumentsHistoryGrid.limitOptions"
+                                        md-limit="ctrl.linkedDocumentsHistoryGrid.limit"
+                                        md-page="ctrl.linkedDocumentsHistoryGrid.page"
+                                        md-total="{{ctrl.linkedDocumentsHistoryRecords.length}}"
+                                        md-page-select
+                                        md-on-paginate="ctrl.linkedDocumentsHistoryGrid.pagingCallback"></md-table-pagination>
                             </md-table-container>
                         </md-card>
                     </div>
@@ -453,85 +616,6 @@
                             </md-table-container>
                         </md-card>
                     </div>
-                    <!-- Content View History -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_content_view_history' && ctrl.showTab('view_tracking_sheet_content_view_history')">
-                        <div layout="row" class="p020">
-                            <span flex></span>
-                            <md-switch aria-label="{{lang.truncate_subject}}"
-                                       class="m0"
-                                       ng-model="ctrl.contentViewHistoryGrid.truncateSubject"
-                                       ng-change="ctrl.contentViewHistoryGrid.setTruncateSubject($event)">
-                                <span>{{lang.truncate_subject}} : </span>
-                                {{ctrl.contentViewHistoryGrid.truncateSubject ? lang.yes : lang.no }}
-                            </md-switch>
-                        </div>
-                        <md-card>
-                            <md-table-container>
-                                <div flex scroll-directive>
-                                    <table md-table>
-                                        <thead md-head md-order="ctrl.contentViewHistoryGrid.order"
-                                               md-on-reorder="ctrl.getSortedDataContentViewHistory">
-                                        <tr md-row>
-                                            <!--<th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
-                                            </th>
-                                            <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
-                                            </th>
-                                            <th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
-                                            </th>
-                                            <th md-column md-order-by="ouInfo"><span>{{lang.view_tracking_sheet_organization}}</span>
-                                            </th>-->
-                                            <th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
-                                            </th>
-                                            <th md-column md-order-by="documentType"><span>{{lang.view_tracking_sheet_document_type}}</span>
-                                            </th>
-                                            <th md-column><span>{{lang.view_tracking_sheet_viewers}}</span></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody md-body>
-                                        <tr md-select="contentViewHistoryRecord" md-row
-                                            ng-repeat="contentViewHistoryRecord in ctrl.contentViewHistoryRecords | filter:ctrl.searchModelContentViewHistory | limitTo: ctrl.contentViewHistoryGrid.limit: ((ctrl.contentViewHistoryGrid.page - 1) * ctrl.contentViewHistoryGrid.limit) track by $index">
-                                            <!-- <td md-cell>{{contentViewHistoryRecord.getTranslatedActionBy()}}</td>
-                                             <td md-cell>{{contentViewHistoryRecord.actionDate}}</td>
-                                             <td md-cell>{{contentViewHistoryRecord.docSubject}}</td>
-                                             <td md-cell>{{contentViewHistoryRecord.getTranslatedOUInfo()}}</td>-->
-                                            <!--<td md-cell>{{contentViewHistoryRecord.docSubject}}</td>-->
-                                            <td md-cell class="subject">
-                                                        <span ng-if="ctrl.contentViewHistoryGrid.truncateSubject"
-                                                              class="view-doc subject-internal" md-truncate
-                                                              tooltip="{{contentViewHistoryRecord.docSubject}}">{{contentViewHistoryRecord.docSubject}}</span>
-                                                <span ng-if="!ctrl.contentViewHistoryGrid.truncateSubject"
-                                                      class="view-doc subject-internal"
-                                                      tooltip="{{contentViewHistoryRecord.docSubject}}">{{contentViewHistoryRecord.docSubject}}</span>
-                                            </td>
-                                            <td md-cell>{{contentViewHistoryRecord.documentType}}</td>
-                                            <td md-cell>
-                                                <div flex layout="row" layout-align="start center">
-                                                    <md-button class="md-icon-button"
-                                                               title="{{lang.view_tracking_sheet_viewers}}"
-                                                               ng-if="contentViewHistoryRecord.events && contentViewHistoryRecord.events.length"
-                                                               ng-click="ctrl.viewContentViewHistoryViewers(contentViewHistoryRecord, $event)">
-                                                        <md-icon md-svg-icon="account-multiple"></md-icon>
-                                                    </md-button>
-                                                    <md-icon md-svg-icon="coins"
-                                                             ng-if="!contentViewHistoryRecord.events || !contentViewHistoryRecord.events.length"
-                                                             aria-label="{{lang.view_tracking_sheet_viewers}}"></md-icon>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <md-table-pagination
-                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                        md-limit-options="ctrl.contentViewHistoryGrid.limitOptions"
-                                        md-limit="ctrl.contentViewHistoryGrid.limit"
-                                        md-page="ctrl.contentViewHistoryGrid.page"
-                                        md-total="{{ctrl.contentViewHistoryRecords.length}}"
-                                        md-page-select
-                                        md-on-paginate="ctrl.contentViewHistoryGrid.pagingCallback"></md-table-pagination>
-                            </md-table-container>
-                        </md-card>
-                    </div>
                     <!-- SMS Logs -->
                     <div ng-if="ctrl.heading === 'view_tracking_sheet_sms_logs' && ctrl.showTab('view_tracking_sheet_sms_logs')">
                         <md-card>
@@ -574,90 +658,6 @@
                                         md-total="{{ctrl.smsLogRecords.length}}"
                                         md-page-select
                                         md-on-paginate="ctrl.smsLogsGrid.pagingCallback"></md-table-pagination>
-                            </md-table-container>
-                        </md-card>
-                    </div>
-                    <!-- Outgoing Delivery Reports / Messaging History -->
-                    <div ng-if="ctrl.heading === 'view_tracking_sheet_outgoing_delivery_reports' && ctrl.showTab('view_tracking_sheet_outgoing_delivery_reports')">
-                        <md-card>
-                            <md-table-container>
-                                <div flex scroll-directive>
-                                    <table md-table>
-                                        <thead md-head md-order="ctrl.outgoingDeliveryReportGrid.order"
-                                               md-on-reorder="ctrl.getSortedDataOutgoingDeliveryReport">
-                                        <tr md-row>
-                                            <th md-column
-                                                md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}">
-                                                <span>{{lang.view_tracking_sheet_sent_by}}</span></th>
-                                            <th md-column
-                                                md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'Information')}}">
-                                                <span>{{lang.view_tracking_sheet_main_site_from}}</span></th>
-                                            <th md-column
-                                                md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'Information')}}">
-                                                <span>{{lang.view_tracking_sheet_sub_site_from}}</span></th>
-                                            <!--<th md-column md-order-by="priorityLevelInfo"><span>{{lang.view_tracking_sheet_priority_level}}</span></th>-->
-                                            <th md-column
-                                                md-order-by="{{ctrl.getSortingKey('receivedByIdInfo', 'Information')}}">
-                                                <span>{{lang.view_tracking_sheet_received_by}}</span></th>
-                                            <th md-column
-                                                md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'Information')}}">
-                                                <span>{{lang.view_tracking_sheet_main_site_to}}</span></th>
-                                            <th md-column
-                                                md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}">
-                                                <span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
-                                            <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
-                                            </th>
-                                            <th md-column md-order-by="deliveryDate_vts"><span>{{lang.view_tracking_sheet_delivery_date}}</span>
-                                            </th>
-                                            <th md-column
-                                                md-order-by="{{ctrl.getSortingKey('messageStatus','Information')}}">
-                                                <span>{{lang.view_tracking_sheet_message_status}}</span></th>
-                                            <th md-column md-order-by="comment"><span>{{lang.view_tracking_sheet_comments}}</span>
-                                            </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody md-body>
-                                        <tr md-row
-                                            ng-repeat="outgoingDeliveryReportRecord in ctrl.outgoingDeliveryReportRecords | filter:ctrl.searchModelOutgoingDeliveryReports | limitTo: ctrl.outgoingDeliveryReportGrid.limit: ((ctrl.outgoingDeliveryReportGrid.page - 1) * ctrl.outgoingDeliveryReportGrid.limit)  track by $index">
-                                            <td md-cell>
-                                                {{outgoingDeliveryReportRecord.sentByIdInfo.getTranslatedName()}}
-                                            </td>
-                                            <td md-cell>
-                                                {{outgoingDeliveryReportRecord.mainSiteFromIdInfo.getTranslatedName()}}
-                                            </td>
-                                            <td md-cell>
-                                                {{outgoingDeliveryReportRecord.subSiteFromIdInfo.getTranslatedName()}}
-                                            </td>
-                                            <!--<td md-cell>{{outgoingDeliveryReportRecord.priorityLevelInfo.getTranslatedName()}}</td>-->
-                                            <td md-cell>
-                                                {{outgoingDeliveryReportRecord.receivedByIdInfo.getTranslatedName()}}
-                                            </td>
-                                            <td md-cell>
-                                                {{outgoingDeliveryReportRecord.mainSiteToIdInfo.getTranslatedName()}}
-                                            </td>
-                                            <td md-cell>
-                                                {{outgoingDeliveryReportRecord.subSiteToIdInfo.getTranslatedName()}}
-                                            </td>
-                                            <td md-cell>{{outgoingDeliveryReportRecord.actionDate_vts}}</td>
-                                            <td md-cell>{{outgoingDeliveryReportRecord.deliveryDate_vts}}</td>
-                                            <td md-cell>
-                                                {{outgoingDeliveryReportRecord.messageStatus.getTranslatedName()}}
-                                            </td>
-                                            <td md-cell class="cms-comment">
-                                                {{outgoingDeliveryReportRecord.comment}}
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <md-table-pagination
-                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                        md-limit-options="ctrl.outgoingDeliveryReportGrid.limitOptions"
-                                        md-limit="ctrl.outgoingDeliveryReportGrid.limit"
-                                        md-page="ctrl.outgoingDeliveryReportGrid.page"
-                                        md-total="{{ctrl.outgoingDeliveryReportRecords.length}}"
-                                        md-page-select
-                                        md-on-paginate="ctrl.outgoingDeliveryReportGrid.pagingCallback"></md-table-pagination>
                             </md-table-container>
                         </md-card>
                     </div>
@@ -772,6 +772,94 @@
                             </md-card>
                         </md-content>
                     </md-tab>
+                    <!-- Outgoing Delivery Reports / Messaging History -->
+                    <md-tab label="{{lang.view_tracking_sheet_outgoing_delivery_reports}}"
+                            ng-if="ctrl.showTab('view_tracking_sheet_outgoing_delivery_reports')"
+                            md-on-select="ctrl.setCurrentTab('view_tracking_sheet_outgoing_delivery_reports')">
+                        <md-content class="md-padding">
+                            <md-card>
+                                <md-table-container>
+                                    <div flex scroll-directive>
+                                        <table md-table>
+                                            <thead md-head md-order="ctrl.outgoingDeliveryReportGrid.order"
+                                                   md-on-reorder="ctrl.getSortedDataOutgoingDeliveryReport">
+                                            <tr md-row>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}">
+                                                    <span>{{lang.view_tracking_sheet_sent_by}}</span></th>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'Information')}}">
+                                                    <span>{{lang.view_tracking_sheet_main_site_from}}</span></th>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'Information')}}">
+                                                    <span>{{lang.view_tracking_sheet_sub_site_from}}</span></th>
+                                                <!--<th md-column md-order-by="priorityLevelInfo"><span>{{lang.view_tracking_sheet_priority_level}}</span></th>-->
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('receivedByIdInfo', 'Information')}}">
+                                                    <span>{{lang.view_tracking_sheet_received_by}}</span></th>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'Information')}}">
+                                                    <span>{{lang.view_tracking_sheet_main_site_to}}</span></th>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}">
+                                                    <span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
+                                                <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                                </th>
+                                                <th md-column md-order-by="deliveryDate_vts"><span>{{lang.view_tracking_sheet_delivery_date}}</span>
+                                                </th>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('messageStatus','Information')}}">
+                                                    <span>{{lang.view_tracking_sheet_message_status}}</span></th>
+                                                <th md-column md-order-by="comment"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody md-body>
+                                            <tr md-select="outgoingDeliveryReportRecord" md-row
+                                                ng-repeat="outgoingDeliveryReportRecord in ctrl.outgoingDeliveryReportRecords | filter:ctrl.searchModelOutgoingDeliveryReports | limitTo: ctrl.outgoingDeliveryReportGrid.limit: ((ctrl.outgoingDeliveryReportGrid.page - 1) * ctrl.outgoingDeliveryReportGrid.limit) track by $index">
+                                                <td md-cell>
+                                                    {{outgoingDeliveryReportRecord.sentByIdInfo.getTranslatedName()}}
+                                                </td>
+                                                <td md-cell>
+                                                    {{outgoingDeliveryReportRecord.mainSiteFromIdInfo.getTranslatedName()}}
+                                                </td>
+                                                <td md-cell>
+                                                    {{outgoingDeliveryReportRecord.subSiteFromIdInfo.getTranslatedName()}}
+                                                </td>
+                                                <!--<td md-cell>{{outgoingDeliveryReportRecord.priorityLevelInfo.getTranslatedName()}}</td>-->
+                                                <td md-cell>
+                                                    {{outgoingDeliveryReportRecord.receivedByIdInfo.getTranslatedName()}}
+                                                </td>
+                                                <td md-cell>
+                                                    {{outgoingDeliveryReportRecord.mainSiteToIdInfo.getTranslatedName()}}
+                                                </td>
+                                                <td md-cell>
+                                                    {{outgoingDeliveryReportRecord.subSiteToIdInfo.getTranslatedName()}}
+                                                </td>
+                                                <td md-cell>{{outgoingDeliveryReportRecord.actionDate_vts}}</td>
+                                                <td md-cell>{{outgoingDeliveryReportRecord.deliveryDate_vts}}</td>
+                                                <td md-cell>
+                                                    {{outgoingDeliveryReportRecord.messageStatus.getTranslatedName()}}
+                                                </td>
+                                                <td md-cell class="cms-comment">
+                                                    {{outgoingDeliveryReportRecord.comment}}
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <md-table-pagination
+                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                            md-limit-options="ctrl.outgoingDeliveryReportGrid.limitOptions"
+                                            md-limit="ctrl.outgoingDeliveryReportGrid.limit"
+                                            md-page="ctrl.outgoingDeliveryReportGrid.page"
+                                            md-total="{{ctrl.outgoingDeliveryReportRecords.length}}"
+                                            md-page-select
+                                            md-on-paginate="ctrl.outgoingDeliveryReportGrid.pagingCallback"></md-table-pagination>
+                                </md-table-container>
+                            </md-card>
+                        </md-content>
+                    </md-tab>
                     <!-- Full History -->
                     <md-tab label="{{lang.view_tracking_sheet_full_history}}"
                             ng-if="ctrl.showTab('view_tracking_sheet_full_history')"
@@ -829,155 +917,7 @@
                             </md-card>
                         </md-content>
                     </md-tab>
-                    <!-- Linked Documents History Grid -->
-                    <md-tab label="{{lang.view_tracking_sheet_linked_documents_history}}"
-                            ng-if="ctrl.showTab('view_tracking_sheet_linked_documents_history')"
-                            md-on-select="ctrl.setCurrentTab('view_tracking_sheet_linked_documents_history')">
-                        <md-content class="md-padding">
-                            <div layout="row" class="p020">
-                                <span flex></span>
-                                <md-switch aria-label="{{lang.truncate_subject}}"
-                                           class="m0"
-                                           ng-model="ctrl.linkedDocumentsHistoryGrid.truncateSubject"
-                                           ng-change="ctrl.linkedDocumentsHistoryGrid.setTruncateSubject($event)">
-                                    <span>{{lang.truncate_subject}} : </span>
-                                    {{ctrl.linkedDocumentsHistoryGrid.truncateSubject ? lang.yes : lang.no }}
-                                </md-switch>
-                            </div>
-                            <md-card>
-                                <md-table-container>
-                                    <div flex scroll-directive>
-                                        <table md-table>
-                                            <thead md-head md-order="ctrl.linkedDocumentsHistoryGrid.order"
-                                                   md-on-reorder="ctrl.getSortedDataLinkedDocumentsHistory">
-                                            <tr md-row>
-                                                <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
-                                                </th>
-                                                <th md-column
-                                                    md-order-by="{{ctrl.getSortingKey('eventTypeInfo', 'Information')}}">
-                                                    <span>{{lang.view_tracking_sheet_action}}</span>
-                                                </th>
-                                                <th md-column
-                                                    md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
-                                                    <span>{{lang.view_tracking_sheet_action_by}}</span>
-                                                </th>
-                                                <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
-                                                </th>
-                                                <th md-column md-order-by="itemFullSerial"><span>{{lang.view_tracking_sheet_full_serial_number}}</span>
-                                                </th>
-                                                <!--<th md-column md-order-by="itemType"><span>{{lang.view_tracking_sheet_type}}</span>
-                                                </th>-->
-                                            </tr>
-                                            </thead>
-                                            <tbody md-body>
-                                            <tr md-select="linkedDocumentHistoryRecord" md-row
-                                                ng-repeat="linkedDocumentHistoryRecord in ctrl.linkedDocumentsHistoryRecords | filter:ctrl.searchModelLinkedDocsHistory | limitTo: ctrl.linkedDocumentsHistoryGrid.limit: ((ctrl.linkedDocumentsHistoryGrid.page - 1) * ctrl.linkedDocumentsHistoryGrid.limit) track by $index">
-                                                <!--<td md-cell>{{linkedDocumentHistoryRecord.itemName}}</td>-->
-                                                <td md-cell class="subject">
-                                                        <span ng-if="ctrl.linkedDocumentsHistoryGrid.truncateSubject"
-                                                              class="view-doc subject-internal" md-truncate
-                                                              tooltip="{{linkedDocumentHistoryRecord.itemName}}">{{linkedDocumentHistoryRecord.itemName}}</span>
-                                                    <span ng-if="!ctrl.linkedDocumentsHistoryGrid.truncateSubject"
-                                                          class="view-doc subject-internal"
-                                                          tooltip="{{linkedDocumentHistoryRecord.itemName}}">{{linkedDocumentHistoryRecord.itemName}}</span>
-                                                </td>
-                                                <td md-cell>
-                                                    {{linkedDocumentHistoryRecord.eventTypeInfo.getTranslatedName()}}
-                                                </td>
-                                                <td md-cell>
-                                                    {{linkedDocumentHistoryRecord.actionByInfo.getTranslatedName()}}
-                                                </td>
-                                                <td md-cell>{{linkedDocumentHistoryRecord.actionDate}}</td>
-                                                <td md-cell>{{linkedDocumentHistoryRecord.itemFullSerial}}</td>
-                                                <!--<td md-cell>{{linkedDocumentHistoryRecord.itemType}}</td>-->
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <md-table-pagination
-                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                            md-limit-options="ctrl.linkedDocumentsHistoryGrid.limitOptions"
-                                            md-limit="ctrl.linkedDocumentsHistoryGrid.limit"
-                                            md-page="ctrl.linkedDocumentsHistoryGrid.page"
-                                            md-total="{{ctrl.linkedDocumentsHistoryRecords.length}}"
-                                            md-page-select
-                                            md-on-paginate="ctrl.linkedDocumentsHistoryGrid.pagingCallback"></md-table-pagination>
-                                </md-table-container>
-                            </md-card>
-                        </md-content>
-                    </md-tab>
-                    <!-- Attachments History Grid -->
-                    <md-tab label="{{lang.view_tracking_sheet_attachments_history}}"
-                            ng-if="ctrl.showTab('view_tracking_sheet_attachments_history')"
-                            md-on-select="ctrl.setCurrentTab('view_tracking_sheet_attachments_history')">
-                        <md-content class="md-padding">
-                            <div layout="row" class="p020">
-                                <span flex></span>
-                                <md-switch aria-label="{{lang.truncate_subject}}"
-                                           class="m0"
-                                           ng-model="ctrl.attachmentsHistoryGrid.truncateSubject"
-                                           ng-change="ctrl.attachmentsHistoryGrid.setTruncateSubject($event)">
-                                    <span>{{lang.truncate_subject}} : </span>
-                                    {{ctrl.attachmentsHistoryGrid.truncateSubject ? lang.yes : lang.no }}
-                                </md-switch>
-                            </div>
-                            <md-card>
-                                <md-table-container>
-                                    <div flex scroll-directive>
-                                        <table md-table>
-                                            <thead md-head md-order="ctrl.attachmentsHistoryGrid.order"
-                                                   md-on-reorder="ctrl.getSortedDataAttachmentsHistory">
-                                            <tr md-row>
-                                                <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
-                                                </th>
-                                                <th md-column
-                                                    md-order-by="{{ctrl.getSortingKey('eventTypeInfo','Information')}}">
-                                                    <span>{{lang.view_tracking_sheet_action}}</span>
-                                                </th>
-                                                <th md-column
-                                                    md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
-                                                    <span>{{lang.view_tracking_sheet_action_by}}</span>
-                                                </th>
-                                                <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
-                                                </th>
-                                            </tr>
-                                            </thead>
-                                            <tbody md-body>
-                                            <tr md-select="attachmentHistoryRecord" md-row
-                                                ng-repeat="attachmentHistoryRecord in ctrl.attachmentsHistoryRecords | filter:ctrl.searchModelAttachmentsHistory | limitTo: ctrl.attachmentsHistoryGrid.limit: ((ctrl.attachmentsHistoryGrid.page - 1) * ctrl.attachmentsHistoryGrid.limit)  track by $index">
-                                                <!--<td md-cell>{{attachmentHistoryRecord.itemName}}</td>-->
-                                                <td md-cell class="subject">
-                                                        <span ng-if="ctrl.attachmentsHistoryGrid.truncateSubject"
-                                                              class="view-doc subject-internal" md-truncate
-                                                              tooltip="{{attachmentHistoryRecord.itemName}}">{{attachmentHistoryRecord.itemName}}</span>
-                                                    <span ng-if="!ctrl.attachmentsHistoryGrid.truncateSubject"
-                                                          class="view-doc subject-internal"
-                                                          tooltip="{{attachmentHistoryRecord.itemName}}">{{attachmentHistoryRecord.itemName}}</span>
-                                                </td>
-                                                <td md-cell>
-                                                    {{attachmentHistoryRecord.eventTypeInfo.getTranslatedName()}}
-                                                </td>
-                                                <td md-cell>
-                                                    {{attachmentHistoryRecord.actionByInfo.getTranslatedName()}}
-                                                </td>
-                                                <td md-cell>{{attachmentHistoryRecord.actionDate}}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <md-table-pagination
-                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                            md-limit-options="ctrl.attachmentsHistoryGrid.limitOptions"
-                                            md-limit="ctrl.attachmentsHistoryGrid.limit"
-                                            md-page="ctrl.attachmentsHistoryGrid.page"
-                                            md-total="{{ctrl.attachmentsHistoryRecords.length}}"
-                                            md-page-select
-                                            md-on-paginate="ctrl.attachmentsHistoryGrid.pagingCallback"></md-table-pagination>
-                                </md-table-container>
-                            </md-card>
-                        </md-content>
-                    </md-tab>
-                    <!-- Merged Linked Document History Grid -->
+                    <!-- LINKED DOCUMENT WORKFLOW History Grid (Prev. Merged Linked Document)-->
                     <md-tab label="{{lang.view_tracking_sheet_merged_linked_document_history}}"
                             ng-if="ctrl.showTab('view_tracking_sheet_merged_linked_document_history')"
                             md-on-select="ctrl.setCurrentTab('view_tracking_sheet_merged_linked_document_history')">
@@ -1056,6 +996,237 @@
                                             md-total="{{ctrl.mergedLinkedDocumentHistoryRecords.length}}"
                                             md-page-select
                                             md-on-paginate="ctrl.mergedLinkedDocHistoryGrid.pagingCallback"></md-table-pagination>
+                                </md-table-container>
+                            </md-card>
+                        </md-content>
+                    </md-tab>
+                    <!-- Attachments History Grid -->
+                    <md-tab label="{{lang.view_tracking_sheet_attachments_history}}"
+                            ng-if="ctrl.showTab('view_tracking_sheet_attachments_history')"
+                            md-on-select="ctrl.setCurrentTab('view_tracking_sheet_attachments_history')">
+                        <md-content class="md-padding">
+                            <div layout="row" class="p020">
+                                <span flex></span>
+                                <md-switch aria-label="{{lang.truncate_subject}}"
+                                           class="m0"
+                                           ng-model="ctrl.attachmentsHistoryGrid.truncateSubject"
+                                           ng-change="ctrl.attachmentsHistoryGrid.setTruncateSubject($event)">
+                                    <span>{{lang.truncate_subject}} : </span>
+                                    {{ctrl.attachmentsHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                                </md-switch>
+                            </div>
+                            <md-card>
+                                <md-table-container>
+                                    <div flex scroll-directive>
+                                        <table md-table>
+                                            <thead md-head md-order="ctrl.attachmentsHistoryGrid.order"
+                                                   md-on-reorder="ctrl.getSortedDataAttachmentsHistory">
+                                            <tr md-row>
+                                                <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                                </th>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('eventTypeInfo','Information')}}">
+                                                    <span>{{lang.view_tracking_sheet_action}}</span>
+                                                </th>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
+                                                    <span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                </th>
+                                                <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody md-body>
+                                            <tr md-select="attachmentHistoryRecord" md-row
+                                                ng-repeat="attachmentHistoryRecord in ctrl.attachmentsHistoryRecords | filter:ctrl.searchModelAttachmentsHistory | limitTo: ctrl.attachmentsHistoryGrid.limit: ((ctrl.attachmentsHistoryGrid.page - 1) * ctrl.attachmentsHistoryGrid.limit)  track by $index">
+                                                <!--<td md-cell>{{attachmentHistoryRecord.itemName}}</td>-->
+                                                <td md-cell class="subject">
+                                                        <span ng-if="ctrl.attachmentsHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{attachmentHistoryRecord.itemName}}">{{attachmentHistoryRecord.itemName}}</span>
+                                                    <span ng-if="!ctrl.attachmentsHistoryGrid.truncateSubject"
+                                                          class="view-doc subject-internal"
+                                                          tooltip="{{attachmentHistoryRecord.itemName}}">{{attachmentHistoryRecord.itemName}}</span>
+                                                </td>
+                                                <td md-cell>
+                                                    {{attachmentHistoryRecord.eventTypeInfo.getTranslatedName()}}
+                                                </td>
+                                                <td md-cell>
+                                                    {{attachmentHistoryRecord.actionByInfo.getTranslatedName()}}
+                                                </td>
+                                                <td md-cell>{{attachmentHistoryRecord.actionDate}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <md-table-pagination
+                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                            md-limit-options="ctrl.attachmentsHistoryGrid.limitOptions"
+                                            md-limit="ctrl.attachmentsHistoryGrid.limit"
+                                            md-page="ctrl.attachmentsHistoryGrid.page"
+                                            md-total="{{ctrl.attachmentsHistoryRecords.length}}"
+                                            md-page-select
+                                            md-on-paginate="ctrl.attachmentsHistoryGrid.pagingCallback"></md-table-pagination>
+                                </md-table-container>
+                            </md-card>
+                        </md-content>
+                    </md-tab>
+                    <!-- Content View History -->
+                    <md-tab label="{{lang.view_tracking_sheet_content_view_history}}"
+                            ng-if="ctrl.showTab('view_tracking_sheet_content_view_history')"
+                            md-on-select="ctrl.setCurrentTab('view_tracking_sheet_content_view_history')">
+                        <md-content class="md-padding">
+                            <div layout="row" class="p020">
+                                <span flex></span>
+                                <md-switch aria-label="{{lang.truncate_subject}}"
+                                           class="m0"
+                                           ng-model="ctrl.contentViewHistoryGrid.truncateSubject"
+                                           ng-change="ctrl.contentViewHistoryGrid.setTruncateSubject($event)">
+                                    <span>{{lang.truncate_subject}} : </span>
+                                    {{ctrl.contentViewHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                                </md-switch>
+                            </div>
+                            <md-card>
+                                <md-table-container>
+                                    <div flex scroll-directive>
+                                        <table md-table>
+                                            <thead md-head md-order="ctrl.contentViewHistoryGrid.order"
+                                                   md-on-reorder="ctrl.getSortedDataContentViewHistory">
+                                            <tr md-row>
+                                                <!--<th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                </th>
+                                                <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                                </th>
+                                                <th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                                </th>
+                                                <th md-column md-order-by="ouInfo"><span>{{lang.view_tracking_sheet_organization}}</span>
+                                                </th>-->
+                                                <th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                                </th>
+                                                <th md-column md-order-by="documentType"><span>{{lang.view_tracking_sheet_document_type}}</span>
+                                                </th>
+                                                <th md-column><span>{{lang.view_tracking_sheet_viewers}}</span></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody md-body>
+                                            <tr md-select="contentViewHistoryRecord" md-row
+                                                ng-repeat="contentViewHistoryRecord in ctrl.contentViewHistoryRecords | filter:ctrl.searchModelContentViewHistory | limitTo: ctrl.contentViewHistoryGrid.limit: ((ctrl.contentViewHistoryGrid.page - 1) * ctrl.contentViewHistoryGrid.limit) track by $index">
+                                                <!-- <td md-cell>{{contentViewHistoryRecord.getTranslatedActionBy()}}</td>
+                                                 <td md-cell>{{contentViewHistoryRecord.actionDate}}</td>
+                                                 <td md-cell>{{contentViewHistoryRecord.docSubject}}</td>
+                                                 <td md-cell>{{contentViewHistoryRecord.getTranslatedOUInfo()}}</td>-->
+                                                <!--<td md-cell>{{contentViewHistoryRecord.docSubject}}</td>-->
+                                                <td md-cell class="subject">
+                                                        <span ng-if="ctrl.contentViewHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{contentViewHistoryRecord.docSubject}}">{{contentViewHistoryRecord.docSubject}}</span>
+                                                    <span ng-if="!ctrl.contentViewHistoryGrid.truncateSubject"
+                                                          class="view-doc subject-internal"
+                                                          tooltip="{{contentViewHistoryRecord.docSubject}}">{{contentViewHistoryRecord.docSubject}}</span>
+                                                </td>
+                                                <td md-cell>{{contentViewHistoryRecord.documentType}}</td>
+                                                <td md-cell>
+                                                    <div flex layout="row" layout-align="start center">
+                                                        <md-button class="md-icon-button"
+                                                                   title="{{lang.view_tracking_sheet_viewers}}"
+                                                                   ng-if="contentViewHistoryRecord.events && contentViewHistoryRecord.events.length"
+                                                                   ng-click="ctrl.viewContentViewHistoryViewers(contentViewHistoryRecord, $event)">
+                                                            <md-icon md-svg-icon="account-multiple"></md-icon>
+                                                        </md-button>
+                                                        <md-icon md-svg-icon="coins"
+                                                                 ng-if="!contentViewHistoryRecord.events || !contentViewHistoryRecord.events.length"
+                                                                 aria-label="{{lang.view_tracking_sheet_viewers}}"></md-icon>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <md-table-pagination
+                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                            md-limit-options="ctrl.contentViewHistoryGrid.limitOptions"
+                                            md-limit="ctrl.contentViewHistoryGrid.limit"
+                                            md-page="ctrl.contentViewHistoryGrid.page"
+                                            md-total="{{ctrl.contentViewHistoryRecords.length}}"
+                                            md-page-select
+                                            md-on-paginate="ctrl.contentViewHistoryGrid.pagingCallback"></md-table-pagination>
+                                </md-table-container>
+                            </md-card>
+                        </md-content>
+                    </md-tab>
+                    <!-- Linked Documents History Grid -->
+                    <md-tab label="{{lang.view_tracking_sheet_linked_documents_history}}"
+                            ng-if="ctrl.showTab('view_tracking_sheet_linked_documents_history')"
+                            md-on-select="ctrl.setCurrentTab('view_tracking_sheet_linked_documents_history')">
+                        <md-content class="md-padding">
+                            <div layout="row" class="p020">
+                                <span flex></span>
+                                <md-switch aria-label="{{lang.truncate_subject}}"
+                                           class="m0"
+                                           ng-model="ctrl.linkedDocumentsHistoryGrid.truncateSubject"
+                                           ng-change="ctrl.linkedDocumentsHistoryGrid.setTruncateSubject($event)">
+                                    <span>{{lang.truncate_subject}} : </span>
+                                    {{ctrl.linkedDocumentsHistoryGrid.truncateSubject ? lang.yes : lang.no }}
+                                </md-switch>
+                            </div>
+                            <md-card>
+                                <md-table-container>
+                                    <div flex scroll-directive>
+                                        <table md-table>
+                                            <thead md-head md-order="ctrl.linkedDocumentsHistoryGrid.order"
+                                                   md-on-reorder="ctrl.getSortedDataLinkedDocumentsHistory">
+                                            <tr md-row>
+                                                <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
+                                                </th>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('eventTypeInfo', 'Information')}}">
+                                                    <span>{{lang.view_tracking_sheet_action}}</span>
+                                                </th>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
+                                                    <span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                </th>
+                                                <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                                </th>
+                                                <th md-column md-order-by="itemFullSerial"><span>{{lang.view_tracking_sheet_full_serial_number}}</span>
+                                                </th>
+                                                <!--<th md-column md-order-by="itemType"><span>{{lang.view_tracking_sheet_type}}</span>
+                                                </th>-->
+                                            </tr>
+                                            </thead>
+                                            <tbody md-body>
+                                            <tr md-select="linkedDocumentHistoryRecord" md-row
+                                                ng-repeat="linkedDocumentHistoryRecord in ctrl.linkedDocumentsHistoryRecords | filter:ctrl.searchModelLinkedDocsHistory | limitTo: ctrl.linkedDocumentsHistoryGrid.limit: ((ctrl.linkedDocumentsHistoryGrid.page - 1) * ctrl.linkedDocumentsHistoryGrid.limit) track by $index">
+                                                <!--<td md-cell>{{linkedDocumentHistoryRecord.itemName}}</td>-->
+                                                <td md-cell class="subject">
+                                                        <span ng-if="ctrl.linkedDocumentsHistoryGrid.truncateSubject"
+                                                              class="view-doc subject-internal" md-truncate
+                                                              tooltip="{{linkedDocumentHistoryRecord.itemName}}">{{linkedDocumentHistoryRecord.itemName}}</span>
+                                                    <span ng-if="!ctrl.linkedDocumentsHistoryGrid.truncateSubject"
+                                                          class="view-doc subject-internal"
+                                                          tooltip="{{linkedDocumentHistoryRecord.itemName}}">{{linkedDocumentHistoryRecord.itemName}}</span>
+                                                </td>
+                                                <td md-cell>
+                                                    {{linkedDocumentHistoryRecord.eventTypeInfo.getTranslatedName()}}
+                                                </td>
+                                                <td md-cell>
+                                                    {{linkedDocumentHistoryRecord.actionByInfo.getTranslatedName()}}
+                                                </td>
+                                                <td md-cell>{{linkedDocumentHistoryRecord.actionDate}}</td>
+                                                <td md-cell>{{linkedDocumentHistoryRecord.itemFullSerial}}</td>
+                                                <!--<td md-cell>{{linkedDocumentHistoryRecord.itemType}}</td>-->
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <md-table-pagination
+                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                            md-limit-options="ctrl.linkedDocumentsHistoryGrid.limitOptions"
+                                            md-limit="ctrl.linkedDocumentsHistoryGrid.limit"
+                                            md-page="ctrl.linkedDocumentsHistoryGrid.page"
+                                            md-total="{{ctrl.linkedDocumentsHistoryRecords.length}}"
+                                            md-page-select
+                                            md-on-paginate="ctrl.linkedDocumentsHistoryGrid.pagingCallback"></md-table-pagination>
                                 </md-table-container>
                             </md-card>
                         </md-content>
@@ -1183,89 +1354,6 @@
                             </md-card>
                         </md-content>
                     </md-tab>
-                    <!-- Content View History -->
-                    <md-tab label="{{lang.view_tracking_sheet_content_view_history}}"
-                            ng-if="ctrl.showTab('view_tracking_sheet_content_view_history')"
-                            md-on-select="ctrl.setCurrentTab('view_tracking_sheet_content_view_history')">
-                        <md-content class="md-padding">
-                            <div layout="row" class="p020">
-                                <span flex></span>
-                                <md-switch aria-label="{{lang.truncate_subject}}"
-                                           class="m0"
-                                           ng-model="ctrl.contentViewHistoryGrid.truncateSubject"
-                                           ng-change="ctrl.contentViewHistoryGrid.setTruncateSubject($event)">
-                                    <span>{{lang.truncate_subject}} : </span>
-                                    {{ctrl.contentViewHistoryGrid.truncateSubject ? lang.yes : lang.no }}
-                                </md-switch>
-                            </div>
-                            <md-card>
-                                <md-table-container>
-                                    <div flex scroll-directive>
-                                        <table md-table>
-                                            <thead md-head md-order="ctrl.contentViewHistoryGrid.order"
-                                                   md-on-reorder="ctrl.getSortedDataContentViewHistory">
-                                            <tr md-row>
-                                                <!--<th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
-                                                </th>
-                                                <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
-                                                </th>
-                                                <th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
-                                                </th>
-                                                <th md-column md-order-by="ouInfo"><span>{{lang.view_tracking_sheet_organization}}</span>
-                                                </th>-->
-                                                <th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
-                                                </th>
-                                                <th md-column md-order-by="documentType"><span>{{lang.view_tracking_sheet_document_type}}</span>
-                                                </th>
-                                                <th md-column><span>{{lang.view_tracking_sheet_viewers}}</span></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody md-body>
-                                            <tr md-select="contentViewHistoryRecord" md-row
-                                                ng-repeat="contentViewHistoryRecord in ctrl.contentViewHistoryRecords | filter:ctrl.searchModelContentViewHistory | limitTo: ctrl.contentViewHistoryGrid.limit: ((ctrl.contentViewHistoryGrid.page - 1) * ctrl.contentViewHistoryGrid.limit) track by $index">
-                                                <!-- <td md-cell>{{contentViewHistoryRecord.getTranslatedActionBy()}}</td>
-                                                 <td md-cell>{{contentViewHistoryRecord.actionDate}}</td>
-                                                 <td md-cell>{{contentViewHistoryRecord.docSubject}}</td>
-                                                 <td md-cell>{{contentViewHistoryRecord.getTranslatedOUInfo()}}</td>-->
-                                                <!--<td md-cell>{{contentViewHistoryRecord.docSubject}}</td>-->
-                                                <td md-cell class="subject">
-                                                        <span ng-if="ctrl.contentViewHistoryGrid.truncateSubject"
-                                                              class="view-doc subject-internal" md-truncate
-                                                              tooltip="{{contentViewHistoryRecord.docSubject}}">{{contentViewHistoryRecord.docSubject}}</span>
-                                                    <span ng-if="!ctrl.contentViewHistoryGrid.truncateSubject"
-                                                          class="view-doc subject-internal"
-                                                          tooltip="{{contentViewHistoryRecord.docSubject}}">{{contentViewHistoryRecord.docSubject}}</span>
-                                                </td>
-                                                <td md-cell>{{contentViewHistoryRecord.documentType}}</td>
-                                                <td md-cell>
-                                                    <div flex layout="row" layout-align="start center">
-                                                        <md-button class="md-icon-button"
-                                                                   title="{{lang.view_tracking_sheet_viewers}}"
-                                                                   ng-if="contentViewHistoryRecord.events && contentViewHistoryRecord.events.length"
-                                                                   ng-click="ctrl.viewContentViewHistoryViewers(contentViewHistoryRecord, $event)">
-                                                            <md-icon md-svg-icon="account-multiple"></md-icon>
-                                                        </md-button>
-                                                        <md-icon md-svg-icon="coins"
-                                                                 ng-if="!contentViewHistoryRecord.events || !contentViewHistoryRecord.events.length"
-                                                                 aria-label="{{lang.view_tracking_sheet_viewers}}"></md-icon>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <md-table-pagination
-                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                            md-limit-options="ctrl.contentViewHistoryGrid.limitOptions"
-                                            md-limit="ctrl.contentViewHistoryGrid.limit"
-                                            md-page="ctrl.contentViewHistoryGrid.page"
-                                            md-total="{{ctrl.contentViewHistoryRecords.length}}"
-                                            md-page-select
-                                            md-on-paginate="ctrl.contentViewHistoryGrid.pagingCallback"></md-table-pagination>
-                                </md-table-container>
-                            </md-card>
-                        </md-content>
-                    </md-tab>
                     <!-- SMS Logs -->
                     <md-tab label="{{lang.view_tracking_sheet_sms_logs}}"
                             ng-if="ctrl.showTab('view_tracking_sheet_sms_logs')"
@@ -1311,94 +1399,6 @@
                                             md-total="{{ctrl.smsLogRecords.length}}"
                                             md-page-select
                                             md-on-paginate="ctrl.smsLogsGrid.pagingCallback"></md-table-pagination>
-                                </md-table-container>
-                            </md-card>
-                        </md-content>
-                    </md-tab>
-                    <!-- Outgoing Delivery Reports / Messaging History -->
-                    <md-tab label="{{lang.view_tracking_sheet_outgoing_delivery_reports}}"
-                            ng-if="ctrl.showTab('view_tracking_sheet_outgoing_delivery_reports')"
-                            md-on-select="ctrl.setCurrentTab('view_tracking_sheet_outgoing_delivery_reports')">
-                        <md-content class="md-padding">
-                            <md-card>
-                                <md-table-container>
-                                    <div flex scroll-directive>
-                                        <table md-table>
-                                            <thead md-head md-order="ctrl.outgoingDeliveryReportGrid.order"
-                                                   md-on-reorder="ctrl.getSortedDataOutgoingDeliveryReport">
-                                            <tr md-row>
-                                                <th md-column
-                                                    md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}">
-                                                    <span>{{lang.view_tracking_sheet_sent_by}}</span></th>
-                                                <th md-column
-                                                    md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'Information')}}">
-                                                    <span>{{lang.view_tracking_sheet_main_site_from}}</span></th>
-                                                <th md-column
-                                                    md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'Information')}}">
-                                                    <span>{{lang.view_tracking_sheet_sub_site_from}}</span></th>
-                                                <!--<th md-column md-order-by="priorityLevelInfo"><span>{{lang.view_tracking_sheet_priority_level}}</span></th>-->
-                                                <th md-column
-                                                    md-order-by="{{ctrl.getSortingKey('receivedByIdInfo', 'Information')}}">
-                                                    <span>{{lang.view_tracking_sheet_received_by}}</span></th>
-                                                <th md-column
-                                                    md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'Information')}}">
-                                                    <span>{{lang.view_tracking_sheet_main_site_to}}</span></th>
-                                                <th md-column
-                                                    md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}">
-                                                    <span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
-                                                <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
-                                                </th>
-                                                <th md-column md-order-by="deliveryDate_vts"><span>{{lang.view_tracking_sheet_delivery_date}}</span>
-                                                </th>
-                                                <th md-column
-                                                    md-order-by="{{ctrl.getSortingKey('messageStatus','Information')}}">
-                                                    <span>{{lang.view_tracking_sheet_message_status}}</span></th>
-                                                <th md-column md-order-by="comment"><span>{{lang.view_tracking_sheet_comments}}</span>
-                                                </th>
-                                            </tr>
-                                            </thead>
-                                            <tbody md-body>
-                                            <tr md-select="outgoingDeliveryReportRecord" md-row
-                                                ng-repeat="outgoingDeliveryReportRecord in ctrl.outgoingDeliveryReportRecords | filter:ctrl.searchModelOutgoingDeliveryReports | limitTo: ctrl.outgoingDeliveryReportGrid.limit: ((ctrl.outgoingDeliveryReportGrid.page - 1) * ctrl.outgoingDeliveryReportGrid.limit) track by $index">
-                                                <td md-cell>
-                                                    {{outgoingDeliveryReportRecord.sentByIdInfo.getTranslatedName()}}
-                                                </td>
-                                                <td md-cell>
-                                                    {{outgoingDeliveryReportRecord.mainSiteFromIdInfo.getTranslatedName()}}
-                                                </td>
-                                                <td md-cell>
-                                                    {{outgoingDeliveryReportRecord.subSiteFromIdInfo.getTranslatedName()}}
-                                                </td>
-                                                <!--<td md-cell>{{outgoingDeliveryReportRecord.priorityLevelInfo.getTranslatedName()}}</td>-->
-                                                <td md-cell>
-                                                    {{outgoingDeliveryReportRecord.receivedByIdInfo.getTranslatedName()}}
-                                                </td>
-                                                <td md-cell>
-                                                    {{outgoingDeliveryReportRecord.mainSiteToIdInfo.getTranslatedName()}}
-                                                </td>
-                                                <td md-cell>
-                                                    {{outgoingDeliveryReportRecord.subSiteToIdInfo.getTranslatedName()}}
-                                                </td>
-                                                <td md-cell>{{outgoingDeliveryReportRecord.actionDate_vts}}</td>
-                                                <td md-cell>{{outgoingDeliveryReportRecord.deliveryDate_vts}}</td>
-                                                <td md-cell>
-                                                    {{outgoingDeliveryReportRecord.messageStatus.getTranslatedName()}}
-                                                </td>
-                                                <td md-cell class="cms-comment">
-                                                    {{outgoingDeliveryReportRecord.comment}}
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <md-table-pagination
-                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                            md-limit-options="ctrl.outgoingDeliveryReportGrid.limitOptions"
-                                            md-limit="ctrl.outgoingDeliveryReportGrid.limit"
-                                            md-page="ctrl.outgoingDeliveryReportGrid.page"
-                                            md-total="{{ctrl.outgoingDeliveryReportRecords.length}}"
-                                            md-page-select
-                                            md-on-paginate="ctrl.outgoingDeliveryReportGrid.pagingCallback"></md-table-pagination>
                                 </md-table-container>
                             </md-card>
                         </md-content>

@@ -68,6 +68,20 @@ module.exports = function (app) {
                                 return true;
                             }
                         },
+                        // Outgoing Delivery Reports
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_outgoing_delivery_reports',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_outgoing_delivery_reports', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                var info = model.getInfo();
+                                return info.documentClass === "outgoing";
+                            }
+                        },
                         // Full History
                         {
                             type: 'action',
@@ -81,14 +95,14 @@ module.exports = function (app) {
                                 return true;
                             }
                         },
-                        // Linked Documents History
+                        // LINKED DOCUMENT WORKFLOW History (Prev. Merged Linked Document)
                         {
                             type: 'action',
                             icon: '',
-                            text: 'view_tracking_sheet_linked_documents_history',
+                            text: 'view_tracking_sheet_merged_linked_document_history',
                             shortcut: false,
                             callback: self.viewTrackingSheet,
-                            params: ['view_tracking_sheet_linked_documents_history', 'grid', parentGridName],
+                            params: ['view_tracking_sheet_merged_linked_document_history', 'grid', parentGridName],
                             class: "action-green",
                             checkShow: function (action, model) {
                                 return true;
@@ -107,14 +121,28 @@ module.exports = function (app) {
                                 return true;
                             }
                         },
-                        // Merged Linked Document History
+                        // Content View History
                         {
                             type: 'action',
                             icon: '',
-                            text: 'view_tracking_sheet_merged_linked_document_history',
+                            text: 'view_tracking_sheet_content_view_history',
                             shortcut: false,
                             callback: self.viewTrackingSheet,
-                            params: ['view_tracking_sheet_merged_linked_document_history', 'grid', parentGridName],
+                            permissionKey: "VIEW_CONTENT_LOG",
+                            params: ['view_tracking_sheet_content_view_history', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // Linked Documents History
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_linked_documents_history',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            params: ['view_tracking_sheet_linked_documents_history', 'grid', parentGridName],
                             class: "action-green",
                             checkShow: function (action, model) {
                                 return true;
@@ -147,20 +175,6 @@ module.exports = function (app) {
                                 return info.documentClass === "outgoing";
                             }
                         },
-                        // Content View History
-                        {
-                            type: 'action',
-                            icon: '',
-                            text: 'view_tracking_sheet_content_view_history',
-                            shortcut: false,
-                            callback: self.viewTrackingSheet,
-                            permissionKey: "VIEW_CONTENT_LOG",
-                            params: ['view_tracking_sheet_content_view_history', 'grid', parentGridName],
-                            class: "action-green",
-                            checkShow: function (action, model) {
-                                return true;
-                            }
-                        },
                         // SMS Logs
                         {
                             type: 'action',
@@ -180,20 +194,6 @@ module.exports = function (app) {
                                     || parentGridName === gridService.grids.search.general
                                     || parentGridName === gridService.grids.search.outgoingIncoming
                                     || parentGridName === gridService.grids.search.quick);
-                            }
-                        },
-                        // Outgoing Delivery Reports
-                        {
-                            type: 'action',
-                            icon: '',
-                            text: 'view_tracking_sheet_outgoing_delivery_reports',
-                            shortcut: false,
-                            callback: self.viewTrackingSheet,
-                            params: ['view_tracking_sheet_outgoing_delivery_reports', 'grid', parentGridName],
-                            class: "action-green",
-                            checkShow: function (action, model) {
-                                var info = model.getInfo();
-                                return info.documentClass === "outgoing";
                             }
                         },
                         // Document Link Viewers History
