@@ -422,7 +422,7 @@ module.exports = function (app) {
                         'ngInject';
                         return entityService.loadEntityById($stateParams.entityId);
                     },
-                    applicationUsers: function (applicationUserService) {
+                    applicationUsers: function (applicationUserService, employeeService) {
                         'ngInject';
                         return applicationUserService
                             .getApplicationUsers()
@@ -432,7 +432,7 @@ module.exports = function (app) {
                                 }
                             });
                     },
-                    themes: function (themeService) {
+                    themes: function (themeService, employeeService) {
                         'ngInject';
                         return themeService
                             .getThemes()
