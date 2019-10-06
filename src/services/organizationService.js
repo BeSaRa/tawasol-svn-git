@@ -289,7 +289,7 @@ module.exports = function (app) {
         };
 
         self.getAllCentralArchive = function (exclude) {
-            return _.filter(self.organizations, function (item) {
+            return _.filter(self.allOrganizationsStructure, function (item) {
                 return exclude ? (item.centralArchive && exclude.id !== item.id) : item.centralArchive;
             });
         };
