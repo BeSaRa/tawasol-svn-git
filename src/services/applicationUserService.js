@@ -651,7 +651,7 @@ module.exports = function (app) {
                 });
             }
             return _.some(_.map(applicationUsersToFilter, function (existingApplicationUser) {
-                return existingApplicationUser.arFullName === applicationUser.arFullName
+                return existingApplicationUser.arFullName.toLowerCase() === applicationUser.arFullName.toLowerCase()
                     || existingApplicationUser.enFullName.toLowerCase() === applicationUser.enFullName.toLowerCase()
                     || existingApplicationUser.domainName.toLowerCase() === applicationUser.domainName.toLowerCase();
             }), function (matchingResult) {

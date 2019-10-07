@@ -45,37 +45,63 @@ module.exports = function (app) {
                 };
             }
         }
-    })
-};
+    });
 
 
-/**
- * CUSTOM VALIDATION FOR ONE VALIDATION TYPE
- * @param app
- */
-/*module.exports = function(app){
-    app.directive('customValidateDirective', function($q, customValidationService){
+    /*app.directive('customValidateDirective', function ($q, customValidationService, _) {
+        'ngInject';
         return {
             restrict: 'A',
             require: 'ngModel',
-            link: function($scope, $element, attrs, ngModelCtrl){
-                var type = attrs.customValidateDirective;
-                var regex = customValidationService.regex;
+            link: function ($scope, $element, attrs, ngModelCtrl) {
 
-                //Check validation asynchronously
-                ngModelCtrl.$asyncValidators[type] = function(modelValue, viewValue){
-                    var defer = $q.defer();
-                    if(viewValue){
-                        if(type == "serverName"){
-                            (regex["url"].test(viewValue) || regex["ip"].test(viewValue)) ? defer.resolve() : defer.reject();
-                        }
-                        else{
-                            regex[type].test(viewValue) ? defer.resolve() : defer.reject();
+                var type = attrs.customValidateDirective;
+                if (!type)
+                    return;
+
+                var regex = customValidationService.regex,
+                    validationOperator = 'AND';
+
+                type = type.split(';');
+                if (type.length > 1) {
+                    validationOperator = (type[1] === '&' ? 'AND' : 'OR');
+                }
+                type = type[0];
+
+                ngModelCtrl.$asyncValidators[type] = function (modelValue, viewValue) {
+                    var defer = $q.defer(), validationResult = [], validationPassed = false;
+
+                    if (!viewValue) {
+                        validationResult = [true];
+                    } else {
+                        var typesList = type.split(',');
+
+                        for (var i = 0; i < typesList.length; i++) {
+                            if (typesList[i] !== 'number') {
+                                if (regex[typesList[i]].test(viewValue)) {
+                                    validationResult.push(true);
+                                } else {
+                                    validationResult.push(false);
+                                }
+                            } else {
+                                if ((/^[0-9\u0660-\u0669]+$/g).test(viewValue)) {
+                                    validationResult.push(true);
+                                } else {
+                                    validationResult.push(false);
+                                }
+                            }
                         }
                     }
-                    return defer.promise
-                }
+
+                    if (validationOperator === 'AND'){
+                        validationPassed = _.every(validationResult, function(e){ return !!e; });
+                    } else {
+                        validationPassed = _.some(validationResult, function(e){ return !!e; })
+                    }
+                    validationPassed ? defer.resolve() : defer.reject();
+                    return defer.promise;
+                };
             }
         }
-    })
-};*/
+    })*/
+};
