@@ -320,7 +320,7 @@ module.exports = function (app) {
          * @param $index
          * @param $event
          */
-        self.viewLinkedDocumentTrackingSheet = function (linkedDoc, $index, $event) {
+        self.viewTrackingSheet = function (linkedDoc, $index, $event) {
             viewTrackingSheetService
                 .controllerMethod
                 .viewTrackingSheetPopup(linkedDoc, ['view_tracking_sheet', 'tabs'], $event).then(function (result) {

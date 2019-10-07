@@ -220,8 +220,9 @@
                                     </md-button>
                                     &nbsp;&nbsp;
                                     <md-button class="md-icon-button view-icon-button"
+                                               ng-if="ctrl.employeeService.hasPermissionTo('VIEW_DOCUMENT\'S_TRACKING_SHEET')"
                                                tooltip="{{lang.grid_action_view_tracking_sheet}}" tooltip-direction="right"
-                                               ng-click="ctrl.viewLinkedDocumentTrackingSheet(doc, $index ,  $event)">
+                                               ng-click="ctrl.viewTrackingSheet(doc, $index ,  $event)">
                                         <md-icon md-svg-icon="eye"></md-icon>
                                     </md-button>
                                 </li>
