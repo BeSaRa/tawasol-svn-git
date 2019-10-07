@@ -203,10 +203,6 @@
                                     layout-align="start center" layout="row"
                                     ng-repeat="attachment in ctrl.correspondence.attachments track by $index">
                                     <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">{{attachment.getTranslatedName()}}</a>
-                                    <md-button class="md-icon-button view-icon-button"
-                                               ng-click="ctrl.showAttachment(attachment , $index , $event)">
-                                        <md-icon md-svg-icon="eye"></md-icon>
-                                    </md-button>
                                 </li>
                             </ul>
                         </li>
@@ -218,7 +214,14 @@
                                     ng-repeat="doc in ctrl.correspondence.linkedDocs track by $index">
                                     <a flex href="#" ng-click="ctrl.showLinkedDocument(doc , $index ,  $event)">{{doc.getTranslatedName()}}</a>
                                     <md-button class="md-icon-button view-icon-button"
+                                               tooltip="{{lang.open_in_new_popup}}" tooltip-direction="right"
                                                ng-click="ctrl.showLinkedDocument(doc, $index ,  $event , true)">
+                                        <md-icon md-svg-icon="open-in-new"></md-icon>
+                                    </md-button>
+                                    &nbsp;&nbsp;
+                                    <md-button class="md-icon-button view-icon-button"
+                                               tooltip="{{lang.view_tracking_sheet_linked_documents_history}}" tooltip-direction="right"
+                                               ng-click="ctrl.showLinkedDocumentHistory(doc, $index ,  $event)">
                                         <md-icon md-svg-icon="eye"></md-icon>
                                     </md-button>
                                 </li>

@@ -15,6 +15,7 @@ module.exports = function (app) {
                                                           $q,
                                                           gridService,
                                                           $state,
+                                                          viewTrackingSheetService,
                                                           generator) {
         'ngInject';
         var self = this;
@@ -311,6 +312,19 @@ module.exports = function (app) {
                     _changeSecondURL(result, 'linkedDocs', $index);
                 });
 
+        };
+
+        /**
+         * @description show linked document tracking sheet
+         * @param linkedDoc
+         * @param $index
+         * @param $event
+         */
+        self.showLinkedDocumentHistory = function (linkedDoc, $index, $event) {
+            viewTrackingSheetService
+                .controllerMethod
+                .viewTrackingSheetPopup(linkedDoc, ['view_tracking_sheet_linked_documents_history', 'grid'], $event).then(function (result) {
+            });
         };
 
         self.checkSelected = function (index, selectedList) {
