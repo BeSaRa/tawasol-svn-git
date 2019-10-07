@@ -1,6 +1,6 @@
 <div layout="row" flex class="p20">
     <div flex layout="column">
-        <ng-form name="documentSecurityForm" ng-if="ctrl.documentSecurity">
+        <ng-form name="documentSecurityForm" edit-mode-path="$parent.$parent.ctrl.editMode" ng-if="ctrl.documentSecurity">
             <div>
                 <!-- Show Watermark -->
                 <md-switch  ng-model="ctrl.documentSecurity.status"
@@ -8,8 +8,6 @@
                     <span>{{lang.apply_document_protection}} : </span>
                     {{ctrl.documentSecurity.getTranslatedYesNo('status')}}
                 </md-switch>
-
-
 
                 <div flex layout="column" layout-gt-md="row">
 

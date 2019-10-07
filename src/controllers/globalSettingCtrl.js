@@ -31,6 +31,8 @@ module.exports = function (app) {
          */
         self.globalSetting = globalSetting;
         self.globalSettingCopy = angular.copy(self.globalSetting);
+        self.editMode = !!self.globalSetting.id;
+        
         self.entity = entity;
         self.entityForGlobalSetting = angular.copy(entity);
         self.entityProperties = ['appArName', 'appEnName', 'arName', 'enName', 'identifier', 'groupPrefix'];

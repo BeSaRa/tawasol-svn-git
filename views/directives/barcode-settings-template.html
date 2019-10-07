@@ -19,7 +19,7 @@
     </div><!--barcode-generator -->
     <div class="barcode-column" flex="40" id="barcode-viewer" layout="column">
         <div layout="column">
-            <ng-form layout="column" name="barcodeForm">
+            <ng-form layout="column" name="barcodeForm" edit-mode-path="$parent.$parent.ctrl.editMode">
                 <div layout="row">
                     <md-input-container flex>
                         <label for="encodeType">{{lang.barcode_type}}</label>

@@ -7,41 +7,48 @@ module.exports = function (app) {
                 restrict: 'E',
                 link: function (scope, element, attrs, ctrl) {
                     $timeout(function () {
-                        console.log(scope, element, attrs, ctrl);
+                        //console.log('formDirective', scope, element, attrs, ctrl);
+                        var control;
                         if (scope.hasOwnProperty('ctrl') && scope.ctrl && scope.ctrl.hasOwnProperty('editMode') && !!scope.ctrl.editMode) {
-                            //if (ctrl.$error && !ctrl.$valid && Object.keys(ctrl.$error).length > 0) {
                             for (var i = 0; i < ctrl.$$controls.length; i++) {
-                                ctrl.$$controls[i].$setTouched();
+                                control = ctrl.$$controls[i];
+                                if (typeof control.$setTouched !== 'undefined' && typeof control.$setTouched === 'function') {
+                                    control.$setTouched();
+                                    control.$setDirty();
+                                }
                             }
-                            //} else {
-                            //    //console.log('success');
-                            //}
                         }
                     });
 
                 }
-            }
+            };
         })
-        .directive('ng-form', function ($timeout) {
+        .directive('ngForm', function ($timeout) {
             'ngInject';
             return {
-                require: 'ng-form',
+                require: 'form',
                 restrict: 'E',
                 link: function (scope, element, attrs, ctrl) {
-                    $timeout(function () {
-                        console.log(scope, element, attrs, ctrl);
-                        if (scope.hasOwnProperty('ctrl') && scope.ctrl && scope.ctrl.hasOwnProperty('editMode') && !!scope.ctrl.editMode) {
-                            //if (ctrl.$error && !ctrl.$valid && Object.keys(ctrl.$error).length > 0) {
-                            for (var i = 0; i < ctrl.$$controls.length; i++) {
-                                ctrl.$$controls[i].$setTouched();
+                    //console.log('ngFormDirective', scope);
+                    var control,
+                        editPath = attrs.hasOwnProperty('editModePath') ? attrs.editModePath : false;
+
+                    if (editPath) {
+                        $timeout(function () {
+                            var editMode = scope.$eval(editPath);
+                            if (editMode) {
+                                for (var i = 0; i < ctrl.$$controls.length; i++) {
+                                    control = ctrl.$$controls[i];
+                                    if (typeof control.$setTouched !== 'undefined' && typeof control.$setTouched === 'function') {
+                                        control.$setTouched();
+                                        control.$setDirty();
+                                    }
+                                }
                             }
-                            //} else {
-                            //    //console.log('success');
-                            //}
-                        }
-                    });
+                        });
+                    }
 
                 }
-            }
+            };
         })
 };
