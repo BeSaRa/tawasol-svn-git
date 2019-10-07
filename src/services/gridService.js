@@ -862,7 +862,8 @@ module.exports = function (app) {
                 duplicate: 'settings',
                 duplicateCurrentVersion: 'content-copy',
                 duplicateSpecificVersion: 'content-duplicate',
-
+                fullScreen: 'fullscreen',
+                fullScreenExit: 'fullscreen-exit'
             },
             indicators: {
                 securityLevel: 'security',

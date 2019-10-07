@@ -7,7 +7,7 @@
                     <span>{{::ctrl.document.getTranslatedName()}}</span>
                 </div>
                 <md-button ng-click="ctrl.toggleFullScreen()" class="md-icon-button">
-                    <md-icon md-svg-icon="fullscreen"></md-icon>
+                    <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen'}}"></md-icon>
                 </md-button>
                 <md-button ng-click="ctrl.closeDocumentReadOnlyDialog()"
                            class="md-icon-button">

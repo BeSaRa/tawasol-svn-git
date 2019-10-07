@@ -158,7 +158,7 @@
             {{lang.edit_content}}
         </md-button>
         <md-button ng-click="ctrl.toggleFullScreen()" class="md-icon-button">
-            <md-icon md-svg-icon="fullscreen"></md-icon>
+            <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen'}}"></md-icon>
         </md-button>
         <md-button ng-if="!ctrl.correspondence" ng-click="ctrl.returnBackCorrespondenceInformation()"
                    class="md-icon-button">

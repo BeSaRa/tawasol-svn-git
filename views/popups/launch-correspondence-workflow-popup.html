@@ -19,7 +19,7 @@
         <!--<md-progress-circular md-mode="indeterminate"
                               ng-if="ctrl.loadingIndicatorService.loading"></md-progress-circular>-->
         <md-button ng-click="ctrl.toggleWorkflowFullScreen()" class="md-icon-button">
-            <md-icon md-svg-icon="fullscreen"></md-icon>
+            <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen'}}"></md-icon>
         </md-button>
         <md-button ng-click="ctrl.closeCorrespondenceWorkflow()"
                    class="md-icon-button">
