@@ -390,5 +390,9 @@ module.exports = function (app) {
                 }
             }
         };
+
+        self.changeDocumentClass = function () {
+            self.correspondence.refDocNumber = null;
+        }
     });
 };

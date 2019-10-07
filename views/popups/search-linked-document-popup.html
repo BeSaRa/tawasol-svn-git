@@ -22,18 +22,26 @@
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label for="docType">{{lang.linked_document_type}}</label>
-                                    <md-select id="docType" ng-model="ctrl.searchType">
+                                    <md-select id="docType" ng-model="ctrl.searchType"
+                                               ng-change="ctrl.changeDocumentClass()">
                                         <md-option ng-value="documentClass"
                                                    ng-repeat="documentClass in ctrl.documentClasses">
                                             {{documentClass.getTranslatedName()}}
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
+                                <md-input-container flex
+                                        ng-if="ctrl.searchType.getStringKeyValue().toLowerCase() === 'incoming'">
+                                    <label for="refDocNumber">{{lang.document_number}}</label>
+                                    <input type="text" id="refDocNumber" name="refDocNumber"
+                                           ng-model="ctrl.correspondence.refDocNumber">
+                                </md-input-container>
                             </div>
                             <div layout="row">
                                 <md-input-container flex>
                                     <label for="registryOU">{{lang.linked_document_organization}}</label>
-                                    <md-select ng-disabled="ctrl.disableSelectedOrganization" id="registryOU" name="registryOU"
+                                    <md-select ng-disabled="ctrl.disableSelectedOrganization" id="registryOU"
+                                               name="registryOU"
                                                ng-model="ctrl.correspondence.registryOU">
                                         <md-option ng-value="organization.id"
                                                    ng-repeat="organization in ctrl.organizations">
