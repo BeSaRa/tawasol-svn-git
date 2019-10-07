@@ -315,15 +315,15 @@ module.exports = function (app) {
         };
 
         /**
-         * @description show linked document tracking sheet
+         * @description show tracking sheet
          * @param linkedDoc
          * @param $index
          * @param $event
          */
-        self.showLinkedDocumentHistory = function (linkedDoc, $index, $event) {
+        self.viewLinkedDocumentTrackingSheet = function (linkedDoc, $index, $event) {
             viewTrackingSheetService
                 .controllerMethod
-                .viewTrackingSheetPopup(linkedDoc, ['view_tracking_sheet_linked_documents_history', 'grid'], $event).then(function (result) {
+                .viewTrackingSheetPopup(linkedDoc, ['view_tracking_sheet', 'tabs'], $event).then(function (result) {
             });
         };
 
