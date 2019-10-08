@@ -355,7 +355,8 @@ module.exports = function (app) {
                     || parentGridName === gridService.grids.search.internal
                     || parentGridName === gridService.grids.search.general
                     || parentGridName === gridService.grids.search.outgoingIncoming
-                    || parentGridName === gridService.grids.search.quick)
+                    || parentGridName === gridService.grids.search.quick
+                    || parentGridName === gridService.grids.others.linkedDoc)
             }
             return (self.tabsToShow.indexOf(tabName) > -1);
         };

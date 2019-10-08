@@ -225,6 +225,7 @@ module.exports = function (app) {
                  * Contains an array of parameters.
                  * First parameter is type of tracking sheet.
                  * Second parameter is type of popup representation(grid/tabs)
+                 * third parameter is for parent grid name
                  * @param $event
                  * @returns {promise}
                  */

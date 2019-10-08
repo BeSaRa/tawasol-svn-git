@@ -323,7 +323,7 @@ module.exports = function (app) {
         self.viewTrackingSheet = function (linkedDoc, $index, $event) {
             viewTrackingSheetService
                 .controllerMethod
-                .viewTrackingSheetPopup(linkedDoc, ['view_tracking_sheet', 'tabs'], $event).then(function (result) {
+                .viewTrackingSheetPopup(linkedDoc, ['view_tracking_sheet', 'tabs', gridService.grids.others.linkedDoc], $event).then(function (result) {
             });
         };
 
