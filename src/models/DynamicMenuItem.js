@@ -306,7 +306,6 @@ module.exports = function (app) {
                     _.map(variables, function (item) {
                         url = url.replace(item, self.getReplacement(self.parsedURLParams[item]));
                     });
-                    console.log("URL AFTER REPLACE", url);
                     return url;
                 } else {
                     return self.url;

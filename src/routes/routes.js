@@ -1509,7 +1509,7 @@ module.exports = function (app) {
                         aLink = null;
 
                     self.createLoginIframe = function () {
-                        aLink = angular.element('<a />').attr('href', menuURL);
+                        aLink = angular.element('<a />').attr('href', encodeURIComponent(menuURL));
                         var loginLink = aLink[0].protocol + '//' + aLink[0].host + '/navigator/jaxrs/logon?userid={{username}}&password={{password}}';
                         self.loginURL = $sce.trustAsResourceUrl(loginLink.replace('{{username}}', encodeURIComponent(credentials.username)).replace('{{password}}', encodeURIComponent(credentials.password)));
                     };

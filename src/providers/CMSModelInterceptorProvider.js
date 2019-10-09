@@ -5,6 +5,7 @@ module.exports = function (app) {
 
         self.$get = function ($log) {
             'ngInject';
+
             /**
              * check model interceptor if not found make one
              * @param modelName
@@ -113,7 +114,7 @@ module.exports = function (app) {
                         for (var i = 0; i < event.length; i++) {
                             instance = event[i](instance);
                             if (!instance)
-                                $log.warn("this Model", modelName, "has interceptor but you missing to return the model in event: ", eventName);
+                                throw Error(encodeURIComponent("this Model" + modelName + "has interceptor but you missing to return the model in event: " + eventName));
                         }
                     }
                     // return the model again

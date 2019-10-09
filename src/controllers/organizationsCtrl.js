@@ -94,7 +94,7 @@ module.exports = function (app) {
                     toast.success(langService.get('organizations_synced_done'));
                 });
             }).catch(function (error) {
-                toast.error(error.data.eo[langService.current + 'Name']);
+                toast.error(encodeURI(error.data.eo[langService.current + 'Name']));
             })
         };
 
