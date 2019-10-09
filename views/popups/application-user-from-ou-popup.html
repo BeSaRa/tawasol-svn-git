@@ -20,12 +20,10 @@
                                     <md-input-container flex>
                                         <label for="arFullName">{{lang.arabic_full_name}}</label>
                                         <input name="arFullName" id="arFullName" required minlength="4"
-                                               ng-model="ctrl.applicationUser.arFullName"
-                                               custom-validate-directive="ANS" maxlength="80">
+                                               ng-model="ctrl.applicationUser.arFullName" maxlength="80">
                                         <div ng-messages="applicationUserForm.arFullName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="ANS">{{lang.arabic_number_space}}</div>
                                             <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
                                         </div>
                                     </md-input-container>
@@ -33,12 +31,10 @@
                                     <md-input-container flex>
                                         <label for="enFullName">{{lang.english_full_name}}</label>
                                         <input name="enFullName" id="enFullName" required minlength="4"
-                                               ng-model="ctrl.applicationUser.enFullName"
-                                               custom-validate-directive="ENS" maxlength="80">
+                                               ng-model="ctrl.applicationUser.enFullName" maxlength="80">
                                         <div ng-messages="applicationUserForm.enFullName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="ENS">{{lang.english_number_space}}</div>
                                             <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
                                         </div>
                                     </md-input-container>
