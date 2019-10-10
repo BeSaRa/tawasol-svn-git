@@ -370,7 +370,7 @@
                 // g2g pending items
                 .addToAllWithBase('messagingHistory', 'cms-entity/user/messaging-history')
                 // get correspondnce by g2gActionID
-                .addToAllWithBase('g2gTerminateByActionID', 'g2g//terminate/g2gActionID/{g2gActionID}')
+                .addToAllWithBase('g2gTerminateByActionID', 'g2g/terminate/g2gActionID/{g2gActionID}')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

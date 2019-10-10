@@ -4,13 +4,14 @@ module.exports = function (app) {
                       generator,
                       correspondenceService,
                       Incoming,
-                      Site/*,
-                      g2gLookupService*/
+                      Site,
+                      g2gReturnedService
     ) {
 
         var modelName = 'G2G';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
+            model.setG2GReturnService(g2gReturnedService);
             return model;
         });
 

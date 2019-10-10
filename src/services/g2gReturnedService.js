@@ -97,8 +97,8 @@ module.exports = function (app) {
                 });
         };
 
-        self.terminateG2GKuwait = function (g2gItem , $event ) {
-            return $http.get(urlService.g2gTerminateByActionID.replace('{g2gActionID}',g2gItem.g2gActionID) ).then(function (result) {
+        self.terminateG2GKuwait = function (g2gItem, $event) {
+            return $http.get(urlService.g2gTerminateByActionID.replace('{g2gActionID}', g2gItem.hasOwnProperty('g2gActionID') ? g2gItem.g2gActionID : g2gItem.correspondence.g2gActionID)).then(function (result) {
                 return result.data.rs;
             }).catch(function (error) {
                 return errorCode.showErrorDialog(error);

@@ -2,11 +2,12 @@ module.exports = function (app) {
     app.factory('G2G', function (CMSModelInterceptor,
                                  langService,
                                  Information,
+                                 configurationService,
                                  downloadService,
                                  viewDocumentService,
                                  Indicator) {
         return function G2G(model) {
-            var self = this;
+            var self = this, g2gReturnedService;
 
             self.correspondence = null;
             self.documentFile = null;
@@ -34,6 +35,11 @@ module.exports = function (app) {
             if (model)
                 angular.extend(this, model);
 
+
+            G2G.prototype.setG2GReturnService = function (service) {
+                g2gReturnedService = service;
+                return this;
+            };
             /**
              * @description Get all required fields
              * @return {Array|requiredFields}
@@ -146,13 +152,21 @@ module.exports = function (app) {
 
             G2G.prototype.getTranslatedOriginalCopy = function () {
                 return this.stepElm.orginality === 0
-                    ? new Information({enName: langService.getByLangKey('original', 'en'), arName: langService.getByLangKey('original', 'ar')})
-                    : new Information({enName: langService.getByLangKey('copy', 'en'), arName: langService.getByLangKey('copy', 'ar')});
+                    ? new Information({
+                        enName: langService.getByLangKey('original', 'en'),
+                        arName: langService.getByLangKey('original', 'ar')
+                    })
+                    : new Information({
+                        enName: langService.getByLangKey('copy', 'en'),
+                        arName: langService.getByLangKey('copy', 'ar')
+                    });
             };
 
 
-
-
+            G2G.prototype.terminate = function ($event) {
+                var method = configurationService.G2G_QATAR_SOURCE ? 'terminateG2G' : 'terminateG2GKuwait';
+                return g2gReturnedService[method](this, $event);
+            };
 
 
             // don't remove CMSModelInterceptor from last line
