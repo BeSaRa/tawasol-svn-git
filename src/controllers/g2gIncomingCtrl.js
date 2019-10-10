@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                 counterService,
                                                 toast,
                                                 dialog,
+                                                configurationService,
                                                 employeeService,
                                                 localStorageService,
                                                 generator,
@@ -323,7 +324,7 @@ module.exports = function (app) {
                 showInView: true,
                 showInViewOnly: true,
                 checkShow: function (action, model) {
-                    return true;
+                    return configurationService.G2G_QATAR_SOURCE ? true : !model.isReceived;
                 }
             },
             // Return
