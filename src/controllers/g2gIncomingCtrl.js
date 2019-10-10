@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('g2gIncomingCtrl', function (lookupService,
                                                 g2gIncomingService,
                                                 g2gItems,
+                                                G2G,
                                                 $q,
                                                 $filter,
                                                 langService,
@@ -357,7 +358,8 @@ module.exports = function (app) {
                 showInView: true,
                 showInViewOnly: true,
                 checkShow: function (action, model) {
-                    return configurationService.G2G_QATAR_SOURCE ? true : !model.isReceived;
+                    var show = model instanceof G2G ? !model.correspondence.isReceived : !model.isReceived;
+                    return configurationService.G2G_QATAR_SOURCE ? true : show;
                 }
             },
             // Return

@@ -96,7 +96,10 @@ module.exports = function (app) {
                         'userFavouriteDocument',
                         'foldersCount',
                         function (currentValue, counter, employee, property) {
-                            currentValue = employee.inRegistry() ? currentValue : (counter.groupMail[property] + currentValue);
+                            if (!employee.inRegistry() && employee.hasThesePermissions('GROUP_MAIL')){
+                                currentValue = (counter.groupMail[property] + currentValue);
+                            }
+                            //currentValue = employee.inRegistry() ? currentValue : (counter.groupMail[property] + currentValue);
                             return currentValue;
                         }
                     ],
