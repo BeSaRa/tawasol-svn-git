@@ -180,7 +180,7 @@ module.exports = function (app) {
             };
 
             G2GMessagingHistory.prototype.resendNewG2GItem = function () {
-                return correspondenceService.resendG2GItemNew(this);
+                return correspondenceService.resendG2GItemNew(this.g2gActionID);
             };
 
             G2GMessagingHistory.prototype.manageG2GDocumentProperties = function ($event) {
