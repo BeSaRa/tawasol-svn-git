@@ -5,6 +5,7 @@ module.exports = function (app) {
                       lookupService,
                       correspondenceService,
                       managerService,
+                      g2gReturnedService,
                       g2gLookupService) {
         'ngInject';
         var modelName = 'G2GMessagingHistory';
@@ -12,6 +13,7 @@ module.exports = function (app) {
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
             model.setCorrespondenceService(correspondenceService);
             model.setManagerService(managerService);
+            model.setG2GReturnService(g2gReturnedService);
             return model;
         });
 

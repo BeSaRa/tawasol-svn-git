@@ -233,6 +233,25 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Terminate the document
+         * @param g2gItem
+         * @param $event
+         * @param defer
+         * @returns {*}
+         */
+        self.terminate = function (g2gItem, $event, defer) {
+            g2gItem
+                .terminate()
+                .then(function () {
+                    new ResolveDefer(defer);
+                    self.reloadG2gItems(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get('terminate_success'));
+                        });
+                });
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -311,6 +330,20 @@ module.exports = function (app) {
                     return true;
                 },
                 showInView: false
+            },
+            // Terminate
+            {
+                type: 'action',
+                icon: 'stop',
+                text: 'grid_action_terminate',
+                shortcut: true,
+                callback: self.terminate,
+                class: "action-green",
+                //permissionKey: 'VIEW_DOCUMENT',
+                showInView: true,
+                checkShow: function (action, model) {
+                    return !configurationService.G2G_QATAR_SOURCE;
+                }
             },
             // Receive
             {

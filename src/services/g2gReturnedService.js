@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                 $http,
                                                 $q,
                                                 generator,
+                                                configurationService,
                                                 G2GMessagingHistory,
                                                 _,
                                                 dialog,
@@ -79,7 +80,7 @@ module.exports = function (app) {
                 });
         };
 
-        self.terminateG2G = function (g2gItem,$event) {
+        self.terminateG2G = function (g2gItem, $event) {
             return self.showReasonDialog('terminate_reason', $event)
                 .then(function (reason) {
                     var isInternal = g2gItem.isInternalG2G();
@@ -96,18 +97,13 @@ module.exports = function (app) {
                 });
         };
 
-        /*self.terminateG2G = function (g2gItem) {
-            return dialog.confirmMessage(langService.get('confirm_terminate').change({name: g2gItem.getTranslatedName()}))
-                .then(function () {
-                    var isInternal = g2gItem.isInternalG2G();
-                    g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
-                    return $http.put((urlService.g2gInbox + 'terminate/' + isInternal), g2gItem).then(function (result) {
-                        return result.data.rs;
-                    }).catch(function (error) {
-                        return errorCode.showErrorDialog(error);
-                    });
-                });
-        };*/
+        self.terminateG2GKuwait = function (g2gItem , $event ) {
+            return $http.get(urlService.g2gTerminateByActionID.replace('{g2gActionID}',g2gItem.g2gActionID) ).then(function (result) {
+                return result.data.rs;
+            }).catch(function (error) {
+                return errorCode.showErrorDialog(error);
+            });
+        };
 
         self.resendG2G = function (g2gItem) {
             var isInternal = g2gItem.isInternalG2G();

@@ -8,7 +8,7 @@ module.exports = function (app) {
                                                  langService) {
         'ngInject';
         return function G2GMessagingHistory(model) {
-            var self = this, correspondenceService, managerService,
+            var self = this, correspondenceService, g2gReturnedService, managerService,
                 exportData = {
                     subject: 'subject',
                     document_type: function () {
@@ -77,6 +77,10 @@ module.exports = function (app) {
             };
             G2GMessagingHistory.prototype.setManagerService = function (service) {
                 managerService = service;
+                return this;
+            };
+            G2GMessagingHistory.prototype.setG2GReturnService = function (service) {
+                g2gReturnedService = service;
                 return this;
             };
 
@@ -222,6 +226,11 @@ module.exports = function (app) {
             };
             G2GMessagingHistory.prototype.getExportedData = function () {
                 return exportData;
+            };
+
+            G2GMessagingHistory.prototype.terminate = function ($event) {
+                var method = configurationService.G2G_QATAR_SOURCE ? 'terminateG2G' : 'terminateG2GKuwait';
+                return g2gReturnedService[method](this, $event);
             };
 
             // don't remove CMSModelInterceptor from last line

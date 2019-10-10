@@ -198,14 +198,15 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.terminate = function (g2gItem, $event, defer) {
-            return g2gReturnedService.terminateG2G(g2gItem)
-                .then(function (result) {
+            g2gItem
+                .terminate()
+                .then(function () {
                     new ResolveDefer(defer);
                     self.reloadG2gItems(self.grid.page)
                         .then(function () {
                             toast.success(langService.get('terminate_success'));
                         });
-                })
+                });
         };
 
         /**
