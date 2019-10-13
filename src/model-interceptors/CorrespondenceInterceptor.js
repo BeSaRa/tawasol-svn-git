@@ -164,6 +164,7 @@ module.exports = function (app) {
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
 
             delete model.internalG2G; // temporary property added to correspondence when opening the G2G incoming
+            delete model.isReceived;// temporary property added to correspondence when opening the G2G incoming
             return model;
         });
 

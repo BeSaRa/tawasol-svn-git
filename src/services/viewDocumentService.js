@@ -17,6 +17,7 @@ module.exports = function (app) {
         };
 
         provider.$get = function (dialog,
+                                  configurationService,
                                   generator,
                                   $http,
                                   $timeout,
@@ -1365,6 +1366,12 @@ module.exports = function (app) {
                         metaData.internalG2G = isInternal;
 
                         result.data.rs.metaData = metaData;
+
+                        if (!configurationService.G2G_QATAR_SOURCE && g2gItemCopy.hasOwnProperty('correspondence') && g2gItemCopy.correspondence.hasOwnProperty('isReceived')) {
+                            // temporary property added to correspondence(will be removed before send)
+                            result.data.rs.metaData.isReceived = g2gItemCopy.correspondence.isReceived;
+                        }
+
                         localStorageService.remove('vsid');
                         localStorageService.set('vsid', metaData.vsId);
                         return result.data.rs;
