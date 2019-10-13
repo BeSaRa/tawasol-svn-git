@@ -419,6 +419,34 @@ module.exports = function (app) {
             }
         };
 
+        self.manageAttachments = function ($event) {
+            if (!employeeService.hasPermissionTo("MANAGE_ATTACHMENTS")) {
+                return;
+            }
+            var record = self.workItem || self.correspondence;
+            record.manageDocumentAttachments($event)
+                .then(function (attachments) {
+                    self.correspondence.attachments = angular.copy(attachments);
+                })
+                .catch(function (attachments) {
+                    self.correspondence.attachments = angular.copy(attachments);
+                });
+        };
+
+        self.manageLinkedDocuments = function($event){
+            if (!employeeService.hasPermissionTo("MANAGE_LINKED_DOCUMENTS")) {
+                return;
+            }
+            var record = self.workItem || self.correspondence;
+            record.manageDocumentLinkedDocuments($event)
+                .then(function (linkedDocs) {
+                    self.correspondence.linkedDocs = angular.copy(linkedDocs);
+                })
+                .catch(function (linkedDocs) {
+                    self.correspondence.linkedDocs = angular.copy(linkedDocs);
+                });
+        };
+
         $timeout(function () {
             self.stickyActions = gridService.getStickyActions(self.actions);
         })
