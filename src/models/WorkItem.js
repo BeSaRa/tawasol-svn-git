@@ -248,7 +248,17 @@ module.exports = function (app) {
 
             WorkItem.prototype.getIsTransferredDocumentIndicator = function () {
                 // if no incomingVSID, then its directly sent from launch(transferred)
-                return indicator.getIsTransferredDocumentIndicator((!this.generalStepElm.incomingVSID));
+                return indicator.getIsTransferredDocumentIndicator(this.isTransferredDocument());
+            };
+
+            /**
+             * @description Checks if the document is transferred
+             * if no incomingVSID, then its directly sent from launch(transferred), otherwise its exported to organization
+             * @returns {boolean}
+             */
+            WorkItem.prototype.isTransferredDocument = function(){
+                // if no incomingVSID, then its directly sent from launch(transferred)
+                return !this.generalStepElm.incomingVSID;
             };
 
             WorkItem.prototype.getWobNumber = function () {

@@ -250,13 +250,13 @@ module.exports = function (app) {
             // Department Inbox
             .getPageNameOverride('departmentIncoming', 'draftOutgoing', {
                 disableProperties: function (model) {
-                    return true;
+                    return !model.isTransferredDocument();
                 },
                 disableSites: function (model) {
                     return true;
                 },
                 disableAll: function (model) {
-                    return !model.generalStepElm.isReassigned;
+                    return !model.generalStepElm.isReassigned && !model.isTransferredDocument() ;
                 }
             })
             .getPageNameOverride('departmentReturned', 'draftOutgoing', {

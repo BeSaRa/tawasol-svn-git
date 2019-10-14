@@ -413,16 +413,10 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(incomingDepartmentInbox, null));
                 return;
             }
-            /*correspondenceService.viewCorrespondence(incomingDepartmentInbox, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true)
-                .then(function () {
-                    return self.reloadIncomingDepartmentInboxes(self.grid.page);
-                })
-                .catch(function (error) {
-                    if (error !== 'exception') {
-                        return self.reloadIncomingDepartmentInboxes(self.grid.page);
-                    }
-                });*/
-            correspondenceService.viewCorrespondenceWorkItem(incomingDepartmentInbox.getInfo(), self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true)
+            //if not transferred, disable edit properties
+            var disableProperties = checkIfEditPropertiesAllowed(incomingDepartmentInbox, true) && !incomingDepartmentInbox.isTransferredDocument();
+
+            correspondenceService.viewCorrespondenceWorkItem(incomingDepartmentInbox.getInfo(), self.gridActions, disableProperties, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true)
                 .then(function () {
                     correspondenceService.unlockWorkItem(incomingDepartmentInbox, true, $event).then(function () {
                         return self.reloadIncomingDepartmentInboxes(self.grid.page);
@@ -653,6 +647,42 @@ module.exports = function (app) {
             });
         };
 
+        self.editProperties = function (workItem, $event) {
+            var info = workItem.getInfo();
+            managerService
+                .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
+                .finally(function (e) {
+                    self.reloadIncomingDepartmentInboxes(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
+
+                });
+        };
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var info = model.getInfo();
+            var hasPermission = false;
+            if (info.documentClass === "internal") {
+                //If approved internal electronic, don't allow to edit
+                if (info.docStatus >= 24 && !info.isPaper)
+                    hasPermission = false;
+                else
+                    hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+            } else if (info.documentClass === "incoming")
+                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+            else if (info.documentClass === "outgoing") {
+                //If approved outgoing electronic, don't allow to edit
+                if (info.docStatus >= 24 && !info.isPaper)
+                    hasPermission = false;
+                else
+                    hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+            }
+            if (checkForViewPopup)
+                return !hasPermission;
+            return hasPermission;
+        };
+
         /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
@@ -760,6 +790,20 @@ module.exports = function (app) {
                     return true;
                 },
                 showInView: false
+            },
+            // Edit outgoing properties
+            {
+                type: 'action',
+                icon: 'pencil',
+                text: 'grid_action_edit_properties',
+                shortcut: true,
+                showInView: false,
+                //permissionKey: "EDIT_OUTGOING_PROPERTIES",
+                callback: self.editProperties,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return checkIfEditPropertiesAllowed(model) && model.isTransferredDocument();
+                }
             },
             // Manage
             {
