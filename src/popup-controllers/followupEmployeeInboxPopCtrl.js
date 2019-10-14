@@ -18,6 +18,7 @@ module.exports = function (app) {
         self.controllerName = 'followupEmployeeInboxPopCtrl';
 
         self.inlineOUSearchText = '';
+        self.inlineAppUserSearchText = '';
 
         var _mapRegOUSections = function(){
             // filter all regOU

@@ -1,7 +1,7 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.select_organization_and_user}}">
-        <popup-toolbar-directive header-text="{{lang.select_organization_and_user}}"></popup-toolbar-directive>
+    <popup-toolbar-directive header-text="{{lang.select_organization_and_user}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive>
         <div class="md-dialog-content cms-dialog-content">
             <form name="organizationAndUserForm" autocomplete="off">
@@ -41,11 +41,20 @@
                                        ng-required="ctrl.selectedOrganization"
                                        ng-disabled="!ctrl.selectedOrganization"
                                        aria-label="{{lang.app_users}}"
-                                       ng-model="ctrl.selectedApplicationUser">
+                                       ng-model="ctrl.selectedApplicationUser"
+                                       md-on-close="ctrl.clearSearchText('inlineAppUser')"
+                                       data-md-container-class="select-header-container">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.inlineAppUserSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
                                 <md-option ng-if="!ctrl.notCurrentUser(user.applicationUser)"
                                            ng-value="user.applicationUser"
-                                           ng-repeat="user in ctrl.ouApplicationUsers track by $index">
-                                    {{user.getTranslatedApplicationUserName()}}
+                                           ng-repeat="user in ctrl.ouApplicationUsers | translatedNameFilter: ctrl.inlineAppUserSearchText : null:'applicationUser'  track by $index ">
+                                       <span md-highlight-text="ctrl.inlineAppUserSearchText"
+                                             md-highlight-flags="i">{{user.getTranslatedApplicationUserName()}}</span>
                                 </md-option>
                             </md-select>
                             <div ng-messages="organizationAndUserForm.applicationUser.$error">
