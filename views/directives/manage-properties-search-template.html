@@ -224,10 +224,10 @@
                             </div>
                         </md-select-header>
                         <md-option ng-value="classification.classification"
-                                   ng-repeat="classification in ctrl.classifications | translatedNameFilter: ctrl.mainClassificationSearchText:null:'classification'">
+                                   ng-repeat="classification in ctrl.classifications | translatedNameFilter: ctrl.mainClassificationSearchText:'getIdNameByLanguage':'classification'">
                         <span
                                 md-highlight-text="ctrl.mainClassificationSearchText"
-                                md-highlight-flags="i">{{classification.classification.getTranslatedName()}}</span>
+                                md-highlight-flags="i">{{classification.classification.getIdNameByLanguage()}}</span>
                         </md-option>
                         <md-option ng-value="null">{{lang.all}}</md-option>
 
@@ -266,10 +266,10 @@
                             </div>
                         </md-select-header>
                         <md-option ng-value="classification"
-                                   ng-repeat="classification in ctrl.document.mainClassification.children | translatedNameFilter: ctrl.subClassificationSearchText">
+                                   ng-repeat="classification in ctrl.document.mainClassification.children | translatedNameFilter: ctrl.subClassificationSearchText:'getIdNameByLanguage'">
                             <span
                                     md-highlight-text="ctrl.subClassificationSearchText"
-                                    md-highlight-flags="i">{{classification.getTranslatedName()}}</span>
+                                    md-highlight-flags="i">{{classification.getIdNameByLanguage()}}</span>
                         </md-option>
                     </md-select>
                     <div ng-messages="docSearchForm.subClassification.$error">

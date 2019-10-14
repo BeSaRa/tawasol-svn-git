@@ -75,6 +75,15 @@ module.exports = function (app) {
             Classification.prototype.getNameByLanguage = function (language) {
                 return this[language + 'Name'];
             };
+            /**
+             * @description Get the id concatenated with name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            Classification.prototype.getIdNameByLanguage = function (language) {
+                language = language || langService.current;
+                return (this.id + ' - ') + this[language + 'Name'];
+            };
             Classification.prototype.appendChild = function (classification) {
                 this.children.push(classification);
                 return this;
