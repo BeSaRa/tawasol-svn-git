@@ -30,6 +30,7 @@ module.exports = function (app) {
                         .getInformation($stateParams.identifier)
                         .then(function () {
                             // get load languages
+                           langService.setEntityCurrentLang();
                             $timeout(function () {
                                 return application.setReadyStatus();
                             }, 1000);

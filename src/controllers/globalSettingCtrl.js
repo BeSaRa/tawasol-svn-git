@@ -32,7 +32,7 @@ module.exports = function (app) {
         self.globalSetting = globalSetting;
         self.globalSettingCopy = angular.copy(self.globalSetting);
         self.editMode = !!self.globalSetting.id;
-        
+
         self.entity = entity;
         self.entityForGlobalSetting = angular.copy(entity);
         self.entityProperties = ['appArName', 'appEnName', 'arName', 'enName', 'identifier', 'groupPrefix'];
@@ -48,6 +48,7 @@ module.exports = function (app) {
         self.workFlowSecurities = lookupService.returnLookups(lookupService.workflowSecurity);
         self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.thumbnailModes = lookupService.returnLookups(lookupService.thumbnailMode);
+        self.languages = lookupService.returnLookups(lookupService.language);
         self.correspondenceSiteSearchTypeOptions = [
             {
                 key: 'search_type_simple',
@@ -111,6 +112,7 @@ module.exports = function (app) {
         self.validateLabels = {
             searchAmount: 'default_max_row_search',
             searchAmountLimit: 'limited_max_row_search',
+            defaultDisplayLang: 'default_language',
             inboxRefreshInterval: 'inbox_refresh_interval',
             sessionTimeout: 'session_time_out',
             thumbnailMode: 'thumbnail_mode',

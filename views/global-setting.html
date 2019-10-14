@@ -48,6 +48,20 @@
                                     <input id="identifier" readonly ng-disabled="true" name="identifier"
                                            ng-model="ctrl.entity.identifier">
                                 </md-input-container>
+                                <!-- Language -->
+                                <md-input-container flex>
+                                    <label for="defaultDisplayLang">{{lang.default_language}}</label>
+                                    <md-select id="defaultDisplayLang" name="defaultDisplayLang" required
+                                               ng-model="ctrl.globalSetting.defaultDisplayLang">
+                                        <md-option ng-value="language.lookupKey"
+                                                   ng-repeat="language in ctrl.languages track by $index">
+                                            {{language.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="globalSettingForm.defaultDisplayLang.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
                                 <!-- Entity Group Prefix -->
                                 <!--<md-input-container flex>
                                     <label for="groupPrefix">{{lang.group_prefix}}</label>

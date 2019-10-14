@@ -296,6 +296,16 @@ module.exports = function (app) {
             return self.current;
         };
 
+        self.setEntityCurrentLang = function () {
+            if(!rootEntity)
+                return;
+
+            var defaultDisplayLang = _.find(self.languages, function (lang) {
+                return lang.lookupKey === rootEntity.getGlobalSettings().defaultDisplayLang;
+            });
+            self.setCurrentLang(defaultDisplayLang.code);
+        };
+
         self.getSelectedLanguage = function () {
             return _.find(self.languages, function (lang) {
                 return lang.code === self.current;

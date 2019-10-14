@@ -129,6 +129,7 @@ module.exports = function (app) {
                     }
                     tokenService.destroy(); // destroy the current sessions
                     employeeService.destroyEmployee(); // destroy current user data
+                    langService.setEntityCurrentLang();
                     return result.data.rs;
                 })
                 .catch(function () {
@@ -139,6 +140,7 @@ module.exports = function (app) {
                     }
                     tokenService.destroy(); // destroy the current sessions
                     employeeService.destroyEmployee(); // destroy current user data
+                    langService.setEntityCurrentLang();
                     return true;
                 });
         };

@@ -54,6 +54,7 @@ module.exports = function (app) {
             self.allowTwoWaysRelatedBook = false;
             self.removeMAIPSecurity = true;
             self.separateActionOnTransfer = false;
+            self.defaultDisplayLang = 1;
             //endregion
 
             // every model has required fields
@@ -61,6 +62,7 @@ module.exports = function (app) {
             var requiredFields = [
                 'searchAmount',
                 'searchAmountLimit',
+                'defaultDisplayLang',
                 'inboxRefreshInterval',
                 'sessionTimeout',
                 'thumbnailMode',
