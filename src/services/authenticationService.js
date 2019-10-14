@@ -59,6 +59,13 @@ module.exports = function (app) {
                     self.setLastLoginOrganizationId(result.data.rs.ou);
                 }
                 return result.data.rs;
+            }).catch(function (error) {
+                // wrong password or empty password
+                if (errorCode.checkIf(error, 'PASSWORD_EMPTY') === true) {
+                    dialog.errorMessage(langService.get('access_denied'));
+                    return $q.reject(false);
+                }
+                return $q.reject(error);
             });
         };
         /**
@@ -81,13 +88,6 @@ module.exports = function (app) {
                     .setEmployee(result);
                 tokenService.setToken(result.token);
                 return result;
-            }).catch(function (error) {
-                // wrong password or empty password
-                if (errorCode.checkIf(error, 'PASSWORD_EMPTY') === true) {
-                    dialog.errorMessage(langService.get('access_denied'));
-                    return $q.reject(false);
-                }
-                return $q.reject(false);
             });
         };
         /**
