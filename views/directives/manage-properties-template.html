@@ -326,7 +326,7 @@
                     </div>
                 </md-input-container>
                 <!-- Add Document Type -->
-                <md-input-container ng-if="ctrl.checkStatus('docType') && !ctrl.disableProperties">
+                <md-input-container ng-if="ctrl.checkStatus('docType') && !ctrl.disableProperties && ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT_TYPE')">
                     <md-button class="md-icon-button"
                                ng-disabled="!!ctrl.disableProperties"
                                ng-click="ctrl.shortcut.addNewDocumentType($event)">
@@ -377,7 +377,7 @@
                     </div>
                 </md-input-container>
                 <!-- Add File -->
-                <md-input-container ng-if="ctrl.checkStatus('fileId') && !ctrl.disableProperties">
+                <md-input-container ng-if="ctrl.checkStatus('fileId') && !ctrl.disableProperties && ctrl.employeeService.hasPermissionTo('MANAGE_FILES')">
                     <md-button tooltip="{{lang.outgoing_add_new_document_file}}"
                                class="md-icon-button"
 
