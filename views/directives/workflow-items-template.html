@@ -6,6 +6,7 @@
                    multiple="ctrl.multiSelect">
                 <thead md-head md-order="ctrl.grid.order" md-on-reoreder="ctrl.getSortedData">
                 <tr md-row>
+                    <!-- Toggle Favorites -->
                     <th md-column class="no-padding" ng-if="ctrl.allowFavorites">
                         <md-button
                                 ng-if="ctrl.excludeSelected && ctrl.allowFavorites"
@@ -23,18 +24,19 @@
                                      md-svg-icon="{{ctrl.callbackAllInFavorites(ctrl.workflowItems) ? 'star' :  'star-outline' }}"></md-icon>
                         </md-button>
                     </th>
-                    <th colspan="5" ng-if="ctrl.selectedWorkflowItems.length" md-column>
+                    <!-- Selected Items -->
+                    <th colspan="2" ng-if="ctrl.selectedWorkflowItems.length" md-column>
                         <span>{{ctrl.selectedWorkflowItems.length}} {{lang.items_selected}} </span>
                     </th>
-                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="">
+                    <!-- Name-->
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="{{ctrl.getTranslatedKey()}}">
                         {{lang.name}}
                     </th>
-                    <!--<th md-column ng-if="!ctrl.selectedWorkflowItems.length && lang.current === 'en'" md-order-by="enName">
-                        {{lang.english_name}}
-                    </th>-->
+                    <!-- Action -->
                     <th ng-if="!ctrl.selectedWorkflowItems.length" md-column>
                         {{lang.action}}
                     </th>
+                    <!-- Notifications -->
                     <th md-column ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification">
                         <md-menu>
                             <md-button tooltip="{{lang.notification_settings}}" class="md-icon-button"
@@ -61,6 +63,7 @@
                             </md-menu-content>
                         </md-menu>
                     </th>
+                    <!-- Properties and menu -->
                     <th md-column>
                         <div layout="row">
                             <div>
@@ -92,13 +95,9 @@
                         </md-button>
                     </td>
                     <td md-cell>
-                                                <span md-highlight-text="ctrl.workflowItemsCriteria.arName"
+                                                <span md-highlight-text="ctrl.workflowItemsCriteria[ctrl.getTranslatedKey()]"
                                                       md-highlight-flags="i">{{workflowItem.getTranslatedName()}}</span>
                     </td>
-                    <!--<td md-cell>
-                                                <span md-highlight-text="ctrl.workflowItemsCriteria.enName"
-                                                      md-highlight-flags="i">{{workflowItem.getFullNameByKey('en')}}</span>
-                    </td>-->
                     <td md-cell>
                         <!--<md-menu-bar class="no-padding">
                             <md-menu>
@@ -194,10 +193,6 @@
                     <td md-cell>
                                                 <span md-highlight-text="ctrl.workflowItemsCriteria[ctrl.getTranslatedKey()]"
                                                       md-highlight-flags="i">{{workflowItem.getTranslatedName()}}</span>
-                    </td>
-                    <!--<td ng-if="lang.current === 'en'" md-cell>
-                                                <span md-highlight-text="ctrl.workflowItemsCriteria.enName"
-                                                      md-highlight-flags="i">{{workflowItem.getFullNameByKey('en')}}</span>-->
                     </td>
                     <td md-cell>
                         <!--<md-menu-bar class="no-padding">

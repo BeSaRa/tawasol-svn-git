@@ -6,6 +6,7 @@
                    multiple="ctrl.multiSelect">
                 <thead md-head md-order="ctrl.grid[ctrl.gridName].order" md-on-reorder="ctrl.getSortedData">
                 <tr md-row>
+                    <!-- Toggle Favorites -->
                     <th md-column class="no-padding" ng-if="ctrl.allowFavorites">
                         <md-button
                                 ng-if="ctrl.excludeSelected && ctrl.allowFavorites"
@@ -23,29 +24,27 @@
                                      md-svg-icon="{{ctrl.runAllInFavorites((ctrl.gridItems)) ? 'star' :  'star-outline' }}"></md-icon>
                         </md-button>
                     </th>
-                    <th colspan="{{ctrl.allowFavorites ? '4' : '5'}}" ng-if="ctrl.selectedWorkflowItems.length"
+                    <!-- Selected Items -->
+                    <th colspan="{{ctrl.getColspan()}}" ng-if="ctrl.selectedWorkflowItems.length"
                         md-column>
                         <span>{{ctrl.selectedWorkflowItems.length}} {{lang.items_selected}} </span>
                     </th>
-                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="toUserDomain">
-                        {{lang.domain_name}}
-                    </th>
-                    <th md-column class="no-padding">
-                        <!-- just to display out of office  --></th>
+                    <!-- out of office icon -->
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length && ctrl.isAnyOutOfOffice()" class="no-padding"></th>
+                    <!-- Name-->
                     <th md-column ng-if="!ctrl.selectedWorkflowItems.length"
                         md-order-by="{{ctrl.getTranslatedKey()}}">
                         {{lang.name}}
                     </th>
-                    <!-- <th md-column ng-if="!ctrl.selectedWorkflowItems.length && lang.current === 'en'"
-                                            md-order-by="enName">
-                                            {{lang.english_name}}
-                                        </th>-->
+                    <!-- OU-->
                     <th ng-if="!ctrl.selectedWorkflowItems.length" md-column>
                         {{lang.organization_unit}}
                     </th>
+                    <!-- Action -->
                     <th ng-if="!ctrl.selectedWorkflowItems.length" md-column>
                         {{lang.action}}
                     </th>
+                    <!-- Notifications -->
                     <th ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification"
                         md-column>
                         <md-menu>
@@ -77,6 +76,7 @@
                             </md-menu-content>
                         </md-menu>
                     </th>
+                    <!-- Properties and menu -->
                     <th md-column>
                         <div layout="row">
                             <div>
@@ -107,25 +107,16 @@
                                     md-svg-icon="{{workflowUser.isFavorite() ? 'star' : 'star-outline'}}"></md-icon>
                         </md-button>
                     </td>
-                    <td md-cell>
-                                                <span flex md-highlight-text="ctrl.gridItemsCriteria.domainName"
-                                                      md-highlight-flags="i">{{workflowUser.getDomainName()}}</span>
-                    </td>
-                    <td md-cell class="no-padding">
+                    <td md-cell ng-if="workflowUser.isUserOutOfOffice()" class="no-padding">
                         <md-button class="md-icon-button"
-                                   ng-if="workflowUser.isUserOutOfOffice()"
                                    ng-click="ctrl.runOpenWorkflowUserOutOfOffice(workflowUser , $event)">
-                            <md-icon ng-if="workflowUser.isUserOutOfOffice()" md-svg-icon="account-alert"></md-icon>
+                            <md-icon md-svg-icon="account-alert"></md-icon>
                         </md-button>
                     </td>
                     <td md-cell>
                                                 <span md-highlight-text="ctrl.gridItemsCriteria[ctrl.getTranslatedKey()]"
                                                       md-highlight-flags="i">{{workflowUser.getTranslatedName()}}</span>
                     </td>
-                    <!--<td ng-if="lang.current === 'en'" md-cell>
-                                                <span md-highlight-text="ctrl.gridItemsCriteria.enName"
-                                                      md-highlight-flags="i">{{workflowUser.getFullNameByKey('en')}}</span>
-                    </td>-->
                     <td md-cell>
                         <span>{{workflowUser.getTranslatedOrganizationName()}}</span>
                     </td>
@@ -235,25 +226,16 @@
                                     md-svg-icon="{{workflowUser.isFavorite() ? 'star' : 'star-outline'}}"></md-icon>
                         </md-button>
                     </td>
-                    <td md-cell>
-                                                <span flex md-highlight-text="ctrl.gridItemsCriteria.domainName"
-                                                      md-highlight-flags="i">{{workflowUser.getDomainName()}}</span>
-                    </td>
-                    <td md-cell class="no-padding">
+                    <td md-cell ng-if="workflowUser.isUserOutOfOffice()" class="no-padding">
                         <md-button class="md-icon-button"
-                                   ng-if="workflowUser.isUserOutOfOffice()"
                                    ng-click="ctrl.runOpenWorkflowUserOutOfOffice(workflowUser , $event)">
-                            <md-icon ng-if="workflowUser.isUserOutOfOffice()" md-svg-icon="account-alert"></md-icon>
+                            <md-icon md-svg-icon="account-alert"></md-icon>
                         </md-button>
                     </td>
                     <td md-cell>
                                                 <span md-highlight-text="ctrl.gridItemsCriteria[ctrl.getTranslatedKey()]"
                                                       md-highlight-flags="i">{{workflowUser.getTranslatedName()}}</span>
                     </td>
-                    <!--                    <td ng-if="lang.current === 'en'" md-cell>
-                                                                    <span md-highlight-text="ctrl.gridItemsCriteria.enName"
-                                                                          md-highlight-flags="i">{{workflowUser.getFullNameByKey('en')}}</span>
-                    </td>-->
                     <td md-cell>
                         <span>{{workflowUser.getTranslatedOrganizationName()}}</span>
                     </td>

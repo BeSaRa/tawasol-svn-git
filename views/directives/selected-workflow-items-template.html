@@ -5,7 +5,7 @@
                    md-row-select="true">
                 <thead md-head md-order="ctrl.grid.order" md-on-reoder="ctrl.getSortedData">
                 <tr md-row>
-                    <th colspan="4" ng-if="ctrl.selectedWorkflowItems.length" md-column>
+                    <th colspan="5" ng-if="ctrl.selectedWorkflowItems.length" md-column>
                         <span>{{ctrl.selectedWorkflowItems.length}} {{lang.items_selected}} </span>
                     </th>
                     <th md-column ng-if="!ctrl.selectedWorkflowItems.length"

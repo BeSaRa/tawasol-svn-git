@@ -4,7 +4,8 @@ module.exports = function (app) {
                                                            DistributionWFItem,
                                                            rootEntity,
                                                            LangWatcher,
-                                                           $filter) {
+                                                           $filter,
+                                                           _) {
         'ngInject';
         var self = this;
         self.controllerName = 'workflowUsersDirectiveCtrl';
@@ -93,6 +94,20 @@ module.exports = function (app) {
         self.getSortedData = function () {
             self.gridItems = $filter('orderBy')(self.gridItems, self.grid[self.gridName].order);
         };
+
+        self.isAnyOutOfOffice = function () {
+            return _.some(self.gridItems, function (item) {
+                return item.isUserOutOfOffice();
+            })
+        };
+
+        self.getColspan = function () {
+            var colspan = 4;
+            if (!self.isAnyOutOfOffice()){
+                colspan--;
+            }
+            return colspan;
+        }
 
     });
 };

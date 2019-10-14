@@ -265,7 +265,6 @@ module.exports = function (app) {
                 ],
                 selected: [],
                 searchColumns: {
-                    domainName: 'toUserDomain',
                     name: function (record) {
                         return record.getTranslatedKey();
                     },
@@ -293,7 +292,6 @@ module.exports = function (app) {
                 ],
                 selected: [],
                 searchColumns: {
-                    domainName: 'toUserDomain',
                     name: function (record) {
                         return record.getTranslatedKey();
                     },
@@ -317,7 +315,6 @@ module.exports = function (app) {
                     gridService.setGridPagingLimitByGridName(gridService.grids.launch.managers, limit);
                 },
                 searchColumns: {
-                    domainName: 'toUserDomain',
                     name: function (record) {
                         return record.getTranslatedKey();
                     },
@@ -345,7 +342,6 @@ module.exports = function (app) {
                 ],
                 selected: [],
                 searchColumns: {
-                    domainName: 'toUserDomain',
                     name: function (record) {
                         return record.getTranslatedKey();
                     },
