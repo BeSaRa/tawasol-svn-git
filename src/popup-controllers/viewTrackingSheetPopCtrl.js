@@ -303,7 +303,7 @@ module.exports = function (app) {
          */
         self.viewMergedLinkedDocumentsHistoryEvents = function (mergedLinkedDocumentHistory, $event) {
             viewTrackingSheetService.controllerMethod
-                .viewMergedLinkedDocumentHistoryEvents(mergedLinkedDocumentHistory, $event);
+                .viewMergedLinkedDocumentHistoryEvents(mergedLinkedDocumentHistory, self.mergedLinkedDocumentHistoryRecords, $event);
         };
 
         /**

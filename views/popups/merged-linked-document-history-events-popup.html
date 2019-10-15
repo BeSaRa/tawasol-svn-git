@@ -1,9 +1,10 @@
 <md-dialog class="dialog-extend"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="merged-linked-doc-history-events-dialog"
+
            ng-attr-aria-label="{{lang.view_tracking_sheet_actions}}">
-    <popup-toolbar-directive
-            header-text="{{lang.view_tracking_sheet_actions}} : {{ctrl.mergedLinkedDocHistorySubject}}"></popup-toolbar-directive>
+    <popup-toolbar-directive full-screen-button="true" full-screen="ctrl.fullScreen"
+            header-text="{{lang.view_tracking_sheet_actions}} : {{ctrl.mergedLinkedDocHistorySubject}}" ></popup-toolbar-directive>
     <md-dialog-content scroll-directive>
         <div class="md-dialog-content cms-dialog-content">
             <md-card>
@@ -57,6 +58,24 @@
                             md-on-paginate="ctrl.grid.pagingCallback"></md-table-pagination>
                 </md-table-container>
             </md-card>
+
+            <div class="absolute-back-button navigate-next">
+                <md-button tooltip="{{lang.next}}"
+                           class="md-icon-button md-raised"
+                           ng-click="ctrl.next($event)"
+                           ng-disabled="ctrl.mergedLinkedDocumentHistoryIndex === ctrl.mergedLinkedDocumentHistoryRecords.length-1">
+                    <md-icon md-svg-icon="chevron-right"></md-icon>
+                </md-button>
+            </div>
+
+            <div class="absolute-back-button navigate-prev">
+                <md-button tooltip="{{lang.previous}}"
+                           class="md-icon-button md-raised"
+                           ng-click="ctrl.previous($event)"
+                           ng-disabled="ctrl.mergedLinkedDocumentHistoryIndex === 0">
+                    <md-icon md-svg-icon="chevron-left"></md-icon>
+                </md-button>
+            </div>
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">

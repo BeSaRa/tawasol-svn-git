@@ -4,15 +4,31 @@ module.exports = function (app) {
                                                                     generator,
                                                                     dialog,
                                                                     langService,
-                                                                    mergedLinkedDocHistoryEvents,
-                                                                    mergedLinkedDocHistorySubject,
+                                                                    mergedLinkedDocumentHistoryRecords,
+                                                                    mergedLinkedDocumentHistoryIndex,
                                                                     viewTrackingSheetService,
                                                                     gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'mergedLinkedDocHistoryEventsPopCtrl';
-        self.mergedLinkedDocHistoryEvents = angular.copy(mergedLinkedDocHistoryEvents);
-        self.mergedLinkedDocHistorySubject = mergedLinkedDocHistorySubject;
+        self.mergedLinkedDocumentHistoryRecords = mergedLinkedDocumentHistoryRecords;
+        self.mergedLinkedDocumentHistoryIndex = mergedLinkedDocumentHistoryIndex;
+
+        var _setMergedLinkedDocumentHistory = function () {
+            var selectedMergedLinkedDocument = self.mergedLinkedDocumentHistoryRecords[self.mergedLinkedDocumentHistoryIndex];
+            self.mergedLinkedDocHistoryEvents = selectedMergedLinkedDocument.events;
+            self.mergedLinkedDocHistorySubject = selectedMergedLinkedDocument.docSubject;
+            //reset events for print/export
+            viewTrackingSheetService.mergedLinkedDocumentEvents = self.mergedLinkedDocHistoryEvents;
+            //reset grid
+            if (self.grid) {
+                self.grid.page = 1;
+                self.grid.order = '';
+                self.grid.limitOptions = gridService.getGridLimitOptions(gridService.grids.trackingSheet.mergedLinkedDocsHistoryActions, self.mergedLinkedDocHistoryEvents.length)
+            }
+        };
+
+        _setMergedLinkedDocumentHistory();
 
         self.grid = {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.mergedLinkedDocsHistoryActions) || 5, // default limit
@@ -62,5 +78,15 @@ module.exports = function (app) {
         self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
+
+        self.next = function ($event) {
+            self.mergedLinkedDocumentHistoryIndex++;
+            _setMergedLinkedDocumentHistory();
+        };
+        self.previous = function ($event) {
+            self.mergedLinkedDocumentHistoryIndex--;
+            _setMergedLinkedDocumentHistory();
+        };
+
     });
 };

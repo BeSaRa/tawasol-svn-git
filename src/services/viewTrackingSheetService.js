@@ -352,19 +352,21 @@ module.exports = function (app) {
                 /**
                  * @description Opens popup for merged linked document history events
                  * @param mergedLinkedDocumentHistory
+                 * @param mergedLinkedDocumentHistoryRecords
                  * @param $event
                  * @returns {promise}
                  */
-                viewMergedLinkedDocumentHistoryEvents: function (mergedLinkedDocumentHistory, $event) {
+                viewMergedLinkedDocumentHistoryEvents: function (mergedLinkedDocumentHistory, mergedLinkedDocumentHistoryRecords, $event) {
                     self.mergedLinkedDocumentEvents = mergedLinkedDocumentHistory.hasOwnProperty('events') ? mergedLinkedDocumentHistory.events : mergedLinkedDocumentHistory;
+                    var mergedLinkedDocumentHistoryIndex = mergedLinkedDocumentHistoryRecords.indexOf(mergedLinkedDocumentHistory);
                     return dialog.showDialog({
                         templateUrl: cmsTemplate.getPopup('merged-linked-document-history-events'),
                         controller: 'mergedLinkedDocHistoryEventsPopCtrl',
                         targetEvent: $event || false,
                         controllerAs: 'ctrl',
                         locals: {
-                            mergedLinkedDocHistoryEvents: self.mergedLinkedDocumentEvents,
-                            mergedLinkedDocHistorySubject: mergedLinkedDocumentHistory.docSubject
+                            mergedLinkedDocumentHistoryRecords: mergedLinkedDocumentHistoryRecords,
+                            mergedLinkedDocumentHistoryIndex: mergedLinkedDocumentHistoryIndex
                         }
                     });
                 },
