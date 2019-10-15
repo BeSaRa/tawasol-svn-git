@@ -66,7 +66,7 @@ module.exports = function (app) {
         self.internal = /*demoInternal;*/
             new Internal({
                 ou: self.employee.getOUID(),
-                addMethod: 0,
+                addMethod: self.employee.isBacklogMode() ? 1 : 0,
                 createdOn: new Date(),
                 docDate: generator.convertDateToString(new Date()),
                 registryOU: self.employee.getRegistryOUID(),
@@ -78,6 +78,10 @@ module.exports = function (app) {
             self.documentInformation = editAfterApproved.content;
             self.editContent = true;
         }
+
+        self.isDocumentTypeSwitchDisabled = function () {
+            return !!self.internal.vsId || !employeeService.hasPermissionTo('INTERNAL_PAPER') || self.employee.isBacklogMode();
+        };
 
         self.preventPropagation = function ($event) {
             $event.stopPropagation();
@@ -296,7 +300,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.docActionApprove = function (model, $event, defer) {
-            if (_hasContent()){
+            if (_hasContent()) {
                 model.approveDocument($event, defer, false)
                     .then(function (result) {
                         counterService.loadCounters();
@@ -519,6 +523,9 @@ module.exports = function (app) {
         };
 
         self.checkChangeInternalType = function () {
+            if (self.employee.isBacklogMode()){
+                return;
+            }
             // self.checkCentralArchive();
             if (self.documentInformation || self.internal.contentFile) {
                 return dialog

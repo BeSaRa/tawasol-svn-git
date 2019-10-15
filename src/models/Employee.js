@@ -55,6 +55,8 @@ module.exports = function (app) {
             self.isAdmin = false;
             self.isSuperAdmin = false;
             self.isSubAdmin = false;
+            self.backLogMode = false;
+            self.slowConnectionMode = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -278,6 +280,14 @@ module.exports = function (app) {
 
             Employee.prototype.inCentralArchiveAndHasRegistry = function () {
                 return this.userOrganization && this.userOrganization.centralArchive && this.userOrganization.hasRegistry;
+            };
+
+            Employee.prototype.isBacklogMode = function () {
+                return this.backLogMode;
+            };
+
+            Employee.prototype.isSlowConnectionMode = function () {
+                return this.slowConnectionMode;
             };
 
             Employee.prototype.mapSend = function () {

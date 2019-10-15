@@ -78,7 +78,7 @@ module.exports = function (app) {
         self.outgoing = /*demoOutgoing;*/
             new Outgoing({
                 ou: self.employee.getOUID(),
-                addMethod: 0,
+                addMethod: self.employee.isBacklogMode() ? 1 : 0,
                 createdOn: new Date(),
                 docDate: generator.convertDateToString(new Date()),
                 registryOU: self.employee.getRegistryOUID(),
@@ -100,6 +100,10 @@ module.exports = function (app) {
             self.editContent = true;
         }
 
+        self.isDocumentTypeSwitchDisabled = function(){
+            return !!self.outgoing.vsId || !employeeService.hasPermissionTo('OUTGOING_PAPER') || self.employee.isBacklogMode();
+        };
+
         self.preventPropagation = function ($event) {
             $event.stopPropagation();
         };
@@ -120,6 +124,9 @@ module.exports = function (app) {
         };
 
         self.checkChangeOutgoingType = function () {
+            if (self.employee.isBacklogMode()){
+                return;
+            }
             self.checkCentralArchive();
             if (self.documentInformation || self.outgoing.contentFile) {
                 return dialog
