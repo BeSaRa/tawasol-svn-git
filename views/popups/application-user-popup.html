@@ -614,6 +614,225 @@
                             </div>
                         </md-content>
                     </md-tab>
+                    <!-- Other Organizations Tab -->
+                    <md-tab label="{{lang.other_organizations}}" ng-if="ctrl.editMode"
+                            md-on-select="ctrl.setCurrentTab('ot')">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div layout="row">
+                                    <!-- Organizations Dropdown-->
+                                    <md-input-container flex ng-if="!ctrl.ouApplicationUserBeforeEdit">
+                                        <label for="ouid">{{lang.organization_unit}}</label>
+                                        <md-select id="ouid" name="ouid"
+                                                   ng-model-options="{trackBy : '$value.id'}"
+                                                   ng-change="ctrl.getParentOrganizationsWithRegistry()"
+                                                   ng-disabled="ctrl.ouApplicationUser.id"
+                                                   ng-model="ctrl.ouApplicationUser.ouid"
+                                                   md-on-close="ctrl.clearSearchText('inlineUserOU')"
+                                                   data-md-container-class="select-header-container">
+                                            <md-select-header class="select-header">
+                                                <input ng-model="ctrl.inlineUserOUSearchText"
+                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                            </md-select-header>
+                                            <md-option ng-value="organization"
+                                                       ng-if="ctrl.excludeOrganizationsIfExists(organization)"
+                                                       ng-repeat="organization in ctrl.organizationsCopy | translatedNameFilter: ctrl.inlineUserOUSearchText : 'getNameByLanguageRegOUSection'"
+                                                       ng-disabled="!organization.status"
+                                                       tooltip="{{(!organization.status)? lang.inactive_organization : '' }}">
+                                                <span
+                                                        md-highlight-text="ctrl.inlineUserOUSearchText"
+                                                        md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+
+                                    <!-- Organizations Textbox-->
+                                    <md-input-container flex ng-if="ctrl.ouApplicationUserBeforeEdit">
+                                        <label for="ouidText">{{lang.organization_unit}}</label>
+                                        <input id="ouidText" name="ouidText"
+                                               ng-disabled="true" ng-readonly="true"
+                                               title="{{ctrl.ouApplicationUser.ouid.getTranslatedName()}}"
+                                               ng-value="ctrl.ouApplicationUser.ouid.getTranslatedName()">
+                                    </md-input-container>
+
+                                    <!-- Organizations Parents With Registry Dropdown-->
+                                    <md-input-container flex><!--ng-if="!ctrl.ouApplicationUserBeforeEdit"-->
+                                        <label for="ouRegistryID">{{lang.parent_organization}}</label>
+                                        <md-select id="ouRegistryID" name="ouRegistryID"
+                                                   ng-disabled="!ctrl.ouApplicationUser.ouid"
+                                                   ng-model="ctrl.ouApplicationUser.ouRegistryID">
+                                            <md-option ng-value="organizationWithRegistry.id"
+                                                       ng-if="ctrl.parentsWithRegistryList.length > 0"
+                                                       ng-repeat="organizationWithRegistry in ctrl.parentsWithRegistryList track by $index">
+                                                {{organizationWithRegistry.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+
+                                    <!-- Roles -->
+                                    <md-input-container flex>
+                                        <label for="customRoleId">{{lang.role}}</label>
+                                        <md-select id="customRoleId" name="customRoleId"
+                                                   ng-disabled="ctrl.ouApplicationUser.id"
+                                                   ng-model="ctrl.ouApplicationUser.customRoleId">
+                                            <md-option ng-value="role"
+                                                       ng-repeat="role in ctrl.roles track by $index"
+                                                       ng-disabled="!role.status">
+                                                {{role.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <!-- Security Levels -->
+                                    <md-input-container flex>
+                                        <label for="ouSecurityLevel">{{lang.security_levels}}</label>
+                                        <md-select id="ouSecurityLevel" name="ouSecurityLevel" multiple
+                                                   ng-model-options="{trackBy:'$value.lookupKey'}"
+                                                   ng-model="ctrl.ouApplicationUser.securityLevels">
+                                            <md-option ng-value="securityLevel"
+                                                       ng-repeat="securityLevel in ctrl.securityLevels">
+                                                {{securityLevel.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+
+                                    <div class="p20">
+                                        <md-button class="md-raised" ng-if="!ctrl.ouApplicationUserBeforeEdit"
+                                                   ng-disabled="!ctrl.ouApplicationUser.ouid
+                                                   || !ctrl.ouApplicationUser.customRoleId
+                                               || !ctrl.ouApplicationUser.securityLevels.length"
+                                                   ng-click="ctrl.addOUApplicationUserFromCtrl()">
+                                            {{lang.add}}
+                                        </md-button>
+                                        <md-button class="md-raised" ng-if="ctrl.ouApplicationUserBeforeEdit"
+                                                   ng-disabled="!ctrl.ouApplicationUser.ouid
+                                                     || !ctrl.ouApplicationUser.customRoleId
+                                               || !ctrl.ouApplicationUser.securityLevels.length"
+                                                   ng-click="ctrl.updateOUApplicationUserFromCtrl()">
+                                            {{lang.save}}
+                                        </md-button>
+                                        <md-button class="md-raised" ng-if="ctrl.ouApplicationUserBeforeEdit"
+                                                   ng-click="ctrl.cancelOuApplicationUser()">
+                                            {{lang.cancel}}
+                                        </md-button>
+                                    </div>
+                                </div>
+                                <div layout="row">
+                                    <md-card ng-if="ctrl.ouApplicationUsers.length" layout="column"
+                                             flex class="card-overlay">
+                                        <md-table-container>
+                                            <table md-table>
+                                                <thead md-head>
+                                                <tr md-row>
+                                                    <th md-column>{{lang.arabic_name}}</th>
+                                                    <th md-column>{{lang.role}}</th>
+                                                    <th md-column>{{lang.security_levels}}</th>
+                                                    <th md-column>{{lang.status}}</th>
+                                                    <th md-column>{{lang.private}}</th>
+                                                    <th md-column>{{lang.actions}}</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-row
+                                                    ng-repeat="ouApplicationUser in ctrl.ouApplicationUsers track by $index">
+                                                    <td md-cell>
+                                                        <div layout="column">
+                                                            <div><span flex>{{ouApplicationUser.ouid.arName}}</span>
+                                                            </div>
+                                                            <div><span flex>{{ouApplicationUser.ouid.enName}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td md-cell>
+                                                        {{ouApplicationUser.customRoleId.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        {{ouApplicationUser.getSecurityLevelsText()}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        <md-switch ng-model="ouApplicationUser.status"
+                                                                   ng-disabled="ctrl.disableOUApplicationUserActions(ouApplicationUser)"
+                                                                   title="{{ouApplicationUser.getTranslatedStatus()}}"
+                                                                   aria-label="{{ouApplicationUser.getTranslatedStatus()}}">
+                                                        </md-switch>
+                                                    </td>
+                                                    <td md-cell>
+                                                        <md-switch ng-model="ouApplicationUser.isPrivate"
+                                                                   title="{{ouApplicationUser.getTranslatedPrivate()}}"
+                                                                   aria-label="{{ouApplicationUser.getTranslatedPrivate()}}">
+                                                        </md-switch>
+                                                    </td>
+                                                    <td md-cell>
+                                                        <div flex layout="row" layout-align="start center">
+                                                            <md-button class="md-icon-button" title="{{lang.save}}"
+                                                                       ng-click="ctrl.saveOUApplicationUserFromCtrl(ouApplicationUser, $event)">
+                                                                <md-icon md-svg-icon="content-save"></md-icon>
+                                                            </md-button>
+                                                            <md-menu>
+                                                                <md-button aria-label="Open OU permission menu"
+                                                                           class="md-icon-button"
+                                                                           ng-click="$mdMenu.open()">
+                                                                    <md-icon md-svg-icon="dots-vertical"></md-icon>
+                                                                </md-button>
+                                                                <md-menu-content width="4">
+                                                                    <md-menu-item>
+                                                                        <md-button
+                                                                                ng-click="ctrl.openEditPermissionDialog(ouApplicationUser, $event)">
+                                                                            {{lang.grid_action_edit_permission}}
+                                                                        </md-button>
+                                                                    </md-menu-item>
+                                                                    <md-menu-item>
+                                                                        <md-button
+                                                                                ng-click="ctrl.openWorkflowParticipationDialog(ouApplicationUser, $event)">
+                                                                            {{lang.grid_action_edit_workflow_participation}}
+                                                                        </md-button>
+                                                                    </md-menu-item>
+                                                                    <md-menu-item>
+                                                                        <md-button
+                                                                                ng-click="ctrl.openOutOfOfficeSettingsDialog(ouApplicationUser, $event , $index)">
+                                                                            {{lang.grid_action_out_of_office_settings}}
+                                                                        </md-button>
+                                                                    </md-menu-item>
+                                                                    <md-menu-item>
+                                                                        <md-button
+                                                                                ng-click="ctrl.openFollowupOrganizationDialog(ouApplicationUser, $event , $index)">
+                                                                            {{lang.followup_organization}}
+                                                                        </md-button>
+                                                                    </md-menu-item>
+                                                                    <md-menu-divider></md-menu-divider>
+                                                                    <md-menu-item>
+                                                                        <md-button
+                                                                                ng-click="ctrl.editOUApplicationUserFromCtrl(ouApplicationUser, $event)">
+                                                                            {{lang.edit}}
+                                                                        </md-button>
+                                                                    </md-menu-item>
+                                                                    <md-menu-item>
+                                                                        <md-button
+                                                                                ng-disabled="ctrl.disableOUApplicationUserActions(ouApplicationUser)"
+                                                                                ng-click="ctrl.removeOUApplicationUserFromCtrl(ouApplicationUser, $event)">
+                                                                            {{lang.delete}}
+                                                                        </md-button>
+                                                                    </md-menu-item>
+                                                                </md-menu-content>
+                                                            </md-menu>
+                                                            <!--<div flex layout="row" layout-align="start center">
+                                                                <grid-actions-directive actions-direction="vertical"
+                                                                                        shortcut-actions="ctrl.shortcutActions"
+                                                                                        model="ouApplicationUser">
+                                                                </grid-actions-directive>
+                                                            </div>-->
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </md-table-container>
+                                    </md-card>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
                     <!-- Signature -->
                     <md-tab label="{{lang.signature}}" ng-if="ctrl.editMode"
                             md-on-select="ctrl.setCurrentTab('signature')">
@@ -993,225 +1212,6 @@
                                     </md-card>
                                 </div>
                             </div>
-                    </md-tab>
-                    <!-- Other Organizations Tab -->
-                    <md-tab label="{{lang.other_organizations}}" ng-if="ctrl.editMode"
-                            md-on-select="ctrl.setCurrentTab('ot')">
-                        <md-content class="md-padding">
-                            <div layout="column">
-                                <div layout="row">
-                                    <!-- Organizations Dropdown-->
-                                    <md-input-container flex ng-if="!ctrl.ouApplicationUserBeforeEdit">
-                                        <label for="ouid">{{lang.organization_unit}}</label>
-                                        <md-select id="ouid" name="ouid"
-                                                   ng-model-options="{trackBy : '$value.id'}"
-                                                   ng-change="ctrl.getParentOrganizationsWithRegistry()"
-                                                   ng-disabled="ctrl.ouApplicationUser.id"
-                                                   ng-model="ctrl.ouApplicationUser.ouid"
-                                                   md-on-close="ctrl.clearSearchText('inlineUserOU')"
-                                                   data-md-container-class="select-header-container">
-                                            <md-select-header class="select-header">
-                                                <input ng-model="ctrl.inlineUserOUSearchText"
-                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
-                                                       placeholder="{{lang.search}}"
-                                                       class="select-header-input">
-                                            </md-select-header>
-                                            <md-option ng-value="organization"
-                                                       ng-if="ctrl.excludeOrganizationsIfExists(organization)"
-                                                       ng-repeat="organization in ctrl.organizationsCopy | translatedNameFilter: ctrl.inlineUserOUSearchText : 'getNameByLanguageRegOUSection'"
-                                                       ng-disabled="!organization.status"
-                                                       tooltip="{{(!organization.status)? lang.inactive_organization : '' }}">
-                                                <span
-                                                        md-highlight-text="ctrl.inlineUserOUSearchText"
-                                                        md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
-                                            </md-option>
-                                        </md-select>
-                                    </md-input-container>
-
-                                    <!-- Organizations Textbox-->
-                                    <md-input-container flex ng-if="ctrl.ouApplicationUserBeforeEdit">
-                                        <label for="ouidText">{{lang.organization_unit}}</label>
-                                        <input id="ouidText" name="ouidText"
-                                               ng-disabled="true" ng-readonly="true"
-                                               title="{{ctrl.ouApplicationUser.ouid.getTranslatedName()}}"
-                                               ng-value="ctrl.ouApplicationUser.ouid.getTranslatedName()">
-                                    </md-input-container>
-
-                                    <!-- Organizations Parents With Registry Dropdown-->
-                                    <md-input-container flex><!--ng-if="!ctrl.ouApplicationUserBeforeEdit"-->
-                                        <label for="ouRegistryID">{{lang.parent_organization}}</label>
-                                        <md-select id="ouRegistryID" name="ouRegistryID"
-                                                   ng-disabled="!ctrl.ouApplicationUser.ouid"
-                                                   ng-model="ctrl.ouApplicationUser.ouRegistryID">
-                                            <md-option ng-value="organizationWithRegistry.id"
-                                                       ng-if="ctrl.parentsWithRegistryList.length > 0"
-                                                       ng-repeat="organizationWithRegistry in ctrl.parentsWithRegistryList track by $index">
-                                                {{organizationWithRegistry.getTranslatedName()}}
-                                            </md-option>
-                                        </md-select>
-                                    </md-input-container>
-
-                                    <!-- Roles -->
-                                    <md-input-container flex>
-                                        <label for="customRoleId">{{lang.role}}</label>
-                                        <md-select id="customRoleId" name="customRoleId"
-                                                   ng-disabled="ctrl.ouApplicationUser.id"
-                                                   ng-model="ctrl.ouApplicationUser.customRoleId">
-                                            <md-option ng-value="role"
-                                                       ng-repeat="role in ctrl.roles track by $index"
-                                                       ng-disabled="!role.status">
-                                                {{role.getTranslatedName()}}
-                                            </md-option>
-                                        </md-select>
-                                    </md-input-container>
-                                    <!-- Security Levels -->
-                                    <md-input-container flex>
-                                        <label for="ouSecurityLevel">{{lang.security_levels}}</label>
-                                        <md-select id="ouSecurityLevel" name="ouSecurityLevel" multiple
-                                                   ng-model-options="{trackBy:'$value.lookupKey'}"
-                                                   ng-model="ctrl.ouApplicationUser.securityLevels">
-                                            <md-option ng-value="securityLevel"
-                                                       ng-repeat="securityLevel in ctrl.securityLevels">
-                                                {{securityLevel.getTranslatedName()}}
-                                            </md-option>
-                                        </md-select>
-                                    </md-input-container>
-
-                                    <div class="p20">
-                                        <md-button class="md-raised" ng-if="!ctrl.ouApplicationUserBeforeEdit"
-                                                   ng-disabled="!ctrl.ouApplicationUser.ouid
-                                                   || !ctrl.ouApplicationUser.customRoleId
-                                               || !ctrl.ouApplicationUser.securityLevels.length"
-                                                   ng-click="ctrl.addOUApplicationUserFromCtrl()">
-                                            {{lang.add}}
-                                        </md-button>
-                                        <md-button class="md-raised" ng-if="ctrl.ouApplicationUserBeforeEdit"
-                                                   ng-disabled="!ctrl.ouApplicationUser.ouid
-                                                     || !ctrl.ouApplicationUser.customRoleId
-                                               || !ctrl.ouApplicationUser.securityLevels.length"
-                                                   ng-click="ctrl.updateOUApplicationUserFromCtrl()">
-                                            {{lang.save}}
-                                        </md-button>
-                                        <md-button class="md-raised" ng-if="ctrl.ouApplicationUserBeforeEdit"
-                                                   ng-click="ctrl.cancelOuApplicationUser()">
-                                            {{lang.cancel}}
-                                        </md-button>
-                                    </div>
-                                </div>
-                                <div layout="row">
-                                    <md-card ng-if="ctrl.ouApplicationUsers.length" layout="column"
-                                             flex class="card-overlay">
-                                        <md-table-container>
-                                            <table md-table>
-                                                <thead md-head>
-                                                <tr md-row>
-                                                    <th md-column>{{lang.arabic_name}}</th>
-                                                    <th md-column>{{lang.role}}</th>
-                                                    <th md-column>{{lang.security_levels}}</th>
-                                                    <th md-column>{{lang.status}}</th>
-                                                    <th md-column>{{lang.private}}</th>
-                                                    <th md-column>{{lang.actions}}</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody md-body>
-                                                <tr md-row
-                                                    ng-repeat="ouApplicationUser in ctrl.ouApplicationUsers track by $index">
-                                                    <td md-cell>
-                                                        <div layout="column">
-                                                            <div><span flex>{{ouApplicationUser.ouid.arName}}</span>
-                                                            </div>
-                                                            <div><span flex>{{ouApplicationUser.ouid.enName}}</span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td md-cell>
-                                                        {{ouApplicationUser.customRoleId.getTranslatedName()}}
-                                                    </td>
-                                                    <td md-cell>
-                                                        {{ouApplicationUser.getSecurityLevelsText()}}
-                                                    </td>
-                                                    <td md-cell>
-                                                        <md-switch ng-model="ouApplicationUser.status"
-                                                                   ng-disabled="ctrl.disableOUApplicationUserActions(ouApplicationUser)"
-                                                                   title="{{ouApplicationUser.getTranslatedStatus()}}"
-                                                                   aria-label="{{ouApplicationUser.getTranslatedStatus()}}">
-                                                        </md-switch>
-                                                    </td>
-                                                    <td md-cell>
-                                                        <md-switch ng-model="ouApplicationUser.isPrivate"
-                                                                   title="{{ouApplicationUser.getTranslatedPrivate()}}"
-                                                                   aria-label="{{ouApplicationUser.getTranslatedPrivate()}}">
-                                                        </md-switch>
-                                                    </td>
-                                                    <td md-cell>
-                                                        <div flex layout="row" layout-align="start center">
-                                                            <md-button class="md-icon-button" title="{{lang.save}}"
-                                                                       ng-click="ctrl.saveOUApplicationUserFromCtrl(ouApplicationUser, $event)">
-                                                                <md-icon md-svg-icon="content-save"></md-icon>
-                                                            </md-button>
-                                                            <md-menu>
-                                                                <md-button aria-label="Open OU permission menu"
-                                                                           class="md-icon-button"
-                                                                           ng-click="$mdMenu.open()">
-                                                                    <md-icon md-svg-icon="dots-vertical"></md-icon>
-                                                                </md-button>
-                                                                <md-menu-content width="4">
-                                                                    <md-menu-item>
-                                                                        <md-button
-                                                                                ng-click="ctrl.openEditPermissionDialog(ouApplicationUser, $event)">
-                                                                            {{lang.grid_action_edit_permission}}
-                                                                        </md-button>
-                                                                    </md-menu-item>
-                                                                    <md-menu-item>
-                                                                        <md-button
-                                                                                ng-click="ctrl.openWorkflowParticipationDialog(ouApplicationUser, $event)">
-                                                                            {{lang.grid_action_edit_workflow_participation}}
-                                                                        </md-button>
-                                                                    </md-menu-item>
-                                                                    <md-menu-item>
-                                                                        <md-button
-                                                                                ng-click="ctrl.openOutOfOfficeSettingsDialog(ouApplicationUser, $event , $index)">
-                                                                            {{lang.grid_action_out_of_office_settings}}
-                                                                        </md-button>
-                                                                    </md-menu-item>
-                                                                    <md-menu-item>
-                                                                        <md-button
-                                                                                ng-click="ctrl.openFollowupOrganizationDialog(ouApplicationUser, $event , $index)">
-                                                                            {{lang.followup_organization}}
-                                                                        </md-button>
-                                                                    </md-menu-item>
-                                                                    <md-menu-divider></md-menu-divider>
-                                                                    <md-menu-item>
-                                                                        <md-button
-                                                                                ng-click="ctrl.editOUApplicationUserFromCtrl(ouApplicationUser, $event)">
-                                                                            {{lang.edit}}
-                                                                        </md-button>
-                                                                    </md-menu-item>
-                                                                    <md-menu-item>
-                                                                        <md-button
-                                                                                ng-disabled="ctrl.disableOUApplicationUserActions(ouApplicationUser)"
-                                                                                ng-click="ctrl.removeOUApplicationUserFromCtrl(ouApplicationUser, $event)">
-                                                                            {{lang.delete}}
-                                                                        </md-button>
-                                                                    </md-menu-item>
-                                                                </md-menu-content>
-                                                            </md-menu>
-                                                            <!--<div flex layout="row" layout-align="start center">
-                                                                <grid-actions-directive actions-direction="vertical"
-                                                                                        shortcut-actions="ctrl.shortcutActions"
-                                                                                        model="ouApplicationUser">
-                                                                </grid-actions-directive>
-                                                            </div>-->
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </md-table-container>
-                                    </md-card>
-                                </div>
-                            </div>
-                        </md-content>
                     </md-tab>
                 </md-tabs>
             </form>
