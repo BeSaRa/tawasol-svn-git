@@ -234,7 +234,7 @@ module.exports = function (app) {
                     var gridType = params ? params[1].toLowerCase() : 'grid';
                     var parentGridName = params ? params[2] : '';
                     return dialog.showDialog({
-                        templateUrl: cmsTemplate.getPopup('view-tracking-sheet'),
+                        templateUrl: cmsTemplate.getPopup(gridType === 'grid' ? 'view-tracking-sheet' : 'view-tracking-sheet-tabs'),
                         controller: 'viewTrackingSheetPopCtrl',
                         targetEvent: $event || false,
                         controllerAs: 'ctrl',
