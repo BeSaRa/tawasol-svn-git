@@ -15,12 +15,19 @@ module.exports = function (app) {
         self.controllerName = 'referencePlanElementDirectiveCtrl';
         // all reference plan items
         var items = angular.copy(lookupService.returnLookups(lookupService.refrenceNumberPlanElement));
+
+        items = items.map(function (item) {
+            item.required = true;
+            return item;
+        });
+
         items.push(new Lookup({
             lookupStrKey: '',
             defaultArName: langService.getKey('static_text', 'ar'),
             defaultEnName: langService.getKey('static_text', 'en'),
             lookupKey: 'SEPARATOR'
         }));
+
 
         self.referenceElements = _.chunk(items, 4);
         // item wrapper
@@ -98,6 +105,10 @@ module.exports = function (app) {
             if (code !== 13)
                 return;
             element.editMode = false;
+        };
+
+        self.setElementMandatory = function (element, mandatory) {
+            element.required = mandatory;
         };
 
         $timeout(function () {

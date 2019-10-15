@@ -20,6 +20,8 @@ module.exports = function (app) {
                 docType: null
             };
 
+            self.referenceOptions = {};
+
             var strings = ['classDescription'];
 
             // every model has required fields
@@ -39,10 +41,17 @@ module.exports = function (app) {
 
             ReferencePlanItem.prototype.fetchItemComponent = function () {
                 var self = this;
+                self.referenceOptions = JSON.parse(this.referenceOptions);
+
                 this.components = _.map(this.refernceFormat.split('|'), function (item) {
                     var lookupKey = item.split(':').pop();
                     var separator = item.split(':').shift();
-                    var lookup = lookupService.getLookupByLookupKey(lookupService.refrenceNumberPlanElement, lookupKey);
+                    var lookup = angular.copy(lookupService.getLookupByLookupKey(lookupService.refrenceNumberPlanElement, lookupKey));
+
+                    lookup && separator !== 'none' ? (function () {
+                        lookup.required = self.referenceOptions && self.referenceOptions.hasOwnProperty(lookup.lookupKey) ? self.referenceOptions[lookup.lookupKey] : true;
+                    })() : null;
+
                     return lookup && separator !== 'none' ? lookup : new Lookup({
                         lookupStrKey: lookupKey,
                         defaultArName: langService.getKey('static_text', 'ar'),
@@ -77,11 +86,13 @@ module.exports = function (app) {
 
             ReferencePlanItem.prototype.retrieveItemComponent = function () {
                 var self = this;
+                self.referenceOptions = {};
 
                 var ids = _.map(this.components, function (lookup) {
                     var item;
                     if (lookup.id) {
                         item = 'id:' + lookup.lookupKey;
+                        lookup.required ? self.referenceOptions[lookup.lookupKey] = true : self.referenceOptions[lookup.lookupKey] = false;
                     } else {
                         item = 'none:' + lookup.lookupStrKey;
                     }
@@ -96,6 +107,7 @@ module.exports = function (app) {
                     }
                 });
                 self.refernceExpression = array.join(" && ");
+                self.referenceOptions = JSON.stringify(self.referenceOptions);
                 return this;
             };
             /**

@@ -115,8 +115,8 @@ module.exports = function (app) {
                             return true;
                         })
                     })
-                    .catch(function(error){
-                        errorCode.checkIf(error, 'CAN_NOT_DELETE_LOOKUP', function(){
+                    .catch(function (error) {
+                        errorCode.checkIf(error, 'CAN_NOT_DELETE_LOOKUP', function () {
                             dialog.errorMessage(langService.get('cannot_delete_lookup').change({
                                 lookup: langService.get('reference_number_plan'),
                                 used: langService.get('other_organizations')
@@ -313,7 +313,47 @@ module.exports = function (app) {
             var scope = $rootScope.$new();
             scope.elementItem = elementItem;
             scope.ctrl = ctrl;
-            return $compile(angular.element('<div class="reference-element-item component-element {{!elementItem.id ? \'element-separator\' : \'\'}}">\n    <div ng-dblclick="ctrl.editStaticTextOn(elementItem)" class="padding-input" ng-if="!elementItem.id">\n        <span layout="row" layout-align="start center">\n            <span tooltip="{{elementItem.getTranslatedName()}}" flex ng-if="!elementItem.editMode">{{elementItem.id ? elementItem.getTranslatedName() : elementItem.hasValueOrSpace() ? elementItem.lookupStrKey : elementItem.getTranslatedName()}}</span>\n            <span flex ng-if="elementItem.editMode">\n                <input ng-keypress="ctrl.editStaticTextOffWhenEnter(elementItem,$event)"\n                       ng-trim="false"\n                       ng-blur="ctrl.editStaticTextOff(elementItem)" class="element-edit"\n                       ng-model="elementItem.lookupStrKey"/>\n            </span>\n            <span>\n                <md-button class="md-icon-button" ng-click="ctrl.removeReferenceElement(elementItem , $event)">\n                    <md-icon md-svg-icon="close-circle-outline"></md-icon>\n                </md-button>\n            </span>\n        </span>\n    </div>\n    <span layout="row" layout-align="start center" ng-if="elementItem.id">\n        <span flex>{{elementItem.id ? elementItem.getTranslatedName() : elementItem.lookupStrKey ? elementItem.lookupStrKey : elementItem.getTranslatedName()}}</span>\n        <span>\n        <md-button class="md-icon-button" ng-click="ctrl.removeReferenceElement(elementItem, $event)">\n            <md-icon md-svg-icon="close-circle-outline"></md-icon>\n        </md-button>\n        </span>\n    </span>\n</div>').data('elementItem', elementItem))(scope);
+            var element = angular.element('<div class="{{elementItem.required ? \'required-element\' : \'\'}} reference-element-item component-element {{!elementItem.id ? \'element-separator\' : \'\'}}">\n    <div ng-dblclick="ctrl.editStaticTextOn(elementItem)" class="padding-input" ng-if="!elementItem.id">\n        <span layout="row" layout-align="start center">\n            <span tooltip="{{elementItem.getTranslatedName()}}" flex ng-if="!elementItem.editMode">{{elementItem.id ? elementItem.getTranslatedName() : elementItem.hasValueOrSpace() ? elementItem.lookupStrKey : elementItem.getTranslatedName()}}</span>\n            <span flex ng-if="elementItem.editMode">\n                <input ng-keypress="ctrl.editStaticTextOffWhenEnter(elementItem,$event)"\n                       ng-trim="false"\n                       ng-blur="ctrl.editStaticTextOff(elementItem)" class="element-edit"\n                       ng-model="elementItem.lookupStrKey"/>\n            </span>\n            <span>\n                <md-button class="md-icon-button remove-element-component" ng-click="ctrl.removeReferenceElement(elementItem , $event)">\n                    <md-icon md-svg-icon="close-circle-outline"></md-icon>\n                </md-button>\n            </span>\n        </span>\n    </div>\n    <span layout="row" layout-align="start center" ng-if="elementItem.id">\n        <span flex>{{elementItem.id ? elementItem.getTranslatedName() : elementItem.lookupStrKey ? elementItem.lookupStrKey : elementItem.getTranslatedName()}}</span>\n        <span>\n        <md-button class="md-icon-button remove-element-component" ng-click="ctrl.removeReferenceElement(elementItem, $event)">\n            <md-icon md-svg-icon="close-circle-outline"></md-icon>\n        </md-button>\n        </span>\n    </span>\n</div>').data('elementItem', elementItem);
+
+            if (!elementItem.id)
+                return $compile(element)(scope);
+
+
+            var menu = angular.element('<md-menu />')
+                .append(
+                    angular.element('<md-button />')
+                        .attr('class', 'md-icon-button')
+                        .attr('ng-click', '$mdMenu.open()')
+                        .append(angular.element('<md-icon />').attr('md-svg-icon', 'dots-vertical'))
+                );
+
+            var menuContent = angular.element('<md-menu-content width="2" />');
+
+            var mandatory = angular.element('<md-menu-item />');
+            var mandatoryButton = angular.element('<md-button />').attr('ng-click', 'ctrl.setElementMandatory(elementItem , true)');
+            var mandatoryDiv = angular.element('<div />').attr('layout', 'row');
+            var mandatoryIcon = angular.element('<md-icon />').attr('md-svg-icon', 'check').attr('ng-if', 'elementItem.required');
+            var mandatorySpan = angular.element('<span />').html('{{lang.mandatory}}');
+
+            mandatory.append(mandatoryButton.append(mandatoryDiv.append(mandatorySpan).append(mandatoryIcon)));
+
+            var optional = angular.element('<md-menu-item />');
+            var optionalButton = angular.element('<md-button />').attr('ng-click', 'ctrl.setElementMandatory(elementItem , false)');
+            var optionalDiv = angular.element('<div />').attr('layout', 'row');
+            var optionalIcon = angular.element('<md-icon />').attr('md-svg-icon', 'check').attr('ng-if', '!elementItem.required');
+            var optionalSpan = angular.element('<span />').html('{{lang.optional}}');
+
+            optional.append(optionalButton.append(optionalDiv.append(optionalSpan).append(optionalIcon)));
+
+
+            menuContent
+                .append(mandatory)
+                .append(optional);
+
+            menu.append(menuContent);
+            element.find('.remove-element-component').parent().append(menu);
+
+            return $compile(element)(scope);
         };
         /**
          * @description load reference plan related organizations

@@ -5,6 +5,12 @@
   cursor: move;
   background-color: #FFF;
   padding: 0 0 0 15px;
+
+  &.required-element {
+    background-color: orange;
+    color: white;
+  }
+
   button {
     margin: 0 !important;
     padding: 0 !important;
@@ -18,6 +24,7 @@
 
 .element-separator {
   background-color: #9E9E9E;
+
   .padding-input {
     padding: 0 0 0 20px;
   }
@@ -43,4 +50,19 @@ html.rtl {
 
 #elements {
   position: relative;
+}
+
+#reference-element-keys {
+  .element-box {
+    width: 100px;
+    height: 20px;
+  }
+
+  & > div.element-key-mandatory > .element-box {
+    background-color: orange;
+  }
+
+  & > div.element-key-optional > .element-box {
+    background-color: white;
+  }
 }
