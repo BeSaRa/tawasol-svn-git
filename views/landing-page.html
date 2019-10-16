@@ -28,7 +28,7 @@
                     <md-icon md-svg-icon="pencil"></md-icon>
                 </md-button>
                 <md-button ng-disabled="ctrl.editMode" class="md-icon-button"
-                           ng-click="ctrl.displayDeleteLayoutPopup($event)">
+                           ng-click="ctrl.displayDeleteLayoutPopup($event)" ng-if="ctrl.layout">
                     <md-icon md-svg-icon="delete"></md-icon>
                 </md-button>
             </div>
