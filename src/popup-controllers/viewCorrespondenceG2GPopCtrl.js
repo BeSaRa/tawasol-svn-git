@@ -8,7 +8,7 @@ module.exports = function (app) {
                                                              popupNumber,
                                                              loadingIndicatorService,
                                                              employeeService,
-                                                             generator) {
+                                                             correspondenceService) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondenceG2GPopCtrl';
@@ -23,6 +23,16 @@ module.exports = function (app) {
         }, 100);
 
         self.sideNavId = "correspondence-details_" + popupNumber;
+
+        self.viewURL = '';
+        var _overrideViewUrl = function () {
+            correspondenceService.overrideViewUrl(self.content.viewURL, true)
+                .then(function (result) {
+                    self.viewURL = result;
+                })
+        };
+        _overrideViewUrl();
+
         /**
          * @description toggle correspondence details sidebar
          */

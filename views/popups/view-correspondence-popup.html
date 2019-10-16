@@ -224,8 +224,8 @@
                 </div>
             </md-sidenav>
             <div layout="column" class="relative" flex>
-                <iframe id="iframe-main-document" ng-if="ctrl.correspondence && !ctrl.editMode"
-                        ng-src="{{ctrl.content.viewURL}}" flex
+                <iframe id="iframe-main-document" ng-if="ctrl.correspondence && !ctrl.editMode && ctrl.viewURL"
+                        ng-src="{{ctrl.viewURL}}" flex
                         class="iframe-main-document"
                         frameborder="0"></iframe>
                 <iframe id="iframe-main-document" ng-if="!ctrl.correspondence || (ctrl.correspondence && ctrl.editMode)"

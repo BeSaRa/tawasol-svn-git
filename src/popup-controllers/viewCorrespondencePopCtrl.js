@@ -15,8 +15,7 @@ module.exports = function (app) {
                                                           $q,
                                                           gridService,
                                                           $state,
-                                                          viewTrackingSheetService,
-                                                          generator) {
+                                                          viewTrackingSheetService) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondencePopCtrl';
@@ -31,8 +30,16 @@ module.exports = function (app) {
         self.stickyActions = [];
 
         self.editMode = false;
-
         self.info = null;
+
+        self.viewURL = '';
+        var _overrideViewUrl = function () {
+            correspondenceService.overrideViewUrl(self.content.viewURL, true)
+                .then(function (result) {
+                    self.viewURL = result;
+                })
+        };
+        _overrideViewUrl();
 
         self.documentClassPermissionMap = {
             outgoing: function (isPaper) {
@@ -126,7 +133,7 @@ module.exports = function (app) {
         }
 
         self.employeeCanEditContent = function () {
-            if (!self.info){
+            if (!self.info) {
                 return false;
             }
             var documentClass = (self.info.documentClass + ''),

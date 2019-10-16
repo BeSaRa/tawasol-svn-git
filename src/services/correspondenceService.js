@@ -4224,6 +4224,31 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Get the blob url to display as pdf if slow connection mode is enabled for user
+         * @param viewURL
+         * @param returnPromise
+         * @returns {Promise|*}
+         */
+        self.overrideViewUrl = function (viewURL, returnPromise) {
+            if (employeeService.getEmployee().isSlowConnectionMode()) {
+                return $http.get(viewURL, {
+                    responseType: 'blob'
+                }).then(function (result) {
+                    var urlObj = window.URL.createObjectURL(result.data);
+                    if (returnPromise) {
+                        return $q.resolve($sce.trustAsResourceUrl(urlObj));
+                    }
+                    return $sce.trustAsResourceUrl(urlObj);
+                });
+            } else {
+                if (returnPromise) {
+                    return $q.resolve(self.content.viewURL);
+                }
+                return self.content.viewURL;
+            }
+        };
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);

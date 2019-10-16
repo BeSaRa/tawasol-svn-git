@@ -266,9 +266,9 @@
                         <md-icon md-svg-icon="reload"></md-icon>
                     </md-button>
                 </div>
-                <iframe ng-if="ctrl.mainDocument && !ctrl.editMode" id="iframe-main-document"
+                <iframe ng-if="ctrl.mainDocument && !ctrl.editMode && ctrl.viewURL" id="iframe-main-document"
                         class="iframe-main-document"
-                        ng-src="{{ctrl.content.viewURL}}" flex
+                        ng-src="{{ctrl.viewURL}}" flex
                         frameborder="0"></iframe>
 
                 <iframe ng-if="ctrl.mainDocument && ctrl.editMode" id="iframe-main-document"

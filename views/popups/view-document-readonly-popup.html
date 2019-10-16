@@ -15,8 +15,8 @@
                 </md-button>
             </div>
         </div>
-        <div layout="row" flex>
-            <iframe ng-src="{{ctrl.content.viewURL}}" class="document-viewer-full-width-height"
+        <div layout="row" flex ng-if="ctrl.viewURL">
+            <iframe ng-src="{{ctrl.viewURL}}" class="document-viewer-full-width-height"
                     frameborder="0"></iframe>
         </div>
         <div layout="row">
