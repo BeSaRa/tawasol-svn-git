@@ -4243,9 +4243,9 @@ module.exports = function (app) {
                 });
             } else {
                 if (returnPromise) {
-                    return $q.resolve(self.content.viewURL);
+                    return $q.resolve(viewURL);
                 }
-                return self.content.viewURL;
+                return viewURL;
             }
         };
 
