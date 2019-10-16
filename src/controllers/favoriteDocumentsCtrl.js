@@ -61,12 +61,12 @@ module.exports = function (app) {
                 serial: 'docFullSerial',
                 subject: 'docSubject',
                 docType: function (record) {
-                    return self.getSortingKey('docTypeInfo','Information');
+                    return self.getSortingKey('docTypeInfo', 'Information');
                 },
-                securityLevel: function(record){
+                securityLevel: function (record) {
                     return self.getSortingKey('securityLevelInfo', 'Lookup');
                 },
-                priorityLevel: function(record){
+                priorityLevel: function (record) {
                     return self.getSortingKey('priorityLevelInfo', 'Lookup');
                 },
                 documentDate: 'createdOn'
@@ -610,13 +610,14 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     var hasPermission = false;
-                    if (info.documentClass === "internal")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT"));
-                    else if (info.documentClass === "incoming")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
-                    else if (info.documentClass === "outgoing")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                    return hasPermission && info.docStatus < 24;
+                    if (info.documentClass === "internal") {
+                        hasPermission = checkIfEditPropertiesAllowed(model) || (employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT") && info.docStatus < 24);
+                    } else if (info.documentClass === "incoming") {
+                        hasPermission = checkIfEditPropertiesAllowed(model) || (employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT") && info.docStatus < 24);
+                    } else if (info.documentClass === "outgoing") {
+                        hasPermission = checkIfEditPropertiesAllowed(model) || ((info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT")) && info.docStatus < 24);
+                    }
+                    return hasPermission;
                 },
                 subMenu: [
                     // Content
@@ -640,9 +641,10 @@ module.exports = function (app) {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                             else if (info.documentClass === "incoming")
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
-                            else if (info.documentClass === "outgoing")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
-                            return hasPermission;
+                            else if (info.documentClass === "outgoing") {
+                                hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                            }
+                            return hasPermission && info.docStatus < 24;
                         }
                     },
                     // Properties
@@ -659,15 +661,6 @@ module.exports = function (app) {
                         callback: self.editProperties,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            /*var info = model.getInfo();
-                             var hasPermission = false;
-                             if (info.documentClass === "internal")
-                             hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-                             else if (info.documentClass === "incoming")
-                             hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
-                             else if (info.documentClass === "outgoing")
-                             hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
-                             return hasPermission;*/
                             return checkIfEditPropertiesAllowed(model);
                         }
                     },
@@ -677,7 +670,6 @@ module.exports = function (app) {
                         icon: 'desktop-classic',
                         text: 'grid_action_edit_in_desktop',
                         shortcut: true,
-                        hide: false,
                         callback: self.editInDesktop,
                         class: "action-green",
                         showInView: false,
@@ -685,12 +677,13 @@ module.exports = function (app) {
                             var info = model.getInfo();
                             var hasPermission = false;
                             if (info.documentClass === 'outgoing') {
-                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
+                                hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
                             } else if (info.documentClass === 'incoming') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
                             } else if (info.documentClass === 'internal') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                             }
+
                             return !model.isBroadcasted()
                                 && !info.isPaper
                                 && (info.documentClass !== 'incoming')
@@ -699,19 +692,6 @@ module.exports = function (app) {
                         }
                     }
                 ]
-            },
-            // Send To Review
-            {
-                type: 'action',
-                icon: 'send',
-                text: 'grid_action_send_to_review',
-                shortcut: true,
-                hide: true,
-                callback: self.sendFavoriteDocumentToReview,
-                class: "action-red",
-                checkShow: function (action, model) {
-                    return true;
-                }
             },
             // Launch Distribution Workflow
             {

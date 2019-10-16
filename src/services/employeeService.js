@@ -15,15 +15,17 @@ module.exports = function (app) {
         var classMapPermission = {
             outgoing: {
                 properties: 'EDIT_OUTGOING_PROPERTIES',
-                content: 'EDIT_OUTGOING_CONTENT'
+                content: function (isPaper) {
+                    return isPaper ? 'EDIT_OUTGOING_PAPER' : 'EDIT_OUTGOING_CONTENT';
+                }
             },
             incoming: {
-                properties: 'EDIT_OUTGOING_PROPERTIES',
-                content: 'EDIT_OUTGOING_CONTENT'
+                properties: 'EDIT_INCOMING’S_PROPERTIES',
+                content: 'EDIT_INCOMING’S_CONTENT'
             },
             internal: {
-                properties: 'EDIT_OUTGOING_PROPERTIES',
-                content: 'EDIT_OUTGOING_CONTENT'
+                properties: 'EDIT_INTERNAL_PROPERTIES',
+                content: 'EDIT_INTERNAL_CONTENT'
             }
         };
 
@@ -250,8 +252,14 @@ module.exports = function (app) {
             applicationUserSignatureService = service;
         };
 
-        self.getPermissionForDocumentClass = function (documentClass) {
-            return classMapPermission[documentClass.toLowerCase()];
+        self.getPermissionForDocumentClass = function (document) {
+            var info = document.getInfo(),
+                permissionName = angular.copy(classMapPermission[info.documentClass.toLowerCase()]);
+
+            if (typeof permissionName.content === 'function') {
+                permissionName.content = permissionName.content(info.isPaper);
+            }
+            return permissionName;
         };
 
         self.employeePermissionChanged = function (callback) {

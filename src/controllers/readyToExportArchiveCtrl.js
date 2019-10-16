@@ -617,7 +617,7 @@ module.exports = function (app) {
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
-            var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+            var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES"));
             var allowed = hasPermission && info.isPaper;// && info.docStatus < 24
             if (checkForViewPopup)
                 return !allowed;
@@ -1027,7 +1027,7 @@ module.exports = function (app) {
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
-                permissionKey: "EDIT_OUTGOING_CONTENT", //TODO: Apply correct permission when added to database.
+                permissionKey: "EDIT_OUTGOING_CONTENT",
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return !info.isPaper;
@@ -1287,14 +1287,9 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                    var hasPermission = checkIfEditPropertiesAllowed(model) || (employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER"));
                     return hasPermission && info.isPaper;// && info.docStatus < 24
                 },
-                /*permissionKey: [
-                    "EDIT_OUTGOING_CONTENT",
-                    "EDIT_OUTGOING_PROPERTIES"
-                ],
-                checkAnyPermission: true,*/
                 subMenu: [
                     // Content
                     {
@@ -1303,10 +1298,11 @@ module.exports = function (app) {
                         text: 'grid_action_content',
                         shortcut: false,
                         callback: self.editContent,
-                        permissionKey: "EDIT_OUTGOING_CONTENT",
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;
+                            var info = model.getInfo();
+                            return info.isPaper && employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER");
                         }
                     },
                     // Edit properties
@@ -1316,10 +1312,9 @@ module.exports = function (app) {
                         text: 'grid_action_properties',
                         shortcut: false,
                         callback: self.editProperties,
-                        permissionKey: "EDIT_OUTGOING_PROPERTIES",
                         class: "action-green",
                         checkShow: function (action, model) {
-                            return true;
+                            return checkIfEditPropertiesAllowed(model);
                         }
                     }
                 ]

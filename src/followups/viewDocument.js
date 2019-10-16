@@ -6,8 +6,7 @@ module.exports = function (app) {
             .getPageName(
                 'draftOutgoing',
                 function (model) {
-                    var info = model.getInfo();
-                    return !employeeService.hasPermissionTo(employeeService.getPermissionForDocumentClass(info.documentClass).properties);
+                    return !employeeService.hasPermissionTo(employeeService.getPermissionForDocumentClass(model).properties);
                 }, function (model) {
                     return !employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
                 }, function (model) {

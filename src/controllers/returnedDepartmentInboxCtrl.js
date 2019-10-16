@@ -543,7 +543,7 @@ module.exports = function (app) {
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
-            var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+            var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES"));
             var allowed = hasPermission && info.isPaper;// && info.docStatus < 24
             if (checkForViewPopup)
                 return !allowed;
@@ -1220,10 +1220,10 @@ module.exports = function (app) {
                 },
                 callback: self.editAfterExport, //TODO: Service is not available yet
                 checkShow: function (action, model) {
-                    // var info = model.getInfo();
-                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                    // return hasPermission && !info.isPaper;
-                    return hasPermission; //TODO: Check with Besara as its enabled for paper by Issawi on 16 Oct, 2018
+                    var info = model.getInfo();
+                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES")
+                        || (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT")));
+                    return hasPermission;
                 }
             },
             // Edit (Paper Only)
@@ -1239,14 +1239,9 @@ module.exports = function (app) {
                 },
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                    var hasPermission = checkIfEditPropertiesAllowed(model) || employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER");
                     return hasPermission && info.isPaper;
                 },
-                /*permissionKey: [
-                    "EDIT_OUTGOING_CONTENT",
-                    "EDIT_OUTGOING_PROPERTIES"
-                ],
-                checkAnyPermission: true,*/
                 subMenu: [
                     // Content
                     {
@@ -1255,10 +1250,10 @@ module.exports = function (app) {
                         text: 'grid_action_content',
                         shortcut: false,
                         callback: self.editContent,
-                        permissionKey: "EDIT_OUTGOING_CONTENT",
                         class: "action-green",
                         checkShow: function (action, model) {
-                            return true;
+                            var info = model.getInfo();
+                            return info.isPaper && employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER");
                         }
                     },
                     // Properties
@@ -1268,10 +1263,9 @@ module.exports = function (app) {
                         text: 'grid_action_properties',
                         shortcut: false,
                         callback: self.editProperties,
-                        permissionKey: "EDIT_OUTGOING_PROPERTIES",
                         class: "action-green",
                         checkShow: function (action, model) {
-                            return true;
+                            return checkIfEditPropertiesAllowed(model);
                         }
                     }
                 ]

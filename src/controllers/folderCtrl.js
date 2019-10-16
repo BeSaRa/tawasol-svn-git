@@ -76,10 +76,10 @@ module.exports = function (app) {
                 serial: 'generalStepElm.docFullSerial',
                 subject: 'generalStepElm.docSubject',
                 receivedDate: 'generalStepElm.receivedDate',
-                action: function(record){
-                  return self.getSortingKey('action', 'WorkflowAction');
+                action: function (record) {
+                    return self.getSortingKey('action', 'WorkflowAction');
                 },
-                sender: function(record){
+                sender: function (record) {
                     return self.getSortingKey('senderInfo', 'SenderInfo');
                 },
                 dueDate: 'generalStepElm.dueDate'
@@ -293,7 +293,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.createReplyIncoming = function (workItem, $event,defer) {
+        self.createReplyIncoming = function (workItem, $event, defer) {
             workItem.createReply($event)
                 .then(function (result) {
                     new ResolveDefer(defer);
@@ -1473,13 +1473,14 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     var hasPermission = false;
-                    if (info.documentClass === "internal")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT"));
-                    else if (info.documentClass === "incoming")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
-                    else if (info.documentClass === "outgoing")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                    return hasPermission && info.docStatus < 24 && !model.isBroadcasted();
+                    if (info.documentClass === "internal") {
+                        hasPermission = checkIfEditPropertiesAllowed(model) || (employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT") && info.docStatus < 24);
+                    } else if (info.documentClass === "incoming") {
+                        hasPermission = checkIfEditPropertiesAllowed(model) || (employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT") && info.docStatus < 24);
+                    } else if (info.documentClass === "outgoing") {
+                        hasPermission = checkIfEditPropertiesAllowed(model) || ((info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT")) && info.docStatus < 24);
+                    }
+                    return hasPermission && !model.isBroadcasted();
                 },
                 subMenu: [
                     // Content
@@ -1503,8 +1504,9 @@ module.exports = function (app) {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                             else if (info.documentClass === "incoming")
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
-                            else if (info.documentClass === "outgoing")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
+                            else if (info.documentClass === "outgoing") {
+                                hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                            }
                             return hasPermission && info.docStatus < 24;
                         }
                     },
@@ -1532,7 +1534,6 @@ module.exports = function (app) {
                         icon: 'desktop-classic',
                         text: 'grid_action_edit_in_desktop',
                         shortcut: true,
-                        hide: false,
                         callback: self.editInDesktop,
                         class: "action-green",
                         showInView: false,
@@ -1540,7 +1541,7 @@ module.exports = function (app) {
                             var info = model.getInfo();
                             var hasPermission = false;
                             if (info.documentClass === 'outgoing') {
-                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
+                                hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
                             } else if (info.documentClass === 'incoming') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
                             } else if (info.documentClass === 'internal') {

@@ -645,34 +645,6 @@ module.exports = function (app) {
                             return true;
                         }
             },
-            /* // Edit Outgoing Properties
-             {
-                 type: 'action',
-                 icon: 'pencil',
-                 text: 'grid_action_edit_outgoing_properties',
-                 shortcut: false,
-                 permissionKey: "EDIT_OUTGOING_PROPERTIES",
-                 callback: self.editProperties,
-                 class: "action-green",
-                 showInView: false,
-                 checkShow: function (action, model) {
-                            return true;
-                        }
-             },
-             // Edit Outgoing Content
-             {
-                 type: 'action',
-                 icon: 'pencil-box',
-                 text: 'grid_action_edit_outgoing_content',
-                 shortcut: false,
-                 callback: self.editContent,
-                 permissionKey: "EDIT_OUTGOING_CONTENT",
-                 class: "action-green",
-                 showInView: false,
-                 checkShow: function (action, model) {
-                            return true;
-                        }
-             },*/
             // Launch Distribution Workflow
             {
                 type: 'action',
@@ -718,14 +690,12 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                    var info = model.getInfo(),
+                        hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES")
+                            || (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"))
+                        );
                     return hasPermission;
                 },
-                permissionKey: [
-                    "EDIT_OUTGOING_CONTENT",
-                    "EDIT_OUTGOING_PROPERTIES"
-                ],
-                checkAnyPermission: true,
                 subMenu: [
                     // Content
                     {
@@ -741,9 +711,11 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.editContent,
                         class: "action-green",
-                        permissionKey: "EDIT_OUTGOING_CONTENT",
                         checkShow: function (action, model) {
-                            return true;
+                            var info = model.getInfo(),
+                                hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+
+                            return hasPermission;
                         }
                     },
                     // Properties
@@ -760,9 +732,8 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.editProperties,
                         class: "action-green",
-                        permissionKey: "EDIT_OUTGOING_PROPERTIES",
                         checkShow: function (action, model) {
-                            return true;
+                            return checkIfEditPropertiesAllowed(model);
                         }
                     },
                     // editInDeskTop
@@ -771,7 +742,6 @@ module.exports = function (app) {
                         icon: 'desktop-classic',
                         text: 'grid_action_edit_in_desktop',
                         shortcut: true,
-                        hide: false,
                         callback: self.editInDesktop,
                         class: "action-green",
                         showInView: false,
@@ -779,7 +749,7 @@ module.exports = function (app) {
                             var info = model.getInfo();
                             var hasPermission = false;
                             if (info.documentClass === 'outgoing') {
-                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
+                                hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
                             } else if (info.documentClass === 'incoming') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
                             }

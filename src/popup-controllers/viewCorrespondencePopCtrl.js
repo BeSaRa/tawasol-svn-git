@@ -35,7 +35,9 @@ module.exports = function (app) {
         self.info = null;
 
         self.documentClassPermissionMap = {
-            outgoing: 'EDIT_OUTGOING_CONTENT',
+            outgoing: function (isPaper) {
+                return isPaper ? 'EDIT_OUTGOING_PAPER' : 'EDIT_OUTGOING_CONTENT';
+            },
             incoming: 'EDIT_INCOMING’S_CONTENT',
             internal: 'EDIT_INTERNAL_CONTENT'
         };
@@ -124,8 +126,15 @@ module.exports = function (app) {
         }
 
         self.employeeCanEditContent = function () {
-            var documentClass = (self.info.documentClass + '');
-            return !self.info ? false : self.employeeService.hasPermissionTo(self.documentClassPermissionMap[documentClass]);
+            if (!self.info){
+                return false;
+            }
+            var documentClass = (self.info.documentClass + ''),
+                permissionName = self.documentClassPermissionMap[documentClass];
+            if (typeof permissionName === 'function') {
+                permissionName = permissionName(self.info.isPaper);
+            }
+            return self.employeeService.hasPermissionTo(permissionName);
         };
 
         $timeout(function () {
@@ -433,7 +442,7 @@ module.exports = function (app) {
                 });
         };
 
-        self.manageLinkedDocuments = function($event){
+        self.manageLinkedDocuments = function ($event) {
             if (!employeeService.hasPermissionTo("MANAGE_LINKED_DOCUMENTS")) {
                 return;
             }

@@ -1418,14 +1418,11 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     var hasPermission = false;
                     if (info.documentClass === "internal")
-                        hasPermission = ((employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") && checkIfEditPropertiesAllowed(model))
-                            || (employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT") && info.docStatus < 23));
+                        hasPermission = checkIfEditPropertiesAllowed(model) || (employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT") && info.docStatus < 23);
                     else if (info.documentClass === "incoming")
-                        hasPermission = ((employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES") && checkIfEditPropertiesAllowed(model))
-                            || (employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT") && info.docStatus < 23));
+                        hasPermission = checkIfEditPropertiesAllowed(model) || (employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT") && info.docStatus < 23);
                     else if (info.documentClass === "outgoing")
-                        hasPermission = ((employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") && checkIfEditPropertiesAllowed(model))
-                            || (employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT") && info.docStatus < 23));
+                        hasPermission = checkIfEditPropertiesAllowed(model) || ((info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT")) && info.docStatus < 23);
                     return hasPermission && !model.isBroadcasted();
                 },
                 subMenu: [
@@ -1449,12 +1446,15 @@ module.exports = function (app) {
                             if (info.docStatus === 23)
                                 return false;
                             var hasPermission = false;
-                            if (info.documentClass === "internal")
+                            if (info.documentClass === "internal") {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
-                            else if (info.documentClass === "incoming")
+                            }
+                            else if (info.documentClass === "incoming") {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
-                            else if (info.documentClass === "outgoing")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
+                            }
+                            else if (info.documentClass === "outgoing") {
+                                hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                            }
                             return hasPermission && info.docStatus < 23;
                             /*If partially or fully approved, don't show edit content*/
                         }
@@ -1483,14 +1483,13 @@ module.exports = function (app) {
                         icon: 'desktop-classic',
                         text: 'grid_action_edit_in_desktop',
                         shortcut: true,
-                        hide: false,
                         callback: self.editInDesktop,
                         class: "action-green",
                         checkShow: function (action, model, showInViewOnly) {
                             var info = model.getInfo();
                             var hasPermission = false;
                             if (info.documentClass === 'outgoing') {
-                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
+                                hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
                             } else if (info.documentClass === 'incoming') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
                             } else if (info.documentClass === 'internal') {

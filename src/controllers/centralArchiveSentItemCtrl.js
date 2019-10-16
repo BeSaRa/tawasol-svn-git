@@ -635,7 +635,7 @@ module.exports = function (app) {
                     return true;
                 }
             },
-            // Edit After Approve (Only electronic only)
+            // Edit After Export
             {
                 type: 'action',
                 icon: 'eraser-variant',
@@ -646,10 +646,11 @@ module.exports = function (app) {
                 showInView: false,
                 hide: true,
                 checkShow: function (action, model) {
-                    // var info = model.getInfo();
-                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                    // return !info.isPaper;
-                    return hasPermission; //TODO: Check with Besara as its enabled for paper by Issawi on 16 Oct, 2018
+                    var info = model.getInfo();
+                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES")
+                        || (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT")));
+
+                    return hasPermission;
                 }
             },
             // Launch New Distribution Workflow
