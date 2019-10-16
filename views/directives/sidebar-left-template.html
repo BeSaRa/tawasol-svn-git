@@ -4,7 +4,8 @@
     <md-toolbar class="sidebar-toolbar" layout-align="center center" layout="column">
         <div class="pattern"></div>
         <md-button id="pin-btn" ng-click="sidebar.toggleSidebarLocked('main-sidebar')"
-                   class="md-icon-button" tooltip="{{lang.toggle_sidebar}}">
+                   aria-label="{{lang.toggle_sidebar}}"
+                   class="md-icon-button" tooltip="{{lang.toggle_sidebar}}" tooltip-direction="bottom">
             <md-icon md-svg-icon="pin-off" ng-if="sidebar.sidebarStatus('main-sidebar')"></md-icon>
             <md-icon md-svg-icon="pin" ng-if="!sidebar.sidebarStatus('main-sidebar')"></md-icon>
         </md-button>
