@@ -61,6 +61,30 @@ module.exports = function (app) {
             incomingRejected : {
                 permission: 'REJECTED_INCOMING_QUEUE',
                 state: 'app.incoming.rejected'
+            },
+            internalPrepare : {
+                permission: 'PREPARE_INTERNAL',
+                state: 'app.internal.prepare'
+            },
+            internalDraft : {
+                permission: 'DRAFT_INTERNAL',
+                state: 'app.internal.draft'
+            },
+            internalReview : {
+                permission: 'REVIEW_INTERNAL',
+                state: 'app.internal.review'
+            },
+            internalReadyToSent : {
+                permission: 'READY_TO_SEND_INTERNAL',
+                state: 'app.internal.ready-to-send'
+            },
+            internalRejected : {
+                permission: 'REJECTED_INTERNAL',
+                state: 'app.internal.rejected'
+            },
+            internalApproved : {
+                permission: 'APPROVED_INTERNAL_DOCUMENT',
+                state: 'app.internal.approved'
             }
         };
 
@@ -124,6 +148,42 @@ module.exports = function (app) {
                 ar: langService.getKey('counter_incoming_rejected', 'ar'),
                 en: langService.getKey('counter_incoming_rejected', 'en'),
                 value: 'incomingRejected'
+            },
+            {
+                id: 11,
+                ar: langService.getKey('counter_internal_prepare', 'ar'),
+                en: langService.getKey('counter_internal_prepare', 'en'),
+                value: 'internalPrepare'
+            },
+            {
+                id: 11,
+                ar: langService.getKey('counter_internal_draft', 'ar'),
+                en: langService.getKey('counter_internal_draft', 'en'),
+                value: 'internalDraft'
+            },
+            {
+                id: 11,
+                ar: langService.getKey('counter_internal_review', 'ar'),
+                en: langService.getKey('counter_internal_review', 'en'),
+                value: 'internalReview'
+            },
+            {
+                id: 11,
+                ar: langService.getKey('counter_internal_ready_to_send', 'ar'),
+                en: langService.getKey('counter_internal_ready_to_send', 'en'),
+                value: 'internalReadyToSent'
+            },
+            {
+                id: 11,
+                ar: langService.getKey('counter_internal_rejected', 'ar'),
+                en: langService.getKey('counter_internal_rejected', 'en'),
+                value: 'internalRejected'
+            },
+            {
+                id: 11,
+                ar: langService.getKey('counter_internal_approved', 'ar'),
+                en: langService.getKey('counter_internal_approved', 'en'),
+                value: 'internalApproved'
             }
         ];
 
