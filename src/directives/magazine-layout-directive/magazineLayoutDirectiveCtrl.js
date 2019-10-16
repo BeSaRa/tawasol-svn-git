@@ -42,7 +42,7 @@ module.exports = function (app) {
             return $mdMedia('gt-sm');
         };
 
-        self.sidebarOpend = function (sidebarCode) {
+        self.sidebarOpened = function (sidebarCode) {
             return sidebarService.getSidebar(sidebarCode).isLockedOpen;
         };
 

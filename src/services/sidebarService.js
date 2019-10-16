@@ -23,7 +23,7 @@ module.exports = function (app) {
         self.menuItems = [];
         self.menuParents = [];
         self.menuChildren = {};
-        self.lastOpendItem = null;
+        self.lastOpenedItem = null;
 
         self.dynamicMenuItems = [];
         self.dynamicMenuParents = [];

@@ -6,7 +6,7 @@ module.exports = function (app) {
         self.serviceName = 'loginDialogService';
         // promise var to store the promise when open the dialog to callback the
         self.promise = null;
-        // variable to catch the current login dialog status if it is true then dialog opend.
+        // variable to catch the current login dialog status if it is true then dialog opened.
         self.openStatus = false;
         self.locationPath = null;
 
@@ -33,10 +33,10 @@ module.exports = function (app) {
             });
         };
         /**
-         * method to check if login dialog already opend or not.
+         * method to check if login dialog already opened or not.
          * @returns {boolean}
          */
-        self.alreadyOpend = function () {
+        self.alreadyOpened = function () {
             return self.openStatus;
         };
         /**

@@ -4,13 +4,13 @@
         <div layout="row" layout-align="start center" flex class="toolbar-left-side"
              ng-class="{'toolbar-border-bottom relative':toolbar.sizeXS()}">
             <toolbar-search-directive flex hide-gt-xs ng-if="toolbar.quickSearchPermission"></toolbar-search-directive>
-            <md-button hide-sm hide-xs ng-click="toolbar.toggleSidebarLocked('main-sidebar')"
+            <!--<md-button hide-sm hide-xs ng-click="toolbar.toggleSidebarLocked('main-sidebar')"
                        class="md-icon-button m015">
                 <md-icon md-svg-icon="menu"></md-icon>
             </md-button>
             <md-button hide-gt-sm hide-xs ng-click="toolbar.toggleSidebar('main-sidebar')" class="md-icon-button m015">
                 <md-icon md-svg-icon="menu"></md-icon>
-            </md-button>
+            </md-button>-->
 
             <div class="separator"></div>
             <div class="font-size-14" ng-if="!toolbar.employeeService.isAdminUser()">

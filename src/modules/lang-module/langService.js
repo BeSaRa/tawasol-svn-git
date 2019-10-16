@@ -1,7 +1,7 @@
 module.exports = function (app) {
     app.service('langService', function (Language, CMSModelInterceptor, $timeout, titleService, cmsTemplate, $window, $rootScope, Localization, generator, $http, urlService, $q, $cookies, _) {
         'ngInject';
-        var self = this, toast, dialog, addKeyOpend = false, rootEntity;
+        var self = this, toast, dialog, addKeyOpened = false, rootEntity;
         self.cookiesKey = 'lang';
         self.current = null;
         self.defaultLanguages = {};
@@ -552,7 +552,7 @@ module.exports = function (app) {
                     });
             },
             addNewLocalizationKey: function ($event) {
-                addKeyOpend = true;
+                addKeyOpened = true;
                 return dialog
                     .showDialog({
                         templateUrl: cmsTemplate.getPopup('localization'),
@@ -565,11 +565,11 @@ module.exports = function (app) {
                         }
                     })
                     .then(function (local) {
-                        addKeyOpend = false;
+                        addKeyOpened = false;
                         self.loadLocalizationKeys();
                     })
                     .catch(function () {
-                        addKeyOpend = false;
+                        addKeyOpened = false;
                     });
             }
         };
@@ -596,7 +596,7 @@ module.exports = function (app) {
             .on('keypress keydown', function (e) {
                 var code = e.which || e.keyCode;
                 if (e.ctrlKey && e.altKey && code === 76) {
-                    if (!addKeyOpend)
+                    if (!addKeyOpened)
                         self.controllerMethod.addNewLocalizationKey();
                 }
             });

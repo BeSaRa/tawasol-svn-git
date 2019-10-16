@@ -725,7 +725,7 @@ module.exports = function (app) {
                 .successMessage(comment.description, null, null, $event, true);
         };
         /**
-         * @description expose controller methods to parent Controller just in case the directive opend from dialog.
+         * @description expose controller methods to parent Controller just in case the directive opened from dialog.
          */
         $timeout(function () {
             if (self.fromDialog) {
