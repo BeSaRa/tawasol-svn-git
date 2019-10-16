@@ -297,13 +297,15 @@ module.exports = function (app) {
         };
 
         self.setEntityCurrentLang = function () {
-            if(!rootEntity)
+            if (!rootEntity)
                 return;
 
             var defaultDisplayLang = _.find(self.languages, function (lang) {
                 return lang.lookupKey === rootEntity.getGlobalSettings().defaultDisplayLang;
             });
-            self.setCurrentLang(defaultDisplayLang.code);
+            if (defaultDisplayLang) {
+                self.setCurrentLang(defaultDisplayLang.code);
+            }
         };
 
         self.getSelectedLanguage = function () {
@@ -362,10 +364,9 @@ module.exports = function (app) {
 
             self.selectedLanguage = self.languages[result];
             self.current = self.selectedLanguage.code;
-            if (defaultTitle){
+            if (defaultTitle) {
                 titleService.setTitle('TAWASOL');
-            }
-            else {
+            } else {
                 titleService.setTitle(rootEntity.returnRootEntity().getTranslatedAppName());
             }
             self.setCurrentLang(self.current);
