@@ -45,6 +45,22 @@ module.exports = function (app) {
             readyToExport: {
                 permission: 'OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE',
                 state: 'app.department-inbox.ready-to-export'
+            },
+            incomingPrepare : {
+                permission: 'INCOMING_SCAN_DOCUMENT',
+                state: 'app.incoming.scan'
+            },
+            incomingReview : {
+                permission: 'REVIEW_INCOMING_DOCUMENT',
+                state: 'app.incoming.review'
+            },
+            incomingReadyToSent : {
+                permission: 'SEND_INCOMING_QUEUE',
+                state: 'app.incoming.ready-to-send'
+            },
+            incomingRejected : {
+                permission: 'REJECTED_INCOMING_QUEUE',
+                state: 'app.incoming.rejected'
             }
         };
 
@@ -84,6 +100,30 @@ module.exports = function (app) {
                 ar: langService.getKey('counter_outgoing_export', 'ar'),
                 en: langService.getKey('counter_outgoing_export', 'en'),
                 value: 'readyToExport'
+            },
+            {
+                id: 7,
+                ar: langService.getKey('counter_incoming_scan', 'ar'),
+                en: langService.getKey('counter_incoming_scan', 'en'),
+                value: 'incomingPrepare'
+            },
+            {
+                id: 8,
+                ar: langService.getKey('counter_incoming_review', 'ar'),
+                en: langService.getKey('counter_incoming_review', 'en'),
+                value: 'incomingReview'
+            },
+            {
+                id: 9,
+                ar: langService.getKey('counter_incoming_ready_to_send', 'ar'),
+                en: langService.getKey('counter_incoming_ready_to_send', 'en'),
+                value: 'incomingReadyToSent'
+            },
+            {
+                id: 10,
+                ar: langService.getKey('counter_incoming_rejected', 'ar'),
+                en: langService.getKey('counter_incoming_rejected', 'en'),
+                value: 'incomingRejected'
             }
         ];
 
