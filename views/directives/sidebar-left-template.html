@@ -1,7 +1,7 @@
 <md-sidenav ng-class="{'gt-small':sidebar.isGreatThanSmall()}" md-whiteframe="2" id="main-sidebar"
             md-is-locked-open="sidebar.sidebarStatus('main-sidebar')" layout="column" md-component-id="main-sidebar">
 
-    <md-toolbar class="sidebar-toolbar" layout-align="center center" layout="column">
+    <md-toolbar class="sidebar-toolbar" layout-align="center center" layout="row">
         <div class="pattern"></div>
         <md-button id="pin-btn" ng-click="sidebar.toggleSidebarLocked('main-sidebar')"
                    aria-label="{{lang.toggle_sidebar}}"
@@ -9,14 +9,14 @@
             <md-icon md-svg-icon="pin-off" ng-if="sidebar.sidebarStatus('main-sidebar')"></md-icon>
             <md-icon md-svg-icon="pin" ng-if="!sidebar.sidebarStatus('main-sidebar')"></md-icon>
         </md-button>
-        <div layout="row">
+        <div flex layout="row">
             <img ng-if="!sidebar.rootEntity.returnRootEntity().getBannerLogoUrl()" class="toolbar-logo" flex="none"
                  src="assets/images/logo.png">
             <img ng-if="sidebar.rootEntity.returnRootEntity().getBannerLogoUrl()" class="toolbar-logo"
                  flex="none"
                  ng-src="{{sidebar.rootEntity.returnRootEntity().getBannerLogoUrl()}}">
             <span id="logo-span">&nbsp;&nbsp;</span>
-            <div layout="column">
+            <div flex layout="column">
                 <h6 id="application-name">{{sidebar.rootEntity.returnRootEntity().getTranslatedAppName()}}</h6>
                 <p id="toolbar-description">{{lang.application_description}}</p>
             </div>
