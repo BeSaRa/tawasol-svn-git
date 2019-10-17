@@ -142,8 +142,8 @@
 
 <!-- Context Actions -->
 <md-menu-bar ng-if="ctrl.actionsDirection === 'context'" class="grid-context">
-    <md-menu>
-        <button class="menu-handler" ng-click="$mdMenu.open()" ng-hide="true"></button>
+    <md-menu class="main-context-menu">
+        <button class="menu-handler" ng-click="ctrl.openContextMenu($mdMenu, $event)" ng-hide="true"></button><!--$mdMenu.open()-->
         <md-menu-content class="grid-action-menu context-menu" width="4" layout="column">
             <md-menu-item ng-repeat="gridAction in ctrl.contextActions track by $index"
                           ng-if="ctrl.isShowAction(gridAction)"
@@ -161,7 +161,7 @@
                     </div>
                 </md-button>
                 <!-- Cascade(Sub) Menu -->
-                <md-menu md-position-mode="cascade"
+                <md-menu md-position-mode="cascade" class="sub-context-menu"
                          ng-if="gridAction.type==='action' && gridAction.subMenu && gridAction.subMenu.length">
                     <md-button ng-click="ctrl.openCascadeMenu($mdMenu, gridAction)"
                                aria-label="{{ctrl.getActionText(gridAction)}}"

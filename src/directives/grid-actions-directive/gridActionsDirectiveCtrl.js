@@ -23,6 +23,8 @@ module.exports = function (app) {
         self.langService = langService;
         LangWatcher($scope);
 
+        var parentRow;
+
         /**
          * @description Checks if actions will be shown or not
          * @param action
@@ -62,8 +64,7 @@ module.exports = function (app) {
                     langKey = action.text().shortcutText;
                 else
                     langKey = action.text().contextText;
-            }
-            else {
+            } else {
                 langKey = action.text;
             }
             return langService.get(langKey);
@@ -152,14 +153,11 @@ module.exports = function (app) {
                 var securityLevel = null;
                 if (model instanceof WorkItem) {
                     securityLevel = model.generalStepElm.securityLevel;
-                }
-                else if (model instanceof G2G) {
+                } else if (model instanceof G2G) {
                     securityLevel = model.correspondence.securityLevel;
-                }
-                else if (model instanceof G2GMessagingHistory) {
+                } else if (model instanceof G2GMessagingHistory) {
                     securityLevel = model.securityLevel;
-                }
-                else {
+                } else {
                     securityLevel = model.hasOwnProperty('securityLevel') ? model.securityLevel : null;
                 }
                 if (!securityLevel)
@@ -168,22 +166,18 @@ module.exports = function (app) {
                     return securityLevel.getTranslatedName();
                 else
                     return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel).getTranslatedName();
-            }
-            else if (property === 'priorityLevel') {
+            } else if (property === 'priorityLevel') {
                 var priorityLevel = null;
                 if (model instanceof WorkItem) {
                     priorityLevel = model.generalStepElm.priorityLevel;
-                }
-                else if (model instanceof G2G) {
+                } else if (model instanceof G2G) {
                     priorityLevel = model.correspondence.priorityLevel;
-                }
-                else if (model instanceof G2GMessagingHistory) {
+                } else if (model instanceof G2GMessagingHistory) {
                     if (model.hasOwnProperty('prioretyLevel'))
                         priorityLevel = model.prioretyLevel;
                     else if (model.hasOwnProperty('priorityLevel'))
                         priorityLevel = model.priorityLevel;
-                }
-                else {
+                } else {
                     priorityLevel = model.hasOwnProperty('priorityLevel') ? model.priorityLevel : null;
                 }
 
@@ -194,22 +188,18 @@ module.exports = function (app) {
                     return priorityLevel.getTranslatedName();
                 else
                     return lookupService.getLookupByLookupKey(lookupService.priorityLevel, priorityLevel).getTranslatedName();
-            }
-            else if (property === 'author') {
+            } else if (property === 'author') {
                 if (model instanceof WorkItem) {
                     return new Information(model.creatorOu).getTranslatedName();
                 }
                 return model.hasOwnProperty('creatorInfo')
                     ? new Information(model.creatorInfo).getTranslatedName()
                     : (model.hasOwnProperty('creatorOuInfo') ? new Information(model.creatorOuInfo).getTranslatedName() : '');
-            }
-            else if (property === 'tags') {
+            } else if (property === 'tags') {
                 return model.getTagsCount();
-            }
-            else if (property === 'comments') {
+            } else if (property === 'comments') {
                 return model.getCommentsCount();
-            }
-            else if (property === 'broadcasted') {
+            } else if (property === 'broadcasted') {
                 return model.isBroadcasted() ? langService.get('yes') : langService.get('no');
             }
         };
@@ -233,6 +223,24 @@ module.exports = function (app) {
             $mdMenu.open();
         };
 
+        var _setAndHighlightParentRow = function(){
+            parentRow = document.getElementsByClassName(self.contextRowClass);
+            if (parentRow && parentRow.length){
+                parentRow = parentRow[0];
+                // highlight the record when context menu opens
+                parentRow.classList.add('background-context');
+            }
+        };
+
+        var _removeHighlightParentRow = function(){
+            parentRow.classList.remove('background-context', self.contextRowClass);
+        };
+
+        self.openContextMenu = function ($mdMenu, $event) {
+            _setAndHighlightParentRow();
+            $mdMenu.open();
+        };
+
         /**
          * @description Process the callback for the action button
          * @param action
@@ -241,10 +249,10 @@ module.exports = function (app) {
         self.processMenu = function (action, $event) {
             if (action.hasOwnProperty('params') && action.params && action.params.length) {
                 action.callback(self.model, action.params, $event);
-            }
-            else {
+            } else {
                 action.callback(self.model, $event);
             }
+            _removeHighlightParentRow();
         };
     });
 };
