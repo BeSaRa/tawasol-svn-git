@@ -106,6 +106,10 @@ module.exports = function (app) {
 
         self.selectedMainSiteSimple = null;
 
+        self.isSearchByDLSiteType = false;
+        self.selectedSiteType_DL = null;
+        self.siteType_DLSearchText = '';
+
         /**
          * create current date + given days if provided.
          * @param days
@@ -886,7 +890,31 @@ module.exports = function (app) {
                 });
                 self.selectedMainSiteAdvanced ? self.onMainSiteChangeAdvanced() : null;
             }
-        }
+        };
+
+
+        self.onChangeIsSearchByDLSiteType = function(){
+            self.selectedSiteType_DL = null;
+            self.selectedDistributionList = null;
+        };
+
+
+        self.onSiteTypeDistributionListChange = function () {
+            if (self.selectedSiteType_DL) {
+                correspondenceViewService.correspondenceSiteSearch('sub', {
+                    type: self.selectedSiteType_DL.lookupKey,
+                    criteria: null,
+                    excludeOuSites: false
+                }).then(function (result) {
+                    self.subSearchResult_DL_Copy = angular.copy(_.map(result, _mapSubSites));
+                    self.subSearchResult_DL = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+
+                });
+            } else {
+                self.subSearchResult_DL_Copy = [];
+                self.subSearchResult_DL = [];
+            }
+        };
 
     });
 };

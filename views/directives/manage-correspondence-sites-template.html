@@ -643,11 +643,23 @@
     <md-tab label="{{lang.distribution_lists}}" ng-if="ctrl.showTab('distributionLists')"
             md-on-select="ctrl.setCurrentTab('distributionLists')">
         <md-content class="md-padding white-bg">
+            <div layout="row" class="p020">
+                <span flex></span>
+                <div layout="row" layout-align="center center">
+                    <span>{{lang.distribution_list}}</span>
+                    <span>&nbsp;&nbsp;</span>
+                    <md-switch aria-label="distributionListSiteTypeToggle"
+                               class="m0" ng-change="ctrl.onChangeIsSearchByDLSiteType($event)"
+                               ng-model="ctrl.isSearchByDLSiteType">
+                    </md-switch>
+                    <span>{{lang.correspondence_site_type}}</span>
+                </div>
+            </div>
             <div scroll-directive layout="column">
                 <!-- Search Box -->
                 <div layout="row" flex ng-if="!ctrl.disableCorrespondence">
                     <!-- Distribution Lists -->
-                    <md-input-container flex>
+                    <md-input-container flex ng-if="!ctrl.isSearchByDLSiteType">
                         <label for="distributionList">{{lang.distribution_list}}</label>
                         <md-select id="distributionList" ng-model="ctrl.selectedDistributionList"
                                    ng-change="ctrl.getCorrespondenceSites_DL($event)">
@@ -655,6 +667,27 @@
                                        ng-repeat="distributionList in ctrl.distributionLists">
                                 {{distributionList.distributionList.getTranslatedName()}}
                             </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <!-- Site Type -->
+                    <md-input-container flex ng-if="ctrl.isSearchByDLSiteType">
+                        <label for="siteType_DL">{{lang.sites_select_site_type}}</label>
+                        <md-select id="siteType_DL" ng-model="ctrl.selectedSiteType_DL"
+                                   ng-change="ctrl.onSiteTypeDistributionListChange($event)"
+                                   md-on-close="ctrl.clearSearchText('siteType_DL')"
+                                   data-md-container-class="select-header-container">
+                            <md-select-header class="select-header">
+                                <input ng-model="ctrl.siteType_DLSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option ng-value="type"
+                                       ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter:ctrl.siteType_DLSearchText">
+                                <span md-highlight-text="ctrl.siteType_DLSearchText"
+                                      md-highlight-flags="i">{{type.getTranslatedName()}}</span>
+                            </md-option>
+                            <md-option ng-value="null">{{lang.none}}</md-option>
                         </md-select>
                     </md-input-container>
                 </div>
