@@ -297,7 +297,7 @@ module.exports = function (app) {
         };
 
         self.setEntityCurrentLang = function () {
-            if (!rootEntity)
+            if (!rootEntity || !rootEntity.getGlobalSettings())
                 return;
 
             var defaultDisplayLang = _.find(self.languages, function (lang) {
