@@ -9,6 +9,8 @@ module.exports = function (app) {
             self.wfGroups = [];
             self.ouList = [];
             self.action = null;
+            self.rank = null;
+            self.jobTitle = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

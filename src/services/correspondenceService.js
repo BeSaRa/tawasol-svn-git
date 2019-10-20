@@ -1859,6 +1859,14 @@ module.exports = function (app) {
                         workflowGroups: function (broadcastService) {
                             'ngInject';
                             return broadcastService.loadWorkflowGroups();
+                        },
+                        jobTitles: function (jobTitleService) {
+                            'ngInject';
+                            return jobTitleService.getJobTitles();
+                        },
+                        ranks: function (rankService) {
+                            'ngInject';
+                            return rankService.getRanks();
                         }
                     }
                 });

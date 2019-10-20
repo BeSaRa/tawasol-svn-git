@@ -10,6 +10,8 @@ module.exports = function (app) {
                                                  organizations,
                                                  actions,
                                                  workflowGroups,
+                                                 ranks,
+                                                 jobTitles,
                                                  OUBroadcast,
                                                  correspondenceService,
                                                  WorkflowGroup,
@@ -23,7 +25,12 @@ module.exports = function (app) {
             self.progress = null;
 
             self.actions = actions;
+            self.jobTitles = jobTitles;
+            self.ranks = ranks;
+
             self.selectedAction = (self.actions && self.actions.length) ? self.actions[0] : null;
+            self.selectedJobTitle = null;
+            self.selectedRank = null;
 
             self.broadcastRecordType = {
                 organization: {
@@ -232,7 +239,9 @@ module.exports = function (app) {
                     ouList: _.filter(self.addedOUAndWFGroupsToBroadcast, function (record) {
                         return self.checkBroadcastRecordType(record, self.broadcastRecordType.organization);
                     }),
-                    action: self.selectedAction
+                    action: self.selectedAction,
+                    rank: self.selectedRank,
+                    jobTitle: self.selectedJobTitle
                 });
 
                 return correspondenceService

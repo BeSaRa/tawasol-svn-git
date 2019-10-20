@@ -24,6 +24,38 @@
                             </md-input-container>
                         </div>
                         <div layout="row" flex>
+                            <!-- Rank -->
+                            <md-input-container flex>
+                                <label for="selectedRank">{{lang.rank}}</label>
+                                <md-select id="selectedRank" name="selectedRank"
+                                           ng-model="ctrl.selectedRank">
+                                    <md-option ng-value="null">{{lang.none}}</md-option>
+                                    <md-option ng-if="rank.status" ng-value="rank.lookupKey"
+                                               ng-repeat="rank in ctrl.ranks track by $index">
+                                        {{rank.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                                <div ng-messages="broadcast_form.selectedRank.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                            <!-- Job Title -->
+                            <md-input-container flex>
+                                <label for="selectedJobTitle">{{lang.job_title}}</label>
+                                <md-select id="selectedJobTitle" name="selectedJobTitle"
+                                           ng-model="ctrl.selectedJobTitle">
+                                    <md-option ng-value="null">{{lang.none}}</md-option>
+                                    <md-option ng-if="jobTitle.status" ng-value="jobTitle.lookupKey"
+                                               ng-repeat="jobTitle in ctrl.jobTitles track by $index">
+                                        {{jobTitle.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                                <div ng-messages="broadcast_form.selectedJobTitle.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div layout="row" flex>
                             <!-- Organization Unit -->
                             <md-input-container flex>
                                 <label for="ouBroadcast">{{lang.organizations}}</label>
