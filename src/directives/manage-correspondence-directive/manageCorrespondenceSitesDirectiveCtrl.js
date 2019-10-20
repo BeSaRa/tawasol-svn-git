@@ -896,6 +896,8 @@ module.exports = function (app) {
         self.onChangeIsSearchByDLSiteType = function(){
             self.selectedSiteType_DL = null;
             self.selectedDistributionList = null;
+            self.subSearchResult_DL = [];
+            self.subSearchResult_DL_Copy = [];
         };
 
 
