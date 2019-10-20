@@ -62,6 +62,7 @@ module.exports = function (app) {
             self.internalG2gId = null;
             self.ouLevel = 1;
             self.faxId = null;
+            self.isPrivateRegistry = false;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
