@@ -3,6 +3,7 @@ module.exports = function (app) {
                                        lookupService,
                                        Lookup,
                                        moment,
+                                       langService,
                                        gridService) {
         'ngInject';
         return function Indicator(model) {
@@ -64,8 +65,8 @@ module.exports = function (app) {
              */
             Indicator.prototype.getIndicatorIcons = function (type) {
                 if (type)
-                    return icons[type];
-                return icons;
+                    return gridService.gridIcons.indicators[type];
+                return gridService.gridIcons.indicators;
             };
 
             /**
@@ -84,7 +85,10 @@ module.exports = function (app) {
                         text: 'indicator_security_level',
                         icon: icon,
                         tooltip: 'indicator_security_level',
-                        value: lookup
+                        value: lookup,
+                        legendText: function () {
+                            return langService.get('security_level') + ' : ' + lookup.getTranslatedName();
+                        }
                     }
                 }), ['key', securityLevel.lookupKey]);
                 return new Indicator(securityLevelMap);
@@ -103,9 +107,12 @@ module.exports = function (app) {
                             key: lookup.lookupKey,
                             class: 'indicator prior' + (lookup.lookupKey),
                             text: 'indicator_priority_level',
-                            icon: self.getIndicatorIcons(lookupService.priorityLevel + '_prior' + priorityLevel.lookupKey),
+                            icon: self.getIndicatorIcons(lookupService.priorityLevel + '_' + priorityLevel.lookupKey),
                             tooltip: 'indicator_priority_level',
-                            value: lookup
+                            value: lookup,
+                            legendText: function () {
+                                return langService.get('priority_level') + ' : ' + lookup.getTranslatedName();
+                            }
                         }
                     }), ['key', priorityLevel.lookupKey]);
                     return new Indicator(priorityLevelMap);
@@ -122,7 +129,10 @@ module.exports = function (app) {
                     class: 'indicator',
                     text: 'indicator_doc_has_attachment',
                     icon: self.getIndicatorIcons('attachment'),
-                    tooltip: 'indicator_doc_has_attachment'
+                    tooltip: 'indicator_doc_has_attachment',
+                    legendText: function () {
+                        return langService.get('attachments')
+                    }
                 });
             };
 
@@ -135,7 +145,10 @@ module.exports = function (app) {
                     class: 'indicator',
                     text: 'indicator_doc_has_linked_doc',
                     icon: self.getIndicatorIcons('linkedDocs'),
-                    tooltip: 'indicator_doc_has_linked_doc'
+                    tooltip: 'indicator_doc_has_linked_doc',
+                    legendText: function () {
+                        return langService.get('linked_documents');
+                    }
                 });
             };
 
@@ -154,7 +167,10 @@ module.exports = function (app) {
                             text: 'indicator_followup_status',
                             icon: self.getIndicatorIcons('followupStatus' + lookup.lookupKey),
                             tooltip: 'indicator_followup_status',
-                            value: lookup
+                            value: lookup,
+                            legendText: function () {
+                                return langService.get('follow_up_status') + ' : ' + lookup.getTranslatedName();
+                            }
                         }
                     }), ['key', followupStatus.lookupKey]);
                     return new Indicator(followupStatusMap);
@@ -168,6 +184,10 @@ module.exports = function (app) {
              * @returns {Indicator}
              */
             Indicator.prototype.getDueDateStatusIndicator = function (dueDate) {
+                if (!dueDate) {
+                    return false;
+                }
+
                 var today = moment(new Date()).startOf('day');
                 var recordDueDate = moment(dueDate).startOf('day');
                 var diff = recordDueDate.diff(today, 'days');
@@ -175,8 +195,11 @@ module.exports = function (app) {
                 return new Indicator({
                     class: 'indicator date-' + dueDateStatus,
                     text: diff < 0 ? 'indicator_date_passed' : (diff === 0 ? 'indicator_date_today' : 'indicator_date_coming'),
-                    icon: self.getIndicatorIcons('due_date'),
-                    tooltip: 'indicator_due_date'
+                    icon: self.getIndicatorIcons('dueDate'),
+                    tooltip: 'indicator_due_date',
+                    legendText: function () {
+                        return '';
+                    }
                 });
             };
 
@@ -190,7 +213,10 @@ module.exports = function (app) {
                     class: 'indicator badge',
                     text: tagsCount,
                     icon: '',
-                    tooltip: 'indicator_tags'
+                    tooltip: 'indicator_tags',
+                    legendText: function () {
+                        return '';
+                    }
                 });
             };
 
@@ -207,7 +233,10 @@ module.exports = function (app) {
                     text: 'indicator_' + docClass,
                     icon: self.getIndicatorIcons(docClass),
                     tooltip: 'indicator_' + docClass,
-                    value: docClassCopy
+                    value: docClassCopy,
+                    legendText: function () {
+                        return langService.get(docClass);
+                    }
                 });
             };
 
@@ -221,7 +250,10 @@ module.exports = function (app) {
                     class: 'indicator ' + (reassigned ? 'reassigned' : 'no-reassigned'),
                     text: (reassigned ? 'indicator_reassigned' : 'indicator_not_reassigned'),
                     icon: self.getIndicatorIcons('reassigned'),
-                    tooltip: (reassigned ? 'indicator_reassigned' : 'indicator_not_reassigned')
+                    tooltip: (reassigned ? 'indicator_reassigned' : 'indicator_not_reassigned'),
+                    legendText: function () {
+                        return langService.get('reassigned');
+                    }
                 }) : false;
             };
 
@@ -234,8 +266,11 @@ module.exports = function (app) {
                 return new Indicator({
                     class: 'indicator ' + (opened ? 'open' : 'close'),
                     text: (opened ? 'indicator_opened' : 'indicator_not_opened'),
-                    icon: (opened ? self.getIndicatorIcons('email_opened') : self.getIndicatorIcons('email_close')),
-                    tooltip: (opened ? 'indicator_opened' : 'indicator_not_opened')
+                    icon: (opened ? self.getIndicatorIcons('bookOpened') : self.getIndicatorIcons('bookNotOpened')),
+                    tooltip: (opened ? 'indicator_opened' : 'indicator_not_opened'),
+                    legendText: function () {
+                        return '';
+                    }
                 });
             };
 
@@ -249,7 +284,10 @@ module.exports = function (app) {
                     class: 'indicator badge',
                     text: commentsCount,
                     icon: '',
-                    tooltip: 'indicator_comments'
+                    tooltip: 'indicator_comments',
+                    legendText: function () {
+                        return '';
+                    }
                 });
             };
 
@@ -263,8 +301,11 @@ module.exports = function (app) {
                 return new Indicator({
                     class: 'indicator',
                     text: (isPaper ? 'indicator_paper_document' : 'indicator_electronic_document'),
-                    icon: (isPaper ? self.getIndicatorIcons('paper_document') : self.getIndicatorIcons('electronic_document')),
-                    tooltip: (isPaper ? 'indicator_paper_document' : 'indicator_electronic_document')
+                    icon: (isPaper ? self.getIndicatorIcons('paperDocument') : self.getIndicatorIcons('electronicDocument')),
+                    tooltip: (isPaper ? 'indicator_paper_document' : 'indicator_electronic_document'),
+                    legendText: function () {
+                        return isPaper ? langService.get('paper') : langService.get('electronic');
+                    }
                 });
             };
 
@@ -277,8 +318,11 @@ module.exports = function (app) {
                 return exportViaCentralArchive ? new Indicator({
                     class: 'indicator',
                     text: 'export_via_central_archive',
-                    icon: self.getIndicatorIcons('export_via_central_archive'),
-                    tooltip: 'export_via_central_archive'
+                    icon: self.getIndicatorIcons('exportViaCentralArchive'),
+                    tooltip: 'export_via_central_archive',
+                    legendText: function () {
+                        return '';
+                    }
                 }) : false;
             };
 
@@ -290,8 +334,11 @@ module.exports = function (app) {
                 return new Indicator({
                     class: 'indicator',
                     text: 'indicator_linked_exported_doc',
-                    icon: self.getIndicatorIcons('linked_exported_doc'),
-                    tooltip: 'indicator_linked_exported_doc'
+                    icon: self.getIndicatorIcons('linkedExportedDoc'),
+                    tooltip: 'indicator_linked_exported_doc',
+                    legendText: function () {
+                        return '';
+                    }
                 });
             };
 
@@ -305,7 +352,10 @@ module.exports = function (app) {
                     class: 'indicator',
                     text: 'indicator_copy',
                     icon: self.getIndicatorIcons('copy'),
-                    tooltip: 'indicator_copy'
+                    tooltip: 'indicator_copy',
+                    legendText: function () {
+                        return '';
+                    }
                 }) : false;
             };
 
@@ -318,8 +368,11 @@ module.exports = function (app) {
                 return isLockedG2G ? new Indicator({
                     class: 'indicator',
                     text: 'indicator_locked_by',
-                    icon: self.getIndicatorIcons('locked_g2g'),
-                    tooltip: 'indicator_locked_by'
+                    icon: self.getIndicatorIcons('lockedG2g'),
+                    tooltip: 'indicator_locked_by',
+                    legendText: function () {
+                        return '';
+                    }
                 }) : false;
             };
 
@@ -332,8 +385,11 @@ module.exports = function (app) {
                 return hasContent ? new Indicator({
                     class: 'indicator',
                     text: 'indicator_version_has_content',
-                    icon: self.getIndicatorIcons('version_has_content'),
-                    tooltip: 'indicator_version_has_content'
+                    icon: self.getIndicatorIcons('versionHasContent'),
+                    tooltip: 'indicator_version_has_content',
+                    legendText: function () {
+                        return '';
+                    }
                 }) : false;
             };
 
@@ -346,8 +402,11 @@ module.exports = function (app) {
                 return isInternalG2G ? new Indicator({
                     class: 'indicator',
                     text: 'indicator_internal_g2g',
-                    icon: self.getIndicatorIcons('internal_g2g'),
-                    tooltip: 'indicator_internal_g2g'
+                    icon: self.getIndicatorIcons('internalG2g'),
+                    tooltip: 'indicator_internal_g2g',
+                    legendText: function () {
+                        return '';
+                    }
                 }) : false;
             };
 
@@ -361,9 +420,12 @@ module.exports = function (app) {
                     ? new Indicator({
                         class: 'indicator',
                         text: 'indicator_locked_item_by',
-                        icon: self.getIndicatorIcons('indicator_locked_workitem'),
+                        icon: self.getIndicatorIcons('lockedWorkItem'),
                         tooltip: 'indicator_locked_item_by',
-                        value: record.getLockingUserInfo()
+                        value: record.getLockingUserInfo(),
+                        legendText: function () {
+                            return '';
+                        }
                     }) : false;
             };
 
@@ -377,8 +439,11 @@ module.exports = function (app) {
                     ? new Indicator({
                         class: 'indicator',
                         text: 'indicator_transferred_document',
-                        icon: self.getIndicatorIcons('indicator_transferred_document'),
-                        tooltip: 'indicator_transferred_document'
+                        icon: self.getIndicatorIcons('transferredDocument'),
+                        tooltip: 'indicator_transferred_document',
+                        legendText: function () {
+                            return '';
+                        }
                     }) : false;
             };
 

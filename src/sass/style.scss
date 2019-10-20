@@ -2273,7 +2273,8 @@ $ta-background-transparent: transparent !important;
     display: inline-block !important;
     //width: 91% !important;
   }
-  .subject-internal{
+
+  .subject-internal {
     max-width: 930px !important;
   }
 }
@@ -2351,4 +2352,8 @@ md-select-menu {
       width: 100%;
     }
   }
+}
+
+.row-border-top {
+  border-top: 1px rgba(0, 0, 0, 0.12) solid;
 }

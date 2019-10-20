@@ -188,7 +188,8 @@
                 <td md-cell class="td-data">
                     <div layout="row">
                         <span ng-if="!ctrl.configurationService.ENABLE_ACTIVE_SENDER_LINKS" flex>{{userInbox.senderInfo.getTranslatedName()}}</span>
-                        <a target="_blank" href="{{ctrl.userUrl[$index%2]}}" ng-if="ctrl.configurationService.ENABLE_ACTIVE_SENDER_LINKS" flex>{{userInbox.senderInfo.getTranslatedName()}}</a>
+                        <a target="_blank" href="{{ctrl.userUrl[$index%2]}}"
+                           ng-if="ctrl.configurationService.ENABLE_ACTIVE_SENDER_LINKS" flex>{{userInbox.senderInfo.getTranslatedName()}}</a>
                     </div>
                 </td>
                 <td md-cell class="td-data">
@@ -231,11 +232,16 @@
             </tbody>
         </table>
     </div>
-    <md-table-pagination
-            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-            md-limit-options="ctrl.grid.limitOptions"
-            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-            md-total="{{(ctrl.workItems | filter:ctrl.searchModel).length}}" md-page-select
-            md-on-paginate="ctrl.grid.pagingCallback">
-    </md-table-pagination>
+    <div layout="row">
+        <legend-indicators-directive grid-legends="ctrl.gridLegends" visible-count="5"></legend-indicators-directive>
+        <span flex class="row-border-top"></span>
+        <md-table-pagination
+                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                md-limit-options="ctrl.grid.limitOptions"
+                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                md-total="{{(ctrl.workItems | filter:ctrl.searchModel).length}}" md-page-select
+                md-on-paginate="ctrl.grid.pagingCallback">
+        </md-table-pagination>
+    </div>
 </md-table-container>
+

@@ -1,0 +1,29 @@
+<div layout="row" class="row-border-top">
+    <div ng-repeat="legend in ctrl.legends"
+         ng-if="$index < ctrl.visibleCount && legend.legendText()" layout-align="center" layout-padding>
+        <md-icon class="{{legend.class}}"
+                 md-svg-icon="{{legend.icon}}">
+        </md-icon>
+        <span>{{legend.legendText()}}</span>
+    </div>
+
+    <div layout-align="center" layout-padding>
+        <md-menu>
+            <md-button aria-label="Open" class="md-icon-button"
+                       ng-click="$mdMenu.open($event)">
+                <md-icon md-svg-icon="dots-vertical"></md-icon>
+            </md-button>
+            <md-menu-content width="3">
+                <md-menu-item ng-repeat="legend in ctrl.legends"
+                              ng-if="$index >= ctrl.visibleCount && legend.legendText()">
+                    <md-icon class="{{legend.class}}"
+                             md-svg-icon="{{legend.icon}}">
+                    </md-icon>
+                    <span>{{legend.legendText()}}</span>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+    </div>
+</div>
+
+
