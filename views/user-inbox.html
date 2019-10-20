@@ -17,37 +17,34 @@
             <md-button ng-click="ctrl.reloadUserInboxes()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
-            <span flex></span>
             <div class="p020">
-                <md-switch ng-if="ctrl.selectedGridType === 'inbox'"
+                <md-switch md-invert ng-if="ctrl.selectedGridType === 'inbox'"
                            aria-label="{{lang.truncate_subject}}"
                            ng-model="ctrl.grid.truncateSubject"
                            ng-change="ctrl.grid.setTruncateSubject($event)">
-                    <span>{{lang.truncate_subject}} : </span>
-                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                    <span>{{lang.truncate_subject}} </span>
                 </md-switch>
-                <md-switch ng-if="ctrl.selectedGridType === 'starred'"
+                <md-switch md-invert ng-if="ctrl.selectedGridType === 'starred'"
                            aria-label="{{lang.truncate_subject}}"
                            ng-model="ctrl.starredGrid.truncateSubject"
                            ng-change="ctrl.starredGrid.setTruncateSubject($event)">
-                    <span>{{lang.truncate_subject}} : </span>
-                    {{ctrl.starredGrid.truncateSubject ? lang.yes : lang.no }}
+                    <span>{{lang.truncate_subject}}</span>
                 </md-switch>
-                <md-switch ng-if="ctrl.selectedGridType === 'filter'"
+                <md-switch md-invert ng-if="ctrl.selectedGridType === 'filter'"
                            aria-label="{{lang.truncate_subject}}"
                            ng-model="ctrl.filterGrid[0].truncateSubject"
                            ng-change="ctrl.filterGrid[0].setTruncateSubject($event)">
-                    <span>{{lang.truncate_subject}} : </span>
-                    {{ctrl.filterGrid[0].truncateSubject ? lang.yes : lang.no }}
+                    <span>{{lang.truncate_subject}}</span>
                 </md-switch>
             </div>
             <div>
-                <div layout="row" tooltip="{{ctrl.showStarred ? lang.hide_starred: lang.show_starred}}"
-                     layout-align="start center">
-                    <md-checkbox class="m0" aria-label="show/hide starred grid" ng-model="ctrl.showStarred"
-                                 ng-change="ctrl.toggleStarredTab($event)"></md-checkbox>
-                </div>
+                <md-switch md-invert aria-label="show/hide starred grid"
+                           ng-model="ctrl.showStarred"
+                           ng-change="ctrl.toggleStarredTab($event)">
+                    <span>{{lang.starred}} </span>
+                </md-switch>
             </div>
+            <span flex></span>
             <md-button ng-click="ctrl.userFilterCreate($event)"
                        aria-label="{{lang.create_filter}}"
                        class="md-icon-button" tooltip="{{lang.create_filter}}">
