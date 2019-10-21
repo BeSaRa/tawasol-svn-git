@@ -5,7 +5,8 @@ module.exports = function (app) {
                                                               lookupService,
                                                               $scope,
                                                               _,
-                                                              $timeout) {
+                                                              $timeout,
+                                                              rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'legendIndicatorsDirectiveCtrl';
@@ -17,8 +18,7 @@ module.exports = function (app) {
             _.map(self.gridLegends, function (indicatorKey) {
                 switch (indicatorKey) {
                     case 'securityLevel':
-                        var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
-
+                        var securityLevels = rootEntity.getGlobalSettings().securityLevels;
                         _.map(securityLevels, function (securityLevel) {
                             self.legends.push(indicator.getSecurityLevelIndicator(securityLevel));
                         });
