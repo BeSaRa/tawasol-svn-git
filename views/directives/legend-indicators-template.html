@@ -1,13 +1,13 @@
-<div layout="row" class="grid-legend row-border-top">
+<div layout="row" class="grid-legend row-border-top" layout-align="center center">
     <div ng-repeat="legend in ctrl.legends"
-         ng-if="$index < ctrl.visibleCount && legend.legendText()" layout-align="center" layout-padding>
+         ng-if="$index < ctrl.visibleCount && legend.legendText()" class="p0p5">
         <md-icon class="{{legend.class}}"
                  md-svg-icon="{{legend.icon}}">
         </md-icon>
         <span>{{legend.legendText()}}</span>
     </div>
 
-    <div layout-align="center" layout-padding>
+    <div layout-padding>
         <md-menu>
             <md-button aria-label="Open" class="md-icon-button"
                        ng-click="$mdMenu.open($event)">
