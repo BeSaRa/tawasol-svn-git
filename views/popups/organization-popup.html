@@ -32,7 +32,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div ng-if="ctrl.editMode && !ctrl.rootMode" layout="row">
                                     <md-input-container tooltip="{{ctrl.parentOrganization.getTranslatedName(true)}}"
                                                         flex>
@@ -40,7 +40,7 @@
                                         <input ng-disabled="true" name="parent"
                                                ng-value="ctrl.parentOrganization.getTranslatedName()" id="parent">
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
@@ -70,7 +70,7 @@
                                             <div ng-message="ENS">{{lang.english_number_space}}</div>
                                         </div>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="description">{{lang.description}}</label>
@@ -83,7 +83,7 @@
                                             <div ng-message="AEN">{{lang.arabic_english_number}}</div>
                                         </div>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="ouLevel">{{lang.organization_level}}</label>
@@ -119,7 +119,7 @@
                                             <md-icon md-svg-icon="plus"></md-icon>
                                         </md-button>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="code">{{lang.code}}</label>
@@ -197,7 +197,7 @@
                                             <md-icon md-svg-icon="plus"></md-icon>
                                         </md-button>
                                     </div>-->
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row" layout-align="start center">
                                     <md-switch ng-disabled="ctrl.rootMode || ctrl.organization.id"
                                                ng-change="ctrl.hasRegistryChange(ctrl.organization.hasRegistry)"
@@ -260,7 +260,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row" layout-align="start center">
                                     <md-switch ng-change="ctrl.centralArchiveChange(ctrl.organization.centralArchive)"
                                                ng-model="ctrl.organization.centralArchive" ng-disabled="ctrl.editMode">
@@ -285,7 +285,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row">
                                     <md-switch flex ng-model="ctrl.organization.status"
                                                ng-change="ctrl.onChangeOUStatus($event)"
@@ -405,8 +405,9 @@
                                         </div>
                                     </md-input-container>
                                 </div>
-                                <div layout="row">
-                                    <md-switch ng-model="ctrl.organization.isPrivateRegistry">
+                                <div layout="row" ng-if="ctrl.organization.hasRegistry">
+                                    <md-switch ng-model="ctrl.organization.isPrivateRegistry"
+                                               ng-if="ctrl.organization.hasRegistry">
                                         <span>{{lang.private_registry}}</span>
                                     </md-switch>
                                     <span flex></span>

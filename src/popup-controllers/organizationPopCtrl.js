@@ -403,6 +403,7 @@ module.exports = function (app) {
             dialog.confirmMessage(langService.get('confirm_change_affect_whole_system'))
                 .then(function () {
                     self.organization.ldapCode = null;
+                    self.organization.isPrivateRegistry = false;
                     if (hasRegistry) {
                         self.organization.setRegistryParentId(null);
                         if (self.entityLDAPProviders.length === 1) {
