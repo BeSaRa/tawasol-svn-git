@@ -16,10 +16,18 @@
             <md-menu-content width="3">
                 <md-menu-item ng-repeat="legend in ctrl.legends"
                               ng-if="$index >= ctrl.visibleCount && legend.legendText()">
-                    <md-icon class="{{legend.class}}"
+                    <!--<md-icon class="{{legend.class}}"
                              md-svg-icon="{{legend.icon}}">
                     </md-icon>
-                    <span>{{legend.legendText()}}</span>
+                    <span>{{legend.legendText()}}</span>-->
+                    <md-button aria-label="Legend" md-prevent-menu-close>
+                        <div layout="row" flex>
+                            <md-icon class="{{legend.class}}"
+                                     md-svg-icon="{{legend.icon}}">
+                            </md-icon>
+                            <p flex>{{legend.legendText()}}</p>
+                        </div>
+                    </md-button>
                 </md-menu-item>
             </md-menu-content>
         </md-menu>
