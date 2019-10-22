@@ -15,9 +15,31 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'ouUnassignedUserPopCtrl';
         self.ouApplicationUser = ouApplicationUser;
-        //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
-        self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
         self.roles = roleService.roles;
+
+        self.roleSearchText = '';
+
+        self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
+        self.securityLevelsModel = {
+            securityLevels: self.securityLevels,
+            add: [],
+            archive: []
+        };
+
+        function _generateArchiveAndAddSecurityArray() {
+            _.map(self.securityLevelsModel.securityLevels, function (securityLevel, index) {
+                self.securityLevelsModel.add[index] = !!_securityExists(securityLevel, self.ouApplicationUser.securityLevels);
+                self.securityLevelsModel.archive[index] = !!_securityExists(securityLevel, self.ouApplicationUser.archiveSecurityLevels);
+            });
+        }
+
+        _generateArchiveAndAddSecurityArray();
+
+        function _securityExists(securityLevel, collection) {
+            return _.find(collection, function (item) {
+                return item.lookupKey === securityLevel.lookupKey;
+            });
+        }
 
         /**
          * @description Contains the labels for the fields for validation purpose
@@ -41,6 +63,38 @@ module.exports = function (app) {
             return result;
         };
 
+
+        function _isAnySecurityLevelAdd() {
+            return _.some(self.securityLevelsModel.add, function (securityLevel) {
+                return !!securityLevel;
+            });
+        }
+
+        function _isAnyArchiveSecurityLevel() {
+            return _.some(self.securityLevelsModel.archive, function (securityLevel) {
+                return !!securityLevel;
+            });
+        }
+
+        self.isSaveEnabled = function (form) {
+            return !form.$invalid && self.ouApplicationUser.customRoleId && _isAnySecurityLevelAdd() && _isAnyArchiveSecurityLevel();
+        };
+
+        var _setSecurityLevelsBeforeSave = function(){
+            var securityLevelAdd = [], archiveSecurityLevels = [];
+            _.map(self.securityLevels, function (securityLevel, index) {
+                if (self.securityLevelsModel.add[index]) {
+                    securityLevelAdd.push(securityLevel);
+                }
+                if (self.securityLevelsModel.archive[index]) {
+                    archiveSecurityLevels.push(securityLevel);
+                }
+            });
+
+            self.ouApplicationUser.securityLevels = securityLevelAdd;
+            self.ouApplicationUser.archiveSecurityLevels = archiveSecurityLevels;
+        };
+
         /**
          * @description Adds the selected values of organization, custom role, security level to the grid
          */
@@ -56,7 +110,13 @@ module.exports = function (app) {
         /**
          * @description Add new ou unassigned user
          */
-        self.addOuUnassignedUserFromCtrl = function () {
+        self.addOuUnassignedUserFromCtrl = function (form) {
+            if (!self.isSaveEnabled(form)) {
+                toast.info(langService.get('select_ou_role_security_level'));
+                return false;
+            }
+            _setSecurityLevelsBeforeSave();
+
             validationService
                 .createValidation('ADD_OU_UNASSIGNED_USER')
                 .addStep('check_required', true, self.checkRequiredFields_ouUnassigned, self.ouApplicationUser, function (result) {
@@ -108,6 +168,26 @@ module.exports = function (app) {
          */
         self.closeOuUnassignedUserPopupFromCtrl = function () {
             dialog.cancel();
-        }
+        };
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
+        };
     });
 };

@@ -5,16 +5,26 @@
     <md-dialog-content scroll-directive>
         <div class="md-dialog-content cms-dialog-content">
             <form name="ouUnassignedUserForm" autocomplete="off">
-                <div layout="row">
+                <div layout="column">
                     <!-- Role -->
                     <md-input-container flex>
                         <label for="customRoleId">{{lang.role}}</label>
-                        <md-select ng-change="ctrl.customRoleChanged()" id="customRoleId" name="customRoleId"
-                                   required
-                                   ng-model="ctrl.ouApplicationUser.customRoleId">
+                        <md-select id="customRoleId" name="customRoleId" required
+                                   ng-change="ctrl.customRoleChanged()"
+                                   ng-model="ctrl.ouApplicationUser.customRoleId"
+                                   md-on-close="ctrl.clearSearchText('role')"
+                                   data-md-container-class="select-header-container">
+                            <md-select-header class="select-header">
+                                <input ng-model="ctrl.roleSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
                             <md-option ng-value="role"
-                                       ng-repeat="role in ctrl.roles track by $index">
-                                {{role.getTranslatedName()}}
+                                       ng-repeat="role in ctrl.roles | translatedNameFilter: ctrl.roleSearchText track by $index">
+                                <span
+                                        md-highlight-text="ctrl.roleSearchText"
+                                        md-highlight-flags="i">{{role.getTranslatedName()}}</span>
                             </md-option>
                         </md-select>
                         <div ng-messages="ouUnassignedUserForm.customRoleId.$error">
@@ -22,26 +32,40 @@
                         </div>
                     </md-input-container>
                     <!-- Security Levels -->
-                    <md-input-container flex>
-                        <label for="ouSecurityLevel">{{lang.security_levels}}</label>
-                        <md-select id="ouSecurityLevel" name="ouSecurityLevel" multiple required
-                                   ng-model="ctrl.ouApplicationUser.securityLevels">
-                            <md-option ng-value="securityLevel"
-                                       ng-repeat="securityLevel in ctrl.securityLevels track by $index">
-                                {{securityLevel.getTranslatedName()}}
-                            </md-option>
-                        </md-select>
-                        <div ng-messages="ouUnassignedUserForm.securityLevels.$error">
-                            <div ng-message="required">{{lang.field_required}}</div>
-                        </div>
-                    </md-input-container>
+                    <md-table-container flex>
+                        <table md-table>
+                            <thead md-head>
+                            <tr md-row>
+                                <th md-column>{{lang.security_level}}</th>
+                                <th md-column>{{lang.add}}</th>
+                                <th md-column>{{lang.archive}}</th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row
+                                ng-repeat="(key, securityLevel) in ctrl.securityLevelsModel.securityLevels track by $index">
+                                <td md-cell>{{securityLevel.getTranslatedName()}}</td>
+                                <td md-cell>
+                                    <md-switch aria-label="Security Level Add"
+                                               ng-model="ctrl.securityLevelsModel.add[key]">
+                                    </md-switch>
+                                </td>
+                                <td md-cell>
+                                    <md-switch aria-label="Archive Security Level"
+                                               ng-model="ctrl.securityLevelsModel.archive[key]">
+                                    </md-switch>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
                 </div>
             </form>
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="ouUnassignedUserForm.$invalid"
-                   ng-click="ctrl.addOuUnassignedUserFromCtrl()">
+        <md-button class="md-raised" ng-disabled="!ctrl.isSaveEnabled(ouUnassignedUserForm)"
+                   ng-click="ctrl.addOuUnassignedUserFromCtrl(ouUnassignedUserForm)">
             {{lang.add}}
         </md-button>
         <span flex></span>

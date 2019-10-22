@@ -61,6 +61,7 @@ module.exports = function (app) {
         self.notFound = {};
         self.inlineUserOUSearchText = '';
         self.inlineOuSearchText = '';
+        self.roleSearchText = '';
 
         self.rootEntity = rootEntity;
 
@@ -877,7 +878,7 @@ module.exports = function (app) {
          * @description Adds the selected values of organization, custom role, security level to the grid
          */
         self.addOUApplicationUserFromCtrl = function () {
-            if (self.ouApplicationUser.ouid && self.ouApplicationUser.customRoleId && self.ouApplicationUser.securityLevels) {
+            if (self.ouApplicationUser.ouid && self.ouApplicationUser.customRoleId && self.ouApplicationUser.securityLevels && self.ouApplicationUser.archiveSecurityLevels) {
                 self.ouApplicationUser.wfsecurity = self.ouApplicationUser.ouid.wfsecurity.lookupKey;
                 return ouApplicationUserService
                     .addOUApplicationUser(self.ouApplicationUser)

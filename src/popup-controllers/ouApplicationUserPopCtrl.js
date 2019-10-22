@@ -128,17 +128,7 @@ module.exports = function (app) {
             return !form.$invalid && self.ouApplicationUser.ouid && self.ouApplicationUser.customRoleId && _isAnySecurityLevelAdd() && _isAnyArchiveSecurityLevel();
         };
 
-        /**
-         * @description Add/Update the ouApplicationUser
-         * @param form
-         * @param $event
-         * @returns {boolean}
-         */
-        self.saveOUApplicationUser = function (form, $event) {
-            if (!self.isSaveEnabled(form)) {
-                toast.info(langService.get('select_ou_role_security_level'));
-                return false;
-            }
+        var _setSecurityLevelsBeforeSave = function(){
             var securityLevelAdd = [], archiveSecurityLevels = [];
             _.map(self.securityLevels, function (securityLevel, index) {
                 if (self.securityLevelsModel.add[index]) {
@@ -151,6 +141,20 @@ module.exports = function (app) {
 
             self.ouApplicationUser.securityLevels = securityLevelAdd;
             self.ouApplicationUser.archiveSecurityLevels = archiveSecurityLevels;
+        };
+
+        /**
+         * @description Add/Update the ouApplicationUser
+         * @param form
+         * @param $event
+         * @returns {boolean}
+         */
+        self.saveOUApplicationUser = function (form, $event) {
+            if (!self.isSaveEnabled(form)) {
+                toast.info(langService.get('select_ou_role_security_level'));
+                return false;
+            }
+            _setSecurityLevelsBeforeSave();
             self.ouApplicationUser.wfsecurity = self.ouApplicationUser.ouid.wfsecurity.lookupKey;
 
             if (!self.ouApplicationUser.id) {
