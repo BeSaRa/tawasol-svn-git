@@ -147,6 +147,7 @@
                                         <md-input-container flex>
                                             <label for="rank">{{lang.rank}}</label>
                                             <md-select id="rank" name="rank"
+                                                       ng-disabled="true" ng-readonly="true"
                                                        ng-model="ctrl.applicationUser.rank">
                                                 <!--required ng-disabled="true" ng-readonly="true"-->
                                                 <md-option ng-value="rank.lookupKey"
@@ -158,12 +159,6 @@
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                             </div>
                                         </md-input-container>
-                                        <!--<md-button
-                                                tooltip="{{lang.add_new_rank}}"
-                                                ng-click="ctrl.openAddRankDialog($event)"
-                                                class="md-icon-button">
-                                            <md-icon md-svg-icon="plus"></md-icon>
-                                        </md-button>-->
                                     </div>
                                     <!-- Mobile Number -->
                                     <md-input-container flex>
