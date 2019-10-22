@@ -24,38 +24,6 @@
                             </md-input-container>
                         </div>
                         <div layout="row" flex>
-                            <!-- Rank -->
-                            <md-input-container flex>
-                                <label for="selectedRank">{{lang.rank}}</label>
-                                <md-select id="selectedRank" name="selectedRank"
-                                           ng-model="ctrl.selectedRank">
-                                    <md-option ng-value="null">{{lang.none}}</md-option>
-                                    <md-option ng-if="rank.status" ng-value="rank.lookupKey"
-                                               ng-repeat="rank in ctrl.ranks track by $index">
-                                        {{rank.getTranslatedName()}}
-                                    </md-option>
-                                </md-select>
-                                <div ng-messages="broadcast_form.selectedRank.$error">
-                                    <div ng-message="required">{{lang.field_required}}</div>
-                                </div>
-                            </md-input-container>
-                            <!-- Job Title -->
-                            <md-input-container flex>
-                                <label for="selectedJobTitle">{{lang.job_title}}</label>
-                                <md-select id="selectedJobTitle" name="selectedJobTitle"
-                                           ng-model="ctrl.selectedJobTitle">
-                                    <md-option ng-value="null">{{lang.none}}</md-option>
-                                    <md-option ng-if="jobTitle.status" ng-value="jobTitle.lookupKey"
-                                               ng-repeat="jobTitle in ctrl.jobTitles track by $index">
-                                        {{jobTitle.getTranslatedName()}}
-                                    </md-option>
-                                </md-select>
-                                <div ng-messages="broadcast_form.selectedJobTitle.$error">
-                                    <div ng-message="required">{{lang.field_required}}</div>
-                                </div>
-                            </md-input-container>
-                        </div>
-                        <div layout="row" flex>
                             <!-- Organization Unit -->
                             <md-input-container flex>
                                 <label for="ouBroadcast">{{lang.organizations}}</label>
@@ -92,6 +60,38 @@
                                     <div ng-message="required">{{lang.field_required}}</div>
                                 </div>
                             </md-input-container>
+                        </div>
+                        <div layout="row" flex>
+                            <!-- Rank -->
+                            <md-input-container flex>
+                                <label for="selectedRank">{{lang.rank}}</label>
+                                <md-select id="selectedRank" name="selectedRank"
+                                           ng-model="ctrl.selectedRank">
+                                    <md-option ng-value="null">{{lang.none}}</md-option>
+                                    <md-option ng-if="rank.status" ng-value="rank.lookupKey"
+                                               ng-repeat="rank in ctrl.ranks track by $index">
+                                        {{rank.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                                <div ng-messages="broadcast_form.selectedRank.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                            <!-- Job Title -->
+                            <md-input-container flex>
+                                <label for="selectedJobTitle">{{lang.job_title}}</label>
+                                <md-select id="selectedJobTitle" name="selectedJobTitle"
+                                           ng-model="ctrl.selectedJobTitle">
+                                    <md-option ng-value="null">{{lang.none}}</md-option>
+                                    <md-option ng-if="jobTitle.status" ng-value="jobTitle.lookupKey"
+                                               ng-repeat="jobTitle in ctrl.jobTitles track by $index">
+                                        {{jobTitle.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                                <div ng-messages="broadcast_form.selectedJobTitle.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
                             <div>
                                 <div flex>
                                     <md-button class="md-raised"
@@ -112,7 +112,7 @@
                                 <thead md-head md-order="ctrl.grid.order"
                                        md-on-reorder="ctrl.getSortedData">
                                 <tr md-row>
-                                    <th colspan="5" class="table-selector-header"
+                                    <th colspan="6" class="table-selector-header"
                                         ng-if="ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedAddedOUAndWFGroupsToBroadcast.length}} {{lang.items_selected}} </span>
@@ -124,16 +124,20 @@
                                         </div>
                                     </th>
                                     <th ng-if="!ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column
-                                        md-order-by="arName">
-                                        {{lang.arabic_name}}
-                                    </th>
-                                    <th ng-if="!ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column
-                                        md-order-by="enName">
-                                        {{lang.english_name}}
+                                        md-order-by="{{lang.current === 'ar' ? 'arName' : 'enName'}}">
+                                        {{lang.name}}
                                     </th>
                                     <th ng-if="!ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column
                                         md-order-by="">
                                         {{lang.type}}
+                                    </th>
+                                    <th ng-if="!ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column
+                                        md-order-by="">
+                                        {{lang.rank}}
+                                    </th>
+                                    <th ng-if="!ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column
+                                        md-order-by="">
+                                        {{lang.job_title}}
                                     </th>
                                     <th ng-if="!ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column>
                                         <!--{{lang.with_sub}}-->
@@ -148,22 +152,49 @@
                                     ng-repeat="record in ctrl.addedOUAndWFGroupsToBroadcast | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index"
                                     md-select="record">
                                     <td md-cell>
-                                        {{record.getNameByLanguage('ar')}}
+                                        {{record.itemId.getTranslatedName()}}
                                     </td>
                                     <td md-cell>
-                                        {{record.getNameByLanguage('en')}}
-                                    </td>
-                                    <td md-cell>
-                                        <md-icon md-svg-icon="{{record.broadcastRecordType.icon}}"
-                                                 tooltip="{{lang[record.broadcastRecordType.text]}}">
+                                        <md-icon md-svg-icon="{{record.itemId.broadcastRecordType.icon}}"
+                                                 tooltip="{{lang[record.itemId.broadcastRecordType.text]}}">
                                         </md-icon>
+                                    </td>
+                                    <td md-cell>
+                                        <md-input-container flex>
+                                            <md-select id="recordRank" name="recordRank"
+                                                       ng-model="record.rank" aria-label="rank">
+                                                <md-option ng-value="null">{{lang.none}}</md-option>
+                                                <md-option ng-if="rank.status" ng-value="rank.lookupKey"
+                                                           ng-repeat="rank in ctrl.ranks track by $index">
+                                                    {{rank.getTranslatedName()}}
+                                                </md-option>
+                                            </md-select>
+                                            <div ng-messages="broadcast_form.recordRank.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+                                    </td>
+                                    <td md-cell>
+                                        <md-input-container flex>
+                                            <md-select id="recordJobTitle" name="recordJobTitle"
+                                                       ng-model="record.jobTitle" aria-label="jobTitle">
+                                                <md-option ng-value="null">{{lang.none}}</md-option>
+                                                <md-option ng-if="jobTitle.status" ng-value="jobTitle.lookupKey"
+                                                           ng-repeat="jobTitle in ctrl.jobTitles track by $index">
+                                                    {{jobTitle.getTranslatedName()}}
+                                                </md-option>
+                                            </md-select>
+                                            <div ng-messages="broadcast_form.recordJobTitle.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
                                     </td>
                                     <td md-cell>
                                         <md-checkbox
                                                 ng-if="ctrl.checkBroadcastRecordType(record, ctrl.broadcastRecordType.organization)"
                                                 aria-label="{{lang.with_sub}}"
                                                 tooltip="{{lang.with_sub}}"
-                                                ng-model="record.withSub"></md-checkbox>
+                                                ng-model="record.includeOuList"></md-checkbox>
                                     </td>
                                     <td md-cell>
                                         <div flex layout="row" layout-align="start center">

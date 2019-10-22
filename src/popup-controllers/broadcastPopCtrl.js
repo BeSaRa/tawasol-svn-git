@@ -64,7 +64,6 @@ module.exports = function (app) {
             self.grid = {
                 limit: 5, // default limit
                 page: 1, // first page
-                //order: 'arName', // default sorting order
                 order: '', // default sorting order
                 limitOptions: [5, 10, 20, // limit options
                     {
@@ -87,6 +86,7 @@ module.exports = function (app) {
              */
             self.organizationNotExists = function (organization) {
                 return !_.find(self.addedOUAndWFGroupsToBroadcast, function (item) {
+                    item = item.hasOwnProperty('itemId') ? item.itemId : item;
                     return item.id === organization.id && self.checkBroadcastRecordType(organization, self.broadcastRecordType.organization);
                 });
             };
@@ -98,11 +98,13 @@ module.exports = function (app) {
              */
             self.workflowGroupNotExists = function (workflowGroup) {
                 return !_.find(self.addedOUAndWFGroupsToBroadcast, function (item) {
+                    item = item.hasOwnProperty('itemId') ? item.itemId : item;
                     return item.id === workflowGroup.id && self.checkBroadcastRecordType(item, self.broadcastRecordType.workflowGroup);
                 });
             };
 
             self.checkBroadcastRecordType = function (record, typeToCompare) {
+                record = record.hasOwnProperty('itemId') ? record.itemId : record;
                 if (typeToCompare && typeof typeToCompare === 'object' && typeToCompare.hasOwnProperty('name'))
                     return record.broadcastRecordType.name === typeToCompare.name;
                 return record.broadcastRecordType.name === typeToCompare;
@@ -114,6 +116,8 @@ module.exports = function (app) {
             self.addToBroadcast = function (broadcastForm) {
                 self.addOrganizationToBroadcast();
                 self.addWorkflowGroupToBroadcast();
+                self.selectedRank = null;
+                self.selectedJobTitle = null;
                 broadcastForm.$setUntouched();
             };
 
@@ -122,7 +126,13 @@ module.exports = function (app) {
              */
             self.addOrganizationToBroadcast = function () {
                 if (self.ouBroadcast && self.ouBroadcast.length) {
-                    self.addedOUAndWFGroupsToBroadcast = self.addedOUAndWFGroupsToBroadcast.concat(self.ouBroadcast);
+                    for (var i = 0; i < self.ouBroadcast.length; i++) {
+                        self.addedOUAndWFGroupsToBroadcast.push({
+                            itemId: self.ouBroadcast[i],
+                            jobTitle: self.selectedJobTitle,
+                            rank: self.selectedRank
+                        });
+                    }
                 }
                 self.ouBroadcast = null;
             };
@@ -132,45 +142,19 @@ module.exports = function (app) {
              * @param recordToDelete
              */
             self.removeRecordFromBroadcastGrid = function (recordToDelete) {
+                recordToDelete = recordToDelete.hasOwnProperty('itemId') ? recordToDelete.itemId : recordToDelete;
                 dialog.confirmMessage(langService.get('confirm_delete_msg'))
                     .then(function () {
                         var indexToDelete = _.findIndex(self.addedOUAndWFGroupsToBroadcast, function (addedRecord) {
+                            addedRecord = addedRecord.hasOwnProperty('itemId') ? addedRecord.itemId : addedRecord;
                             return recordToDelete.id === addedRecord.id && self.checkBroadcastRecordType(addedRecord, recordToDelete.broadcastRecordType);
                         });
                         if (indexToDelete > -1) {
                             self.addedOUAndWFGroupsToBroadcast.splice(indexToDelete, 1);
                         }
-                        /*self.removeOrganizationBroadcast(record);
-                        self.removeWorkflowGroupBroadcast(record);*/
                         self.selectedAddedOUAndWFGroupsToBroadcast = [];
                     })
             };
-
-            /* /!**
-              * @description remove single organization from list
-              * @param recordToDelete
-              *!/
-             self.removeOrganizationBroadcast = function (recordToDelete) {
-                 var organizationIndexToDelete = _.findIndex(self.addedOUAndWFGroupsToBroadcast, function (addedRecord) {
-                     return addedRecord.id === recordToDelete.id && self.checkBroadcastRecordType(addedRecord, recordToDelete.broadcastRecordType);
-                 });
-                 if (organizationIndexToDelete > -1) {
-                     self.addedOUAndWFGroupsToBroadcast.splice(organizationIndexToDelete, 1);
-                 }
-             };
-
-             /!**
-              * @description remove single workflow group from list
-              * @param recordToDelete
-              *!/
-             self.removeWorkflowGroupBroadcast = function (recordToDelete) {
-                 var workflowGroupIndexToDelete = _.findIndex(self.addedOUAndWFGroupsToBroadcast, function (addedRecord) {
-                     return addedRecord.id === recordToDelete.id && self.checkBroadcastRecordType(addedRecord, self.broadcastRecordType.workflowGroup);
-                 });
-                 if (workflowGroupIndexToDelete > -1) {
-                     self.addedOUAndWFGroupsToBroadcast.splice(workflowGroupIndexToDelete, 1);
-                 }
-             };*/
 
             /**
              * @description Removes the selected records(OUs/WfGroups) from list of added records
@@ -179,48 +163,29 @@ module.exports = function (app) {
                 dialog.confirmMessage(langService.get('confirm_delete_selected_multiple'))
                     .then(function () {
                         _.map(self.selectedAddedOUAndWFGroupsToBroadcast, function (recordToDelete) {
+                            recordToDelete = recordToDelete.hasOwnProperty('itemId') ? recordToDelete.itemId : recordToDelete;
                             return _.remove(self.addedOUAndWFGroupsToBroadcast, function (addedRecord) {
+                                addedRecord = addedRecord.hasOwnProperty('itemId') ? addedRecord.itemId : addedRecord;
                                 if (addedRecord.id === recordToDelete.id && self.checkBroadcastRecordType(addedRecord, recordToDelete.broadcastRecordType))
                                     return addedRecord;
                             });
                         });
-                        /*self.removeBulkOrganizationBroadcast();
-                        self.removeBulkWorkflowGroupBroadcast();*/
                         self.selectedAddedOUAndWFGroupsToBroadcast = [];
                     });
             };
-/*
-            /!**
-             * @description remove bulk organization from list
-             *!/
-            self.removeBulkOrganizationBroadcast = function () {
-                _.map(self.selectedAddedOUAndWFGroupsToBroadcast, function (selectedOu) {
-                    return _.remove(self.addedOUAndWFGroupsToBroadcast, function (Ou) {
-                        if (Ou.id === selectedOu.id && self.checkBroadcastRecordType(Ou, self.broadcastRecordType.organization))
-                            return Ou;
-                    });
-                });
-
-            };
-
-            /!**
-             * @description remove bulk workflow group from list
-             *!/
-            self.removeBulkWorkflowGroupBroadcast = function () {
-                _.map(self.selectedAddedOUAndWFGroupsToBroadcast, function (selectedWf) {
-                    return _.remove(self.addedOUAndWFGroupsToBroadcast, function (wfGroup) {
-                        if (wfGroup.id === selectedWf.id && self.checkBroadcastRecordType(wfGroup, self.broadcastRecordType.workflowGroup))
-                            return wfGroup;
-                    });
-                });
-            };*/
 
             /**
              * @description add selected workflow group to grid
              */
             self.addWorkflowGroupToBroadcast = function () {
                 if (self.wfGroupBroadcast) {
-                    self.addedOUAndWFGroupsToBroadcast = self.addedOUAndWFGroupsToBroadcast.concat(self.wfGroupBroadcast);
+                    for (var i = 0; i < self.wfGroupBroadcast.length; i++) {
+                        self.addedOUAndWFGroupsToBroadcast.push({
+                            itemId: self.wfGroupBroadcast[i],
+                            jobTitle: self.selectedJobTitle,
+                            rank: self.selectedRank
+                        });
+                    }
                 }
                 self.wfGroupBroadcast = null;
             };
@@ -234,14 +199,14 @@ module.exports = function (app) {
             self.startBroadcast = function () {
                 var broadcast = new Broadcast({
                     wfGroups: _.filter(self.addedOUAndWFGroupsToBroadcast, function (record) {
+                        record = record.hasOwnProperty('itemId') ? record.itemId : record;
                         return self.checkBroadcastRecordType(record, self.broadcastRecordType.workflowGroup);
                     }),
                     ouList: _.filter(self.addedOUAndWFGroupsToBroadcast, function (record) {
+                        record = record.hasOwnProperty('itemId') ? record.itemId : record;
                         return self.checkBroadcastRecordType(record, self.broadcastRecordType.organization);
                     }),
-                    action: self.selectedAction,
-                    rank: self.selectedRank,
-                    jobTitle: self.selectedJobTitle
+                    action: self.selectedAction
                 });
 
                 return correspondenceService
