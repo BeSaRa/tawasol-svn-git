@@ -798,7 +798,7 @@ module.exports = function (app) {
                 text: 'grid_action_edit_properties',
                 shortcut: true,
                 showInView: false,
-                //permissionKey: "EDIT_OUTGOING_PROPERTIES",
+                permissionKey: "EDIT_OUTGOING_PROPERTIES",
                 callback: self.editProperties,
                 class: "action-green",
                 checkShow: function (action, model) {
