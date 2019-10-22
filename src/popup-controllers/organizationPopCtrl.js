@@ -1743,7 +1743,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.privateRegOUGrid.progress = defer.promise;
             return organizationService
-                .loadOUPrivateRegOUsMapping(organization)
+                .loadPrivateRegOUsMapping(organization)
                 .then(function (result) {
                     self.privateRegOUs = result;
                     self.privateRegOUsCopy = angular.copy(self.privateRegOUs);

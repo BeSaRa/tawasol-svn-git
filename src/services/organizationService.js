@@ -663,14 +663,14 @@ module.exports = function (app) {
          * @description load Ou Private registry Ous Mapping
          * @param organization
          */
-        self.loadOUPrivateRegOUsMapping = function (organization) {
+        self.loadPrivateRegOUsMapping = function (organization) {
             var ouId = organization.hasOwnProperty('id') ? organization.id : organization;
 
             return $http
                 .get(urlService.privateRegistryOU + "/to-regou-id/" + ouId)
                 .then(function (result) {
                     return _.map(result.data.rs, function (ou) {
-                        return new Information(ou.regOu);
+                        return new Information(ou.ouInfo);
                     });
                 });
         };
