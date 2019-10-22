@@ -1,0 +1,25 @@
+// Dropdown and menu scroll(similar to perfect scrollbar)
+md-select-menu, .md-open-menu-container {
+  /* width */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    border-radius: 11px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #aaa;
+    border-radius: 6px;
+    width: 6px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    width: 11px;
+    background: #999;
+  }
+}
