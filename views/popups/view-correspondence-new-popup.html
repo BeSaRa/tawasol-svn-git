@@ -214,7 +214,13 @@
                                 <li ng-class="{'selected':ctrl.checkSelected($index , 'attachments')}"
                                     layout-align="start center" layout="row"
                                     ng-repeat="attachment in ctrl.correspondence.attachments track by $index">
-                                    <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">{{attachment.getTranslatedName()}}</a>
+                                    <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">
+                                        {{attachment.getTranslatedName()}}
+                                    </a>
+
+                                    <grid-indicator-directive record="attachment"
+                                                              indicator-type="isLinkedExportedDoc"
+                                                              record-type="Attachment"></grid-indicator-directive>
                                 </li>
                             </ul>
                         </li>
