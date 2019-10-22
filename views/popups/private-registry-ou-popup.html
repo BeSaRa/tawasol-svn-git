@@ -1,0 +1,95 @@
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.select_organization}}">
+    <popup-toolbar-directive
+            header-text="{{lang.select_organization}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="ouPrivateRegistryForm" novalidate enter-submit-directive="btn-view-doc">
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="organizations">{{lang.select_organization}}</label>
+                        <md-select id="organizations" aria-label="{{lang.select_organization}}"
+                                   ng-model="ctrl.selectedPrivateRegOus"
+                                   multiple
+                                   ng-model-options="{trackBy: '$value.id'}">
+                            <md-option ng-if="ctrl.excludeOrganizationIfExists(organization)"
+                                       ng-value="organization"
+                                       ng-repeat="organization in ctrl.allRegOus track by $index">
+                                {{organization.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <div>
+                        <md-button class="md-raised" ng-disabled="!ctrl.selectedPrivateRegOus.length"
+                                   ng-click="ctrl.addPrivateRegistryOUs($event)">{{lang.add}}
+                        </md-button>
+                    </div>
+                </div>
+                <md-card ng-if="ctrl.privateRegOusGrid.length" class="card-overlay">
+                    <md-table-container>
+                        <table md-table
+                               md-row-select multiple ng-model="ctrl.selectedPrivateRegOusGrid">
+                            <thead md-head>
+                            <tr md-row>
+                                <th ng-if="ctrl.selectedPrivateRegOusGrid.length" colspan="3"
+                                    md-column>
+                                    <div layout="row" layout-align="start center">
+                                        <span>{{ctrl.selectedPrivateRegOusGrid.length}} {{lang.items_selected}} </span>
+                                        <span flex></span>
+                                        <div>
+                                            <md-button class="md-icon-button"
+                                                       ng-click="ctrl.removeBulkPrivateRegistryOu()">
+                                                <md-icon md-svg-icon="delete"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th ng-if="!ctrl.selectedPrivateRegOusGrid.length" md-column>
+                                    <span>{{lang.arabic_name}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedPrivateRegOusGrid.length" md-column>
+                                    <span>{{lang.english_name}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedPrivateRegOusGrid.length" md-column>
+                                    <span>{{lang.actions}}</span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row md-select="organization"
+                                ng-repeat="organization in ctrl.privateRegOusGrid track by $index">
+                                <td md-cell>{{organization.arName}}</td>
+                                <td md-cell>{{organization.enName}}</td>
+                                <td md-cell>
+                                    <div layout="row">
+                                        <md-button class="md-icon-button"
+                                                   ng-click="ctrl.removePrivateRegistryOu(organization)">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit"
+                                md-page="ctrl.grid.page"
+                                md-total="{{ctrl.privateRegOusGrid.length}}" md-page-select>
+                        </md-table-pagination>
+                    </md-table-container>
+                </md-card>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <span flex></span>
+        <md-button class="md-raised" ng-if="ctrl.privateRegOusGrid.length"
+                   ng-click="ctrl.savePrivateRegistryOUs($event)">
+            {{lang.save}}
+        </md-button>
+        <span flex></span>
+    </md-dialog-actions>
+</md-dialog>

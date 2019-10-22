@@ -132,6 +132,11 @@ module.exports = function (app) {
         self.documentTemplates = documentTemplates;
         self.documentTemplatesCopy = angular.copy(self.documentTemplates);
 
+        self.privateRegOUs = [];
+        self.privateRegOUsCopy = angular.copy(self.privateRegOUs);
+        self.selectedPrivateRegOUs = [];
+
+
         self.listParentsHasCentralArchive.push(new Organization({
             id: null,
             arName: langService.getKey('not_found', 'ar'),
@@ -198,10 +203,11 @@ module.exports = function (app) {
             'basic',
             'security_settings',
             'workflow_settings',
+            'document_templates',
             'children',
             'classifications',
             'correspondence_sites',
-            'document_templates',
+            'private_registry_ou',
             'property_config',
             'users',
             'departmentUsers'
@@ -312,7 +318,20 @@ module.exports = function (app) {
         self.userAdded = false;
 
         self.setCurrentTab = function (tabName) {
-            self.selectedTab = tabName;
+            var defer = $q.defer();
+            if (tabName === 'private_registry_ou') {
+                self.reloadPrivateRegOU(self.privateRegOUGrid.page)
+                    .then(function () {
+                        defer.resolve(tabName);
+                    });
+            } else {
+                defer.resolve(tabName);
+            }
+            return defer.promise.then(function (tab) {
+                self.selectedTab = tab;
+            });
+
+            // self.selectedTab = tabName;
         };
 
         self.showTab = function (tabName) {
@@ -1669,6 +1688,82 @@ module.exports = function (app) {
                 !formField.$invalid || (formField.$invalid && formField.$untouched) && !self.editMode
             );
         };
+
+
+        /**
+         * @description open add private registry Ou Dialog
+         * @param $event
+         */
+        self.openAddPrivateRegistryOUDialog = function ($event) {
+            organizationService
+                .openPrivateRegistryOUDialog(self.organization, self.privateRegOUs, $event)
+                .then(function () {
+                    self.reloadPrivateRegOU(self.privateRegOUGrid.page).then(function () {
+                        toast.success(langService.get('save_success'));
+                    });
+                }).catch(function () {
+
+            });
+        };
+
+
+        /**
+         * @description Contains options for grid configuration
+         * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
+         */
+        self.privateRegOUGrid = {
+            name: 'privateRegOUGrid',
+            progress: null,
+            limit: 5, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.privateRegOUs.length + 21)
+                    }
+                }
+            ],
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName',
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.privateRegOUs = gridService.searchGridData(self.privateRegOUGrid, self.privateRegOUsCopy);
+            }
+        };
+
+        /**
+         * @description reload private registry Ou
+         * @param pageNumber
+         */
+        self.reloadPrivateRegOU = function (pageNumber) {
+            var defer = $q.defer();
+            self.privateRegOUGrid.progress = defer.promise;
+            return organizationService
+                .loadOUPrivateRegOUsMapping(organization)
+                .then(function (result) {
+                    self.privateRegOUs = result;
+                    self.privateRegOUsCopy = angular.copy(self.privateRegOUs);
+                    self.selectedPrivateRegOUs = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.privateRegOUGrid.page = pageNumber;
+                    self.getSortedDataPrivateRegOUs();
+                    self.privateRegOUGrid.searchCallback();
+                    return result;
+                });
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataPrivateRegOUs = function () {
+            self.privateRegOUs = $filter('orderBy')(self.privateRegOUs, self.privateRegOUGrid.order);
+        };
+
 
         self.referencePlanChanged(true);
     });

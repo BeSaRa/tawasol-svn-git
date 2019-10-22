@@ -242,24 +242,12 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                    <!-- LDAP Code -->
-                                    <md-input-container class="input-container-no-top-margin"
-                                                        ng-if="ctrl.organization.hasRegistry"
-                                                        flex>
-                                        <label for="ldapCode">{{lang.ldap_code}}</label>
-                                        <md-select name="ldapCode" id="ldapCode" required
-                                                   ng-model="ctrl.organization.ldapCode"
-                                                   ng-disabled="ctrl.editMode"
-                                                   ng-readonly="ctrl.editMode">
-                                            <md-option ng-value="ldapProvider.ldapCode"
-                                                       ng-repeat="ldapProvider in ctrl.entityLDAPProviders track by $index">
-                                                {{ldapProvider.getNames()}}
-                                            </md-option>
-                                        </md-select>
-                                        <div ng-messages="org_form.registryParentId.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                        </div>
-                                    </md-input-container>
+
+                                    <md-switch ng-model="ctrl.organization.isPrivateRegistry"
+                                               ng-if="ctrl.organization.hasRegistry">
+                                        <span>{{lang.private_registry}} : {{ ctrl.organization.getIsPrivateRegistryTranslate() }}</span>
+                                    </md-switch>
+
                                 </div>
                                 <div layout="row" layout-align="start center">
                                     <md-switch ng-change="ctrl.centralArchiveChange(ctrl.organization.centralArchive)"
@@ -405,11 +393,25 @@
                                         </div>
                                     </md-input-container>
                                 </div>
-                                <div layout="row" ng-if="ctrl.organization.hasRegistry">
-                                    <md-switch ng-model="ctrl.organization.isPrivateRegistry"
-                                               ng-if="ctrl.organization.hasRegistry">
-                                        <span>{{lang.private_registry}}</span>
-                                    </md-switch>
+                                <div layout="row">
+                                    <!-- LDAP Code -->
+                                    <md-input-container class="input-container-no-top-margin"
+                                                        ng-if="ctrl.organization.hasRegistry"
+                                                        flex>
+                                        <label for="ldapCode">{{lang.ldap_code}}</label>
+                                        <md-select name="ldapCode" id="ldapCode" required
+                                                   ng-model="ctrl.organization.ldapCode"
+                                                   ng-disabled="ctrl.editMode"
+                                                   ng-readonly="ctrl.editMode">
+                                            <md-option ng-value="ldapProvider.ldapCode"
+                                                       ng-repeat="ldapProvider in ctrl.entityLDAPProviders track by $index">
+                                                {{ldapProvider.getNames()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="org_form.registryParentId.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
                                     <span flex></span>
                                 </div>
                             </div><!-- column container -->
@@ -535,6 +537,105 @@
                                             </md-input-container>
                                         </div>
                                     </fieldset>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <!-- Document Templates -->
+                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('document_templates')"
+                            label="{{lang.document_templates}}" ng-click="ctrl.setCurrentTab('document_templates')">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div layout="row" class="p20-0">
+                                    <md-button ng-click="ctrl.openAddDocumentTemplateDialog($event)"
+                                               class="md-icon-button"
+                                               tooltip="{{lang.add}}">
+                                        <md-icon md-svg-icon="plus"></md-icon>
+                                    </md-button>
+                                    <md-button ng-click="ctrl.reloadDocumentTemplates()" class="md-icon-button"
+                                               tooltip="{{lang.reload}}">
+                                        <md-icon md-svg-icon="refresh"></md-icon>
+                                    </md-button>
+                                    <span flex></span>
+                                    <grid-search-directive grid="ctrl.documentTemplateGrid"></grid-search-directive>
+                                </div>
+                                <div layout="column" ng-if="ctrl.documentTemplates.length">
+                                    <div scroll-directive>
+                                        <md-card md-whiteframe="3" class="card-overlay">
+                                            <md-table-container>
+                                                <div scroll-directive>
+                                                    <table md-table md-row-select="true"
+                                                           multiple="true"
+                                                           ng-model="ctrl.selectedDocumentTemplates"
+                                                           md-progress="ctrl.documentTemplateGrid.progress">
+                                                        <thead md-head md-order="ctrl.documentTemplateGrid.order"
+                                                               md-on-reorder="ctrl.getSortedDataTemplate">
+                                                        <tr md-row>
+                                                            <th colspan="5" class="table-selector-header"
+                                                                ng-if="ctrl.selectedDocumentTemplates.length"
+                                                                md-column>
+                                                                <div layout="row" layout-align="start center">
+                                                                    <span>{{ctrl.selectedDocumentTemplates.length}} {{lang.items_selected}} </span>
+                                                                    <span flex></span>
+                                                                </div>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDocumentTemplates.length"
+                                                                md-column
+                                                                md-order-by="docSubject">
+                                                                <span>{{lang.document_subject}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDocumentTemplates.length"
+                                                                md-column
+                                                                md-order-by="documentTitle">
+                                                                <span>{{lang.document_title}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDocumentTemplates.length"
+                                                                md-column
+                                                                md-order-by="{{ctrl.getSortingKey('docTypeInfo', 'Information')}}">
+                                                                <span>{{lang.label_document_type}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDocumentTemplates.length"
+                                                                md-column>
+                                                                <span>{{lang.actions}}</span>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody md-body>
+                                                        <tr md-row md-select="documentTemplate"
+                                                            ng-repeat="documentTemplate in ctrl.documentTemplates | limitTo: ctrl.documentTemplateGrid.limit: ((ctrl.documentTemplateGrid.page - 1) * ctrl.documentTemplateGrid.limit) track by $index">
+                                                            <td md-cell>{{documentTemplate.docSubject}}</td>
+                                                            <td md-cell>{{documentTemplate.documentTitle}}</td>
+                                                            <td md-cell>
+                                                                {{documentTemplate.docTypeInfo.getTranslatedName()}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                <div flex layout="row" layout-align="start center">
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.delete}}"
+                                                                               ng-click="ctrl.removeDocumentTemplate(documentTemplate, $event)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.edit}}"
+                                                                               ng-click="ctrl.openEditDocumentTemplateDialog(documentTemplate, $event)">
+                                                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <md-table-pagination
+                                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                        md-limit-options="ctrl.documentTemplateGrid.limitOptions"
+                                                        md-limit="ctrl.documentTemplateGrid.limit"
+                                                        md-page="ctrl.documentTemplateGrid.page"
+                                                        md-total="{{ctrl.documentTemplates.length}}" md-page-select>
+                                                </md-table-pagination>
+                                            </md-table-container>
+                                        </md-card>
+                                    </div>
                                 </div>
                             </div>
                         </md-content>
@@ -1024,97 +1125,85 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <!-- Document Templates -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('document_templates')"
-                            label="{{lang.document_templates}}" ng-click="ctrl.setCurrentTab('document_templates')">
+                    <!-- OU Private Registry List -->
+                    <md-tab ng-if="ctrl.editMode && ctrl.model.isPrivateRegistry"
+                            label="{{lang.ou_private_list_mapping}}"
+                            ng-click="ctrl.setCurrentTab('private_registry_ou')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row" class="p20-0">
-                                    <md-button ng-click="ctrl.openAddDocumentTemplateDialog($event)"
+                                    <md-button ng-click="ctrl.openAddPrivateRegistryOUDialog($event)"
                                                class="md-icon-button"
                                                tooltip="{{lang.add}}">
                                         <md-icon md-svg-icon="plus"></md-icon>
                                     </md-button>
-                                    <md-button ng-click="ctrl.reloadDocumentTemplates()" class="md-icon-button"
+                                    <md-button ng-click="ctrl.reloadPrivateRegOU()" class="md-icon-button"
                                                tooltip="{{lang.reload}}">
                                         <md-icon md-svg-icon="refresh"></md-icon>
                                     </md-button>
                                     <span flex></span>
-                                    <grid-search-directive grid="ctrl.documentTemplateGrid"></grid-search-directive>
+                                    <grid-search-directive grid="ctrl.privateRegOUGrid"></grid-search-directive>
                                 </div>
-                                <div layout="column" ng-if="ctrl.documentTemplates.length">
+                                <div layout="column" ng-if="ctrl.privateRegOUs.length">
                                     <div scroll-directive>
                                         <md-card md-whiteframe="3" class="card-overlay">
                                             <md-table-container>
                                                 <div scroll-directive>
-                                                    <table md-table md-row-select="true"
-                                                           multiple="true"
-                                                           ng-model="ctrl.selectedDocumentTemplates"
-                                                           md-progress="ctrl.documentTemplateGrid.progress">
-                                                        <thead md-head md-order="ctrl.documentTemplateGrid.order"
-                                                               md-on-reorder="ctrl.getSortedDataTemplate">
+                                                    <table md-table
+                                                           ng-model="ctrl.selectedPrivateRegOUs"
+                                                           md-progress="ctrl.privateRegOUGrid.progress">
+                                                        <thead md-head md-order="ctrl.privateRegOUGrid.order"
+                                                               md-on-reorder="ctrl.getSortedDataPrivateRegOUs">
                                                         <tr md-row>
-                                                            <th colspan="5" class="table-selector-header"
-                                                                ng-if="ctrl.selectedDocumentTemplates.length"
-                                                                md-column>
-                                                                <div layout="row" layout-align="start center">
-                                                                    <span>{{ctrl.selectedDocumentTemplates.length}} {{lang.items_selected}} </span>
-                                                                    <span flex></span>
-                                                                </div>
+                                                            <!--  <th ng-if="ctrl.selectedPrivateRegOUs.length" colspan="3"
+                                                                  md-column>
+                                                                  <div layout="row" layout-align="start center">
+                                                                      <span>{{ctrl.selectedPrivateRegOUs.length}} {{lang.items_selected}} </span>
+                                                                      <span flex></span>
+                                                                      <div>
+                                                                          <md-button class="md-icon-button"
+                                                                                     ng-click="ctrl.removeBulkPrivateRegistryOu()">
+                                                                              <md-icon md-svg-icon="delete"></md-icon>
+                                                                          </md-button>
+                                                                      </div>
+                                                                  </div>
+                                                              </th>-->
+                                                            <th ng-if="!ctrl.selectedPrivateRegOUs.length"
+                                                                md-order-by="arName" md-column>
+                                                                <span>{{lang.arabic_name}}</span>
                                                             </th>
-                                                            <th ng-if="!ctrl.selectedDocumentTemplates.length"
-                                                                md-column
-                                                                md-order-by="docSubject">
-                                                                <span>{{lang.document_subject}}</span>
+                                                            <th ng-if="!ctrl.selectedPrivateRegOUs.length"
+                                                                md-order-by="enName" md-column>
+                                                                <span>{{lang.english_name}}</span>
                                                             </th>
-                                                            <th ng-if="!ctrl.selectedDocumentTemplates.length"
-                                                                md-column
-                                                                md-order-by="documentTitle">
-                                                                <span>{{lang.document_title}}</span>
-                                                            </th>
-                                                            <th ng-if="!ctrl.selectedDocumentTemplates.length"
-                                                                md-column
-                                                                md-order-by="{{ctrl.getSortingKey('docTypeInfo', 'Information')}}">
-                                                                <span>{{lang.label_document_type}}</span>
-                                                            </th>
-                                                            <th ng-if="!ctrl.selectedDocumentTemplates.length"
-                                                                md-column>
-                                                                <span>{{lang.actions}}</span>
-                                                            </th>
+                                                            <!-- <th ng-if="!ctrl.selectedPrivateRegOUs.length" md-column>
+                                                                 <span>{{lang.actions}}</span>
+                                                             </th>-->
                                                         </tr>
                                                         </thead>
                                                         <tbody md-body>
-                                                        <tr md-row md-select="documentTemplate"
-                                                            ng-repeat="documentTemplate in ctrl.documentTemplates | limitTo: ctrl.documentTemplateGrid.limit: ((ctrl.documentTemplateGrid.page - 1) * ctrl.documentTemplateGrid.limit) track by $index">
-                                                            <td md-cell>{{documentTemplate.docSubject}}</td>
-                                                            <td md-cell>{{documentTemplate.documentTitle}}</td>
-                                                            <td md-cell>
-                                                                {{documentTemplate.docTypeInfo.getTranslatedName()}}
-                                                            </td>
-                                                            <td md-cell>
-                                                                <div flex layout="row" layout-align="start center">
-                                                                    <md-button class="md-icon-button"
-                                                                               title="{{lang.delete}}"
-                                                                               ng-click="ctrl.removeDocumentTemplate(documentTemplate, $event)">
-                                                                        <md-icon md-svg-icon="delete"></md-icon>
-                                                                    </md-button>
-                                                                    <md-button class="md-icon-button"
-                                                                               title="{{lang.edit}}"
-                                                                               ng-click="ctrl.openEditDocumentTemplateDialog(documentTemplate, $event)">
-                                                                        <md-icon md-svg-icon="pencil"></md-icon>
-                                                                    </md-button>
-                                                                </div>
-                                                            </td>
+                                                        <tr md-row md-select="privateRegOU"
+                                                            ng-repeat="privateRegOU in ctrl.privateRegOUs track by $index">
+                                                            <td md-cell>{{privateRegOU.arName}}</td>
+                                                            <td md-cell>{{privateRegOU.enName}}</td>
+                                                            <!-- <td md-cell>
+                                                                 <div layout="row">
+                                                                     <md-button class="md-icon-button"
+                                                                                ng-click="ctrl.removePrivateRegistryOu(privateRegOU)">
+                                                                         <md-icon md-svg-icon="delete"></md-icon>
+                                                                     </md-button>
+                                                                 </div>
+                                                             </td>-->
                                                         </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                                 <md-table-pagination
                                                         md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                        md-limit-options="ctrl.documentTemplateGrid.limitOptions"
-                                                        md-limit="ctrl.documentTemplateGrid.limit"
-                                                        md-page="ctrl.documentTemplateGrid.page"
-                                                        md-total="{{ctrl.documentTemplates.length}}" md-page-select>
+                                                        md-limit-options="ctrl.privateRegOUGrid.limitOptions"
+                                                        md-limit="ctrl.privateRegOUGrid.limit"
+                                                        md-page="ctrl.privateRegOUGrid.page"
+                                                        md-total="{{ctrl.privateRegOUs.length}}" md-page-select>
                                                 </md-table-pagination>
                                             </md-table-container>
                                         </md-card>

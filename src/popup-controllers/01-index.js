@@ -133,5 +133,6 @@ module.exports = function (app) {
     require('./ldapProviderPopCtrl')(app);
     require('./userCommentPopCtrl')(app);
     require('./g2gPendingFilterPopCtrl')(app);
+    require('./privateRegistryOUPopCtrl')(app);
     require('./ouApplicationUserPopCtrl')(app);
 };

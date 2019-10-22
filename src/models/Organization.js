@@ -139,6 +139,10 @@ module.exports = function (app) {
                 return this.centralArchive ? langService.get('yes') : langService.get('no');
             };
 
+            Organization.prototype.getIsPrivateRegistryTranslate = function () {
+                return this.isPrivateRegistry ? langService.get('yes') : langService.get('no');
+            };
+
             Organization.prototype.getTranslatedName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };

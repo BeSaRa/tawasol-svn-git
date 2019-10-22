@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                  generator,
                                                  lookupService,
                                                  PropertyConfiguration,
+                                                 Information,
                                                  employeeService) {
         'ngInject';
         var self = this;
@@ -656,6 +657,71 @@ module.exports = function (app) {
                         locals: {}
                     });
             }
+        };
+
+        /**
+         * @description load Ou Private registry Ous Mapping
+         * @param organization
+         */
+        self.loadOUPrivateRegOUsMapping = function (organization) {
+            var ouId = organization.hasOwnProperty('id') ? organization.id : organization;
+
+            return $http
+                .get(urlService.privateRegistryOU + "/to-regou-id/" + ouId)
+                .then(function (result) {
+                    return _.map(result.data.rs, function (ou) {
+                        return new Information(ou.regOu);
+                    });
+                });
+        };
+
+
+        /**
+         * @description
+         * @param organization
+         * @param excludedPrivateRegOU
+         * @param $event
+         * @returns {promise}
+         */
+        self.openPrivateRegistryOUDialog = function (organization, excludedPrivateRegOU, $event) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    templateUrl: cmsTemplate.getPopup('private-registry-ou'),
+                    controller: 'privateRegistryOUPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    locals: {
+                        organization: organization,
+                        excludedPrivateRegOU: excludedPrivateRegOU
+                    },
+                    resolve: {
+                        registryOrganizations: function () {
+                            'ngInject';
+                            return self.getAllOrganizationsStructure()
+                                .then(function (organizations) {
+                                    return _.filter(organizations, function (organization) {
+                                        return organization.hasRegistry;
+                                    });
+                                });
+                        }
+                    }
+                });
+        };
+
+        /**
+         * @description add Private Registry Ous
+         */
+        self.addPrivateRegistryOUs = function (organization, privateOus) {
+            organization = organization.hasOwnProperty('id') ? organization.id : organization;
+            privateOus = _.map(privateOus, 'id');
+            return $http.post(urlService.privateRegistryOU + '/from-regou-id/bulk',
+                {
+                    first: organization,
+                    second: privateOus
+                }).then(function (result) {
+                return result.data.rs;
+            })
         };
 
         self.exportOrganizations = function () {

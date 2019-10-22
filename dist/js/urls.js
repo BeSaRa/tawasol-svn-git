@@ -278,7 +278,7 @@
                 // user sent items
                 .addToAllWithBase('userInboxSentItems', 'cms-entity/user/inbox/user-sent-items')
                 //
-                .addToAllWithBase('departmentSentItems','cms-entity/user/ou-inbox/dept-sent-items')
+                .addToAllWithBase('departmentSentItems', 'cms-entity/user/ou-inbox/dept-sent-items')
                 // broadcast
                 .addToAllWithBase('broadcast', 'cms-entity/correspondence/wf/outgoing/vsid/{{VSID}}/broadcast')
                 // correspondence workFlow
@@ -371,6 +371,8 @@
                 .addToAllWithBase('messagingHistory', 'cms-entity/user/messaging-history')
                 // get correspondnce by g2gActionID
                 .addToAllWithBase('g2gTerminateByActionID', 'g2g/terminate/g2gActionID/{g2gActionID}')
+                // ou private registry
+                .addToAllWithBase('privateRegistryOU', 'cms-entity/admin/ou-private-registry')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();
