@@ -808,6 +808,69 @@ module.exports = function (app) {
         };
 
         /**
+         * @description load OU Distribution Lists
+         * @param organization
+         */
+        self.loadOUDistributionList = function (organization) {
+            organization = organization.hasOwnProperty('id') ? organization.id : organization;
+            return $http.get(urlService.distributionLists + '/regou-id/' + organization)
+                .then(function (result) {
+                    return _.map(result.data.rs, function (dl) {
+                        return new Information(dl);
+                    })
+                });
+        };
+
+        self.addOUDistributionList = function (regOu, distributionList) {
+            regOu = regOu.hasOwnProperty('id') ? regOu.id : regOu;
+            distributionList = distributionList.hasOwnProperty('id') ? distributionList.id : distributionList;
+
+            return $http.put(urlService.distributionLists + '/regou-id/' + regOu + '/dist-id/' + distributionList)
+                .then(function (result) {
+                    return result.data.rs;
+                })
+        };
+
+        self.openOUDistributionListsDialog = function (regOu, excludedDL, $event) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    templateUrl: cmsTemplate.getPopup('ou-distribution-lists'),
+                    controller: 'ouDistributionListsPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    locals: {
+                        regOu: regOu,
+                        excludedDL: excludedDL
+                    },
+                    resolve: {
+                        distributionLists: function (distributionListService) {
+                            'ngInject';
+                            return distributionListService.getDistributionLists()
+                                .then(function (dl) {
+                                    return dl;
+                                });
+                        }
+                    }
+                });
+        };
+
+
+        /**
+         * @description delete OU distribution list
+         * @param regOu
+         * @param distributionList
+         * @returns {HttpPromise}
+         */
+        self.deleteOUDistributionList = function (regOu, distributionList) {
+            regOu = regOu.hasOwnProperty('id') ? regOu.id : regOu;
+            distributionList = distributionList.hasOwnProperty('id') ? distributionList.id : distributionList;
+
+            return $http
+                .delete(urlService.distributionLists + '/regou-id/' + regOu + '/dist-id/' + distributionList);
+        };
+
+        /**
          * @description sync organizations
          * @return {*}
          */

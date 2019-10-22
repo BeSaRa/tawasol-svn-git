@@ -136,6 +136,9 @@ module.exports = function (app) {
         self.privateRegOUsCopy = angular.copy(self.privateRegOUs);
         self.selectedPrivateRegOUs = [];
 
+        self.ouDistributionLists = [];
+        self.ouDistributionListsCopy = angular.copy(self.ouDistributionLists);
+        self.selectedOUDistributionLists = [];
 
         self.listParentsHasCentralArchive.push(new Organization({
             id: null,
@@ -204,6 +207,7 @@ module.exports = function (app) {
             'security_settings',
             'workflow_settings',
             'document_templates',
+            'distribution_lists',
             'children',
             'classifications',
             'correspondence_sites',
@@ -321,6 +325,11 @@ module.exports = function (app) {
             var defer = $q.defer();
             if (tabName === 'private_registry_ou') {
                 self.reloadPrivateRegOU(self.privateRegOUGrid.page)
+                    .then(function () {
+                        defer.resolve(tabName);
+                    });
+            } else if (tabName === 'distribution_lists') {
+                self.reloadOUDistributionList(self.ouDistributionListGrid.page)
                     .then(function () {
                         defer.resolve(tabName);
                     });
@@ -1762,6 +1771,82 @@ module.exports = function (app) {
          */
         self.getSortedDataPrivateRegOUs = function () {
             self.privateRegOUs = $filter('orderBy')(self.privateRegOUs, self.privateRegOUGrid.order);
+        };
+
+
+        self.ouDistributionListGrid = {
+            name: 'ouDistributionListGrid',
+            progress: null,
+            limit: 5, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.ouDistributionLists.length + 21)
+                    }
+                }
+            ],
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName',
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.ouDistributionLists = gridService.searchGridData(self.ouDistributionListGrid, self.ouDistributionListsCopy);
+            }
+        };
+
+        self.openAddOUDistributionList = function ($event) {
+            organizationService
+                .openOUDistributionListsDialog(organization, self.ouDistributionLists, $event)
+                .then(function () {
+                    self.reloadOUDistributionList(self.ouDistributionListGrid.page).then(function () {
+                        toast.success(langService.get('save_success'));
+                    });
+                }).catch(function () {
+
+            });
+        };
+
+
+        self.reloadOUDistributionList = function (pageNumber) {
+            var defer = $q.defer();
+            self.ouDistributionListGrid.progress = defer.promise;
+            return organizationService
+                .loadOUDistributionList(organization)
+                .then(function (result) {
+                    self.ouDistributionLists = result;
+                    self.ouDistributionListsCopy = angular.copy(self.ouDistributionLists);
+                    self.selectedOUDistributionLists = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.ouDistributionListGrid.page = pageNumber;
+                    self.getSortedOUDistributionList();
+                    self.ouDistributionListGrid.searchCallback();
+                    return result;
+                });
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedOUDistributionList = function () {
+            self.ouDistributionLists = $filter('orderBy')(self.ouDistributionLists, self.ouDistributionListGrid.order);
+        };
+
+        self.removeOUDistributionList = function (distributionList, $event) {
+            dialog
+                .confirmMessage(langService.get('confirm_delete').change({name: distributionList.getTranslatedName()}))
+                .then(function () {
+                    organizationService.deleteOUDistributionList(organization, distributionList)
+                        .then(function () {
+                            self.reloadOUDistributionList(self.ouDistributionListGrid.page).then(function () {
+                                toast.success(langService.get('delete_success'));
+                            });
+                        });
+                });
         };
 
 

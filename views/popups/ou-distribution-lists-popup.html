@@ -1,0 +1,31 @@
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.distribution_list}}">
+    <popup-toolbar-directive
+            header-text="{{lang.distribution_list}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="ouPrivateRegistryForm" novalidate enter-submit-directive="btn-view-doc">
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="distributionList">{{lang.distribution_list}}</label>
+                        <md-select id="distributionList" aria-label="{{lang.distribution_list}}"
+                                   ng-model="ctrl.selectedOUDistributionList"
+                                   ng-model-options="{trackBy: '$value.id'}">
+                            <md-option ng-if="ctrl.excludeOUDistributionListIfExists(dl)"
+                                       ng-value="dl"
+                                       ng-repeat="dl in ctrl.distributionLists track by $index">
+                                {{dl.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <div>
+                        <md-button class="md-raised" ng-disabled="!ctrl.selectedOUDistributionList"
+                                   ng-click="ctrl.saveOUDistributionList($event)">{{lang.add}}
+                        </md-button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+</md-dialog>

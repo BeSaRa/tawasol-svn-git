@@ -135,4 +135,5 @@ module.exports = function (app) {
     require('./g2gPendingFilterPopCtrl')(app);
     require('./privateRegistryOUPopCtrl')(app);
     require('./ouApplicationUserPopCtrl')(app);
+    require('./ouDistributionListsPopCtrl')(app);
 };
