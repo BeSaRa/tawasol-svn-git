@@ -1,0 +1,150 @@
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_user_to_organization : ctrl.model.getTranslatedApplicationUserName() - ctrl.model.getOrganizationTranslate()}}">
+    <popup-toolbar-directive ng-if="!ctrl.editMode"
+                             header-text="{{lang.add_user_to_organization}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode"
+                             header-text="{{ctrl.model.getTranslatedApplicationUserName()}} - {{ctrl.model.getOrganizationTranslate()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="ouApplicationUserForm">
+                <div layout="row">
+                    <!-- Organizations Dropdown-->
+                    <md-input-container flex ng-if="!ctrl.editMode">
+                        <label for="ouid">{{lang.organization_unit}}</label>
+                        <md-select id="ouid" name="ouid" required
+                                   ng-model-options="{trackBy : '$value.id'}"
+                                   ng-change="ctrl.getParentOrganizationsWithRegistry()"
+                                   ng-disabled="ctrl.ouApplicationUser.id"
+                                   ng-model="ctrl.ouApplicationUser.ouid"
+                                   md-on-close="ctrl.clearSearchText('ou')"
+                                   data-md-container-class="select-header-container">
+                            <md-select-header class="select-header">
+                                <input ng-model="ctrl.ouSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option ng-value="organization"
+                                       ng-if="ctrl.excludeOrganizationsIfExists(organization)"
+                                       ng-repeat="organization in ctrl.organizationsCopy | translatedNameFilter: ctrl.ouSearchText : 'getNameByLanguageRegOUSection'"
+                                       ng-disabled="!organization.status"
+                                       tooltip="{{(!organization.status)? lang.inactive_organization : '' }}">
+                                                <span
+                                                        md-highlight-text="ctrl.ouSearchText"
+                                                        md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="ouApplicationUserForm.ouid.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+
+                    <!-- Organizations Textbox -->
+                    <md-input-container flex ng-if="ctrl.editMode">
+                        <label for="ouidText">{{lang.organization_unit}}</label>
+                        <input id="ouidText" name="ouidText" required
+                               ng-disabled="true" ng-readonly="true"
+                               title="{{ctrl.ouApplicationUser.ouid.getTranslatedName()}}"
+                               ng-value="ctrl.ouApplicationUser.ouid.getTranslatedName()">
+                        <div ng-messages="ouApplicationUserForm.ouidText.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+
+                    <!-- Organizations Parents With Registry Dropdown-->
+                    <md-input-container flex>
+                        <label for="ouRegistryID">{{lang.parent_organization}}</label>
+                        <md-select id="ouRegistryID" name="ouRegistryID" required
+                                   ng-disabled="!ctrl.ouApplicationUser.ouid"
+                                   ng-model="ctrl.ouApplicationUser.ouRegistryID"
+                                   md-on-close="ctrl.clearSearchText('parentOu')"
+                                   data-md-container-class="select-header-container">
+                            <md-select-header class="select-header">
+                                <input ng-model="ctrl.parentOuSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option
+                                    ng-repeat="organizationWithRegistry in ctrl.parentsWithRegistryList | translatedNameFilter: ctrl.parentOuSearchText track by $index"
+                                    ng-value="organizationWithRegistry.id"
+                                    ng-if="ctrl.parentsWithRegistryList.length > 0">
+                            <span
+                                    md-highlight-text="ctrl.parentOuSearchText"
+                                    md-highlight-flags="i">{{organizationWithRegistry.getTranslatedName()}}</span>
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="ouApplicationUserForm.ouRegistryID.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+
+                    <!-- Roles -->
+                    <md-input-container flex>
+                        <label for="customRoleId">{{lang.role}}</label>
+                        <md-select id="customRoleId" name="customRoleId" required
+                                   ng-disabled="ctrl.ouApplicationUser.id"
+                                   ng-model-options="{trackBy: '$value.id'}"
+                                   ng-model="ctrl.ouApplicationUser.customRoleId"
+                                   md-on-close="ctrl.clearSearchText('role')"
+                                   data-md-container-class="select-header-container">
+                            <md-select-header class="select-header">
+                                <input ng-model="ctrl.roleSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option
+                                    ng-repeat="role in ctrl.roles | translatedNameFilter: ctrl.roleSearchText"
+                                    ng-value="role" ng-disabled="!role.status">
+                            <span
+                                    md-highlight-text="ctrl.roleSearchText"
+                                    md-highlight-flags="i">{{role.getTranslatedName()}}</span>
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="ouApplicationUserForm.customRoleId.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div layout="row">
+                    <md-table-container flex>
+                        <table md-table>
+                            <thead md-head>
+                            <tr md-row>
+                                <th md-column>{{lang.security_level}}</th>
+                                <th md-column>{{lang.add}}</th>
+                                <th md-column>{{lang.archive}}</th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row
+                                ng-repeat="(key, securityLevel) in ctrl.securityLevelsModel.securityLevels track by $index">
+                                <td md-cell>{{securityLevel.getTranslatedName()}}</td>
+                                <td md-cell>
+                                    <md-switch aria-label="Security Level Add"
+                                               ng-model="ctrl.securityLevelsModel.add[key]">
+                                    </md-switch>
+                                </td>
+                                <td md-cell>
+                                    <md-switch aria-label="Archive Security Level"
+                                               ng-model="ctrl.securityLevelsModel.archive[key]">
+                                    </md-switch>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised" ng-disabled="!ctrl.isSaveEnabled(ouApplicationUserForm)"
+                   ng-click="ctrl.saveOUApplicationUser(ouApplicationUserForm, $event)">{{ctrl.editMode ? lang.save : lang.add}}
+        </md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="ctrl.closePopup($event)">{{lang.close}}</md-button>
+    </md-dialog-actions>
+</md-dialog>

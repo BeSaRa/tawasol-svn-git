@@ -173,26 +173,6 @@ module.exports = function (app) {
                                     return _.uniqBy(result, 'applicationUser.id');
                                 })
                             }
-                            /*  ouApplicationUsers: function () {
-                                'ngInject';
-                                return self.loadRelatedOUApplicationUsers(organization)
-                                    .then(function (result) {
-                                        return _.filter(result, function (ouApplicationUserResult) {
-                                            if (property === 'managerId') {
-                                                var viceManager = organization.viceManagerId;
-                                                if (viceManager)
-                                                    return ouApplicationUserResult.applicationUser.id !== viceManager.id;
-                                                return ouApplicationUserResult;
-                                            } else if (property === 'viceManagerId') {
-                                                var manager = organization.managerId;
-                                                if (manager)
-                                                    return ouApplicationUserResult.applicationUser.id !== manager.id;
-                                                return ouApplicationUserResult;
-                                            }
-                                            return ouApplicationUserResult;
-                                        })
-                                    });
-                            }*/
                         }
                     });
             },
@@ -229,6 +209,87 @@ module.exports = function (app) {
                                 }
                             }
 
+                        }
+                    });
+            },
+
+            addOUApplicationUserDialog: function (applicationUser, $event) {
+                var deferOus = $q.defer();
+                return dialog
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('ou-application-user'),
+                        targetEvent: $event,
+                        controller: 'ouApplicationUserPopCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            editMode: false,
+                            ouApplicationUser: new OUApplicationUser({
+                                applicationUser: applicationUser
+                            })
+                        },
+                        resolve: {
+                            organizations: function (organizationService) {
+                                'ngInject';
+                                return organizationService.getOrganizations()
+                                    .then(function (result) {
+                                        deferOus.resolve(result);
+                                        return result;
+                                    });
+                            },
+                            roles: function (roleService) {
+                                'ngInject';
+                                return roleService.getRoles();
+                            },
+                            ouApplicationUsers: function (ouApplicationUserService) {
+                                'ngInject';
+                                var defer = $q.defer();
+                                deferOus.promise.then(function () {
+                                    ouApplicationUserService.getOUApplicationUsersByUserId(applicationUser.id)
+                                        .then(function (result) {
+                                            defer.resolve(result);
+                                        });
+                                });
+                                return defer.promise;
+                            },
+                        }
+                    });
+            },
+            editOUApplicationUserDialog: function (ouApplicationUser, applicationUser, $event) {
+                var deferOus = $q.defer();
+                return dialog
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('ou-application-user'),
+                        targetEvent: $event,
+                        controller: 'ouApplicationUserPopCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            editMode: true,
+                            ouApplicationUser: angular.copy(ouApplicationUser)
+                        },
+                        resolve: {
+                            organizations: function (organizationService) {
+                                'ngInject';
+                                return organizationService.getOrganizations()
+                                    .then(function (result) {
+                                        deferOus.resolve(result);
+                                        return result;
+                                    });
+                            },
+                            roles: function (roleService) {
+                                'ngInject';
+                                return roleService.getRoles();
+                            },
+                            ouApplicationUsers: function (ouApplicationUserService) {
+                                'ngInject';
+                                var defer = $q.defer();
+                                deferOus.promise.then(function () {
+                                    ouApplicationUserService.getOUApplicationUsersByUserId(applicationUser.id)
+                                        .then(function (result) {
+                                            defer.resolve(result);
+                                        });
+                                });
+                                return defer.promise;
+                            },
                         }
                     });
             }

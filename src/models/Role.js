@@ -50,6 +50,16 @@ module.exports = function (app) {
             Role.prototype.getTranslatedName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
             };
+
+            /**
+             * @description Get the id concatenated with name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            Role.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
+            };
+
             Role.prototype.getTranslatedStatus = function () {
                 return this.status ? langService.get('active') : langService.get('inactive');
             };

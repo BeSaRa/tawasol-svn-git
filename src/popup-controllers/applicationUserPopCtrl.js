@@ -43,7 +43,8 @@ module.exports = function (app) {
                                                        $q,
                                                        $filter,
                                                        $timeout,
-                                                       Information) {
+                                                       Information,
+                                                       gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'applicationUserPopCtrl';
@@ -220,9 +221,7 @@ module.exports = function (app) {
          * @description List of ou application users
          */
         self.ouApplicationUsers = ouApplicationUsers;
-
-        //self.organizationsForAppUser = _.map(self.ouApplicationUsers, 'ouid');
-
+        self.ouApplicationUsersCopy = angular.copy(self.ouApplicationUsers);
         self.getOrganizationsForAppUser = function (ouAppUser) {
             self.organizationsForAppUser = _.map(self.ouApplicationUsers, function (ouAppUser) {
                 return {
@@ -875,85 +874,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Adds the selected values of organization, custom role, security level to the grid
-         */
-        self.addOUApplicationUserFromCtrl = function () {
-
-            if (self.ouApplicationUser.ouid && self.ouApplicationUser.customRoleId && self.ouApplicationUser.securityLevels) {
-                self.ouApplicationUser.wfsecurity = self.ouApplicationUser.ouid.wfsecurity.lookupKey;
-                return ouApplicationUserService
-                    .addOUApplicationUser(self.ouApplicationUser)
-                    .then(function (result) {
-                        self.cancelOuApplicationUser();
-                        self.ouApplicationUsers.push(result);
-
-                        self.getOrganizationsForAppUser();
-
-                        self.excludedOrganizations = self.excludedOrganizations.concat(result.ouid.id);
-
-                        var userOuPermissions = [];
-                        for (var i = 0; i < result.customRoleId.customRolePermission.length; i++) {
-                            userOuPermissions.push(new UserOuPermission({
-                                userId: result.applicationUser.id,
-                                ouId: result.ouid.id,
-                                customRoleId: result.customRoleId.id,
-                                permissionId: result.customRoleId.customRolePermission[i].id
-                            }));
-                        }
-
-                        if (!userOuPermissions.length) {
-                            toast.success(langService.get('save_success'));
-                            return;
-                        }
-
-                        return ouApplicationUserService
-                            .addUserOuPermission(userOuPermissions)
-                            .then(function () {
-                                //if (!self.currentOrganization) {
-                                toast.success(langService.get('save_success'));
-                                //}
-                                return true;
-                            })
-                            .then(function () {
-                                return tokenService.forceTokenRefresh()
-                                    .then(function () {
-                                        return true;
-                                    })
-                            });
-                    });
-            } else {
-                toast.info(langService.get('select_ou_role_security_level'));
-            }
-        };
-
-        /**
-         * @description Edit the selected values of organization, custom role, security level in the grid
-         * @param ouApplicationUser
-         * @param $event
-         */
-        self.ouApplicationUserBeforeEdit = null;
-        self.editOUApplicationUserFromCtrl = function (ouApplicationUser, $event) {
-            self.ouApplicationUserBeforeEdit = angular.copy(ouApplicationUser);
-            self.ouApplicationUser = angular.copy(ouApplicationUser);
-            self.getParentOrganizationsWithRegistry();
-        };
-
-        /**
-         * @description Updates the selected values of organization, custom role, security level to the grid
-         */
-        self.updateOUApplicationUserFromCtrl = function () {
-            var indexOfUpdatedOUApplicationUser = _.findIndex(self.ouApplicationUsers, function (x) {
-                return x.ouid.id === self.ouApplicationUserBeforeEdit.ouid.id;
-            });
-
-            self.saveOUApplicationUserFromCtrl(self.ouApplicationUser)
-                .then(function () {
-                    self.ouApplicationUsers.splice(indexOfUpdatedOUApplicationUser, 1, self.ouApplicationUser);
-                    self.cancelOuApplicationUser();
-                });
-        };
-
-        /**
          * @description Remove the selected record of organization, custom role, security level to the grid
          * @param ouApplicationUser
          * @param $event
@@ -965,12 +885,7 @@ module.exports = function (app) {
             ouApplicationUserService
                 .deleteOUApplicationUser(ouApplicationUser, $event)
                 .then(function () {
-                    var indexOfUpdatedOUApplicationUser = _.findIndex(self.ouApplicationUsers, function (x) {
-                        return x.ouid.id === ouApplicationUser.ouid.id;
-                    });
-                    self.ouApplicationUsers.splice(indexOfUpdatedOUApplicationUser, 1);
-                    self.getOrganizationsForAppUser();
-
+                    self.reloadOUApplicationUsers();
 
                     self.excludedOrganizations = _.filter(self.excludedOrganizations, function (id) {
                         return ouApplicationUser.ouid.id !== id;
@@ -984,35 +899,23 @@ module.exports = function (app) {
          * @description Save OU Application User
          * @param ouApplicationUser
          */
-        self.saveOUApplicationUserFromCtrl = function (ouApplicationUser) {
-            if (ouApplicationUser.id) {
-                return ouApplicationUserService
-                    .updateOUApplicationUser(ouApplicationUser)
-                    .then(function () {
-                        toast.success(langService.get('edited_successfully'));
-                        if (employeeService.isCurrentOUApplicationUser(ouApplicationUser)) {
-                            employeeService.setCurrentOUApplicationUser(ouApplicationUser);
-                            employeeService.setCurrentEmployee(self.ouApplicationUser.applicationUser);
-                        }
-
-                        self.getOrganizationsForAppUser(ouApplicationUser);
-
-                        return true;
-                    });
-            } else {
-                //ouApplicationUser.wfsecurity = self.globalSetting.wfsecurity;
-                return ouApplicationUserService
-                    .addOUApplicationUser(ouApplicationUser)
-                    .then(function () {
-                        var indexOfUpdatedOUApplicationUser = _.findIndex(self.ouApplicationUsers, function (x) {
-                            return x.ouid.id === ouApplicationUser.ouid.id;
-                        });
-                        self.ouApplicationUsers.splice(indexOfUpdatedOUApplicationUser, 1, ouApplicationUser);
-                        self.getOrganizationsForAppUser();
-                        toast.success(langService.get('save_success'));
-                        return true;
-                    });
+        self.saveOUApplicationUser = function (ouApplicationUser) {
+            if (!ouApplicationUser.id) {
+                return false;
             }
+            return ouApplicationUserService
+                .updateOUApplicationUser(ouApplicationUser)
+                .then(function () {
+                    toast.success(langService.get('edited_successfully'));
+                    if (employeeService.isCurrentOUApplicationUser(ouApplicationUser)) {
+                        employeeService.setCurrentOUApplicationUser(ouApplicationUser);
+                        employeeService.setCurrentEmployee(self.ouApplicationUser.applicationUser);
+                    }
+
+                    self.getOrganizationsForAppUser(ouApplicationUser);
+
+                    return true;
+                });
         };
 
 
@@ -1175,7 +1078,6 @@ module.exports = function (app) {
                 });
         };
 
-
         /**
          * @description Opens dialog for add new rank
          * @param $event
@@ -1203,131 +1105,6 @@ module.exports = function (app) {
                     self.themes.unshift(result);
                 });
         };
-
-
-        /**
-         * @description Add new application user and add to organization
-         */
-        self.addApplicationUserAndOUFromCtrl = function () {
-            validationService
-                .createValidation('ADD_APPLICATION_USER')
-                .addStep('check_required', true, self.checkRequiredFieldsAppUser, self.applicationUser, function (result) {
-                    return !result.length;
-                })
-                .notifyFailure(function (step, result) {
-                    var labels = _.map(result, function (label) {
-                        return self.validateLabels[label];
-                    });
-                    generator.generateErrorFields('check_this_fields', labels);
-                })
-                .addStep('check_duplicate', true, applicationUserService.checkDuplicateApplicationUser, [self.applicationUser, false], function (result) {
-                    return !result;
-                }, true)
-                .notifyFailure(function () {
-                    toast.error(langService.get('name_duplication_message'));
-                })
-                .addStep('check_duplicate_employeeNo', true, applicationUserService.checkDuplicateApplicationUserProperties, [self.applicationUser, 'employeeNo', false], function (result) {
-                    return !result;
-                }, true)
-                .notifyFailure(function () {
-                    toast.error(langService.get('employee_number_duplication_message'));
-                })
-                .addStep('check_duplicate_qatari_id', true, applicationUserService.checkDuplicateApplicationUserProperties, [self.applicationUser, 'qid', false], function (result) {
-                    return !result;
-                }, true)
-                .notifyFailure(function () {
-                    toast.error(langService.get('qid_duplication_message'));
-                })
-                .validate()
-                .then(function () {
-                    applicationUserService
-                        .addApplicationUser(self.applicationUser)
-                        .then(function (result) {
-                            self.ouApplicationUser.ouid = _.find(self.organizations, function (organization) {
-                                return organization.id === self.applicationUser.defaultOUID;
-                            });
-                            self.ouApplicationUser.applicationUser = result;
-
-                            self.classificationViewPermissions = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
-                                return Number(userClassificationViewPermission.userId) === Number(self.applicationUser.id);
-                            });
-                            self.cancelClassificationViewPermissionFromCtrl();
-
-                            self.addOUApplicationUserFromCtrl().then(function () {
-                                self.applicationUser = angular.copy(self.applicationUser);
-                                self.model = angular.copy(self.applicationUser);
-                                self.editMode = true;
-                                toast.success(langService.get('add_success').change({name: self.applicationUser.getNames()}));
-                            });
-                        });
-                })
-                .catch(function () {
-
-                });
-        };
-
-        /**
-         * @description Edit application user and update organization
-         */
-        self.editApplicationUserAndOUFromCtrl = function () {
-            validationService
-                .createValidation('EDIT_APPLICATION_USER')
-                .addStep('check_required', true, self.checkRequiredFieldsAppUser, self.applicationUser, function (result) {
-                    return !result.length;
-                })
-                .notifyFailure(function (step, result) {
-                    var labels = _.map(result, function (label) {
-                        return self.validateLabels[label];
-                    });
-                    generator.generateErrorFields('check_this_fields', labels);
-                })
-                .addStep('check_duplicate', true, applicationUserService.checkDuplicateApplicationUser, [self.applicationUser, true], function (result) {
-                    return !result;
-                }, true)
-                .notifyFailure(function () {
-                    toast.error(langService.get('name_duplication_message'));
-                })
-                .addStep('check_duplicate_employeeNo', true, applicationUserService.checkDuplicateApplicationUserProperties, [self.applicationUser, 'employeeNo', true], function (result) {
-                    return !result;
-                }, true)
-                .notifyFailure(function () {
-                    toast.error(langService.get('employee_number_duplication_message'));
-                })
-                .addStep('check_duplicate_qatari_id', true, applicationUserService.checkDuplicateApplicationUserProperties, [self.applicationUser, 'qid', true], function (result) {
-                    return !result;
-                }, true)
-                .notifyFailure(function () {
-                    toast.error(langService.get('qid_duplication_message'));
-                })
-                .validate()
-                .then(function () {
-                    applicationUserService
-                        .updateApplicationUser(self.applicationUser)
-                        .then(function () {
-
-                            self.ouApplicationUser.ouid = _.find(self.organizations, function (organization) {
-                                return organization.id === self.applicationUser.defaultOUID;
-                            });
-                            self.ouApplicationUser.applicationUser = self.applicationUser;
-                            self.saveOUApplicationUserFromCtrl(self.ouApplicationUser).then(function () {
-                                toast.success(langService.get('edit_success').change({name: self.applicationUser.getNames()}));
-                                if (employeeService.isCurrentEmployee(self.applicationUser)) {
-                                    tokenService.forceTokenRefresh().then(function () {
-                                        dialog.hide(self.applicationUser);
-                                    });
-                                } else {
-                                    dialog.hide(self.applicationUser);
-                                }
-                            });
-
-
-                        });
-                })
-                .catch(function () {
-
-                });
-        };
-
 
         //
         self.ouViewPermissions = ouViewPermissions;
@@ -1476,7 +1253,7 @@ module.exports = function (app) {
             {
                 type: 'action',
                 text: 'grid_action_edit',
-                callback: self.editOUApplicationUserFromCtrl,
+                callback: self.openEditOUApplicationUserDialog,
                 checkShow: function (action, model) {
                     return true;
                 }
@@ -1540,6 +1317,76 @@ module.exports = function (app) {
                         .setQid(user.qid)
                         .setEmail(user.email);
                 });
-        }
+        };
+
+        self.ouApplicationUsersGrid = {
+            progress: null,
+            limit: 5, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, {
+                label: langService.get('all'),
+                value: function () {
+                    return (self.ouApplicationUsers.length + 21);
+                }
+            }],
+            pagingCallback: function (page, limit) {
+
+            },
+            searchColumns: {
+                organizationArName: 'ouid.arName',
+                organizationEnName: 'ouid.enName',
+                role: function (record) {
+                    return 'customRoleId.' + langService.current + 'Name';
+                },
+                securityLevel: 'securityLevelsString',
+                archiveSecurityLevel: 'archiveSecurityLevelsString'
+            },
+            searchText: '',
+            searchCallback: function () {
+                self.ouApplicationUsers = gridService.searchGridData(self.ouApplicationUsersGrid, self.ouApplicationUsersCopy);
+            }
+        };
+
+        self.openAddOUApplicationUserDialog = function ($event) {
+            ouApplicationUserService.controllerMethod
+                .addOUApplicationUserDialog(self.applicationUser, $event)
+                .then(function (result) {
+                    self.reloadOUApplicationUsers();
+                })
+                .catch(function(error){
+
+                });
+        };
+
+        self.openEditOUApplicationUserDialog = function (ouApplicationUser, $event) {
+            ouApplicationUserService.controllerMethod
+                .editOUApplicationUserDialog(ouApplicationUser, self.applicationUser, $event)
+                .then(function (result) {
+                    self.reloadOUApplicationUsers();
+                });
+        };
+
+        self.reloadOUApplicationUsers = function ($event) {
+            var defer = $q.defer();
+            self.ouApplicationUsersGrid.progress = defer.promise;
+            return ouApplicationUserService.loadOUApplicationUsersByUserId(applicationUser.id)
+                .then(function (result) {
+                    self.ouApplicationUsers = result;
+                    self.ouApplicationUsersCopy = angular.copy(self.ouApplicationUsers);
+                    self.getOrganizationsForAppUser();
+                    if (self.ouApplicationUsersGrid) {
+                        self.ouApplicationUsersGrid.page = 1;
+                    }
+                    defer.resolve(true);
+                    self.getSortedData();
+                    return result;
+                });
+        };
+
+        self.getSortedOUApplicationUserData = function(){
+            self.ouApplicationUsers = $filter('orderBy')(self.ouApplicationUsers, self.ouApplicationUsersGrid.order);
+        };
+
     });
 };

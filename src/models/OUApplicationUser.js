@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('OUApplicationUser', function (CMSModelInterceptor, generator, lookupService, ProxyUser) {
+    app.factory('OUApplicationUser', function (CMSModelInterceptor, generator, lookupService, ProxyUser, _) {
         'ngInject';
         return function OUApplicationUser(model) {
             var self = this, langService;
@@ -30,6 +30,7 @@ module.exports = function (app) {
             self.ouInfo = null;
             self.wfsecurity = null;
             self.ouViewPermissionList = null;
+            self.archiveSecurityLevels = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -101,7 +102,12 @@ module.exports = function (app) {
             };
 
             OUApplicationUser.prototype.getOrganizationTranslate = function () {
-                return this.ouInfo.getTranslatedName();
+                if (this.ouInfo && this.ouInfo.id) {
+                    return this.ouInfo.getTranslatedName();
+                } else if (this.ouid && this.ouid.hasOwnProperty('id')) {
+                    return this.ouid.getTranslatedName();
+                }
+                return '';
             };
 
             /**
@@ -134,6 +140,16 @@ module.exports = function (app) {
              */
             OUApplicationUser.prototype.getSecurityLevelsText = function () {
                 return _.map(this.securityLevels, function (securityLevel) {
+                    return securityLevel.getTranslatedName();
+                }).join(', ');
+            };
+
+            /**
+             * @description Get the translated archive security levels as separated by comma.
+             * @returns {string}
+             */
+            OUApplicationUser.prototype.getArchiveSecurityLevelsText = function () {
+                return _.map(this.archiveSecurityLevels, function (securityLevel) {
                     return securityLevel.getTranslatedName();
                 }).join(', ');
             };

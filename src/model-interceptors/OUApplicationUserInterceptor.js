@@ -32,8 +32,10 @@ module.exports = function (app) {
 
             model.ouid = model.ouid.id;
             model.securityLevels = generator.filterSecurityLevels(model.securityLevels);
-
             model.securityLevels = generator.getResultFromSelectedCollection(model.securityLevels, 'lookupKey');
+
+            model.archiveSecurityLevels = generator.filterSecurityLevels(model.archiveSecurityLevels);
+            model.archiveSecurityLevels = generator.getResultFromSelectedCollection(model.archiveSecurityLevels, 'lookupKey');
 
             var privateUsersCopy = angular.copy(model.privateUsers);
             model.privateUsers = (model.sendToPrivateUsers && angular.isArray(model.privateUsers) && typeof model.privateUsers[0] !== 'undefined') ? JSON.stringify(getPrivateUsersToSend(model, privateUsersCopy)) : "{}";
@@ -54,6 +56,8 @@ module.exports = function (app) {
             model.applicationUser = generator.interceptSendInstance('ApplicationUser', model.applicationUser);
 
             delete model.ouInfo;
+            delete model.securityLevelsString;
+            delete model.archiveSecurityLevelsString;
 
             return model;
         });
@@ -128,6 +132,12 @@ module.exports = function (app) {
                 if (typeof model.securityLevels !== "object") {
                     model.securityLevels = generator.getSelectedCollectionFromResult(securityLevels, model.securityLevels, 'lookupKey');
                     model.securityLevels = generator.filterSecurityLevels(model.securityLevels);
+                    model.securityLevelsString = model.getSecurityLevelsText();
+                }
+                if (typeof model.archiveSecurityLevels !== "object") {
+                    model.archiveSecurityLevels = generator.getSelectedCollectionFromResult(securityLevels, model.archiveSecurityLevels, 'lookupKey');
+                    model.archiveSecurityLevels = generator.filterSecurityLevels(model.archiveSecurityLevels);
+                    model.archiveSecurityLevelsString = model.getArchiveSecurityLevelsText();
                 }
 
                 if (model.proxyUser) {
