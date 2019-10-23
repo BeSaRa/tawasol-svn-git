@@ -439,8 +439,7 @@ module.exports = function (app) {
             if (!employeeService.hasPermissionTo("MANAGE_ATTACHMENTS")) {
                 return;
             }
-            var record = self.workItem || self.correspondence;
-            record.manageDocumentAttachments($event)
+            self.correspondence.manageDocumentAttachments($event)
                 .then(function (attachments) {
                     self.correspondence.attachments = angular.copy(attachments);
                 })
@@ -453,8 +452,7 @@ module.exports = function (app) {
             if (!employeeService.hasPermissionTo("MANAGE_LINKED_DOCUMENTS")) {
                 return;
             }
-            var record = self.workItem || self.correspondence;
-            record.manageDocumentLinkedDocuments($event)
+            self.correspondence.manageDocumentLinkedDocuments($event)
                 .then(function (linkedDocs) {
                     self.correspondence.linkedDocs = angular.copy(linkedDocs);
                 })
