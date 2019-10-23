@@ -125,16 +125,20 @@
                                             <md-icon md-svg-icon="format-align-justify"></md-icon>
                                             <span>{{lang.outgoing_create_content}}</span>
                                             <span flex></span>
-                                            <md-switch
-                                                    ng-disabled="ctrl.isDocumentTypeSwitchDisabled()"
-                                                    class="m0 top-switch-handler"
-                                                    ng-true-value="1" ng-false-value="0"
-                                                    ng-click="ctrl.preventPropagation($event)"
-                                                    ng-change="ctrl.checkChangeOutgoingType()"
-                                                    ng-model="ctrl.outgoing.addMethod">
-                                                {{lang.outgoing_document_type}} :
-                                                {{ctrl.outgoing.getMethodType()}}
-                                            </md-switch>
+                                            <div layout="row" layout-align="center center">
+                                                <span>{{lang.outgoing_document_type}} :</span>
+                                                <span>{{lang.outgoing_electronic}}</span>
+                                                <span>&nbsp;&nbsp;</span>
+                                                <md-switch
+                                                        ng-disabled="ctrl.isDocumentTypeSwitchDisabled()"
+                                                        class="m0 top-switch-handler"
+                                                        ng-true-value="1" ng-false-value="0"
+                                                        ng-click="ctrl.preventPropagation($event)"
+                                                        ng-change="ctrl.checkChangeOutgoingType()"
+                                                        ng-model="ctrl.outgoing.addMethod">
+                                                </md-switch>
+                                                <span>{{lang.outgoing_paper}}</span>
+                                            </div>
                                         </div>
                                     </accordion-title>
                                     <accordion-content layout="column">
