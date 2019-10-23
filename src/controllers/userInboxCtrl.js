@@ -1327,6 +1327,7 @@ module.exports = function (app) {
                 callback: self.terminate,
                 class: "action-green",
                 sticky: true,
+                stickyIndex: 1,
                 checkShow: function (action, model) {
                     return true;
                 }
@@ -1405,6 +1406,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.forward,
                 sticky: true,
+                stickyIndex: 4,
                 class: "action-green",
                 checkShow: function (action, model) {
                     return true
@@ -1433,6 +1435,7 @@ module.exports = function (app) {
                 text: 'grid_action_reply',
                 callback: self.reply,
                 sticky: true,
+                stickyIndex: 5,
                 class: "action-green",
                 checkShow: function (action, model) {
                     return !model.isBroadcasted();
@@ -1535,6 +1538,7 @@ module.exports = function (app) {
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: gridService.checkToShowAction,
                 sticky: true,
+                stickyIndex: 2,
                 showInView: false,
                 showInViewOnly: true,
                 callback: self.viewTrackingSheet,
@@ -1596,6 +1600,7 @@ module.exports = function (app) {
                         callback: self.manageComments,
                         class: "action-green",
                         sticky: true,
+                        stickyIndex: 3,
                         checkShow: function (action, model) {
                             return true;
                         }
@@ -1850,6 +1855,7 @@ module.exports = function (app) {
                         callback: self.signESignatureAndSend,
                         class: "action-green",
                         sticky: true,
+                        stickyIndex: 7,
                         permissionKey: "ELECTRONIC_SIGNATURE",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
@@ -1868,6 +1874,7 @@ module.exports = function (app) {
                         callback: self.signESignature,
                         class: "action-green",
                         sticky: true,
+                        stickyIndex: 6,
                         permissionKey: "ELECTRONIC_SIGNATURE",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
@@ -2063,7 +2070,7 @@ module.exports = function (app) {
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
-        self.stickyActions = gridService.getStickyActions(self.gridActions);
+        self.stickyActions = $filter('orderBy')(gridService.getStickyActions(self.gridActions), 'stickyIndex');
 
         /**
          * @description Mark item as read/unread

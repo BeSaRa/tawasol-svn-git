@@ -128,21 +128,13 @@
                                       class="magazine-serial date {{workItem.getIndicatorDueDate().class}}">{{workItem.generalStepElm.dueDate}}</span>
                         </span>
                         </div>
-                        <div class="magazine-fix-actions">
-                        <span ng-repeat="quickAction in ctrl.quickActions track by $index"
-                              ng-if="ctrl.isShowQuickAction(quickAction, workItem)">
-                            <md-icon md-svg-icon="{{quickAction.icon}}" class="cursor-pointer {{quickAction.class}}"
-                                     tooltip="{{ctrl.getQuickActionText(quickAction, workItem ,  true)}}"
-                                     tooltip-direction="{{lang.current === 'en' ? 'left': 'right'}}"
-                                     ng-click="ctrl.callbackQuickAction(quickAction, workItem, $event)"></md-icon>
-                        </span>
-                            <!--<md-icon md-svg-icon="stop" class="cursor-pointer action-green"
-                                     tooltip="{{lang.grid_action_terminate}}"
-                                     ng-click="ctrl.terminate(workItem, $event)"></md-icon>
-                            <md-icon md-svg-icon="reply" class="cursor-pointer action-green"
-                                     tooltip="{{lang.grid_action_reply}}"
-                                     ng-click="ctrl.reply(workItem, $event)"></md-icon>-->
-                        </div>
+
+                        <!--<md-icon md-svg-icon="stop" class="cursor-pointer action-green"
+                                 tooltip="{{lang.grid_action_terminate}}"
+                                 ng-click="ctrl.terminate(workItem, $event)"></md-icon>
+                        <md-icon md-svg-icon="reply" class="cursor-pointer action-green"
+                                 tooltip="{{lang.grid_action_reply}}"
+                                 ng-click="ctrl.reply(workItem, $event)"></md-icon>-->
                         <div class="magazine-sender">{{lang.sender }} -
                             {{workItem.senderInfo.getTranslatedName()}}
                         </div>
@@ -199,6 +191,17 @@
                             <main-site-sub-site-directive class="magazine-serial font-12"
                                                           item="workItem"></main-site-sub-site-directive>
                         </div>
+                    </div>
+                </div>
+                <div layout="column" layout-align="center center">
+                    <div class="magazine-fix-actions">
+                        <span ng-repeat="quickAction in ctrl.quickActions track by $index" ng-if="ctrl.isShowQuickAction(quickAction, workItem)">
+                            <md-button ng-click="ctrl.callbackQuickAction(quickAction, workItem, $event)" class="md-icon-button magazine-button">
+                            <md-icon md-svg-icon="{{quickAction.icon}}" class="cursor-pointer {{quickAction.class}}"
+                                     tooltip="{{ctrl.getQuickActionText(quickAction, workItem ,  true)}}"
+                                     tooltip-direction="{{lang.current === 'en' ? 'left': 'right'}}"></md-icon>
+                            </md-button>
+                        </span>
                     </div>
                 </div>
                 <!--<div class="magazine-action" layout="column">
