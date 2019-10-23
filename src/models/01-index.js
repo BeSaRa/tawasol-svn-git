@@ -176,4 +176,5 @@ module.exports = function (app) {
     require('./DocumentLinkViewer')(app);
     require('./TaskCalenderItem')(app);
     require('./LDAPProvider')(app);
+    require('./OUPrivateRegistry')(app);
 };

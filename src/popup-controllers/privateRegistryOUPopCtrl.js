@@ -9,7 +9,7 @@ module.exports = function (app) {
 
         self.privateRegOusGrid = [];
         self.selectedPrivateRegOusGrid = [];
-        self.excludedPrivateRegOU = _.map(self.excludedPrivateRegOU, 'id');
+        self.excludedPrivateRegOU = _.map(self.excludedPrivateRegOU, 'ouid');
 
         /**
          * @description add private registry Ous

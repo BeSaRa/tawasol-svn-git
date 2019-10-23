@@ -13,7 +13,7 @@ module.exports = function (app) {
                                                  generator,
                                                  lookupService,
                                                  PropertyConfiguration,
-                                                 Information,
+                                                 OUPrivateRegistry,
                                                  employeeService) {
         'ngInject';
         var self = this;
@@ -669,9 +669,7 @@ module.exports = function (app) {
             return $http
                 .get(urlService.privateRegistryOU + "/to-regou-id/" + ouId)
                 .then(function (result) {
-                    return _.map(result.data.rs, function (ou) {
-                        return new Information(ou.ouInfo);
-                    });
+                    return  generator.interceptReceivedCollection('OUPrivateRegistry', generator.generateCollection(result.data.rs, OUPrivateRegistry, self._sharedMethods));
                 });
         };
 
@@ -815,9 +813,7 @@ module.exports = function (app) {
             organization = organization.hasOwnProperty('id') ? organization.id : organization;
             return $http.get(urlService.distributionLists + '/regou-id/' + organization)
                 .then(function (result) {
-                    return _.map(result.data.rs, function (dl) {
-                        return new Information(dl);
-                    })
+                    return result.data.rs;
                 });
         };
 

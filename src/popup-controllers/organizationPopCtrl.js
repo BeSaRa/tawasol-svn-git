@@ -1735,8 +1735,8 @@ module.exports = function (app) {
                 }
             ],
             searchColumns: {
-                arabicName: 'arName',
-                englishName: 'enName',
+                arabicName: 'ouInfo.arName',
+                englishName: 'ouInfo.enName',
             },
             searchText: '',
             searchCallback: function (grid) {

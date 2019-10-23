@@ -642,7 +642,7 @@
                     </md-tab>
                     <!--  OU Distribution List -->
                     <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('distribution_lists')"
-                            label="{{lang.distribution_list}}" ng-click="ctrl.setCurrentTab('distribution_lists')" >
+                            label="{{lang.distribution_list}}" ng-click="ctrl.setCurrentTab('distribution_lists')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row" class="p20-0">
@@ -1253,11 +1253,11 @@
                                                                   </div>
                                                               </th>-->
                                                             <th ng-if="!ctrl.selectedPrivateRegOUs.length"
-                                                                md-order-by="arName" md-column>
+                                                                md-order-by="ouInfo.arName" md-column>
                                                                 <span>{{lang.arabic_name}}</span>
                                                             </th>
                                                             <th ng-if="!ctrl.selectedPrivateRegOUs.length"
-                                                                md-order-by="enName" md-column>
+                                                                md-order-by="ouInfo.enName" md-column>
                                                                 <span>{{lang.english_name}}</span>
                                                             </th>
                                                             <!-- <th ng-if="!ctrl.selectedPrivateRegOUs.length" md-column>
@@ -1268,8 +1268,8 @@
                                                         <tbody md-body>
                                                         <tr md-row md-select="privateRegOU"
                                                             ng-repeat="privateRegOU in ctrl.privateRegOUs | limitTo: ctrl.privateRegOUGrid.limit: ((ctrl.privateRegOUGrid.page - 1) * ctrl.privateRegOUGrid.limit) track by $index">
-                                                            <td md-cell>{{privateRegOU.arName}}</td>
-                                                            <td md-cell>{{privateRegOU.enName}}</td>
+                                                            <td md-cell>{{privateRegOU.ouInfo.arName}}</td>
+                                                            <td md-cell>{{privateRegOU.ouInfo.enName}}</td>
                                                             <!-- <td md-cell>
                                                                  <div layout="row">
                                                                      <md-button class="md-icon-button"
