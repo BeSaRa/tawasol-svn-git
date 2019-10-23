@@ -395,6 +395,29 @@ module.exports = function (app) {
                 _resetSelectedData(isDistributionListRecord);
             }
         };
+
+        /**
+         * @description add all sites to To with followup status = without reply.
+         * @param $event
+         * @param isDistributionListRecord
+         */
+        self.addAllSitesTo = function ($event, isDistributionListRecord) {
+            var sites = angular.copy(self.subSearchResult);
+            if (isDistributionListRecord){
+                sites = angular.copy(self.subSearchResult_DL);
+            }
+            /*Override all sites to use without reply*/
+            var followupStatusWithoutReply = _.find(self.followUpStatuses, function (status) {
+                return status.lookupStrKey === 'WITHOUT_REPLY';
+            });
+            _.map(sites, function (site) {
+                site.followupStatus = followupStatusWithoutReply;
+                site.followupDate = null;
+                self.addSiteTo(site);
+            });
+            _resetSelectedData(isDistributionListRecord);
+        };
+
         /**
          * @description add all selected sites to CC.
          * @param sites
@@ -429,6 +452,29 @@ module.exports = function (app) {
                 _resetSelectedData(isDistributionListRecord);
             }
         };
+
+        /**
+         * @description add all sites to CC.
+         * @param $event
+         * @param isDistributionListRecord
+         */
+        self.addAllSitesCC = function ($event, isDistributionListRecord) {
+            var sites = angular.copy(self.subSearchResult);
+            if (isDistributionListRecord){
+                sites = angular.copy(self.subSearchResult_DL);
+            }
+            /*Override all sites to use without reply*/
+            var followupStatusWithoutReply = _.find(self.followUpStatuses, function (status) {
+                return status.lookupStrKey === 'WITHOUT_REPLY';
+            });
+            _.map(sites, function (site) {
+                site.followupStatus = followupStatusWithoutReply;
+                site.followupDate = null;
+                self.addSiteCC(site);
+            });
+            _resetSelectedData(isDistributionListRecord);
+        };
+
         /**
          * @description change site from CC to To and else.
          * @param type
@@ -893,7 +939,7 @@ module.exports = function (app) {
         };
 
 
-        self.onChangeIsSearchByDLSiteType = function(){
+        self.onChangeIsSearchByDLSiteType = function () {
             self.selectedSiteType_DL = null;
             self.selectedDistributionList = null;
             self.subSearchResult_DL = [];

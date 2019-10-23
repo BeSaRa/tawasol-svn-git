@@ -143,6 +143,19 @@
                                 <div layout="row" ng-if="!ctrl.subSearchSelected.length" flex
                                      layout-align="start center">
                                     <div flex>{{lang.sites_search_results}}</div>
+                                    <!-- Add all as original/copy -->
+                                    <div ng-if="!ctrl.subSearchSelected.length && ctrl.subSearchResult.length">
+                                        <md-button class="md-raised"
+                                                   ng-click="ctrl.addAllSitesTo($event)"
+                                                   ng-disabled="!!ctrl.disableCorrespondence">
+                                            {{lang.add_all_sites_as_original}}
+                                        </md-button>
+                                        <md-button class="md-raised"
+                                                   ng-click="ctrl.addAllSitesCC($event)"
+                                                   ng-disabled="!!ctrl.disableCorrespondence">
+                                            {{lang.add_all_sites_as_copy}}
+                                        </md-button>
+                                    </div>
                                     <div ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence"
                                          flex>
                                         <!-- sub site result search -->
@@ -164,7 +177,6 @@
                                             </md-item-template>
                                         </md-autocomplete>
                                     </div>
-
                                     <!-- Close search results -->
                                     <div>
                                         <md-button tooltip="{{lang.sites_hide_search}}"
@@ -703,6 +715,19 @@
                                 <!-- Close search results -->
                                 <div layout="row" ng-if="!ctrl.subSearchSelected_DL.length" flex>
                                     <div flex>{{lang.sites_search_results}}</div>
+                                    <!-- Add all as original/copy -->
+                                    <div ng-if="ctrl.isSearchByDLSiteType">
+                                        <md-button class="md-raised"
+                                                   ng-click="ctrl.addAllSitesTo($event, true)"
+                                                   ng-disabled="!!ctrl.disableCorrespondence">
+                                            {{lang.add_all_sites_as_original}}
+                                        </md-button>
+                                        <md-button class="md-raised"
+                                                   ng-click="ctrl.addAllSitesCC($event, true)"
+                                                   ng-disabled="!!ctrl.disableCorrespondence">
+                                            {{lang.add_all_sites_as_copy}}
+                                        </md-button>
+                                    </div>
                                     <div>
                                         <md-button tooltip="{{lang.sites_hide_search}}"
                                                    class="md-icon-button close-search-button"
