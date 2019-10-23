@@ -23,17 +23,17 @@ module.exports = function (app) {
         self.securityLevelsModel = {
             securityLevels: self.securityLevels,
             add: [],
-            archive: []
+            view: []
         };
 
-        function _generateArchiveAndAddSecurityArray() {
+        function _generateViewAndAddSecurityArray() {
             _.map(self.securityLevelsModel.securityLevels, function (securityLevel, index) {
                 self.securityLevelsModel.add[index] = !!_securityExists(securityLevel, self.ouApplicationUser.securityLevels);
-                self.securityLevelsModel.archive[index] = !!_securityExists(securityLevel, self.ouApplicationUser.archiveSecurityLevels);
+                self.securityLevelsModel.view[index] = !!_securityExists(securityLevel, self.ouApplicationUser.archiveSecurityLevels);
             });
         }
 
-        _generateArchiveAndAddSecurityArray();
+        _generateViewAndAddSecurityArray();
 
         function _securityExists(securityLevel, collection) {
             return _.find(collection, function (item) {
@@ -64,35 +64,35 @@ module.exports = function (app) {
         };
 
 
-        function _isAnySecurityLevelAdd() {
+        function _isAnyAddSecurityLevel() {
             return _.some(self.securityLevelsModel.add, function (securityLevel) {
                 return !!securityLevel;
             });
         }
 
-        function _isAnyArchiveSecurityLevel() {
-            return _.some(self.securityLevelsModel.archive, function (securityLevel) {
+        function _isAnyViewSecurityLevel() {
+            return _.some(self.securityLevelsModel.view, function (securityLevel) {
                 return !!securityLevel;
             });
         }
 
         self.isSaveEnabled = function (form) {
-            return !form.$invalid && self.ouApplicationUser.customRoleId && _isAnySecurityLevelAdd() && _isAnyArchiveSecurityLevel();
+            return !form.$invalid && self.ouApplicationUser.customRoleId && (_isAnyAddSecurityLevel() || _isAnyViewSecurityLevel());
         };
 
         var _setSecurityLevelsBeforeSave = function(){
-            var securityLevelAdd = [], archiveSecurityLevels = [];
+            var addSecurityLevel = [], viewSecurityLevels = [];
             _.map(self.securityLevels, function (securityLevel, index) {
                 if (self.securityLevelsModel.add[index]) {
-                    securityLevelAdd.push(securityLevel);
+                    addSecurityLevel.push(securityLevel);
                 }
-                if (self.securityLevelsModel.archive[index]) {
-                    archiveSecurityLevels.push(securityLevel);
+                if (self.securityLevelsModel.view[index]) {
+                    viewSecurityLevels.push(securityLevel);
                 }
             });
 
-            self.ouApplicationUser.securityLevels = securityLevelAdd;
-            self.ouApplicationUser.archiveSecurityLevels = archiveSecurityLevels;
+            self.ouApplicationUser.securityLevels = addSecurityLevel;
+            self.ouApplicationUser.archiveSecurityLevels = viewSecurityLevels;
         };
 
         /**

@@ -306,10 +306,11 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row" flex>
-                                    <!-- Security Levels -->
+                                    <!-- View Security Levels -->
                                     <md-input-container flex>
-                                        <label for="ouSecurityLevel">{{lang.security_levels}}</label>
-                                        <md-select id="ouSecurityLevel" name="ouSecurityLevel" multiple required
+                                        <label for="ouSecurityLevel">{{lang.security_level_view}} {{lang.security_levels}}</label>
+                                        <md-select id="ouSecurityLevel" name="ouSecurityLevel" multiple
+                                                   ng-required="!ctrl.ouApplicationUser.archiveSecurityLevels || !ctrl.ouApplicationUser.archiveSecurityLevels.length"
                                                    ng-model-options="{trackBy:'$value.lookupKey'}"
                                                    ng-model="ctrl.ouApplicationUser.securityLevels">
                                             <md-option ng-value="securityLevel"
@@ -321,10 +322,11 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                    <!-- Archive Security Levels -->
+                                    <!-- Security Levels -->
                                     <md-input-container flex>
-                                        <label for="ouArchiveSecurityLevel">{{lang.archive}} {{lang.security_levels}}</label>
-                                        <md-select id="ouArchiveSecurityLevel" name="ouArchiveSecurityLevel" multiple required
+                                        <label for="ouArchiveSecurityLevel">{{lang.security_levels}}</label>
+                                        <md-select id="ouArchiveSecurityLevel" name="ouArchiveSecurityLevel" multiple
+                                                   ng-required="!ctrl.ouApplicationUser.securityLevels || !ctrl.ouApplicationUser.securityLevels.length"
                                                    ng-model-options="{trackBy:'$value.lookupKey'}"
                                                    ng-model="ctrl.ouApplicationUser.archiveSecurityLevels">
                                             <md-option ng-value="securityLevel"
@@ -378,15 +380,15 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                    <md-switch flex ng-model="ctrl.applicationUser.backLogMode"
-                                               aria-label="{{lang.backlog_mode}}">
-                                        <label>{{lang.backlog_mode}} :
-                                            {{ctrl.applicationUser.getTranslatedYesNo('backLogMode')}}</label>
-                                    </md-switch>
                                     <md-switch flex ng-model="ctrl.applicationUser.slowConnectionMode"
                                                aria-label="{{lang.slow_connection_mode}}">
                                         <label>{{lang.slow_connection_mode}} :
                                             {{ctrl.applicationUser.getTranslatedYesNo('slowConnectionMode')}}</label>
+                                    </md-switch>
+                                    <md-switch flex ng-model="ctrl.applicationUser.backLogMode"
+                                               aria-label="{{lang.backlog_mode}}">
+                                        <label>{{lang.backlog_mode}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('backLogMode')}}</label>
                                     </md-switch>
                                 </div>
                             </div>
@@ -664,8 +666,9 @@
                                             <table md-table>
                                                 <thead md-head>
                                                 <tr md-row>
-                                                    <th md-column>{{lang.arabic_name}}</th>
+                                                    <th md-column>{{lang.organization}}</th>
                                                     <th md-column>{{lang.role}}</th>
+                                                    <th md-column>{{lang.security_level_view}} {{lang.security_levels}}</th>
                                                     <th md-column>{{lang.security_levels}}</th>
                                                     <th md-column>{{lang.status}}</th>
                                                     <th md-column>{{lang.private}}</th>
@@ -687,7 +690,10 @@
                                                         {{ouApplicationUser.customRoleId.getTranslatedName()}}
                                                     </td>
                                                     <td md-cell>
-                                                        {{ouApplicationUser.getSecurityLevelsText()}}
+                                                        {{ouApplicationUser.securityLevelsString}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        {{ouApplicationUser.archiveSecurityLevelsString}}
                                                     </td>
                                                     <td md-cell>
                                                         <md-switch ng-model="ouApplicationUser.status"

@@ -352,15 +352,15 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <md-switch flex ng-model="ctrl.applicationUser.backLogMode"
-                                               aria-label="{{lang.backlog_mode}}">
-                                        <label>{{lang.backlog_mode}} :
-                                            {{ctrl.applicationUser.getTranslatedYesNo('backLogMode')}}</label>
-                                    </md-switch>
                                     <md-switch flex ng-model="ctrl.applicationUser.slowConnectionMode"
                                                aria-label="{{lang.slow_connection_mode}}">
                                         <label>{{lang.slow_connection_mode}} :
                                             {{ctrl.applicationUser.getTranslatedYesNo('slowConnectionMode')}}</label>
+                                    </md-switch>
+                                    <md-switch flex ng-model="ctrl.applicationUser.backLogMode"
+                                               aria-label="{{lang.backlog_mode}}">
+                                        <label>{{lang.backlog_mode}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('backLogMode')}}</label>
                                     </md-switch>
                                 </div>
                             </div>
@@ -654,13 +654,13 @@
                                                     <thead md-head md-order="ctrl.ouApplicationUsersGrid.order"
                                                            md-on-reorder="ctrl.getSortedOUApplicationUserData">
                                                     <tr md-row>
-                                                        <th md-column md-order-by="">{{lang.organization}}</th>
-                                                        <th md-column md-order-by="">{{lang.role}}</th>
-                                                        <th md-column md-order-by="">{{lang.security_levels}}</th>
-                                                        <th md-column md-order-by="">{{lang.archive}} {{lang.security_levels}}</th>
-                                                        <th md-column md-order-by="">{{lang.status}}</th>
-                                                        <th md-column md-order-by="">{{lang.private}}</th>
-                                                        <th md-column md-order-by="">{{lang.actions}}</th>
+                                                        <th md-column>{{lang.organization}}</th>
+                                                        <th md-column>{{lang.role}}</th>
+                                                        <th md-column>{{lang.security_level_view}} {{lang.security_levels}}</th>
+                                                        <th md-column>{{lang.security_levels}}</th>
+                                                        <th md-column>{{lang.status}}</th>
+                                                        <th md-column>{{lang.private}}</th>
+                                                        <th md-column>{{lang.actions}}</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody md-body>
