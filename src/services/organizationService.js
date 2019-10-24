@@ -73,15 +73,17 @@ module.exports = function (app) {
         /**
          * @description get organization by organizationId
          * @param organizationId
+         * @param useNormalOrgList
          * @returns {Organization|undefined} return Organization Model or undefined if not found.
          */
-        self.getOrganizationById = function (organizationId) {
+        self.getOrganizationById = function (organizationId, useNormalOrgList) {
             if (!organizationId)
                 return;
 
-            var id = organizationId.hasOwnProperty('id') ? organizationId.id : organizationId;
+            var id = organizationId.hasOwnProperty('id') ? organizationId.id : organizationId,
+                ous = useNormalOrgList ? self.organizations : self.allOrganizationsStructure;
 
-            return _.find(self.allOrganizationsStructure, function (organization) {
+            return _.find(ous, function (organization) {
                 return Number(organization.id) === Number(id);
             });
         };
