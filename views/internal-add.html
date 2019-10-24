@@ -23,12 +23,12 @@
                                     <span> &nbsp;{{lang.document_properties}}</span>
                                     <span flex></span>
                                     <div layout="row" layout-align="center center">
-                                        <span>{{lang.internal_document_type}} :</span>
-                                        <span>{{lang.internal_electronic}}</span>
+                                        <span>{{lang.internal_document_type}} : {{lang.internal_electronic}}</span>
                                         <span>&nbsp;&nbsp;</span>
                                         <md-switch
                                                 ng-disabled="!!ctrl.internal.vsId || ctrl.duplicateVersion || !ctrl.employeeService.hasPermissionTo('INTERNAL_PAPER')"
                                                 class="m0 top-switch-handler"
+                                                aria-label="{{lang.internal_document_type}}"
                                                 ng-true-value="1" ng-false-value="0"
                                                 ng-click="ctrl.preventPropagation($event)"
                                                 ng-change="ctrl.checkChangeInternalType()"
