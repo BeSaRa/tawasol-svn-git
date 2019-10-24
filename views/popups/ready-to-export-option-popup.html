@@ -109,28 +109,26 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-click="ctrl.exportCorrespondenceWorkItem()"
+        <md-button class="md-raised md-primary" ng-click="ctrl.exportCorrespondenceWorkItem()"
                    ng-if="ctrl.resend"
                    ng-disabled="!ctrl.correspondenceSites.length">
             {{lang.resend}}
         </md-button>
-        <md-button class="md-raised" ng-click="ctrl.exportCorrespondenceWorkItem()"
+        <md-button class="md-raised md-primary" ng-click="ctrl.exportCorrespondenceWorkItem()"
                    ng-if="!ctrl.resend && ctrl.isElectronicExport()"
                    ng-disabled="!ctrl.correspondenceSites.length">
             {{lang.export}}
         </md-button>
-        <md-button class="md-raised" ng-click="ctrl.exportCorrespondenceWorkItem()"
+        <md-button class="md-raised md-primary" ng-click="ctrl.exportCorrespondenceWorkItem()"
                    ng-if="!ctrl.resend && ctrl.isFaxExport()"
                    ng-disabled="!ctrl.correspondenceSites.length">
             {{ctrl.fax_export}}
         </md-button>
-        <span ng-if="!ctrl.resend && (ctrl.isElectronicExport() || ctrl.isFaxExport())" flex></span>
-        <md-button ng-if="!ctrl.resend && ctrl.isManualExport()" class="md-raised"
+        <md-button ng-if="!ctrl.resend && ctrl.isManualExport()" class="md-raised md-primary"
                    ng-click="ctrl.printWithTerminate()">
             {{lang.print_with_terminate}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeExportPopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeExportPopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

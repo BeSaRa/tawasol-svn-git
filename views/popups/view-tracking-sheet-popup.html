@@ -714,17 +714,15 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-click="ctrl.exportToExcel($event)"
+        <md-button class="md-raised md-primary" ng-click="ctrl.exportToExcel($event)"
                    ng-disabled="ctrl.checkDisabled($event)">
             {{lang.export_to_excel}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.printSheet($event)"
+        <md-button class="md-raised md-primary" ng-click="ctrl.printSheet($event)"
                    ng-disabled="ctrl.checkDisabled($event)">
             {{lang.print}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeTrackingSheetPopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeTrackingSheetPopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

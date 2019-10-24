@@ -39,12 +39,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-click="ctrl.archiveCorrespondence()"
+        <md-button class="md-raised md-primary" ng-click="ctrl.archiveCorrespondence()"
                    ng-disabled="icnArchiveOptionsForm.$invalid">
             {{lang.archive}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closePopup()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

@@ -98,10 +98,9 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="icnAttachmentOptionsForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="icnAttachmentOptionsForm.$invalid"
                    ng-click="ctrl.getICNAttachmentForm($event)">{{lang.attachment_add}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closePopup($event)">{{lang.close}}</md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup($event)">{{lang.close}}</md-button>
     </md-dialog-actions>
 </md-dialog>

@@ -101,7 +101,7 @@
                         </div>
                         <div>
                             <!-- Test Connection -->
-                            <md-button class="md-raised" ng-if="ctrl.editMode"
+                            <md-button class="md-raised md-primary" ng-if="ctrl.editMode"
                                        ng-disabled="!ctrl.checkTestLdapConnectionEnabled()"
                                        ng-click="ctrl.testLdapConnection()">{{lang.test_connection}}
                             </md-button>
@@ -112,14 +112,12 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="ldapProviderForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="ldapProviderForm.$invalid"
                    ng-click="ctrl.sendLDAPProvider($event)">{{lang.set}}
         </md-button>
-        <span flex></span>
         <md-button class="md-raised"
                    ng-click="ctrl.resetLDAPProvider(ldapProviderForm, $event)">{{lang.reset}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closePopUp($event)">{{lang.close}}</md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopUp($event)">{{lang.close}}</md-button>
     </md-dialog-actions>
 </md-dialog>

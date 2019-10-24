@@ -141,12 +141,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="outOfOfficeSettingsForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="outOfOfficeSettingsForm.$invalid"
                    ng-click="ctrl.addApplicationUserOutOfOfficeSettingsFromCtrl()">
             {{lang.add}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeApplicationUserOutOfOfficeSettingPopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeApplicationUserOutOfOfficeSettingPopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

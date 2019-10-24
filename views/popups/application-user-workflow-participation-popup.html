@@ -103,12 +103,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="applicationUserWorkflowParticipationForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="applicationUserWorkflowParticipationForm.$invalid"
                    ng-click="ctrl.addApplicationUserWorkflowParticipationPopupFromCtrl()">
             {{lang.add}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised"
+        <md-button class="md-raised red-text"
                    ng-click="ctrl.closeApplicationUserWorkflowParticipationPopupFromCtrl()">
             {{lang.close}}
         </md-button>

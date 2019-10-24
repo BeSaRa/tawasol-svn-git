@@ -964,7 +964,7 @@
                                     </md-input-container>
                                     <!-- Buttons -->
                                     <div class="p20">
-                                        <md-button class="md-raised" ng-if="!ctrl.classificationViewPermission.id"
+                                        <md-button class="md-raised md-primary" ng-if="!ctrl.classificationViewPermission.id"
                                                    ng-disabled="!ctrl.classificationViewPermission.classificationId
                                                || !ctrl.classificationViewPermission.securityLevels.length"
                                                    ng-click="ctrl.addClassificationViewPermissionFromCtrl()">
@@ -1077,7 +1077,7 @@
                                     </md-input-container>
                                     <!-- Buttons -->
                                     <div class="p20">
-                                        <md-button class="md-raised" ng-disabled="!ctrl.ouViewPermission.ouId
+                                        <md-button class="md-raised md-primary" ng-disabled="!ctrl.ouViewPermission.ouId
                                                || !ctrl.ouViewPermission.securityLevels.length"
                                                    ng-click="ctrl.addOuViewPermissionFromCtrl()">
                                             {{lang.add}}
@@ -1160,16 +1160,15 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="applicationUserForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="applicationUserForm.$invalid"
                    ng-if="!ctrl.editMode"
                    ng-click="ctrl.addApplicationUserFromCtrl()">{{lang.add}}
         </md-button>
-        <md-button class="md-raised" ng-disabled="applicationUserForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="applicationUserForm.$invalid"
                    ng-if="ctrl.editMode && ctrl.selectedTab!=='cvp' && ctrl.selectedTab!=='ot' && ctrl.selectedTab !== 'signature'"
                    ng-click="ctrl.editApplicationUserFromCtrl()">{{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeApplicationUserPopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeApplicationUserPopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

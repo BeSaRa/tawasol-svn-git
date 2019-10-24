@@ -185,13 +185,12 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="!ctrl.addedUsers.length"
                    ng-click="ctrl.addToWorkflowGroup($event)">
             {{lang.add}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeAddToWorkflowGroupPopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeAddToWorkflowGroupPopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

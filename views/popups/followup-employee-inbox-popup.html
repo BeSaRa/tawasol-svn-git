@@ -67,12 +67,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="organizationAndUserForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="organizationAndUserForm.$invalid"
                    ng-click="ctrl.getFollowupEmployeeDataForOUAndUser($event)">
             {{lang.follow_up_get_inbox}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeFollowupEmployeeInboxPopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeFollowupEmployeeInboxPopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

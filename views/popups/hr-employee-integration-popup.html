@@ -158,22 +158,20 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-click="ctrl.search()"
+        <md-button class="md-raised md-primary" ng-click="ctrl.search()"
                    ng-disabled="HRIntegrationSearchForm.$invalid"
                    ng-if="ctrl.selectedTabIndex ===0">
             {{lang.search}}
         </md-button>
-        <md-button class="md-raised" ng-click="ctrl.addEmployeeLinkedEntity()"
+        <md-button class="md-raised md-primary" ng-click="ctrl.addEmployeeLinkedEntity()"
                    ng-disabled="HRIntegrationSearchForm.$invalid || !ctrl.selectedEmployees.length"
                    ng-if="ctrl.selectedTabIndex ===1">
             {{lang.add}}
         </md-button>
-        <span flex></span>
         <md-button class="md-raised" ng-click="ctrl.resetPopupForm($event)" ng-if="ctrl.selectedTabIndex ===1">
             {{lang.reset}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closePopupFromCtrl($event)">
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopupFromCtrl($event)">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

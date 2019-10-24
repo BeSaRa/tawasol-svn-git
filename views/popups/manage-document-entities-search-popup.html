@@ -14,10 +14,9 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="!ctrl.formValid"
+        <md-button class="md-raised md-primary" ng-disabled="!ctrl.formValid"
                    ng-click="ctrl.setDocumentEntities($event)">{{lang.set}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeDocumentEntities($event)">{{lang.close}}</md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closeDocumentEntities($event)">{{lang.close}}</md-button>
     </md-dialog-actions>
 </md-dialog>

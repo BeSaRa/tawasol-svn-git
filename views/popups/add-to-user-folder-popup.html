@@ -18,18 +18,17 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-if="!ctrl.isBulkAdd"
+        <md-button class="md-raised md-primary" ng-if="!ctrl.isBulkAdd"
                    ng-disabled="!ctrl.currentNode || ctrl.currentNodeCopy===ctrl.currentNode"
                    ng-click="ctrl.addToFolder($event)">
             {{lang.add}}
         </md-button>
-        <md-button class="md-raised" ng-if="ctrl.isBulkAdd"
+        <md-button class="md-raised md-primary" ng-if="ctrl.isBulkAdd"
                    ng-disabled="!ctrl.currentNode"
                    ng-click="ctrl.addToFolderBulk($event)">
             {{lang.add}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeAddToUserFolderPopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeAddToUserFolderPopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

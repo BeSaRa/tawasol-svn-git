@@ -18,7 +18,7 @@
                     </md-select>
                 </md-input-container>
                 <div>
-                    <md-button class="md-raised" ng-disabled="ctrl.isDisabled()"
+                    <md-button class="md-raised md-primary" ng-disabled="ctrl.isDisabled()"
                                ng-click="ctrl.addClassificationToSelectedClassification()">
                         {{lang.add}}
                     </md-button>
@@ -79,11 +79,9 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <span flex></span>
-        <md-button class="md-raised" ng-if="ctrl.selectedClassifications.length"
+        <md-button class="md-raised md-primary" ng-if="ctrl.selectedClassifications.length"
                    ng-click="ctrl.sendSelectedClassification()">
             {{lang.send}}
         </md-button>
-        <span flex></span>
     </md-dialog-actions>
 </md-dialog>

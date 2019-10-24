@@ -40,12 +40,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="searchDocDateForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="searchDocDateForm.$invalid"
                    ng-click="ctrl.returnSearchDocDates($event)">
             {{lang.set}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeSearchDocDatePopup($event)">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeSearchDocDatePopup($event)">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

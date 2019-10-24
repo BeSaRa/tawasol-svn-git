@@ -153,7 +153,7 @@
                                         </md-checkbox>
                                     </md-input-container>
                                     <div>
-                                        <md-button class="md-raised" ng-disabled="!ctrl.includedOrganization"
+                                        <md-button class="md-raised md-primary" ng-disabled="!ctrl.includedOrganization"
                                                    ng-click="ctrl.includeSelectedOrganization()">
                                             {{$root.lang.add}}
                                         </md-button>
@@ -208,20 +208,19 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="privateAnnouncementForm.$invalid || !ctrl.privateAnnouncement.subscribers.length"
                    ng-if="!ctrl.editMode"
                    ng-click="ctrl.addPrivateAnnouncementFromCtrl()">
             {{lang.add}}
         </md-button>
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="privateAnnouncementForm.$invalid || !ctrl.privateAnnouncement.subscribers.length"
                    ng-if="ctrl.editMode"
                    ng-click="ctrl.editPrivateAnnouncementFromCtrl()">
             {{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closePrivateAnnouncementPopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closePrivateAnnouncementPopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

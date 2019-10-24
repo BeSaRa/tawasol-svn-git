@@ -94,7 +94,7 @@
                             </md-input-container>
                             <div>
                                 <div flex>
-                                    <md-button class="md-raised"
+                                    <md-button class="md-raised md-primary"
                                                ng-disabled="broadcast_form.$invalid"
                                                ng-click="ctrl.addToBroadcast(broadcast_form)">
                                         {{lang.add}}
@@ -226,8 +226,7 @@
                    ng-click="ctrl.startBroadcast()">
             {{lang.broadcast}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closePopup()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

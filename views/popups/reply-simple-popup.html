@@ -161,15 +161,13 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="distWorkflowItem_form.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="distWorkflowItem_form.$invalid"
                    ng-click="ctrl.launch($event)">
             {{lang.reply}}
         </md-button>
-        <span flex></span>
         <md-button class="md-raised" ng-click="ctrl.advancedReply($event)">{{lang.more_details}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeLaunchPopup()">{{lang.close}}
+        <md-button class="md-raised red-text" ng-click="ctrl.closeLaunchPopup()">{{lang.close}}
         </md-button>
     </md-dialog-actions>
 </md-dialog>

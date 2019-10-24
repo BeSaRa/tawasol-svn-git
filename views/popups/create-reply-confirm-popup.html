@@ -42,13 +42,12 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="reason_form.$invalid"
                    ng-click="ctrl.setCreateReply($event)">
             {{lang.grid_action_create_reply}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closePopup()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

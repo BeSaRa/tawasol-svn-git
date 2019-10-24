@@ -63,12 +63,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="!ctrl.isSaveEnabled(ouUnassignedUserForm)"
+        <md-button class="md-raised md-primary" ng-disabled="!ctrl.isSaveEnabled(ouUnassignedUserForm)"
                    ng-click="ctrl.addOuUnassignedUserFromCtrl(ouUnassignedUserForm)">
             {{lang.add}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeOuUnassignedUserPopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeOuUnassignedUserPopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

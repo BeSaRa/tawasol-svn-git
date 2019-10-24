@@ -1087,12 +1087,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="!ctrl.partialExportList.hasSites()"
+        <md-button class="md-raised md-primary" ng-disabled="!ctrl.partialExportList.hasSites()"
                    ng-click="ctrl.partialExportDocument()">
             {{lang.grid_action_send_to_ready_to_export}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closePartialExportDialog()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closePartialExportDialog()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

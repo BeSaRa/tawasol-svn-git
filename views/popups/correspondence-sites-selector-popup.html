@@ -18,7 +18,7 @@
                     </md-select>
                 </md-input-container>
                 <div>
-                    <md-button class="md-raised" ng-disabled="ctrl.isDisabled()"
+                    <md-button class="md-raised md-primary" ng-disabled="ctrl.isDisabled()"
                                ng-click="ctrl.addCorrespondenceSiteToSelectedCorrespondenceSite()">
                         {{lang.add}}
                     </md-button>
@@ -79,11 +79,9 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <span flex></span>
-        <md-button class="md-raised" ng-if="ctrl.selectedCorrespondenceSites.length"
+        <md-button class="md-raised md-primary" ng-if="ctrl.selectedCorrespondenceSites.length"
                    ng-click="ctrl.sendSelectedCorrespondenceSite()">
             {{lang.send}}
         </md-button>
-        <span flex></span>
     </md-dialog-actions>
 </md-dialog>

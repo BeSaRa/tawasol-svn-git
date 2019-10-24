@@ -207,7 +207,7 @@
                                     </div>
                                     <div layout="row">
                                         <div flex>
-                                            <md-button class="md-raised" ng-if="ctrl.editMode"
+                                            <md-button class="md-raised md-primary" ng-if="ctrl.editMode"
                                                        ng-disabled="!ctrl.checkTestFileNetConnectionEnabled()"
                                                        ng-click="ctrl.testFileNetConnection()">{{lang.test_connection}}
                                             </md-button>
@@ -360,7 +360,7 @@
                                         </md-input-container>
                                     </div>
                                     <div layout="row">
-                                        <md-button class="md-raised" ng-if="ctrl.editMode"
+                                        <md-button class="md-raised md-primary" ng-if="ctrl.editMode"
                                                    ng-disabled="!ctrl.checkTestSmtpConnectionEnabled()"
                                                    ng-click="ctrl.testSmtpConnection()">{{lang.test_connection}}
                                         </md-button>
@@ -606,16 +606,15 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-if="!ctrl.editMode"
+        <md-button class="md-raised md-primary" ng-if="!ctrl.editMode"
                    ng-disabled="entityForm.$invalid || !ctrl.entity.ldapProviders.length"
                    ng-click="ctrl.addEntityFromCtrl()">{{lang.add}}
         </md-button>
-        <md-button class="md-raised" ng-if="ctrl.editMode"
+        <md-button class="md-raised md-primary" ng-if="ctrl.editMode"
                    ng-disabled="entityForm.$invalid || !ctrl.entity.ldapProviders.length"
                    ng-click="ctrl.editEntityFromCtrl()">{{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeEntityPopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeEntityPopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

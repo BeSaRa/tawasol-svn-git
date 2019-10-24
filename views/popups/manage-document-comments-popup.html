@@ -19,18 +19,17 @@
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <div ng-if="!!ctrl.documentComment">
-            <md-button class="md-raised" ng-if="!ctrl.editMode"
+            <md-button class="md-raised md-primary" ng-if="!ctrl.editMode"
                        ng-disabled="!ctrl.isValid"
                        ng-click="ctrl.createDocumentComment()">
                 {{lang.add}}
             </md-button>
-            <md-button class="md-raised" ng-if="ctrl.editMode"
+            <md-button class="md-raised md-primary" ng-if="ctrl.editMode"
                        ng-disabled="!ctrl.isValid"
                        ng-click="ctrl.saveDocumentComments()">
                 {{lang.save}}
             </md-button>
         </div>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeDocumentComments()">{{lang.close}}</md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closeDocumentComments()">{{lang.close}}</md-button>
     </md-dialog-actions>
 </md-dialog>

@@ -62,18 +62,16 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="localization_form.$invalid || localization_form.$pending || ctrl.disableOnPost"
                    ng-click="ctrl.saveLocalization()">
             {{lang.save}}
         </md-button>
-        <span flex></span>
         <md-button class="md-raised"
                    ng-click="ctrl.resetModel()">
             {{lang.reset}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeLocalizationPopup()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeLocalizationPopup()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

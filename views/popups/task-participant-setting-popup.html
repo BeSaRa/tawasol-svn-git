@@ -113,17 +113,16 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="participant_form.$invalid"
                    ng-if="!ctrl.editMode"
                    ng-click="ctrl.addTaskParticipantFromCtrl()">{{lang.add}}
         </md-button>
-        <md-button class="md-raised" ng-if="ctrl.editMode"
+        <md-button class="md-raised md-primary" ng-if="ctrl.editMode"
                    ng-disabled="participant_form.$invalid"
                    ng-click="ctrl.editTaskParticipantFromCtrl()">{{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeTaskParticipantPopupFromCtrl()">{{lang.close}}
+        <md-button class="md-raised red-text" ng-click="ctrl.closeTaskParticipantPopupFromCtrl()">{{lang.close}}
         </md-button>
     </md-dialog-actions>
 </md-dialog>

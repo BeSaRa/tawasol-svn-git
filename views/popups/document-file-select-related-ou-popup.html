@@ -115,21 +115,18 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <div ng-if="!ctrl.showRelatedOUForm" layout="row" flex>
-            <span flex></span>
-            <md-button class="md-raised" ng-disabled="!ctrl.documentFile.relatedOus.length"
+        <div ng-if="!ctrl.showRelatedOUForm">
+            <md-button class="md-raised md-primary" ng-disabled="!ctrl.documentFile.relatedOus.length"
                        ng-click="ctrl.saveSelectedOrganizations()">
                 {{lang.save}}
             </md-button>
-            <span flex></span>
         </div>
-        <div ng-if="ctrl.showRelatedOUForm" layout="row" flex>
-            <md-button class="md-raised" ng-disabled="!ctrl.isRelatedOuFormValid()"
+        <div ng-if="ctrl.showRelatedOUForm">
+            <md-button class="md-raised md-primary" ng-disabled="!ctrl.isRelatedOuFormValid()"
                        ng-click="ctrl.addOuDocumentFile($event)">
                 {{lang.add}}
             </md-button>
-            <span flex></span>
-            <md-button class="md-raised" ng-click="ctrl.toggleRelatedOuForm()">
+            <md-button class="md-raised red-text" ng-click="ctrl.toggleRelatedOuForm()">
                 {{lang.close}}
             </md-button>
         </div>

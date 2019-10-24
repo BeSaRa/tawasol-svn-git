@@ -210,7 +210,7 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="workflowActionForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="workflowActionForm.$invalid"
                    ng-if="!ctrl.editMode"
                    ng-click="ctrl.addWorkflowActionFromCtrl()">{{lang.add}}
         </md-button>
@@ -219,12 +219,11 @@
                    ng-click="ctrl.editWorkflowActionFromCtrl()">{{lang.save}}
         </md-button>-->
 
-        <md-button class="md-raised" ng-if="ctrl.editMode && ctrl.selectedTabName == 'basic_info'"
+        <md-button class="md-raised md-primary" ng-if="ctrl.editMode && ctrl.selectedTabName == 'basic_info'"
                    ng-disabled="ctrl.isWorkflowActionValid(workflowActionForm)"
                    ng-click="ctrl.editWorkflowActionFromCtrl()">{{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeWorkflowActionPopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeWorkflowActionPopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

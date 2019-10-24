@@ -219,34 +219,31 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <div ng-if="!ctrl.showRelatedOUForm" layout="row" flex>
-            <md-button class="md-raised" ng-if="!ctrl.editMode"
+        <div ng-if="!ctrl.showRelatedOUForm">
+            <md-button class="md-raised md-primary" ng-if="!ctrl.editMode"
                        ng-disabled="documentFileForm.$invalid || !ctrl.checkValidGlobal()"
                        ng-click="ctrl.saveDocumentFile($event)">{{lang.add}}
             </md-button>
-            <md-button class="md-raised"
+            <md-button class="md-raised md-primary"
                        ng-if="ctrl.editMode && ctrl.selectedTab === 'basic'"
                        ng-disabled="documentFileForm.$invalid || !ctrl.checkValidGlobal()"
                        ng-click="ctrl.saveDocumentFile($event)">{{lang.save}}
             </md-button>
-            <span flex=""></span>
             <md-button class="md-raised" ng-if="ctrl.selectedTab === 'basic'"
                        ng-click="ctrl.resetModel()">
                 {{lang.reset}}
             </md-button>
-            <span flex></span>
-            <md-button class="md-raised"
+            <md-button class="md-raised red-text"
                        ng-click="ctrl.closePopup()">
                 {{lang.close}}
             </md-button>
         </div>
-        <div ng-if="ctrl.showRelatedOUForm" layout="row" flex>
-            <md-button class="md-raised" ng-disabled="!ctrl.isRelatedOuFormValid()"
+        <div ng-if="ctrl.showRelatedOUForm">
+            <md-button class="md-raised md-primary" ng-disabled="!ctrl.isRelatedOuFormValid()"
                        ng-click="ctrl.addOuDocumentFile($event)">
                 {{lang.add}}
             </md-button>
-            <span flex></span>
-            <md-button class="md-raised" ng-click="ctrl.toggleRelatedOuForm()">
+            <md-button class="md-raised red-text" ng-click="ctrl.toggleRelatedOuForm()">
                 {{lang.close}}
             </md-button>
         </div>

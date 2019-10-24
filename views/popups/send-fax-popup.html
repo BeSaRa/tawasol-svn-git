@@ -14,12 +14,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="!ctrl.correspondence.sitesInfoTo.length"
+        <md-button class="md-raised md-primary" ng-disabled="!ctrl.correspondence.sitesInfoTo.length"
                    ng-click="ctrl.sendFax()">
             {{lang.send}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closePopup()">{{lang.close}}
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">{{lang.close}}
         </md-button>
     </md-dialog-actions>
 </md-dialog>

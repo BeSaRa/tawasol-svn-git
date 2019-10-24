@@ -80,13 +80,12 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="reason_form.$invalid && ctrl.itemNeedReason()"
                    ng-click="ctrl.sendBulkReason()">
             {{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeBulkReasonPopup()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeBulkReasonPopup()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

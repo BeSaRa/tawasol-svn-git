@@ -24,7 +24,7 @@
                                     selected-file-extension="ctrl.selectedExtension">
                             </browse-file-directive>-->
                             <label for="upload-sign"
-                                   class="md-button md-raised alongside-input">
+                                   class="md-button md-raised alongside-input md-primary">
                                             <span layout="row" layout-align="start center">
                                                 <md-icon md-svg-icon="upload"></md-icon>
                                                 <span>{{lang.upload_signature}}</span>
@@ -66,18 +66,17 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-if="!ctrl.editMode"
+        <md-button class="md-raised md-primary" ng-if="!ctrl.editMode"
                    ng-disabled="applicationUserSignatureForm.$invalid || !ctrl.currentFileData"
                    ng-click="ctrl.addDocumentTemplateFromCtrl()">
             {{lang.add}}
         </md-button>
-        <md-button class="md-raised" ng-disabled="applicationUserSignatureForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="applicationUserSignatureForm.$invalid"
                    ng-if="ctrl.editMode"
                    ng-click="ctrl.editApplicationUserSignatureFromCtrl()">
             {{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeApplicationUserSignaturePopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeApplicationUserSignaturePopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

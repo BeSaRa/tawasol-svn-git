@@ -135,11 +135,10 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-click="ctrl.sendSelectedLinkedDocuments()">
+        <md-button class="md-raised md-primary" ng-click="ctrl.sendSelectedLinkedDocuments()">
             {{lang.export_linked_document_attachments_select}}
         </md-button>
-        <span flex></span>
-        <md-button ng-click="ctrl.closeDialog()" class="md-raised">{{lang.close}}
+        <md-button ng-click="ctrl.closeDialog()" class="md-raised red-text">{{lang.close}}
         </md-button>
     </md-dialog-actions>
 </md-dialog>

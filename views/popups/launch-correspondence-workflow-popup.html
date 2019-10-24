@@ -178,7 +178,7 @@
                                 </md-input-container>
                                 <div>
                                     <md-button id="user_search" ng-disabled="ctrl.loadingIndicatorService.loading"
-                                               class="md-raised"
+                                               class="md-raised md-primary"
                                                ng-click="ctrl.onSearchUsers()">
                                         {{lang.search}}
                                     </md-button>
@@ -454,11 +454,11 @@
     </md-dialog-content>
     <!-- Buttons and info -->
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-click="ctrl.launchDistributionCorrespondenceWorkFlow()">
+        <span layout-align="center center"><span ng-if="ctrl.getApprovedStatus()" class="red-color">{{ctrl.multi ?  lang.get('selected_document_has_not_approved_document') : lang.get('cannot_send_to_multi')}}</span></span>
+        <span flex></span>
+        <md-button class="md-raised md-primary" ng-click="ctrl.launchDistributionCorrespondenceWorkFlow()">
             {{lang.get(ctrl.textButton)}}
         </md-button>
-        <span layout="row" layout-align="center center"
-              flex><span ng-if="ctrl.getApprovedStatus()" class="red-color">{{ctrl.multi ?  lang.get('selected_document_has_not_approved_document') : lang.get('cannot_send_to_multi')}}</span></span>
         <md-button class="md-raised red-text" ng-click="ctrl.closeCorrespondenceWorkflow()">{{lang.close}}</md-button>
     </md-dialog-actions>
 </md-dialog>

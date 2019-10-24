@@ -104,12 +104,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="distWorkflowItem_form.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="distWorkflowItem_form.$invalid"
                    ng-click="ctrl.setDistWorkflowItemProperties()">
             {{lang.set}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeDistWorkflowItemProperties()">{{lang.close}}
+        <md-button class="md-raised red-text" ng-click="ctrl.closeDistWorkflowItemProperties()">{{lang.close}}
         </md-button>
     </md-dialog-actions>
 </md-dialog>

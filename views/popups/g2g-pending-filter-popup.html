@@ -61,11 +61,10 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="g2gPendingSearchCriteriaForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="g2gPendingSearchCriteriaForm.$invalid"
                    ng-click="ctrl.setCriteria($event)">{{lang.search}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closePopup()">{{lang.close}}
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">{{lang.close}}
         </md-button>
     </md-dialog-actions>
 </md-dialog>

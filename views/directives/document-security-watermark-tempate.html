@@ -402,11 +402,11 @@
             </md-tabs>
             <!-- Buttons -->
             <div>
-                <md-button class="md-raised" ng-if="!ctrl.documentSecurity.id"
+                <md-button class="md-raised md-primary" ng-if="!ctrl.documentSecurity.id"
                            ng-disabled="(ctrl.documentSecurity.status && documentSecurityForm.$invalid)"
                            ng-click="ctrl.addDocumentSecurity()">{{lang.add}}
                 </md-button>
-                <md-button class="md-raised" ng-if="ctrl.documentSecurity.id"
+                <md-button class="md-raised md-primary" ng-if="ctrl.documentSecurity.id"
                            ng-disabled="(ctrl.documentSecurity.status && documentSecurityForm.$invalid)"
                            ng-click="ctrl.saveDocumentSecurity()">{{lang.save}}
                 </md-button>

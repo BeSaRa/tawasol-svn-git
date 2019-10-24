@@ -93,7 +93,7 @@
                                         </md-select>
                                     </md-input-container>
                                     <div>
-                                        <md-button class="md-raised" ng-disabled="!ctrl.selectedOrganization"
+                                        <md-button class="md-raised md-primary" ng-disabled="!ctrl.selectedOrganization"
                                                    ng-click="ctrl.addOrganizationToDistributionList()">{{lang.add}}
                                         </md-button>
                                     </div>
@@ -221,26 +221,24 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="distributionList_form.$invalid || !ctrl.checkValidGlobal()"
                    ng-if="!ctrl.editMode"
                    ng-click="ctrl.saveDistributionList()">
             {{lang.add}}
         </md-button>
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="distributionList_form.$invalid || !ctrl.checkValidGlobal()"
                    ng-if="ctrl.editMode && ctrl.selectedTabName === 'basic'"
                    ng-click="ctrl.saveDistributionList()">
             {{lang.save}}
         </md-button>
-        <span flex></span>
         <md-button class="md-raised"
                    ng-if="((ctrl.editMode && ctrl.selectedTabName === 'basic') || !ctrl.editMode)"
                    ng-click="ctrl.resetModel()">
             {{lang.reset}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeDistributionListPopup()">{{lang.close}}
+        <md-button class="md-raised red-text" ng-click="ctrl.closeDistributionListPopup()">{{lang.close}}
         </md-button>
     </md-dialog-actions>
 </md-dialog>

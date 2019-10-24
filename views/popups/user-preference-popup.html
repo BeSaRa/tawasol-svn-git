@@ -1039,7 +1039,7 @@
                                     <div layout="column" flex>
                                         <div layout="row">
                                             <div>
-                                                <label for="add-sign" class="md-button md-raised alongside-input">
+                                                <label for="add-sign" class="md-button md-raised alongside-input md-primary">
                                                         <span layout="row" layout-align="start center">
                                                             <md-icon md-svg-icon="upload"></md-icon>
                                                             <span>{{lang.upload_signature}}</span>
@@ -1086,11 +1086,11 @@
                                                      class="upload-image" height="85" flex>
                                             </div>
                                             <div layout="row" class="p20">
-                                                <md-button class="md-raised" ng-disabled="signatureForm.$invalid"
+                                                <md-button class="md-raised md-primary" ng-disabled="signatureForm.$invalid"
                                                            ng-click="ctrl.addApplicationUserSignatureFromCtrl()">
                                                     {{lang.add}}
                                                 </md-button>
-                                                <md-button class="md-raised"
+                                                <md-button class="md-raised red-text"
                                                            ng-click="ctrl.closeApplicationUserSignatureFromCtrl()">
                                                     {{lang.close}}
                                                 </md-button>
@@ -1174,16 +1174,15 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="userPreferencesForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="userPreferencesForm.$invalid"
                    ng-if="ctrl.selectedTab==='general' || ctrl.selectedTab==='ns'"
                    ng-click="ctrl.editApplicationUserFromCtrl()">{{lang.save}}
         </md-button>
-        <md-button class="md-raised" ng-disabled="outOfOfficeSettingsForm.$invalid || !ctrl.isOutOfOffice"
+        <md-button class="md-raised md-primary" ng-disabled="outOfOfficeSettingsForm.$invalid || !ctrl.isOutOfOffice"
                    ng-if="ctrl.selectedTab==='ooos'"
                    ng-click="ctrl.saveOutOfOfficeSettingsFromCtrl()">{{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeUserPreferencePopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeUserPreferencePopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

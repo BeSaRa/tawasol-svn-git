@@ -15,12 +15,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="documentTypeForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="documentTypeForm.$invalid"
                    ng-click="ctrl.saveSelectedMenuItems()">
             {{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeDialog()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeDialog()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

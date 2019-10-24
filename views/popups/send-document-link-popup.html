@@ -102,7 +102,7 @@
                             </div>
                         </md-input-container>
                         <md-input-container>
-                            <md-button class="md-raised" ng-disabled="documentLinkForm.$invalid"
+                            <md-button class="md-raised md-primary" ng-disabled="documentLinkForm.$invalid"
                                        ng-click="ctrl.addDocumentLinkSubscriber(documentLinkForm)">
                                 {{lang.add}}
                             </md-button>
@@ -185,13 +185,12 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="ctrl.checkDocumentLinkDisabled()"
                    ng-click="ctrl.sendDocumentLink()">
             {{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closePopup()">{{lang.close}}
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">{{lang.close}}
         </md-button>
     </md-dialog-actions>
 </md-dialog>

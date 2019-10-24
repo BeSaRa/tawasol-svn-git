@@ -237,15 +237,14 @@
         </div>
         <div layout="row">
             <div ng-if="ctrl.correspondence">
-                <md-button class="md-raised" ng-click="ctrl.saveCorrespondenceChanges()"
+                <md-button class="md-raised md-primary" ng-click="ctrl.saveCorrespondenceChanges()"
                            ng-disabled="ctrl.checkDisabled() || ctrl.document_properties.$invalid">{{lang.save}}
                 </md-button>
             </div>
             <div ng-if="!ctrl.correspondence">
-                <md-button class="md-raised" ng-click="ctrl.returnBackCorrespondenceInformation()">{{lang.save}}
+                <md-button class="md-raised md-primary" ng-click="ctrl.returnBackCorrespondenceInformation()">{{lang.save}}
                 </md-button>
             </div>
-            <span flex></span>
             <div ng-if="ctrl.correspondence">
                 <md-button class="md-raised red-text" ng-click="ctrl.closeCorrespondenceDialog()">{{lang.close}}</md-button>
             </div>

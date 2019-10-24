@@ -108,18 +108,17 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="role_form.$invalid || ctrl.role.customRolePermission.length===0"
                    ng-if="!ctrl.editMode"
                    ng-click="ctrl.addRoleFromCtrl()">{{lang.add}}
         </md-button>
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="role_form.$invalid || ctrl.role.customRolePermission.length===0"
                    ng-if="ctrl.editMode"
                    ng-click="ctrl.editRoleFromCtrl()">{{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeRolePopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeRolePopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

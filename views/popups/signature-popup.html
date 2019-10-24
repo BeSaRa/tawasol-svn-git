@@ -21,12 +21,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="!ctrl.selectedSignature"
+        <md-button class="md-raised md-primary" ng-disabled="!ctrl.selectedSignature"
                    ng-click="ctrl.signDocumentFromCtrl()">
             {{lang.approve}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeSignaturesPopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeSignaturesPopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

@@ -74,16 +74,15 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="attachmentTypeForm.$invalid" ng-if="!ctrl.editMode"
+        <md-button class="md-raised md-primary" ng-disabled="attachmentTypeForm.$invalid" ng-if="!ctrl.editMode"
                    ng-click="ctrl.addAttachmentTypeFromCtrl()">
             {{lang.add}}
         </md-button>
-        <md-button class="md-raised" ng-disabled="attachmentTypeForm.$invalid" ng-if="ctrl.editMode"
+        <md-button class="md-raised md-primary" ng-disabled="attachmentTypeForm.$invalid" ng-if="ctrl.editMode"
                    ng-click="ctrl.editAttachmentTypeFromCtrl()">
             {{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeAttachmentTypePopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeAttachmentTypePopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

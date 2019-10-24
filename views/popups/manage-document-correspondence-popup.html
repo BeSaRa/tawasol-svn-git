@@ -22,21 +22,20 @@
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <div ng-if="ctrl.documentClass.toLowerCase()==='outgoing'">
-            <md-button class="md-raised" ng-disabled="ctrl.checkDisabled()"
+            <md-button class="md-raised md-primary" ng-disabled="ctrl.checkDisabled()"
                        ng-click="ctrl.saveCorrespondenceSites()">
                 <!--ng-disabled="!ctrl.correspondence.hasSiteTO()"-->
                 {{lang.save}}
             </md-button>
         </div>
         <div ng-if="ctrl.documentClass.toLowerCase()==='incoming'">
-            <md-button class="md-raised" ng-disabled="ctrl.checkDisabled()"
+            <md-button class="md-raised md-primary" ng-disabled="ctrl.checkDisabled()"
                        ng-click="ctrl.saveCorrespondenceSite()">
                 <!--ng-disabled="!ctrl.correspondence.site"-->
                 {{lang.save}}
             </md-button>
         </div>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeDocumentCorrespondence()">{{lang.close}}
+        <md-button class="md-raised red-text" ng-click="ctrl.closeDocumentCorrespondence()">{{lang.close}}
         </md-button>
     </md-dialog-actions>
 </md-dialog>

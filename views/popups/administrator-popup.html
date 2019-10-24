@@ -75,10 +75,9 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="administratorForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="administratorForm.$invalid"
                    ng-click="ctrl.saveAdministrator($event)">{{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closePopup($event)">{{lang.close}}</md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup($event)">{{lang.close}}</md-button>
     </md-dialog-actions>
 </md-dialog>

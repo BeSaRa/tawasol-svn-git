@@ -886,11 +886,11 @@
                                                    ng-model="ctrl.selectedOUClassification.itemOrder">
                                         </md-input-container>
                                         <div>
-                                            <md-button class="md-raised"
+                                            <md-button class="md-raised md-primary"
                                                        ng-click="ctrl.updateOUClassification()">
                                                 {{lang.save}}
                                             </md-button>
-                                            <md-button class="md-raised"
+                                            <md-button class="md-raised red-text"
                                                        ng-click="ctrl.resetEditClassificationMode()">
                                                 {{lang.cancel}}
                                             </md-button>
@@ -1082,11 +1082,11 @@
                                                    ng-model="ctrl.selectedOUCorrespondenceSite.itemOrder">
                                         </md-input-container>
                                         <div>
-                                            <md-button class="md-raised"
+                                            <md-button class="md-raised md-primary"
                                                        ng-click="ctrl.updateOUCorrespondenceSite(ctrl.selectedOUCorrespondenceSite)">
                                                 {{lang.save}}
                                             </md-button>
-                                            <md-button class="md-raised"
+                                            <md-button class="md-raised red-text"
                                                        ng-click="ctrl.resetEditCorrespondenceSiteMode()">
                                                 {{lang.cancel}}
                                             </md-button>
@@ -1681,15 +1681,14 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="org_form.$invalid" ng-click="ctrl.editOrganizationFromCtrl()"
+        <md-button class="md-raised md-primary" ng-disabled="org_form.$invalid" ng-click="ctrl.editOrganizationFromCtrl()"
                    ng-if="ctrl.editMode && ctrl.showSaveButton()">
             {{lang.save}}
         </md-button>
-        <md-button ng-disabled="org_form.$invalid" class="md-raised" ng-click="ctrl.addOrganizationFromCtrl()"
+        <md-button ng-disabled="org_form.$invalid" class="md-raised md-primary" ng-click="ctrl.addOrganizationFromCtrl()"
                    ng-if="!ctrl.editMode">
             {{lang.add}}
         </md-button>
-        <span flex></span>
-        <md-button ng-click="ctrl.closeOrganizationDialog()" class="md-raised">{{lang.close}}</md-button>
+        <md-button ng-click="ctrl.closeOrganizationDialog()" class="md-raised red-text">{{lang.close}}</md-button>
     </md-dialog-actions>
 </md-dialog>

@@ -144,13 +144,12 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="reason_form.$invalid && ctrl.nothingNeedUserReason()"
                    ng-click="ctrl.transferMail()">
             {{lang.transfer}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeTransferReason()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeTransferReason()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

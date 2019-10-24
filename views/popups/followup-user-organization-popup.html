@@ -63,7 +63,7 @@
                             </md-input-container>
 
                             <div class="p020">
-                                <md-button class="md-raised"
+                                <md-button class="md-raised md-primary"
                                            ng-disabled="ctrl.isAddFollowupOrganizationDisabled()"
                                            ng-click="ctrl.addFollowupOrganizationFromCtrl($event)">
                                     {{lang.add}}
@@ -144,12 +144,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised"
+        <md-button class="md-raised md-primary"
                    ng-disabled="followupOrganizationForm.$invalid"
                    ng-click="ctrl.saveFollowupOrganizationFromCtrl()">{{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeFollowupUserOrganizationPopup()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeFollowupUserOrganizationPopup()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

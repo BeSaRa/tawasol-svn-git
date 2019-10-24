@@ -380,19 +380,17 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-if="!ctrl.editMode" ng-disabled="ctrl.checkDisabled(userFilter)"
+        <md-button class="md-raised md-primary" ng-if="!ctrl.editMode" ng-disabled="ctrl.checkDisabled(userFilter)"
                    ng-click="ctrl.saveUserFilterFromCtrl()">{{lang.add}}
         </md-button>
-        <md-button class="md-raised" ng-if="ctrl.editMode" ng-disabled="ctrl.checkDisabled(userFilter)"
+        <md-button class="md-raised md-primary" ng-if="ctrl.editMode" ng-disabled="ctrl.checkDisabled(userFilter)"
                    ng-click="ctrl.saveUserFilterFromCtrl()">
             {{lang.save}}
         </md-button>
-        <span flex></span>
         <md-button class="md-raised" ng-click="ctrl.resetFilterForm(userFilter, $event)">
             {{lang.reset}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeFilterForm($event)">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeFilterForm($event)">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

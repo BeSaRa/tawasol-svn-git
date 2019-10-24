@@ -79,17 +79,15 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-click="ctrl.exportToExcel($event)"
+        <md-button class="md-raised md-primary" ng-click="ctrl.exportToExcel($event)"
                    ng-disabled="!ctrl.mergedLinkedDocHistoryEvents.length">
             {{lang.export_to_excel}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.printSheet($event)"
+        <md-button class="md-raised md-primary" ng-click="ctrl.printSheet($event)"
                    ng-disabled="!ctrl.mergedLinkedDocHistoryEvents.length">
             {{lang.print}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeMergedLinkedDocHistoryEventsPopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeMergedLinkedDocHistoryEventsPopupFromCtrl()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

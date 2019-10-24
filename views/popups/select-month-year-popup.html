@@ -38,12 +38,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-disabled="monthAndYearForm.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="monthAndYearForm.$invalid"
                    ng-click="ctrl.returnMonthAndYear($event)">
             {{lang.dep_get_sent_items}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeMonthAndYearPopup()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeMonthAndYearPopup()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

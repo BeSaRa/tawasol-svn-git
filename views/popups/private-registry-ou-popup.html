@@ -21,7 +21,7 @@
                         </md-select>
                     </md-input-container>
                     <div>
-                        <md-button class="md-raised" ng-disabled="!ctrl.selectedPrivateRegOus.length"
+                        <md-button class="md-raised md-primary" ng-disabled="!ctrl.selectedPrivateRegOus.length"
                                    ng-click="ctrl.addPrivateRegistryOUs($event)">{{lang.add}}
                         </md-button>
                     </div>
@@ -85,11 +85,9 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <span flex></span>
-        <md-button class="md-raised" ng-if="ctrl.privateRegOusGrid.length"
+        <md-button class="md-raised md-primary" ng-if="ctrl.privateRegOusGrid.length"
                    ng-click="ctrl.savePrivateRegistryOUs($event)">
             {{lang.save}}
         </md-button>
-        <span flex></span>
     </md-dialog-actions>
 </md-dialog>

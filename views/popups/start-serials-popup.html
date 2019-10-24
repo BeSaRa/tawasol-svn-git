@@ -44,12 +44,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised" ng-if="!ctrl.editMode"
+        <md-button class="md-raised md-primary" ng-if="!ctrl.editMode"
                    ng-click="ctrl.saveStartReferencePlanItem()">
             {{lang.save}}
         </md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="ctrl.closeStartReferencePlanItem()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeStartReferencePlanItem()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>
