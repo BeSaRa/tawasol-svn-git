@@ -21,6 +21,7 @@ module.exports = function (app) {
                                            errorCode,
                                            contextHelpService,
                                            generator,
+                                           _,
                                            gridService,
                                            $scope) {
         'ngInject';
@@ -585,13 +586,31 @@ module.exports = function (app) {
          * @param workItem
          * @param $event
          * @param defer
-         * @param preActionCallback
+         * @param additionalData
+         * @param sendAfterApprove
          */
-        self.signESignature = function (workItem, $event, defer, preActionCallback) {
-            workItem
+        self.signESignature = function (workItem, $event, defer, additionalData, sendAfterApprove) {
+            /*workItem
                 .approveWorkItem($event, defer, null, null, preActionCallback)
                 .then(function (result) {
                     self.reloadFolders(self.grid.page);
+                });*/
+            return workItem
+                .approveWorkItem($event, defer, null, sendAfterApprove, additionalData)
+                .then(function (result) {
+                    if (sendAfterApprove)
+                        return result;
+
+                    workItem
+                        .launchWorkFlowCondition($event, 'reply', null, true, function () {
+                            return result === 'INTERNAL_PERSONAL'
+                        })
+                        .then(function () {
+                            self.reloadFolders(self.grid.page);
+                        })
+                        .catch(function () {
+                            self.reloadFolders(self.grid.page);
+                        });
                 });
         };
 
@@ -1425,6 +1444,7 @@ module.exports = function (app) {
                     return !model.isBroadcasted()
                         && !info.isPaper
                         && (info.documentClass !== 'incoming')
+                        && model.hasSingleSignature()
                         && model.needApprove();
                 },
                 permissionKey: [
@@ -1444,7 +1464,11 @@ module.exports = function (app) {
                         class: "action-green",
                         permissionKey: "ELECTRONIC_SIGNATURE",
                         checkShow: function (action, model) {
-                            return true;
+                            var info = model.getInfo();
+                            return !model.isBroadcasted()
+                                && !info.isPaper
+                                && (info.documentClass !== 'incoming')
+                                && model.needApprove();
                         }
                     },
                     // Digital Signature

@@ -296,7 +296,7 @@ module.exports = function (app) {
                                               correspondenceService) {
                             'ngInject';
                             var qDefer = $q.defer();
-                            var organizations = organizationService.loadOrganizations();
+                            var organizations = organizationService.loadOrganizations(true);
                             var lookups = correspondenceService.loadCorrespondenceLookups(documentClass);
                             $q.all([organizations, lookups]).then(function (result) {
                                 deferCorrespondence.resolve(true);
@@ -323,7 +323,10 @@ module.exports = function (app) {
                         },
                         centralArchives: function (organizationService, employeeService) {
                             'ngInject';
-                            return employeeService.isCentralArchive() && (documentClass.toLowerCase() === 'incoming' || documentClass.toLowerCase() === 'outgoing') ? organizationService.centralArchiveOrganizations() : false
+                            return ((documentClass.toLowerCase() === 'outgoing' && employeeService.isCentralArchive())
+                                || (documentClass.toLowerCase() === 'incoming' || !employeeService.isCentralArchiveHasRegistry()))
+                                ? organizationService.centralArchiveOrganizations()
+                                : false
                         }
                     }
                 }).catch(function (e) {
