@@ -72,10 +72,18 @@ module.exports = function (app) {
         };*/
 
         function _sortRegOusSections(organizations) {
-            // filter all regOU
+            // filter all regOU (has registry)
             var regOus = _.filter(organizations, function (item) {
-                return item.hasRegistry;
-            });
+                    return item.hasRegistry;
+                }),
+                // filter all sections (no registry)
+                sections = _.filter(organizations, function (ou) {
+                    return !ou.hasRegistry;
+                }),
+                // registry parent organization
+                parentRegistryOu;
+
+            // To show (regou - section), append the dummy property "display"
             regOus = _.map(regOus, function (regOu) {
                 regOu.display = new Information({
                     arName: regOu.arName,
@@ -83,25 +91,20 @@ module.exports = function (app) {
                 });
                 return regOu;
             });
-
-            // filter all sections (no registry)
-            var sections = _.filter(organizations, function (item) {
-                return !item.hasRegistry;
-            }), parent;
-            // if needed to show regou - section, append the dummy property "display"
             sections = _.map(sections, function (item) {
                 if (typeof item.registryParentId === 'number') {
-                    parent = _.find(regOus, {'id': item.registryParentId});
+                    parentRegistryOu = _.find(regOus, {'id': item.registryParentId});
                 } else {
-                    parent = item.registryParentId;
+                    parentRegistryOu = item.registryParentId;
                 }
-                // if ou is section(has no registry and has regOuId, add temporary field for regOu)
                 item.display = new Information({
-                    arName: (parent ? parent.arName : '') + ' - ' + item.arName,
-                    enName: (parent ? parent.enName : '') + ' - ' + item.enName
+                    arName: (parentRegistryOu ? parentRegistryOu.arName : '') + ' - ' + item.arName,
+                    enName: (parentRegistryOu ? parentRegistryOu.enName : '') + ' - ' + item.enName
                 });
                 return item;
             });
+
+            // sort regOu-section
             return _.sortBy([].concat(regOus, sections), [function (ou) {
                 return ou.display[langService.current + 'Name'].toLowerCase();
             }]);

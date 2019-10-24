@@ -44,8 +44,8 @@ module.exports = function (app) {
          * @description get organizations from self.organizations if found and if not load it from server again.
          * @returns {Promise|organizations}
          */
-        self.getOrganizations = function () {
-            return self.organizations.length ? $q.when(self.organizations) : self.loadOrganizations();
+        self.getOrganizations = function (skipUserRoleWhenLoad) {
+            return self.organizations.length ? $q.when(self.organizations) : self.loadOrganizations(skipUserRoleWhenLoad);
         };
 
         /**

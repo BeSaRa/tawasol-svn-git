@@ -20,10 +20,18 @@ module.exports = function (app) {
             self.inlineOUSearchText = '';
 
             var _mapRegOUSections = function () {
-                // filter all regOU
-                var regOus = _.filter(organizationGroups, function (item) {
-                    return item.hasRegistry;
-                });
+                // filter all regOU (has registry)
+                var regOus = _.filter(organizationGroups, function (ou) {
+                        return ou.hasRegistry;
+                    }),
+                    // filter all sections (no registry)
+                    sections = _.filter(organizationGroups, function (ou) {
+                        return !ou.hasRegistry;
+                    }),
+                    // registry parent organization
+                    parentRegistryOu;
+
+                // To show (regou - section), append the dummy property "tempRegOUSection"
                 regOus = _.map(regOus, function (regOu) {
                     regOu.tempRegOUSection = new Information({
                         arName: regOu.arName,
@@ -31,24 +39,22 @@ module.exports = function (app) {
                     });
                     return regOu;
                 });
+                sections = _.map(sections, function (section) {
+                    parentRegistryOu = (section.regouId || section.regOuId);
+                    if (typeof parentRegistryOu === 'number') {
+                        parentRegistryOu = _.find(organizationGroups, function (ou) {
+                            return ou.id === parentRegistryOu;
+                        });
+                    }
 
-                // filter all sections (no registry)
-                var sections = _.filter(organizationGroups, function (item) {
-                    return !item.hasRegistry;
+                    section.tempRegOUSection = new Information({
+                        arName: ((parentRegistryOu) ? parentRegistryOu.arName + ' - ' : '') + section.arName,
+                        enName: ((parentRegistryOu) ? parentRegistryOu.enName + ' - ' : '') + section.enName
+                    });
+                    return section;
                 });
 
-                // if needed to show regou - section, append the dummy property "tempRegOUSection"
-                sections = _.map(sections, function (item) {
-                    // if ou is section(has no registry and has regOuId, add temporary field for regOu)
-                    var regOu = _.find(organizationGroups, function (ou) {
-                        return ou.id === (item.regouId || item.regOuId);
-                    });
-                    item.tempRegOUSection = new Information({
-                        arName: ((regOu) ? regOu.arName + ' - ' : '') + item.arName,
-                        enName: ((regOu) ? regOu.enName + ' - ' : '') + item.enName
-                    });
-                    return item;
-                });
+                // sort regOu-section
                 return _.sortBy([].concat(regOus, sections), [function (ou) {
                     return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
                 }]);
