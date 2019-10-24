@@ -28,6 +28,7 @@ module.exports = function (app) {
         self.siteTypeSearchText = '';
         self.mainSiteSearchText = '';
         self.subSiteSearchText = '';
+        self.receiverSearchText = '';
         self.fromActionTimeMinValue = moment().subtract(1, 'years').toDate();
         self.toActionTimeMaxValue = moment().endOf("day").toDate();
 

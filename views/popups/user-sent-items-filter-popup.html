@@ -79,11 +79,21 @@
                         <md-input-container flex>
                             <label for="userToId">{{lang.sent_items_receiver}}</label>
                             <md-select name="userToId" id="userToId"
-                                       ng-model="ctrl.searchCriteria.userToId">
+                                       ng-model="ctrl.searchCriteria.userToId"
+                                       md-on-close="ctrl.clearSearchText('receiver')"
+                                       data-md-container-class="select-header-container">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.receiverSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
                                 <md-option ng-value="null">{{lang.none}}</md-option>
-                                <md-option ng-repeat="userTo in ctrl.usersTo"
+                                <md-option ng-repeat="userTo in ctrl.usersTo | translatedNameFilter: ctrl.receiverSearchText"
                                            ng-value="userTo.id">
-                                    {{userTo.getTranslatedName()}}
+                                    <span
+                                            md-highlight-text="ctrl.receiverSearchText"
+                                            md-highlight-flags="i">{{userTo.getTranslatedName()}}</span>
                                 </md-option>
                             </md-select>
                         </md-input-container>
