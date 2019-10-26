@@ -276,7 +276,8 @@ module.exports = function (app) {
         };
 
         self.getCurrentLang = function () {
-            return $cookies.get(self.cookiesKey) ? $cookies.get(self.cookiesKey) : self.setCurrentLang('ar');
+            return $cookies.get(self.cookiesKey);
+            //return $cookies.get(self.cookiesKey) ? $cookies.get(self.cookiesKey) : self.setCurrentLang('ar');
         };
 
         self.is = function (lang) {
@@ -299,7 +300,7 @@ module.exports = function (app) {
         self.setEntityCurrentLang = function () {
             if ($cookies.get(self.cookiesKey) || !rootEntity || !rootEntity.getGlobalSettings())
                 return;
-
+debugger
             var defaultDisplayLang = _.find(self.languages, function (lang) {
                 return lang.lookupKey === rootEntity.getGlobalSettings().defaultDisplayLang;
             });
@@ -369,6 +370,7 @@ module.exports = function (app) {
             } else {
                 titleService.setTitle(rootEntity.returnRootEntity().getTranslatedAppName());
             }
+            debugger;
             self.setCurrentLang(self.current);
         };
         self.getCurrentTranslate = function () {
