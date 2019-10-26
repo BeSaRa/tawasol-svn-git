@@ -451,6 +451,27 @@ module.exports = function (app) {
                     self.organization.hasRegistry = !self.organization.hasRegistry;
                 })
         };
+
+        /**
+         * @description Checks if public registry changed to private
+         * @returns {boolean}
+         * @private
+         */
+        var _isPublicRegistryChangedToPrivate = function () {
+            return (!self.model.isPrivateRegistry && self.organization.isPrivateRegistry);
+        };
+
+        /**
+         * @description Handles on change of isPrivateRegistry
+         * @param $event
+         * @returns {boolean}
+         */
+        self.onChangePrivateRegistry = function ($event) {
+            if (_isPublicRegistryChangedToPrivate()) {
+                self.organization.isPrivateRegistry = false;
+            }
+        };
+
         /**
          * @description get reference planNumber Id from registry unit.
          * @param parent
@@ -573,6 +594,9 @@ module.exports = function (app) {
          * to save the edit
          */
         self.editOrganizationFromCtrl = function () {
+            if (_isPublicRegistryChangedToPrivate()){
+                self.organization.isPrivateRegistry = false;
+            }
             validationService
                 .createValidation('EDIT_ORGANIZATION')
                 .addStep('check_required', true, self.checkRequiredFields, self.organization, function (result) {
