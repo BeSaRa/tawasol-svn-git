@@ -230,7 +230,7 @@
                                     <div layout="row" layout-align="start center">
                                         <span class="manage-span" flex>{{lang.get('linked_documents')}}</span>
                                         <md-button class="md-icon-button collapse-button"
-                                                   ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS'  && ctrl.showManagePopups()"
+                                                   ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS') && ctrl.showManagePopups()"
                                                    aria-label="{{lang.grid_action_linked_documents}}"
                                                    ng-click="ctrl.manageLinkedDocuments($event)"
                                                    tooltip="{{lang.grid_action_linked_documents}}"
