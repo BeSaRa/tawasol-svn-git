@@ -273,6 +273,7 @@ module.exports = function (app) {
                     }
                 }],
                 searchColumns: {
+                    id: 'classification.id',
                     arabicName: 'classification.arName',
                     englishName: 'classification.enName',
                     code: 'code',

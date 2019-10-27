@@ -41,6 +41,9 @@
                                                 </md-button>
                                             </div>
                                         </th>
+                                        <th ng-if="!ctrl.selectedClassifications.length" md-column md-order-by="id">
+                                            <span>{{lang.identifier}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedClassifications.length" md-column md-order-by="arName">
                                             <span>{{lang.arabic_name}}</span>
                                         </th>
@@ -68,6 +71,7 @@
                                     <tbody md-body>
                                     <tr md-row md-select="classification"
                                         ng-repeat="classification in ctrl.classifications |limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        <td md-cell>{{classification.id}}</td>
                                         <td md-cell>{{classification.arName}}</td>
                                         <td md-cell>{{classification.enName}}</td>
                                         <td md-cell>

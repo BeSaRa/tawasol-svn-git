@@ -925,6 +925,9 @@
                                                                     </md-button>
                                                                 </div>
                                                             </th>
+                                                            <th ng-if="!ctrl.selectedOUClassifications.length" md-column md-order-by="classification.id">
+                                                                <span>{{lang.identifier}}</span>
+                                                            </th>
                                                             <th ng-if="!ctrl.selectedOUClassifications.length"
                                                                 md-column
                                                                 md-order-by="classification.arName">
@@ -960,6 +963,7 @@
                                                         <tr md-row ng-disabled="ctrl.classificationEditMode"
                                                             md-select="ouClassification"
                                                             ng-repeat="ouClassification in ctrl.ouClassifications | limitTo: ctrl.grid.classifications.limit: ((ctrl.grid.classifications.page - 1) * ctrl.grid.classifications.limit) track by $index">
+                                                            <td md-cell>{{ouClassification.classification.id}}</td>
                                                             <td md-cell>{{ouClassification.classification.arName}}
                                                             </td>
                                                             <td md-cell>{{ouClassification.classification.enName}}

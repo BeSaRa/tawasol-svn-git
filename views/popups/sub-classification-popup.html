@@ -33,6 +33,9 @@
                                     <span flex></span>
                                 </div>
                             </th>
+                            <th ng-if="!ctrl.selectedSubClassifications.length" md-column md-order-by="id">
+                                <span>{{lang.identifier}}</span>
+                            </th>
                             <th ng-if="!ctrl.selectedSubClassifications.length" md-column md-order-by="arName">
                                 <span>{{lang.arabic_name}}</span>
                             </th>
@@ -70,6 +73,7 @@
                         <tbody md-body>
                         <tr md-row md-select="subClassification"
                             ng-repeat="subClassification in ctrl.subClassifications  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                            <td md-cell>{{subClassification.id}}</td>
                             <td md-cell>{{subClassification.arName}}</td>
                             <td md-cell>{{subClassification.enName}}</td>
                             <td md-cell>
