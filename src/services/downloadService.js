@@ -350,6 +350,7 @@ module.exports = function (app) {
                         bindToController: true,
                         escapeToCancel: false,
                         locals: {
+                            escapeEmployeeCheck: true,
                             document: new Information({arName: fileName, enName: fileName}),
                             content: {viewURL: $sce.trustAsResourceUrl(urlObj)}
                         }

@@ -4236,10 +4236,11 @@ module.exports = function (app) {
          * @description Get the blob url to display as pdf if slow connection mode is enabled for user
          * @param viewURL
          * @param returnPromise
+         * @param escapeEmployeeCheck
          * @returns {Promise|*}
          */
-        self.overrideViewUrl = function (viewURL, returnPromise) {
-            if (employeeService.getEmployee().isSlowConnectionMode()) {
+        self.overrideViewUrl = function (viewURL, returnPromise , escapeEmployeeCheck) {
+            if (!escapeEmployeeCheck && employeeService.getEmployee().isSlowConnectionMode()) {
                 return $http.get(viewURL, {
                     responseType: 'blob'
                 }).then(function (result) {

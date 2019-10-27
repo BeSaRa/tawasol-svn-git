@@ -7,7 +7,7 @@ module.exports = function (app) {
 
         self.viewURL = '';
         var _overrideViewUrl = function () {
-            correspondenceService.overrideViewUrl(self.content.viewURL, true)
+            correspondenceService.overrideViewUrl(self.content.viewURL, true, self.escapeEmployeeCheck)
                 .then(function (result) {
                     self.viewURL = result;
                 })
