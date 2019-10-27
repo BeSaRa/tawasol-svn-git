@@ -200,9 +200,9 @@
                             <ul class="work-item-properties">
                                 <li class="section-title">
                                     <div layout="row" layout-align="start center">
-                                        <span flex>{{lang.get('attachments')}}</span>
+                                        <span class="manage-span" flex>{{lang.get('attachments')}}</span>
                                         <md-button class="md-icon-button collapse-button"
-                                                   ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')"
+                                                   ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS') && ctrl.showManagePopups()"
                                                    aria-label="{{lang.grid_action_attachments}}"
                                                    ng-click="ctrl.manageAttachments($event)"
                                                    tooltip="{{lang.grid_action_attachments}}"
@@ -228,9 +228,9 @@
                             <ul class="work-item-properties">
                                 <li class="section-title">
                                     <div layout="row" layout-align="start center">
-                                        <span flex>{{lang.get('linked_documents')}}</span>
+                                        <span class="manage-span" flex>{{lang.get('linked_documents')}}</span>
                                         <md-button class="md-icon-button collapse-button"
-                                                   ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')"
+                                                   ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS'  && ctrl.showManagePopups()"
                                                    aria-label="{{lang.grid_action_linked_documents}}"
                                                    ng-click="ctrl.manageLinkedDocuments($event)"
                                                    tooltip="{{lang.grid_action_linked_documents}}"

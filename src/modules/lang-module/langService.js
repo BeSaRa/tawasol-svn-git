@@ -300,7 +300,7 @@ module.exports = function (app) {
         self.setEntityCurrentLang = function () {
             if ($cookies.get(self.cookiesKey) || !rootEntity || !rootEntity.getGlobalSettings())
                 return;
-debugger
+
             var defaultDisplayLang = _.find(self.languages, function (lang) {
                 return lang.lookupKey === rootEntity.getGlobalSettings().defaultDisplayLang;
             });
@@ -370,7 +370,6 @@ debugger
             } else {
                 titleService.setTitle(rootEntity.returnRootEntity().getTranslatedAppName());
             }
-            debugger;
             self.setCurrentLang(self.current);
         };
         self.getCurrentTranslate = function () {

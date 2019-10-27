@@ -32,6 +32,11 @@ module.exports = function (app) {
         self.editMode = false;
         self.info = null;
 
+        self.excludedManagePopupsFromGrids = [
+            'departmentIncoming',
+            'g2gIncoming'
+        ];
+
         self.viewURL = '';
         var _overrideViewUrl = function () {
             correspondenceService.overrideViewUrl(self.content.viewURL, true)
@@ -313,6 +318,10 @@ module.exports = function (app) {
                 .then(function (result) {
                     _changeSecondURL(result, 'attachments', $index);
                 });
+        };
+        // to check if the current page exists in excluded grids to remove the manage attachment/linked document from view.
+        self.showManagePopups = function () {
+            return self.excludedManagePopupsFromGrids.indexOf(self.pageName) === -1;
         };
 
         self.showLinkedDocument = function (linkedDoc, $index, $event, popup) {
