@@ -39,7 +39,6 @@ module.exports = function (app) {
          */
         self.reviewIncomings = reviewIncomings;
         self.reviewIncomingsCopy = angular.copy(self.reviewIncomings);
-        console.log(self.reviewIncomings);
 
         /**
          * @description Contains the selected review incoming emails
@@ -949,6 +948,7 @@ module.exports = function (app) {
                 icon: 'bullhorn',
                 text: 'grid_action_broadcast',
                 shortcut: false,
+                class: 'action-green',
                 permissionKey: 'BROADCAST_DOCUMENT',
                 callback: self.broadcast,
                 checkShow: function (action, model) {
