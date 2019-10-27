@@ -297,10 +297,12 @@ module.exports = function (app) {
         };
 
         function _changeSecondURL(url, listName, index) {
-            self.secondURL = url;
-            self.mainDocument = false;
-            self.selectedList = listName;
-            self.listIndex = index;
+            correspondenceService.overrideViewUrl(url, true).then(function (url) {
+                self.secondURL = url;
+                self.mainDocument = false;
+                self.selectedList = listName;
+                self.listIndex = index;
+            })
         }
 
         self.showAttachment = function (attachment, $index, $event) {
