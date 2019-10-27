@@ -32,10 +32,6 @@
                         </md-select>
                     </md-input-container>
                     <md-input-container flex>
-                        <label for="domain_name">{{lang.domain_name}}</label>
-                        <input id="domain_name" ng-model="ctrl.usersCriteria.domainName">
-                    </md-input-container>
-                    <md-input-container flex>
                         <label for="arabic_name">{{lang.arabic_name}}</label>
                         <input id="arabic_name" ng-model="ctrl.usersCriteria.arName">
                     </md-input-container>
@@ -71,9 +67,6 @@
                                         </md-button>
                                     </div>
                                 </th>
-                                <th md-column ng-if="!ctrl.selectedUsers.length" md-order-by="toUserDomain">
-                                    {{lang.domain_name}}
-                                </th>
                                 <th md-column ng-if="!ctrl.selectedUsers.length" md-order-by="arName">
                                     {{lang.arabic_name}}
                                 </th>
@@ -89,9 +82,6 @@
                             <tbody md-body>
                             <tr md-row md-select="user" ng-if="!ctrl.checkIfExist(user) && !ctrl.checkIfAdded(user)"
                                 ng-repeat="user in ctrl.users | filter:ctrl.searchModel |limitTo: ctrl.searchedUsersGrid.limit: ((ctrl.searchedUsersGrid.page - 1) * ctrl.searchedUsersGrid.limit) track by $index">
-                                <td md-cell>
-                                    <span>{{user.toUserDomain}}</span>
-                                </td>
                                 <td md-cell>
                                     <span>{{user.getFullNameByKey('ar')}}</span>
                                 </td>
