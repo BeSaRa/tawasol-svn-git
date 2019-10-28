@@ -120,7 +120,9 @@ module.exports = function (app) {
                 return true;
             })
             .end()
-            .addMenuPermission('menu_item_g2g', 'GOVERNMENT_TO_GOVERNMENT')
+            .addMenuPermission('menu_item_g2g', function (employee) {
+                return employee.hasAnyPermissions(["GOVERNMENT_TO_GOVERNMENT", "OLD_SYSTEM_COMMUINCATION"]);
+            })
             .addMenuPermissionGroup('menu_item_reports')
             .addMenuPermission('menu_item_reports_statistical_correspondence_report', 'CORRESPONDENCE_REPORT')
             .addMenuPermission('menu_item_reports_statistical_report', 'CORRESPONDENCE_SITE_REPORT')

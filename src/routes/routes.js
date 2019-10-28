@@ -85,7 +85,7 @@ module.exports = function (app) {
                     counters: function (counterService, sidebarService, employeeService) {
                         'ngInject';
                         return !employeeService.isAdminUser() ? counterService.loadCounters().then(function () {
-                            if (employeeService.getEmployee().hasPermissionTo('GOVERNMENT_TO_GOVERNMENT')) {
+                            if (employeeService.getEmployee().hasAnyPermissions(["GOVERNMENT_TO_GOVERNMENT", "OLD_SYSTEM_COMMUINCATION"])) {
                                 counterService.loadG2GCounters().then(function () {
                                     counterService.intervalG2GCounters();
                                 });

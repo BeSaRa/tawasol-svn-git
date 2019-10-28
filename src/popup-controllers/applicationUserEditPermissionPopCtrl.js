@@ -144,7 +144,7 @@ module.exports = function (app) {
                     .then(function () {
                         layoutService.loadLandingPage();
                         counterService.loadCounters().then(function () {
-                            if (employeeService.getEmployee().hasPermissionTo('GOVERNMENT_TO_GOVERNMENT')) {
+                            if (employeeService.getEmployee().hasAnyPermissions(["GOVERNMENT_TO_GOVERNMENT", "OLD_SYSTEM_COMMUINCATION"])) {
                                 // console.log('permission granted');
                                 counterService.loadG2GCounters()
                                     .then(function () {
