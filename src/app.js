@@ -22,6 +22,7 @@
                 'ngCookies',
                 'ngIdle',
                 'md.data.table',
+                'fixed.table.header',
                 'tooltips',
                 'mdColorPicker',
                 'CMSScanner',

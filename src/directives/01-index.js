@@ -106,4 +106,5 @@ module.exports = function (app) {
     require('./task-list-directive/01-index')(app);
     require('./form-directive/form-directive')(app);
     require('./legend-indicators-directive/01-index')(app);
+    require('./table-height-directive/table-height-directive')(app);
 };

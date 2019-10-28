@@ -198,7 +198,7 @@ module.exports = (function () {
     require('es6-promise').polyfill(); // polyfill for promises
     require('angular-material-data-table'); // polyfill for promises
     require('angular-material-data-table/dist/md-data-table.min.css');
-    // require('./sass/style.scss');
+    require('angular-fixed-table-header');
 
     require('jquery-ui/ui/widgets/sortable.js');
     require('jquery-ui/ui/widgets/droppable.js');
