@@ -123,6 +123,17 @@
                                  tooltip="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}">
                     </md-checkbox>
                 </md-input-container>
+                <!-- Document Full Serial -->
+                <md-input-container flex ng-if="ctrl.employee.isBacklogMode()">
+                    <label for="docFullSerial">{{lang.serial_number}}</label>
+                    <input name="docFullSerial" id="docFullSerial"
+                           ng-required="ctrl.employee.isBacklogMode()"
+                           ng-disabled="!!ctrl.disableProperties"
+                           ng-model="ctrl.document.docFullSerial">
+                    <div ng-messages="outgoing_properties.docFullSerial.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
                 <!-- Document Number -->
                 <md-input-container flex
                                     ng-if='ctrl.document.docClassName.toLowerCase() === "incoming" && ctrl.checkStatus("refDocNumber")'>

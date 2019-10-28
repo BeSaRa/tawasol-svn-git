@@ -76,7 +76,7 @@ module.exports = function (app) {
         self.internal = /*demoInternal;*/
             new Internal({
                 ou: self.employee.getOUID(),
-                addMethod: 0,
+                addMethod: self.employee.isBacklogMode() ? 1 : 0,
                 createdOn: new Date(),
                 docDate: new Date(),
                 registryOU: self.employee.getRegistryOUID(),
@@ -614,6 +614,10 @@ module.exports = function (app) {
             })
         };
 
+
+        self.isDocumentTypeSwitchDisabled = function () {
+            return !!self.internal.vsId || self.duplicateVersion || !self.employeeService.hasPermissionTo('INTERNAL_PAPER') || self.employee.isBacklogMode();
+        }
 
     });
 };

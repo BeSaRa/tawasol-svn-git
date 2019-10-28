@@ -26,7 +26,7 @@
                                         <span>{{lang.outgoing_document_type}} : {{lang.outgoing_electronic}}</span>
                                         <span>&nbsp;&nbsp;</span>
                                         <md-switch
-                                                ng-disabled="!!ctrl.outgoing.vsId || ctrl.duplicateVersion || !ctrl.employeeService.hasPermissionTo('OUTGOING_PAPER')"
+                                                ng-disabled="ctrl.isDocumentTypeSwitchDisabled()"
                                                 class="m0 top-switch-handler"
                                                 aria-label="{{lang.outgoing_document_type}}"
                                                 ng-true-value="1" ng-false-value="0"

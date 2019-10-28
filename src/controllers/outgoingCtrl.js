@@ -85,7 +85,7 @@ module.exports = function (app) {
         self.outgoing =
             new Outgoing({
                 ou: self.employee.getOUID(),
-                addMethod: 0,
+                addMethod: self.employee.isBacklogMode() ? 1 : 0,
                 createdOn: new Date(),
                 docDate: new Date(),
                 registryOU: self.employee.getRegistryOUID(),
@@ -764,7 +764,10 @@ module.exports = function (app) {
                     return action.text;
                 }
             }
-
         };
+
+        self.isDocumentTypeSwitchDisabled = function () {
+            return !!self.outgoing.vsId || self.duplicateVersion || !self.employeeService.hasPermissionTo('OUTGOING_PAPER') || self.employee.isBacklogMode();
+        }
     });
 };
