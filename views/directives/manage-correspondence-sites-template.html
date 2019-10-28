@@ -655,19 +655,6 @@
     <md-tab label="{{lang.distribution_lists}}" ng-if="ctrl.showTab('distributionLists')"
             md-on-select="ctrl.setCurrentTab('distributionLists')">
         <md-content class="md-padding white-bg">
-            <!-- Correspondence Site Type / Distribution List Toggle -->
-            <div layout="row" class="p020">
-                <span flex></span>
-                <div layout="row" layout-align="center center">
-                    <span>{{lang.distribution_list}}</span>
-                    <span>&nbsp;&nbsp;</span>
-                    <md-switch aria-label="distributionListSiteTypeToggle"
-                               class="m0" ng-change="ctrl.onChangeIsSearchByDLSiteType($event)"
-                               ng-model="ctrl.isSearchByDLSiteType">
-                    </md-switch>
-                    <span>{{lang.correspondence_site_type}}</span>
-                </div>
-            </div>
             <div scroll-directive layout="column">
                 <!-- Search Box -->
                 <div layout="row" flex ng-if="!ctrl.disableCorrespondence">
@@ -716,7 +703,7 @@
                                 <div layout="row" ng-if="!ctrl.subSearchSelected_DL.length" flex>
                                     <div flex>{{lang.sites_search_results}}</div>
                                     <!-- Add all as original/copy -->
-                                    <div ng-if="ctrl.isSearchByDLSiteType">
+                                    <div>
                                         <md-button class="md-raised"
                                                    ng-click="ctrl.addAllSitesTo($event, true)"
                                                    ng-disabled="!!ctrl.disableCorrespondence">
