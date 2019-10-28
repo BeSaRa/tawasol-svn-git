@@ -12,7 +12,13 @@ module.exports = function (app) {
                                                                   employeeService,
                                                                   $stateParams,
                                                                   toast,
-                                                                  gridService) {
+                                                                  gridService,
+                                                                  Outgoing,
+                                                                  Incoming,
+                                                                  Internal,
+                                                                  General,
+                                                                  G2G,
+                                                                  G2GMessagingHistory) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageLinkedDocumentDirectiveCtrl';
@@ -57,6 +63,19 @@ module.exports = function (app) {
         }
 
         /**
+         * the registered models for our CMS
+         * @type {{outgoing: (Outgoing|*), internal: (Internal|*), incoming: (Incoming|*)}}
+         */
+        self.models = {
+            outgoing: Outgoing,
+            internal: Internal,
+            incoming: Incoming,
+            general: General,
+            g2g: G2G,
+            g2gmessaginghistory: G2GMessagingHistory
+        };
+
+        /**
          * @description view correspondence .
          * @param correspondence
          * @param $event
@@ -68,6 +87,25 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(correspondence, [], true, true);
         };
+
+        var _saveLinkedDocs = function(linkedDocs){
+            var document = new self.models[self.documentClass.toLowerCase()]({
+                linkedDocs: angular.copy(linkedDocs),
+                vsId: self.vsId,
+                docClassName: self.documentClass
+            });
+
+            document
+                .saveLinkedDocuments()
+                .then(function () {
+                    self.linkedDocs = linkedDocs;
+                    toast.success(langService.get('success_messages'));
+                })
+                .catch(function () {
+                    toast.success(langService.get('error_messages'));
+                });
+        };
+
         /**
          * @description open search dialog
          * @param $event
@@ -84,7 +122,7 @@ module.exports = function (app) {
                         viewCallback: self.viewCorrespondence,
                         excludeVsId: self.vsId,
                         isAdminSearch: false,
-                        multiSelect : true
+                        multiSelect: true
                     },
                     resolve: {
                         organizations: function (organizationService) {
@@ -100,9 +138,16 @@ module.exports = function (app) {
                 })
                 .then(function (correspondences) {
                     var vsIds = _.map(self.linkedDocs, 'vsId'); // get current linked documents vsIds
-                    self.linkedDocs = angular.isArray(self.linkedDocs) ? self.linkedDocs.concat(_filterExists(correspondences, vsIds)) : correspondences;
+                    var linkedDocs = angular.isArray(self.linkedDocs) ? self.linkedDocs.concat(_filterExists(correspondences, vsIds)) : correspondences;
+
+                    if (!self.vsId) {
+                        self.linkedDocs = linkedDocs;
+                    } else {
+                        _saveLinkedDocs(angular.copy(linkedDocs));
+                    }
                 });
         };
+
         /**
          * @description delete correspondence from the grid.
          * @param linkedDocument
@@ -114,6 +159,7 @@ module.exports = function (app) {
                     self.linkedDocs = _.filter(self.linkedDocs, function (correspondence) {
                         return vsId !== correspondence.getInfo().vsId;
                     });
+                    _saveLinkedDocs(angular.copy(self.linkedDocs));
                 });
         };
 
@@ -127,8 +173,9 @@ module.exports = function (app) {
                     self.linkedDocs = _.filter(self.linkedDocs, function (linkedDocs) {
                         return vsIds.indexOf(linkedDocs.vsId) === -1;
                     });
+                    _saveLinkedDocs(angular.copy(self.linkedDocs));
                     self.selectedCorrespondences = [];
-                    toast.success(langService.get('delete_success'));
+                    //toast.success(langService.get('delete_success'));
                 })
         };
 

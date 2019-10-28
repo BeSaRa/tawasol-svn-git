@@ -5,7 +5,7 @@ module.exports = function (app) {
         self.controllerName = 'manageLinkedDocumentPopCtrl';
         self.model = angular.copy(correspondence.setLinkedDocs(linkedDocs));
 
-        self.saveLinkedDocumentsFromCtrl = function () {
+        /*self.saveLinkedDocumentsFromCtrl = function () {
             if (!self.vsId) {
                 dialog.hide(self.correspondence.linkedDocs);
                 return;
@@ -18,7 +18,7 @@ module.exports = function (app) {
                 .catch(function () {
                     toast.success(langService.get('error_messages'));
                 })
-        };
+        };*/
 
         self.closeLinkedDocuments = function () {
             dialog.cancel(self.correspondence.linkedDocs);
