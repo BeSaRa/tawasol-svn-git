@@ -45,12 +45,16 @@ module.exports = function (app) {
              * @param documentClassFromUser
              */
             documentTypeAdd: function ($event, documentClassFromUser) {
-                var documentClassLookup;
+                var documentClassLookup,defer = $q.defer();
                 if (documentClassFromUser) {
                     documentClassLookup = _.filter(lookupService.returnLookups(lookupService.documentClass), function (lookup) {
                         return lookup.lookupStrKey.toLowerCase() === documentClassFromUser.toLowerCase();
                     });
                 }
+
+              defer.resolve(documentClassFromUser ? self.loadDocumentTypes(): self.documentTypes);
+
+                return defer.promise.then(function (documentTypes) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -61,13 +65,14 @@ module.exports = function (app) {
                             editMode: false,
                             documentType: new DocumentType(
                                 {
-                                    itemOrder: generator.createNewID(self.documentTypes, 'itemOrder'),
+                                    itemOrder: generator.createNewID(documentTypes, 'itemOrder'),
                                     lookupStrKey: documentClassFromUser ? documentClassLookup : null
                                 }),
-                            documentTypes: self.documentTypes,
+                            documentTypes: documentTypes,
                             documentClassFromUser: documentClassLookup
                         }
                     });
+                })
             },
             /**
              * @description Opens popup to edit document type
