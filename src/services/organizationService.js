@@ -530,11 +530,11 @@ module.exports = function (app) {
                                 return [];
                             }
                             return ouApplicationUserService.loadOuApplicationUserByRegOu(organization.id);
+                        },
+                        distributionLists: function (distributionListService) {
+                            'ngInject';
+                            return distributionListService.getDistributionLists();
                         }
-                        /*,
-                         organizations: function(organizationService){
-                         return organizationService.getOrganizations()
-                         }*/
                     }
                 });
             },
@@ -635,6 +635,10 @@ module.exports = function (app) {
                                 return [];
                             }
                             return ouApplicationUserService.loadOuApplicationUserByRegOu(organization.id);
+                        },
+                        distributionLists: function (distributionListService) {
+                            'ngInject';
+                            return distributionListService.getDistributionLists();
                         }
                     }
                 });
@@ -671,7 +675,7 @@ module.exports = function (app) {
             return $http
                 .get(urlService.privateRegistryOU + "/to-regou-id/" + ouId)
                 .then(function (result) {
-                    return  generator.interceptReceivedCollection('OUPrivateRegistry', generator.generateCollection(result.data.rs, OUPrivateRegistry, self._sharedMethods));
+                    return generator.interceptReceivedCollection('OUPrivateRegistry', generator.generateCollection(result.data.rs, OUPrivateRegistry, self._sharedMethods));
                 });
         };
 
@@ -827,6 +831,14 @@ module.exports = function (app) {
                 .then(function (result) {
                     return result.data.rs;
                 })
+        };
+
+        self.updateDistributionListsForRegOU = function (regOU, distLists) {
+            regOU = regOU.hasOwnProperty('id') ? regOU.id : regOU;
+            return $http.put(urlService.distributionLists + '/regou-id/' + regOU, _.map(distLists, 'id'))
+                .then(function (result) {
+                    return result.data.rs;
+                });
         };
 
         self.openOUDistributionListsDialog = function (regOu, excludedDL, $event) {

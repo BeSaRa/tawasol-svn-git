@@ -50,6 +50,7 @@ module.exports = function (app) {
                                                     correspondenceViewService,
                                                     gridService,
                                                     entityLDAPProviders,
+                                                    distributionLists,
                                                     departmentUsers) {
         'ngInject';
 
@@ -57,6 +58,8 @@ module.exports = function (app) {
         self.controllerName = 'organizationPopCtrl';
         // current organization.
         self.parentOrganization = organization;
+
+        self.distributionLists = distributionLists;
 
         self.employeeService = employeeService;
         // to check edit mode.
@@ -233,6 +236,24 @@ module.exports = function (app) {
         self.selectedOUCorrespondenceSite = new OUCorrespondenceSite({ouid: organization.id});
 
         self.correspondenceSiteEditMode = false;
+
+
+        function _loadOuDistributionLists() {
+            if (!self.organization.hasRegistry && self.organization.isPrivateRegistry)
+                return;
+
+            // ouDistributionLists
+            organizationService
+                .loadOUDistributionList(self.organization)
+                .then(function (result) {
+                    self.ouDistributionLists = result;
+                });
+
+        }
+
+        if (self.editMode) {
+            _loadOuDistributionLists();
+        }
 
         /**
          * @description Get the sorting key for information or lookup model
@@ -579,9 +600,21 @@ module.exports = function (app) {
                                 organizationService
                                     .loadOrganizations()
                                     .then(function () {
-                                        toast.success(langService.get('add_success').change({name: self.organization.getNames()}));
-                                        if (self.editMode) {
-                                            dialog.hide(self.model);
+                                        if (self.organization.hasRegistry && !self.organization.isPrivateRegistry && self.ouDistributionLists.length) {
+                                            organizationService
+                                                .updateDistributionListsForRegOU(self.organization, self.ouDistributionLists)
+                                                .then(function () {
+                                                    _loadOuDistributionLists();
+                                                    toast.success(langService.get('add_success').change({name: self.organization.getNames()}));
+                                                    if (self.editMode) {
+                                                        dialog.hide(self.model);
+                                                    }
+                                                });
+                                        } else {
+                                            toast.success(langService.get('add_success').change({name: self.organization.getNames()}));
+                                            if (self.editMode) {
+                                                dialog.hide(self.model);
+                                            }
                                         }
                                         self.editMode = true;
                                     });
@@ -595,7 +628,7 @@ module.exports = function (app) {
          * to save the edit
          */
         self.editOrganizationFromCtrl = function () {
-            if (_isPublicRegistryChangedToPrivate()){
+            if (_isPublicRegistryChangedToPrivate()) {
                 self.organization.isPrivateRegistry = false;
             }
             validationService
@@ -648,12 +681,22 @@ module.exports = function (app) {
                                 }
 
                                 self.model = angular.copy(self.organization);
-                                toast.success(langService.get('edit_success').change({name: self.organization.getNames()}));
-                                if (self.organization.id === employeeService.getEmployee().getOUID()) {
-                                    employeeService.getEmployee().loadOrganization();
-                                    //employeeService.getEmployee().updateUserOrganizationInfo(self.organization);
+
+                                if (self.organization.hasRegistry && !self.organization.isPrivateRegistry && self.ouDistributionLists.length) {
+                                    organizationService
+                                        .updateDistributionListsForRegOU(self.organization, self.ouDistributionLists)
+                                        .then(function () {
+                                            _loadOuDistributionLists();
+                                            toast.success(langService.get('edit_success').change({name: self.organization.getNames()}));
+                                            dialog.hide(self.model);
+                                        });
+                                } else {
+                                    toast.success(langService.get('edit_success').change({name: self.organization.getNames()}));
+                                    if (self.organization.id === employeeService.getEmployee().getOUID()) {
+                                        employeeService.getEmployee().loadOrganization();
+                                    }
+                                    dialog.hide(self.model);
                                 }
-                                dialog.hide(self.model);
                             })
                     }
                 })

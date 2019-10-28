@@ -276,6 +276,17 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
+                                    <md-input-container
+                                            ng-if="ctrl.organization.hasRegistry && !ctrl.organization.isPrivateRegistry"
+                                            class="input-container-no-top-margin" flex>
+                                        <label>{{lang.distribution_list}}</label>
+                                        <md-select multiple ng-model-options="{trackBy: '$value.id'}"
+                                                   ng-model="ctrl.ouDistributionLists">
+                                            <md-option ng-value="dist" ng-repeat="dist in ctrl.distributionLists">
+                                                {{dist.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
                                 </div>
                                 <div layout="row">
                                     <md-switch flex ng-model="ctrl.organization.status"
@@ -643,90 +654,7 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <!--  OU Distribution List -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('distribution_lists')"
-                            label="{{lang.distribution_list}}" ng-click="ctrl.setCurrentTab('distribution_lists')">
-                        <md-content class="md-padding">
-                            <div layout="column">
-                                <div layout="row" class="p20-0">
-                                    <md-button ng-click="ctrl.openAddOUDistributionList($event)"
-                                               class="md-icon-button"
-                                               tooltip="{{lang.add}}">
-                                        <md-icon md-svg-icon="plus"></md-icon>
-                                    </md-button>
-                                    <md-button ng-click="ctrl.reloadOUDistributionList()" class="md-icon-button"
-                                               tooltip="{{lang.reload}}">
-                                        <md-icon md-svg-icon="refresh"></md-icon>
-                                    </md-button>
-                                    <span flex></span>
-                                    <grid-search-directive grid="ctrl.ouDistributionListGrid"></grid-search-directive>
-                                </div>
-                                <div layout="column" ng-if="ctrl.ouDistributionLists.length">
-                                    <div scroll-directive>
-                                        <md-card md-whiteframe="3" class="card-overlay">
-                                            <md-table-container>
-                                                <div scroll-directive>
-                                                    <table md-table ng-model="ctrl.selectedOUDistributionLists"
-                                                           md-progress="ctrl.ouDistributionListGrid.progress">
-                                                        <thead md-head md-order="ctrl.ouDistributionListGrid.order"
-                                                               md-on-reorder="ctrl.getSortedOUDistributionList">
-                                                        <tr md-row>
-                                                            <th colspan="3" class="table-selector-header"
-                                                                ng-if="ctrl.selectedOUDistributionLists.length"
-                                                                md-column>
-                                                                <div layout="row" layout-align="start center">
-                                                                    <span>{{ctrl.selectedOUDistributionLists.length}} {{lang.items_selected}} </span>
-                                                                    <span flex></span>
-                                                                </div>
-                                                            </th>
-                                                            <th ng-if="!ctrl.selectedOUDistributionLists.length"
-                                                                md-column
-                                                                md-order-by="arName">
-                                                                <span>{{lang.arabic_name}}</span>
-                                                            </th>
-                                                            <th ng-if="!ctrl.selectedOUDistributionLists.length"
-                                                                md-column
-                                                                md-order-by="enName">
-                                                                <span>{{lang.english_name}}</span>
-                                                            </th>
-                                                            <th ng-if="!ctrl.selectedOUDistributionLists.length"
-                                                                md-column>
-                                                                <span>{{lang.actions}}</span>
-                                                            </th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody md-body>
-                                                        <tr md-row md-select="ouDistributionList"
-                                                            ng-repeat="ouDistributionList in ctrl.ouDistributionLists | limitTo: ctrl.ouDistributionListGrid.limit: ((ctrl.ouDistributionListGrid.page - 1) * ctrl.ouDistributionListGrid.limit) track by $index">
-                                                            <td md-cell>{{ouDistributionList.arName}}</td>
-                                                            <td md-cell>{{ouDistributionList.enName}}</td>
-                                                            <td md-cell>
-                                                                <div flex layout="row" layout-align="start center">
-                                                                    <md-button class="md-icon-button"
-                                                                               title="{{lang.delete}}"
-                                                                               ng-click="ctrl.removeOUDistributionList(ouDistributionList, $event)">
-                                                                        <md-icon md-svg-icon="delete"></md-icon>
-                                                                    </md-button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <md-table-pagination
-                                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                                        md-limit-options="ctrl.ouDistributionListGrid.limitOptions"
-                                                        md-limit="ctrl.ouDistributionListGrid.limit"
-                                                        md-page="ctrl.ouDistributionListGrid.page"
-                                                        md-total="{{ctrl.ouDistributionLists.length}}" md-page-select>
-                                                </md-table-pagination>
-                                            </md-table-container>
-                                        </md-card>
-                                    </div>
-                                </div>
-                            </div>
-                        </md-content>
-                    </md-tab>
+
                     <!-- Children -->
                     <md-tab label="{{lang.childs}}" ng-if="ctrl.editMode && ctrl.showTab('children')"
                             ng-click="ctrl.setCurrentTab('children')">
@@ -925,7 +853,8 @@
                                                                     </md-button>
                                                                 </div>
                                                             </th>
-                                                            <th ng-if="!ctrl.selectedOUClassifications.length" md-column md-order-by="classification.id">
+                                                            <th ng-if="!ctrl.selectedOUClassifications.length" md-column
+                                                                md-order-by="classification.id">
                                                                 <span>{{lang.identifier}}</span>
                                                             </th>
                                                             <th ng-if="!ctrl.selectedOUClassifications.length"

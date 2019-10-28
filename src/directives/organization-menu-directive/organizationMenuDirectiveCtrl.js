@@ -18,6 +18,9 @@ module.exports = function (app) {
                 .organizationAdd(organization, $event)
                 .finally(function () {
                     self.reloadCallback();
+                })
+                .catch(function () {
+                    return $q.reject(null);
                 });
         };
 
@@ -27,6 +30,9 @@ module.exports = function (app) {
                 .organizationEdit(organization, $event)
                 .then(function () {
                     self.reloadCallback();
+                })
+                .catch(function () {
+                    return $q.reject(null);
                 })
         };
 
