@@ -249,13 +249,35 @@ module.exports = function (app) {
             // Department Inbox
             .getPageNameOverride('departmentIncoming', 'draftOutgoing', {
                 disableProperties: function (model) {
-                    return !model.isTransferredDocument();
+                    //return !model.isTransferredDocument();
+
+                    if (!model.isTransferredDocument()) {
+                        return true;
+                    }
+                    var info = model.getInfo();
+                    var hasPermission = false;
+                    if (info.documentClass === "internal") {
+                        //If approved internal electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                    } else if (info.documentClass === "incoming")
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+                    else if (info.documentClass === "outgoing") {
+                        //If approved outgoing electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                    }
+                    return !hasPermission;
                 },
                 disableSites: function (model) {
                     return true;
                 },
                 disableAll: function (model) {
-                    return !model.generalStepElm.isReassigned && !model.isTransferredDocument() ;
+                    return !model.generalStepElm.isReassigned && !model.isTransferredDocument();
                 }
             })
             .getPageNameOverride('departmentReturned', 'draftOutgoing', {
