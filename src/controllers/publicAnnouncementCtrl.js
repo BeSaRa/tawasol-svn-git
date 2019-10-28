@@ -44,8 +44,8 @@ module.exports = function (app) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.publicAnnouncement, limit);
             },
             searchColumns: {
-                arabicName: 'arName',
-                englishName: 'enName',
+                arabicName: 'arSubject',
+                englishName: 'enSubject',
                 itemOrder: 'itemOrder'
             },
             searchText: '',
