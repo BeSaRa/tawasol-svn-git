@@ -80,6 +80,7 @@ module.exports = function (app) {
         function _openInDesktop() {
             if (self.content.desktop) {
                 self.content.desktop.overlay = true;
+                self.editMode = true;
             } else {
                 dialog.hide('editInDesktop');
             }
