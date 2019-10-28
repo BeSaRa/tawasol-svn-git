@@ -261,10 +261,13 @@ module.exports = function (app) {
          */
         self.manageDocumentProperties = function (vsId, documentClass, documentSubject, $event) {
             var defer = $q.defer(), deferCorrespondence = $q.defer();
-            var document = null;
+            var document = null, action = null, currentStateName = $state.current.name;
+            if (currentStateName.indexOf('review') !== -1) {
+                action = "review";
+            } else if (currentStateName.indexOf('user-inbox') !== -1) {
+                action = "user-inbox";
+            }
 
-            var action = ($state.current.name.indexOf('review') !== -1) ? 'review' : null;
-            //var firstDefer = $q.defer();
             documentClass = _checkDocumentClass(documentClass);
             return dialog
                 .showDialog({
