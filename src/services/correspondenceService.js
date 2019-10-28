@@ -645,6 +645,10 @@ module.exports = function (app) {
                         dialog.infoMessage(langService.get('error_save_document_already_modified_by_other_user'));
                         return $q.reject(error);
                     }
+                    if (errorCode.checkIf(error, 'ERROR_MISSING_REQUIRED_TEMPLATE_FIELDS') === true) {
+                        dialog.errorMessage(self.getTranslatedError(error));
+                        return $q.reject(error);
+                    }
                     return $q.reject(self.getTranslatedError(error));
                 });
         };
@@ -664,6 +668,10 @@ module.exports = function (app) {
                 }).catch(function (error) {
                     if (errorCode.checkIf(error, 'ERROR_SAVE_DOC_ALREADY_MODIFIED_BY_OTHER_USER') === true) {
                         dialog.infoMessage(langService.get('error_save_document_already_modified_by_other_user'));
+                        return $q.reject(error);
+                    }
+                    if (errorCode.checkIf(error, 'ERROR_MISSING_REQUIRED_TEMPLATE_FIELDS') === true) {
+                        dialog.errorMessage(self.getTranslatedError(error));
                         return $q.reject(error);
                     }
                     return $q.reject(self.getTranslatedError(error));

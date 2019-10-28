@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('viewCorrespondencePopCtrl', function ($mdSidenav,
                                                           dialog,
                                                           $element,
+                                                          $rootScope,
                                                           toast,
                                                           langService,
                                                           $timeout,
@@ -15,7 +16,9 @@ module.exports = function (app) {
                                                           $q,
                                                           gridService,
                                                           $state,
-                                                          viewTrackingSheetService) {
+                                                          viewTrackingSheetService,
+                                                          errorCode,
+                                                          $compile) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondencePopCtrl';
@@ -235,7 +238,20 @@ module.exports = function (app) {
                             return true;
                         })
                         .catch(function (error) {
-                            toast.error(error);
+                            if (typeof error === 'string') {
+                                toast.error(error);
+                            } else {
+                                if (errorCode.checkIf(error, 'ERROR_MISSING_REQUIRED_TEMPLATE_FIELDS') === true) {
+                                    var iframe = '<iframe ng-if="ctrl.mainDocument && ctrl.editMode" id="iframe-main-document"\n' +
+                                        '                        class="iframe-main-document"\n' +
+                                        '                        ng-src="{{ctrl.content.editURL}}" flex\n' +
+                                        '                        frameborder="0"></iframe>';
+                                    var newScope = $rootScope.$new(true);
+                                    newScope.ctrl = self;
+                                    var element = $compile(iframe)(newScope);
+                                    angular.element('#iframe-parent').prepend(element);
+                                }
+                            }
                             self.disableSaveTimeout = false;
                             return $q.reject(error);
                         });
