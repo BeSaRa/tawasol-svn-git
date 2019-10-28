@@ -223,13 +223,13 @@
                                 {{lang.press_enter_to_load_more_records}}
                             </div>
                         </md-select-header>
+                        <md-option ng-value="null">{{lang.all}}</md-option>
                         <md-option ng-value="classification.classification"
                                    ng-repeat="classification in ctrl.classifications | translatedNameFilter: ctrl.mainClassificationSearchText:'getIdNameByLanguage':'classification'">
                         <span
                                 md-highlight-text="ctrl.mainClassificationSearchText"
                                 md-highlight-flags="i">{{classification.classification.getIdNameByLanguage()}}</span>
                         </md-option>
-                        <md-option ng-value="null">{{lang.all}}</md-option>
 
                     </md-select>
                     <div ng-messages="docSearchForm.mainClassification.$error">
