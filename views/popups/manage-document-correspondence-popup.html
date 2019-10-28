@@ -1,8 +1,8 @@
 <md-dialog class="dialog-extend mw60"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.correspondence_sites}}">
-        <popup-toolbar-directive header-text="{{lang.correspondence_sites}} : {{ctrl.documentSubject}}"
-                                 close-callback="ctrl.closeDocumentCorrespondence"></popup-toolbar-directive>
+    <popup-toolbar-directive header-text="{{lang.correspondence_sites}} : {{ctrl.documentSubject}}"
+                             close-callback="ctrl.closeDocumentCorrespondence"></popup-toolbar-directive>
     <md-dialog-content scroll-directive>
         <div>
             <manage-correspondence-sites-directive
@@ -10,7 +10,8 @@
                     vs-id="ctrl.correspondence.vsId"
                     document-class="ctrl.correspondence.docClassName"
                     sites-info-c-c="ctrl.correspondence.sitesInfoCC"
-                    sites-info-to="ctrl.correspondence.sitesInfoTo">
+                    sites-info-to="ctrl.correspondence.sitesInfoTo"
+                    dist-list-id="ctrl.correspondence.distListId">
             </manage-correspondence-sites-directive>
             <manage-correspondence-site-incoming-directive
                     ng-if="ctrl.documentClass.toLowerCase()==='incoming'"

@@ -309,16 +309,21 @@ module.exports = function (app) {
         /**
          * @description add single site to To.
          * @param site
+         * @param isDistributionListRecord
          */
-        self.addSiteTo = function (site) {
-            if (self.needReply(site.followupStatus) && !(site.followupDate))
+        self.addSiteTo = function (site, isDistributionListRecord) {
+            if (self.needReply(site.followupStatus) && !(site.followupDate)) {
                 return toast.error(langService.get('sites_please_select_followup_date'));
+            }
+            //TODO: add distListId to outgoing document in case of add document only but need refactor later
+            if (isDistributionListRecord && !self.vsId) {
+                self.distListId = (self.selectedDistributionList && self.selectedDistributionList.hasOwnProperty('id')) ? self.selectedDistributionList.id : null;
+            }
+
             _addSite('To', site)
                 .then(function () {
                     self.subSearchSelected = [];
                     self.simpleSubSiteResultSearchText = '';
-                    /*self['sitesInfoToFollowupStatus'] = null;
-                    self['sitesInfoToFollowupStatusDate'] = null;*/
                     self.resetToStatusAndDate();
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
@@ -330,16 +335,20 @@ module.exports = function (app) {
         /**
          * @description add single site to CC.
          * @param site
+         * @param isDistributionListRecord
          */
-        self.addSiteCC = function (site) {
-            if (self.needReply(site.followupStatus) && !(site.followupDate))
+        self.addSiteCC = function (site, isDistributionListRecord) {
+            if (self.needReply(site.followupStatus) && !(site.followupDate)) {
                 return toast.error(langService.get('sites_please_select_followup_date'));
+            }
+            //TODO: add distListId to outgoing document in case of add document only but need refactor later
+            if (isDistributionListRecord && !self.vsId) {
+                self.distListId = (self.selectedDistributionList && self.selectedDistributionList.hasOwnProperty('id')) ? self.selectedDistributionList.id : null;
+            }
             _addSite('CC', site)
                 .then(function () {
                     self.subSearchSelected = [];
                     self.simpleSubSiteResultSearchText = '';
-                    /*self['sitesInfoCCFollowupStatus'] = null;
-                    self['sitesInfoCCFollowupStatusDate'] = null;*/
                     self.resetCCStatusAndDate();
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
@@ -403,7 +412,7 @@ module.exports = function (app) {
          */
         self.addAllSitesTo = function ($event, isDistributionListRecord) {
             var sites = angular.copy(self.subSearchResult);
-            if (isDistributionListRecord){
+            if (isDistributionListRecord) {
                 sites = angular.copy(self.subSearchResult_DL);
             }
             /*Override all sites to use without reply*/
@@ -460,7 +469,7 @@ module.exports = function (app) {
          */
         self.addAllSitesCC = function ($event, isDistributionListRecord) {
             var sites = angular.copy(self.subSearchResult);
-            if (isDistributionListRecord){
+            if (isDistributionListRecord) {
                 sites = angular.copy(self.subSearchResult_DL);
             }
             /*Override all sites to use without reply*/
@@ -939,6 +948,9 @@ module.exports = function (app) {
         };
 
 
+        /**
+         * @description Handles the change of distribution list/correspondence site type switch in distribution list tab
+         */
         self.onChangeIsSearchByDLSiteType = function () {
             self.selectedSiteType_DL = null;
             self.selectedDistributionList = null;
@@ -947,6 +959,9 @@ module.exports = function (app) {
         };
 
 
+        /**
+         * @description Handles on change of correspondence site type dropdown(switch enabled) in distribution list tab
+         */
         self.onSiteTypeDistributionListChange = function () {
             if (self.selectedSiteType_DL) {
                 correspondenceViewService.correspondenceSiteSearch('sub', {

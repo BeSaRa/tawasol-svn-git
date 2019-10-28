@@ -36,6 +36,7 @@ module.exports = function (app) {
             self.toSitesList = [];
             self.isComposite = false;
             self.fromEditOnDesktop = false;
+            self.distListId = null;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
