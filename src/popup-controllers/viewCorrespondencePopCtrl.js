@@ -88,10 +88,6 @@ module.exports = function (app) {
                 .editCorrespondenceInDesktop()
                 .then(function () {
                     dialog.hide('editInDesktop');
-                })
-                .catch(function () {
-                    self.editMode = false;
-                    //dialog.hide('editInDesktop');
                 });
         }
 
