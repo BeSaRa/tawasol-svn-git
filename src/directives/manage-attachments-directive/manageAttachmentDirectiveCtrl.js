@@ -84,11 +84,15 @@ module.exports = function (app) {
                 attachment.file = file;
                 return attachment;
             } else {
+                var activeAttachmentTypes = _.filter(self.attachmentTypes, function (type) {
+                    return type.status;
+                });
+
                 return new Attachment({
                     file: file,
                     securityLevel: self.document ? securityLevel : null,
                     updateActionStatus: self.attachmentUpdateActions[0],
-                    attachmentType: (self.attachmentTypes.length) ? self.attachmentTypes[0] : null
+                    attachmentType: (activeAttachmentTypes.length) ? activeAttachmentTypes[0] : null
                 });
             }
         }
