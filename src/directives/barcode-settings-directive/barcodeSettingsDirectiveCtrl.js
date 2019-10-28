@@ -17,6 +17,9 @@ module.exports = function (app) {
         self.controllerName = 'barcodeSettingsDirectiveCtrl';
         LangWatcher($scope);
         self.barcodeElements = lookupService.returnLookups(lookupService.barcodeElement);
+        self.barcodeElements = _.sortBy(self.barcodeElements, function (element) {
+            return element.itemOrder ? element.itemOrder : '';
+        });
         self.elements = [];
 
         self.selectedRowIndex = null;
