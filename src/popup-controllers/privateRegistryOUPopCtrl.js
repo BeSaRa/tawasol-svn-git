@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('privateRegistryOUPopCtrl', function (dialog, registryOrganizations, toast, langService, organizationService) {
+    app.controller('privateRegistryOUPopCtrl', function (dialog, registryOrganizations, toast, langService, organizationService, _) {
         'ngInject';
         var self = this;
         self.controllerName = 'privateRegistryOUPopCtrl';
@@ -10,6 +10,8 @@ module.exports = function (app) {
         self.privateRegOusGrid = [];
         self.selectedPrivateRegOusGrid = [];
         self.excludedPrivateRegOU = _.map(self.excludedPrivateRegOU, 'ouid');
+
+        self.ouSearchText = '';
 
         /**
          * @description add private registry Ous
@@ -70,6 +72,25 @@ module.exports = function (app) {
 
         self.closePopup = function () {
             dialog.cancel();
-        }
+        };
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
+        };
     });
 };

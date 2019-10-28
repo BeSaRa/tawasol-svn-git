@@ -10,13 +10,23 @@
                     <md-input-container flex>
                         <label for="organizations">{{lang.select_organization}}</label>
                         <md-select id="organizations" aria-label="{{lang.select_organization}}"
-                                   ng-model="ctrl.selectedPrivateRegOus"
-                                   multiple
-                                   ng-model-options="{trackBy: '$value.id'}">
-                            <md-option ng-if="ctrl.excludeOrganizationIfExists(organization)"
-                                       ng-value="organization"
-                                       ng-repeat="organization in ctrl.allRegOus track by $index">
-                                {{organization.getTranslatedName()}}
+                                   ng-model="ctrl.selectedPrivateRegOus" multiple
+                                   ng-model-options="{trackBy: '$value.id'}"
+                                   md-on-close="ctrl.clearSearchText('ou')"
+                                   data-md-container-class="select-header-container">
+                            <md-select-header class="select-header">
+                                <input ng-model="ctrl.ouSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option
+                                    ng-repeat="organization in ctrl.allRegOus | translatedNameFilter: ctrl.ouSearchText track by $index"
+                                    ng-if="ctrl.excludeOrganizationIfExists(organization)"
+                                    ng-value="organization">
+                                <span
+                                        md-highlight-text="ctrl.ouSearchText"
+                                        md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
                             </md-option>
                         </md-select>
                     </md-input-container>
