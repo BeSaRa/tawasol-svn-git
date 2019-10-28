@@ -67,7 +67,7 @@ module.exports = function (app) {
 
         self.openPrepareTemplateDialog = function ($event) {
             self.checkRequired($event).then(function () {
-                if (self.editContent) {
+                if (self.editContent && self.documentInformation) {
                     return dialog
                         .confirmMessage(langService.get('content_will_remove_confirm'))
                         .then(function () {
@@ -271,12 +271,13 @@ module.exports = function (app) {
          * @description open edit correspondence when editAfterApproved = true.
          */
         self.openCorrespondenceToEdit = function () {
-            if (!self.trusted) {
-                self.documentInformation.viewURL = $sce.trustAsResourceUrl(self.documentInformation.viewURL);
-                self.documentInformation.editURL = $sce.trustAsResourceUrl(self.documentInformation.editURL);
+            if (!self.documentInformation.editURL) {
+                self.documentInformation.editURL = angular.copy(self.documentInformation.viewURL);
             }
-
+            self.documentInformation.viewURL = typeof self.documentInformation.viewURL === 'object' ? self.documentInformation.viewURL : $sce.trustAsResourceUrl(self.documentInformation.viewURL);
+            self.documentInformation.editURL = typeof self.documentInformation.editURL === 'object' ? self.documentInformation.editURL : $sce.trustAsResourceUrl(self.documentInformation.editURL);
             self.trusted = true;
+
             return correspondenceService
                 .openCorrespondenceEditor(self.documentInformation)
                 .then(function (information) {

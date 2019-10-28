@@ -48,7 +48,7 @@
         </md-icon>
     </div>
     <div>
-        <md-button ng-if="ctrl.editContent && !ctrl.receiveDocument" class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
+        <md-button ng-if="ctrl.editContent && !ctrl.receiveDocument && ctrl.documentInformation" class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
             {{lang.edit_content}}
         </md-button>
         <md-button ng-if="ctrl.receiveDocument" class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
