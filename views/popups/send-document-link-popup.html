@@ -91,7 +91,7 @@
                         <!-- Mobile Number -->
                         <md-input-container flex>
                             <label for="sharedToMobileNum">{{lang.mobile_number}}</label>
-                            <input id="sharedToMobileNum" required name="sharedToMobileNum"
+                            <input id="sharedToMobileNum" name="sharedToMobileNum"
                                    ng-model="ctrl.documentLinkSubscriber.sharedToMobileNum"
                                    custom-validate-directive="phone_mobile">
                             <div ng-messages="documentLinkForm.sharedToMobileNum.$error">
@@ -134,10 +134,10 @@
                                         md-order-by="sharedToFullName">{{lang.name}}
                                     </th>
                                     <th md-column ng-if="!ctrl.selectedDocumentLinkSubscribers.length"
-                                        md-order-by="sharedToMobileNum">{{lang.mobile}}
+                                        md-order-by="sharedToEmail">{{lang.email}}
                                     </th>
                                     <th md-column ng-if="!ctrl.selectedDocumentLinkSubscribers.length"
-                                        md-order-by="sharedToEmail">{{lang.email}}
+                                        md-order-by="sharedToMobileNum">{{lang.mobile}}
                                     </th>
                                     <!-- <th md-column ng-if="!ctrl.selectedDocumentLinkSubscribers.length">
                                          {{lang.expiry_date}}
@@ -151,10 +151,10 @@
                                         {{subscriber.sharedToFullName}}
                                     </td>
                                     <td md-cell>
-                                        {{subscriber.sharedToMobileNum}}
+                                        {{subscriber.sharedToEmail}}
                                     </td>
                                     <td md-cell>
-                                        {{subscriber.sharedToEmail}}
+                                        {{subscriber.sharedToMobileNum}}
                                     </td>
                                     <!--   <td md-cell>
                                            <span layout="row" layout-align="end center">{{ctrl.documentLink.expirationTime | date : 'yyyy/MM/dd'}}</span>
