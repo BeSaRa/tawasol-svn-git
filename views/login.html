@@ -81,27 +81,29 @@
                 </md-button>
             </div>
             <br/>
-            <div layout="row" layout-align="center center">
+            <br/>
+            <div ng-if="login.loginStatus" layout="row">
+                <md-progress-linear md-mode="intermediate"></md-progress-linear>
+            </div>
+        </form>
+        <div class="help-text" layout="column" layout-align="center center">
+            <div layout="row">
+                <span flex></span>
+                <a href="" ng-click="login.showHelp($event)" ng-if="login.isHelpAvailable()">{{lang.help}}</a>
+                <span ng-if="login.isHelpAvailable()">&nbsp; | &nbsp;</span>
+                <a href="" ng-click="login.showTerms($event)">Terms</a>
+                <span flex=""></span>
+            </div>
+            <div layout="row">
                 <span flex></span>
                 <a target="_blank" href="https://www.veracode.com/verified/directory/ebla-computer-consultancy">
-                    <img width="75"
+                    <img width="60"
                          src="../assets/images/vcode.png"
                          tooltip="Verified by Veracode"
                          alt="Verified by Veracode!">
                 </a>
                 <span flex></span>
             </div>
-            <br/>
-            <div ng-if="login.loginStatus" layout="row">
-                <md-progress-linear md-mode="intermediate"></md-progress-linear>
-            </div>
-        </form>
-        <div class="help-text" layout="row" layout-align="center center">
-            <span flex></span>
-            <a href="" ng-click="login.showHelp($event)" ng-if="login.isHelpAvailable()">{{lang.help}}</a>
-            <span ng-if="login.isHelpAvailable()">&nbsp; | &nbsp;</span>
-            <a href="" ng-click="login.showTerms($event)">Terms</a>
-            <span flex=""></span>
         </div>
         <br>
         <div class="copyright-text" layout="row" layout-align="center end"
