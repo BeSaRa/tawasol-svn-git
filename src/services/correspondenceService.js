@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                    Pair,
                                                    downloadService,
                                                    helper,
+                                                   $state,
                                                    CommentModel,
                                                    CMSModelInterceptor,
                                                    employeeService,
@@ -4247,7 +4248,7 @@ module.exports = function (app) {
          * @param escapeEmployeeCheck
          * @returns {Promise|*}
          */
-        self.overrideViewUrl = function (viewURL, returnPromise , escapeEmployeeCheck) {
+        self.overrideViewUrl = function (viewURL, returnPromise, escapeEmployeeCheck) {
             if (!escapeEmployeeCheck && employeeService.getEmployee().isSlowConnectionMode()) {
                 return $http.get(viewURL, {
                     responseType: 'blob'
@@ -4264,6 +4265,22 @@ module.exports = function (app) {
                 }
                 return viewURL;
             }
+        };
+
+        /**
+         * @description Returns the action/state name if security level can be enabled.
+         * Otherwise returns null
+         * @returns {*}
+         */
+        self.getSecurityLevelEnabledAction = function () {
+            var currentStateName = $state.current.name,
+                action = null;
+            if (currentStateName.indexOf('review') !== -1) {
+                action = "review";
+            } else if (currentStateName.indexOf('user-inbox') !== -1) {
+                action = "user-inbox";
+            }
+            return action;
         };
 
         $timeout(function () {

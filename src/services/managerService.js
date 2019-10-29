@@ -261,12 +261,9 @@ module.exports = function (app) {
          */
         self.manageDocumentProperties = function (vsId, documentClass, documentSubject, $event) {
             var defer = $q.defer(), deferCorrespondence = $q.defer();
-            var document = null, action = null, currentStateName = $state.current.name;
-            if (currentStateName.indexOf('review') !== -1) {
-                action = "review";
-            } else if (currentStateName.indexOf('user-inbox') !== -1) {
-                action = "user-inbox";
-            }
+            var document = null,
+                // set action to review/user-inbox will enable edit of security level
+                action = correspondenceService.getSecurityLevelEnabledAction();
 
             documentClass = _checkDocumentClass(documentClass);
             return dialog
