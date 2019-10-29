@@ -20,12 +20,12 @@
                            placeholder="{{lang.search}}"
                            class="select-header-input">
                 </md-select-header>
+                <md-option ng-value="null">{{lang.none}}</md-option>
                 <md-option ng-value="type"
                            ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter:ctrl.siteTypeSimpleSearchText">
                     <span md-highlight-text="ctrl.siteTypeSimpleSearchText"
                           md-highlight-flags="i">{{type.getTranslatedName()}}</span>
                 </md-option>
-                <md-option ng-value="null">{{lang.none}}</md-option>
             </md-select>
         </md-input-container>
         <!-- Main Site -->
@@ -58,13 +58,13 @@
                         {{lang.press_enter_to_load_more_records}}
                     </div>
                 </md-select-header>
+                <md-option ng-value="null">{{lang.none}}</md-option>
                 <md-option ng-value="site"
                            ng-repeat="site in ctrl.mainSites | translatedNameFilter: ctrl.mainSiteSimpleSearchText">
                     <span
                             md-highlight-text="ctrl.mainSiteSimpleSearchText"
                             md-highlight-flags="i">{{site.getTranslatedName()}}</span>
                 </md-option>
-                <md-option ng-value="null">{{lang.none}}</md-option>
             </md-select>
         </md-input-container>
     </div>
@@ -85,13 +85,13 @@
                            placeholder="{{lang.search}}"
                            class="select-header-input">
                 </md-select-header>
+                <md-option ng-value="null">{{lang.none}}</md-option>
                 <md-option ng-value="type"
                            ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter: ctrl.siteTypeAdvancedSearchText">
                     <span
                             md-highlight-text="ctrl.siteTypeAdvancedSearchText"
                             md-highlight-flags="i">{{type.getTranslatedName()}}</span>
                 </md-option>
-                <md-option ng-value="null">{{lang.none}}</md-option>
             </md-select>
         </md-input-container>
         <!-- Main Site -->
@@ -124,13 +124,13 @@
                         {{lang.press_enter_to_load_more_records}}
                     </div>
                 </md-select-header>
+                <md-option ng-value="null">{{lang.none}}</md-option>
                 <md-option
                         ng-repeat="site in ctrl.mainSites | translatedNameFilter: ctrl.mainSiteAdvancedSearchText"
                         ng-value="site">
                                 <span md-highlight-text="ctrl.mainSiteAdvancedSearchText"
                                       md-highlight-flags="i">{{site.getTranslatedName()}}</span>
                 </md-option>
-                <md-option ng-value="null">{{lang.none}}</md-option>
             </md-select>
         </md-input-container>
         <!--<md-autocomplete

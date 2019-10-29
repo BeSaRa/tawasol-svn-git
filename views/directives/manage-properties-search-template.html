@@ -567,11 +567,11 @@
                                ng-change="ctrl.openEntityTypePopup(true, $event)"
                                ng-model="ctrl.document.selectedEntityType"
                                ng-required="ctrl.checkMandatory('linkedEntities')">
+                        <md-option ng-value="null">{{lang.none}}</md-option>
                         <md-option ng-value="entityType"
                                    ng-repeat="entityType in ctrl.entityTypesArray">
                             {{entityType.getTranslatedName()}}
                         </md-option>
-                        <md-option ng-value="null">{{lang.none}}</md-option>
                     </md-select>
                     <div ng-messages="docSearchForm.selectedEntityType.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
@@ -611,15 +611,25 @@
                 <!-- Approver drop down -->
                 <md-input-container flex>
                     <label for="approvers">{{lang.approver}}</label>
-                    <md-select name="approvers"
-                               id="approvers"
+                    <md-select name="approvers" id="approvers"
                                ng-model="ctrl.document.approvers"
-                               ng-required="ctrl.checkMandatory('approvers')">
-                        <md-option ng-value="approver"
-                                   ng-repeat="approver in ctrl.approvers">
-                            {{approver.applicationUser.getTranslatedName()}} - {{approver.ouInfo.getTranslatedName()}}
-                        </md-option>
+                               ng-required="ctrl.checkMandatory('approvers')"
+                               md-on-close="ctrl.clearSearchText('approver')"
+                               data-md-container-class="select-header-container">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.approverSearchText"
+                                   ng-keydown="ctrl.handleSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
                         <md-option ng-value="null">{{lang.none}}</md-option>
+                        <md-option
+                                ng-repeat="approver in ctrl.approvers | translatedNameFilter: ctrl.approverSearchText:'getAppUserAndOuTranslate'"
+                                ng-value="approver">
+                            <span
+                                    md-highlight-text="ctrl.approverSearchText"
+                                    md-highlight-flags="i">{{approver.getAppUserAndOuTranslate()}}</span>
+                        </md-option>
                     </md-select>
                     <div ng-messages="docSearchForm.approvers.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
@@ -659,24 +669,48 @@
                     <label for="fromRegOUId">{{lang.from_reg_ou}}</label>
                     <md-select name="fromRegOUId" id="fromRegOUId"
                                aria-label="{{lang.from_reg_ou}}"
-                               ng-model="ctrl.document.fromRegOUId">
-                        <md-option ng-value="ou.id" ng-repeat="ou in ctrl.organizations track by $index"
-                                   ng-if="ou.id !== ctrl.document.toRegOUId && ou.hasRegistry">
-                            {{ou.getTranslatedName()}}
-                        </md-option>
+                               ng-model="ctrl.document.fromRegOUId"
+                               ng-model-options="{trackBy: '$value'}"
+                               md-on-close="ctrl.clearSearchText('fromDept')"
+                               data-md-container-class="select-header-container">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.fromDeptSearchText"
+                                   ng-keydown="ctrl.handleSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
                         <md-option ng-value="null">{{lang.none}}</md-option>
+                        <md-option ng-repeat="ou in ctrl.organizations | translatedNameFilter: ctrl.fromDeptSearchText"
+                                   ng-if="ou.id !== ctrl.document.toRegOUId && ou.hasRegistry"
+                                   ng-value="ou.id">
+                            <span
+                                    md-highlight-text="ctrl.fromDeptSearchText"
+                                    md-highlight-flags="i">{{ou.getTranslatedName()}}</span>
+                        </md-option>
                     </md-select>
                 </md-input-container>
                 <md-input-container flex>
                     <label for="toRegOUId">{{lang.to_reg_ou}}</label>
                     <md-select name="toRegOUId" id="toRegOUId"
                                aria-label="{{lang.to_reg_ou}}"
-                               ng-model="ctrl.document.toRegOUId">
-                        <md-option ng-value="ou.id" ng-repeat="ou in ctrl.organizations track by $index"
-                                   ng-if="ou.id !== ctrl.document.fromRegOUId && ou.hasRegistry">
-                            {{ou.getTranslatedName()}}
-                        </md-option>
+                               ng-model="ctrl.document.toRegOUId"
+                               ng-model-options="{trackBy: '$value'}"
+                               md-on-close="ctrl.clearSearchText('toDept')"
+                               data-md-container-class="select-header-container">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.toDeptSearchText"
+                                   ng-keydown="ctrl.handleSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
                         <md-option ng-value="null">{{lang.none}}</md-option>
+                        <md-option ng-repeat="ou in ctrl.organizations | translatedNameFilter: ctrl.toDeptSearchText"
+                                   ng-if="ou.id !== ctrl.document.fromRegOUId && ou.hasRegistry"
+                                   ng-value="ou.id">
+                            <span
+                                    md-highlight-text="ctrl.toDeptSearchText"
+                                    md-highlight-flags="i">{{ou.getTranslatedName()}}</span>
+                        </md-option>
                     </md-select>
                 </md-input-container>
             </div>

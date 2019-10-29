@@ -46,10 +46,14 @@ module.exports = function (app) {
         self.subClassificationSearchText = '';
         self.documentFileSearchText = '';
 
-        self.displayFollowUpDates = false;
-
         self.regOUSearchText = '';
         self.sectionOUSearchText = '';
+        self.approverSearchText = '';
+        self.fromDeptSearchText = '';
+        self.toDeptSearchText = '';
+
+
+        self.displayFollowUpDates = false;
 
         /*Types options for the type drop down*/
         self.typeOptions = [

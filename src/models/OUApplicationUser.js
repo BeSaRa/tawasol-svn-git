@@ -110,6 +110,13 @@ module.exports = function (app) {
                 return '';
             };
 
+            OUApplicationUser.prototype.getAppUserAndOuTranslate = function () {
+                if (this.getOrganizationTranslate()) {
+                    return this.getTranslatedApplicationUserName() + ' - ' + this.getOrganizationTranslate();
+                }
+                return this.getTranslatedApplicationUserName();
+            };
+
             /**
              * @description Get the status of ou application user as Active or Inactive instead of true or false.
              * @returns {string}
