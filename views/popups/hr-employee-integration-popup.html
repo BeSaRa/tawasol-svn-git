@@ -12,6 +12,12 @@
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row">
+                                    <!--employee number-->
+                                    <md-input-container flex>
+                                        <label for="employeeNo">{{lang.entities_employee_number}}</label>
+                                        <input name="employeeNo" id="employeeNo"
+                                               ng-model="ctrl.criteria.employeeNo">
+                                    </md-input-container>
                                     <!--arabic name-->
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
@@ -24,14 +30,14 @@
                                         <input name="enName" id="enName"
                                                ng-model="ctrl.criteria.enName">
                                     </md-input-container>
+                                </div>
+                                <div layout="row">
                                     <!--employee qid-->
                                     <md-input-container flex>
                                         <label for="qId">{{lang.qid}}</label>
                                         <input name="qId" id="qId"
                                                ng-model="ctrl.criteria.qId">
                                     </md-input-container>
-                                </div>
-                                <div layout="row">
                                     <!--domain name-->
                                     <md-input-container flex>
                                         <label for="domainName">{{lang.domain_name}}</label>
@@ -54,6 +60,8 @@
                                             </div>
                                         </div>
                                     </md-input-container>
+                                </div>
+                                <div layout="row">
                                     <!--email-->
                                     <md-input-container flex>
                                         <label for="email">{{lang.email}}</label>
@@ -63,14 +71,6 @@
                                         <div ng-messages="HRIntegrationSearchForm.email.$error">
                                             <div ng-message="email">{{lang.invalid_email}}</div>
                                         </div>
-                                    </md-input-container>
-                                </div>
-                                <div layout="row">
-                                    <!-- nationality -->
-                                    <md-input-container flex>
-                                        <label for="nationality">{{lang.entities_nationality}}</label>
-                                        <input name="nationality" id="nationality"
-                                               ng-model="ctrl.criteria.nationality">
                                     </md-input-container>
                                     <!--joining date-->
                                     <md-input-container class="cms-datepicker" flex>
