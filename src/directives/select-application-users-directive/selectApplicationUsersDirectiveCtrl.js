@@ -18,6 +18,8 @@ module.exports = function (app) {
         self.searchedUsers = [];
         self.searchText = '';
 
+        self.inlineOuSearchText = '';
+
         self.availableSearchCriteria = [
             {key: 'loginName', value: 'login_name'},
             {key: 'employeeNo', value: 'employee_number'},
@@ -210,6 +212,26 @@ module.exports = function (app) {
             lastSearch = lastSearch || now;
             return ((now - lastSearch) < 300);
         }
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
+        };
 
     });
 };

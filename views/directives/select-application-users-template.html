@@ -15,10 +15,20 @@
                             ng-if="ctrl.searchBy && ctrl.searchBy.key === 'organizationUnit'">
             <md-select ng-model="ctrl.selectedOrganization"
                        aria-label="{{lang.organizations}}"
-                       ng-change="ctrl.loadUsersByOU($event)">
-                <md-option ng-repeat="organization in ctrl.organizations"
+                       ng-change="ctrl.loadUsersByOU($event)"
+                       md-on-close="ctrl.clearSearchText('inlineOu')"
+                       data-md-container-class="select-header-container">
+                <md-select-header class="select-header">
+                    <input ng-model="ctrl.inlineOuSearchText"
+                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                           placeholder="{{lang.search}}"
+                           class="select-header-input">
+                </md-select-header>
+                <md-option ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.inlineOuSearchText"
                            ng-value="organization">
-                    {{organization.getTranslatedName()}}
+                    <span
+                            md-highlight-text="ctrl.inlineOuSearchText"
+                            md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
                 </md-option>
             </md-select>
         </md-input-container>
