@@ -152,7 +152,7 @@ module.exports = function (app) {
                 })
         };
 
-        self.resetNotifications = function () {
+        self.onChangeManager = function () {
             var setReplyOn = false;
             if (self.getApprovedStatus()) {
                 setReplyOn = (self.selectedManagers !== -1);
