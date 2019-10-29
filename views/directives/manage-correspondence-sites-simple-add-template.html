@@ -12,12 +12,12 @@
                        placeholder="{{lang.search}}"
                        class="select-header-input">
             </md-select-header>
+            <md-option ng-value="null">{{lang.none}}</md-option>
             <md-option ng-value="type"
                        ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter:ctrl.siteTypeSearchText">
                 <span md-highlight-text="ctrl.siteTypeSearchText"
                       md-highlight-flags="i">{{type.getTranslatedName()}}</span>
             </md-option>
-            <md-option ng-value="null">{{lang.none}}</md-option>
         </md-select>
     </md-input-container>
     <!-- Main Site -->

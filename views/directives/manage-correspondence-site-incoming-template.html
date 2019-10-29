@@ -14,13 +14,13 @@
                            placeholder="{{lang.search}}"
                            class="select-header-input">
                 </md-select-header>
+                <md-option ng-value="null">{{lang.none}}</md-option>
                 <md-option ng-value="type"
                            ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter:ctrl.siteTypeSimpleSearchText">
                 <span
                         md-highlight-text="ctrl.siteTypeSimpleSearchText"
                         md-highlight-flags="i">{{type.getTranslatedName()}}</span>
                 </md-option>
-                <md-option ng-value="null">{{lang.none}}</md-option>
             </md-select>
         </md-input-container>
         <!-- Main Site -->
@@ -75,13 +75,13 @@
                            placeholder="{{lang.search}}"
                            class="select-header-input">
                 </md-select-header>
+                <md-option ng-value="null">{{lang.none}}</md-option>
                 <md-option ng-value="type"
                            ng-repeat="type in ctrl.correspondenceSiteTypes | translatedNameFilter: ctrl.siteTypeAdvancedSearchText">
                     <span
                             md-highlight-text="ctrl.siteTypeAdvancedSearchText"
                             md-highlight-flags="i">{{type.getTranslatedName()}}</span>
                 </md-option>
-                <md-option ng-value="null">{{lang.none}}</md-option>
             </md-select>
         </md-input-container>
         <!-- Main Site -->

@@ -51,7 +51,6 @@
                                     </md-select-header>
                                     <md-option ng-value="null">{{lang.none}}</md-option>
                                     <md-option ng-value="organization"
-
                                                ng-disabled="!ctrl.includeOrganizationsIfNotExists(organization)"
                                                ng-repeat="organization in ctrl.subOrganizations | translatedNameFilter: ctrl.sectionOUSearchText">
                             <span

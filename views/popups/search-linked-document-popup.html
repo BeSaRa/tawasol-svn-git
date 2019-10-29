@@ -55,11 +55,11 @@
                                                ng-model="ctrl.correspondence.securityLevel"
                                                ng-change="ctrl.onSecurityLevelChange()"
                                                ng-model-options="{trackBy: '$value.id'}">
+                                        <md-option ng-value="null">{{lang.all}}</md-option>
                                         <md-option ng-value="securityLevel"
                                                    ng-repeat="securityLevel in ctrl.securityLevels">
                                             {{securityLevel.getTranslatedName()}}
                                         </md-option>
-                                        <md-option ng-value="null">{{lang.all}}</md-option>
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container flex>
@@ -166,13 +166,13 @@
                                                 {{lang.press_enter_to_load_more_records}}
                                             </div>
                                         </md-select-header>
+                                        <md-option ng-value="null">{{lang.all}}</md-option>
                                         <md-option ng-value="file.file"
                                                    ng-repeat="file in ctrl.documentFiles | translatedNameFilter: ctrl.documentFileSearchText:null:'file'">
                                             <span
                                                     md-highlight-text="ctrl.documentFileSearchText"
                                                     md-highlight-flags="i">{{file.file.getTranslatedName()}}</span>
                                         </md-option>
-                                        <md-option ng-value="null">{{lang.all}}</md-option>
                                     </md-select>
                                 </md-input-container>
                             </div>
