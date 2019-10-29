@@ -85,6 +85,10 @@ module.exports = function (app) {
             internalApproved : {
                 permission: 'APPROVED_INTERNAL_DOCUMENT',
                 state: 'app.internal.approved'
+            },
+            outgoingReview: {
+                permission: 'REVIEW_OUTGOING_DOCUMENTS',
+                state: 'app.outgoing.review'
             }
         };
 
@@ -156,34 +160,40 @@ module.exports = function (app) {
                 value: 'internalPrepare'
             },
             {
-                id: 11,
+                id: 12,
                 ar: langService.getKey('counter_internal_draft', 'ar'),
                 en: langService.getKey('counter_internal_draft', 'en'),
                 value: 'internalDraft'
             },
             {
-                id: 11,
+                id: 13,
                 ar: langService.getKey('counter_internal_review', 'ar'),
                 en: langService.getKey('counter_internal_review', 'en'),
                 value: 'internalReview'
             },
             {
-                id: 11,
+                id: 14,
                 ar: langService.getKey('counter_internal_ready_to_send', 'ar'),
                 en: langService.getKey('counter_internal_ready_to_send', 'en'),
                 value: 'internalReadyToSent'
             },
             {
-                id: 11,
+                id: 15,
                 ar: langService.getKey('counter_internal_rejected', 'ar'),
                 en: langService.getKey('counter_internal_rejected', 'en'),
                 value: 'internalRejected'
             },
             {
-                id: 11,
+                id: 16,
                 ar: langService.getKey('counter_internal_approved', 'ar'),
                 en: langService.getKey('counter_internal_approved', 'en'),
                 value: 'internalApproved'
+            },
+            {
+                id: 17,
+                ar: langService.getKey('counter_outgoing_review', 'ar'),
+                en: langService.getKey('counter_outgoing_review', 'en'),
+                value: 'outgoingReview'
             }
         ];
 
