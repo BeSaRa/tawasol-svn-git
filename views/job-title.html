@@ -14,16 +14,17 @@
             <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div><!-- page-header -->
         <div layout="column" flex>
-            <div scroll-directive>
+            <div>
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
                         <md-table-container>
-                            <div flex scroll-directive>
+                            <div table-height-directive overlay-scroll-bar-directive>
                                 <table md-table md-row-select="true"
                                        multiple="true"
                                        ng-model="ctrl.selectedJobTitles"
                                        md-progress="ctrl.grid.progress">
-                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                    <thead fix-head md-head md-order="ctrl.grid.order"
+                                           md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="5" class="table-selector-header"
                                             ng-if="ctrl.selectedJobTitles.length" md-column>
@@ -82,14 +83,14 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <md-table-pagination
-                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                    md-limit-options="ctrl.grid.limitOptions"
-                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.jobTitles).length}}" md-page-select
-                                    md-on-paginate="ctrl.grid.pagingCallback">
-                            </md-table-pagination>
                         </md-table-container>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                md-total="{{(ctrl.jobTitles).length}}" md-page-select
+                                md-on-paginate="ctrl.grid.pagingCallback">
+                        </md-table-pagination>
                     </md-card>
                 </div>
             </div>
