@@ -654,7 +654,6 @@
                             </div>
                         </md-content>
                     </md-tab>
-
                     <!-- Children -->
                     <md-tab label="{{lang.childs}}" ng-if="ctrl.editMode && ctrl.showTab('children')"
                             ng-click="ctrl.setCurrentTab('children')">
@@ -1399,12 +1398,14 @@
                                                         <thead md-head md-order="ctrl.appUserGrid.order"
                                                                md-on-reorder="ctrl.getSortedDataAppUser">
                                                         <tr md-row>
-                                                            <th colspan="5"
+                                                            <th colspan="6"
                                                                 ng-if="ctrl.selectedOUApplicationUsers.length"
                                                                 md-column>
                                                                 <div layout="row" layout-align="start center">
                                                                     <span>{{ctrl.selectedOUApplicationUsers.length}} {{lang.items_selected}} </span>
                                                                     <span flex></span>
+                                                                    <table-status-directive
+                                                                            when-close="ctrl.changeStatusBulkOUApplicationUsers"></table-status-directive>
                                                                     <md-button class="md-icon-button"
                                                                                title="{{lang.delete_selected_items}}"
                                                                                ng-click="ctrl.removeBulkOUApplicationUsers($event)">
@@ -1433,6 +1434,11 @@
                                                                 <span>{{lang.domain_name}}</span>
                                                             </th>
                                                             <th ng-if="!ctrl.selectedOUApplicationUsers.length"
+                                                                md-column
+                                                                md-order-by="">
+                                                                <span>{{lang.status}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedOUApplicationUsers.length"
                                                                 md-column>
                                                                 <span>{{lang.actions}}</span>
                                                             </th>
@@ -1453,6 +1459,13 @@
                                                             </td>
                                                             <td md-cell>
                                                                 {{ouApplicationUser.applicationUser.domainName}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                <md-switch aria-label="{{lang.status}}"
+                                                                           ng-model="ouApplicationUser.status"
+                                                                           ng-if="ctrl.employeeService.getEmployee().id != ouApplicationUser.applicationUser.id"
+                                                                           ng-change="ctrl.changeOUApplicationUserStatus(ouApplicationUser, $event)"
+                                                                           title="{{ouApplicationUser.getTranslatedStatus()}}"></md-switch>
                                                             </td>
                                                             <td md-cell>
                                                                 <div flex layout="row" layout-align="start center">
@@ -1514,12 +1527,14 @@
                                                         <thead md-head md-order="ctrl.departmentUsersGrid.order"
                                                                md-on-reorder="ctrl.getSortedDataDepartmentUser">
                                                         <tr md-row>
-                                                            <th colspan="6"
+                                                            <th colspan="7"
                                                                 ng-if="ctrl.selectedDepartmentUsers.length"
                                                                 md-column>
                                                                 <div layout="row" layout-align="start center">
                                                                     <span>{{ctrl.selectedDepartmentUsers.length}} {{lang.items_selected}} </span>
                                                                     <span flex></span>
+                                                                    <table-status-directive
+                                                                            when-close="ctrl.changeStatusBulkOUApplicationUsers"></table-status-directive>
                                                                     <md-button class="md-icon-button"
                                                                                title="{{lang.delete_selected_items}}"
                                                                                ng-click="ctrl.removeBulkOUApplicationUsers($event)">
@@ -1554,6 +1569,10 @@
                                                             </th>
                                                             <th ng-if="!ctrl.selectedDepartmentUsers.length"
                                                                 md-column>
+                                                                <span>{{lang.status}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDepartmentUsers.length"
+                                                                md-column>
                                                                 <span>{{lang.actions}}</span>
                                                             </th>
                                                         </tr>
@@ -1576,6 +1595,13 @@
                                                             </td>
                                                             <td md-cell>
                                                                 {{ouApplicationUser.ouid.getTranslatedName()}}
+                                                            </td>
+                                                            <td md-cell>
+                                                                <md-switch aria-label="{{lang.status}}"
+                                                                           ng-model="ouApplicationUser.status"
+                                                                           ng-if="ctrl.employeeService.getEmployee().id != ouApplicationUser.applicationUser.id"
+                                                                           ng-change="ctrl.changeOUApplicationUserStatus(ouApplicationUser, $event)"
+                                                                           title="{{ouApplicationUser.getTranslatedStatus()}}"></md-switch>
                                                             </td>
                                                             <td md-cell>
                                                                 <div flex layout="row" layout-align="start center">

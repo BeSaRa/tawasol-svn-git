@@ -565,8 +565,9 @@ module.exports = function (app) {
          * @param ouApplicationUser
          */
         self.activateOUApplicationUser = function (ouApplicationUser) {
+            ouApplicationUser = ouApplicationUser.hasOwnProperty('id') ? ouApplicationUser.id : ouApplicationUser;
             return $http
-                .put((urlService.ouApplicationUsers + '/activate/' + ouApplicationUser.id))
+                .put((urlService.ouApplicationUsers + '/activate/' + ouApplicationUser))
                 .then(function () {
                     return ouApplicationUser;
                 });
@@ -577,8 +578,9 @@ module.exports = function (app) {
          * @param ouApplicationUser
          */
         self.deactivateOUApplicationUser = function (ouApplicationUser) {
+            ouApplicationUser = ouApplicationUser.hasOwnProperty('id') ? ouApplicationUser.id : ouApplicationUser;
             return $http
-                .put((urlService.ouApplicationUsers + '/deactivate/' + ouApplicationUser.id))
+                .put((urlService.ouApplicationUsers + '/deactivate/' + ouApplicationUser))
                 .then(function () {
                     return ouApplicationUser;
                 });

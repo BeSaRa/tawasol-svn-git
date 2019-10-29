@@ -1919,5 +1919,58 @@ module.exports = function (app) {
 
 
         self.referencePlanChanged(true);
+
+        /**
+         *@description Contains methods for CRUD operations for job titles
+         */
+        self.statusServices = {
+            'activate': ouApplicationUserService.activateBulkOUApplicationUsers,
+            'deactivate': ouApplicationUserService.deactivateBulkOUApplicationUsers,
+            'true': ouApplicationUserService.activateOUApplicationUser,
+            'false': ouApplicationUserService.deactivateOUApplicationUser
+        };
+
+        /**
+         * @description Handles the change of ouApplicationUser status
+         * @param ouApplicationUser
+         * @param $event
+         */
+        self.changeOUApplicationUserStatus = function (ouApplicationUser, $event) {
+            self.statusServices[ouApplicationUser.status](ouApplicationUser)
+                .then(function () {
+                    // reload the users tab which is not selected
+                    if (self.selectedTab === 'departmentUsers') {
+                        self.reloadOuApplicationUsers(self.appUserGrid.page);
+                    } else {
+                        self.reloadDepartmentUsers(self.departmentUsersGrid.page);
+                    }
+                    toast.success(langService.get('status_success'));
+                })
+                .catch(function () {
+                    ouApplicationUser.status = !ouApplicationUser.status;
+                    dialog.errorMessage(langService.get('something_happened_when_update_status'));
+                });
+        };
+
+        /**
+         * @description Change the status of selected job titles
+         * @param status
+         */
+        self.changeStatusBulkOUApplicationUsers = function (status) {
+            var selectedOuAppUsers = angular.copy(self.selectedOUApplicationUsers);
+            if (self.selectedTab === 'departmentUsers') {
+                selectedOuAppUsers = angular.copy(self.selectedDepartmentUsers);
+            }
+
+            var statusCheck = (status === 'activate');
+            if (!generator.checkCollectionStatus(selectedOuAppUsers, statusCheck)) {
+                toast.success(langService.get(statusCheck ? 'success_activate_selected' : 'success_deactivate_selected'));
+                return;
+            }
+            self.statusServices[status](selectedOuAppUsers).then(function () {
+                self.reloadOuApplicationUsers(self.appUserGrid.page);
+                self.reloadDepartmentUsers(self.departmentUsersGrid.page);
+            });
+        };
     });
 };
