@@ -816,6 +816,7 @@ module.exports = function (app) {
                 self.subRecords = _concatCorrespondenceSites(true);
                 self.emptySubRecords = false;
                 self.simpleSubSiteResultSearchText = '';
+                self.selectedSimpleSub = null;
             }
         });
 
