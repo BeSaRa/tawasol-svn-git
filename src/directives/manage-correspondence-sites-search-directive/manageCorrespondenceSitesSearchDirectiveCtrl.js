@@ -543,9 +543,9 @@ module.exports = function (app) {
                         self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                         self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
 
-                        if (self.subSearchResult.length === 1) {
+                        /*if (self.subSearchResult.length === 1) {
                             self.subSearchSelected.push(self.subSearchResult[0]);
-                        }
+                        }*/
 
                         // bind sub site search
                         if (self.isSimpleCorrespondenceSiteSearchType) {
