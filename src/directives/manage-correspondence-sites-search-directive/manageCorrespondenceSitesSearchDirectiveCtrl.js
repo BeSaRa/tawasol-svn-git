@@ -28,6 +28,7 @@ module.exports = function (app) {
         self.mainSiteSimpleSearchText = '';
         self.mainSiteAdvancedSearchText = '';
         self.subSiteAdvancedSearchText = '';
+        self.simpleSubSiteResultSearchText = '';
 
         self.documentClass = null;
         self.searchByMain = false;
@@ -50,6 +51,8 @@ module.exports = function (app) {
 
         self.selectedMainSiteSimple = null;
         self.selectedMainSiteAdvanced = null;
+
+        self.selectedSimpleSub = null;
 
         // sub Search result
         self.subSearchResult = [];
@@ -369,8 +372,10 @@ module.exports = function (app) {
             _addSite('To', site)
                 .then(function () {
                     self.subSearchSelected = [];
+                    self.simpleSubSiteResultSearchText = '';
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+                        self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
                     });
                 })
         };
@@ -384,8 +389,10 @@ module.exports = function (app) {
             _addSite('CC', site)
                 .then(function () {
                     self.subSearchSelected = [];
+                    self.simpleSubSiteResultSearchText = '';
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+                        self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
                     });
                 });
         };
@@ -518,6 +525,12 @@ module.exports = function (app) {
                         self['sitesInfoTo'] = [];
                     }
                 }
+
+                // bind sub site search
+                if (self.isSimpleCorrespondenceSiteSearchType) {
+                    self.simpleSubSiteResultSearchText = '';
+                    self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
+                }
             } else {
                 if (self.selectedMainSiteSimple) {
                     correspondenceViewService.correspondenceSiteSearch('sub', {
@@ -532,6 +545,12 @@ module.exports = function (app) {
 
                         if (self.subSearchResult.length === 1) {
                             self.subSearchSelected.push(self.subSearchResult[0]);
+                        }
+
+                        // bind sub site search
+                        if (self.isSimpleCorrespondenceSiteSearchType) {
+                            self.simpleSubSiteResultSearchText = '';
+                            self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
                         }
                     });
                 }
@@ -563,6 +582,30 @@ module.exports = function (app) {
                     self.onSubSiteSearchAdvanced(true, null);
                 }
             }
+        };
+
+
+        /**
+         * @description drop down values for sub site result search
+         * @param searchText
+         * @returns {Array}
+         */
+        self.getSimpleSubSearchOptions = function (searchText) {
+            if (searchText) {
+                return _.filter(self.simpleSubSiteSearchCopy, function (simpleSearchSite) {
+                    return simpleSearchSite.getTranslatedName().toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
+                });
+            }
+            return self.simpleSubSiteSearchCopy;
+        };
+
+        self.onSimpleSubSiteSelectedChange = function (subSite) {
+            if (subSite) {
+                self.subSearchResult = _.filter(self.subSearchResultCopy, function (resultCopy) {
+                    return resultCopy.subSiteId === subSite.subSiteId;
+                });
+            } else
+                self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
         };
 
         self.onSearchByMainChange = function () {
@@ -708,6 +751,7 @@ module.exports = function (app) {
                     self['sitesInfo' + type + 'Selected'] = [];
                     _concatCorrespondenceSites(false).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+                        self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
                     });
                 });
         };

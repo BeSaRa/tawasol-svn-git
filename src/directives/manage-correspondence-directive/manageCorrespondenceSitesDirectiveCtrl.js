@@ -588,7 +588,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description drop down values for sub site search
+         * @description drop down values for sub site result search
          * @param searchText
          * @returns {Array}
          */

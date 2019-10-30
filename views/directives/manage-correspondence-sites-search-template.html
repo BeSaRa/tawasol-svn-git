@@ -32,15 +32,11 @@
         <md-input-container flex>
             <label for="mainSite">{{lang.main_site}}</label>
             <md-select id="mainSite" ng-model="ctrl.selectedMainSiteSimple"
+                       ng-model-options="{trackBy: '$value.id'}"
                        ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
                        ng-change="ctrl.onMainSiteChangeSimple($event)"
                        md-on-close="ctrl.clearSearchText('mainSiteSimple')"
                        data-md-container-class="select-header-container">
-                <!--<md-tooltip md-direction="top"
-                            ng-if="!!(ctrl.mainSiteSimpleSearchText && !ctrl.searchByMain)"
-                            md-visible="true">
-                    {{lang.press_enter_to_load_more_records}}
-                </md-tooltip>-->
                 <md-select-header class="select-header" layout="column">
                     <div layout="row" flex class="size-100">
                         <input ng-model="ctrl.mainSiteSimpleSearchText"
@@ -162,6 +158,28 @@
             <md-toolbar class="md-table-toolbar md-default"
                         ng-class="{'selected':ctrl.subSearchSelected.length}">
                 <div class="md-toolbar-tools">
+                    <span ng-if="ctrl.isSimpleCorrespondenceSiteSearchType" flex></span>
+                    <div ng-if="ctrl.isSimpleCorrespondenceSiteSearchType"
+                         flex>
+                        <!-- sub site result search -->
+                        <md-autocomplete
+                                flex
+                                md-no-cache="true"
+                                md-clear-button="true"
+                                md-select-on-match="true"
+                                md-selected-item="ctrl.selectedSimpleSub"
+                                md-search-text="ctrl.simpleSubSiteResultSearchText"
+                                md-selected-item-change="ctrl.onSimpleSubSiteSelectedChange(item)"
+                                md-items="item in ctrl.getSimpleSubSearchOptions(ctrl.simpleSubSiteResultSearchText)"
+                                md-item-text="item.getTranslatedName()"
+                                md-min-length="0"
+                                placeholder="{{lang.search}}">
+                            <md-item-template>
+                                                <span md-highlight-text="ctrl.simpleSubSiteResultSearchText"
+                                                      md-highlight-flags="i">{{item.getTranslatedName()}}</span>
+                            </md-item-template>
+                        </md-autocomplete>
+                    </div>
                     <!-- Close search results -->
                     <div layout="row" ng-if="!ctrl.subSearchSelected.length" flex>
                         <div flex>{{lang.sites_search_results}}</div>
