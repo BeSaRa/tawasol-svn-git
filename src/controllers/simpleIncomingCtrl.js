@@ -494,7 +494,21 @@ module.exports = function (app) {
                 .catch(function (result) {
                     self.incoming.linkedDocs = result;
                 });
-        }
+        };
+
+        /**
+         * @description Manage linked entities
+         * @param $event
+         */
+        self.manageLinkedEntities = function ($event) {
+            self.incoming
+                .manageDocumentEntities($event, true)
+                .then(function (result) {
+                    self.incoming.linkedEntities = result;
+                }).catch(function (result) {
+                self.incoming.linkedEntities = result;
+            })
+        };
 
     });
 };

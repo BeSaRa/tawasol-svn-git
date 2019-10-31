@@ -568,6 +568,20 @@ module.exports = function (app) {
                 .catch(function (result) {
                     self.internal.linkedDocs = result;
                 });
-        }
+        };
+
+        /**
+         * @description Manage linked entities
+         * @param $event
+         */
+        self.manageLinkedEntities = function ($event) {
+            self.internal
+                .manageDocumentEntities($event, true)
+                .then(function (result) {
+                    self.internal.linkedEntities = result;
+                }).catch(function (result) {
+                self.internal.linkedEntities = result;
+            })
+        };
     });
 };

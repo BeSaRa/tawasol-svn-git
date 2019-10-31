@@ -147,7 +147,14 @@
                                                 </md-button>
                                                 <span class="counter blue">{{ctrl.internal.linkedDocs.length}}</span>
                                             </div>
-
+                                            <div class="icon-relative">
+                                                <md-button tooltip="{{lang.linked_entities}}"
+                                                           class="md-raised md-icon-button"
+                                                           ng-click="ctrl.manageLinkedEntities($event)">
+                                                    <md-icon md-svg-icon="vector-triangle"></md-icon>
+                                                </md-button>
+                                                <span class="counter blue">{{ctrl.internal.linkedEntities.length}}</span>
+                                            </div>
                                             <!--toggle Iframe-->
                                           <!--  <md-button ng-click="!ctrl.toggleDocumentViewer($event)"
                                                        class="md-icon-button"

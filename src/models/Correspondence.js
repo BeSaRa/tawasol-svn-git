@@ -594,9 +594,9 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 return managerService.manageDocumentLinkedDocuments.apply(managerService, [info.vsId, info.documentClass, info.title, $event, this, isSimpleAdd]);
             };
-            Correspondence.prototype.manageDocumentEntities = function ($event) {
+            Correspondence.prototype.manageDocumentEntities = function ($event, isSimpleAdd) {
                 var info = this.getInfo();
-                return managerService.manageDocumentEntities.apply(managerService, [info.vsId, info.documentClass, info.title, $event]);
+                return managerService.manageDocumentEntities.apply(managerService, [info.vsId, info.documentClass, info.title, $event,this ,isSimpleAdd]);
             };
             Correspondence.prototype.manageDocumentCorrespondence = function ($event) {
                 var info = this.getInfo();

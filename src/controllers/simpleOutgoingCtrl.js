@@ -572,7 +572,7 @@ module.exports = function (app) {
                     var info = model.getInfo();
 
                     //Don't show if its paper outgoing or any site is external/g2g or signatures count more than 1 or personal/private security level
-                    isVisible = gridService.checkToShowAction(action)  && !model.isPrivateSecurityLevel() && !info.isPaper && !_hasExternalOrG2GSite(model) && _hasContent() && _hasSingleSignature(model);
+                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !info.isPaper && !_hasExternalOrG2GSite(model) && _hasContent() && _hasSingleSignature(model);
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
@@ -688,7 +688,21 @@ module.exports = function (app) {
                 .catch(function (result) {
                     self.outgoing.linkedDocs = result;
                 });
-        }
+        };
+
+        /**
+         * @description Manage linked entities
+         * @param $event
+         */
+        self.manageLinkedEntities = function ($event) {
+            self.outgoing
+                .manageDocumentEntities($event, true)
+                .then(function (result) {
+                    self.outgoing.linkedEntities = result;
+                }).catch(function (result) {
+                self.outgoing.linkedEntities = result;
+            })
+        };
 
     });
 };

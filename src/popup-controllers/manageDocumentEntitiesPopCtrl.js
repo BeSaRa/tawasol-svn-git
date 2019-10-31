@@ -5,7 +5,7 @@ module.exports = function (app) {
         self.controllerName = 'manageDocumentEntitiesPopCtrl';
 
         self.closeDocumentEntities = function () {
-            dialog.hide(true);
+            dialog.hide(self.linkedEntities);
         }
     });
 };

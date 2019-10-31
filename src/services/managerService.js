@@ -407,7 +407,7 @@ module.exports = function (app) {
                 });
         };
 
-        self.manageDocumentEntities = function (vsId, documentClass, documentSubject, $event) {
+        self.manageDocumentEntities = function (vsId, documentClass, documentSubject, $event, document, isSimpleAdd) {
             documentClass = _checkDocumentClass(documentClass);
             var defer = $q.defer();
             return dialog.showDialog({
@@ -430,6 +430,11 @@ module.exports = function (app) {
                     },
                     linkedEntities: function () {
                         'ngInject';
+                        if (isSimpleAdd && !vsId) {
+                            defer.resolve(angular.copy(document.linkedEntities));
+                            return angular.copy(document.linkedEntities);
+                        }
+
                         return correspondenceService.getLinkedEntitiesByVsIdClass(vsId, documentClass).then(function (linkedEntities) {
                             defer.resolve(angular.copy(linkedEntities));
                             return linkedEntities;
