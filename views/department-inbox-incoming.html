@@ -62,7 +62,8 @@
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
-                                            md-order-by="">
+                                            md-order-by="{{ctrl.getSortingKey('securityLevel','Information')}}">
+                                            <md-icon md-svg-icon="security" class="indicator"></md-icon>
                                             <!-- Indicators -->
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
