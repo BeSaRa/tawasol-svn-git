@@ -277,134 +277,174 @@ module.exports = function (app) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
+        var _getSortingColumnHeaderText = function(key, isDescendingOrder){
+            return langService.get(key);
+            /*if (isDescendingOrder){
+                return langService.get(key) + ' - ' + langService.get('descending');
+            }
+            return langService.get(key) + ' - ' + langService.get('ascending');*/
+        };
+
         self.sortingOptions = [
             {
                 column: 'serial_asc',
                 text: function () {
-                    return langService.get('inbox_serial') + ' - ' + langService.get('ascending');
+                    return _getSortingColumnHeaderText('inbox_serial');
                 },
                 value: function () {
                     return 'generalStepElm.docFullSerial';
-                }
+                },
+                icon: 'arrow-up'
             },
             {
                 column: 'serial_desc',
                 text: function () {
-                    return langService.get('inbox_serial') + ' - ' + langService.get('descending');
+                    return _getSortingColumnHeaderText('inbox_serial', true);
                 },
                 value: function () {
                     return '-generalStepElm.docFullSerial';
-                }
+                },
+                icon: 'arrow-down'
             },
             {
                 column: 'subject_asc',
                 text: function () {
-                    return langService.get('subject') + ' - ' + langService.get('ascending');
+                    return _getSortingColumnHeaderText('subject');
                 },
                 value: function () {
                     return 'generalStepElm.docSubject';
-                }
+                },
+                icon: 'arrow-up'
             },
             {
                 column: 'subject_desc',
                 text: function () {
-                    return langService.get('subject') + ' - ' + langService.get('descending');
+                    return _getSortingColumnHeaderText('subject', true);
                 },
                 value: function () {
                     return '-generalStepElm.docSubject';
-                }
+                },
+                icon: 'arrow-down'
+            },
+            {
+                column: 'securityLevel_asc',
+                text: function () {
+                    return _getSortingColumnHeaderText('security_level');
+                },
+                value: function () {
+                    return self.getSortingKey('securityLevel', 'Information');
+                },
+                icon: 'arrow-up'
+            },
+            {
+                column: 'securityLevel_desc',
+                text: function () {
+                    return _getSortingColumnHeaderText('security_level', true);
+                },
+                value: function () {
+                    return '-' + self.getSortingKey('securityLevel', 'Information');
+                },
+                icon: 'arrow-down'
             },
             {
                 column: 'receivedDate_asc',
                 text: function () {
-                    return langService.get('received_date') + ' - ' + langService.get('ascending');
+                    return _getSortingColumnHeaderText('received_date');
                 },
                 value: function () {
                     return 'generalStepElm.receivedDate';
-                }
+                },
+                icon: 'arrow-up'
             },
             {
                 column: 'receivedDate_desc',
                 text: function () {
-                    return langService.get('received_date') + ' - ' + langService.get('descending');
+                    return _getSortingColumnHeaderText('received_date', true);
                 },
                 value: function () {
                     return '-generalStepElm.receivedDate';
-                }
+                },
+                icon: 'arrow-down'
             },
             {
                 column: 'action_asc',
                 text: function () {
-                    return langService.get('action') + ' - ' + langService.get('ascending');
+                    return _getSortingColumnHeaderText('action');
                 },
                 value: function () {
-                    // return 'generalStepElm.action'
                     return self.getSortingKey('action', 'WorkflowAction');
-                }
+                },
+                icon: 'arrow-up'
             },
             {
                 column: 'action_desc',
                 text: function () {
-                    return langService.get('action') + ' - ' + langService.get('descending');
+                    return _getSortingColumnHeaderText('action', true);
                 },
                 value: function () {
-                    // return '-generalStepElm.action'
                     return '-' + self.getSortingKey('action', 'WorkflowAction');
-                }
+                },
+                icon: 'arrow-down'
             },
             {
                 column: 'sender_asc',
                 text: function () {
-                    return langService.get('sender') + ' - ' + langService.get('ascending')
+                    return _getSortingColumnHeaderText('sender');
                 },
                 value: function () {
-                    return self.getSortingKey('senderInfo','SenderInfo');
-                }
+                    return self.getSortingKey('senderInfo', 'SenderInfo');
+                },
+                icon: 'arrow-up'
             },
             {
                 column: 'sender_desc',
                 text: function () {
-                    return langService.get('sender') + ' - ' + langService.get('descending')
+                    return _getSortingColumnHeaderText('sender', true);
                 },
                 value: function () {
-                    return '-' + self.getSortingKey('senderInfo','SenderInfo');
-                }
+                    return '-' + self.getSortingKey('senderInfo', 'SenderInfo');
+                },
+                icon: 'arrow-down'
             },
             {
                 column: 'dueDate_asc',
                 text: function () {
-                    return langService.get('due_date') + ' - ' + langService.get('ascending')
+                    return _getSortingColumnHeaderText('due_date');
                 },
                 value: function () {
                     return 'generalStepElm.dueDate';
-                }
+                },
+                icon: 'arrow-up'
             },
             {
                 column: 'dueDate_desc',
                 text: function () {
-                    return langService.get('due_date') + ' - ' + langService.get('descending');
+                    return _getSortingColumnHeaderText('due_date', true);
                 },
                 value: function () {
                     return '-generalStepElm.dueDate';
-                }
+                },
+                icon: 'arrow-down'
             },
             {
                 column: 'correspondenceSites_asc',
                 text: function () {
-                    return langService.get('correspondence_sites') + ' - ' + langService.get('ascending');
+                    return _getSortingColumnHeaderText('correspondence_sites');
                 },
                 value: function () {
                     return self.getSortingKey('mainSiteSubSiteString', 'Information');
-                }
+                },
+                icon: 'arrow-up'
             },
             {
                 column: 'correspondenceSites_desc',
                 text: function () {
-                    return langService.get('correspondence_sites') + ' - ' + langService.get('descending');
+                    return _getSortingColumnHeaderText('correspondence_sites', true);
                 },
                 value: function () {
                     return '-' + self.getSortingKey('mainSiteSubSiteString', 'Information');
-                }
+                },
+                icon: 'arrow-down'
             }
         ];
 

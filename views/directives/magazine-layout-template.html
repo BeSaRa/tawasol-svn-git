@@ -24,7 +24,8 @@
                                    ng-model="ctrl.sortOrder"
                                    ng-change="ctrl.getSortedMagazineData()">
                             <md-option ng-repeat="option in ctrl.sortingOptions track by $index"
-                                       ng-value="option.value()">{{option.text()}}
+                                       ng-value="option.value()">
+                                <md-icon md-svg-icon="{{option.icon}}"></md-icon> {{option.text()}}
                             </md-option>
                         </md-select>
                     </md-input-container>
