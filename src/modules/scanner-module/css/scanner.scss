@@ -107,11 +107,13 @@ html.rtl {
   display: block;
   position: relative;
   min-height: 120px;
+
   img {
     border: 1px solid #EEE;
     padding: 5px;
     outline: none;
     cursor: pointer;
+
     &.selected {
       background-color: lighten(#0b93d5, 50);
     }
@@ -125,19 +127,23 @@ html.rtl {
   z-index: 3;
   box-sizing: border-box;
   right: 5px;
+
   span {
     position: relative;
     height: 36px;
+
     button {
       margin: 0 !important;
       position: absolute;
     }
+
     &.page-arrow-up {
       button {
         top: 0;
         bottom: auto;
       }
     }
+
     &.page-arrow-down {
       button {
         bottom: 0;
@@ -157,15 +163,19 @@ html.rtl {
 #workspace-tools {
   padding-bottom: 20px;
   box-sizing: content-box;
+
   md-input-container {
     height: 40px;
     margin-bottom: 0;
+
     .md-errors-spacer {
       display: none;
     }
+
     .md-input {
       max-width: 70px;
     }
+
     button {
       margin: 0;
     }
@@ -184,4 +194,8 @@ html.rtl {
     right: 345px;
     left: 20px;
   }
+}
+
+md-radio-group.horizontal-radio-group md-radio-button {
+  margin: 0 8px;
 }

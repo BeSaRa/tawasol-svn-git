@@ -5,6 +5,7 @@ module.exports = function (app) {
                                             $timeout,
                                             scannerService,
                                             toast,
+                                            cmsTemplate,
                                             attachmentService,
                                             // IPSettings,
                                             // getFilterProperty,
@@ -76,6 +77,13 @@ module.exports = function (app) {
             checkautorotation: false
         };
 
+        self.jobOptions = {
+            jobType: 'new', // new or add
+            addType: 'first', // first,last,location
+            location: 'before',// before , after
+            pageNumber: 0 // selected index in case use select location
+        };
+
         self.cc = CCToolkit = new CCToolkit();
 
         self.fullScreenToggle = function () {
@@ -86,10 +94,10 @@ module.exports = function (app) {
         };
 
         self.moveDown = function (page) {
-            self.cc.getDocument().movePageDown(page.getPageNumber());
+            self.cc.getDocument().movePageDown(page.getCustomPageNumber());
         };
         self.moveUp = function (page) {
-            self.cc.getDocument().movePageUp(page.getPageNumber());
+            self.cc.getDocument().movePageUp(page.getCustomPageNumber());
         };
         self.canDelete = function () {
             return self.cc.getDocument().pages.length > 1;
@@ -583,7 +591,7 @@ module.exports = function (app) {
 
         function selectPageThumbnail(imageNumber) {
             _.map(self.cc.getDocument().pages, function (page, idx) {
-                self.cc.getDocument().pages[idx].selected = (page.getPageNumber() === imageNumber);
+                self.cc.getDocument().pages[idx].selected = (page.getCustomPageNumber() === imageNumber);
             });
         }
 
@@ -591,7 +599,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             var result = page.getImageInfo(function () {
                 defer.resolve({
-                    pageNumber: page.getPageNumber(),
+                    pageNumber: page.getCustomPageNumber(),
                     showDialog: showDialog
                 });
             });
@@ -630,11 +638,23 @@ module.exports = function (app) {
             if (isErrorExist(data)) {
                 displayError(data);
             }
-            // TODO: need to display message with speed of scanning process and number of scanned images.
-            $("#lblScanProgress").html("Scanned images number:" + data.NumberOfScannedImages + "<br />Speed: " + speed.toFixed(2) + " ppm");
-            $("#btnSendAllToServer").show();
             uploadComplete(data.ScanJobID, document);
-            // TODO : need to hide progress bar
+
+            var pages = self.cc.getTempPages();
+
+            pages = pages.reverse();
+
+            if (self.jobOptions.jobType === 'append' && self.jobOptions.addType === 'first') {
+                _.map(pages, function (page) {
+                    document.pages.unshift(page);
+                });
+            } else if (self.jobOptions.jobType === 'append' && self.jobOptions.addType === 'location') {
+                _.map(pages, function (page, index) {
+                    document.pages.splice(parseInt(self.jobOptions.pageNumber, 10) + (self.jobOptions.location === 'before' ? 0 : 1), 0, pages[index])
+                });
+            }
+
+
             PleaseWaitDialog.show(false);
             $timeout(function () {
                 if (document.pages[0])
@@ -798,37 +818,40 @@ module.exports = function (app) {
         self.onStopScanClick = function () {
             CCToolkit.stopScanning(stopScanningCallback);
         };
-        self.onImportFileClick = function (files, element) {
-            updateUIForScanning(true);
-            cleanUpDetailsPanel();
-            if (!window.FileReader) {
-                PleaseWaitDialog.show(false);
-                dialog.errorMessage(langService.get('update_browser'));
-                return;
-            }
+        self.onImportFileClick = function (files, element, emptyCallback) {
+            self.openOperationDialog('import').then(function () {
+                updateUIForScanning(true);
+                cleanUpDetailsPanel();
+                if (!window.FileReader) {
+                    PleaseWaitDialog.show(false);
+                    dialog.errorMessage(langService.get('update_browser'));
+                    return;
+                }
 
-            var reader = new FileReader();
-            reader.onload = function (evt) {
-                CCToolkit.startImporting(evt.target.result,
-                    onScanStarted,
-                    onNewPageAdded,
-                    onJobFinished);
-            };
+                var reader = new FileReader();
+                reader.onload = function (evt) {
+                    CCToolkit.startImporting(evt.target.result,
+                        onScanStarted,
+                        onNewPageAdded,
+                        onJobFinished, self.jobOptions);
+                };
 
-            reader.onerror = function (evt) {
-                // TODO : need to hide progress bar
-                PleaseWaitDialog.show(false);
-                dialog.errorMessage(evt.message);
-            };
-
-            attachmentService
-                .validateBeforeUpload('scannerImport', files[0])
-                .then(function (file) {
-                    reader.readAsDataURL(file);
-                })
-                .catch(function (availableExtensions) {
-                    dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
-                });
+                reader.onerror = function (evt) {
+                    // TODO : need to hide progress bar
+                    PleaseWaitDialog.show(false);
+                    dialog.errorMessage(evt.message);
+                };
+                attachmentService
+                    .validateBeforeUpload('scannerImport', files[0])
+                    .then(function (file) {
+                        reader.readAsDataURL(file);
+                        emptyCallback();
+                    })
+                    .catch(function (availableExtensions) {
+                        dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
+                        emptyCallback();
+                    });
+            });
 
         };
 
@@ -837,10 +860,66 @@ module.exports = function (app) {
         };
 
         self.onScanClick = function () {
-            updateUIForScanning(false);
-            CCToolkit.startScanning(onScanStarted,
-                onNewPageAdded,
-                onJobFinished);
+            self.openOperationDialog('scan').then(function () {
+                updateUIForScanning(false);
+                CCToolkit.startScanning(onScanStarted,
+                    onNewPageAdded,
+                    onJobFinished, self.jobOptions);
+            });
+        };
+
+        self.openOperationDialog = function (action) {
+            return self.scannerHasDocument() ? (dialog.showDialog({
+                template: require('./../templates/scanner-job-options.html'),
+                controllerAs: 'ctrl',
+                locals: {
+                    action: action
+                },
+                controller: function (dialog, action) {
+                    'ngInject';
+                    var ctrl = this;
+                    ctrl.jobOptions = angular.copy(self.jobOptions);
+                    ctrl.appendScreen = false;
+                    ctrl.locationScreen = false;
+                    ctrl.action = action;
+                    ctrl.pages = self.cc.getDocument().pages;
+                    ctrl.appenGroupOptions = {
+                        first: 'append_to_scanned_in_first',
+                        last: 'append_to_scanned_in_last',
+                        location: 'append_to_scanned_in_location'
+                    };
+
+                    ctrl.sendOptions = function () {
+                        dialog.hide(ctrl.jobOptions);
+                    };
+
+                    ctrl.appendJob = function () {
+                        ctrl.appendScreen = true;
+                        ctrl.jobOptions.jobType = 'append';
+                    };
+
+                    ctrl.newJob = function () {
+                        ctrl.jobOptions.jobType = 'new';
+                        ctrl.saveJobOptions();
+                    };
+
+                    ctrl.cancelOptions = function () {
+                        dialog.cancel('Cancel Scanner options!');
+                    };
+
+                    ctrl.backToScannerOptions = function () {
+                        ctrl.appendScreen = false;
+                    };
+
+                    ctrl.saveJobOptions = function () {
+                        dialog.hide(ctrl.jobOptions);
+                    }
+                },
+
+            }).then(function (options) {
+                self.jobOptions = options;
+                return self.jobOptions;
+            })) : $q.when(self.jobOptions);
         };
 
         self.loadScannerSettings = function (selectedScanner) {

@@ -33,7 +33,8 @@ module.exports = function (app) {
             var _scanFinishedCallback = null;
             var _document = null;
             var _importing = null;
-
+            var _tempPages = [];
+            var _options = null;
             //initialize public members
             this.getServiceUrl = function () {
                 return _serviceURL;
@@ -45,6 +46,10 @@ module.exports = function (app) {
 
             this.getDocument = function () {
                 return _document;
+            };
+
+            this.getTempPages = function () {
+                return _tempPages;
             };
 
             this.setup = function (ajaxMethod, networkError) {
@@ -138,24 +143,25 @@ module.exports = function (app) {
                 }
             };
 
-            this.startScanning = function (scanStartedCallback, pageScannedCallback, scanFinishedCallback) {
+            this.startScanning = function (scanStartedCallback, pageScannedCallback, scanFinishedCallback, options) {
                 _scanStartedCallback = scanStartedCallback;
                 _pageScannedCallback = pageScannedCallback;
                 _scanFinishedCallback = scanFinishedCallback;
                 _importing = false;
+                _options = options;
                 var request = getDefaultRequest();
                 request.url = _serviceURL + "createscanjob?session=" + _sessionID + "&pages=" + 0 + "&filetype=" + FileType.AutoDetect + "&compression=" + ImageCompression.AutoDetect;
                 request.success = function (data) {
-                    console.log(data);
                     _onScanStarted(data, false);
                 };
                 ajaxRequest(request);
             };
 
-            this.startImporting = function (fileContent, scanStartedCallback, pageScannedCallback, scanFinishedCallback) {
+            this.startImporting = function (fileContent, scanStartedCallback, pageScannedCallback, scanFinishedCallback, options) {
                 _scanStartedCallback = scanStartedCallback;
                 _pageScannedCallback = pageScannedCallback;
                 _scanFinishedCallback = scanFinishedCallback;
+                _options = options;
                 _importing = true;
                 var request = getDefaultRequest();
                 request.url = _serviceURL + "createimportjob?session=" + _sessionID;
@@ -232,9 +238,11 @@ module.exports = function (app) {
 
             var _onScanStarted = function (data, importing) {
                 //set scan job
+                _tempPages = [];
                 _setScanJob.call(this, data);
-
-                _document = new Document(_serviceURL, _sessionID, _scanJob.ScanJobID, importing);
+                if (_options.jobType === 'new') {
+                    _document = new Document(_serviceURL, _sessionID, _scanJob.ScanJobID, importing);
+                }
                 //check job progress
                 _pollScanner.call(this);
 
@@ -265,8 +273,14 @@ module.exports = function (app) {
                     _scanJob.NumberOfScannedImages = data.NumberOfScannedImages;
                     if (_scanJob.NumberOfScannedImages > _scanJob.NumberOfReceivedImages) {
                         for (var i = _scanJob.NumberOfReceivedImages; i < _scanJob.NumberOfScannedImages; i++) {
+
                             var page = new Page(_serviceURL, _sessionID, _scanJob.ScanJobID, i, null, null);
-                            _document.add(page);
+
+                            if (_options.jobType === 'new' || (_options.jobType === 'append' && _options.addType === 'last')) {
+                                _document.add(page);
+                            } else {
+                                _tempPages.push(page);
+                            }
                             _pageScannedCallback(data, page);
                             _scanJob.NumberOfReceivedImages++;
                         }
@@ -293,7 +307,7 @@ module.exports = function (app) {
 
             var _getServiceURLs = function () {
                 var address = window.location.href;
-                var protocol = (address.indexOf("https") === 0 && !configurationService.IGNORE_HTTPS_FOR_SCANNER ) ? "https://" : "http://";
+                var protocol = (address.indexOf("https") === 0 && !configurationService.IGNORE_HTTPS_FOR_SCANNER) ? "https://" : "http://";
                 var portNumbers = (protocol === "https://" && !configurationService.IGNORE_HTTPS_FOR_SCANNER) ? _httpsPortNumbers : _httpPortNumbers;
                 var serviceURLs = [];
                 for (var i = 0; i < portNumbers.length; i++) {

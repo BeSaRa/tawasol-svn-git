@@ -1,0 +1,49 @@
+<md-dialog>
+    <md-dialog-content layout="column" layout-align="center center" class="p20">
+        <span ng-if="!ctrl.appendScreen">{{lang.select_scan_job_type.change({op:lang.get(ctrl.action)})}}</span>
+        <md-radio-group ng-if="ctrl.appendScreen" class="horizontal-radio-group" ng-model="ctrl.jobOptions.addType">
+            <md-radio-button ng-value="value" ng-repeat="(value , locale ) in  ctrl.appenGroupOptions">
+                {{lang.get(locale)}}
+            </md-radio-button> &nbsp;&nbsp;
+        </md-radio-group>
+        <br/>
+        <div ng-if="ctrl.jobOptions.addType === 'location' && ctrl.appendScreen" layout="row">
+            <md-input-container>
+                <md-select aria-label="Append location" ng-model="ctrl.jobOptions.location">
+                    <md-option value="before">{{lang.before}}</md-option>
+                    <md-option value="after">{{lang.after}}</md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container>
+                <md-select aria-label="Page Number" ng-model="ctrl.jobOptions.pageNumber">
+                    <md-option value="{{$index}}" ng-repeat="page in ctrl.pages">{{lang.page + " " + ($index+1)}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions ng-if="!ctrl.appendScreen" layout="row">
+        <span flex></span>
+        <md-button ng-click="ctrl.newJob()" class="md-raised md-primary">
+            {{lang.new_scan_job.change({op:lang.get(ctrl.action)})}}
+        </md-button>
+        <md-button ng-click="ctrl.appendJob()" class="md-raised md-primary">
+            {{lang.append_scan_job}}
+        </md-button>
+        <md-button ng-click="ctrl.cancelOptions()" class="md-raised red-text">
+            {{lang.cancel}}
+        </md-button>
+        <span flex></span>
+    </md-dialog-actions>
+    <md-dialog-actions ng-if="ctrl.appendScreen" layout="row">
+        <span flex></span>
+        <md-button ng-click="ctrl.saveJobOptions()" class="md-raised md-primary">
+            {{lang.save}}
+        </md-button>
+        <md-button ng-click="ctrl.backToScannerOptions()" class="md-raised red-text">
+            {{lang.back}}
+        </md-button>
+        <span flex></span>
+    </md-dialog-actions>
+</md-dialog>

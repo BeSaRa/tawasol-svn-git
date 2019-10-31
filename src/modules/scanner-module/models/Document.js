@@ -29,14 +29,14 @@ module.exports = function (app) {
 
             this.getPage = function (number) {
                 return _.find(this.pages, function (page) {
-                    return page.getPageNumber() === number;
+                    return page.getCustomPageNumber() === number;
                 });
             };
 
             this.deletePage = function (selectedPage, callback) {
                 var pageNumber = null;
                 _.find(this.pages, function (page, index) {
-                    if (selectedPage.getPageNumber() === page.getPageNumber()) {
+                    if (selectedPage.getCustomPageNumber() === page.getCustomPageNumber()) {
                         pageNumber = index;
                     }
                 });
@@ -53,7 +53,7 @@ module.exports = function (app) {
 
             this.movePageUp = function (pageNumber) {
                 _.find(this.pages, function (page, index) {
-                    if (pageNumber === page.getPageNumber()) {
+                    if (pageNumber === page.getCustomPageNumber()) {
                         pageNumber = index;
                     }
                 });
@@ -62,7 +62,7 @@ module.exports = function (app) {
             };
             this.movePageDown = function (pageNumber) {
                 _.find(this.pages, function (page, index) {
-                    if (pageNumber === page.getPageNumber()) {
+                    if (pageNumber === page.getCustomPageNumber()) {
                         pageNumber = index;
                     }
                 });

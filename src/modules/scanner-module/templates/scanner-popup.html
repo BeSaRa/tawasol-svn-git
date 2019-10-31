@@ -17,8 +17,9 @@
                            class="md-button md-icon-button"
                            for="upload-file-scanner">
                         <md-icon md-svg-icon="download"></md-icon>
-                        <input reset-after-change="true" id="upload-file-scanner" class="hide-import-file"
+                        <input id="upload-file-scanner" class="hide-import-file"
                                type="file"
+                               reset-by-callback="true"
                                catch-upload-file-directive="ctrl.onImportFileClick" reset-after-change="true"/>
                     </label>
                 </div>
@@ -49,7 +50,8 @@
                     <div layout="column" id="scanner-properties">
                         <md-input-container>
                             <label for="colorFormat">{{lang.color_format}}</label>
-                            <md-select id="colorFormat" ng-disabled="ctrl.disableProperties.colorFormat" aria-label="color format"
+                            <md-select id="colorFormat" ng-disabled="ctrl.disableProperties.colorFormat"
+                                       aria-label="color format"
                                        ng-model="ctrl.colorFormat"
                                        ng-change="ctrl.onColorFormatChanged(ctrl.colorFormat)">
                                 <md-option ng-value="format" ng-repeat="format in ctrl.listColorFormat">
@@ -59,7 +61,8 @@
                         </md-input-container>
                         <md-input-container>
                             <label for="scanMode">{{lang.scan_mode}}</label>
-                            <md-select id="scanMode" ng-disabled="ctrl.disableProperties.scanMode" aria-label="Scanner Mode"
+                            <md-select id="scanMode" ng-disabled="ctrl.disableProperties.scanMode"
+                                       aria-label="Scanner Mode"
                                        ng-model="ctrl.scanMode"
                                        ng-change="ctrl.onScanModeChanged(ctrl.scanMode)">
                                 <md-option ng-value="mode" ng-repeat="mode in ctrl.listScanMode">
@@ -69,7 +72,8 @@
                         </md-input-container>
                         <md-input-container>
                             <label for="paperSize">{{lang.paper_size}}</label>
-                            <md-select id="paperSize" ng-disabled="ctrl.disableProperties.paperSize" aria-label="Scanner Mode"
+                            <md-select id="paperSize" ng-disabled="ctrl.disableProperties.paperSize"
+                                       aria-label="Scanner Mode"
                                        ng-model="ctrl.paperSize"
                                        ng-change="ctrl.onPaperSizeChanged(ctrl.paperSize)">
                                 <md-option ng-value="size" ng-repeat="size in ctrl.listPaperSize">
@@ -79,7 +83,8 @@
                         </md-input-container>
                         <md-input-container>
                             <label for="resolution">{{lang.resolution}}</label>
-                            <md-select id="resolution" ng-disabled="ctrl.disableProperties.resolution" aria-label="resolution Mode"
+                            <md-select id="resolution" ng-disabled="ctrl.disableProperties.resolution"
+                                       aria-label="resolution Mode"
                                        ng-model="ctrl.resolution"
                                        ng-change="ctrl.onResolutionChanged(ctrl.resolution)">
                                 <md-option ng-value="resolution" ng-repeat="resolution in ctrl.listResolution">
@@ -143,11 +148,13 @@
                     </md-input-container>
                     <md-input-container>
                         <label for="brightness">{{lang.brightness}}</label>
-                        <input id="brightness" ng-model="ctrl.brightness" ng-keypress="$event.keyCode == 13 && ctrl.onBrightness()">
+                        <input id="brightness" ng-model="ctrl.brightness"
+                               ng-keypress="$event.keyCode == 13 && ctrl.onBrightness()">
                     </md-input-container>
                     <md-input-container>
                         <label for="contrast">{{lang.contrast}}</label>
-                        <input id="contrast" ng-model="ctrl.contrast" ng-keypress="$event.keyCode == 13 && ctrl.onContrast()">
+                        <input id="contrast" ng-model="ctrl.contrast"
+                               ng-keypress="$event.keyCode == 13 && ctrl.onContrast()">
                     </md-input-container>
                     <md-input-container>
                         <md-button tooltip="{{lang.copy}}" class="md-icon-button" ng-click="ctrl.onCloneImage()">
@@ -219,7 +226,8 @@
         </div>
         <div id="scanner-actions">
             <div layout="row">
-                <md-button ng-disabled="!ctrl.scannerHasDocument()" ng-click="ctrl.sendDocument()" class="md-raised md-primary">
+                <md-button ng-disabled="!ctrl.scannerHasDocument()" ng-click="ctrl.sendDocument()"
+                           class="md-raised md-primary">
                     {{lang.send}}
                 </md-button>
                 <md-button ng-click="ctrl.closeScanner()" class="md-raised red-text">

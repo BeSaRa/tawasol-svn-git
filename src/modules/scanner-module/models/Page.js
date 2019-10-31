@@ -66,6 +66,10 @@ module.exports = function (app) {
                 return _pageNumber;
             };
 
+            this.getCustomPageNumber = function () {
+                return _sessionId + '_' + jobId + '_' + _pageNumber;
+            };
+
             this.getFilters = function () {
                 return _filters;
             };
