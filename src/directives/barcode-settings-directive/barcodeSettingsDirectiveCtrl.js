@@ -108,7 +108,10 @@ module.exports = function (app) {
             return self.compileElement(element, scope);
         };
 
-        self.createDeleteButton = function (type) {
+        self.createDeleteButton = function (type, idx) {
+            if (self.hasBarcodeLabel(idx)){
+                return ;
+            }
             return angular
                 .element('<div />', {
                     class: type === 'row' ? 'barcode-delete-item-button black' : 'barcode-delete-item-button'
@@ -129,7 +132,7 @@ module.exports = function (app) {
             if (typeof self.globalSetting.barcodeElements.isElectronic[idx] === 'undefined') {
                 self.globalSetting.barcodeElements.isElectronic[idx] = true;
             }
-            return angular.element('<md-checkbox aria-label="check-box" tooltip="{{lang.electronic}}" ng-checked="ctrl.hasBarcodeLabel(' + idx + ') || ctrl.electronicExists(' + idx + ')" ng-disabled="ctrl.hasBarcodeLabel(' + idx + ')" ng-model="ctrl.globalSetting.barcodeElements.isElectronic[' + idx + ']" class="sort-cancel check-box-with-no-padding isElectronic" ng-change="ctrl.checkRow($event)"></md-checkbox>')
+            return angular.element('<md-checkbox aria-label="check-box" tooltip="{{lang.electronic}}" tooltip-direction="bottom" ng-checked="ctrl.hasBarcodeLabel(' + idx + ') || ctrl.electronicExists(' + idx + ')" ng-disabled="ctrl.hasBarcodeLabel(' + idx + ')" ng-model="ctrl.globalSetting.barcodeElements.isElectronic[' + idx + ']" class="sort-cancel check-box-with-no-padding isElectronic" ng-change="ctrl.checkRow($event)"></md-checkbox>')
         };
 
         self.hasBarcodeLabel = function (rowIndex) {
@@ -143,7 +146,7 @@ module.exports = function (app) {
                     class: 'barcode-row',
                     'bc-sortable': ''
                 })
-                .append(self.createDeleteButton('row'))
+                .append(self.createDeleteButton('row', idx))
                 .append(self.createRowCheckBox(idx))
                 .data('rowIndex', idx);
         };
@@ -155,7 +158,7 @@ module.exports = function (app) {
                     class: 'barcode-item',
                     flex: ''
                 })
-                .append(self.createDeleteButton('item'))
+                .append(self.createDeleteButton('item', idx))
                 .append(angular.element('<span />', {'md-truncate': ''}).html('{{item.getTranslatedName()}}'))
                 .data('item', item)
                 .data('rowIndex', idx);
