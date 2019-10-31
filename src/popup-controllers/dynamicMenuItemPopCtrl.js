@@ -55,11 +55,22 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Add new document type
+         * @description Save the dynamic menu
+         */
+        self.saveDynamicMenuItem = function () {
+            if (self.editMode) {
+                self.editDynamicMenuItemFromCtrl();
+            } else {
+                self.addDynamicMenuItemFromCtrl();
+            }
+        };
+
+        /**
+         * @description Add new dynamic menu item
          */
         self.addDynamicMenuItemFromCtrl = function () {
             validationService
-                .createValidation('ADD_DOCUMENT_TYPE')
+                .createValidation('ADD_DYNAMIC_MENU')
                 .addStep('check_required', true, generator.checkRequiredFields, self.dynamicMenuItem, function (result) {
                     return !result.length;
                 })
@@ -99,7 +110,7 @@ module.exports = function (app) {
          */
         self.editDynamicMenuItemFromCtrl = function () {
             validationService
-                .createValidation('EDIT_DOCUMENT_TYPE')
+                .createValidation('EDIT_DYNAMIC_MENU')
                 .addStep('check_required', true, generator.checkRequiredFields, self.dynamicMenuItem, function (result) {
                     return !result.length;
                 })
@@ -249,7 +260,7 @@ module.exports = function (app) {
                 .dynamicMenuItemEditSub(self.dynamicMenuItem, dynamicMenuItem, $event)
                 .then(function (result) {
                     self.reloadSubDynamicMenuItems(self.grid.page)
-                        .then(function(){
+                        .then(function () {
                             toast.success(langService.get('edit_success').change({name: result.getNames()}));
                         });
                 });

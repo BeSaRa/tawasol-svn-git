@@ -214,13 +214,10 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised md-primary" ng-disabled="dynamicMenuItemForm.$invalid" ng-if="!ctrl.editMode"
-                   ng-click="ctrl.addDynamicMenuItemFromCtrl()">
-            {{lang.add}}
-        </md-button>
-        <md-button class="md-raised md-primary" ng-disabled="dynamicMenuItemForm.$invalid" ng-if="ctrl.editMode"
-                   ng-click="ctrl.editDynamicMenuItemFromCtrl()">
-            {{lang.save}}
+        <md-button class="md-raised md-primary"
+                   ng-disabled="dynamicMenuItemForm.$invalid"
+                   ng-click="ctrl.saveDynamicMenuItem()">
+            {{ctrl.editMode ? lang.save : lang.add}}
         </md-button>
         <md-button class="md-raised"
                    ng-click="ctrl.resetModel()">
