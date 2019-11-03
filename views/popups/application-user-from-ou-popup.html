@@ -1,4 +1,4 @@
-<md-dialog class="dialog-extend mw60"
+<md-dialog class="dialog-extend mw60 cms-tabs-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_application_user: ctrl.model.getNames()}}">
     <popup-toolbar-directive ng-if="!ctrl.editMode"
@@ -7,7 +7,7 @@
     <popup-toolbar-directive ng-if="ctrl.editMode"
                              header-text="{{ctrl.model.getNames()}}"
     ></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div>
             <form name="applicationUserForm" autocomplete="off">
                 <md-tabs md-dynamic-height>

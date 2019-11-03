@@ -601,6 +601,7 @@ module.exports = function (app) {
                     controller: 'employeeHRIntegrationPopCtrl',
                     controllerAs: 'ctrl',
                     bindToController: true,
+                    escapeToClose: false,
                     locals: {
                         linkedEntities: linkedEntities,
                         fromApplicationUser: fromApplicationUser,

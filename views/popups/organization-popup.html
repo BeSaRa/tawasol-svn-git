@@ -1,4 +1,4 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-tabs-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="organization-dialog"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_organization : ctrl.model.getTranslatedName()}}">
@@ -6,7 +6,7 @@
                              close-callback="ctrl.closeOrganizationDialog"></popup-toolbar-directive>
     <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getTranslatedName()}}"
                              close-callback="ctrl.closeOrganizationDialog"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div>
             <form name="org_form" novalidate autocomplete="off">
                 <md-tabs md-dynamic-height>

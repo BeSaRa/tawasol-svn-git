@@ -1,11 +1,11 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.newLocalizationKey ? lang.add_new_localization : ctrl.model.getLocalizationKey()}}">
         <popup-toolbar-directive ng-if="!ctrl.newLocalizationKey"
                                  header-text="{{lang.edit }} - {{ctrl.model.getLocalizationKey()}}"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.newLocalizationKey"
                                  header-text="{{lang.add_new_localization}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="localization_form" autocomplete="off">
                 <div layout="column">

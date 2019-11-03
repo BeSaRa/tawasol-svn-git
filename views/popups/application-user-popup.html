@@ -1,11 +1,11 @@
-<md-dialog class="dialog-extend mw60"
+<md-dialog class="dialog-extend mw60 cms-tabs-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_application_user: ctrl.model.getNames()}}">
     <popup-toolbar-directive ng-if="!ctrl.editMode"
                              header-text="{{lang.add_new_application_user}}"></popup-toolbar-directive>
     <popup-toolbar-directive ng-if="ctrl.editMode"
                              header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div>
             <form name="applicationUserForm" autocomplete="off">
                 <md-tabs md-dynamic-height>
@@ -764,7 +764,8 @@
                                             <md-table-pagination
                                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                                     md-limit-options="ctrl.ouApplicationUsersGrid.limitOptions"
-                                                    md-limit="ctrl.ouApplicationUsersGrid.limit" md-page="ctrl.ouApplicationUsersGrid.page"
+                                                    md-limit="ctrl.ouApplicationUsersGrid.limit"
+                                                    md-page="ctrl.ouApplicationUsersGrid.page"
                                                     md-total="{{(ctrl.ouApplicationUsers).length}}"
                                                     md-page-select
                                                     md-on-paginate="ctrl.ouApplicationUsersGrid.pagingCallback">
@@ -964,7 +965,8 @@
                                     </md-input-container>
                                     <!-- Buttons -->
                                     <div class="p20">
-                                        <md-button class="md-raised md-primary" ng-if="!ctrl.classificationViewPermission.id"
+                                        <md-button class="md-raised md-primary"
+                                                   ng-if="!ctrl.classificationViewPermission.id"
                                                    ng-disabled="!ctrl.classificationViewPermission.classificationId
                                                || !ctrl.classificationViewPermission.securityLevels.length"
                                                    ng-click="ctrl.addClassificationViewPermissionFromCtrl()">
