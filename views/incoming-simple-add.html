@@ -126,7 +126,8 @@
                                                     simple-view-url="ctrl.simpleViewUrl"
                                                     is-simple-add="ctrl.simpleAdd"></manage-content-directive>
                                             <span flex></span>
-                                            <div class="icon-relative">
+                                            <!-- Attachments -->
+                                            <div class="icon-relative" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">
                                                 <md-button tooltip="{{lang.attachments}}"
                                                            class="md-raised md-icon-button"
                                                            ng-click="ctrl.manageAttachments($event)">
@@ -134,7 +135,8 @@
                                                 </md-button>
                                                 <span class="counter blue">{{ctrl.incoming.attachments.length}}</span>
                                             </div>
-                                            <div class="icon-relative">
+                                            <!-- Linked Docs -->
+                                            <div class="icon-relative" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
                                                 <md-button tooltip="{{lang.linked_documents}}"
                                                            class="md-raised md-icon-button"
                                                            ng-click="ctrl.manageLinkedDocuments($event)">
@@ -142,7 +144,8 @@
                                                 </md-button>
                                                 <span class="counter blue">{{ctrl.incoming.linkedDocs.length}}</span>
                                             </div>
-                                            <div class="icon-relative">
+                                            <!-- Linked Entities -->
+                                            <div class="icon-relative" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
                                                 <md-button tooltip="{{lang.linked_entities}}"
                                                            class="md-raised md-icon-button"
                                                            ng-click="ctrl.manageLinkedEntities($event)">

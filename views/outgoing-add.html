@@ -15,6 +15,7 @@
             <div scroll-directive>
                 <div class="page-padding">
                     <accordion-directive label-collapse="ctrl.collapse" validation="ctrl.validation">
+                        <!-- Properties -->
                         <accordion-item active fail-when="ctrl.document_properties.$invalid"
                                         pass-when="ctrl.document_properties.$valid">
                             <accordion-title>
@@ -49,6 +50,7 @@
                                         action="ctrl.action"></manage-properties-directive>
                             </accordion-content>
                         </accordion-item>
+                        <!-- Correspondence Sites -->
                         <accordion-item fail-when="!ctrl.outgoing.sitesInfoTo.length"
                                         pass-when="!!ctrl.outgoing.sitesInfoTo.length">
                             <accordion-title>
@@ -77,6 +79,7 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
+                        <!-- Content -->
                         <accordion-item pass-when="ctrl.documentInformation || ctrl.outgoing.contentFile">
                             <accordion-title>
                                 <md-icon md-svg-icon="format-align-justify"></md-icon>
@@ -95,7 +98,10 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.outgoing.attachments.length">
+                        <!-- Attachments -->
+                        <accordion-item
+                                ng-if="!ctrl.isDemoBuild && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')"
+                                pass-when="!!ctrl.outgoing.attachments.length">
                             <accordion-title>
                                 <md-icon md-svg-icon="attachment"></md-icon>
                                 <span>{{lang.outgoing_manage_attachments}}</span>
@@ -111,6 +117,7 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
+                        <!-- Linked Docs -->
                         <accordion-item pass-when="!!ctrl.outgoing.linkedDocs.length"
                                         ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
                             <accordion-title>
@@ -126,7 +133,10 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.outgoing.linkedEntities.length">
+                        <!-- Linked Entities -->
+                        <accordion-item
+                                ng-if="!ctrl.isDemoBuild && ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')"
+                                pass-when="!!ctrl.outgoing.linkedEntities.length">
                             <accordion-title>
                                 <md-icon md-svg-icon="vector-triangle"></md-icon>
                                 <span>{{lang.outgoing_linked_entities}}</span>
@@ -140,8 +150,10 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.outgoing.documentComments.length"
-                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS') && ctrl.employeeService.hasPermissionTo('ADD_DOCUMENT_COMMENT')">
+                        <!-- Document Comments -->
+                        <accordion-item
+                                ng-if="!ctrl.isDemoBuild && ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS') && ctrl.employeeService.hasPermissionTo('ADD_DOCUMENT_COMMENT')"
+                                pass-when="!!ctrl.outgoing.documentComments.length">
                             <accordion-title>
                                 <md-icon md-svg-icon="comment"></md-icon>
                                 <span>{{lang.outgoing_manage_comments}}</span>
@@ -157,8 +169,10 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.outgoing.tags.length"
-                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">
+                        <!-- Tags -->
+                        <accordion-item
+                                ng-if="!ctrl.isDemoBuild && ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')"
+                                pass-when="!!ctrl.outgoing.tags.length">
                             <accordion-title>
                                 <md-icon md-svg-icon="tag-multiple"></md-icon>
                                 <span>{{lang.outgoing_manage_tags}}</span>
