@@ -8,18 +8,30 @@
         </md-radio-group>
         <br/>
         <div ng-if="ctrl.jobOptions.addType === 'location' && ctrl.appendScreen" layout="row">
-            <md-input-container>
+            <md-input-container class="m0">
                 <md-select aria-label="Append location" ng-model="ctrl.jobOptions.location">
                     <md-option value="before">{{lang.before}}</md-option>
                     <md-option value="after">{{lang.after}}</md-option>
                 </md-select>
             </md-input-container>
-            <md-input-container>
+            <md-autocomplete
+                    md-no-cache="true"
+                    md-selected-item="ctrl.jobOptions.selectedPage"
+                    md-search-text="ctrl.searchText"
+                    md-selected-item-change="ctrl.selectedPageChanged(item)"
+                    md-items="item in ctrl.pageQuerySearch(ctrl.searchText)"
+                    md-min-length="0"
+                    md-item-text="item.display">
+                <md-item-template>
+                    <span md-highlight-text="ctrl.searchText" md-highlight-flags="i">{{item.display}}</span>
+                </md-item-template>
+            </md-autocomplete>
+            <!--<md-input-container>
                 <md-select aria-label="Page Number" ng-model="ctrl.jobOptions.pageNumber">
-                    <md-option value="{{$index}}" ng-repeat="page in ctrl.pages">{{lang.page + " " + ($index+1)}}
+                    <md-option value="{{$index}}" ng-repeat="page in ctrl.pages">{{page.display}}
                     </md-option>
                 </md-select>
-            </md-input-container>
+            </md-input-container>-->
 
         </div>
     </md-dialog-content>

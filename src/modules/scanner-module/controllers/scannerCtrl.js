@@ -820,8 +820,6 @@ module.exports = function (app) {
         };
         self.onImportFileClick = function (files, element, emptyCallback) {
             self.openOperationDialog('import').then(function () {
-                updateUIForScanning(true);
-                cleanUpDetailsPanel();
                 if (!window.FileReader) {
                     PleaseWaitDialog.show(false);
                     dialog.errorMessage(langService.get('update_browser'));
@@ -882,7 +880,14 @@ module.exports = function (app) {
                     ctrl.appendScreen = false;
                     ctrl.locationScreen = false;
                     ctrl.action = action;
-                    ctrl.pages = self.cc.getDocument().pages;
+                    ctrl.pages = _.map(self.cc.getDocument().pages, function (page, index) {
+                        page.display = langService.get('page') + '' + (index + 1);
+                        page.index = index;
+                        return page;
+                    });
+
+                    ctrl.jobOptions.selectedPage = ctrl.pages[0];
+
                     ctrl.appenGroupOptions = {
                         first: 'append_to_scanned_in_first',
                         last: 'append_to_scanned_in_last',
@@ -913,6 +918,17 @@ module.exports = function (app) {
 
                     ctrl.saveJobOptions = function () {
                         dialog.hide(ctrl.jobOptions);
+                    };
+
+                    ctrl.pageQuerySearch = function (query) {
+                        return query ? (ctrl.pages.filter(function (item) {
+                            return item.display.indexOf(query.toLowerCase()) !== -1;
+                        })) : ctrl.pages;
+                    };
+
+                    ctrl.selectedPageChanged = function (item) {
+                        if (item)
+                            ctrl.jobOptions.pageNumber = item.index;
                     }
                 },
 

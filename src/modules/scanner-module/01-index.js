@@ -1,4 +1,5 @@
 module.exports = function (app) {
+    // require('./configuration/scannerConfiguration')(app);
     require('./models/FileType')(app);
     require('./models/ImageCompression')(app);
     require('./models/IPSettings')(app);
@@ -22,7 +23,6 @@ module.exports = function (app) {
     require('./models/Tags')(app);
     require('./models/PleaseWaitDialog')(app);
     require('./models/scanner-image')(app);
-
     /// Service and controller //
     require('./services/scannerService')(app);
     require('./controllers/scannerCtrl')(app);
