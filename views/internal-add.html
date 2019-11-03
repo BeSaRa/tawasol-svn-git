@@ -23,7 +23,8 @@
                                     <span> &nbsp;{{lang.document_properties}}</span>
                                     <span flex></span>
                                     <div layout="row" layout-align="center center">
-                                        <span>{{lang.internal_document_type}} : {{lang.internal_electronic}}</span>
+                                        <span>{{lang.internal_document_type}} :&nbsp;</span>
+                                        <span>{{lang.current === 'en' ? lang.internal_electronic : lang.internal_paper}}</span>
                                         <span>&nbsp;&nbsp;</span>
                                         <md-switch
                                                 ng-disabled=" ctrl.isDocumentTypeSwitchDisabled()"
@@ -34,7 +35,7 @@
                                                 ng-change="ctrl.checkChangeInternalType()"
                                                 ng-model="ctrl.internal.addMethod">
                                         </md-switch>
-                                        <span>{{lang.internal_paper}}</span>
+                                        <span>{{lang.current === 'en' ? lang.internal_paper : lang.internal_electronic}}</span>
                                     </div>
                                 </div>
                             </accordion-title>

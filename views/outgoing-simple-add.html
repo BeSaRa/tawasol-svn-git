@@ -126,7 +126,8 @@
                                             <span>{{lang.outgoing_create_content}}</span>
                                             <span flex></span>
                                             <div layout="row" layout-align="center center">
-                                                <span>{{lang.outgoing_document_type}} : {{lang.outgoing_electronic}}</span>
+                                                <span>{{lang.outgoing_document_type}} :&nbsp;</span>
+                                                <span>{{lang.current === 'en' ? lang.outgoing_electronic : lang.outgoing_paper}}</span>
                                                 <span>&nbsp;&nbsp;</span>
                                                 <md-switch
                                                         ng-disabled="ctrl.isDocumentTypeSwitchDisabled()"
@@ -137,7 +138,7 @@
                                                         ng-change="ctrl.checkChangeOutgoingType()"
                                                         ng-model="ctrl.outgoing.addMethod">
                                                 </md-switch>
-                                                <span>{{lang.outgoing_paper}}</span>
+                                                <span>{{lang.current === 'en' ? lang.outgoing_paper : lang.outgoing_electronic}}</span>
                                             </div>
                                         </div>
                                     </accordion-title>
