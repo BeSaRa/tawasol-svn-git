@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                             toast,
                                                             correspondenceService,
                                                             rootEntity,
+                                                            employeeService,
                                                             cmsTemplate,
                                                             _) {
         'ngInject';
@@ -18,6 +19,7 @@ module.exports = function (app) {
         LangWatcher($scope);
         self.defaultEntityTypes = [];
         self.entityTypes = [];
+        self.employeeService = employeeService;
         $timeout(function () {
             self.defaultEntityTypes = correspondenceService.getDefaultEntityTypesForDocumentClass(self.documentClass);
             self.entityTypes = correspondenceService.getCustomEntityTypesForDocumentClass(self.documentClass);

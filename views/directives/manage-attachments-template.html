@@ -1,6 +1,6 @@
 <div layout="column">
     <div layout="row"
-         ng-if="(ctrl.allowUpload || ctrl.allowScanner) && !ctrl.disableEverything && !ctrl.receiveG2g">
+         ng-if="(ctrl.allowUpload || ctrl.allowScanner) && !ctrl.disableEverything && !ctrl.receiveG2g && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">
         <md-menu-bar ng-if="ctrl.allowUpload" class="p0">
             <md-menu>
                 <md-button class="md-raised" ng-click="$mdMenu.open()">
@@ -146,7 +146,7 @@
                 <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                 <tr md-row>
                     <th colspan="5" class="table-selector-header"
-                        ng-if="ctrl.selectedAttachments.length" md-column>
+                        ng-if="ctrl.selectedAttachments.length && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')" md-column>
                         <div layout="row" layout-align="start center">
                             <span>{{ctrl.selectedAttachments.length}} {{lang.items_selected}} </span>
                             <span flex></span>
@@ -206,12 +206,12 @@
                                 <md-icon md-svg-icon="download"></md-icon>
                             </md-button>
                             <md-button class="md-icon-button" title="{{lang.attachment_edit}}"
-                                       ng-if="ctrl.isAttachmentDeletable(attachment, true)"
+                                       ng-if="ctrl.isAttachmentDeletable(attachment, true) && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')"
                                        ng-click="ctrl.openEditDocumentAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="pencil"></md-icon>
                             </md-button>
                             <md-button class="md-icon-button" title="{{lang.attachment_delete}}"
-                                       ng-if="ctrl.isAttachmentDeletable(attachment, false)"
+                                       ng-if="ctrl.isAttachmentDeletable(attachment, false) && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')"
                                        ng-click="ctrl.deleteDocumentAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="delete"></md-icon>
                             </md-button>

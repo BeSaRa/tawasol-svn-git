@@ -1,6 +1,6 @@
 <div layout="column">
     <div ng-if="!ctrl.disableEverything">
-        <md-menu-bar class="menu-bar-has-button">
+        <md-menu-bar class="menu-bar-has-button" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
             <md-menu>
                 <md-button ng-disabled="ctrl.entity" class="md-raised"
                            ng-click="ctrl.openEntityTypeMenu($mdMenu , $event)">
@@ -89,7 +89,7 @@
                             <th ng-if="!ctrl.selectedEntities.length" md-column>
                                 <span>{{lang.entities_type}}</span>
                             </th>
-                            <th md-column ng-if="!ctrl.disableEverything">
+                            <th md-column ng-if="!ctrl.disableEverything && ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
                                 <span ng-if="!ctrl.selectedEntities.length">{{lang.actions}}</span>
                                 <md-button ng-if="ctrl.selectedEntities.length" class="md-icon-button"
                                            ng-click="ctrl.removeBulkDocumentEntities($event)">
@@ -109,7 +109,7 @@
                             <td md-cell>
                                 {{entity.typeId.getTranslatedName()}}
                             </td>
-                            <td md-cell ng-if="!ctrl.disableEverything">
+                            <td md-cell ng-if="!ctrl.disableEverything && ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
                                 <div flex layout="row" layout-align="start center">
                                     <div>
                                         <md-button class="md-icon-button" title="{{lang.delete}}"
