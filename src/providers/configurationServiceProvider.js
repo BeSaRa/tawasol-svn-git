@@ -9,6 +9,7 @@ module.exports = function (app) {
             G2G_CORRESPONDENCE_SITES_TYPE: 3,
             OFFICE_ONLINE_DELAY: 3000,
             DEFAULT_START_TASK_TIME: '08:00',
+            DEFAULT_SEND_LINK_TIME: '20:00',
             DEFAULT_SEND_RELATED_DOCS: true,
             ICN_ENTRY_TEMPLATE_MENU_TYPE: 3,
             ICN_SEARCH_TEMPLATE_MENU_TYPE: 4,

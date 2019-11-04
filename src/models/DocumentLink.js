@@ -29,7 +29,7 @@ module.exports = function (app) {
             };
             self.documentLinkSubscribers = [];
             self.docSubject = null;
-            self.expirationHours = configurationService.DEFAULT_START_TASK_TIME;
+            self.expirationHours = configurationService.DEFAULT_SEND_LINK_TIME;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
