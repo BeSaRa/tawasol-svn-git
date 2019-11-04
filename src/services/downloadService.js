@@ -394,16 +394,8 @@ module.exports = function (app) {
          */
         self.downloadSelectedOptions = function (downloadOptions, correspondence) {
             var info = correspondence.getInfo();
-            return $http.put(urlService.downloadSelected + "/" + info.vsId, downloadOptions, {
-                responseType: 'blob'
-            }).then(function (result) {
-                    var urlObj = window.URL.createObjectURL(result.data);
-                    var fileName = urlObj.substring(urlObj.lastIndexOf('/') + 1);
-                    if (helper.browser.isIE()) {
-                        window.navigator.msSaveOrOpenBlob(result.data);
-                    } else {
-                        window.open(fileName, '_blank');
-                    }
+            return $http.put(urlService.downloadSelected + "/" + info.vsId, downloadOptions, ).then(function (result) {
+                        window.open(result.data.rs, '_blank');
                 }
             );
         };
