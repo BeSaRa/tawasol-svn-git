@@ -246,8 +246,8 @@
                                     <md-switch ng-model="ctrl.organization.isPrivateRegistry"
                                                ng-if="ctrl.organization.hasRegistry"
                                                ng-change="ctrl.onChangePrivateRegistry($event)"
-                                               ng-disabled="!ctrl.organization.isPrivateRegistry"
-                                               ng-readonly="!ctrl.organization.isPrivateRegistry">
+                                               ng-disabled="!ctrl.organization.hasRegistry && ctrl.editMode"
+                                               ng-readonly="!ctrl.organization.hasRegistry && ctrl.editMode">
                                         <span>{{lang.private_registry}} : {{ ctrl.organization.getIsPrivateRegistryTranslate() }}</span>
                                     </md-switch>
 
