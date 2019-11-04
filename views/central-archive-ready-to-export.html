@@ -65,12 +65,10 @@
                                                 </md-button>-->
                                             </div>
                                         </th>
-                                        <!-- <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="">
-
-                                         </th>-->
                                         <th ng-if="!ctrl.selectedWorkItems.length" md-column
-                                            md-order-by="">
-                                            <!-- Security Level Indicators -->
+                                            md-order-by="{{ctrl.getSortingKey('securityLevel','Information')}}">
+                                            <md-icon md-svg-icon="security" class="indicator"></md-icon>
+                                            <!-- Indicators -->
                                         </th>
                                         <th ng-if="!ctrl.selectedWorkItems.length" md-column
                                             md-order-by="generalStepElm.docFullSerial">
@@ -124,13 +122,6 @@
                                         selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
                                         model="workItem"
                                         ng-repeat="workItem in searchResults = (ctrl.workItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
-                                        <!--<td md-cell>
-                                            <star-unstar-directive record="workItem"
-                                                                   record-type="WorkItem"
-                                                                   callback="ctrl.changeReadyToExportStar"
-                                                                   selected-records="ctrl.selectedWorkItems"
-                                            ></star-unstar-directive>
-                                        </td>-->
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
                                             <grid-indicator-directive record="workItem"
