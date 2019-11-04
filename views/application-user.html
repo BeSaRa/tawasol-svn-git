@@ -28,7 +28,7 @@
                                     <thead fix-head md-head md-order="ctrl.grid.order"
                                            md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
-                                        <th colspan="5" ng-if="ctrl.selectedApplicationUsers.length" md-column>
+                                        <th colspan="6" ng-if="ctrl.selectedApplicationUsers.length" md-column>
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedApplicationUsers.length}} {{lang.items_selected}} </span>
                                                 <span flex></span>
@@ -54,6 +54,10 @@
                                             md-order-by="domainName">
                                             <span>{{lang.domain_name}}</span>
                                         </th>
+                                        <th ng-if="!ctrl.selectedApplicationUsers.length" md-column
+                                            md-order-by="employeeNo">
+                                            <span>{{lang.employee_number}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedApplicationUsers.length" md-column>
                                             <span>{{lang.actions}}</span>
                                         </th>
@@ -67,6 +71,7 @@
                                         <td md-cell>{{applicationUser.enFullName}}</td>
                                         <td md-cell>{{applicationUser.loginName}}</td>
                                         <td md-cell>{{applicationUser.domainName}}</td>
+                                        <td md-cell>{{applicationUser.employeeNo}}</td>
                                         <td md-cell>
                                             <div flex layout="row" layout-align="start center">
                                                 <md-button class="md-icon-button" title="{{lang.delete}}"

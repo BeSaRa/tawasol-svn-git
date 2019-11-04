@@ -60,7 +60,8 @@ module.exports = function (app) {
                 arabicName: 'arFullName',
                 englishName: 'enFullName',
                 loginName: 'loginName',
-                domainName: 'domainName'
+                domainName: 'domainName',
+                employeeNo: 'employeeNo'
             },
             searchText: '',
             searchCallback: function (grid) {
