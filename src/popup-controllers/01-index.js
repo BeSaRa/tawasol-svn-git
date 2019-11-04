@@ -136,4 +136,5 @@ module.exports = function (app) {
     require('./privateRegistryOUPopCtrl')(app);
     require('./ouApplicationUserPopCtrl')(app);
     require('./ouDistributionListsPopCtrl')(app);
+    require('./selectedDownloadPopCtrl')(app);
 };

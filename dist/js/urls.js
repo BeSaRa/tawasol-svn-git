@@ -373,6 +373,8 @@
                 .addToAllWithBase('g2gTerminateByActionID', 'g2g/terminate/g2gActionID/{g2gActionID}')
                 // ou private registry
                 .addToAllWithBase('privateRegistryOU', 'cms-entity/admin/ou-private-registry')
+                // download selected book options
+                .addToAllWithBase('downloadSelected','cms-entity/correspondence/common/merge-book')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

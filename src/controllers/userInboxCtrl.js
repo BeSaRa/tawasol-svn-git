@@ -861,6 +861,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description download selected document
+         * @param userInbox
+         * @param $event
+         */
+        self.downloadSelected = function(userInbox,$event){
+            downloadService.openSelectedDownloadDialog(userInbox, $event);
+        };
+
+        /**
          * @description Send Link To Document By Email
          * @param userInbox
          * @param $event
@@ -1729,6 +1738,18 @@ module.exports = function (app) {
                         text: 'grid_action_composite_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadCompositeDocument,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // download selected
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text:'selective_document',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                        callback: self.downloadSelected,
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;

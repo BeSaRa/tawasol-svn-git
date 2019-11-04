@@ -1,0 +1,50 @@
+<md-dialog class="dialog-extend"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.selective_document}}">
+    <popup-toolbar-directive
+            header-text="{{lang.selective_document}} - {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="column">
+                <form name="selectedDownloadForm" autocomplete="off" flex>
+                            <div layout="row">
+                                <md-input-container>
+                                    <md-checkbox ng-model="ctrl.downloadSelectedOptions.BOOK"
+                                                 aria-label="Books">
+                                        <span>{{lang.book_only}}</span>
+                                    </md-checkbox>
+                                </md-input-container>
+                                <span flex></span>
+                                <div>
+                                    <div class="icon-relative">
+                                        <md-button tooltip="{{lang.attachments}}"
+                                                   class="md-raised md-icon-button"
+                                                   ng-click="ctrl.selectAttachmentsToSend($event)">
+                                            <md-icon md-svg-icon="attachment"></md-icon>
+                                        </md-button>
+                                        <span class="counter blue">{{ctrl.downloadSelectedOptions.ATTACHMENTS.length}}</span>
+                                    </div>
+                                    <div class="icon-relative">
+                                        <md-button tooltip="{{lang.linked_documents}}"
+                                                   class="md-raised md-icon-button"
+                                                   ng-click="ctrl.selectLinkedDocumentsToSend($event)">
+                                            <md-icon md-svg-icon="note-multiple-outline"></md-icon>
+                                        </md-button>
+                                        <span class="counter blue">{{ctrl.downloadSelectedOptions.RELATED_BOOKS.length}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                </form>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="ctrl.checkDownloadSelectedOptionsDisabled()"
+                   ng-click="ctrl.downloadSelected()">
+            {{lang.download}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

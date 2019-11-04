@@ -177,4 +177,5 @@ module.exports = function (app) {
     require('./TaskCalenderItem')(app);
     require('./LDAPProvider')(app);
     require('./OUPrivateRegistry')(app);
+    require('./SelectedDownload')(app);
 };

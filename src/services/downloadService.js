@@ -365,5 +365,47 @@ module.exports = function (app) {
                 return $q.reject('INVALID_LINK');
             })
         };
+
+        /**
+         * @description open selected download dialog
+         * @param correspondence
+         * @param $event
+         * @returns {promise}
+         */
+        self.openSelectedDownloadDialog = function (correspondence, $event) {
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('selected-download'),
+                controllerAs: 'ctrl',
+                eventTarget: $event || null,
+                controller: 'selectedDownloadPopCtrl',
+                bindToController: true,
+                locals: {
+                    correspondence: correspondence
+                }
+            });
+        };
+
+
+        /**
+         * @description downloadS elected options
+         * @param downloadOptions
+         * @param correspondence
+         * @returns {*}
+         */
+        self.downloadSelectedOptions = function (downloadOptions, correspondence) {
+            var info = correspondence.getInfo();
+            return $http.put(urlService.downloadSelected + "/" + info.vsId, downloadOptions, {
+                responseType: 'blob'
+            }).then(function (result) {
+                    var urlObj = window.URL.createObjectURL(result.data);
+                    var fileName = urlObj.substring(urlObj.lastIndexOf('/') + 1);
+                    if (helper.browser.isIE()) {
+                        window.navigator.msSaveOrOpenBlob(result.data);
+                    } else {
+                        window.open(fileName, '_blank');
+                    }
+                }
+            );
+        };
     });
 };

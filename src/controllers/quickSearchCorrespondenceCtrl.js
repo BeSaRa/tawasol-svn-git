@@ -295,6 +295,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description download selected document
+         * @param searchedCorrespondenceDocument
+         * @param $event
+         */
+        self.downloadSelected = function(searchedCorrespondenceDocument,$event){
+            downloadService.openSelectedDownloadDialog(searchedCorrespondenceDocument, $event);
+        };
+
+        /**
          * @description send link to document for searched Correspondence document
          * @param searchedCorrespondenceDocument
          * @param $event
@@ -894,6 +903,18 @@ module.exports = function (app) {
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         shortcut: false,
                         callback: self.downloadCompositeDocument,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // download selected
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text:'selective_document',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                        callback: self.downloadSelected,
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;

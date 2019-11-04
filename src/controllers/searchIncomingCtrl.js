@@ -540,6 +540,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description download selected document
+         * @param searchedIncomingDocument
+         * @param $event
+         */
+        self.downloadSelected = function (searchedIncomingDocument, $event) {
+            downloadService.openSelectedDownloadDialog(searchedIncomingDocument, $event);
+        };
+
+        /**
          * @description send link to document for searched incoming document
          * @param searchedIncomingDocument
          * @param $event
@@ -1109,6 +1118,18 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.downloadCompositeDocument,
                         class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // download selected
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'selective_document',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                        callback: self.downloadSelected,
+                        class: "action-red",
                         checkShow: function (action, model) {
                             return true;
                         }
