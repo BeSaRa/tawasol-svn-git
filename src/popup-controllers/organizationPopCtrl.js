@@ -491,6 +491,7 @@ module.exports = function (app) {
         self.onChangePrivateRegistry = function ($event) {
             if (_isPublicRegistryChangedToPrivate()) {
                 self.organization.isPrivateRegistry = false;
+                toast.info(langService.get('can_not_change_global_to_private').change({type: langService.get('reg_ou')}))
             }
         };
 
