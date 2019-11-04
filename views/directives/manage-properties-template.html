@@ -20,6 +20,7 @@
                                    placeholder="{{lang.search}}"
                                    class="select-header-input">
                         </md-select-header>
+                        <md-option ng-value="null">{{lang.none}}</md-option>
                         <md-option ng-value="organization.id"
                                    ng-repeat="organization in ctrl.registryOrganizations | translatedNameFilter: ctrl.registryOUSearchText">
                             <span
@@ -48,6 +49,7 @@
                                    placeholder="{{lang.search}}"
                                    class="select-header-input">
                         </md-select-header>
+                        <md-option ng-value="null">{{lang.none}}</md-option>
                         <md-option ng-value="organization.id"
                                    ng-repeat="organization in ctrl.subOrganizations | translatedNameFilter: ctrl.registrySectionSearchText">
                             <span
@@ -76,6 +78,7 @@
                                    placeholder="{{lang.search}}"
                                    class="select-header-input">
                         </md-select-header>
+                        <md-option ng-value="null">{{lang.none}}</md-option>
                         <md-option ng-value="organization.id"
                                    ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.ouSearchText">
                             <span
@@ -247,6 +250,7 @@
                                 {{lang.press_enter_to_load_more_records}}
                             </div>
                         </md-select-header>
+                        <md-option ng-value="null">{{lang.none}}</md-option>
                         <md-option ng-value="classification.classification"
                                    ng-repeat="classification in ctrl.classifications | translatedNameFilter: ctrl.mainClassificationSearchText:'getIdNameByLanguage':'classification'">
                             <span
@@ -287,6 +291,7 @@
                                 {{lang.press_enter_to_load_more_records}}
                             </div>
                         </md-select-header>
+                        <md-option ng-value="null">{{lang.none}}</md-option>
                         <md-option ng-value="classification"
                                    ng-repeat="classification in ctrl.document.mainClassification.children | translatedNameFilter: ctrl.subClassificationSearchText:'getIdNameByLanguage'">
                             <span
@@ -327,6 +332,7 @@
                                ng-model="ctrl.document.docType"
                                ng-model-options="{trackBy: '$value.id'}"
                                ng-required="ctrl.checkMandatory('docType')">
+                        <md-option ng-value="null">{{lang.none}}</md-option>
                         <md-option ng-value="documentType"
                                    ng-repeat="documentType in ctrl.documentTypes">
                             {{documentType.getTranslatedName()}}
@@ -376,6 +382,7 @@
                                 {{lang.press_enter_to_load_more_records}}
                             </div>
                         </md-select-header>
+                        <md-option ng-value="null">{{lang.none}}</md-option>
                         <md-option ng-value="file.file"
                                    ng-repeat="file in ctrl.documentFiles | translatedNameFilter: ctrl.documentFileSearchText:null:'file'">
                             <span
