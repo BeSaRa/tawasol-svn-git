@@ -1,8 +1,8 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}">
         <popup-toolbar-directive
                 header-text="{{ctrl.ouApplicationUser.applicationUser.getNames()}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="ouUnassignedUserForm" autocomplete="off">
                 <div layout="column">

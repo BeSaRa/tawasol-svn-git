@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.correspondence_sites}}">
         <popup-toolbar-directive header-text="{{lang.correspondence_sites}} : {{ctrl.documentSubject}}"
                                  close-callback="ctrl.closeDocumentCorrespondence"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div>
             <manage-correspondence-sites-directive
                     ng-if="ctrl.documentClass.toLowerCase()==='outgoing' && ctrl.type!== 'g2g'"

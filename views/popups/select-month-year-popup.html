@@ -1,8 +1,8 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.select_date_and_year}}">
     <popup-toolbar-directive header-text="{{lang.select_date_and_year}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="monthAndYearForm" autocomplete="off">
                 <div layout="row">

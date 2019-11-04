@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.user_subscription}}">
     <popup-toolbar-directive
             header-text="{{lang.user_subscription}} : {{ctrl.info.title}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <div layout="column">
                 <form name="subscriptionEventTypeForm" autocomplete="off">

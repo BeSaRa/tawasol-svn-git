@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.tags_manage_document_tags}}">
         <popup-toolbar-directive header-text="{{lang.tags_manage_document_tags}} : {{ctrl.documentSubject}}"
                                  close-callback="ctrl.closeDocumentTags"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <manage-tags-directive from-dialog="true" tags="ctrl.tags"></manage-tags-directive>
         </div>

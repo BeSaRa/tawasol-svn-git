@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-tabs-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="partial-export" ng-attr-aria-label="{{lang.partial_export}}">
     <popup-toolbar-directive
             header-text="{{lang.partial_export}} : {{ctrl.correspondence.getTranslatedName()}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div>
             <md-tabs class="content white-bg" md-dynamic-height>
                 <md-tab label="{{lang.export_options}}" ng-if="ctrl.showTab('exportOptions')">

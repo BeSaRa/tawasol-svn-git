@@ -1,10 +1,10 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.attachments_manage_document_attachments}}">
         <popup-toolbar-directive
                 header-text="{{lang.attachments_manage_document_attachments}} : {{ctrl.documentSubject}}"
                 close-callback="ctrl.closeDocumentAttachments"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <manage-attachment-directive
                     document="ctrl.document"
@@ -19,32 +19,3 @@
         <md-button class="md-raised red-text" ng-click="ctrl.closeDocumentAttachments()">{{lang.close}}</md-button>
     </md-dialog-actions>
 </md-dialog>
-
-<!--
-<md-dialog class="dialog-extend"
-           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
-           ng-attr-aria-label="{{lang.attachments_manage_document_attachments}}">
-    <div layout="column">
-        <popup-toolbar-directive
-                header-text="{{lang.attachments_manage_document_attachments}} : {{ctrl.documentSubject}}"
-                close-callback="ctrl.closeDocumentAttachments"></popup-toolbar-directive>
-        <md-content scroll-directive>
-            <div>
-                <manage-attachment-directive
-                        document="ctrl.document"
-                        source-model="ctrl.model"
-                        document-class="ctrl.documentClass"
-                        vs-id="ctrl.vsId"
-                        from-dialog="ctrl.fromDialog"
-                        attachments="ctrl.attachments"></manage-attachment-directive>
-            </div>
-        </md-content>
-        <div>
-            <div layout="row">
-                <md-button class="md-raised" ng-click="ctrl.closeDocumentAttachments()">{{lang.close}}</md-button>
-                <span flex></span>
-            </div>
-        </div>
-    </div>
-</md-dialog>
--->

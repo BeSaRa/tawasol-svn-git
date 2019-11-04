@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="content-view-history-events-dialog"
            ng-attr-aria-label="{{lang.view_tracking_sheet_viewers}}">
         <popup-toolbar-directive header-text="{{lang.view_tracking_sheet_viewers}} : {{ctrl.contentViewHistorySubject}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <md-card>
                 <md-table-container>

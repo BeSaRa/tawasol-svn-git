@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.inbox_add_to_folder}}">
     <popup-toolbar-directive ng-if="!ctrl.model.id"
                              header-text="{{lang.inbox_add_to_folder}} 1"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="addToFolderForm" autocomplete="off">
                 <div layout="row">

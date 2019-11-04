@@ -1,11 +1,10 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="merged-linked-doc-history-events-dialog"
-
            ng-attr-aria-label="{{lang.view_tracking_sheet_actions}}">
     <popup-toolbar-directive full-screen-button="true" full-screen="ctrl.fullScreen"
             header-text="{{lang.view_tracking_sheet_actions}} : {{ctrl.mergedLinkedDocHistorySubject}}" ></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <md-card>
                 <md-table-container>

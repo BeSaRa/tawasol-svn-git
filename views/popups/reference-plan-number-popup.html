@@ -1,11 +1,11 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-tabs-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_reference_plan_number: ctrl.model.getNames()}}">
         <popup-toolbar-directive ng-if="!ctrl.model.id"
                                  header-text="{{lang.add_new_reference_plan_number}}"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.model.id"
                                  header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div>
             <form name="referencePlanNumberForm" autocomplete="off">
                 <md-tabs md-dynamic-height>

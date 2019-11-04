@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.get(Filter.title , true ) ? lang.get(Filter.title)  :  Filter.title }}">
         <popup-toolbar-directive
                 header-text="{{lang.get(Filter.title , true ) ? lang.get(Filter.title)  :  Filter.title }}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <div ng-repeat="field in Filter.options track by $index" layout="column">
                 <md-input-container ng-if="field.type === 'text'">

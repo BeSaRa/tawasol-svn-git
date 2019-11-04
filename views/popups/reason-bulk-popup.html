@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{ctrl.title ? lang.get(ctrl.title) : lang.terminate_reason}}">
         <popup-toolbar-directive
                 header-text="{{ctrl.title ? lang.get(ctrl.title) : lang.terminate_reason}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="reason_form" autocomplete="off">
                 <div layout="column">

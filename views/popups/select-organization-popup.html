@@ -1,4 +1,4 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{ctrl.label || lang.select_organization }}">
     <popup-toolbar-directive ng-if="ctrl.label"
@@ -6,7 +6,7 @@
                              close-callback="ctrl.closeDialog"></popup-toolbar-directive>
     <popup-toolbar-directive ng-if="!ctrl.label" header-text="{{lang.select_organization}}"
                              close-callback="ctrl.closeDialog"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <div flex layout="row">
                 <md-input-container flex class="mt0">

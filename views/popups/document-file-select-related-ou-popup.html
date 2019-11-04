@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.select_organization}}">
     <popup-toolbar-directive
             header-text="{{lang.select_organization}} - {{ctrl.documentFile.getTranslatedName()}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <div layout="row" layout-align="center center" ng-if="!ctrl.showRelatedOUForm">
                 <md-button class="md-raised" ng-click="ctrl.toggleRelatedOuForm(true)">

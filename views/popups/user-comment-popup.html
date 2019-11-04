@@ -1,11 +1,11 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.comment}}">
     <popup-toolbar-directive ng-if="!ctrl.editMode"
                              header-text="{{lang.add}} {{lang.comment}}"></popup-toolbar-directive>
     <popup-toolbar-directive ng-if="ctrl.editMode"
                              header-text="{{ctrl.model.shortComment}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="userCommentsForm" autocomplete="off">
                 <div layout="column">

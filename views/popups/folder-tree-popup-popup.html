@@ -1,4 +1,4 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.inbox_add_to_folder}}">
     <md-toolbar>
@@ -16,7 +16,7 @@
             <cms-close-dialog-directive></cms-close-dialog-directive>
         </div>
     </md-toolbar>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <div class="first-folder-list">
                 <folders-tree-structure-directive disable-selected="ctrl.disableSelected" folders="ctrl.folders"

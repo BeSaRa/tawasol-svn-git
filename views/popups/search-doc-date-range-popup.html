@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.select_date_range}}">
         <popup-toolbar-directive header-text="{{ctrl.popupLabel}}"
                                  close-callback="ctrl.closeSearchDocDatePopup"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="searchDocDateForm" autocomplete="off">
                 <div layout="row">

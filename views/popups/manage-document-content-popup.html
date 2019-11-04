@@ -1,4 +1,4 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.correspondence.contentSize ? lang.create_content : lang.edit_content}}">
         <popup-toolbar-directive ng-if="!ctrl.correspondence.contentSize"
@@ -7,7 +7,7 @@
         <popup-toolbar-directive ng-if="ctrl.correspondence.contentSize"
                                  header-text="{{lang.edit_content}} : {{ctrl.documentSubject}}"
         ></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <manage-content-directive
                     from-dialog="ctrl.fromDialog"

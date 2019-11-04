@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.linked_entities}}">
         <popup-toolbar-directive header-text="{{lang.linked_entity}}"
                                  close-callback="ctrl.closeDocumentEntities"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <manage-entities-search-directive
                     document-class="ctrl.documentClass"

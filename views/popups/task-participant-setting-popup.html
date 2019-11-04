@@ -1,6 +1,8 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.tasks}}">
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.tasks}}">
     <popup-toolbar-directive header-text="{{lang.edit_task_participant}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form autocomplete="off" name="participant_form">
                 <div layout="column">

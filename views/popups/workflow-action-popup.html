@@ -1,11 +1,11 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-tabs-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_workflow_action: ctrl.model.getNames()}}">
     <popup-toolbar-directive ng-if="!ctrl.editMode"
                              header-text="{{lang.add_new_workflow_action}}"></popup-toolbar-directive>
     <popup-toolbar-directive ng-if="ctrl.editMode"
                              header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div>
             <form name="workflowActionForm" autocomplete="off">
                 <md-tabs md-dynamic-height md-selected="ctrl.tabIndex">

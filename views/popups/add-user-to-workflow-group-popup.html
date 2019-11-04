@@ -1,10 +1,10 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.group_members}}">
     <popup-toolbar-directive ng-if="!ctrl.model.id"
                              header-text="{{lang.group_members}}"
     ></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="addToWorkflowGroupForm" autocomplete="off">
                 <!-- Search Form -->

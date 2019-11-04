@@ -1,11 +1,11 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_property_configuration : ctrl.model.getNames()}}">
         <popup-toolbar-directive ng-if="!ctrl.editMode"
                                  header-text="{{lang.add_new_property_configuration}}"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.editMode"
                                  header-text="{{lang.edit_property_configuration}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="property_configuration_form" autocomplete="off">
                 <div layout="column">

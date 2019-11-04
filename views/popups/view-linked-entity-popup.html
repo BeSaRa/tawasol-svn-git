@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="view-tracking-sheet-dialog"
            aria-label="{{lang[ctrl.linkedEntity.getTranslatedName()]}}">
         <popup-toolbar-directive header-text="{{ctrl.linkedEntity.getTranslatedName()}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="linkedEntityForm" autocomplete="off" layout="column">
                 <div ng-repeat="fields in ctrl.currentFields track by $index" layout="row">

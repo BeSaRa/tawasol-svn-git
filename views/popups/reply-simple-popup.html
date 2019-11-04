@@ -1,9 +1,9 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            aria-label="{{ctrl.dialogTitle}}">
         <popup-toolbar-directive header-text="{{ctrl.dialogTitle}} - {{ctrl.record.getTranslatedName()}}"
                                  close-callback="ctrl.closeLaunchPopup"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="distWorkflowItem_form" layout="column">
                 <div layout="row">

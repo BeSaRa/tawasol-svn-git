@@ -1,10 +1,10 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{ctrl.title}}">
     <popup-toolbar-directive
             header-text="{{ctrl.title}}"
             close-callback="ctrl.closeItemSelectorPopup"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <md-card flex>
                 <md-table-container>

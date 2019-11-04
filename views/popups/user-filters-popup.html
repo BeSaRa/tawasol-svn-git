@@ -1,10 +1,10 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-tabs-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}">
         <popup-toolbar-directive ng-if="!ctrl.editMode"
                                  header-text="{{ lang.create_filter }}"></popup-toolbar-directive>
         <popup-toolbar-directive ng-if="ctrl.editMode"
                                  header-text="{{ ctrl.model.getNames() }}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div>
             <form name="userFilter" autocomplete="off">
                 <md-tabs md-dynamic-height>

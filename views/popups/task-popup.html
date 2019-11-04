@@ -1,8 +1,10 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.tasks}}">
+<md-dialog class="dialog-extend cms-tabs-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.tasks}}">
     <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_task}}"></popup-toolbar-directive>
     <popup-toolbar-directive ng-if="ctrl.editMode"
                              header-text="{{lang.edit_task}} : {{ctrl.model.taskTitle}}"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div>
             <form autocomplete="off" name="task_form">
                 <md-tabs md-dynamic-height>

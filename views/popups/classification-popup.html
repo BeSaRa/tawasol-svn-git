@@ -1,11 +1,11 @@
-<md-dialog class="dialog-extend"
+<md-dialog class="dialog-extend cms-tabs-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_classification : ctrl.model.getNames()}}">
     <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_classification}}"
                              close-callback="ctrl.closeClassificationDialog"></popup-toolbar-directive>
     <popup-toolbar-directive ng-if="ctrl.editMode" header-text="{{ctrl.model.getNames()}}"
                              close-callback="ctrl.closeClassificationDialog"></popup-toolbar-directive>
-    <md-dialog-content scroll-directive>
+    <md-dialog-content scroll-directive flex>
         <div>
             <form name="classificationForm">
                 <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
