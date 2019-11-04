@@ -88,33 +88,6 @@ module.exports = function (app) {
                 }
             })
             // User Inbox
-            .getPageNameOverride('proxyMail', 'draftOutgoing', {
-                disableProperties: function (model) {
-                    var info = model.getInfo();
-                    var hasPermission = false;
-                    if (info.documentClass === "internal") {
-                        //If approved internal electronic, don't allow to edit
-                        if (info.docStatus >= 24 && !info.isPaper)
-                            hasPermission = false;
-                        else
-                            hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-                    } else if (info.documentClass === "incoming")
-                        hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
-                    else if (info.documentClass === "outgoing") {
-                        //If approved outgoing electronic, don't allow to edit
-                        if (info.docStatus >= 24 && !info.isPaper)
-                            hasPermission = false;
-                        else
-                            hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
-                    }
-                    return !hasPermission;
-                },
-                disableSites: function (model) {
-                    var info = model.getInfo();
-                    var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
-                    return !(hasPermission && info.documentClass !== "internal");
-                }
-            })
             .getPageNameOverride('userInbox', 'draftOutgoing', {
                 disableProperties: function (model) {
                     var info = model.getInfo();
@@ -144,6 +117,33 @@ module.exports = function (app) {
                 disableAll: function (model) {
                     var info = model.getInfo();
                     return (info.docStatus >= 24 && !info.isPaper);
+                }
+            })
+            .getPageNameOverride('proxyMail', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = false;
+                    if (info.documentClass === "internal") {
+                        //If approved internal electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                    } else if (info.documentClass === "incoming")
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+                    else if (info.documentClass === "outgoing") {
+                        //If approved outgoing electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                    }
+                    return !hasPermission;
+                },
+                disableSites: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+                    return !(hasPermission && info.documentClass !== "internal");
                 }
             })
             .getPageNameOverride('followupEmployeeInbox', 'draftOutgoing', {
@@ -206,7 +206,14 @@ module.exports = function (app) {
                     return !(hasPermission && info.documentClass !== "internal");
                 }
             })
-            .getPageNameOverride('sentItem', 'draftOutgoing')
+            .getPageNameOverride('sentItem', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    return true;
+                },
+                disableSites: function (model) {
+                    return true;
+                }
+            })
             .getPageNameOverride('folder', 'draftOutgoing', {
                 disableProperties: function (model) {
                     var info = model.getInfo();
@@ -298,17 +305,6 @@ module.exports = function (app) {
                     return true;
                 }
             })
-            .getPageNameOverride('g2gPending', 'draftOutgoing', {
-                disableProperties: function (model) {
-                    return true;
-                },
-                disableSites: function (model) {
-                    return true;
-                },
-                disableAll: function (model) {
-                    return true;
-                }
-            })
             .getPageNameOverride('departmentReadyToExport', 'draftOutgoing', {
                 disableProperties: function (model) {
                     var info = model.getInfo();
@@ -331,6 +327,17 @@ module.exports = function (app) {
                 }
             })
             .getPageNameOverride('g2gReturned', 'draftOutgoing', {
+                disableAll: function (model) {
+                    return true;
+                }
+            })
+            .getPageNameOverride('g2gPending', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    return true;
+                },
+                disableSites: function (model) {
+                    return true;
+                },
                 disableAll: function (model) {
                     return true;
                 }

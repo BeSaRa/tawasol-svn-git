@@ -401,7 +401,7 @@ module.exports = function (app) {
          * @param userSentItem
          * @param $event
          */
-        self.downloadSelected = function(userSentItem,$event){
+        self.downloadSelected = function (userSentItem, $event) {
             downloadService.openSelectedDownloadDialog(userSentItem, $event);
         };
 
@@ -457,28 +457,10 @@ module.exports = function (app) {
 
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
-            /*var info = model.getInfo();
             var hasPermission = false;
-            if (info.documentClass === "internal") {
-                //If approved internal electronic, don't allow to edit
-                if (info.docStatus >= 24 && !info.isPaper)
-                    hasPermission = false;
-                else
-                    hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-            }
-            else if (info.documentClass === "incoming")
-                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
-            else if (info.documentClass === "outgoing") {
-                //If approved outgoing electronic, don't allow to edit
-                if (info.docStatus >= 24 && !info.isPaper)
-                    hasPermission = false;
-                else
-                    hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
-            }
-            if (checkForViewPopup)
+            if (checkForViewPopup) {
                 return !hasPermission;
-            return hasPermission;*/
-            return true;
+            }
         };
 
         /**
@@ -772,6 +754,7 @@ module.exports = function (app) {
                 text: 'grid_action_correspondence_sites',
                 callback: self.viewCorrespondenceSites,
                 class: "action-green",
+                showInView: false,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return info.documentClass !== "internal";
@@ -949,7 +932,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",
