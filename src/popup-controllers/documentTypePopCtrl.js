@@ -59,8 +59,8 @@ module.exports = function (app) {
                 .then(function () {
                     documentTypeService
                         .addDocumentType(self.documentType)
-                        .then(function () {
-                            dialog.hide(self.documentType);
+                        .then(function (result) {
+                            dialog.hide(result);
                         });
                 })
                 .catch(function () {

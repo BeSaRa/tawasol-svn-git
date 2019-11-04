@@ -151,8 +151,8 @@ module.exports = function (app) {
             return $http
                 .post(urlService.documentTypes,
                     generator.interceptSendInstance('DocumentType', documentType))
-                .then(function () {
-                    return documentType;
+                .then(function (result) {
+                    return generator.interceptReceivedInstance('DocumentType', generator.generateInstance(result.data.rs, DocumentType, self._sahredMethods));
                 });
         };
         /**
