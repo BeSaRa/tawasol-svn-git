@@ -16,7 +16,8 @@ module.exports = function (app) {
                                                  correspondenceService,
                                                  viewDeliveryReportService,
                                                  printService,
-                                                 gridService) {
+                                                 gridService,
+                                                 G2GMessagingHistory) {
         var self = this;
 
         self.controllerName = 'g2gSentItemsCtrl';
@@ -143,12 +144,15 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+            self.g2gItemCopy = angular.copy(g2gItem);
 
             return correspondenceService.viewCorrespondenceG2G(g2gItem, self.gridActions, 'G2GMessagingHistory', $event)
                 .then(function (result) {
+                    self.g2gItemCopy = null;
                     self.reloadG2gItems(self.grid.page);
                 })
                 .catch(function (error) {
+                    self.g2gItemCopy = null;
                     self.reloadG2gItems(self.grid.page);
                 })
         };
@@ -163,11 +167,14 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+            self.g2gItemCopy = angular.copy(g2gItem);
             g2gItem.viewDocument(self.gridActions, 'g2gSentItem', $event)
                 .then(function (result) {
+                    self.g2gItemCopy = null;
                     self.reloadG2gItems(self.grid.page);
                 })
                 .catch(function (error) {
+                    self.g2gItemCopy = null;
                     self.reloadG2gItems(self.grid.page);
                 })
         };
@@ -353,13 +360,15 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.recall,
                 class: "action-green",
-                //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
                 checkShow: function (action, model) {
-                    return configurationService.G2G_QATAR_SOURCE;
+                    if (!(model instanceof G2GMessagingHistory)) {
+                        model = angular.copy(self.g2gItemCopy);
+                    }
+                    return !model.isInternalG2G() && configurationService.G2G_QATAR_SOURCE;
                 }
             },
-            // Recall
+            // Recall and terminate
             {
                 type: 'action',
                 icon: 'reload-alert',
@@ -367,13 +376,12 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.recallAndTerminate,
                 class: "action-green",
-                //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
                 checkShow: function (action, model) {
                     return !configurationService.G2G_QATAR_SOURCE;
                 }
             },
-            // Recall
+            // Recall and forward
             {
                 type: 'action',
                 icon: 'call-missed',
@@ -381,7 +389,6 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.recallAndForward,
                 class: "action-green",
-                //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
                 checkShow: function (action, model) {
                     return !configurationService.G2G_QATAR_SOURCE;
