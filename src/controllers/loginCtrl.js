@@ -44,7 +44,6 @@ module.exports = function (app) {
         // concat public and global announcements
         self.announcements = self.publicAnnouncements.concat(self.globalAnnouncements);
 
-
         function checkIfLogoutBySession() {
             if ($cookies.get(authenticationService.logoutBySessionsKey)) {
                 $cookies.remove(authenticationService.logoutBySessionsKey);
@@ -228,6 +227,18 @@ module.exports = function (app) {
         self.isHelpAvailable = function () {
             var globalSettings = rootEntity.getGlobalSettings();
             return !!globalSettings.supportEmail || !!globalSettings.supportPhoneNo || !!globalSettings.loginAdditionalContent;
+        };
+
+
+        function _setLoginBackground() {
+            var loginElement = angular.element('#login-meta-wrapper'),
+                imagePath = '../../../assets/images/background-' + self.rootEntity.rootEntity.identifier + '.png';
+            loginElement.css({
+                backgroundImage: "url(" + imagePath + ")"
+            })
+
         }
+
+        $timeout(_setLoginBackground);
     });
 };
