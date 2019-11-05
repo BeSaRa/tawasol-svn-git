@@ -889,7 +889,8 @@ module.exports = function (app) {
                 versionHasContent: 'file-check',
                 internalG2g: 'recycle',
                 lockedWorkItem: 'lock',
-                transferredDocument: 'bank-transfer-in'
+                transferredDocument: 'bank-transfer-in',
+                broadcast: 'bullhorn'
             }
         };
     });

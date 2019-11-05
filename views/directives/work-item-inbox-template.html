@@ -112,30 +112,34 @@
                 ng-repeat="userInbox in searchResults = (ctrl.workItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                 <td md-cell class="indicator-td">
                     <!-- Doc class -->
-                    <grid-indicator-directive record-type="WorkItem"
-                                              record="userInbox"
-                                              indicator-type="docClass">
+                    <grid-indicator-directive record="userInbox"
+                                              indicator-type="docClass"
+                                              record-type="WorkItem">
                     </grid-indicator-directive>
                     <!-- Security Level -->
                     <grid-indicator-directive record="userInbox"
                                               indicator-type="securityLevel"
-                                              record-type="workItem"></grid-indicator-directive>
+                                              record-type="WorkItem"></grid-indicator-directive>
                     <!-- Electronic/Paper Document -->
                     <grid-indicator-directive record="userInbox"
                                               indicator-type="paperElectronic"
-                                              record-type="workItem"></grid-indicator-directive>
+                                              record-type="WorkItem"></grid-indicator-directive>
                     <!-- Is Reassigned -->
                     <grid-indicator-directive record="userInbox"
                                               indicator-type="isReassigned"
-                                              record-type="workItem"></grid-indicator-directive>
+                                              record-type="WorkItem"></grid-indicator-directive>
                     <!-- Linked Documents -->
                     <grid-indicator-directive record="userInbox"
                                               indicator-type="hasLinkedDocuments"
-                                              record-type="workItem"></grid-indicator-directive>
+                                              record-type="WorkItem"></grid-indicator-directive>
                     <!-- Follow up Status -->
                     <grid-indicator-directive record="userInbox"
                                               indicator-type="followupStatus"
-                                              record-type="workItem"></grid-indicator-directive>
+                                              record-type="WorkItem"></grid-indicator-directive>
+                    <!-- Broadcast -->
+                    <!--<grid-indicator-directive record="userInbox"
+                                              indicator-type="broadcast"
+                                              record-type="WorkItem"></grid-indicator-directive>-->
                 </td>
                 <td md-cell>
                     <star-unstar-directive record="userInbox"

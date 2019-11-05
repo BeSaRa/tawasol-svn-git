@@ -251,6 +251,10 @@ module.exports = function (app) {
                 return indicator.getIsTransferredDocumentIndicator(this.isTransferredDocument());
             };
 
+            WorkItem.prototype.getBroadcastIndicator = function () {
+                return indicator.getIsBroadcastedIndicator(this.isBroadcasted());
+            };
+
             /**
              * @description Checks if the document is transferred
              * if no incomingVSID, then its directly sent from launch(transferred), otherwise its exported to organization

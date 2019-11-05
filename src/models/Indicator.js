@@ -447,6 +447,24 @@ module.exports = function (app) {
                     }) : false;
             };
 
+            /**
+             * @description Returns the isBroadcasted record indicator and description
+             * @returns {Indicator}
+             * @param isBroadcasted
+             */
+            Indicator.prototype.getIsBroadcastedIndicator = function (isBroadcasted) {
+                return isBroadcasted
+                    ? new Indicator({
+                        class: 'indicator',
+                        text: 'broadcasted',
+                        icon: self.getIndicatorIcons('broadcast'),
+                        tooltip: 'broadcasted',
+                        legendText: function () {
+                            return langService.get('broadcasted');
+                        }
+                    }) : false;
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

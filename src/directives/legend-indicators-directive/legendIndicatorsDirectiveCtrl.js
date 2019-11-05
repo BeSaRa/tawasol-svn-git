@@ -81,6 +81,9 @@ module.exports = function (app) {
                     case 'transferredDocument':
                         self.legends.push(indicator.getIsTransferredDocumentIndicator(true));
                         break;
+                    case 'broadcast':
+                        self.legends.push(indicator.getIsBroadcastedIndicator(true));
+                        break;
                 }
             });
         };

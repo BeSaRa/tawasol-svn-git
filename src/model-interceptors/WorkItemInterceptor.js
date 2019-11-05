@@ -64,6 +64,7 @@ module.exports = function (app) {
             delete model.originalCopyIndicator;
             delete model.isLockedWorkItemIndicator;
             delete model.isTransferredDocumentIndicator;
+            delete model.isBroadcastedIndicator;
             delete model.toOU;
             delete model.fromOU;
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
@@ -118,6 +119,7 @@ module.exports = function (app) {
             model.fromOuInfo = new Information(model.fromOuInfo);
             model.isLockedWorkItemIndicator = model.getLockedWorkItemIndicator();
             model.isTransferredDocumentIndicator = model.getIsTransferredDocumentIndicator();
+            model.isBroadcastedIndicator = model.getBroadcastIndicator();
             model.setMainSiteSubSiteString();
 
             return model;

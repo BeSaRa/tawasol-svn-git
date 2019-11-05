@@ -175,3 +175,12 @@
              tooltip="{{ctrl.langService.get(ctrl.record.isTransferredDocumentIndicator.tooltip)}}"
     ></md-icon>
 </span>
+<!-- Broadcast -->
+<span ng-if="ctrl.indicatorType === 'broadcast'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.isBroadcastedIndicator}">
+    <md-icon ng-if="ctrl.record.isBroadcastedIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.isBroadcastedIndicator.class}} {{ctrl.iconClass}} cursor-pointer"
+             md-svg-icon="{{ctrl.record.isBroadcastedIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.isBroadcastedIndicator.tooltip)}}"
+    ></md-icon>
+</span>

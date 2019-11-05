@@ -433,6 +433,10 @@ module.exports = function (app) {
                 return indicator.getTagsIndicator(tagsCount);
             };
 
+            Correspondence.prototype.getBroadcastIndicator = function () {
+                return indicator.getIsBroadcastedIndicator(this.isBroadcasted());
+            };
+
             Correspondence.prototype.getTagsCount = function ($event) {
                 return this.tags && this.tags.length ? this.tags.length : 0;
             };
