@@ -28,37 +28,6 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Contains the icons for the indicators
-             * @type {{}}
-             */
-            var icons = {};
-            icons[lookupService.securityLevel] = 'security';
-            icons[lookupService.priorityLevel + '_prior0'] = '';//(not showing any icon for normal priority) //arrow-down // Normal Priority
-            icons[lookupService.priorityLevel + '_prior1'] = 'arrow-up'; // Urgent Priority
-            icons[lookupService.priorityLevel + '_prior2'] = 'exclamation';// Top Urgent Priority
-            icons['followupStatus0'] = 'reply';
-            icons['attachment'] = 'paperclip';
-            icons['linkedDocs'] = 'link-variant';
-            icons['reassigned'] = 'transfer';
-            icons['email_opened'] = 'email-open';
-            icons['email_close'] = 'email';
-            icons['outgoing'] = 'arrow-up-bold-box';
-            icons['incoming'] = 'arrow-down-bold-box';
-            icons['internal'] = 'recycle';
-            icons['paper_document'] = 'file-document';
-            icons['electronic_document'] = 'tablet';//cellphone-dock';
-            icons['export_via_central_archive'] = 'archive';
-            icons['linked_exported_doc'] = 'link';
-            icons['due_date'] = 'calendar';
-            icons['copy'] = 'content-copy';
-            icons['locked_g2g'] = 'lock';
-            icons['version_has_content'] = 'file-check';
-            icons['internal_g2g'] = 'recycle';
-            icons['indicator_locked_workitem'] = 'lock';
-            icons['indicator_transferred_document'] = 'bank-transfer-in';
-
-
-            /**
              * @description Returns the icons to be shown as indicators
              * @param type
              * @returns {*}

@@ -2,7 +2,8 @@
            ng-attr-aria-label="{{lang.view_document}}" layout="column">
 
     <div layout="row" layout-align="start center">
-        <md-button ng-if="ctrl.correspondence" ng-click="ctrl.toggleCorrespondenceDetails()"
+        <md-button ng-if="ctrl.correspondence && ctrl.editContentFrom !== 'editContentFromGrid'"
+                   ng-click="ctrl.toggleCorrespondenceDetails()"
                    class="md-icon-button">
             <md-icon md-svg-icon="menu"></md-icon>
         </md-button>

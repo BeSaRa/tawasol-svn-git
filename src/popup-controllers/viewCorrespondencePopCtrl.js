@@ -34,6 +34,7 @@ module.exports = function (app) {
 
         self.editMode = false;
         self.info = null;
+        self.editContentFrom = null;
 
         self.excludedManagePopupsFromGrids = [
             'departmentIncoming',
@@ -123,6 +124,10 @@ module.exports = function (app) {
                         ctrl.cancelCallback = function () {
                             self.editMode = false;
                             dialog.cancel();
+                            if (self.editContentFrom === 'editContentFromGrid') {
+                                dialog.cancel();
+                                self.editContentFrom = null;
+                            }
                         }
                     },
                     controllerAs: 'ctrl',
@@ -158,7 +163,11 @@ module.exports = function (app) {
             // _checkIfFromEditInDesktop(self.correspondence);
             if (self.correspondence) {
                 self.info = self.correspondence.getInfo();
-                self.correspondence.openInEditMode ? self.toggleCorrespondenceEditMode() : null;
+                // self.correspondence.openInEditMode ? self.toggleCorrespondenceEditMode() : null;
+                if (self.correspondence.openInEditMode) {
+                    self.editContentFrom = 'editContentFromGrid';
+                    self.toggleCorrespondenceEditMode();
+                }
             }
         }, 100);
 
