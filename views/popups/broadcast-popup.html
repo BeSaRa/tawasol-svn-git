@@ -12,10 +12,20 @@
                             <md-input-container flex>
                                 <label for="selectedAction">{{lang.dwf_label_selectaction}}</label>
                                 <md-select name="selectedAction" id="selectedAction" required
-                                           ng-model="ctrl.selectedAction">
-                                    <md-option ng-value="action"
-                                               ng-repeat="action in ctrl.actions track by $index">
-                                        {{action.getTranslatedName()}}
+                                           ng-model="ctrl.selectedAction"
+                                           md-on-close="ctrl.clearSearchText('action')"
+                                           data-md-container-class="select-header-container">
+                                    <md-select-header class="select-header">
+                                        <input ng-model="ctrl.actionSearchText"
+                                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                               placeholder="{{lang.search}}"
+                                               class="select-header-input">
+                                    </md-select-header>
+                                    <md-option ng-repeat="action in ctrl.actions | translatedNameFilter: ctrl.actionSearchText track by $index"
+                                               ng-value="action">
+                                        <span
+                                                md-highlight-text="ctrl.actionSearchText"
+                                                md-highlight-flags="i">{{action.getTranslatedName()}}</span>
                                     </md-option>
                                 </md-select>
                                 <div ng-messages="broadcast_form.selectedAction.$error">
