@@ -20,7 +20,8 @@ module.exports = function (app) {
                                                 viewDeliveryReportService,
                                                 gridService,
                                                 _,
-                                                managerService) {
+                                                managerService,
+                                                G2GMessagingHistory) {
         var self = this;
 
         self.controllerName = 'g2gReturnedCtrl';
@@ -125,12 +126,15 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+            self.g2gItemCopy = angular.copy(g2gItem);
 
             return correspondenceService.viewCorrespondenceG2G(g2gItem, self.gridActions, 'G2GMessagingHistory', $event)
                 .then(function (result) {
+                    self.g2gItemCopy = null;
                     self.reloadG2gItems(self.grid.page);
                 })
                 .catch(function (error) {
+                    self.g2gItemCopy = null;
                     self.reloadG2gItems(self.grid.page);
                 })
         };
@@ -145,11 +149,14 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+            self.g2gItemCopy = angular.copy(g2gItem);
             g2gItem.viewDocument(self.gridActions, 'g2gReturned', $event)
                 .then(function (result) {
+                    self.g2gItemCopy = null;
                     self.reloadG2gItems(self.grid.page);
                 })
                 .catch(function (error) {
+                    self.g2gItemCopy = null;
                     self.reloadG2gItems(self.grid.page);
                 })
         };
@@ -490,7 +497,10 @@ module.exports = function (app) {
                 callback: self.g2gEditAfterReturn,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return configurationService.G2G_QATAR_SOURCE;
+                    if (!(model instanceof G2GMessagingHistory)) {
+                        model = angular.copy(self.g2gItemCopy);
+                    }
+                    return !model.isInternalG2G() && configurationService.G2G_QATAR_SOURCE;
                 }
             },
             // Manage
