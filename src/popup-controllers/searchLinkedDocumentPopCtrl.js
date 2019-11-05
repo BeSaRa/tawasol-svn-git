@@ -63,6 +63,7 @@ module.exports = function (app) {
         self.mainClassificationSearchText = '';
         self.subClassificationSearchText = '';
         self.documentFileSearchText = '';
+        self.linkedDocOuSearchText = '';
 
         /**
          * @description get available documentFiles for the document by security level.

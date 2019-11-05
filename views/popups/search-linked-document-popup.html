@@ -31,7 +31,7 @@
                                     </md-select>
                                 </md-input-container>
                                 <md-input-container flex
-                                        ng-if="ctrl.searchType.getStringKeyValue().toLowerCase() === 'incoming'">
+                                                    ng-if="ctrl.searchType.getStringKeyValue().toLowerCase() === 'incoming'">
                                     <label for="refDocNumber">{{lang.document_number}}</label>
                                     <input type="text" id="refDocNumber" name="refDocNumber"
                                            ng-model="ctrl.correspondence.refDocNumber">
@@ -42,10 +42,22 @@
                                     <label for="registryOU">{{lang.linked_document_organization}}</label>
                                     <md-select ng-disabled="ctrl.disableSelectedOrganization" id="registryOU"
                                                name="registryOU"
-                                               ng-model="ctrl.correspondence.registryOU">
-                                        <md-option ng-value="organization.id"
-                                                   ng-repeat="organization in ctrl.organizations">
-                                            {{organization.getTranslatedName()}}
+                                               ng-model="ctrl.correspondence.registryOU"
+                                               md-on-close="ctrl.clearSearchText('linkedDocOu')"
+                                               data-md-container-class="select-header-container">
+                                        <md-select-header class="select-header">
+                                            <input ng-model="ctrl.linkedDocOuSearchText"
+                                                   ng-keydown="ctrl.handleSearchKeyDown($event, 'registryOU')"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </md-select-header>
+                                        <md-option ng-value="null">{{lang.none}}</md-option>
+                                        <md-option
+                                                ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.linkedDocOuSearchText"
+                                                ng-value="organization.id" md-truncate>
+                                            <span
+                                                    md-highlight-text="ctrl.linkedDocOuSearchText"
+                                                    md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
