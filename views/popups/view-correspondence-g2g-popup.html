@@ -1,5 +1,200 @@
 <md-dialog id="correspondence-dialog" class="fullscreen" ng-class="{'fullscreen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.view_document}}" layout="column">
+    <div layout="row" layout-align="start center">
+        <md-button ng-if="ctrl.correspondence" ng-click="ctrl.toggleCorrespondenceDetails()"
+                   class="md-icon-button">
+            <md-icon md-svg-icon="menu"></md-icon>
+        </md-button>
+        <correspondence-view-action-directive ng-if="ctrl.actions.length" actions="ctrl.actions"
+                                              work-item="ctrl.workItem"
+                                              correspondence="ctrl.correspondence"
+                                              g2g-item-copy="ctrl.g2gItemCopy"></correspondence-view-action-directive>
+        <div flex layout-align="center center" layout="row">
+            <span flex md-truncate class="font-bold text-center">{{::ctrl.correspondence.getTranslatedName()}}</span>
+            <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
+                                  md-diameter="30"></md-progress-circular>
+        </div>
+        <md-button ng-click="ctrl.toggleFullScreen()" class="md-icon-button">
+            <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen'}}"></md-icon>
+        </md-button>
+        <md-button ng-if="!ctrl.correspondence" ng-click="ctrl.returnBackCorrespondenceInformation()"
+                   class="md-icon-button">
+            <md-icon md-svg-icon="close" class="red-text"></md-icon>
+        </md-button>
+        <md-button ng-if="ctrl.correspondence" ng-click="ctrl.closeCorrespondenceDialog()"
+                   class="md-icon-button">
+            <md-icon md-svg-icon="close" class="red-text"></md-icon>
+        </md-button>
+    </div>
+
+
+    <md-dialog-content layout="column" flex scroll-directive>
+        <div layout="row" layout-fill flex>
+            <md-sidenav ng-if="ctrl.detailsReady && ctrl.correspondence" id="correspondence-details"
+                        md-whiteframe="3"
+                        ng-class="{'md-sidenav-right':lang.current === 'ar'}"
+                        md-component-id="{{ctrl.sideNavId}}">
+                <div class="p20" scroll-directive>
+                    <accordion-directive label-collapse="true" validation="ctrl.validation">
+                        <accordion-item fail-when="ctrl.document_properties.$invalid"
+                                        pass-when="ctrl.document_properties.$valid">
+                            <accordion-title>
+                                <md-icon md-svg-icon="file-document-box"></md-icon>
+                                <span> &nbsp;{{lang.document_properties}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <manage-properties-directive
+                                        source-model="ctrl.model"
+                                        source-form="ctrl.document_properties"
+                                        document="ctrl.correspondence"
+                                        disable-properties="ctrl.disableProperties">
+                                </manage-properties-directive>
+                            </accordion-content>
+                        </accordion-item>
+                        <accordion-item ng-if="ctrl.hasCorrespondenceSite()"
+                                        fail-when="!ctrl.correspondence.sitesInfoTo.length"
+                                        pass-when="!!ctrl.correspondence.sitesInfoTo.length">
+                            <accordion-title>
+                                <md-icon md-svg-icon="arrange-send-backward"></md-icon>
+                                <span>{{lang.manage_correspondence_sites}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div>
+                                    <manage-correspondence-site-g2g-directive
+                                            vs-id="ctrl.correspondence.vsId"
+                                            site="ctrl.correspondence.site"
+                                            document-class="ctrl.correspondence.docClassName"></manage-correspondence-site-g2g-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>
+                        <!--<accordion-item pass-when="ctrl.documentInformation || ctrl.correspondence.contentFile">
+                            <accordion-title>
+                                <md-icon md-svg-icon="format-align-justify"></md-icon>
+                                <span>{{lang.outgoing_create_content}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div layout="row">
+                                    <manage-content-directive
+                                            display-prepare="!ctrl.correspondence.addMethod"
+                                            document-information="ctrl.documentInformation"
+                                            vs-id="ctrl.correspondence.vsId"
+                                            document="ctrl.correspondence"
+                                            signatures-count="ctrl.correspondence.signaturesCount"
+                                            templates="ctrl.templates"></manage-content-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>-->
+                        <accordion-item pass-when="!!ctrl.correspondence.tags.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">
+                            <accordion-title>
+                                <md-icon md-svg-icon="tag-multiple"></md-icon>
+                                <span>{{lang.outgoing_manage_tags}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div>
+                                    <manage-tags-directive from-dialog="false"
+                                                           tags="ctrl.correspondence.tags"
+                                                           disable-everything="ctrl.disableEverything">
+                                    </manage-tags-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>
+                        <accordion-item pass-when="!!ctrl.correspondence.linkedDocs.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
+                            <accordion-title>
+                                <md-icon md-svg-icon="note-multiple-outline"></md-icon>
+                                <span>{{lang.outgoing_manage_linked_document}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div>
+                                    <manage-linked-document-directive
+                                            linked-docs="ctrl.correspondence.linkedDocs"
+                                            vs-id="ctrl.correspondence.vsId"
+                                            document-class="ctrl.correspondence.docClassName"
+                                            disable-everything="ctrl.disableEverything">
+                                    </manage-linked-document-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>
+                        <accordion-item pass-when="!!ctrl.correspondence.attachments.length">
+                            <accordion-title>
+                                <md-icon md-svg-icon="attachment"></md-icon>
+                                <span>{{lang.outgoing_manage_attachments}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div layout="row">
+                                    <manage-attachment-directive
+                                            document="ctrl.correspondence"
+                                            attachments="ctrl.correspondence.attachments"
+                                            linked-exported-attachments="self.correspondence.linkedExportedDocsList"
+                                            vs-id="ctrl.correspondence.vsId"
+                                            document-class="ctrl.correspondence.docClassName"
+                                            disable-everything="ctrl.disableEverything" flex>
+                                    </manage-attachment-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>
+                        <accordion-item pass-when="!!ctrl.correspondence.documentComments.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS')">
+                            <accordion-title>
+                                <md-icon md-svg-icon="comment"></md-icon>
+                                <span>{{lang.outgoing_manage_comments}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div layout="row">
+                                    <manage-comments-directive
+                                            vs-id="ctrl.correspondence.vsId"
+                                            document-comments="ctrl.correspondence.documentComments"
+                                            show-comment-form="ctrl.showDocumentComment"
+                                            disable-everything="ctrl.disableEverything"
+                                            flex>
+                                    </manage-comments-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>
+                        <accordion-item pass-when="!!ctrl.correspondence.linkedEntities.length">
+                            <accordion-title>
+                                <md-icon md-svg-icon="vector-triangle"></md-icon>
+                                <span>{{lang.outgoing_linked_entities}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div>
+                                    <manage-entities-directive
+                                            vs-id="ctrl.correspondence.vsId"
+                                            linked-entities="ctrl.correspondence.linkedEntities"
+                                            document-class="ctrl.correspondence.docClassName"
+                                            disable-everything="ctrl.disableEverything">
+                                    </manage-entities-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>
+                    </accordion-directive>
+                </div>
+            </md-sidenav>
+            <div id="iframe-parent" layout="column" class="relative" flex>
+                <iframe ng-if="ctrl.viewURL" id="iframe-main-document"
+                        class="iframe-main-document"
+                        ng-src="{{ctrl.viewURL}}" flex
+                        frameborder="0"></iframe>
+            </div>
+        </div>
+    </md-dialog-content>
+
+
+    <md-dialog-actions class="cms-dialog-actions">
+        <div ng-if="ctrl.correspondence">
+            <md-button class="md-raised red-text" ng-click="ctrl.closeCorrespondenceDialog()">{{lang.close}}</md-button>
+        </div>
+        <div ng-if="!ctrl.correspondence">
+            <md-button class="md-raised red-text" ng-click="ctrl.returnBackCorrespondenceInformation()">{{lang.close}}
+            </md-button>
+        </div>
+    </md-dialog-actions>
+</md-dialog>
+
+
+<!--<md-dialog id="correspondence-dialog" class="fullscreen" ng-class="{'fullscreen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.view_document}}" layout="column">
     <div flex layout="row" layout-align="start center">
         <md-button ng-if="ctrl.correspondence" ng-click="ctrl.toggleCorrespondenceDetails()"
                    class="md-icon-button">
@@ -64,7 +259,7 @@
                             </div>
                         </accordion-content>
                     </accordion-item>
-                    <!--<accordion-item pass-when="ctrl.documentInformation || ctrl.correspondence.contentFile">
+                    &lt;!&ndash;<accordion-item pass-when="ctrl.documentInformation || ctrl.correspondence.contentFile">
                         <accordion-title>
                             <md-icon md-svg-icon="format-align-justify"></md-icon>
                             <span>{{lang.outgoing_create_content}}</span>
@@ -80,7 +275,7 @@
                                         templates="ctrl.templates"></manage-content-directive>
                             </div>
                         </accordion-content>
-                    </accordion-item>-->
+                    </accordion-item>&ndash;&gt;
                     <accordion-item pass-when="!!ctrl.correspondence.tags.length"
                                     ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">
                         <accordion-title>
@@ -221,4 +416,4 @@
             </md-button>
         </div>
     </md-dialog-actions>
-</md-dialog>
+</md-dialog>-->
