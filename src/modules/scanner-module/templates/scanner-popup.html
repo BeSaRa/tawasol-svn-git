@@ -90,7 +90,7 @@
                                 </md-button>
                             </div>
                             <div>
-                                <label tooltip="{{lang.import_image}}" md-ink-ripple id="scanner-import-label"
+                                <label md-ink-ripple id="scanner-import-label"
                                        class="md-button"
                                        for="upload-file-scanner">
                                     <md-button class="md-primary md-raised flex"
@@ -99,6 +99,7 @@
                                     </md-button>
                                     <input id="upload-file-scanner" class="hide-import-file"
                                            type="file"
+                                           accept=".png,.jpeg,jpg,.tiff,tif,image/pjpeg,image/jpeg,image/jpeg,image/tiff,image/x-tiff,image/png"
                                            reset-by-callback="true"
                                            catch-upload-file-directive="ctrl.onImportFileClick"
                                            reset-after-change="true"/>
