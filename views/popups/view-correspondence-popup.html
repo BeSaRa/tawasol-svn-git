@@ -185,48 +185,6 @@
                     </accordion-directive>
                 </div>
             </md-sidenav>
-            <md-sidenav md-is-locked-open="!ctrl.fullScreen" ng-if="false">
-                <div class="p20" layout="column" scroll-directive>
-                    <ul id="document-properties">
-                        <li class="document-properties">
-                            <ul ng-if="!!ctrl.workItem" class="work-item-properties">
-                                <li>
-                                    <span class="property-key">{{lang.previous_action}}</span>
-                                    <span class="property-value">{{ctrl.workItem.action.getTranslatedName()}}</span>
-                                </li>
-                                <li>
-                                    <span class="property-key">{{lang.previous_comment}}</span>
-                                    <span class="property-value cms-comment">{{ctrl.workItem.generalStepElm.comments}}</span>
-                                </li>
-                                <li>
-                                    <span class="property-key">{{lang.work_item_sender}}</span>
-                                    <span class="property-value">{{ctrl.workItem.senderInfo.getTranslatedName()}}</span>
-                                </li>
-                                <li>
-                                    <span class="property-key">{{lang.action_date}}</span>
-                                    <span class="property-value">{{ctrl.workItem.getReceivedDate()}}</span>
-                                </li>
-                                <li>
-                                    <span class="property-key">{{lang.time}}</span>
-                                    <span class="property-value">{{ctrl.workItem.getReceivedTime()}}</span>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="document-properties">
-                            <ul class="correspondence-properties">
-                                <li>
-                                    <span class="property-key">{{lang.document_number}}</span>
-                                    <span class="property-value">{{ctrl.workItem.getReceivedTime()}}</span>
-                                </li>
-                                <li>
-                                    <span class="property-key">{{lang.document_number}}</span>
-                                    <span class="property-value">{{ctrl.workItem.getReceivedTime()}}</span>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </md-sidenav>
             <div id="iframe-parent" layout="column" class="relative" flex>
                 <iframe id="iframe-main-document" ng-if="ctrl.correspondence && !ctrl.editMode && ctrl.viewURL"
                         ng-src="{{ctrl.viewURL}}" flex

@@ -151,7 +151,7 @@ module.exports = function (app) {
             if (typeof permissionName === 'function') {
                 permissionName = permissionName(self.info.isPaper);
             }
-            return self.employeeService.hasPermissionTo(permissionName);
+            return self.employeeService.hasPermissionTo(permissionName) && self.pageName !== 'g2gReturned';
         };
 
         $timeout(function () {
