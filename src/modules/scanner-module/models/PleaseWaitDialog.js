@@ -13,9 +13,11 @@ module.exports = function (app) {
          */
         self.show = function (showValue, scanning, buttonCallback, CCToolkit, message) {
             if (showValue) {
-                self.waiting = true;
                 dialog
                     .showDialog({
+                        onComplete: function () {
+                            self.waiting = true;
+                        },
                         template: require('./../templates/please-wait.html'),
                         locals: {
                             scanning: scanning,
@@ -34,9 +36,12 @@ module.exports = function (app) {
                     });
             } else {
                 if (self.waiting) {
+                    self.waiting = false;
                     $timeout(function () {
-                        dialog.hide();
-                        self.waiting = false;
+                        var element = angular.element('#PleaseWaitDialog');
+                        if (element.length) {
+                            dialog.hide();
+                        }
                     }, 200);
                 }
             }

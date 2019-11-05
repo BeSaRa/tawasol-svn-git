@@ -13,17 +13,6 @@
                     </md-button>
                 </div>
                 <div>
-                    <label tooltip="{{lang.import_image}}" md-ink-ripple id="scanner-import-label"
-                           class="md-button md-icon-button"
-                           for="upload-file-scanner">
-                        <md-icon md-svg-icon="download"></md-icon>
-                        <input id="upload-file-scanner" class="hide-import-file"
-                               type="file"
-                               reset-by-callback="true"
-                               catch-upload-file-directive="ctrl.onImportFileClick" reset-after-change="true"/>
-                    </label>
-                </div>
-                <div>
                     <md-button ng-disabled="!ctrl.scannerLoaded" tooltip="{{lang.advanced_scanner_settings}}"
                                class="md-icon-button"
                                ng-click="ctrl.onShowScannerUIClick()">
@@ -99,6 +88,21 @@
                                            ng-click="ctrl.onScanClick()">
                                     {{lang.scan_pages}}
                                 </md-button>
+                            </div>
+                            <div>
+                                <label tooltip="{{lang.import_image}}" md-ink-ripple id="scanner-import-label"
+                                       class="md-button"
+                                       for="upload-file-scanner">
+                                    <md-button class="md-primary md-raised flex"
+                                               ng-disabled="!ctrl.scannerLoaded || ctrl.processInProgress">
+                                        {{lang.import_image}}
+                                    </md-button>
+                                    <input id="upload-file-scanner" class="hide-import-file"
+                                           type="file"
+                                           reset-by-callback="true"
+                                           catch-upload-file-directive="ctrl.onImportFileClick"
+                                           reset-after-change="true"/>
+                                </label>
                             </div>
                             <div ng-if="ctrl.cc.getDocument().pages.length">
                                 <span>{{lang.number_of_pages}} : {{ctrl.cc.getDocument().pages.length}}</span>

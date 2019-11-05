@@ -138,7 +138,7 @@ module.exports = function (app) {
                  * @private
                  */
                 function _generateAttachmentUrl(document) {
-                    var documentClass = (document.hasOwnProperty('docClassName') ? document.docClassName : document.documentClass).toLowerCase();
+                    var documentClass = (document.hasOwnProperty('docClassName') ? document.docClassName : (document.hasOwnProperty('documentClass') ? document.documentClass : document.getInfo().docClassName)).toLowerCase();
                     var vsId = document.hasOwnProperty('vsId') ? document.vsId : false;
                     var url = null;
                     if (vsId && documentClass) {
@@ -708,6 +708,20 @@ module.exports = function (app) {
                  */
                 self.getProvider = function () {
                     return provider;
+                };
+                /**
+                 * download any document content by VsId
+                 * @param vsId
+                 * @returns {*}
+                 */
+                self.downloadDocumentContent = function (vsId) {
+                    return $http
+                        .get(urlService.downloadDocumentContent.replace('{vsId}', vsId), {
+                            responseType: 'blob'
+                        })
+                        .then(function (result) {
+                            return result.data;
+                        });
                 };
 
                 _prepareExtensionGroups();

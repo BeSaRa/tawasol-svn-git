@@ -35,6 +35,7 @@ module.exports = function (app) {
             var _importing = null;
             var _tempPages = [];
             var _options = null;
+            var _currentPosition = false;
             //initialize public members
             this.getServiceUrl = function () {
                 return _serviceURL;
@@ -239,6 +240,8 @@ module.exports = function (app) {
             var _onScanStarted = function (data, importing) {
                 //set scan job
                 _tempPages = [];
+                _currentPosition = false;
+
                 _setScanJob.call(this, data);
                 if (_options.jobType === 'new') {
                     _document = new Document(_serviceURL, _sessionID, _scanJob.ScanJobID, importing);
@@ -278,8 +281,23 @@ module.exports = function (app) {
 
                             if (_options.jobType === 'new' || (_options.jobType === 'append' && _options.addType === 'last')) {
                                 _document.add(page);
-                            } else {
-                                _tempPages.push(page);
+                            } else if (_options.jobType === 'append' && _options.addType === 'first') {
+                                if (_currentPosition === false) {
+                                    _document.pages.unshift(page);
+                                    _currentPosition = 0;
+                                } else {
+                                    _currentPosition += 1;
+                                    _document.pages.splice(_currentPosition, 0, page);
+                                }
+                            } else if (_options.jobType === 'append' && _options.addType === 'location') {
+                                if (_currentPosition === false) {
+                                    _currentPosition = _options.pageNumber;
+                                    _document.pages.splice(_currentPosition + (_options.location === 'before' ? 0 : 1), 0, page);
+                                    _currentPosition = _document.pages.indexOf(page);
+                                } else {
+                                    _currentPosition += 1;
+                                    _document.pages.splice(_currentPosition, 0, page);
+                                }
                             }
                             _pageScannedCallback(data, page);
                             _scanJob.NumberOfReceivedImages++;
@@ -293,6 +311,7 @@ module.exports = function (app) {
                         _pollScanner.call(self);
                     }, 1000);
                 } else {
+                    _currentPosition = false;
                     _scanFinishedCallback(data, _document);
                 }
             };

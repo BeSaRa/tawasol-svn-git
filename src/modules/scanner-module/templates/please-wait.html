@@ -1,4 +1,4 @@
-<md-dialog>
+<md-dialog id="PleaseWaitDialog">
     <div class="p20" layout="column">
         <span>{{lang.scanning_please_wait}}</span>
         <br>
@@ -14,9 +14,5 @@
         <md-button class="md-raised" ng-if="ctrl.scanning && ctrl.buttonCallback " ng-click="ctrl.buttonCallback()">
             {{lang.cancel_scan}}
         </md-button>
-        <!--<br/>-->
-        <!--<md-button ng-if="!ctrl.scanning && !ctrl.buttonCallback " ng-click="ctrl.cancelOperation()">-->
-        <!--{{lang.cancel_operation}}-->
-        <!--</md-button>-->
     </div>
 </md-dialog>

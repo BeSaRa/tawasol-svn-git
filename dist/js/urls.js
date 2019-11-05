@@ -375,6 +375,8 @@
                 .addToAllWithBase('privateRegistryOU', 'cms-entity/admin/ou-private-registry')
                 // download selected book options
                 .addToAllWithBase('downloadSelected','cms-entity/correspondence/common/merge-book')
+                // downlaod document content
+                .addToAllWithBase('downloadDocumentContent', 'cms-entity/correspondence/common/download-content/{vsId}')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    // require('./configuration/scannerConfiguration')(app);
+    require('./configuration/scannerConfiguration')(app);
     require('./models/FileType')(app);
     require('./models/ImageCompression')(app);
     require('./models/IPSettings')(app);

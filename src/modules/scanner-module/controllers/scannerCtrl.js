@@ -6,6 +6,7 @@ module.exports = function (app) {
                                             scannerService,
                                             toast,
                                             cmsTemplate,
+                                            fileToEdit,
                                             attachmentService,
                                             // IPSettings,
                                             // getFilterProperty,
@@ -37,6 +38,9 @@ module.exports = function (app) {
         self.currentPage = null;
 
         self.fullscreen = false;
+
+        self.editMode = !!fileToEdit;
+        self.fileToEdit = fileToEdit;
 
         self.listColorFormat = [];
         self.listScanMode = [];
@@ -640,19 +644,19 @@ module.exports = function (app) {
             }
             uploadComplete(data.ScanJobID, document);
 
-            var pages = self.cc.getTempPages();
-
-            pages = pages.reverse();
-
-            if (self.jobOptions.jobType === 'append' && self.jobOptions.addType === 'first') {
-                _.map(pages, function (page) {
-                    document.pages.unshift(page);
-                });
-            } else if (self.jobOptions.jobType === 'append' && self.jobOptions.addType === 'location') {
-                _.map(pages, function (page, index) {
-                    document.pages.splice(parseInt(self.jobOptions.pageNumber, 10) + (self.jobOptions.location === 'before' ? 0 : 1), 0, pages[index])
-                });
-            }
+            // var pages = self.cc.getTempPages();
+            //
+            // pages = pages.reverse();
+            //
+            // if (self.jobOptions.jobType === 'append' && self.jobOptions.addType === 'first') {
+            //     _.map(pages, function (page) {
+            //         document.pages.unshift(page);
+            //     });
+            // } else if (self.jobOptions.jobType === 'append' && self.jobOptions.addType === 'location') {
+            //     _.map(pages, function (page, index) {
+            //         document.pages.splice(parseInt(self.jobOptions.pageNumber, 10) + (self.jobOptions.location === 'before' ? 0 : 1), 0, pages[index])
+            //     });
+            // }
 
 
             PleaseWaitDialog.show(false);
@@ -819,38 +823,54 @@ module.exports = function (app) {
             CCToolkit.stopScanning(stopScanningCallback);
         };
         self.onImportFileClick = function (files, element, emptyCallback) {
-            self.openOperationDialog('import').then(function () {
-                if (!window.FileReader) {
-                    PleaseWaitDialog.show(false);
-                    dialog.errorMessage(langService.get('update_browser'));
-                    return;
-                }
-
-                var reader = new FileReader();
-                reader.onload = function (evt) {
-                    CCToolkit.startImporting(evt.target.result,
-                        onScanStarted,
-                        onNewPageAdded,
-                        onJobFinished, self.jobOptions);
-                };
-
-                reader.onerror = function (evt) {
-                    // TODO : need to hide progress bar
-                    PleaseWaitDialog.show(false);
-                    dialog.errorMessage(evt.message);
-                };
-                attachmentService
-                    .validateBeforeUpload('scannerImport', files[0])
-                    .then(function (file) {
-                        reader.readAsDataURL(file);
-                        emptyCallback();
-                    })
-                    .catch(function (availableExtensions) {
-                        dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
-                        emptyCallback();
-                    });
+            return self.openOperationDialog('import').then(function () {
+                return self.startImportJob(files[0], emptyCallback);
             });
 
+        };
+        /**
+         * @description start import job
+         * @param file
+         * @param emptyCallback
+         * @param ignoreValidation
+         */
+        self.startImportJob = function (file, emptyCallback, ignoreValidation) {
+            if (!window.FileReader) {
+                PleaseWaitDialog.hide();
+                dialog.errorMessage(langService.get('update_browser'));
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+                CCToolkit.startImporting(evt.target.result,
+                    onScanStarted,
+                    onNewPageAdded,
+                    onJobFinished, self.jobOptions);
+            };
+
+            reader.onerror = function (evt) {
+                // TODO : need to hide progress bar
+                PleaseWaitDialog.hide();
+                dialog.errorMessage(evt.message);
+            };
+
+            if (ignoreValidation) {
+                reader.readAsDataURL(file);
+                return;
+            }
+            attachmentService
+                .validateBeforeUpload('scannerImport', file)
+                .then(function (file) {
+                    reader.readAsDataURL(file);
+                    if (emptyCallback)
+                        emptyCallback();
+                })
+                .catch(function (availableExtensions) {
+                    dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
+                    if (emptyCallback)
+                        emptyCallback();
+                });
         };
 
         self.onShowScannerUIClick = function () {
@@ -997,8 +1017,15 @@ module.exports = function (app) {
         };
 
         // create session
-        self.createCCSession(loadSameScanner);
+        self.createCCSession(loadSameScanner)
+            .then(function () {
+                if (self.editMode && self.fileToEdit) {
+                    $timeout(function () {
+                        self.startImportJob(self.fileToEdit, null, true);
+                    }, 1000);
+                }
+            });
 
 
-    });
+    }, 'scannerCtrl');
 };

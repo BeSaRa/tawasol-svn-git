@@ -210,6 +210,11 @@
                                        ng-click="ctrl.openEditDocumentAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="pencil"></md-icon>
                             </md-button>
+                            <md-button class="md-icon-button" title="{{lang.edit_content}}"
+                                       ng-if="ctrl.isAttachmentDeletable(attachment, true)"
+                                       ng-click="ctrl.openEditAttachmentContent(attachment, $event)">
+                                <md-icon md-svg-icon="file-edit-outline"></md-icon>
+                            </md-button>
                             <md-button class="md-icon-button" title="{{lang.attachment_delete}}"
                                        ng-if="ctrl.isAttachmentDeletable(attachment, false) && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')"
                                        ng-click="ctrl.deleteDocumentAttachment(attachment, $event)">

@@ -369,6 +369,28 @@ module.exports = function (app) {
             self.attachmentCopyBeforeEdit.file = file;
         };
 
+        self.openEditAttachmentContent = function (attachment, $event) {
+            if (_checkReceiveG2G()) {
+                return;
+
+            }
+            return attachmentService.downloadDocumentContent(attachment.vsId)
+                .then(function (content) {
+                    scannerService
+                        .openScannerForEdit(true, content, $event)
+                        .then(function (file) {
+                            attachment.file = file.file;
+                            attachmentService
+                                .updateAttachment(self.document, attachment)
+                                .then(function () {
+                                    toast.success(langService.get('edit_success').change({name: attachment.documentTitle}));
+                                    self.attachment = null;
+                                });
+                        });
+                });
+
+        };
+
         self.cancelEditAttachment = function () {
             self.attachment = null;
         };

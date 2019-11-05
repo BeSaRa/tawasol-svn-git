@@ -31,12 +31,28 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     targetEvent: $event || false,
                     locals: {
-                        loadSameScanner: loadSameScanner || false
+                        loadSameScanner: loadSameScanner || false,
+                        fileToEdit: false
                     }
                 });
         };
 
-        function createSession(loadSameScanner) {
+        self.openScannerForEdit = function (loadSameScanner, file, $event) {
+            self.scannerIsOpen = true;
+            return dialog
+                .showDialog({
+                    template: require('./../templates/scanner-popup.html'),
+                    controller: 'scannerCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event || false,
+                    locals: {
+                        loadSameScanner: loadSameScanner || false,
+                        fileToEdit: file
+                    }
+                });
+        };
+
+        /*function createSession(loadSameScanner) {
             var defer = $q.defer();
             CCToolkit.createSession({
                 licenseId: "Some_license",
@@ -52,7 +68,7 @@ module.exports = function (app) {
                 }
             });
             return defer.promise;
-        }
+        }*/
 
         /**
          * @description set stored images
@@ -71,11 +87,11 @@ module.exports = function (app) {
             return storedImages;
         };
 
-        self.convertTiffToPDF = function (file) {
+        /*self.convertTiffToPDF = function (file) {
             createSession(true).then(function () {
                 console.log("ASDASDASD");
             });
-        }
+        }*/
 
 
     });
