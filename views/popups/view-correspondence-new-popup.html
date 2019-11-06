@@ -69,7 +69,7 @@
                             <accordion-content>
                                 <div>
                                     <manage-correspondence-sites-directive
-                                            ng-if="ctrl.correspondence.docClassName !== 'Incoming'"
+                                            ng-if="ctrl.recordType === 'normalDocument' && ctrl.correspondence.docClassName !== 'Incoming'"
                                             vs-id="ctrl.correspondence.vsId"
                                             document-class="ctrl.correspondence.docClassName"
                                             sites-info-c-c="ctrl.correspondence.sitesInfoCC"
@@ -77,11 +77,20 @@
                                             disable-correspondence="ctrl.disableCorrespondence">
                                     </manage-correspondence-sites-directive>
                                     <manage-correspondence-site-incoming-directive
-                                            ng-if="ctrl.correspondence.docClassName === 'Incoming'"
+                                            ng-if="ctrl.recordType === 'normalDocument' && ctrl.correspondence.docClassName === 'Incoming'"
                                             vs-id="ctrl.correspondence.vsId"
                                             site="ctrl.correspondence.site"
                                             document-class="ctrl.correspondence.docClassName"
                                             disable-correspondence="ctrl.disableCorrespondence"></manage-correspondence-site-incoming-directive>
+
+                                    <manage-correspondence-site-g2g-directive
+                                            ng-if="ctrl.recordType === 'g2g'"
+                                            site="ctrl.correspondence.site"></manage-correspondence-site-g2g-directive>
+
+                                    <manage-correspondence-site-g2g-messaging-history-directive
+                                            ng-if="ctrl.recordType === 'g2gmessaginghistory'"
+                                            record="ctrl.g2gItemCopy">
+                                    </manage-correspondence-site-g2g-messaging-history-directive>
                                 </div>
                             </accordion-content>
                         </accordion-item>

@@ -18,7 +18,8 @@ module.exports = function (app) {
                                                           $state,
                                                           viewTrackingSheetService,
                                                           errorCode,
-                                                          $compile) {
+                                                          $compile,
+                                                          G2GMessagingHistory) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondencePopCtrl';
@@ -169,6 +170,17 @@ module.exports = function (app) {
                     self.toggleCorrespondenceEditMode();
                 }
             }
+
+            self.recordType = 'normalDocument';
+
+            if (self.g2gItemCopy) {
+                if (self.g2gItemCopy instanceof G2GMessagingHistory) {
+                    self.recordType = 'g2gmessaginghistory';
+                } else {
+                    self.recordType = 'g2g';
+                }
+            }
+
         }, 100);
 
         self.selectedList = null;
