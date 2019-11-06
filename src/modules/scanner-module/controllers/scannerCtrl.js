@@ -423,7 +423,7 @@ module.exports = function (app) {
                 return;
             }
 
-            window.CurrentImage = page.getPageNumber();
+            window.CurrentImage = page.getCustomPageNumber();
             self.currentPage = page;
             var filters = page.getFilters();
             if (filters === null) {
