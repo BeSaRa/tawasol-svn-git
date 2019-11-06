@@ -14,7 +14,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondenceG2GPopCtrl';
-        self.fullScreen = false;
+        self.fullScreen = true;
         self.validation = false;
         self.detailsReady = false;
         self.employeeService = employeeService;
