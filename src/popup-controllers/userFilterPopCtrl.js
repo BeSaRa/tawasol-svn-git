@@ -39,7 +39,7 @@ module.exports = function (app) {
         self.selectedMainSite = null;
         self.selectedSubSite = null;
 
-        
+
         //console.log(lookupService.returnLookups(lookupService.inboxFilterKey));
 
         self.lookupNames = {};
@@ -227,6 +227,8 @@ module.exports = function (app) {
         self.siteTypeSearchText = '';
         self.mainSiteSearchText = '';
         self.subSiteSearchText = '';
+        self.senderSearchText = '';
+        self.actionSearchText = '';
 
         $timeout(function () {
             if (self.filter.ui.key_siteType.value) {
