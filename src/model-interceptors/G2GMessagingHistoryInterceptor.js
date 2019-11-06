@@ -1,6 +1,8 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       Information,
+                      _,
+                      configurationService,
                       generator,
                       lookupService,
                       correspondenceService,
@@ -8,12 +10,21 @@ module.exports = function (app) {
                       g2gReturnedService,
                       g2gLookupService) {
         'ngInject';
-        var modelName = 'G2GMessagingHistory';
+        var modelName = 'G2GMessagingHistory', correspondenceSiteTypes = [], g2gSiteType,
+            g2gSiteTypeInfo = new Information();
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
             model.setCorrespondenceService(correspondenceService);
             model.setManagerService(managerService);
             model.setG2GReturnService(g2gReturnedService);
+            correspondenceSiteTypes = correspondenceService.getLookup('outgoing', 'siteTypes');
+            g2gSiteType = _.find(correspondenceSiteTypes, function (siteType) {
+                return siteType.lookupKey === configurationService.G2G_CORRESPONDENCE_SITES_TYPE;
+            });
+            if (g2gSiteType) {
+                g2gSiteTypeInfo.arName = g2gSiteType.arName;
+                g2gSiteTypeInfo.enName = g2gSiteType.enName;
+            }
             return model;
         });
 
@@ -64,6 +75,7 @@ module.exports = function (app) {
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
             delete model.isInternalG2GIndicator;
             delete model.internal;
+            delete model.customSiteTypeInfo;
 
             return model;
         });
@@ -107,6 +119,10 @@ module.exports = function (app) {
             model.isInternalG2GIndicator = model.getIsInternalG2GIndicator();
 
             model.setMainSiteSubSiteString();
+
+            if (!model.hasOwnProperty('customSiteTypeInfo') || model.customSiteTypeInfo.id === -1) {
+                model.customSiteTypeInfo = g2gSiteTypeInfo;
+            }
 
             return model;
         });
