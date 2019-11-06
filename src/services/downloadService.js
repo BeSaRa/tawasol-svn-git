@@ -394,7 +394,7 @@ module.exports = function (app) {
          */
         self.downloadSelectedOptions = function (downloadOptions, correspondence) {
             var info = correspondence.getInfo();
-            return $http.put(urlService.downloadSelected + "/" + info.vsId, downloadOptions, ).then(function (result) {
+            return $http.put(urlService.downloadSelected + "/" + info.vsId, downloadOptions).then(function (result) {
                         window.open(result.data.rs, '_blank');
                 }
             );
