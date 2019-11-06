@@ -61,9 +61,15 @@
                             <accordion-content>
                                 <div>
                                     <manage-correspondence-site-g2g-directive
+                                            ng-if="ctrl.recordType === 'g2g'"
                                             vs-id="ctrl.correspondence.vsId"
                                             site="ctrl.correspondence.site"
                                             document-class="ctrl.correspondence.docClassName"></manage-correspondence-site-g2g-directive>
+
+                                    <manage-correspondence-site-g2g-messaging-history-directive
+                                            ng-if="ctrl.recordType === 'g2gmessaginghistory'"
+                                            record="ctrl.g2gItemCopy">
+                                    </manage-correspondence-site-g2g-messaging-history-directive>
                                 </div>
                             </accordion-content>
                         </accordion-item>

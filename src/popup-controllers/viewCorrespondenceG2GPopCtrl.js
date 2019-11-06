@@ -8,7 +8,9 @@ module.exports = function (app) {
                                                              popupNumber,
                                                              loadingIndicatorService,
                                                              employeeService,
-                                                             correspondenceService) {
+                                                             correspondenceService,
+                                                             G2GMessagingHistory,
+                                                             G2G) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondenceG2GPopCtrl';
@@ -20,6 +22,11 @@ module.exports = function (app) {
         $timeout(function () {
             self.detailsReady = true;
             self.model = angular.copy(self.correspondence);
+            if (self.g2gItemCopy instanceof G2GMessagingHistory) {
+                self.recordType = 'g2gmessaginghistory';
+            } else {
+                self.recordType = 'g2g';
+            }
         }, 100);
 
         self.sideNavId = "correspondence-details_" + popupNumber;
