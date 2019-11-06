@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.factory('IncomingSearch', function (CMSModelInterceptor,
                                             langService,
                                             Incoming) {
+        'ngInject';
         return function IncomingSearch(model) {
             var self = this;
 

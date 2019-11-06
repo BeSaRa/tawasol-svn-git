@@ -18,6 +18,7 @@ module.exports = function (app) {
                                                $state,
                                                gridService,
                                                cmsTemplate) {
+        'ngInject';
         var self = this;
 
         self.controllerName = 'g2gPendingCtrl';

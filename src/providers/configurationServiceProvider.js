@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.provider('configurationService', function () {
+        'ngInject';
         var provider = this, configuration = {
             SEARCH_YEARS: 2000,
             IGNORE_HTTPS_FOR_SCANNER: false,
@@ -37,6 +38,7 @@ module.exports = function (app) {
         };
 
         provider.$get = function () {
+            'ngInject';
             return configuration;
         }
     });

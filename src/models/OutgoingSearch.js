@@ -3,6 +3,7 @@ module.exports = function (app) {
                                             Outgoing,
                                             generator,
                                             langService) {
+        'ngInject';
         return function OutgoingSearch(model) {
             var self = this;
 

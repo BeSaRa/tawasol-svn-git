@@ -6,6 +6,7 @@ module.exports = function (app) {
                                  downloadService,
                                  viewDocumentService,
                                  Indicator) {
+        'ngInject';
         return function G2G(model) {
             var self = this, g2gReturnedService;
 

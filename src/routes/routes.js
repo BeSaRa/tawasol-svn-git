@@ -1008,6 +1008,7 @@ module.exports = function (app) {
                 permission: 'menu_item_user_inbox',
                 resolve: {
                     fromNotification: function () {
+                        'ngInject';
                         return false;
                     },
                     userInboxes: function (userInboxService) {

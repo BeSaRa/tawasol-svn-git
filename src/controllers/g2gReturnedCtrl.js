@@ -22,6 +22,7 @@ module.exports = function (app) {
                                                 _,
                                                 managerService,
                                                 G2GMessagingHistory) {
+        'ngInject';
         var self = this;
 
         self.controllerName = 'g2gReturnedCtrl';

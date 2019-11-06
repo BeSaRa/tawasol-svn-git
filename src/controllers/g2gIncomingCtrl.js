@@ -19,6 +19,7 @@ module.exports = function (app) {
                                                 ResolveDefer,
                                                 $state,
                                                 gridService) {
+        'ngInject';
         var self = this;
 
         self.controllerName = 'g2gIncomingCtrl';

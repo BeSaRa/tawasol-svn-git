@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                                    generator,
                                                                    OUDocumentFile,
                                                                    documentFile) {
+        'ngInject';
         var self = this;
         self.controllerName = 'documentFileSelectRelatedOUPopCtrl';
         self.documentFile = documentFile;

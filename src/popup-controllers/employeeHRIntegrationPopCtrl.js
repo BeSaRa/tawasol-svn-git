@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                              linkedEntities,
                                                              entityTypeService,
                                                              langService) {
+        'ngInject';
 
         var self = this;
         self.controllerName = 'employeeHRIntegrationPopCtrl';

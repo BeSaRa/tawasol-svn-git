@@ -18,6 +18,7 @@ module.exports = function (app) {
                                                  printService,
                                                  gridService,
                                                  G2GMessagingHistory) {
+        'ngInject';
         var self = this;
 
         self.controllerName = 'g2gSentItemsCtrl';

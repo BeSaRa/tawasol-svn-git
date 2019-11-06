@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                  toast,
                                                  cmsTemplate,
                                                  errorCode) {
+        'ngInject';
         var self = this;
         self.serviceName = 'g2gSentItemsService';
 

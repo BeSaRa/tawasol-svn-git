@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.provider('viewDocumentService', function () {
+        'ngInject';
         var provider = this, pageNames = {};
 
         provider.addPageName = function (pageName) {

@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('selectOrganizationPopCtrl', function (organizationService, langService, exclude, dialog, label, _) {
+        'ngInject';
         var self = this;
         self.controllerName = 'selectOrganizationPopCtrl';
         // list of organizations from organization service
