@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('PleaseWaitDialog', function (dialog, $timeout, cmsTemplate) {
+    app.factory('PleaseWaitDialog', function (dialog, $timeout) {
         'ngInject';
         var self = this;
         self.waiting = false;

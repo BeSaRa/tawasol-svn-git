@@ -8,10 +8,6 @@ module.exports = function (app) {
                                             cmsTemplate,
                                             fileToEdit,
                                             attachmentService,
-                                            // IPSettings,
-                                            // getFilterProperty,
-                                            // FilterProperty,
-                                            // Filter,
                                             _,
                                             langService,
                                             $scope,
@@ -644,20 +640,6 @@ module.exports = function (app) {
             }
             uploadComplete(data.ScanJobID, document);
 
-            // var pages = self.cc.getTempPages();
-            //
-            // pages = pages.reverse();
-            //
-            // if (self.jobOptions.jobType === 'append' && self.jobOptions.addType === 'first') {
-            //     _.map(pages, function (page) {
-            //         document.pages.unshift(page);
-            //     });
-            // } else if (self.jobOptions.jobType === 'append' && self.jobOptions.addType === 'location') {
-            //     _.map(pages, function (page, index) {
-            //         document.pages.splice(parseInt(self.jobOptions.pageNumber, 10) + (self.jobOptions.location === 'before' ? 0 : 1), 0, pages[index])
-            //     });
-            // }
-
 
             PleaseWaitDialog.show(false);
             $timeout(function () {
@@ -1027,5 +1009,5 @@ module.exports = function (app) {
             });
 
 
-    }, 'scannerCtrl');
+    });
 };

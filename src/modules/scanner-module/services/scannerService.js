@@ -51,25 +51,6 @@ module.exports = function (app) {
                     }
                 });
         };
-
-        /*function createSession(loadSameScanner) {
-            var defer = $q.defer();
-            CCToolkit.createSession({
-                licenseId: "Some_license",
-                applicationId: "SampleApplication",
-                closeExistingSessions: true,
-                locale: "en-us",
-                warnDisableOption: 0
-            }, function (sessionID, token) {
-                defer.resolve(sessionID);
-                self.sessionCreated = true;
-                if (loadSameScanner) {
-                    self.loadCCScanner(LoadScannerOption.UseLastConfiguration)
-                }
-            });
-            return defer.promise;
-        }*/
-
         /**
          * @description set stored images
          * @param images
@@ -86,12 +67,6 @@ module.exports = function (app) {
         self.getStoredImages = function () {
             return storedImages;
         };
-
-        /*self.convertTiffToPDF = function (file) {
-            createSession(true).then(function () {
-                console.log("ASDASDASD");
-            });
-        }*/
 
 
     });
