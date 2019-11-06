@@ -86,6 +86,10 @@ module.exports = function (app) {
 
         self.cc = CCToolkit = new CCToolkit();
 
+        self.extensionGroup = attachmentService.getProvider().getExtensionGroup('scannerImport');
+
+        self.allowedFilesToImport = self.extensionGroup.join(', ');
+
         self.fullScreenToggle = function () {
             self.fullscreen = !self.fullscreen;
         };
@@ -805,6 +809,12 @@ module.exports = function (app) {
             CCToolkit.stopScanning(stopScanningCallback);
         };
         self.onImportFileClick = function (files, element, emptyCallback) {
+            var fileExtension = files[0].name.split('.').pop().toLowerCase();
+            if (self.extensionGroup.indexOf(fileExtension) === -1) {
+                dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(self.extensionGroup.join(', ')));
+                return;
+            }
+
             return self.openOperationDialog('import').then(function () {
                 return self.startImportJob(files[0], emptyCallback);
             });

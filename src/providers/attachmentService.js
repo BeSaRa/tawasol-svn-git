@@ -420,15 +420,17 @@ module.exports = function (app) {
                     });
                     return deferFileType.promise.then(function (allFileTypes) {
                         var allowedExtensions = [];
-                        if (groupName === 'userSignature')
+                        if (groupName === 'scannerImport') {
                             allowedExtensions = provider.getExtensionGroup(groupName);
-                        else
+                        } else if (groupName === 'userSignature')
+                            allowedExtensions = provider.getExtensionGroup(groupName);
+                        else {
                             allowedExtensions = _.map(rootEntity.getGlobalSettings().fileType, function (allowed) {
                                 return _.find(allFileTypes, function (fileType) {
                                     return fileType.id === allowed;
                                 }).extension;
                             });
-
+                        }
                         var extension = file.name.split('.').pop().toLowerCase();
                         var position = _.findIndex(allowedExtensions, function (ext) {
                             // I removed startsWith because not supported in IE 11 .

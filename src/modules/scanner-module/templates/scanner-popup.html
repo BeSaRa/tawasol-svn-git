@@ -99,7 +99,7 @@
                                     </md-button>
                                     <input id="upload-file-scanner" class="hide-import-file"
                                            type="file"
-                                           accept=".png,.jpeg,jpg,.tiff,tif,image/pjpeg,image/jpeg,image/jpeg,image/tiff,image/x-tiff,image/png"
+                                           accept="image/png,image/jpg,image/jpeg,image/gif,image/tif,image/tiff"
                                            reset-by-callback="true"
                                            catch-upload-file-directive="ctrl.onImportFileClick"
                                            reset-after-change="true"/>
@@ -238,6 +238,10 @@
                 <md-button ng-click="ctrl.closeScanner()" class="md-raised red-text">
                     {{lang.close}}
                 </md-button>
+                <span flex></span>
+                <span layout="row" class="p0p5 red-text" layout-align="end center" flex>
+                    {{lang.allowed_file_to_import}} {{ctrl.allowedFilesToImport}}
+                </span>
             </div>
         </div><!-- scanner-actions -->
     </div>
