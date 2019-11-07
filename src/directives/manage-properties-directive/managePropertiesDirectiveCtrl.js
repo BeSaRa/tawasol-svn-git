@@ -64,7 +64,7 @@ module.exports = function (app) {
             self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
             self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
             documentSecurityLevelLookupKey = angular.copy(self.document.securityLevel);
-            if (documentSecurityLevelLookupKey.hasOwnProperty('lookupKey')){
+            if (documentSecurityLevelLookupKey.hasOwnProperty('lookupKey')) {
                 documentSecurityLevelLookupKey = documentSecurityLevelLookupKey.lookupKey;
             }
             properties = lookupService.getPropertyConfigurations(self.document.docClassName);
@@ -224,7 +224,7 @@ module.exports = function (app) {
             }
 
             var mainClassificationId = angular.copy(self.document.mainClassification);
-            if (mainClassificationId && mainClassificationId.hasOwnProperty('id')){
+            if (mainClassificationId && mainClassificationId.hasOwnProperty('id')) {
                 mainClassificationId = mainClassificationId.id;
             }
             if (subClassificationOptionFromInfo.securityLevels === documentSecurityLevelLookupKey && mainClassificationId === subClassificationOptionFromInfo.parent) {
@@ -312,7 +312,7 @@ module.exports = function (app) {
                 self.document.isComposite = false;
 
             documentSecurityLevelLookupKey = angular.copy(self.document.securityLevel);
-            if (documentSecurityLevelLookupKey.hasOwnProperty('lookupKey')){
+            if (documentSecurityLevelLookupKey.hasOwnProperty('lookupKey')) {
                 documentSecurityLevelLookupKey = documentSecurityLevelLookupKey.lookupKey;
             }
 
@@ -738,5 +738,17 @@ module.exports = function (app) {
                 && employeeService.hasPermissionTo('CHANGE_BOOK_SECURITY_LEVEL') && !self.disableProperties;
         };
 
+        /**
+         * @description Check if serial number(docFullSerial) field can be displayed.
+         * If displayed, it is mandatory
+         * @returns {boolean|*}
+         */
+        self.isShowDocFullSerial = function () {
+            if (!self.document.vsId) {
+                return self.employee.isBacklogMode();
+            } else {
+                return self.employee.isBacklogMode() && self.document.isMigrated;
+            }
+        };
     });
 };

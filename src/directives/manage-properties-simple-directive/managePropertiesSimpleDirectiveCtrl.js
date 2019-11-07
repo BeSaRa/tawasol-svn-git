@@ -533,5 +533,18 @@ module.exports = function (app) {
                 }
             }
         };
+
+        /**
+         * @description Check if serial number(docFullSerial) field can be displayed.
+         * If displayed, it is mandatory
+         * @returns {boolean|*}
+         */
+        self.isShowDocFullSerial = function () {
+            if (!self.document.vsId) {
+                return self.employee.isBacklogMode();
+            } else {
+                return self.employee.isBacklogMode() && self.document.isMigrated;
+            }
+        };
     });
 };

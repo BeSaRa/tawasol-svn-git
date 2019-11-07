@@ -92,13 +92,6 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <!-- Security Level (Disabled Input)-->
-                <md-input-container ng-if="ctrl.document.hasVsId()" flex>
-                    <label for="securityLevel">{{lang.security_level}}</label>
-                    <input id="securityLevel" name="securityLevel"
-                           ng-disabled="true"
-                           ng-value="ctrl.sourceModel.securityLevel.getTranslatedName()">
-                </md-input-container>
             </div>
             <div layout="row">
                 <!-- Type (Personal/Departmental) -->
@@ -172,13 +165,20 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <!-- Security Level (Disabled Input)-->
+                <md-input-container ng-if="ctrl.document.hasVsId()" flex>
+                    <label for="securityLevel">{{lang.security_level}}</label>
+                    <input id="securityLevel" name="securityLevel"
+                           ng-disabled="true"
+                           ng-value="ctrl.sourceModel.securityLevel.getTranslatedName()">
+                </md-input-container>
             </div>
             <div layout="row">
                 <!-- Document Full Serial -->
-                <md-input-container flex ng-if="ctrl.employee.isBacklogMode() && ctrl.document.isMigrated">
+                <md-input-container flex ng-if="ctrl.isShowDocFullSerial()">
                     <label for="docFullSerial">{{lang.serial_number}}</label>
                     <input name="docFullSerial" id="docFullSerial"
-                           ng-required="ctrl.employee.isBacklogMode() && ctrl.document.isMigrated"
+                           ng-required="ctrl.isShowDocFullSerial()"
                            ng-disabled="!!ctrl.disableProperties"
                            ng-model="ctrl.document.docFullSerial">
                     <div ng-messages="outgoing_properties.docFullSerial.$error">
