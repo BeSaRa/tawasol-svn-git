@@ -138,7 +138,7 @@ module.exports = function (app) {
                  * @private
                  */
                 function _generateAttachmentUrl(document) {
-                    var documentClass = (document.hasOwnProperty('docClassName') ? document.docClassName : (document.hasOwnProperty('documentClass') ? document.documentClass : document.getInfo().docClassName)).toLowerCase();
+                    var documentClass = (document.hasOwnProperty('docClassName') ? document.docClassName : (document.hasOwnProperty('documentClass') ? document.documentClass : document.getInfo().documentClass)).toLowerCase();
                     var vsId = document.hasOwnProperty('vsId') ? document.vsId : false;
                     var url = null;
                     if (vsId && documentClass) {

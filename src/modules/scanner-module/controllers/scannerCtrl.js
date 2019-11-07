@@ -809,7 +809,7 @@ module.exports = function (app) {
             CCToolkit.stopScanning(stopScanningCallback);
         };
         self.onImportFileClick = function (files, element, emptyCallback) {
-            var fileExtension = files[0].name.split('.').pop().toLowerCase();
+            var fileExtension = '.' + files[0].name.split('.').pop().toLowerCase();
             if (self.extensionGroup.indexOf(fileExtension) === -1) {
                 dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(self.extensionGroup.join(', ')));
                 return;
@@ -936,6 +936,10 @@ module.exports = function (app) {
                         return query ? (ctrl.pages.filter(function (item) {
                             return item.display.indexOf(query.toLowerCase()) !== -1;
                         })) : ctrl.pages;
+                    };
+
+                    ctrl.disableSave = function(){
+                        return ctrl.jobOptions.addType === 'location' && ctrl.jobOptions.jobType === 'append' && ctrl.jobOptions.selectedPage === null;
                     };
 
                     ctrl.selectedPageChanged = function (item) {
