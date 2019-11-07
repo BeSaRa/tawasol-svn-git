@@ -480,7 +480,7 @@ module.exports = function (app) {
          * @private
          */
         var _isPublicRegistryChangedToPrivate = function () {
-            return (!self.model.isPrivateRegistry && self.organization.isPrivateRegistry);
+            return (!self.model.isPrivateRegistry && self.organization.isPrivateRegistry) && self.editMode;
         };
 
         /**
