@@ -277,7 +277,7 @@
                                         </div>
                                     </md-input-container>
                                     <md-input-container
-                                            ng-if="ctrl.organization.hasRegistry && !ctrl.organization.isPrivateRegistry"
+                                            ng-if="ctrl.organization.hasRegistry"
                                             class="input-container-no-top-margin" flex>
                                         <label>{{lang.distribution_list}}</label>
                                         <md-select multiple ng-model-options="{trackBy: '$value.id'}"
