@@ -332,7 +332,8 @@ module.exports = function (app) {
                     angular.extend(self.content, content);
                     self.content.desktop.overlay = false;
                     self.editMode = false;
-                    self.viewURL = self.content.viewURL;
+                    _overrideViewUrl();
+                    //self.viewURL = self.content.viewURL;
                     self.backToCorrespondence();
                 })
         };
