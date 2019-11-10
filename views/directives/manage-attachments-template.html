@@ -146,7 +146,8 @@
                 <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                 <tr md-row>
                     <th colspan="5" class="table-selector-header"
-                        ng-if="ctrl.selectedAttachments.length && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')" md-column>
+                        ng-if="ctrl.selectedAttachments.length && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')"
+                        md-column>
                         <div layout="row" layout-align="start center">
                             <span>{{ctrl.selectedAttachments.length}} {{lang.items_selected}} </span>
                             <span flex></span>
@@ -210,17 +211,16 @@
                                        ng-click="ctrl.openEditDocumentAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="pencil"></md-icon>
                             </md-button>
-                            <md-button class="md-icon-button" title="{{lang.edit_content}}"
-                                       ng-if="ctrl.isAttachmentDeletable(attachment, true)"
-                                       ng-click="ctrl.openEditAttachmentContent(attachment, $event)">
-                                <md-icon md-svg-icon="file-edit-outline"></md-icon>
-                            </md-button>
                             <md-button class="md-icon-button" title="{{lang.attachment_delete}}"
                                        ng-if="ctrl.isAttachmentDeletable(attachment, false) && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')"
                                        ng-click="ctrl.deleteDocumentAttachment(attachment, $event)">
                                 <md-icon md-svg-icon="delete"></md-icon>
                             </md-button>
-
+                            <md-button class="md-icon-button" title="{{lang.edit_content}}"
+                                       ng-if="ctrl.isAttachmentDeletable(attachment, true) && attachment.sourceType === 2"
+                                       ng-click="ctrl.openEditAttachmentContent(attachment, $event)">
+                                <md-icon md-svg-icon="file-edit-outline"></md-icon>
+                            </md-button>
                         </div>
                     </td>
                 </tr>

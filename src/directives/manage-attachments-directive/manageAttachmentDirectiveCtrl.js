@@ -126,6 +126,7 @@ module.exports = function (app) {
                 .then(function () {
                     var result = scannerService.getStoredImages();
                     self.attachment = _createAttachmentFile(result.file);
+                    self.attachment.sourceType = 2; // scanned attachment.
                 })
                 .catch(function (error) {
                     self.showButtons();
@@ -380,6 +381,7 @@ module.exports = function (app) {
                         .openScannerForEdit(true, content, $event)
                         .then(function (file) {
                             attachment.file = file.file;
+                            attachment.sourceType  = 2 ; // scanned attachment.
                             attachmentService
                                 .updateAttachment(self.document, attachment)
                                 .then(function () {

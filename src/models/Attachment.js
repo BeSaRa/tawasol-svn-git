@@ -24,10 +24,12 @@ module.exports = function (app) {
             self.securityLevel = null;
             self.updateActionStatus = null;
             self.isDeletable = null;
+            self.sourceType = 1;
             self.refVSID = null;//This is for the linked Exported Documents
             // will removed when send to backend.
             self.file = null;
             self.progress = 0;
+
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
