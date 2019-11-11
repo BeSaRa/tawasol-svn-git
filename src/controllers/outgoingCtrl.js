@@ -260,8 +260,11 @@ module.exports = function (app) {
                 })
                     .catch(function (error) {
                         self.saveInProgress = false;
-                        toast.error(error);
-                        return $q.reject(error);
+                        if (typeof error === 'string') {
+                            toast.error(error);
+                        }else {
+                            return $q.reject(error);
+                        }
                     });
             })
         };
