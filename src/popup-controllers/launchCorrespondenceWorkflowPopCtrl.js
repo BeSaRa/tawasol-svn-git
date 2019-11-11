@@ -1207,18 +1207,18 @@ module.exports = function (app) {
          * @param $event
          */
         self.addSelectedUserWithIgnoreToGrid = function (selectedUser, $event) {
-            if (self.selectedWorkflowItems.length && self.getApprovedStatus()) {
-                dialog
-                    .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
-                    .then(function () {
-                        self.selectedWorkflowItems = [];
-                        var user = _getUsersNotExists([selectedUser]);
-                        _addUsersToSelectedGrid(user);
-                    });
-            } else {
-                var user = _getUsersNotExists([selectedUser]);
-                _addUsersToSelectedGrid(user);
-            }
+            /* if (self.selectedWorkflowItems.length && self.getApprovedStatus()) {
+                 dialog
+                     .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
+                     .then(function () {
+                         self.selectedWorkflowItems = [];
+                         var user = _getUsersNotExists([selectedUser]);
+                         _addUsersToSelectedGrid(user);
+                     });
+             } else {*/
+            var user = _getUsersNotExists([selectedUser]);
+            _addUsersToSelectedGrid(user);
+            //   }
         };
         /**
          * @description add selected user to grid
@@ -1229,28 +1229,28 @@ module.exports = function (app) {
             // just to filter the users before add.
             var users = _getUsersNotExists([selectedUser]);
 
-            if (self.selectedWorkflowItems.length && self.getApprovedStatus()) {
-                dialog
-                    .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
-                    .then(function () {
-                        self.selectedWorkflowItems = [];
-                        // get proxies users to display message before add.
-                        var proxies = _getProxiesUsers(users);
-                        // display proxy message
-                        if (proxies.length)
-                            dialog.alertMessage(_prepareProxyMessage(proxies));
-                        // add users to grid
-                        _addUsersToSelectedGrid(users);
-                    });
-            } else {
-                // get proxies users to display message before add.
-                var proxies = _getProxiesUsers(users);
-                // display proxy message
-                if (proxies.length)
-                    dialog.alertMessage(_prepareProxyMessage(proxies));
-                // add users to grid
-                _addUsersToSelectedGrid(users);
-            }
+            /*           if (self.selectedWorkflowItems.length && self.getApprovedStatus()) {
+                           dialog
+                               .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
+                               .then(function () {
+                                   self.selectedWorkflowItems = [];
+                                   // get proxies users to display message before add.
+                                   var proxies = _getProxiesUsers(users);
+                                   // display proxy message
+                                   if (proxies.length)
+                                       dialog.alertMessage(_prepareProxyMessage(proxies));
+                                   // add users to grid
+                                   _addUsersToSelectedGrid(users);
+                               });
+                       } else {*/
+            // get proxies users to display message before add.
+            var proxies = _getProxiesUsers(users);
+            // display proxy message
+            if (proxies.length)
+                dialog.alertMessage(_prepareProxyMessage(proxies));
+            // add users to grid
+            _addUsersToSelectedGrid(users);
+            //}
 
         };
         /**
@@ -1414,5 +1414,7 @@ module.exports = function (app) {
             }
         };
 
-    });
-};
+    })
+    ;
+}
+;

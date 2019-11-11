@@ -85,9 +85,10 @@
                                                     workflow-comments="ctrl.comments"
                                                     workflow-actions="ctrl.workflowActions"
                                                     grid="ctrl.grid"
-                                                    multi-select="!ctrl.getApprovedStatus()"
+                                                    multi-select="true"
                                                     grid-name="favoriteUsers"
                                                     grid-items="ctrl.favoriteUsers"></workflow-users-directive>
+                                                <!--multi-select="!ctrl.getApprovedStatus()"-->
                                         </div>
                                     </md-tab>
                                     <!-- Organizations -->
@@ -95,8 +96,9 @@
                                             md-on-select="ctrl.setCurrentFavoriteTab('ou')"
                                             label="{{lang.organizations}}">
                                         <div>
+<!--                                            multi-select="!ctrl.getApprovedStatus()"-->
                                             <workflow-items-directive
-                                                    multi-select="!ctrl.getApprovedStatus()"
+                                                    multi-select="true"
                                                     exclude-selected="false"
                                                     allow-favorites="true"
                                                     grid-type="Organization"
@@ -200,9 +202,10 @@
                                     grid="ctrl.grid"
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    multi-select="!ctrl.getApprovedStatus()"
+                                    multi-select="true"
                                     grid-name="users"
                                     grid-items="ctrl.users"></workflow-users-directive>
+                            <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
                             </div>
@@ -248,9 +251,10 @@
                                     grid="ctrl.grid"
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    multi-select="!ctrl.getApprovedStatus()"
+                                    multi-select="true"
                                     grid-name="privateUsers"
                                     grid-items="ctrl.privateUsers"></workflow-users-directive>
+                            <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
                             </div>
@@ -296,9 +300,10 @@
                                     grid="ctrl.grid"
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    multi-select="!ctrl.getApprovedStatus()"
+                                    multi-select="true"
                                     grid-name="managerUsers"
                                     grid-items="ctrl.managerUsers"></workflow-users-directive>
+                            <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
                             </div>
@@ -344,9 +349,10 @@
                                     grid="ctrl.grid"
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    multi-select="!ctrl.getApprovedStatus()"
+                                    multi-select="true"
                                     grid-name="governmentEntitiesHeads"
                                     grid-items="ctrl.governmentEntitiesHeads"></workflow-users-directive>
+                            <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
                             </div>
@@ -374,7 +380,7 @@
                                 <br/>
                             </div>
                             <workflow-items-directive
-                                    multi-select="!ctrl.getApprovedStatus()"
+                                    multi-select="true"
                                     exclude-selected="false"
                                     allow-favorites="false"
                                     grid-type="Organization"
@@ -414,7 +420,7 @@
                                 <br/>
                             </div>
                             <workflow-items-directive
-                                    multi-select="!ctrl.getApprovedStatus()"
+                                    multi-select="true"
                                     exclude-selected="true"
                                     allow-favorites="true"
                                     grid-type="Organization"
@@ -450,7 +456,9 @@
     </md-dialog-content>
     <!-- Buttons and info -->
     <md-dialog-actions class="cms-dialog-actions">
+<!--
         <span layout-align="center center"><span ng-if="ctrl.getApprovedStatus()" class="red-color">{{ctrl.multi ?  lang.get('selected_document_has_not_approved_document') : lang.get('cannot_send_to_multi')}}</span></span>
+-->
         <span flex></span>
         <md-button class="md-raised md-primary" ng-click="ctrl.launchDistributionCorrespondenceWorkFlow()">
             {{lang.get(ctrl.textButton)}}
