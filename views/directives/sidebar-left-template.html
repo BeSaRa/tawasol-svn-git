@@ -34,7 +34,7 @@
                 </div>
             </li>
         </ul>
-        <div scroll-directive destroy-scroll="{{sidebar.checkSidebarScroll()}}">
+        <div class="sidebar-container" scroll-directive destroy-scroll="{{sidebar.checkSidebarScroll()}}">
             <sidebar-menu-directive ng-class="{'open-children':sidebar.search.length}" search="sidebar.search"
                                     items="sidebar.service.allParents" lang="lang"
                                     level="1"></sidebar-menu-directive>
