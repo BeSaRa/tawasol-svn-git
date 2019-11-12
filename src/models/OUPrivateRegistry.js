@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('OUPrivateRegistry', function (CMSModelInterceptor) {
+    app.factory('OUPrivateRegistry', function (CMSModelInterceptor,langService) {
         'ngInject';
         return function OUPrivateRegistry(model) {
             var self = this;
@@ -16,6 +16,10 @@ module.exports = function (app) {
 
             if (model)
                 angular.extend(this, model);
+
+            OUPrivateRegistry.prototype.getTranslatedName = function (reverse) {
+                return langService.current === 'ar' ? (reverse ? this.ouInfo.enName : this.ouInfo.arName) : (reverse ? this.ouInfo.arName : this.ouInfo.enName);
+            };
 
 
             // don't remove CMSModelInterceptor from last line

@@ -728,6 +728,30 @@ module.exports = function (app) {
             })
         };
 
+        self.deletePrivateRegistryOUs = function (privateOu) {
+            var id = privateOu.hasOwnProperty('id') ? privateOu.id : privateOu;
+            return $http.delete(urlService.privateRegistryOU + "/" + id);
+        };
+
+        /**
+         * @description delete bulk private registry ous
+         * @param privateOus
+         * @returns {*}
+         */
+        self.deleteBulkPrivateRegistryOUs = function (privateOus) {
+            var bulkIds = privateOus[0].hasOwnProperty('id') ? _.map(privateOus, 'id') : privateOus;
+            return $http({
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                url: urlService.privateRegistryOU + '/bulk',
+                data: bulkIds
+            }).then(function (result) {
+                return generator.getBulkActionResponse(result, privateOus, false, 'failed_delete_selected', 'delete_success', 'delete_success_except_following');
+            });
+        };
+
         self.exportOrganizations = function () {
             return $http
                 .get(urlService.organizations + "/export/excel", null)

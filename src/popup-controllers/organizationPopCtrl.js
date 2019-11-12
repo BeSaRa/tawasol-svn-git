@@ -1784,6 +1784,39 @@ module.exports = function (app) {
             });
         };
 
+        /**
+         * @description remove private registry ou
+         */
+        self.removePrivateRegistryOu = function (privateRegOU) {
+            dialog
+                .confirmMessage(langService.get('confirm_delete').change({name: privateRegOU.getTranslatedName()}))
+                .then(function () {
+                    return organizationService
+                        .deletePrivateRegistryOUs(privateRegOU)
+                        .then(function () {
+                            self.reloadPrivateRegOU(self.privateRegOUGrid.page)
+                                .then(function () {
+                                    toast.success(langService.get('delete_success'));
+                                });
+                        });
+                });
+        };
+
+        /**
+         * @description delete bulk private registry ous
+         */
+        self.removeBulkPrivateRegistryOus = function ($event) {
+            dialog
+                .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event || null)
+                .then(function () {
+                    return organizationService
+                        .deleteBulkPrivateRegistryOUs(self.selectedPrivateRegOUs)
+                        .then(function () {
+                            self.reloadPrivateRegOU(self.privateRegOUGrid.page);
+                        });
+                });
+        };
+
 
         /**
          * @description Contains options for grid configuration

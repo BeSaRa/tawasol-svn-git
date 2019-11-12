@@ -1170,23 +1170,25 @@
                                                 <div scroll-directive>
                                                     <table md-table
                                                            ng-model="ctrl.selectedPrivateRegOUs"
-                                                           md-progress="ctrl.privateRegOUGrid.progress">
+                                                           md-progress="ctrl.privateRegOUGrid.progress"
+                                                           md-row-select="true"
+                                                           multiple>
                                                         <thead md-head md-order="ctrl.privateRegOUGrid.order"
                                                                md-on-reorder="ctrl.getSortedDataPrivateRegOUs">
                                                         <tr md-row>
-                                                            <!--  <th ng-if="ctrl.selectedPrivateRegOUs.length" colspan="3"
-                                                                  md-column>
-                                                                  <div layout="row" layout-align="start center">
-                                                                      <span>{{ctrl.selectedPrivateRegOUs.length}} {{lang.items_selected}} </span>
-                                                                      <span flex></span>
-                                                                      <div>
-                                                                          <md-button class="md-icon-button"
-                                                                                     ng-click="ctrl.removeBulkPrivateRegistryOu()">
-                                                                              <md-icon md-svg-icon="delete"></md-icon>
-                                                                          </md-button>
-                                                                      </div>
-                                                                  </div>
-                                                              </th>-->
+                                                            <th ng-if="ctrl.selectedPrivateRegOUs.length" colspan="3"
+                                                                md-column>
+                                                                <div layout="row" layout-align="start center">
+                                                                    <span>{{ctrl.selectedPrivateRegOUs.length}} {{lang.items_selected}} </span>
+                                                                    <span flex></span>
+                                                                    <div>
+                                                                        <md-button class="md-icon-button"
+                                                                                   ng-click="ctrl.removeBulkPrivateRegistryOus($event)">
+                                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                                        </md-button>
+                                                                    </div>
+                                                                </div>
+                                                            </th>
                                                             <th ng-if="!ctrl.selectedPrivateRegOUs.length"
                                                                 md-order-by="ouInfo.arName" md-column>
                                                                 <span>{{lang.arabic_name}}</span>
@@ -1195,9 +1197,9 @@
                                                                 md-order-by="ouInfo.enName" md-column>
                                                                 <span>{{lang.english_name}}</span>
                                                             </th>
-                                                            <!-- <th ng-if="!ctrl.selectedPrivateRegOUs.length" md-column>
-                                                                 <span>{{lang.actions}}</span>
-                                                             </th>-->
+                                                            <th ng-if="!ctrl.selectedPrivateRegOUs.length" md-column>
+                                                                <span>{{lang.actions}}</span>
+                                                            </th>
                                                         </tr>
                                                         </thead>
                                                         <tbody md-body>
@@ -1205,14 +1207,14 @@
                                                             ng-repeat="privateRegOU in ctrl.privateRegOUs | limitTo: ctrl.privateRegOUGrid.limit: ((ctrl.privateRegOUGrid.page - 1) * ctrl.privateRegOUGrid.limit) track by $index">
                                                             <td md-cell>{{privateRegOU.ouInfo.arName}}</td>
                                                             <td md-cell>{{privateRegOU.ouInfo.enName}}</td>
-                                                            <!-- <td md-cell>
-                                                                 <div layout="row">
-                                                                     <md-button class="md-icon-button"
-                                                                                ng-click="ctrl.removePrivateRegistryOu(privateRegOU)">
-                                                                         <md-icon md-svg-icon="delete"></md-icon>
-                                                                     </md-button>
-                                                                 </div>
-                                                             </td>-->
+                                                            <td md-cell>
+                                                                <div layout="row">
+                                                                    <md-button class="md-icon-button"
+                                                                               ng-click="ctrl.removePrivateRegistryOu(privateRegOU)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
