@@ -105,6 +105,12 @@ module.exports = function (app) {
             GeneralStepElementView.prototype.getReceivedTime = function () {
                 return this.generalStepElm.receivedDate ? moment(this.generalStepElm.receivedDate).format('hh:mm A') : '';
             };
+
+            GeneralStepElementView.prototype.isTransferredDocument = function(){
+                // if no incomingVSID, then its directly sent from launch(transferred)
+                return !this.generalStepElm.incomingVSID;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('GeneralStepElementView', 'init', this);

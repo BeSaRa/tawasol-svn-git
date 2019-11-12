@@ -38,7 +38,7 @@ module.exports = function (app) {
         self.editContentFrom = null;
 
         self.excludedManagePopupsFromGrids = [
-            'departmentIncoming',
+            // 'departmentIncoming',
             'g2gIncoming'
         ];
 
@@ -179,6 +179,11 @@ module.exports = function (app) {
                 } else {
                     self.recordType = 'g2g';
                 }
+            }
+
+            // exclude manage attachments/linked doc if not transferred books in department incoming
+            if (self.workItem && !self.workItem.isTransferredDocument()) {
+                self.excludedManagePopupsFromGrids.push("departmentIncoming");
             }
 
         }, 100);
