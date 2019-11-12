@@ -20,6 +20,7 @@ module.exports = function (app) {
             .setBuildNumber('T#4854')
             .setPrivateBuildNumber('T#4854');
 
+
         $urlRouterProvider.otherwise('/404');
         /**
          * md-datepicker settings for default date format
