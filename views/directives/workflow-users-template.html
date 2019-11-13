@@ -107,8 +107,9 @@
                                     md-svg-icon="{{workflowUser.isFavorite() ? 'star' : 'star-outline'}}"></md-icon>
                         </md-button>
                     </td>
-                    <td md-cell ng-if="workflowUser.isUserOutOfOffice()" class="no-padding">
-                        <md-button class="md-icon-button"
+                    <td md-cell ng-if="ctrl.isAnyOutOfOffice()" class="no-padding">
+                        <span flex ng-if="!workflowUser.isUserOutOfOffice()"></span>
+                        <md-button class="md-icon-button" ng-if="workflowUser.isUserOutOfOffice()"
                                    ng-click="ctrl.runOpenWorkflowUserOutOfOffice(workflowUser , $event)">
                             <md-icon md-svg-icon="account-alert"></md-icon>
                         </md-button>
@@ -226,8 +227,9 @@
                                     md-svg-icon="{{workflowUser.isFavorite() ? 'star' : 'star-outline'}}"></md-icon>
                         </md-button>
                     </td>
-                    <td md-cell ng-if="workflowUser.isUserOutOfOffice()" class="no-padding">
-                        <md-button class="md-icon-button"
+                    <td md-cell ng-if="ctrl.isAnyOutOfOffice()" class="no-padding">
+                        <span flex ng-if="!workflowUser.isUserOutOfOffice()"></span>
+                        <md-button class="md-icon-button" ng-if="workflowUser.isUserOutOfOffice()"
                                    ng-click="ctrl.runOpenWorkflowUserOutOfOffice(workflowUser , $event)">
                             <md-icon md-svg-icon="account-alert"></md-icon>
                         </md-button>
