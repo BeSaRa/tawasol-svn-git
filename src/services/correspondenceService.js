@@ -4283,6 +4283,16 @@ module.exports = function (app) {
             return action;
         };
 
+        self.updateDocumentVersion = function (document) {
+            var info = document.getInfo();
+            return $http.get(urlService.correspondenceCommon + '/version-info/' + info.vsId)
+                .then(function (result) {
+                    document.setMajorVersionNumber(result.data.rs.first);
+                    document.setMinorVersionNumber(result.data.rs.second);
+                    return document;
+                });
+        };
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);

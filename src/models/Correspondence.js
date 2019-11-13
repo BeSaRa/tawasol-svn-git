@@ -601,7 +601,7 @@ module.exports = function (app) {
             };
             Correspondence.prototype.manageDocumentEntities = function ($event, isSimpleAdd) {
                 var info = this.getInfo();
-                return managerService.manageDocumentEntities.apply(managerService, [info.vsId, info.documentClass, info.title, $event,this ,isSimpleAdd]);
+                return managerService.manageDocumentEntities.apply(managerService, [info.vsId, info.documentClass, info.title, $event, this, isSimpleAdd]);
             };
             Correspondence.prototype.manageDocumentCorrespondence = function ($event) {
                 var info = this.getInfo();
@@ -799,7 +799,7 @@ module.exports = function (app) {
                 }
             };
 
-            Correspondence.prototype.createDocumentTask = function($event){
+            Correspondence.prototype.createDocumentTask = function ($event) {
                 return taskService
                     .controllerMethod
                     .addCorrespondenceTask(this, $event);
@@ -808,6 +808,20 @@ module.exports = function (app) {
 
             Correspondence.prototype.canSendByFax = function () {
                 return rootEntity.returnRootEntity().rootEntity.faxEnabled;
+            };
+
+            Correspondence.prototype.setMajorVersionNumber = function (majorVersionNumber) {
+                this.majorVersionNumber = majorVersionNumber;
+                return this;
+            };
+
+            Correspondence.prototype.setMinorVersionNumber = function (minorVersionNumber) {
+                this.minorVersionNumber = minorVersionNumber;
+                return this;
+            };
+
+            Correspondence.prototype.updateDocumentVersion = function () {
+                return correspondenceService.updateDocumentVersion(this);
             };
 
             // don't remove CMSModelInterceptor from last line

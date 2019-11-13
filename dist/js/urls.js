@@ -373,6 +373,8 @@
                 .addToAllWithBase('g2gTerminateByActionID', 'g2g/terminate/g2gActionID/{g2gActionID}')
                 // ou private registry
                 .addToAllWithBase('privateRegistryOU', 'cms-entity/admin/ou-private-registry')
+                // correspondence common
+                .addToAllWithBase('correspondenceCommon', 'cms-entity/correspondence/common')
                 // download selected book options
                 .addToAllWithBase('downloadSelected','cms-entity/correspondence/common/merge-book')
                 // downlaod document content

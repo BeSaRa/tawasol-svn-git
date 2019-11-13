@@ -238,9 +238,10 @@ module.exports = function (app) {
             counterService.loadCounters();
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             if (replyTo) {
-                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                //mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                 replyTo = false;
             }
+            self.internal.updateDocumentVersion();
 
             if (self.terminateAfterCreateReply) {
                 correspondenceService.terminateWorkItemBehindScene($stateParams.workItem, 'incoming', langService.get('terminated_after_create_reply'))

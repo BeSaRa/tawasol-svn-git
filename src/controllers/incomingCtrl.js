@@ -223,6 +223,7 @@ module.exports = function (app) {
 
         var saveCorrespondenceFinished = function (status, isSaveAndPrintBarcode) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+            self.incoming.updateDocumentVersion();
             counterService.loadCounters();
             // once saved/received, don't consider the request as receive/receiveG2G
             self.receive = false;
