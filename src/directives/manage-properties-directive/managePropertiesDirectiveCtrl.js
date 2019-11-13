@@ -193,16 +193,18 @@ module.exports = function (app) {
                 return;
             }
 
-            var selectedClassification = _.find(self.classifications, function (classification) {
-                return classification.classification.id === mainClassificationOptionFromInfo.classification.id;
-            });
-            // if selected option exists in list, return. Otherwise, push option from info.
-            if (selectedClassification) {
-                self.classificationsCopy = angular.copy(self.classifications);
-                return;
-            }
-            if (mainClassificationOptionFromInfo.classification.securityLevels === documentSecurityLevelLookupKey) {
-                self.classifications.push(mainClassificationOptionFromInfo);
+            if (mainClassificationOptionFromInfo && (mainClassificationOptionFromInfo instanceof OUClassification)) {
+                var selectedClassification = _.find(self.classifications, function (classification) {
+                    return classification.classification.id === mainClassificationOptionFromInfo.classification.id;
+                });
+                // if selected option exists in list, return. Otherwise, push option from info.
+                if (selectedClassification) {
+                    self.classificationsCopy = angular.copy(self.classifications);
+                    return;
+                }
+                if (mainClassificationOptionFromInfo.classification.securityLevels === documentSecurityLevelLookupKey) {
+                    self.classifications.push(mainClassificationOptionFromInfo);
+                }
             }
             self.classificationsCopy = angular.copy(self.classifications);
         };
@@ -214,21 +216,23 @@ module.exports = function (app) {
                 return;
             }
 
-            var selectedSubClassification = _.find(self.document.mainClassification.children, function (subClassification) {
-                return subClassification.id === subClassificationOptionFromInfo.id;
-            });
-            // if selected option exists in list, return. Otherwise, push option from info.
-            if (selectedSubClassification) {
-                self.classificationsCopy = angular.copy(self.classifications);
-                return;
-            }
+            if (subClassificationOptionFromInfo && (subClassificationOptionFromInfo instanceof Classification)) {
+                var selectedSubClassification = _.find(self.document.mainClassification.children, function (subClassification) {
+                    return subClassification.id === subClassificationOptionFromInfo.id;
+                });
+                // if selected option exists in list, return. Otherwise, push option from info.
+                if (selectedSubClassification) {
+                    self.classificationsCopy = angular.copy(self.classifications);
+                    return;
+                }
 
-            var mainClassificationId = angular.copy(self.document.mainClassification);
-            if (mainClassificationId && mainClassificationId.hasOwnProperty('id')) {
-                mainClassificationId = mainClassificationId.id;
-            }
-            if (subClassificationOptionFromInfo.securityLevels === documentSecurityLevelLookupKey && mainClassificationId === subClassificationOptionFromInfo.parent) {
-                self.document.mainClassification.children.push(subClassificationOptionFromInfo);
+                var mainClassificationId = angular.copy(self.document.mainClassification);
+                if (mainClassificationId && mainClassificationId.hasOwnProperty('id')) {
+                    mainClassificationId = mainClassificationId.id;
+                }
+                if (subClassificationOptionFromInfo.securityLevels === documentSecurityLevelLookupKey && mainClassificationId === subClassificationOptionFromInfo.parent) {
+                    self.document.mainClassification.children.push(subClassificationOptionFromInfo);
+                }
             }
             self.classificationsCopy = angular.copy(self.classifications);
         };
@@ -240,17 +244,19 @@ module.exports = function (app) {
                 return;
             }
 
-            var selectedDocumentFile = _.find(self.documentFiles, function (documentFile) {
-                return documentFile.file.id === documentFileOptionFromInfo.file.id;
-            });
-            // if selected option exists in list, return. Otherwise, push option from info.
-            if (selectedDocumentFile) {
-                self.documentFilesCopy = angular.copy(self.documentFiles);
-                return;
-            }
+            if (documentFileOptionFromInfo && (documentFileOptionFromInfo instanceof OUDocumentFile)) {
+                var selectedDocumentFile = _.find(self.documentFiles, function (documentFile) {
+                    return documentFile.file.id === documentFileOptionFromInfo.file.id;
+                });
+                // if selected option exists in list, return. Otherwise, push option from info.
+                if (selectedDocumentFile) {
+                    self.documentFilesCopy = angular.copy(self.documentFiles);
+                    return;
+                }
 
-            if (documentFileOptionFromInfo.file.securityLevels === documentSecurityLevelLookupKey) {
-                self.documentFiles.push(documentFileOptionFromInfo);
+                if (documentFileOptionFromInfo.file.securityLevels === documentSecurityLevelLookupKey) {
+                    self.documentFiles.push(documentFileOptionFromInfo);
+                }
             }
             self.documentFilesCopy = angular.copy(self.documentFiles);
         };
@@ -744,7 +750,7 @@ module.exports = function (app) {
          * @returns {boolean|*}
          */
         self.isShowDocFullSerial = function () {
-            if (!self.document.vsId &&  self.employee.isBacklogMode() ) {
+            if (!self.document.vsId && self.employee.isBacklogMode()) {
                 self.document.isMigrated = true;
                 return true;
             } else {
