@@ -290,7 +290,8 @@ module.exports = function (app) {
                     type: self.filter.ui.key_siteType.value.hasOwnProperty('lookupKey') ? self.filter.ui.key_siteType.value.lookupKey : self.filter.ui.key_siteType.value,
                     parent: mainSite,
                     criteria: null,
-                    excludeOuSites: false
+                    excludeOuSites: false,
+                    includeDisabled: true // to include private regOu
                 }).then(function (result) {
                     self.subSites = result;
                     self.subSitesCopy = angular.copy(result);
