@@ -30,6 +30,7 @@
                         </th>
                         <th ng-if="ctrl.selectedCorrespondences.length" md-column>
                             <md-button class="md-icon-button"
+                                       ng-if="ctrl.checkBulkDelete()"
                                        ng-click="ctrl.deleteBulkLinkedDocument($event)">
                                 <md-icon md-svg-icon="delete"></md-icon>
                             </md-button>
@@ -49,9 +50,9 @@
                         <th md-column md-order-by="securityLevel" ng-if="!ctrl.selectedCorrespondences.length">
                             <span>{{lang.security_level}}</span>
                         </th>
-                        <th md-column md-order-by="createdBy" ng-if="!ctrl.selectedCorrespondences.length">
+                       <!-- <th md-column md-order-by="createdBy" ng-if="!ctrl.selectedCorrespondences.length">
                             <span>{{lang.creator}}</span>
-                        </th>
+                        </th>-->
                         <th md-column md-order-by="createdOn" ng-if="!ctrl.selectedCorrespondences.length">
                             <span>{{lang.created_on}}</span>
                         </th>
@@ -118,7 +119,7 @@
                         <td md-cell><span class="serial-td">{{correspondence.docFullSerial}}</span></td>
                         <td md-cell>{{correspondence.priorityLevel.getTranslatedName()}}</td>
                         <td md-cell>{{correspondence.securityLevel.getTranslatedName()}}</td>
-                        <td md-cell>{{correspondence.getTranslatedCreator()}}</td>
+                        <!--   <td md-cell>{{correspondence.getTranslatedCreator()}}</td>-->
                         <td md-cell>{{correspondence.createdOn}}</td>
                         <td md-cell ng-if="!ctrl.disableEverything">
                             <md-button class="md-icon-button" ng-click="ctrl.deleteLinkedDocument(correspondence)"

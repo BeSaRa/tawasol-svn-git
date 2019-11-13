@@ -185,6 +185,17 @@ module.exports = function (app) {
          */
         self.checkIfReplyToAction = function (correspondence) {
             return !(self.linkedDocs[0].vsId === correspondence.vsId && $stateParams.hasOwnProperty('action') && $stateParams.action === 'reply');
+        };
+
+
+        /**
+         * @description disable delete for selected linked docs
+         * @returns {boolean}
+         */
+        self.checkBulkDelete = function () {
+            return  _.every(self.selectedCorrespondences, function (correspondence) {
+                return self.checkIfReplyToAction(correspondence);
+            })
         }
     });
 };
