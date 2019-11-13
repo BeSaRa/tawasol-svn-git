@@ -492,6 +492,12 @@ module.exports = function (app) {
             if (_isPublicRegistryChangedToPrivate()) {
                 self.organization.isPrivateRegistry = false;
                 toast.info(langService.get('can_not_change_global_to_private').change({type: langService.get('reg_ou')}))
+            } else if (!self.organization.isPrivateRegistry && self.editMode) {
+                dialog.confirmMessage(langService.get('confirm_permanent_change')).then(function () {
+                    self.organization.isPrivateRegistry = false;
+                }).catch(function () {
+                    self.organization.isPrivateRegistry = true;
+                })
             }
         };
 
