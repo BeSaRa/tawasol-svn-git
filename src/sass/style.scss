@@ -228,6 +228,7 @@ body, html, #main-view, #sub-view-wrapper {
   padding: 3px 8px;
   border-radius: 20px;
   font-size: 12px;
+  z-index: 21;
 
   &.red {
     background-color: red;

@@ -824,6 +824,24 @@ module.exports = function (app) {
                 return correspondenceService.updateDocumentVersion(this);
             };
 
+            Correspondence.prototype.getCorrespondenceSitesCount = function () {
+                var info = this.getInfo();
+                if (info.documentClass === 'outgoing') {
+                    var sitesTo = this.sitesInfoTo,
+                        sitesCC = this.sitesInfoCC;
+                    if (generator.isJsonString(sitesTo)) {
+                        sitesTo = JSON.parse(sitesTo);
+                    }
+                    if (generator.isJsonString(sitesCC)) {
+                        sitesCC = JSON.parse(sitesCC);
+                    }
+                    return sitesTo.length + sitesCC.length;
+                } else if (info.documentClass === 'incoming') {
+                    return 1;
+                }
+                return 0;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Correspondence', 'init', this);

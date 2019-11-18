@@ -19,6 +19,7 @@ module.exports = function (app) {
                                                           viewTrackingSheetService,
                                                           errorCode,
                                                           $compile,
+                                                          _,
                                                           G2GMessagingHistory) {
         'ngInject';
         var self = this;
@@ -436,12 +437,24 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.isShowViewerAction = function (action) {
+            if (action.forceShow) {
+                return true;
+            }
             if (!self.workItem)
                 return false;
             if (action.hasOwnProperty('checkAnyPermission')) {
                 return action.checkShow(action, self.workItem, action.checkAnyPermission);
             }
             return action.checkShow(action, self.workItem);
+        };
+
+        self.isShowActionCount = function (action) {
+            var record = self.workItem || self.correspondence;
+            if (record.getInfo().documentClass !== 'outgoing') {
+                return false;
+            } else if (action.hasOwnProperty('count')) {
+                return true;
+            }
         };
 
         /**
@@ -482,9 +495,9 @@ module.exports = function (app) {
                 additionalData = {preApproveAction: self.saveCorrespondenceChanges};
             }
             if (action.hasOwnProperty('params') && action.params) {
-                action.callback(self.workItem, action.params, $event, defer, additionalData);
+                action.callback((self.workItem || self.correspondence), action.params, $event, defer, additionalData);
             } else {
-                action.callback(self.workItem, $event, defer, additionalData);
+                action.callback((self.workItem || self.correspondence), $event, defer, additionalData);
             }
         };
 
@@ -527,7 +540,7 @@ module.exports = function (app) {
          * @param record
          * @param $event
          */
-        self.viewCorrespondenceSites = function(record, $event){
+        self.viewCorrespondenceSites = function (record, $event) {
             correspondenceService.viewCorrespondenceSites(record, self.recordType, $event);
         };
 
@@ -544,9 +557,15 @@ module.exports = function (app) {
                     class: "action-green",
                     checkShow: function (action, model) {
                         return model.getInfo().documentClass === 'outgoing';
-                    }
+                    },
+                    count: function () {
+                        var record = self.workItem || self.correspondence;
+                        return record.getCorrespondenceSitesCount();
+                    },
+                    forceShow: true
                 }
-            )
+            );
+            self.stickyActionsChunk = _.chunk(self.stickyActions, 5);
         })
 
 

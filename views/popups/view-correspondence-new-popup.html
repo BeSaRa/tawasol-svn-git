@@ -191,18 +191,23 @@
                                 item="ctrl.correspondence"></correspondence-item-properties-directive>
                         <!-- Quick Actions -->
                         <li>
-                            <div class="viewer-actions">
-                                <md-button
-                                        ng-repeat="quickAction in ctrl.stickyActions track by $index"
-                                        ng-if="ctrl.isShowViewerAction(quickAction)" class="md-fab md-mini"
-                                        aria-label="{{ctrl.getViewerActionText(quickAction, true)}}"
-                                        ng-click="ctrl.callbackViewerAction(quickAction, $event)"
-                                        tooltip="{{ctrl.getViewerActionText(quickAction, true)}}"
-                                        tooltip-direction="{{lang.current === 'ar' ? 'left': 'right'}}">
-                                    <md-icon md-svg-icon="{{quickAction.icon}}"
-                                             class="{{quickAction.class}}"
-                                    ></md-icon>
-                                </md-button>
+                            <div class="viewer-actions" layout="row" ng-repeat="chunk in ctrl.stickyActionsChunk">
+                                <div ng-repeat="quickAction in chunk track by $index"
+                                     ng-if="ctrl.isShowViewerAction(quickAction)"
+                                     ng-class="{'icon-relative':ctrl.isShowActionCount(quickAction)}">
+                                    <md-button
+                                            class="md-fab md-mini"
+                                            aria-label="{{ctrl.getViewerActionText(quickAction, true)}}"
+                                            ng-click="ctrl.callbackViewerAction(quickAction, $event)"
+                                            tooltip="{{ctrl.getViewerActionText(quickAction, true)}}"
+                                            tooltip-direction="{{lang.current === 'ar' ? 'left': 'right'}}">
+                                        <md-icon md-svg-icon="{{quickAction.icon}}"
+                                                 class="{{quickAction.class}}"
+                                        ></md-icon>
+                                    </md-button>
+                                    <span ng-if="ctrl.isShowActionCount(quickAction)"
+                                          class="counter blue">{{quickAction.count()}}</span>
+                                </div>
                             </div>
                         </li>
 
@@ -234,7 +239,8 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="document-properties linked linked-documents" ng-if="ctrl.workItem.isTransferredDocument()">
+                        <li class="document-properties linked linked-documents"
+                            ng-if="ctrl.workItem.isTransferredDocument()">
                             <ul class="work-item-properties">
                                 <li class="section-title">
                                     <div layout="row" layout-align="start center">

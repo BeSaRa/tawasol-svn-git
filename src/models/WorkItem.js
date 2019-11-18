@@ -260,7 +260,7 @@ module.exports = function (app) {
              * if no incomingVSID, then its directly sent from launch(transferred), otherwise its exported to organization
              * @returns {boolean}
              */
-            WorkItem.prototype.isTransferredDocument = function(){
+            WorkItem.prototype.isTransferredDocument = function () {
                 // if no incomingVSID, then its directly sent from launch(transferred)
                 return !this.generalStepElm.incomingVSID;
             };
@@ -855,6 +855,24 @@ module.exports = function (app) {
 
             WorkItem.prototype.canSendByFax = function () {
                 return rootEntity.returnRootEntity().rootEntity.faxEnabled;
+            };
+
+            WorkItem.prototype.getCorrespondenceSitesCount = function () {
+                var info = this.getInfo();
+                if (info.documentClass === 'outgoing') {
+                    var sitesTo = this.generalStepElm.sitesInfoTo,
+                        sitesCC = this.generalStepElm.sitesInfoCC;
+                    if (generator.isJsonString(sitesTo)) {
+                        sitesTo = JSON.parse(sitesTo);
+                    }
+                    if (generator.isJsonString(sitesCC)) {
+                        sitesCC = JSON.parse(sitesCC);
+                    }
+                    return sitesTo.length + sitesCC.length;
+                } else if (info.documentClass === 'incoming') {
+                    return 1;
+                }
+                return 0;
             };
 
 
