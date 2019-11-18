@@ -177,7 +177,7 @@ module.exports = function (app) {
             var promise = null;
             var defer = $q.defer();
             if (replyTo && $stateParams.workItem) {
-                dialog.confirmMessage(langService.get('prompt_terminate').change({name: self.replyToOriginalName}), 'yes', 'no')
+                dialog.confirmMessage(langService.get('prompt_terminate').change({name: self.replyToOriginalName}), langService.get('yes'), langService.get('no'))
                     .then(function () {
                         self.terminateAfterCreateReply = true;
                         defer.resolve(true);
