@@ -58,20 +58,45 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
+                                    <!-- Domain Name -->
+                                    <div flex layout="row">
+                                        <md-input-container flex>
+                                            <label for="domainName">{{lang.domain_name}}</label>
+                                            <input name="domainName" id="domainName" required minlength="2"
+                                                   ng-model="ctrl.applicationUser.domainName" maxlength="50"
+                                                   ng-disabled="ctrl.editMode && !ctrl.employeeService.getEmployee().isAdmin"
+                                                   no-space-directive custom-validate-directive="FILE_NET_USER">
+                                            <div ng-messages="applicationUserForm.domainName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
+                                                </div>
+                                                <div ng-message="FILE_NET_USER">{{lang.english_number}}</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container ng-if="!ctrl.applicationUser.id">
+                                            <md-button ng-disabled="!ctrl.applicationUser.domainName"
+                                                       tooltip="{{lang.check_ldap_user}}"
+                                                       ng-click="ctrl.checkLDAPUser($event)"
+                                                       class="md-icon-button">
+                                                <md-icon md-svg-icon="account-check"></md-icon>
+                                            </md-button>
+                                        </md-input-container>
+                                    </div>
                                     <!-- Login Name -->
-                                    <md-input-container flex>
-                                        <label for="loginName">{{lang.login_name}}</label>
-                                        <input name="loginName" id="loginName" required minlength="2"
-                                               ng-model="ctrl.applicationUser.loginName"
-                                               maxlength="50"
-                                               ng-disabled="ctrl.editMode && !ctrl.employeeService.getEmployee().isAdmin"
-                                               no-space-directive custom-validate-directive="FILE_NET_USER">
-                                        <div ng-messages="applicationUserForm.loginName.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="FILE_NET_USER">{{lang.english_number}}</div>
-                                        </div>
-                                    </md-input-container>
+                                    <!--   <md-input-container flex>
+                                           <label for="loginName">{{lang.login_name}}</label>
+                                           <input name="loginName" id="loginName" required minlength="2"
+                                                  ng-model="ctrl.applicationUser.loginName"
+                                                  maxlength="50"
+                                                  ng-disabled="ctrl.editMode && !ctrl.employeeService.getEmployee().isAdmin"
+                                                  no-space-directive custom-validate-directive="FILE_NET_USER">
+                                           <div ng-messages="applicationUserForm.loginName.$error">
+                                               <div ng-message="required">{{lang.field_required}}</div>
+                                               <div ng-message="minlength">{{lang.short}}</div>
+                                               <div ng-message="FILE_NET_USER">{{lang.english_number}}</div>
+                                           </div>
+                                       </md-input-container>-->
                                 </div>
                                 <div layout="row">
                                     <!-- Employee Number -->
@@ -100,28 +125,27 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <!-- Domain Name -->
+                                    <!-- Rank -->
                                     <div flex layout="row">
                                         <md-input-container flex>
-                                            <label for="domainName">{{lang.domain_name}}</label>
-                                            <input name="domainName" id="domainName" required minlength="2"
-                                                   ng-model="ctrl.applicationUser.domainName" maxlength="50"
-                                                   ng-disabled="ctrl.editMode && !ctrl.employeeService.getEmployee().isAdmin"
-                                                   no-space-directive custom-validate-directive="FILE_NET_USER">
-                                            <div ng-messages="applicationUserForm.domainName.$error">
+                                            <label for="rank">{{lang.rank}}</label>
+                                            <md-select id="rank" name="rank"
+                                                       ng-model="ctrl.applicationUser.rank"><!-- required-->
+                                                <md-option ng-if="rank.status" ng-value="rank.lookupKey"
+                                                           ng-repeat="rank in ctrl.ranks track by $index">
+                                                    {{rank.getTranslatedName()}}
+                                                </md-option>
+                                            </md-select>
+                                            <div ng-messages="applicationUserForm.rank.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
-                                                <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
-                                                </div>
-                                                <div ng-message="FILE_NET_USER">{{lang.english_number}}</div>
                                             </div>
                                         </md-input-container>
-                                        <md-input-container ng-if="!ctrl.applicationUser.id">
-                                            <md-button ng-disabled="!ctrl.applicationUser.domainName"
-                                                       tooltip="{{lang.check_ldap_user}}"
-                                                       ng-click="ctrl.checkLDAPUser($event)"
-                                                       class="md-icon-button">
-                                                <md-icon md-svg-icon="account-check"></md-icon>
+                                        <md-input-container>
+                                            <md-button
+                                                    tooltip="{{lang.add_new_rank}}"
+                                                    ng-click="ctrl.openAddRankDialog($event)"
+                                                    class="md-icon-button">
+                                                <md-icon md-svg-icon="plus"></md-icon>
                                             </md-button>
                                         </md-input-container>
                                     </div>
@@ -154,30 +178,20 @@
                                     </div>
                                 </div>
                                 <div layout="row">
-                                    <!-- Rank -->
-                                    <div flex layout="row">
-                                        <md-input-container flex>
-                                            <label for="rank">{{lang.rank}}</label>
-                                            <md-select id="rank" name="rank"
-                                                       ng-model="ctrl.applicationUser.rank"><!-- required-->
-                                                <md-option ng-if="rank.status" ng-value="rank.lookupKey"
-                                                           ng-repeat="rank in ctrl.ranks track by $index">
-                                                    {{rank.getTranslatedName()}}
-                                                </md-option>
-                                            </md-select>
-                                            <div ng-messages="applicationUserForm.rank.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
+                                    <!-- Email -->
+                                    <md-input-container flex>
+                                        <label for="email">{{lang.email}}</label>
+                                        <input name="email" id="email" required maxlength="50"
+                                               ng-model="ctrl.applicationUser.email"
+                                               custom-validate-directive="email">
+                                        <div ng-messages="applicationUserForm.email.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="email">
+                                                {{lang.invalid_email}}
                                             </div>
-                                        </md-input-container>
-                                        <md-input-container>
-                                            <md-button
-                                                    tooltip="{{lang.add_new_rank}}"
-                                                    ng-click="ctrl.openAddRankDialog($event)"
-                                                    class="md-icon-button">
-                                                <md-icon md-svg-icon="plus"></md-icon>
-                                            </md-button>
-                                        </md-input-container>
-                                    </div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:50})}}</div>
+                                        </div>
+                                    </md-input-container>
                                     <!-- Mobile Number -->
                                     <md-input-container flex>
                                         <label for="mobile">{{lang.mobile_number}}</label>
@@ -207,20 +221,30 @@
                                     </md-input-container>-->
                                 </div>
                                 <div layout="row">
-                                    <!-- Email -->
-                                    <md-input-container flex>
-                                        <label for="email">{{lang.email}}</label>
-                                        <input name="email" id="email" required maxlength="50"
-                                               ng-model="ctrl.applicationUser.email"
-                                               custom-validate-directive="email">
-                                        <div ng-messages="applicationUserForm.email.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="email">
-                                                {{lang.invalid_email}}
+                                    <!-- Theme -->
+                                    <div flex layout="row">
+                                        <md-input-container flex>
+                                            <label for="defaultThemeID">{{lang.default_theme}}</label>
+                                            <md-select id="defaultThemeID" name="defaultThemeID" required
+                                                       ng-model="ctrl.applicationUser.defaultThemeID">
+                                                <md-option ng-value="theme.id"
+                                                           ng-repeat="theme in ctrl.themes track by $index">
+                                                    {{theme.getTranslatedName()}}
+                                                </md-option>
+                                            </md-select>
+                                            <div ng-messages="applicationUserForm.defaultThemeID.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
                                             </div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:50})}}</div>
-                                        </div>
-                                    </md-input-container>
+                                        </md-input-container>
+                                        <md-input-container>
+                                            <md-button
+                                                    tooltip="{{lang.add_new_theme}}"
+                                                    ng-click="ctrl.openAddThemeDialog($event)"
+                                                    class="md-icon-button">
+                                                <md-icon md-svg-icon="plus"></md-icon>
+                                            </md-button>
+                                        </md-input-container>
+                                    </div>
                                     <!-- Language -->
                                     <md-input-container flex>
                                         <label for="defaultDisplayLang">{{lang.default_language}}</label>
@@ -254,30 +278,20 @@
                                             </div>
                                         </div>
                                     </md-input-container>
-                                    <!-- Theme -->
-                                    <div flex layout="row">
-                                        <md-input-container flex>
-                                            <label for="defaultThemeID">{{lang.default_theme}}</label>
-                                            <md-select id="defaultThemeID" name="defaultThemeID" required
-                                                       ng-model="ctrl.applicationUser.defaultThemeID">
-                                                <md-option ng-value="theme.id"
-                                                           ng-repeat="theme in ctrl.themes track by $index">
-                                                    {{theme.getTranslatedName()}}
-                                                </md-option>
-                                            </md-select>
-                                            <div ng-messages="applicationUserForm.defaultThemeID.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                            </div>
-                                        </md-input-container>
-                                        <md-input-container>
-                                            <md-button
-                                                    tooltip="{{lang.add_new_theme}}"
-                                                    ng-click="ctrl.openAddThemeDialog($event)"
-                                                    class="md-icon-button">
-                                                <md-icon md-svg-icon="plus"></md-icon>
-                                            </md-button>
-                                        </md-input-container>
-                                    </div>
+                                    <!-- View Inbox -->
+                                    <md-input-container flex>
+                                        <label for="viewInboxAsGrid">{{lang.view_inbox_as}}</label>
+                                        <md-select id="viewInboxAsGrid" name="viewInboxAsGrid" required
+                                                   ng-model="ctrl.applicationUser.viewInboxAsGrid">
+                                            <md-option ng-value="viewType.value"
+                                                       ng-repeat="viewType in ctrl.viewInboxAsOptions track by $index">
+                                                {{lang[viewType.key]}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="applicationUserForm.viewInboxAsGrid.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
                                 </div>
                                 <!--<div layout="row" flex>
                                     &lt;!&ndash; Subscription Email &ndash;&gt;
@@ -293,40 +307,6 @@
                                             {{ctrl.applicationUser.getTranslatedYesNo('subscriptionsmsNotify')}}</label>
                                     </md-switch>
                                 </div>-->
-                                <div layout="row">
-                                    <!-- View Inbox -->
-                                    <md-input-container flex>
-                                        <label for="viewInboxAsGrid">{{lang.view_inbox_as}}</label>
-                                        <md-select id="viewInboxAsGrid" name="viewInboxAsGrid" required
-                                                   ng-model="ctrl.applicationUser.viewInboxAsGrid">
-                                            <md-option ng-value="viewType.value"
-                                                       ng-repeat="viewType in ctrl.viewInboxAsOptions track by $index">
-                                                {{lang[viewType.key]}}
-                                            </md-option>
-                                        </md-select>
-                                        <div ng-messages="applicationUserForm.viewInboxAsGrid.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                        </div>
-                                    </md-input-container>
-                                    <!-- Organization Unit -->
-                                    <md-input-container flex ng-if="ctrl.editMode">
-                                        <label for="defaultOUID">{{lang.organization_unit}}</label>
-                                        <md-select id="defaultOUID" name="defaultOUID" required
-                                                   ng-model="ctrl.applicationUser.defaultOUID">
-                                            <md-option ng-value="organization.ou.id"
-                                                       ng-disabled="!organization.status"
-                                                       tooltip="{{(!organization.status) ? lang.inactive_organization : ''}}"
-                                                       ng-repeat="organization in ctrl.organizationsForAppUser track by $index">
-                                                {{organization.ou.getTranslatedName()}}
-                                            </md-option>
-                                        </md-select>
-                                        <div ng-messages="applicationUserForm.defaultOUID.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                        </div>
-                                    </md-input-container>
-                                    <!-- Empty Container to cover the space when organization unit container is not displayed -->
-                                    <md-input-container flex ng-if="!ctrl.editMode"></md-input-container>
-                                </div>
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="defaultViewerLang">{{lang.default_viewer_language}}</label>
@@ -350,6 +330,26 @@
                                             <md-option ng-value="2">{{lang.desktop}}</md-option>
                                         </md-select>
                                     </md-input-container>
+                                </div>
+                                <div layout="row" ng-if="ctrl.editMode">
+                                    <!-- Organization Unit -->
+                                    <md-input-container flex>
+                                        <label for="defaultOUID">{{lang.organization_unit}}</label>
+                                        <md-select id="defaultOUID" name="defaultOUID" required
+                                                   ng-model="ctrl.applicationUser.defaultOUID">
+                                            <md-option ng-value="organization.ou.id"
+                                                       ng-disabled="!organization.status"
+                                                       tooltip="{{(!organization.status) ? lang.inactive_organization : ''}}"
+                                                       ng-repeat="organization in ctrl.organizationsForAppUser track by $index">
+                                                {{organization.ou.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="applicationUserForm.defaultOUID.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Empty Container to cover the space when organization unit container is not displayed -->
+                                   <!-- <md-input-container flex ng-if="!ctrl.editMode"></md-input-container>-->
                                 </div>
                                 <div layout="row">
                                     <md-switch flex ng-model="ctrl.applicationUser.slowConnectionMode"

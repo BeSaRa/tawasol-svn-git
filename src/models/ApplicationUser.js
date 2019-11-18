@@ -63,7 +63,7 @@ module.exports = function (app) {
             var requiredFields = [
                 'arFullName',
                 'enFullName',
-                'loginName',
+                //'loginName',
                 'gender',
                 'defaultDisplayLang',
                 'employeeNo',

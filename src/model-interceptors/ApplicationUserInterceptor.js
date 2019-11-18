@@ -14,6 +14,8 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            model.loginName = model.domainName;
+
             if (model.signature) {
                 delete model.signature;
             }
