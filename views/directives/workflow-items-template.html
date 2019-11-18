@@ -67,7 +67,7 @@
                     <th md-column>
                         <div layout="row">
                             <div>
-                                <md-button class="md-icon-button"
+                                <md-button class="md-icon-button" tooltip="{{lang.advanced_settings}}"
                                            ng-click="ctrl.setBulkWorkflowItemSettings($event)">
                                     <md-icon md-svg-icon="settings-box"></md-icon>
                                 </md-button>
@@ -162,7 +162,7 @@
                     <td md-cell>
                         <div layout="row">
                             <div>
-                                <md-button
+                                <md-button tooltip="{{lang.advanced_settings}}"
                                         class="md-icon-button"
                                         ng-click="ctrl.setWorkflowItemSettings(workflowItem,$event)">
                                     <md-icon md-svg-icon="settings-box"></md-icon>
@@ -257,7 +257,7 @@
                     <td md-cell>
                         <div layout="row">
                             <div>
-                                <md-button
+                                <md-button tooltip="{{lang.advanced_settings}}"
                                         class="md-icon-button"
                                         ng-click="ctrl.setWorkflowItemSettings(workflowItem,$event)">
                                     <md-icon md-svg-icon="settings-box"></md-icon>

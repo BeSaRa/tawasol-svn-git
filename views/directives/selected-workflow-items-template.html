@@ -68,6 +68,7 @@
                             </div>
                             <div>
                                 <md-button ng-disabled="!ctrl.workflowItems.length" class="md-icon-button"
+                                           tooltip="{{lang.advanced_settings}}"
                                            ng-click="ctrl.setBulkWorkflowItemSettings($event)">
                                     <md-icon md-svg-icon="settings-box"></md-icon>
                                 </md-button>
@@ -210,7 +211,7 @@
                             </div>
 
                             <div>
-                                <md-button
+                                <md-button tooltip="{{lang.advanced_settings}}"
                                         class="md-icon-button"
                                         ng-click="ctrl.setWorkflowItemSettings(workflowItem,$event)">
                                     <md-icon md-svg-icon="settings-box"></md-icon>

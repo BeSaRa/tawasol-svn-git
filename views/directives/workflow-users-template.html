@@ -81,6 +81,7 @@
                         <div layout="row">
                             <div>
                                 <md-button ng-disabled="!ctrl.gridItems.length" class="md-icon-button"
+                                           tooltip="{{lang.advanced_settings}}"
                                            ng-click="ctrl.runSetDefaultWorkflowItemsSettings(ctrl.gridItems , ctrl.defaultWorkflowItemsSettings , $event)">
                                     <md-icon md-svg-icon="settings-box"></md-icon>
                                 </md-button>
@@ -189,7 +190,7 @@
                     <td md-cell>
                         <div layout="row">
                             <div>
-                                <md-button
+                                <md-button tooltip="{{lang.advanced_settings}}"
                                         class="md-icon-button"
                                         ng-click="ctrl.runSetSettingsToDistWorkflowItem(workflowUser,$event)">
                                     <md-icon md-svg-icon="settings-box"></md-icon>
@@ -308,7 +309,7 @@
                     <td md-cell>
                         <div layout="row">
                             <div>
-                                <md-button
+                                <md-button tooltip="{{lang.advanced_settings}}"
                                         class="md-icon-button"
                                         ng-click="ctrl.runSetSettingsToDistWorkflowItem(workflowUser,$event)">
                                     <md-icon md-svg-icon="settings-box"></md-icon>
