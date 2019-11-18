@@ -488,6 +488,10 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description Manage Attachments from sticky actions
+         * @param $event
+         */
         self.manageAttachments = function ($event) {
             if (!employeeService.hasPermissionTo("MANAGE_ATTACHMENTS")) {
                 return;
@@ -501,6 +505,10 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Manage Linked Docs from sticky actions
+         * @param $event
+         */
         self.manageLinkedDocuments = function ($event) {
             if (!employeeService.hasPermissionTo("MANAGE_LINKED_DOCUMENTS")) {
                 return;
@@ -514,8 +522,31 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Show readonly correspondence sites from sticky actions
+         * @param record
+         * @param $event
+         */
+        self.viewCorrespondenceSites = function(record, $event){
+            correspondenceService.viewCorrespondenceSites(record, self.recordType, $event);
+        };
+
         $timeout(function () {
             self.stickyActions = gridService.getStickyActions(self.actions);
+            // show readonly manage destinations for outgoing only
+            self.stickyActions.push(
+                {
+                    type: 'action',
+                    icon: 'arrange-send-backward',
+                    text: 'grid_action_destinations',
+                    callback: self.viewCorrespondenceSites,
+                    permissionKey: "MANAGE_DESTINATIONS",
+                    class: "action-green",
+                    checkShow: function (action, model) {
+                        return model.getInfo().documentClass === 'outgoing';
+                    }
+                }
+            )
         })
 
 
