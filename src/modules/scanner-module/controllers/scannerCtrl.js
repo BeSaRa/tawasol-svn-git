@@ -106,9 +106,8 @@ module.exports = function (app) {
         self.canDelete = function () {
             return self.cc.getDocument().pages.length > 1;
         };
-        self.deletePage = function (page) {
-            debugger;
-            dialog.confirmMessage(langService.get('confirm_delete_msg'))
+        self.deletePage = function (page, $index, $event) {
+            dialog.confirmMessage(langService.get('confirm_delete').change({name: langService.get('page') + ' ' + ($index + 1)  }))
                 .then(function(){
                     self.cc.getDocument().deletePage(page, function (pageAfter) {
                         self.showPage(pageAfter);

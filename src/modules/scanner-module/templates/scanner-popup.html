@@ -124,7 +124,7 @@
                                 </md-button>
                             </span>
                             <span class="page-arrow-up">
-                                <md-button ng-click="ctrl.deletePage(page)"
+                                <md-button ng-click="ctrl.deletePage(page, $index, $event)"
                                            ng-if="ctrl.canDelete()" class="md-icon-button">
                                     <md-icon md-svg-icon="delete"></md-icon>
                                 </md-button>
@@ -136,8 +136,12 @@
                                 </md-button>
                             </span>
                         </div>
-                        <img scanner-image ng-class="{'selected':page.selected}" ng-click="ctrl.showPage(page)"
-                             ng-src="{{page.getThumbnail()}}"/>
+                        <div>
+                            <img scanner-image ng-class="{'selected':page.selected}" ng-click="ctrl.showPage(page)"
+                                 ng-src="{{page.getThumbnail()}}"/>
+                            <span layout="row"><span flex></span><span>{{lang.page}} {{$index + 1}}</span><span
+                                    flex></span></span>
+                        </div>
                     </div>
                 </div>
             </div>
