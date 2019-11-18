@@ -107,9 +107,13 @@ module.exports = function (app) {
             return self.cc.getDocument().pages.length > 1;
         };
         self.deletePage = function (page) {
-            self.cc.getDocument().deletePage(page, function (pageAfter) {
-                self.showPage(pageAfter);
-            });
+            debugger;
+            dialog.confirmMessage(langService.get('confirm_delete_msg'))
+                .then(function(){
+                    self.cc.getDocument().deletePage(page, function (pageAfter) {
+                        self.showPage(pageAfter);
+                    });
+                });
         };
         self.enableProperty = function (property) {
             self.disableProperties[property] = false;
