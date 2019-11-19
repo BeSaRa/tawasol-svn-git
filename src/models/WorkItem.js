@@ -858,10 +858,11 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.getCorrespondenceSitesCount = function () {
-                var info = this.getInfo();
+                var info = this.getInfo(),
+                    sitesTo = [], sitesCC = [];
                 if (info.documentClass === 'outgoing') {
-                    var sitesTo = this.generalStepElm.sitesInfoTo,
-                        sitesCC = this.generalStepElm.sitesInfoCC;
+                    sitesTo = this.generalStepElm.sitesInfoTo;
+                    sitesCC = this.generalStepElm.sitesInfoCC;
                     if (generator.isJsonString(sitesTo)) {
                         sitesTo = JSON.parse(sitesTo);
                     }

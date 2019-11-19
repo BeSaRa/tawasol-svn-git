@@ -106,16 +106,17 @@ module.exports = function (app) {
                 return this.generalStepElm.receivedDate ? moment(this.generalStepElm.receivedDate).format('hh:mm A') : '';
             };
 
-            GeneralStepElementView.prototype.isTransferredDocument = function(){
+            GeneralStepElementView.prototype.isTransferredDocument = function () {
                 // if no incomingVSID, then its directly sent from launch(transferred)
                 return !this.generalStepElm.incomingVSID;
             };
 
             GeneralStepElementView.prototype.getCorrespondenceSitesCount = function () {
-                var info = this.getInfo();
+                var info = this.getInfo(),
+                    sitesTo = [], sitesCC = [];
                 if (info.documentClass === 'outgoing') {
-                    var sitesTo = this.correspondence.sitesInfoTo,
-                        sitesCC = this.correspondence.sitesInfoCC;
+                    sitesTo = this.correspondence.sitesInfoTo || [];
+                    sitesCC = this.correspondence.sitesInfoCC || [];
                     if (generator.isJsonString(sitesTo)) {
                         sitesTo = JSON.parse(sitesTo);
                     }

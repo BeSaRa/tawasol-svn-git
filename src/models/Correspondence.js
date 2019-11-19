@@ -825,10 +825,11 @@ module.exports = function (app) {
             };
 
             Correspondence.prototype.getCorrespondenceSitesCount = function () {
-                var info = this.getInfo();
+                var info = this.getInfo(),
+                    sitesTo = [], sitesCC = [];
                 if (info.documentClass === 'outgoing') {
-                    var sitesTo = this.sitesInfoTo,
-                        sitesCC = this.sitesInfoCC;
+                    sitesTo = this.sitesInfoTo || [];
+                    sitesCC = this.sitesInfoCC || [];
                     if (generator.isJsonString(sitesTo)) {
                         sitesTo = JSON.parse(sitesTo);
                     }

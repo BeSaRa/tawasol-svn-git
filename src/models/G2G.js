@@ -169,6 +169,10 @@ module.exports = function (app) {
                 return g2gReturnedService[method](this, $event);
             };
 
+            G2G.prototype.getCorrespondenceSitesCount = function ($event) {
+               return 1;
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

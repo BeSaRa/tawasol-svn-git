@@ -227,7 +227,9 @@ module.exports = function (app) {
                 documentClass = correspondence.docClassName;
             } else if (correspondence.hasOwnProperty('classDescription') && correspondence.classDescription) {
                 documentClass = correspondence.classDescription;
-            } else if (correspondence.hasOwnProperty('generalStepElm')) {
+            } else if (correspondence.hasOwnProperty('correspondence')) {
+                documentClass = self.getCorrespondenceInformation(correspondence.correspondence).documentClass;
+            }  else if (correspondence.hasOwnProperty('generalStepElm')) {
                 documentClass = generator.getDocumentClassName(correspondence.generalStepElm.docType);
             } else if (correspondence.hasOwnProperty('docClassId')) { // if notification Item
                 documentClass = generator.getDocumentClassName(correspondence.docClassId);

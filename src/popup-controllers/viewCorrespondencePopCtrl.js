@@ -545,6 +545,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewCorrespondenceSites = function (record, $event) {
+            if (self.recordType === 'g2g' || self.recordType === 'g2gmessaginghistory'){
+               return false;
+            }
             correspondenceService.viewCorrespondenceSites(record, self.recordType, $event);
         };
 
@@ -563,10 +566,16 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             var record = self.workItem || self.correspondence;
+                            if (self.recordType === 'g2g' || self.recordType === 'g2gmessaginghistory'){
+                               return false;
+                            }
                             return record.getInfo().documentClass === 'outgoing';
                         },
                         count: function () {
                             var record = self.workItem || self.correspondence;
+                            if (self.recordType === 'g2g' || self.recordType === 'g2gmessaginghistory'){
+                                return false;
+                            }
                             return record.getCorrespondenceSitesCount();
                         },
                         showAlways: true
