@@ -36,7 +36,9 @@
             <div>
                 <md-menu-bar id="login-select-language">
                     <md-menu>
-                        <md-button aria-label="{{lang.select_lang}}" class="md-icon-button" ng-click="$mdMenu.open()">
+                        <md-button aria-label="{{lang.select_lang}}" class="md-icon-button" ng-click="$mdMenu.open()"
+                                   tooltip="{{langService.getKey('select_lang', 'en') + ' / ' + langService.getKey('select_lang', 'ar')}}"
+                                   tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}">
                             <md-icon md-svg-icon="google-translate"></md-icon>
                         </md-button>
                         <md-menu-content id="login-select-language-content" width="3">
