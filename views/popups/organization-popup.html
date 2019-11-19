@@ -367,6 +367,7 @@
                                     <md-input-container flex>
                                         <label for="g2gId">{{lang.g2g_id}}</label>
                                         <md-select name="g2gId" id="g2gId"
+                                                   ng-disabled="ctrl.organization.hasRegistry || ctrl.organization.centralArchive"
                                                    ng-model="ctrl.organization.g2gId">
                                             <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option
@@ -383,7 +384,8 @@
                                     <md-input-container flex>
                                         <label for="internalG2gId">{{lang.internal_g2g_id}}</label>
                                         <md-select name="internalG2gId" id="internalG2gId"
-                                                   ng-model="ctrl.organization.internalG2gId">
+                                                   ng-model="ctrl.organization.internalG2gId"
+                                                   ng-disabled="ctrl.organization.hasRegistry || ctrl.organization.centralArchive">
                                             <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option
                                                     ng-repeat="globalCorrespondenceSite in ctrl.globalCorrespondenceSitesForInternalG2GId track by $index"

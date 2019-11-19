@@ -440,6 +440,11 @@ module.exports = function (app) {
                     if (!(self.organization.hasRegistry || self.organization.centralArchive)) {
                         self.organization.faxId = '';
                     }
+
+                    if(self.organization.hasRegistry || self.organization.centralArchive){
+                        self.organization.internalG2gId = null;
+                        self.organization.g2gId = null;
+                    }
                 })
                 .catch(function () {
                     self.organization.centralArchive = !self.organization.centralArchive;
@@ -467,6 +472,11 @@ module.exports = function (app) {
 
                     if (!(self.organization.hasRegistry || self.organization.centralArchive)) {
                         self.organization.faxId = '';
+                    }
+
+                    if(self.organization.hasRegistry || self.organization.centralArchive){
+                        self.organization.internalG2gId = null;
+                        self.organization.g2gId = null;
                     }
                 })
                 .catch(function () {
