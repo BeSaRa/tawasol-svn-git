@@ -193,8 +193,8 @@
                         <li>
                             <div class="viewer-actions" layout="row" ng-repeat="chunk in ctrl.stickyActionsChunk">
                                 <div ng-repeat="quickAction in chunk track by $index"
-                                     ng-if="ctrl.isShowViewerAction(quickAction)"
                                      ng-class="{'icon-relative':ctrl.isShowActionCount(quickAction)}">
+                                    <!-- ng-if="ctrl.isShowViewerAction(quickAction)"-->
                                     <md-button
                                             class="md-fab md-mini"
                                             aria-label="{{ctrl.getViewerActionText(quickAction, true)}}"

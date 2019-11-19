@@ -186,7 +186,7 @@ module.exports = function (app) {
             if (self.workItem && !self.workItem.isTransferredDocument()) {
                 self.excludedManagePopupsFromGrids.push("departmentIncoming");
             }
-
+            filterStickyActions();
         }, 100);
 
         self.selectedList = null;
@@ -438,14 +438,18 @@ module.exports = function (app) {
          */
         self.isShowViewerAction = function (action) {
             if (action.showAlways) {
-                return true;
+                if (action.hasOwnProperty('checkAnyPermission')) {
+                    return action.checkShow(action, self.workItem, action.checkAnyPermission);
+                }
+                return action.checkShow(action, self.workItem);
+            } else {
+                if (!self.workItem)
+                    return false;
+                if (action.hasOwnProperty('checkAnyPermission')) {
+                    return action.checkShow(action, self.workItem, action.checkAnyPermission);
+                }
+                return action.checkShow(action, self.workItem);
             }
-            if (!self.workItem)
-                return false;
-            if (action.hasOwnProperty('checkAnyPermission')) {
-                return action.checkShow(action, self.workItem, action.checkAnyPermission);
-            }
-            return action.checkShow(action, self.workItem);
         };
 
         self.isShowActionCount = function (action) {
@@ -544,7 +548,7 @@ module.exports = function (app) {
             correspondenceService.viewCorrespondenceSites(record, self.recordType, $event);
         };
 
-        $timeout(function () {
+        var filterStickyActions = function(){
             self.stickyActions = gridService.getStickyActions(self.actions);
             // show readonly manage destinations for outgoing only
             var record = self.workItem || self.correspondence;
@@ -568,8 +572,13 @@ module.exports = function (app) {
                     }
                 );
             }
+
+            self.stickyActions= _.filter(self.stickyActions, function (action) {
+               return self.isShowViewerAction(action);
+            });
+
             self.stickyActionsChunk = _.chunk(self.stickyActions, 5);
-        })
+        };
 
 
     });
