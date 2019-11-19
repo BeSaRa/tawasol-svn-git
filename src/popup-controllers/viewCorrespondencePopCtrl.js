@@ -437,7 +437,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.isShowViewerAction = function (action) {
-            if (action.forceShow) {
+            if (action.showAlways) {
                 return true;
             }
             if (!self.workItem)
@@ -547,24 +547,27 @@ module.exports = function (app) {
         $timeout(function () {
             self.stickyActions = gridService.getStickyActions(self.actions);
             // show readonly manage destinations for outgoing only
-            self.stickyActions.push(
-                {
-                    type: 'action',
-                    icon: 'arrange-send-backward',
-                    text: 'grid_action_destinations',
-                    callback: self.viewCorrespondenceSites,
-                    permissionKey: "MANAGE_DESTINATIONS",
-                    class: "action-green",
-                    checkShow: function (action, model) {
-                        return model.getInfo().documentClass === 'outgoing';
-                    },
-                    count: function () {
-                        var record = self.workItem || self.correspondence;
-                        return record.getCorrespondenceSitesCount();
-                    },
-                    forceShow: true
-                }
-            );
+            var record = self.workItem || self.correspondence;
+            if (record.getInfo().documentClass === 'outgoing') {
+                self.stickyActions.push(
+                    {
+                        type: 'action',
+                        icon: 'arrange-send-backward',
+                        text: 'grid_action_destinations',
+                        callback: self.viewCorrespondenceSites,
+                        //permissionKey: "MANAGE_DESTINATIONS",
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return model.getInfo().documentClass === 'outgoing';
+                        },
+                        count: function () {
+                            var record = self.workItem || self.correspondence;
+                            return record.getCorrespondenceSitesCount();
+                        },
+                        showAlways: true
+                    }
+                );
+            }
             self.stickyActionsChunk = _.chunk(self.stickyActions, 5);
         })
 
