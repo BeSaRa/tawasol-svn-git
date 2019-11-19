@@ -562,7 +562,8 @@ module.exports = function (app) {
                         //permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
                         checkShow: function (action, model) {
-                            return model.getInfo().documentClass === 'outgoing';
+                            var record = self.workItem || self.correspondence;
+                            return record.getInfo().documentClass === 'outgoing';
                         },
                         count: function () {
                             var record = self.workItem || self.correspondence;
@@ -576,7 +577,6 @@ module.exports = function (app) {
             self.stickyActions= _.filter(self.stickyActions, function (action) {
                return self.isShowViewerAction(action);
             });
-
             self.stickyActionsChunk = _.chunk(self.stickyActions, 5);
         };
 

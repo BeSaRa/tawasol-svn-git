@@ -1204,7 +1204,7 @@
                         </tr>
                         </thead>
                         <tbody md-body>
-                        <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
+                        <tr md-row ng-disabled="!!ctrl.disableCorrespondence"
                             ng-repeat="site in ctrl.sitesInfoTo  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit) |orderBy:ctrl.grid.sitesInfoTo.order  track by $index">
                             <td md-cell>
                                 <div flex layout="column">
@@ -1251,54 +1251,12 @@
                         ng-class="{'selected':ctrl.sitesInfoCCSelected.length}">
                 <div class="md-toolbar-tools">
                     <div ng-if="!ctrl.sitesInfoCCSelected.length" flex>{{lang.sites_copy}}</div>
-                    <div ng-if="ctrl.sitesInfoCCSelected.length" layout="row" flex
-                         layout-align="start center">
-                        <div>{{ctrl.sitesInfoCCSelected.length}} {{lang.items_selected}}</div>
-                        <span flex></span>
-                        <div layout="row" ng-if="!ctrl.disableCorrespondence">
-                            <div>
-                                <md-menu-bar class="follow-up-menu-bar">
-                                    <md-menu>
-                                        <md-button ng-click="$mdMenu.open()">
-                                            {{ctrl.sitesInfoCCFollowupStatus.getTranslatedName() ||
-                                            lang.sites_follow_up_status}}
-                                        </md-button>
-                                        <md-menu-content width="3">
-                                            <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
-                                                <md-button
-                                                        ng-click="ctrl.onSitesFollowupStatusChange( 'CC' , status)">
-                                                    {{status.getTranslatedName()}}
-                                                </md-button>
-                                            </md-menu-item>
-                                        </md-menu-content>
-                                    </md-menu>
-                                </md-menu-bar>
-                            </div>
-                            <div>
-                                <md-datepicker
-                                        ng-if="!ctrl.disableCorrespondence && ctrl.needReply(ctrl.sitesInfoCCFollowupStatus)"
-                                        name="sitesInfoCCFollowupStatus"
-                                        ng-model="ctrl.sitesInfoCCFollowupStatusDate"
-                                        md-placeholder="{{lang.sites_follow_up_status_date}}"
-                                        md-min-date="ctrl.minDate"
-                                        ng-change="ctrl.onSitesInfoFollowupDateChange('CC')"
-                                        md-open-on-focus></md-datepicker>
-                            </div>
-                            <div layout="row" layout-align="start center">
-                                <md-button class="md-icon-button"
-                                           ng-click="ctrl.onSitesInfoDeleteBulk( 'CC' ,$event)"
-                                           ng-if="!ctrl.disableCorrespondence">
-                                    <md-icon md-svg-icon="delete"></md-icon>
-                                </md-button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </md-toolbar>
             <!-- Copy sites table -->
             <md-table-container>
                 <div flex scroll-directive>
-                    <table md-table md-row-select multiple ng-model="ctrl.sitesInfoCCSelected"
+                    <table md-table ng-model="ctrl.sitesInfoCCSelected"
                            md-progress="ctrl.progress">
                         <thead md-head md-order="ctrl.grid.sitesInfoCC.order">
                         <tr md-row>
@@ -1320,7 +1278,7 @@
                         </tr>
                         </thead>
                         <tbody md-body>
-                        <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
+                        <tr md-row ng-disabled="!!ctrl.disableCorrespondence"
                             ng-repeat="site in ctrl.sitesInfoCC  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) |orderBy:ctrl.grid.sitesInfoCC.order  track by $index">
                             <td md-cell>
                                 <div flex layout="column">
@@ -1343,18 +1301,6 @@
                             </td>
                             <td md-cell>
                                 <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
-                                </div>
-                            </td>
-                            <td md-cell>
-                                <div flex layout="row" layout-align="start center"
-                                     ng-if="!ctrl.disableCorrespondence">
-                                    <div>
-                                        <md-button tooltip="{{lang.sites_change_to_original}}"
-                                                   class="md-icon-button"
-                                                   ng-click="ctrl.changeSiteTo('To',site,$index)">
-                                            <md-icon md-svg-icon="priority-high"></md-icon>
-                                        </md-button>
-                                    </div>
                                 </div>
                             </td>
                         </tr>
