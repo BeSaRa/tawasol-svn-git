@@ -289,7 +289,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTags = function (readyToSendIncoming, $event) {
-            //console.log('manage tags', readyToSendIncoming);
             managerService.manageDocumentTags(readyToSendIncoming.vsId, readyToSendIncoming.docClassName, readyToSendIncoming.docSubject, $event)
                 .then(function (tags) {
                     readyToSendIncoming.tags = tags;
@@ -339,7 +338,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (readyToSendIncoming, $event) {
-            //console.log('manage linked documents : ', readyToSendIncoming);
             var info = readyToSendIncoming.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
         };

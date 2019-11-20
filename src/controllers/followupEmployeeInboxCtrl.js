@@ -424,8 +424,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadCompositeDocument = function (followupEmployeeInbox, $event) {
-            //console.log('downloadFollowupEmployeeInboxCompositeDocument : ', followupEmployeeInbox);
-
             downloadService.controllerMethod
                 .compositeDocumentDownload(followupEmployeeInbox.generalStepElm.vsId);
         };

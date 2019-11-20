@@ -164,7 +164,6 @@ module.exports = function (app) {
                             });
                         }
                     }
-                    console.log(self.addedOUAndWFGroupsToBroadcast);
                 }
                 self.ouBroadcast = null;
             };
@@ -220,7 +219,6 @@ module.exports = function (app) {
                             });
                         }
                     }
-                    console.log(self.addedOUAndWFGroupsToBroadcast);
                 }
                 self.wfGroupBroadcast = null;
             };
