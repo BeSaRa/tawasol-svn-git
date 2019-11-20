@@ -221,34 +221,36 @@ module.exports = function (app) {
                         };
                         LangWatcher(scope);
                         template = $compile(angular.element(template))(scope);
-                        dialog.confirmMessage(template[0].innerHTML)
-                            .then(function (result) {
-                                dialog
-                                    .showDialog({
-                                        targetEvent: null,
-                                        templateUrl: cmsTemplate.getPopup('update-manager-proxy'),
-                                        controller: 'updateManagerProxyPopCtrl',
-                                        controllerAs: 'ctrl',
-                                        locals: {
-                                            currentUser: self.ouApplicationUser,
-                                            availableProxies: availableProxies
-                                        },
-                                        resolve: {
-                                            usersWhoSetProxy: function (ouApplicationUserService) {
-                                                'ngInject';
-                                                return ouApplicationUserService.getUsersWhoSetYouAsProxy(self.applicationUser)
+                        $timeout(function () {
+                            dialog.confirmMessage(template[0].innerHTML)
+                                .then(function (result) {
+                                    dialog
+                                        .showDialog({
+                                            targetEvent: null,
+                                            templateUrl: cmsTemplate.getPopup('update-manager-proxy'),
+                                            controller: 'updateManagerProxyPopCtrl',
+                                            controllerAs: 'ctrl',
+                                            locals: {
+                                                currentUser: self.ouApplicationUser,
+                                                availableProxies: availableProxies
+                                            },
+                                            resolve: {
+                                                usersWhoSetProxy: function (ouApplicationUserService) {
+                                                    'ngInject';
+                                                    return ouApplicationUserService.getUsersWhoSetYouAsProxy(self.applicationUser)
+                                                }
                                             }
-                                        }
+                                        })
+                                        .then(function (result) {
+                                            form.$setUntouched();
+                                        }).catch(function (error) {
+                                        self.isOutOfOffice = !self.isOutOfOffice;
                                     })
-                                    .then(function (result) {
-                                        form.$setUntouched();
-                                    }).catch(function (error) {
-                                    self.isOutOfOffice = !self.isOutOfOffice;
                                 })
-                            })
-                            .catch(function () {
-                                self.isOutOfOffice = !self.isOutOfOffice;
-                            });
+                                .catch(function () {
+                                    self.isOutOfOffice = !self.isOutOfOffice;
+                                });
+                        })
                     });
 
                 }
