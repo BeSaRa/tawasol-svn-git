@@ -40,12 +40,22 @@
                                 <md-select ng-model-options="{trackBy: '$value.id'}"
                                            multiple id="ouBroadcast"
                                            ng-required="!ctrl.wfGroupBroadcast.length"
-                                           name="ouBroadcast" ng-model="ctrl.ouBroadcast">
+                                           name="ouBroadcast" ng-model="ctrl.ouBroadcast"
+                                           md-on-close="ctrl.clearSearchText('ou')"
+                                           data-md-container-class="select-header-container">
+                                    <md-select-header class="select-header">
+                                        <input ng-model="ctrl.ouSearchText"
+                                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                               placeholder="{{lang.search}}"
+                                               class="select-header-input">
+                                    </md-select-header>
                                     <md-option
-                                            ng-repeat="organization in ctrl.organizations track by $index"
-                                            ng-if="ctrl.organizationNotExists(organization) && organization.status"
+                                            ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.ouSearchText track by $index"
+                                            ng-if="organization.status"
                                             md-truncate ng-value="organization">
-                                        {{organization.getTranslatedName()}}
+                                        <span
+                                                md-highlight-text="ctrl.ouSearchText"
+                                                md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
                                     </md-option>
                                 </md-select>
                                 <div ng-messages="broadcast_form.ouBroadcast.$error">
@@ -78,7 +88,7 @@
                                 <md-select id="selectedRank" name="selectedRank"
                                            ng-model="ctrl.selectedRank">
                                     <md-option ng-value="null">{{lang.none}}</md-option>
-                                    <md-option ng-if="rank.status" ng-value="rank.lookupKey"
+                                    <md-option ng-if="rank.status" ng-value="rank"
                                                ng-repeat="rank in ctrl.ranks track by $index">
                                         {{rank.getTranslatedName()}}
                                     </md-option>
@@ -93,7 +103,7 @@
                                 <md-select id="selectedJobTitle" name="selectedJobTitle"
                                            ng-model="ctrl.selectedJobTitle">
                                     <md-option ng-value="null">{{lang.none}}</md-option>
-                                    <md-option ng-if="jobTitle.status" ng-value="jobTitle.lookupKey"
+                                    <md-option ng-if="jobTitle.status" ng-value="jobTitle"
                                                ng-repeat="jobTitle in ctrl.jobTitles track by $index">
                                         {{jobTitle.getTranslatedName()}}
                                     </md-option>
@@ -170,7 +180,8 @@
                                         </md-icon>
                                     </td>
                                     <td md-cell>
-                                        <md-input-container flex>
+                                        {{record.rank.getTranslatedName()}}
+                                        <!--<md-input-container flex>
                                             <md-select id="recordRank" name="recordRank"
                                                        ng-model="record.rank" aria-label="rank">
                                                 <md-option ng-value="null">{{lang.none}}</md-option>
@@ -182,10 +193,11 @@
                                             <div ng-messages="broadcast_form.recordRank.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                             </div>
-                                        </md-input-container>
+                                        </md-input-container>-->
                                     </td>
                                     <td md-cell>
-                                        <md-input-container flex>
+                                        {{record.jobTitle.getTranslatedName()}}
+                                        <!--<md-input-container flex>
                                             <md-select id="recordJobTitle" name="recordJobTitle"
                                                        ng-model="record.jobTitle" aria-label="jobTitle">
                                                 <md-option ng-value="null">{{lang.none}}</md-option>
@@ -197,7 +209,7 @@
                                             <div ng-messages="broadcast_form.recordJobTitle.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                             </div>
-                                        </md-input-container>
+                                        </md-input-container>-->
                                     </td>
                                     <td md-cell>
                                         <md-checkbox

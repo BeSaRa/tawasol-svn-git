@@ -33,6 +33,7 @@ module.exports = function (app) {
             self.selectedRank = null;
 
             self.actionSearchText = '';
+            self.ouSearchText = '';
 
             self.broadcastRecordType = {
                 organization: {
@@ -123,18 +124,47 @@ module.exports = function (app) {
                 broadcastForm.$setUntouched();
             };
 
+            var _isOuBroadcastAlreadyExist = function (ou) {
+                var addedOus = angular.copy(_.filter(self.addedOUAndWFGroupsToBroadcast, function (item) {
+                    return self.checkBroadcastRecordType(item, self.broadcastRecordType.organization);
+                }));
+                return !!_.find(addedOus, function (item) {
+                    item.rank = item.rank ? item.rank.lookupKey: null;
+                    item.jobTitle = item.jobTitle ? item.jobTitle.lookupKey: null;
+                    return item.itemId.id === ou.id
+                        && item.rank === (self.selectedRank ? self.selectedRank.lookupKey : null)
+                        && item.jobTitle === (self.selectedJobTitle ? self.selectedJobTitle.lookupKey : null);
+                });
+            };
+
+            var _isWFGroupBroadcastAlreadyExist = function (wfGroup) {
+                var addedWFGroups = angular.copy(_.filter(self.addedOUAndWFGroupsToBroadcast, function (item) {
+                    return self.checkBroadcastRecordType(item, self.broadcastRecordType.workflowGroup);
+                }));
+                return !!_.find(addedWFGroups, function (item) {
+                    item.rank = item.rank ? item.rank.lookupKey: null;
+                    item.jobTitle = item.jobTitle ? item.jobTitle.lookupKey: null;
+                    return item.itemId.id === wfGroup.id
+                        && item.rank === (self.selectedRank ? self.selectedRank.lookupKey : null)
+                        && item.jobTitle === (self.selectedJobTitle ? self.selectedJobTitle.lookupKey : null);
+                });
+            };
+
             /**
              * @description add selected organization to grid
              */
             self.addOrganizationToBroadcast = function () {
                 if (self.ouBroadcast && self.ouBroadcast.length) {
                     for (var i = 0; i < self.ouBroadcast.length; i++) {
-                        self.addedOUAndWFGroupsToBroadcast.push({
-                            itemId: self.ouBroadcast[i],
-                            jobTitle: self.selectedJobTitle,
-                            rank: self.selectedRank
-                        });
+                        if (!_isOuBroadcastAlreadyExist(self.ouBroadcast[i])) {
+                            self.addedOUAndWFGroupsToBroadcast.push({
+                                itemId: self.ouBroadcast[i],
+                                jobTitle: self.selectedJobTitle,
+                                rank: self.selectedRank
+                            });
+                        }
                     }
+                    console.log(self.addedOUAndWFGroupsToBroadcast);
                 }
                 self.ouBroadcast = null;
             };
@@ -182,12 +212,15 @@ module.exports = function (app) {
             self.addWorkflowGroupToBroadcast = function () {
                 if (self.wfGroupBroadcast) {
                     for (var i = 0; i < self.wfGroupBroadcast.length; i++) {
-                        self.addedOUAndWFGroupsToBroadcast.push({
-                            itemId: self.wfGroupBroadcast[i],
-                            jobTitle: self.selectedJobTitle,
-                            rank: self.selectedRank
-                        });
+                        if (!_isWFGroupBroadcastAlreadyExist(self.wfGroupBroadcast[i])) {
+                            self.addedOUAndWFGroupsToBroadcast.push({
+                                itemId: self.wfGroupBroadcast[i],
+                                jobTitle: self.selectedJobTitle,
+                                rank: self.selectedRank
+                            });
+                        }
                     }
+                    console.log(self.addedOUAndWFGroupsToBroadcast);
                 }
                 self.wfGroupBroadcast = null;
             };
@@ -231,25 +264,25 @@ module.exports = function (app) {
                 dialog.cancel();
             };
 
-        /**
-         * @description Clears the searchText for the given field
-         * @param fieldType
-         */
-        self.clearSearchText = function (fieldType) {
-            self[fieldType + 'SearchText'] = '';
-        };
+            /**
+             * @description Clears the searchText for the given field
+             * @param fieldType
+             */
+            self.clearSearchText = function (fieldType) {
+                self[fieldType + 'SearchText'] = '';
+            };
 
-        /**
-         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
-         * @param $event
-         */
-        self.preventSearchKeyDown = function ($event) {
-            if ($event) {
-                var code = $event.which || $event.keyCode;
-                if (code !== 38 && code !== 40)
-                    $event.stopPropagation();
-            }
-        };
+            /**
+             * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+             * @param $event
+             */
+            self.preventSearchKeyDown = function ($event) {
+                if ($event) {
+                    var code = $event.which || $event.keyCode;
+                    if (code !== 38 && code !== 40)
+                        $event.stopPropagation();
+                }
+            };
 
         }
     );
