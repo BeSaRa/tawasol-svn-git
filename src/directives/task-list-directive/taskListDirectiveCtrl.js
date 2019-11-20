@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('taskListDirectiveCtrl', function (taskService, employeeService, $interval) {
+    app.controller('taskListDirectiveCtrl', function (taskService, employeeService, $interval, $state) {
         'ngInject';
         var self = this;
         self.controllerName = 'taskListDirectiveCtrl';
@@ -23,6 +23,10 @@ module.exports = function (app) {
                 .then(function () {
                     $mdMenu.open();
                 });
+        };
+
+        self.redirectToTasks = function ($event) {
+            $state.go('app.inbox.tasks');
         };
 
 

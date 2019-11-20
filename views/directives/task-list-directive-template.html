@@ -37,6 +37,12 @@
                     <div layout="row" layout-align="center center"><span>{{lang.reload}}</span></div>
                 </md-button>
             </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item class="md-dense">
+                <md-button class="md-raised" ng-click="ctrl.redirectToTasks($event)">
+                    <div layout="row" layout-align="center center">{{lang.menu_item_my_tasks}}</div>
+                </md-button>
+            </md-menu-item>
         </md-menu-content>
     </md-menu>
 </md-menu-bar>
