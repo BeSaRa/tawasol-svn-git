@@ -512,6 +512,11 @@ module.exports = function (app) {
             });
         };
 
+        /*
+         * @description query search sub sites
+         * @param query
+         * @returns {any}
+         */
         self.querySearch = function (query) {
             query = query.toLowerCase();
             return query ? self.subSearchResult.filter(function (item) {
@@ -562,7 +567,7 @@ module.exports = function (app) {
         };
 
         /**
-         *
+         *@description query search main sites
          * @param query
          * @returns {any}
          */
