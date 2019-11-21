@@ -133,7 +133,8 @@ module.exports = function (app) {
                 min_length: 'يجب الا يتجاوز :length حروف',
                 max_length: 'يجب ان لا تتجاوز :length',
                 failed_to_download: 'فشل في التحميل',
-                otp_failed_to_download: 'لا يمكن فتح الكتاب ، قد يكون الرابط منتهي الصلاحية أو معطل'
+                otp_failed_to_download: 'لا يمكن فتح الكتاب ، قد يكون الرابط منتهي الصلاحية أو معطل',
+                select_lang: 'اختر اللغة'
             },
             en: {
                 root_entity_not_found: 'No Entity has been provided, to contact through. <br /> Or that the entity does not exist for the connection',
@@ -235,7 +236,8 @@ module.exports = function (app) {
                 min_length: 'Should be minimum :length characters',
                 max_length: 'Should be maximum :length characters',
                 failed_to_download: 'Failed to download',
-                otp_failed_to_download: 'Cannot open the document, the link may be expired or disabled'
+                otp_failed_to_download: 'Cannot open the document, the link may be expired or disabled',
+                select_lang: 'Select Language'
             }
         };
 
