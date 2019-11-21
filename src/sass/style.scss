@@ -2385,6 +2385,27 @@ table.clone thead tr:last-child th {
 table.clone + md-table-container table tbody tr:first-child td {
   border-top: none;
 }
+
 .sidebar-container {
   padding-bottom: 30px;
+}
+
+
+.cms-autocomplete-wrapper {
+  .button-container {
+    position: absolute;
+    z-index: 1;
+
+    .search-button {
+      padding-left: 0;
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  md-autocomplete.ac-search-button {
+    md-autocomplete-wrap {
+      padding-left: 15px;
+    }
+  }
 }

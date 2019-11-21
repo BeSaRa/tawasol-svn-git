@@ -237,13 +237,13 @@ html.rtl {
 
     md-datepicker {
       .md-datepicker-button {
-        margin-right : -12px;
+        margin-right: -12px;
         margin-left: auto;
       }
 
       .md-datepicker-input-container {
         .md-datepicker-triangle-button {
-          left : 8px;
+          left: 8px;
           right: auto;
         }
       }
@@ -252,7 +252,21 @@ html.rtl {
     .md-input-messages-animation {
       .md-input-message-animation {
         margin-right: 34px;
-        margin-left:  auto;
+        margin-left: auto;
+      }
+    }
+  }
+
+  .cms-autocomplete-wrapper {
+    .button-container {
+      .search-button {
+        padding-right: 0;
+      }
+    }
+
+    md-autocomplete.ac-search-button {
+      md-autocomplete-wrap {
+        padding-right: 15px;
       }
     }
   }
