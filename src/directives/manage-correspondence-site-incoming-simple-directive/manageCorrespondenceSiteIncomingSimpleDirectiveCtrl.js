@@ -375,12 +375,13 @@ module.exports = function (app) {
          */
         self.selectedMainSite = null;
         self.getSubSites = function ($event) {
-            if (!self.selectedMainSite) {
+            //TODO: Return it back if autocomplete is to be used
+            /*if (!self.selectedMainSite) {
                 self.subSearchResult = [];
                 self.subSearchResultCopy = [];
                 self.selectedItem = null;
                 return;
-            }
+            }*/
             correspondenceViewService.correspondenceSiteSearch('sub', {
                 type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                 parent: self.selectedMainSite ? self.selectedMainSite.id : null,
@@ -397,20 +398,21 @@ module.exports = function (app) {
             });
         };
 
-        /*
+        //TODO: Return it back if autocomplete is to be used
+       /* /!**
          * @description query search main
          * @param query
          * @returns {any}
-         */
+         *!/
         self.querySearchMain = function (query) {
-            query = (query || self.mainSiteSearchText).toLowerCase();
+            query = query.toLowerCase();
             return query ? self.mainSites.filter(function (item) {
                 if (langService.current === 'ar')
                     return item.arName.toLowerCase().indexOf(query) !== -1;
                 else
                     return item.enName.toLowerCase().indexOf(query) !== -1;
             }) : self.mainSites;
-        };
+        };*/
 
         /**
          * search in MainCorrespondenceSites and retrieve the filtered result.

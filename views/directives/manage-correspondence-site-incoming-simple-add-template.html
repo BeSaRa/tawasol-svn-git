@@ -21,7 +21,7 @@
         </md-select>
     </md-input-container>
     <!-- Main Sites -->
-    <!--<md-input-container class="exclude-margin">
+    <md-input-container class="exclude-margin">
         <label for="mainSite">{{lang.main_site}}</label>
         <md-select id="mainSite" ng-model="ctrl.selectedMainSite"
                    ng-model-options="{trackBy: '$value.id'}"
@@ -51,9 +51,9 @@
                       md-highlight-flags="i">{{site.getTranslatedName()}}</span>
             </md-option>
         </md-select>
-    </md-input-container>-->
-
-    <!-- Main Site -->
+    </md-input-container>
+<!--
+    &lt;!&ndash; Main Site Autocomplete&ndash;&gt;
     <div class="cms-autocomplete-wrapper">
         <span class="button-container">
             <md-button ng-if="ctrl.mainSiteSearchText"
@@ -99,7 +99,7 @@
             </md-not-found>
         </md-autocomplete>
     </div>
-    <br/>
+    <br/>-->
     <!-- Sub Sites -->
     <md-autocomplete
             ng-disabled="!ctrl.selectedMainSite || ctrl.selectedItem"
