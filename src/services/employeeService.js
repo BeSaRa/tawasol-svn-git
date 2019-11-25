@@ -166,9 +166,10 @@ module.exports = function (app) {
          * @return {boolean}
          */
         self.isCurrentOUApplicationUser = function (ouApplicationUser) {
-            var ouId = ouApplicationUser.ouid.hasOwnProperty('id') ? ouApplicationUser.ouid.id : ouApplicationUser.ouid;
+            var ouAppUserOuId = ouApplicationUser.ouid.hasOwnProperty('id') ? ouApplicationUser.ouid.id : ouApplicationUser.ouid;
             var userId = ouApplicationUser.applicationUser.hasOwnProperty('id') ? ouApplicationUser.applicationUser.id : ouApplicationUser.applicationUser;
-            return employee.id === userId && employee.organization.ouid === ouId;
+            var employeeOuId = (employee.organization.ouid && employee.organization.ouid.hasOwnProperty('id')) ? employee.organization.ouid.id : employee.organization.ouid;
+            return employee.id === userId && employeeOuId === ouAppUserOuId;
         };
         /**
          * @description set current Employee from Updated application User.

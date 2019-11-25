@@ -57,7 +57,8 @@ module.exports = function (app) {
                 ERROR_SAVE_DOC_ALREADY_MODIFIED_BY_OTHER_USER: 4019,
                 INVALID_LINK: 3041,
                 ERROR_RUNNING_JOB: 3029,
-                ERROR_MISSING_REQUIRED_TEMPLATE_FIELDS: 2023
+                ERROR_MISSING_REQUIRED_TEMPLATE_FIELDS: 2023,
+                OPERATION_NOT_SUPPORTED: 3002
             },
             errorLangKeys = {
                 1001: 'no_records_found',

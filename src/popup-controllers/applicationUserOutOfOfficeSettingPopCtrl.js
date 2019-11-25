@@ -22,6 +22,7 @@ module.exports = function (app) {
                                                                          $compile,
                                                                          usersWhoSetYouAsProxy,
                                                                          organizationService,
+                                                                         errorCode,
                                                                          ouApplicationUserService) {
         'ngInject';
         var self = this;
@@ -184,6 +185,19 @@ module.exports = function (app) {
             self.ouApplicationUser.proxyAuthorityLevels = null;
         };
 
+
+        /**
+         * @description get error message
+         * @returns {string}
+         */
+        self.getTranslatedError = function (error) {
+            var errorObj = error.data.eo;
+            if (typeof errorObj === 'string'){
+                return errorObj;
+            }
+            return langService.current === 'ar' ? errorObj.arName : errorObj.enName;
+        };
+
         /**
          * @description Saves the ou application user data when not out of office
          * @param form
@@ -191,7 +205,8 @@ module.exports = function (app) {
         self.changeOutOfOffice = function (form) {
             if (!self.isOutOfOffice) {
                 if (self.model.proxyUser) {
-                    self.ouApplicationUser.proxyUser = self.selectedProxyUser = null;
+                    self.ouApplicationUser.proxyUser = null;
+                    self.selectedProxyUser = null;
                     self.ouApplicationUser.proxyStartDate = null;
                     self.ouApplicationUser.proxyEndDate = null;
                     self.ouApplicationUser.proxyAuthorityLevels = null;
@@ -199,6 +214,7 @@ module.exports = function (app) {
                     self.ouApplicationUser.proxyMessage = null;
                 }
             } else {
+                usersWhoSetYouAsProxy = [];
                 if (usersWhoSetYouAsProxy && usersWhoSetYouAsProxy.length) {
 
                     var scope = $rootScope.$new(), templateDefer = $q.defer(),
@@ -264,7 +280,7 @@ module.exports = function (app) {
         /**
          * @description Add the Application User out of office settings in the ouApplicationUser model
          */
-        self.addApplicationUserOutOfOfficeSettingsFromCtrl = function () {
+        self.saveOutOfOfficeSettings = function () {
             if (self.selectedProxyUser) {
                 self.ouApplicationUser.proxyUser = self.selectedProxyUser;
             }
@@ -294,8 +310,10 @@ module.exports = function (app) {
                         self.ouApplicationUser.applicationUser = self.applicationUser;
                         dialog.hide(self.ouApplicationUser);
                     })
-                    .catch(function () {
-
+                    .catch(function (error) {
+                        if (errorCode.checkIf(error, 'OPERATION_NOT_SUPPORTED') === true) {
+                            dialog.errorMessage(self.getTranslatedError(error));
+                        }
                     });
             }
         };

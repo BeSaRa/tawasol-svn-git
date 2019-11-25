@@ -55,7 +55,6 @@ module.exports = function (app) {
         self.applicationUser = new ApplicationUser(applicationUser);
 
         //self.applicationUser.signature = signature;
-        self.currentEmployee = applicationUser;
         self.model = angular.copy(self.applicationUser);
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.genders = lookupService.returnLookups(lookupService.gender);
@@ -287,6 +286,8 @@ module.exports = function (app) {
          */
         self.selectedTab = selectedTab ? selectedTab : "general";
         self.requestForApprove = (selectedTab === 'signature');
+        self.usersWhoSetYouAsProxy = [];
+
         /**
          * @description Set the current tab name
          * @param tabName
@@ -298,6 +299,12 @@ module.exports = function (app) {
                     .then(function () {
                         defer.resolve(tabName);
                     });
+            } else if (tabName === 'ooos') {
+                ouApplicationUserService.getUsersWhoSetYouAsProxy(self.applicationUser.id)
+                    .then(function (result) {
+                        self.usersWhoSetYouAsProxy = result;
+                        defer.resolve(tabName);
+                    })
             } else {
                 defer.resolve(tabName);
             }
@@ -483,8 +490,8 @@ module.exports = function (app) {
             var defer = $q.defer();
             if (!self.isOutOfOffice) {
                 if (self.ouApplicationUserCopy.proxyUser) {
-                    self.selectedProxyUser = null;
                     self.ouApplicationUser.proxyUser = null;
+                    self.selectedProxyUser = null;
                     self.ouApplicationUser.proxyOUId = null;
                     self.ouApplicationUser.proxyStartDate = null;
                     self.ouApplicationUser.proxyEndDate = null;
@@ -501,8 +508,7 @@ module.exports = function (app) {
                         });
                 }
             } else {
-                if (self.currentEmployee.proxyUsers && self.currentEmployee.proxyUsers.length) {
-                    var outOfOfficeUsers = generator.generateCollection(self.currentEmployee.proxyUsers, ProxyInfo);
+                if (self.usersWhoSetYouAsProxy && self.usersWhoSetYouAsProxy.length) {
                     var scope = $rootScope.$new(), templateDefer = $q.defer(),
                         templateUrl = cmsTemplate.getPopup('delegated-by-users-message'),
                         html = $templateCache.get(templateUrl);
@@ -520,7 +526,7 @@ module.exports = function (app) {
                     templateDefer.promise.then(function (template) {
 
                         scope.ctrl = {
-                            outOfOfficeUsers: outOfOfficeUsers
+                            outOfOfficeUsers: self.usersWhoSetYouAsProxy
                         };
                         LangWatcher(scope);
                         template = $compile(angular.element(template))(scope);
@@ -541,7 +547,7 @@ module.exports = function (app) {
                                             resolve: {
                                                 usersWhoSetProxy: function (ouApplicationUserService) {
                                                     'ngInject';
-                                                    return ouApplicationUserService.getUsersWhoSetYouAsProxy(self.applicationUser)
+                                                    return ouApplicationUserService.getUsersWhoSetYouAsProxy(self.applicationUser);
                                                 }
                                             }
                                         })
