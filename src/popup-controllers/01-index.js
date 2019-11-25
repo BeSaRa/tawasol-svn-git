@@ -28,7 +28,7 @@ module.exports = function (app) {
     require('./correspondenceSitePopCtrl')(app);
     require('./subCorrespondenceSiteViewPopCtrl')(app);
     require('./classificationSelectorPopCtrl')(app);
-    require('./applicationUserEditPermissionPopCtrl')(app);
+    require('./applicationUserPermissionPopCtrl')(app);
     require('./applicationUserWorkflowParticipationPopCtrl')(app);
     require('./correspondenceSiteSelectorPopCtrl')(app);
     require('./applicationUserOutOfOfficeSettingPopCtrl')(app);

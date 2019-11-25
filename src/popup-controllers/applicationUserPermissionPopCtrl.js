@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('applicationUserEditPermissionPopCtrl', function (_,
+    app.controller('applicationUserPermissionPopCtrl', function (_,
                                                                      toast,
                                                                      configurationService,
                                                                      $rootScope,
@@ -22,7 +22,7 @@ module.exports = function (app) {
                                                                      UserOuPermission) {
         'ngInject';
         var self = this;
-        self.controllerName = 'applicationUserEditPermissionPopCtrl';
+        self.controllerName = 'applicationUserPermissionPopCtrl';
 
         //self.permissionsChunkArray = _.chunk(permissions, 3);
         self.permissionsList = permissions;

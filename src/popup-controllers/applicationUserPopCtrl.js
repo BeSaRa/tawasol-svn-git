@@ -939,7 +939,7 @@ module.exports = function (app) {
                         .showDialog({
                             targetEvent: $event,
                             templateUrl: cmsTemplate.getPopup('application-user-permission'),
-                            controller: 'applicationUserEditPermissionPopCtrl',
+                            controller: 'applicationUserPermissionPopCtrl',
                             controllerAs: 'ctrl',
                             locals: {
                                 ouApplicationUser: ouApplicationUser,
