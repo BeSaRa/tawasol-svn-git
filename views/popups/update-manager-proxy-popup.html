@@ -19,13 +19,22 @@
                                        required
                                        ng-change="ctrl.setProxyUser(proxyManager, $event)"
                                        ng-model-options="{trackBy:'$value.id'}"
-                                       ng-model="proxyManager.selectedProxyUser">
+                                       ng-model="proxyManager.selectedProxyUser"
+                                       md-on-close="ctrl.clearSearchText('proxyUser')"
+                                       data-md-container-class="select-header-container">
                                 <!--md-selected-text="ctrl.getSelectedDelegatedUserText()"-->
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.proxyUserSearchText"
+                                           placeholder="{{lang.search}}"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           class="select-header-input">
+                                </md-select-header>
                                 <md-option
-                                        ng-repeat="proxyUser in ctrl.availableProxies track by $index"
+                                        ng-repeat="proxyUser in ctrl.availableProxies | translatedNameFilter: ctrl.proxyUserSearchText : 'getTranslatedName'"
                                         ng-if="!ctrl.isCurrentUser(proxyUser)"
                                         ng-value="proxyUser">
-                                    {{proxyUser.getTranslatedName()}}
+                                    <span md-highlight-text="ctrl.proxyUserSearchText"
+                                          md-highlight-flags="i">{{proxyUser.getTranslatedName()}}</span>
                                 </md-option>
                             </md-select>
                             <div ng-messages="managerProxyForm.proxyUser.$error">

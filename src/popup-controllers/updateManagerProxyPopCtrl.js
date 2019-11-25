@@ -13,6 +13,7 @@ module.exports = function (app) {
         console.log('current User', currentUser);
         self.availableProxies = availableProxies;
         self.currentUser = currentUser;
+        self.proxyUserSearchText = '';
 
         self.proxyManagers = [];
         var _createProxyInstance = function () {
@@ -49,6 +50,22 @@ module.exports = function (app) {
                 .catch(function () {
                     dialog.cancel(false);
                 })
+        };
+
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
         };
 
         self.closePopup = function ($event) {
