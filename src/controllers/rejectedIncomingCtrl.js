@@ -99,39 +99,6 @@ module.exports = function (app) {
             'false': rejectedIncomingService.deactivateRejectedIncoming
         };
 
-        /* /!**
-          * @description Opens dialog for add new rejected incoming mail
-          * @param $event
-          *!/
-         self.openAddRejectedIncomingDialog = function ($event) {
-             rejectedIncomingService
-                 .controllerMethod
-                 .rejectedIncomingAdd($event)
-                 .then(function (result) {
-                     self.reloadRejectedIncomings(self.grid.page)
-                         .then(function () {
-                             toast.success(langService.get('add_success').change({name: result.getNames()}));
-                         });
-                 });
-         };
-
-         /!**
-          * @description Opens dialog for edit rejected incoming mail
-          * @param $event
-          * @param rejectedIncoming
-          *!/
-         self.openEditRejectedIncomingDialog = function (rejectedIncoming, $event) {
-             rejectedIncomingService
-                 .controllerMethod
-                 .rejectedIncomingEdit(rejectedIncoming, $event)
-                 .then(function (result) {
-                     self.reloadRejectedIncomings(self.grid.page)
-                         .then(function () {
-                             toast.success(langService.get('edit_success').change({name: result.getNames()}));
-                         });
-                 });
-         };*/
-
         /**
          * @description Replaces the record in grid after update
          * @param record

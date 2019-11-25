@@ -15,7 +15,8 @@ module.exports = function (app) {
                                                  generator,
                                                  contextHelpService,
                                                  ResolveDefer,
-                                                 gridService) {
+                                                 gridService,
+                                                 counterService) {
         'ngInject';
         var self = this;
 
@@ -102,6 +103,7 @@ module.exports = function (app) {
             return scanIncomingService
                 .loadScanIncomings()
                 .then(function (result) {
+                    counterService.loadCounters();
                     self.scanIncomings = result;
                     self.scanIncomingsCopy = angular.copy(self.scanIncomings);
                     self.selectedScanIncomings = [];
