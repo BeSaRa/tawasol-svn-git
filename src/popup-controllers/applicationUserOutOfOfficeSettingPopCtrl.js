@@ -214,7 +214,6 @@ module.exports = function (app) {
                     self.ouApplicationUser.proxyMessage = null;
                 }
             } else {
-                usersWhoSetYouAsProxy = [];
                 if (usersWhoSetYouAsProxy && usersWhoSetYouAsProxy.length) {
 
                     var scope = $rootScope.$new(), templateDefer = $q.defer(),
