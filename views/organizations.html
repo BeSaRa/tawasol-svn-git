@@ -47,7 +47,7 @@
                                           md-highlight-flags="i">{{item['arName'] + ' - ' + item['enName'] }}</span>
                                 </md-item-template>
                                 <md-not-found>
-                                    No states matching "{{ctrl.searchText}}" were found.
+                                    {{lang.no_records_found_matching_search}}
                                     <!--<a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>-->
                                 </md-not-found>
                             </md-autocomplete>
