@@ -1378,7 +1378,7 @@ module.exports = function (app) {
         self.reloadOUApplicationUsers = function ($event) {
             var defer = $q.defer();
             self.ouApplicationUsersGrid.progress = defer.promise;
-            return ouApplicationUserService.loadOUApplicationUsersByUserId(applicationUser.id)
+            return ouApplicationUserService.loadOUApplicationUsersByUserId(self.applicationUser.id)
                 .then(function (result) {
                     self.ouApplicationUsers = result;
                     self.ouApplicationUsersCopy = angular.copy(self.ouApplicationUsers);
