@@ -73,18 +73,18 @@
                                         </div>
                                     </md-input-container>
                                     <!-- Login Name -->
-                                 <!--   <md-input-container flex>
-                                        <label for="loginName">{{lang.login_name}}</label>
-                                        <input name="loginName" id="loginName" required minlength="2"
-                                               ng-disabled="true" ng-readonly="true"
-                                               ng-model="ctrl.applicationUser.loginName"
-                                               no-space-directive custom-validate-directive="FILE_NET_USER">
-                                        <div ng-messages="userPreferencesForm.loginName.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="FILE_NET_USER">{{lang.english_number}}</div>
-                                        </div>
-                                    </md-input-container>-->
+                                    <!--   <md-input-container flex>
+                                           <label for="loginName">{{lang.login_name}}</label>
+                                           <input name="loginName" id="loginName" required minlength="2"
+                                                  ng-disabled="true" ng-readonly="true"
+                                                  ng-model="ctrl.applicationUser.loginName"
+                                                  no-space-directive custom-validate-directive="FILE_NET_USER">
+                                           <div ng-messages="userPreferencesForm.loginName.$error">
+                                               <div ng-message="required">{{lang.field_required}}</div>
+                                               <div ng-message="minlength">{{lang.short}}</div>
+                                               <div ng-message="FILE_NET_USER">{{lang.english_number}}</div>
+                                           </div>
+                                       </md-input-container>-->
                                 </div>
                                 <div layout="row">
                                     <!-- Employee Number -->
@@ -313,6 +313,21 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row" flex>
+                                    <!-- Inbox Refresh Interval -->
+                                    <md-input-container flex>
+                                        <label for="inboxRefreshInterval">{{lang.inbox_refresh_interval}}</label>
+                                        <input name="inboxRefreshInterval" id="inboxRefreshInterval" required
+                                               ng-model="ctrl.applicationUser.inboxRefreshInterval"
+                                               min-max-number-directive min="5"
+                                               max="60"
+                                               custom-validate-directive="number">
+                                        <div ng-messages="userPreferencesForm.inboxRefreshInterval.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="min">{{lang.min_number.change({number:4})}}</div>
+                                            <div ng-message="max">{{lang.max_number.change({number:61})}}</div>
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                        </div>
+                                    </md-input-container>
                                     <!-- Organization Unit -->
                                     <md-input-container flex>
                                         <label for="defaultOUID">{{lang.organization_unit}}</label>
@@ -1031,7 +1046,8 @@
                                     <div layout="column" flex>
                                         <div layout="row">
                                             <div>
-                                                <label for="add-sign" class="md-button md-raised alongside-input md-primary">
+                                                <label for="add-sign"
+                                                       class="md-button md-raised alongside-input md-primary">
                                                         <span layout="row" layout-align="start center">
                                                             <md-icon md-svg-icon="upload"></md-icon>
                                                             <span>{{lang.upload_signature}}</span>
@@ -1078,7 +1094,8 @@
                                                      class="upload-image" height="85" flex>
                                             </div>
                                             <div layout="row" class="p20">
-                                                <md-button class="md-raised md-primary" ng-disabled="signatureForm.$invalid"
+                                                <md-button class="md-raised md-primary"
+                                                           ng-disabled="signatureForm.$invalid"
                                                            ng-click="ctrl.addApplicationUserSignatureFromCtrl()">
                                                     {{lang.add}}
                                                 </md-button>

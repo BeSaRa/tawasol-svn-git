@@ -3,7 +3,8 @@ module.exports = function (app) {
                                              _,
                                              generator,
                                              lookupService,
-                                             langService) {
+                                             langService,
+                                             rootEntity) {
         'ngInject';
         return function ApplicationUser(model) {
             var self = this, organizationService;
@@ -37,7 +38,7 @@ module.exports = function (app) {
             self.reminderSmsdays = 0;
             self.mobile = null;
             self.gender = 1;
-            self.inboxRefreshInterval = 10;
+            self.inboxRefreshInterval = rootEntity.getGlobalSettings().inboxRefreshInterval;
             self.defaultOUID = null;
             self.defaultThemeID = null;
             self.classificationPermisssions = null;

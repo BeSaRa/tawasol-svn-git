@@ -113,16 +113,15 @@
                                     <label for="inboxRefreshInterval">{{lang.inbox_refresh_interval}}
                                         ({{lang.minutes}})</label>
                                     <input id="inboxRefreshInterval" required name="inboxRefreshInterval"
-                                           min="1" max="60"
+                                           min="5" max="60"
                                            min-max-number-directive
-                                           custom-validate-directive="number" maxlength="2"
+                                           custom-validate-directive="number"
                                            ng-model="ctrl.globalSetting.inboxRefreshInterval">
                                     <div ng-messages="globalSettingForm.inboxRefreshInterval.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
-                                        <div ng-message="min">{{lang.min_number.change({number:0})}}</div>
+                                        <div ng-message="min">{{lang.min_number.change({number:4})}}</div>
                                         <div ng-message="max">{{lang.max_number.change({number:61})}}</div>
                                         <div ng-message="number">{{lang.numberonly}}</div>
-                                        <div ng-message="maxlength">{{lang.max_length.change({length:2})}}</div>
                                     </div>
                                 </md-input-container>
                                 <!-- Session Time Out -->

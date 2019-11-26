@@ -308,6 +308,7 @@
                                     </md-switch>
                                 </div>-->
                                 <div layout="row">
+                                    <!-- Office Online Server Language -->
                                     <md-input-container flex>
                                         <label for="defaultViewerLang">{{lang.default_viewer_language}}</label>
                                         <md-select id="defaultViewerLang" name="defaultViewerLang" required
@@ -321,6 +322,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
+                                    <!-- Default Edit Mode -->
                                     <md-input-container flex>
                                         <label for="defaultEditMode">{{lang.default_edit_mode}}</label>
                                         <md-select id="defaultEditMode" name="defaultEditMode"
@@ -331,9 +333,24 @@
                                         </md-select>
                                     </md-input-container>
                                 </div>
-                                <div layout="row" ng-if="ctrl.editMode">
-                                    <!-- Organization Unit -->
+                                <div layout="row">
+                                    <!-- Inbox Refresh Interval -->
                                     <md-input-container flex>
+                                        <label for="inboxRefreshInterval">{{lang.inbox_refresh_interval}}</label>
+                                        <input name="inboxRefreshInterval" id="inboxRefreshInterval" required
+                                               ng-model="ctrl.applicationUser.inboxRefreshInterval"
+                                               min-max-number-directive min="5"
+                                               max="60"
+                                               custom-validate-directive="number">
+                                        <div ng-messages="applicationUserForm.inboxRefreshInterval.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="min">{{lang.min_number.change({number:4})}}</div>
+                                            <div ng-message="max">{{lang.max_number.change({number:61})}}</div>
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Organization Unit -->
+                                    <md-input-container flex ng-if="ctrl.editMode">
                                         <label for="defaultOUID">{{lang.organization_unit}}</label>
                                         <md-select id="defaultOUID" name="defaultOUID" required
                                                    ng-model="ctrl.applicationUser.defaultOUID">
@@ -348,8 +365,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                    <!-- Empty Container to cover the space when organization unit container is not displayed -->
-                                   <!-- <md-input-container flex ng-if="!ctrl.editMode"></md-input-container>-->
+                                    <md-input-container flex ng-if="!ctrl.editMode"></md-input-container>
                                 </div>
                                 <div layout="row">
                                     <md-switch flex ng-model="ctrl.applicationUser.slowConnectionMode"

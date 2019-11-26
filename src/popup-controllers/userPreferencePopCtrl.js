@@ -203,7 +203,8 @@ module.exports = function (app) {
             reminderEmailPriority: 'reminder_email_priority',
             reminderSmsdays: 'reminder_sms_days',
             reminderEmailDays: 'reminder_email_days',
-            viewInboxAsGrid: 'view_inbox_as'
+            viewInboxAsGrid: 'view_inbox_as',
+            inboxRefreshInterval:'inbox_refresh_interval'
         };
 
         self.validateSignatureLabels = {

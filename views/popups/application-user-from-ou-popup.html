@@ -278,52 +278,6 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row" flex>
-                                    <!-- Roles -->
-                                    <md-input-container flex>
-                                        <label for="customRoleId">{{lang.role}}</label>
-                                        <md-select id="customRoleId" name="customRoleId" required
-                                                   ng-disabled="ctrl.ouApplicationUser.id"
-                                                   ng-model-options="{trackBy:'$value.id'}"
-                                                   ng-model="ctrl.ouApplicationUser.customRoleId"
-                                                   md-on-close="ctrl.clearSearchText('role')"
-                                                   data-md-container-class="select-header-container">
-                                            <md-select-header class="select-header">
-                                                <input ng-model="ctrl.roleSearchText"
-                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
-                                                       placeholder="{{lang.search}}"
-                                                       class="select-header-input">
-                                            </md-select-header>
-                                            <md-option
-                                                    ng-repeat="role in ctrl.roles | translatedNameFilter: ctrl.roleSearchText"
-                                                    ng-value="role" ng-disabled="!role.status">
-                                                <span
-                                                        md-highlight-text="ctrl.roleSearchText"
-                                                        md-highlight-flags="i">{{role.getTranslatedName()}}</span>
-                                            </md-option>
-                                        </md-select>
-                                        <div ng-messages="applicationUserForm.customRoleId.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                        </div>
-                                    </md-input-container>
-                                    <!-- Organization Unit -->
-                                    <md-input-container ng-if="ctrl.editMode" flex>
-                                        <label for="defaultOUID">{{lang.organization_unit}}</label>
-                                        <md-select id="defaultOUID" name="defaultOUID" required
-                                                   ng-model="ctrl.applicationUser.defaultOUID">
-                                            <md-option ng-value="organization.ou.id"
-                                                       ng-disabled="!organization.status"
-                                                       tooltip="{{(!organization.status) ? lang.inactive_organization : ''}}"
-                                                       ng-repeat="organization in ctrl.organizationsForAppUser track by $index">
-                                                {{organization.ou.getTranslatedName()}}
-                                            </md-option>
-                                        </md-select>
-                                        <div ng-messages="applicationUserForm.defaultOUID.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                        </div>
-                                    </md-input-container>
-                                    <md-input-container flex ng-if="!ctrl.editMode"></md-input-container>
-                                </div>
-                                <div layout="row" flex>
                                     <!-- Security Levels for view -->
                                     <md-input-container flex>
                                         <label for="ouSecurityLevel">{{lang.security_level_view}}</label>
@@ -380,6 +334,69 @@
                                             <md-option ng-value="2">{{lang.desktop}}</md-option>
                                         </md-select>
                                     </md-input-container>
+                                </div>
+                                <div layout="row" flex>
+                                    <!-- Roles -->
+                                    <md-input-container flex>
+                                        <label for="customRoleId">{{lang.role}}</label>
+                                        <md-select id="customRoleId" name="customRoleId" required
+                                                   ng-disabled="ctrl.ouApplicationUser.id"
+                                                   ng-model-options="{trackBy:'$value.id'}"
+                                                   ng-model="ctrl.ouApplicationUser.customRoleId"
+                                                   md-on-close="ctrl.clearSearchText('role')"
+                                                   data-md-container-class="select-header-container">
+                                            <md-select-header class="select-header">
+                                                <input ng-model="ctrl.roleSearchText"
+                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                            </md-select-header>
+                                            <md-option
+                                                    ng-repeat="role in ctrl.roles | translatedNameFilter: ctrl.roleSearchText"
+                                                    ng-value="role" ng-disabled="!role.status">
+                                                <span
+                                                        md-highlight-text="ctrl.roleSearchText"
+                                                        md-highlight-flags="i">{{role.getTranslatedName()}}</span>
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="applicationUserForm.customRoleId.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Inbox Refresh Interval -->
+                                    <md-input-container flex>
+                                        <label for="inboxRefreshInterval">{{lang.inbox_refresh_interval}}</label>
+                                        <input name="inboxRefreshInterval" id="inboxRefreshInterval" required
+                                               ng-model="ctrl.applicationUser.inboxRefreshInterval"
+                                               min-max-number-directive min="5"
+                                               max="60"
+                                               custom-validate-directive="number">
+                                        <div ng-messages="applicationUserForm.inboxRefreshInterval.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="min">{{lang.min_number.change({number:4})}}</div>
+                                            <div ng-message="max">{{lang.max_number.change({number:61})}}</div>
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" ng-if="ctrl.editMode">
+                                    <!-- Organization Unit -->
+                                    <md-input-container flex>
+                                        <label for="defaultOUID">{{lang.organization_unit}}</label>
+                                        <md-select id="defaultOUID" name="defaultOUID" required
+                                                   ng-model="ctrl.applicationUser.defaultOUID">
+                                            <md-option ng-value="organization.ou.id"
+                                                       ng-disabled="!organization.status"
+                                                       tooltip="{{(!organization.status) ? lang.inactive_organization : ''}}"
+                                                       ng-repeat="organization in ctrl.organizationsForAppUser track by $index">
+                                                {{organization.ou.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="applicationUserForm.defaultOUID.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex></md-input-container>
                                 </div>
                                 <div layout="row">
                                     <md-switch flex ng-model="ctrl.applicationUser.slowConnectionMode"
