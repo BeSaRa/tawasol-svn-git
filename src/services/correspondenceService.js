@@ -229,7 +229,7 @@ module.exports = function (app) {
                 documentClass = correspondence.classDescription;
             } else if (correspondence.hasOwnProperty('correspondence')) {
                 documentClass = self.getCorrespondenceInformation(correspondence.correspondence).documentClass;
-            }  else if (correspondence.hasOwnProperty('generalStepElm')) {
+            } else if (correspondence.hasOwnProperty('generalStepElm')) {
                 documentClass = generator.getDocumentClassName(correspondence.generalStepElm.docType);
             } else if (correspondence.hasOwnProperty('docClassId')) { // if notification Item
                 documentClass = generator.getDocumentClassName(correspondence.docClassId);
@@ -1059,7 +1059,9 @@ module.exports = function (app) {
                             WinPrint.document.close();
                             WinPrint.focus();
                             WinPrint.print();
-                            WinPrint.close();
+                            $timeout(function () {
+                                WinPrint.close();
+                            }, 100)
                         });
                     }
                 },
