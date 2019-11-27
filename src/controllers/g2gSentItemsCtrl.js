@@ -66,8 +66,8 @@ module.exports = function (app) {
                 documentNumber: 'outgoingSerial',
                 g2gBookNumber: 'g2GRefNo',
                 receivedDate: 'updateDate',
-                status: function(record){
-                  return self.getSortingKey('statusInfo', 'Lookup');
+                status: function (record) {
+                    return self.getSortingKey('statusInfo', 'Lookup');
                 },
                 mainSiteSubSiteString: function (record) {
                     return self.getSortingKey('mainSiteSubSiteString', 'Information');
@@ -256,7 +256,7 @@ module.exports = function (app) {
         };
 
         self.printResult = function ($event) {
-            var printTitle = langService.get('menu_item_sent_items'),
+            var printTitle = [langService.get('menu_item_government_inbox'), langService.get('menu_item_government_sent_items')].join(' - '),
                 headers = [
                     'subject',
                     'document_type',

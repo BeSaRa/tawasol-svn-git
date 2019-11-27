@@ -71,16 +71,16 @@ module.exports = function (app) {
                 serial: 'docFullSerial',
                 subject: 'docSubject',
                 type: 'typeOriginalCopy',
-                actionBy: function(record){
-                  return self.getSortingKey('sentByIdInfo', 'SenderInfo');
+                actionBy: function (record) {
+                    return self.getSortingKey('sentByIdInfo', 'SenderInfo');
                 },
                 mainSiteFrom: function (record) {
                     return self.getSortingKey('mainSiteFromIdInfo', 'CorrespondenceSite')
                 },
-                mainSiteTo: function(record){
+                mainSiteTo: function (record) {
                     return self.getSortingKey('mainSiteToIdInfo', 'CorrespondenceSite')
                 },
-                subSiteFrom: function(record){
+                subSiteFrom: function (record) {
                     return self.getSortingKey('subSiteFromIdInfo', 'CorrespondenceSite')
                 },
                 subSiteTo: function (record) {
@@ -382,7 +382,7 @@ module.exports = function (app) {
          * @param sentItemDepartmentInbox
          * @param $event
          */
-        self.downloadSelected = function(sentItemDepartmentInbox,$event){
+        self.downloadSelected = function (sentItemDepartmentInbox, $event) {
             downloadService.openSelectedDownloadDialog(sentItemDepartmentInbox, $event);
         };
 
@@ -566,8 +566,7 @@ module.exports = function (app) {
                 year: self.selectedYear,
                 isCentral: false
             };
-
-            var printTitle = langService.get('menu_item_sent_items'),
+            var printTitle = [langService.get('menu_item_department_inbox'), langService.get('menu_item_department_inbox')].join(' - '),
                 table =
                     {
                         headers:
@@ -931,7 +930,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",
