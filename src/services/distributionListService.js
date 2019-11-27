@@ -135,7 +135,7 @@ module.exports = function (app) {
                     generator.interceptSendInstance('DistributionList', distributionList))
                 .then(function (result) {
                     distributionList.id = result.data.rs;
-                    return generator.generateInstance(distributionList, DistributionList, self._sharedMethods) ;
+                    return generator.generateInstance(distributionList, DistributionList, self._sharedMethods);
                     //return generator.interceptReceivedInstance('DistributionList', generator.generateInstance(distributionList, DistributionList, self._sharedMethods));
                 });
         };
@@ -282,7 +282,7 @@ module.exports = function (app) {
             }
             return _.some(_.map(distributionListsToFilter, function (existingDistributionList) {
                 return existingDistributionList.arName === distributionList.arName
-                    || existingDistributionList.enName.toLowerCase() === distributionList.enName.toLowerCase();
+                    || (existingDistributionList.enName || "").toLowerCase() === (distributionList.enName || "").toLowerCase();
             }), function (matchingResult) {
                 return matchingResult === true;
             });
