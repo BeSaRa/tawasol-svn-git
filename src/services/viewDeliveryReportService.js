@@ -40,7 +40,7 @@ module.exports = function (app) {
         };
 
         self.viewDeliveryReport = function (record, $event) {
-            var id = record.hasOwnProperty('refDocId') ? record.refDocId : record;
+            var id = record.hasOwnProperty('docId') ? record.docId : record;
             var isInternal = record.isInternalG2G();
             return dialog
                 .showDialog({
