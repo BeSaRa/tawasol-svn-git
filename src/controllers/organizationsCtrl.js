@@ -81,9 +81,9 @@ module.exports = function (app) {
 
         self.querySearch = function (searchText) {
             if (!searchText)
-                return organizationService.organizations;
+                return organizationService.allOrganizationsStructure;
             searchText = searchText.toLowerCase();
-            return _.filter(organizationService.organizations, function (item) {
+            return _.filter(organizationService.allOrganizationsStructure, function (item) {
                 return item.arName.toLowerCase().indexOf(searchText) !== -1 || item.enName.toLowerCase().indexOf(searchText) !== -1
             });
         };
