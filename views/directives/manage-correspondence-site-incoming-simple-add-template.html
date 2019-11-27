@@ -52,72 +52,36 @@
             </md-option>
         </md-select>
     </md-input-container>
-<!--
-    &lt;!&ndash; Main Site Autocomplete&ndash;&gt;
+    <!-- Sub Sites -->
     <div class="cms-autocomplete-wrapper">
         <span class="button-container">
-            <md-button ng-if="ctrl.mainSiteSearchText"
-                       ng-click="ctrl.loadMainSitesRecords($event)"
+            <md-button ng-if="ctrl.isSubSiteSearchEnabled()"
+                       ng-click="ctrl.loadSubSitesRecords($event)"
                        class="md-icon-button search-button"
                        tooltip="{{lang.load_more_records}}">
                 <md-icon md-svg-icon="magnify-plus"></md-icon>
             </md-button>
         </span>
+        <div class="help-text-div text-center" ng-if="ctrl.isSubSiteSearchEnabled()">
+            {{lang.press_enter_to_load_more_records}}
+        </div>
         <md-autocomplete
-                ng-class="{'ac-search-button': ctrl.mainSiteSearchText}"
-                ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
+                ng-class="{'ac-search-button': ctrl.isSubSiteSearchEnabled()}"
+                ng-disabled="!ctrl.selectedMainSite || ctrl.selectedSubSite"
                 md-no-cache="true"
-                md-selected-item="ctrl.selectedMainSite"
-                md-selected-item-change="ctrl.getSubSites($event)"
-                md-search-text="ctrl.mainSiteSearchText"
-                md-items="item in ctrl.querySearchMain(ctrl.mainSiteSearchText)"
+                md-selected-item="ctrl.selectedSubSite"
+                md-selected-item-change="ctrl.changeSubCorrespondence(ctrl.selectedSubSite)"
+                md-search-text="ctrl.subSiteSearchText"
+                md-items="item in ctrl.querySearchSubSites(ctrl.subSiteSearchText)"
                 md-item-text="item.getTranslatedName()"
                 md-min-length="0"
-                placeholder="{{lang.main_site}}"
+                placeholder="{{lang.sub_site}}"
                 md-autofocus
-                ng-keydown="ctrl.preventSearchKeyDown($event, 'mainSite')">
+                ng-keydown="ctrl.preventSearchKeyDown($event, 'subSite')">
             <md-item-template>
-                <span md-highlight-text="ctrl.mainSiteSearchText"
+                <span md-highlight-text="ctrl.subSiteSearchText"
                       md-highlight-flags="i">{{item.getTranslatedName()}}</span>
             </md-item-template>
-            <md-not-found>
-                <div layout="column" flex>
-                    <div layout="row" flex>
-                        <span>{{lang.no_sites_to_display}}</span>
-                        <span flex></span>
-                        <md-button ng-if="ctrl.mainSiteSearchText"
-                                   ng-click="ctrl.loadMainSitesRecords($event)"
-                                   class="select-header-icon md-icon-button"
-                                   tooltip="{{lang.load_more_records}}">
-                            <md-icon md-svg-icon="magnify-plus"></md-icon>
-                        </md-button>
-                    </div>
-                    <div class="help-text-div" ng-if="ctrl.mainSiteSearchText">
-                        {{lang.press_enter_to_load_more_records}}
-                    </div>
-                </div>
-            </md-not-found>
         </md-autocomplete>
     </div>
-    <br/>-->
-    <!-- Sub Sites -->
-    <md-autocomplete
-            ng-disabled="!ctrl.selectedMainSite || ctrl.selectedItem"
-            md-no-cache="true"
-            md-selected-item="ctrl.selectedItem"
-            md-selected-item-change="ctrl.changeSubCorrespondence(ctrl.selectedItem)"
-            md-search-text="ctrl.searchText"
-            md-items="item in ctrl.querySearch(ctrl.searchText)"
-            md-item-text="item.getTranslatedName()"
-            md-min-length="0"
-            placeholder="{{lang.sub_site}}"
-            md-autofocus>
-        <md-item-template>
-            <span md-highlight-text="ctrl.searchText" md-highlight-flags="i">{{item.getTranslatedName()}}</span>
-            <!-- - {{ item.getTranslatedName(true)}}-->
-        </md-item-template>
-        <md-not-found>
-            {{lang.no_sites_to_display}}
-        </md-not-found>
-    </md-autocomplete>
 </div>

@@ -50,6 +50,7 @@ module.exports = function (app) {
         self.selectedSubSite = null;
 
         self.sitesInfoLength = 0;
+        self.vsId = null;
 
         /**
          * @description concatenate sub correspondence sites.
@@ -137,26 +138,26 @@ module.exports = function (app) {
          * @param $event
          */
         self.onSiteTypeChange = function ($event) {
+            self.selectedMainSite = null;
             self.selectedSubSite = null;
+
             if (self.selectedSiteType) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                     criteria: null,
                     excludeOuSites: false
                 }).then(function (result) {
-                    self.subSites = [];
                     self.mainSites = result;
                     self.mainSitesCopy = angular.copy(self.mainSites);
-                    self.selectedMainSite = null;
+                    self.subSites = [];
+                    self.subSitesCopy = [];
                     _selectDefaultMainSiteAndGetSubSites()
                 });
             } else {
-                self.selectedMainSite = null;
                 self.mainSites = [];
                 self.mainSitesCopy = angular.copy(self.mainSites);
                 self.subSites = [];
                 self.subSitesCopy = angular.copy(self.subSites);
-                self.selectedSubSite = null;
                 self.subSiteSearchText = '';
             }
         };
@@ -383,6 +384,7 @@ module.exports = function (app) {
                 self.selectedMainSite = null;
                 self.subSites = [];
                 self.subSitesCopy = [];
+                self.subSiteSearchText = '';
                 self.emptySiteSearch = false;
             }
         });
