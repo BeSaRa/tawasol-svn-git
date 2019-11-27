@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                                                     _,
                                                                                     correspondenceService,
                                                                                     toast,
+                                                                                    generator,
                                                                                     rootEntity,
                                                                                     managerService) {
         'ngInject';
@@ -27,6 +28,8 @@ module.exports = function (app) {
         self.documentClass = 'incoming';
         // followup statuses
         self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
+
+        self.querySearchDefer = false;
 
         self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
         self.correspondenceSiteTypesCopy = angular.copy(self.correspondenceSiteTypes);
@@ -163,12 +166,20 @@ module.exports = function (app) {
          */
         self.querySearchSubSites = function (searchText) {
             searchText = searchText ? searchText.toLowerCase() : null;
-            return searchText ? self.subSites.filter(function (item) {
-                if (langService.current === 'ar')
-                    return item.subArSiteText.toLowerCase().indexOf(searchText) !== -1;
-                else
-                    return item.subEnSiteText.toLowerCase().indexOf(searchText) !== -1;
-            }) : self.subSites;
+            var langName = generator.ucFirst(langService.current),
+                result = searchText ? self.subSites.filter(function (item) {
+                    return item['sub' + langName + 'SiteText'].toLowerCase().indexOf(searchText) !== -1;
+                }) : self.subSites;
+
+            if (!self.querySearchDefer) {
+                return result;
+            } else {
+                var defer = $q.defer();
+                $timeout(function () {
+                    defer.resolve(result);
+                }, Math.random() * 1000, false);
+                return defer.promise;
+            }
         };
 
         /**
@@ -246,7 +257,9 @@ module.exports = function (app) {
                     if (fieldType === 'mainSite') {
                         self.loadMainSitesRecords($event);
                     } else if (fieldType === 'subSite') {
-                        self.loadSubSitesRecords($event);
+                        self.loadSubSitesRecords($event).then(function () {
+                            angular.element($event.target).focus();
+                        });
                     }
                 }
                 // prevent keydown except arrow up and arrow down keys
@@ -291,7 +304,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.loadSubSitesRecords = function ($event) {
-            correspondenceViewService.correspondenceSiteSearch('sub', {
+            return correspondenceViewService.correspondenceSiteSearch('sub', {
                 type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                 parent: self.selectedMainSite ? self.selectedMainSite.id : null,
                 criteria: self.subSiteSearchText,
@@ -310,8 +323,9 @@ module.exports = function (app) {
                 } else {
                     self.subSites = angular.copy(self.subSitesCopy);
                 }
+                return self.subSites;
             }).catch(function (error) {
-                self.subSites = angular.copy(self.subSitesCopy);
+                return self.subSites = angular.copy(self.subSitesCopy);
             });
         };
 
