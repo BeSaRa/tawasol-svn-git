@@ -131,9 +131,9 @@ module.exports = function (app) {
             desktopNotificationService
                 .askForPermission()
                 .then(function () {
-                    if (Notification && Notification.permission === 'granted') {
+                    /*if (Notification && Notification.permission === 'granted') {
                         userInboxService.loadUserInboxes(true).then(self.desktopNotify);
-                    }
+                    }*/
                 });
             var stopNotification = false;
 
