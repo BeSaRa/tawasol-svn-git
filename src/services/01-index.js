@@ -118,4 +118,5 @@ module.exports = function (app) {
 	require('./administratorService')(app);
 	require('./cacheService')(app);
 	require('./g2gPendingService')(app);
+	require('./desktopNotificationService')(app);
 };

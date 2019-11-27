@@ -8,11 +8,13 @@ module.exports = function (app) {
                                                              WorkItem,
                                                              correspondenceService,
                                                              userInboxService,
+                                                             $state,
+                                                             $stateParams,
+                                                             desktopNotificationService,
+                                                             langService,
                                                              followupEmployeeInboxService) {
         'ngInject';
         var self = this;
-
-
         self.mailService = mailNotificationService;
 
         var userInboxCtrl = $controller('userInboxCtrl', {
@@ -64,6 +66,22 @@ module.exports = function (app) {
             return allowed;
         };
 
+        self.desktopNotify = function (workItems) {
+            var items = _.filter(workItems, function (item) {
+                return !item.generalStepElm.isOpen;
+            });
+
+            if (items.length) {
+                var notification = desktopNotificationService
+                    .displayNotification(langService.get('inbox_notification'),
+                        langService.get('you_have_received_new_books').change({count: items.length}));
+
+                notification.addEventListener('click', function () {
+                    window.open($state.href('app.inbox.user-inbox', {identifier: $stateParams.identifier}, {absolute: true}));
+                }, true);
+            }
+        };
+
         self.openNotificationItem = function (item, $event) {
             $event.preventDefault();
             var wobNumber = item.workObjectNumber;
@@ -110,13 +128,25 @@ module.exports = function (app) {
         var interval;
 
         if (!employeeService.isAdminUser()) {
+            desktopNotificationService
+                .askForPermission()
+                .then(function () {
+                    if (Notification && Notification.permission === 'granted') {
+                        userInboxService.loadUserInboxes(true).then(self.desktopNotify);
+                    }
+                });
             var stopNotification = false;
+
             // reload notifications
             self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount);
+
             interval = $interval(function () {
                 if (stopNotification) {
                     $interval.cancel(interval);
                     return;
+                }
+                if (Notification && Notification.permission === 'granted') {
+                    userInboxService.loadUserInboxes(true, (Date.now() - employeeService.getEmployee().getIntervalMin())).then(self.desktopNotify);
                 }
                 return self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount)
                     .catch(function () {

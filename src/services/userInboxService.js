@@ -40,10 +40,20 @@ module.exports = function (app) {
          * @description Load the user inboxes from server.
          * @returns {Promise|userInboxes}
          */
-        self.loadUserInboxes = function (excludeLoading) {
-            return $http.get(urlService.userInbox + '/all-mails?optional-fields=registeryOu', {
-                excludeLoading: !!excludeLoading
+        self.loadUserInboxes = function (excludeLoading, afterTime, returnResult) {
+            var params = {
+                'optional-fields': 'registeryOu'
+            };
+            if (afterTime) {
+                params.afterTime = (afterTime + '').substr(0, ('' + afterTime).length - 3);
+            }
+            return $http.get(urlService.userInbox + '/all-mails', {
+                excludeLoading: !!excludeLoading,
+                params: params
             }).then(function (result) {
+                if (returnResult)
+                    return result.data.rs;
+
                 self.userInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                 //self.userInboxes = _.sortBy(self.userInboxes, 'generalStepElm.starred').reverse();
                 self.userInboxes = generator.interceptReceivedCollection('WorkItem', self.userInboxes);
@@ -204,7 +214,7 @@ module.exports = function (app) {
                         }
                     })
                     .then(function (workItems) {
-                       return self.terminateBulkUserInboxes(workItems)
+                        return self.terminateBulkUserInboxes(workItems)
                             .then(function (result) {
                                 var response = false;
                                 if (result.length === workItems.length) {
@@ -246,8 +256,7 @@ module.exports = function (app) {
                                         return false;
                                     }
                                 });
-                        }
-                        else if (signatures && signatures.length > 1) {
+                        } else if (signatures && signatures.length > 1) {
                             return dialog
                                 .showDialog({
                                     targetEvent: $event,
@@ -259,8 +268,7 @@ module.exports = function (app) {
                                         signatures: signatures
                                     }
                                 });
-                        }
-                        else {
+                        } else {
                             dialog.alertMessage(langService.get('no_signature_available'));
 
                             /*Open the user preference with signature tab focused*/
