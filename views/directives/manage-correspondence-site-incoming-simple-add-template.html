@@ -66,6 +66,7 @@
             {{lang.press_enter_to_load_more_records}}
         </div>
         <md-autocomplete
+                id="subCorrSite"
                 ng-class="{'ac-search-button': ctrl.isSubSiteSearchEnabled()}"
                 ng-disabled="!ctrl.selectedMainSite || ctrl.selectedSubSite"
                 md-no-cache="true"
@@ -76,7 +77,6 @@
                 md-item-text="item.getTranslatedName()"
                 md-min-length="0"
                 placeholder="{{lang.sub_site}}"
-                md-autofocus
                 ng-keydown="ctrl.preventSearchKeyDown($event, 'subSite')">
             <md-item-template>
                 <span md-highlight-text="ctrl.subSiteSearchText"

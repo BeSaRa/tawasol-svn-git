@@ -67,6 +67,7 @@
             {{lang.press_enter_to_load_more_records}}
         </div>
         <md-autocomplete
+                id="subCorrSite"
                 ng-class="{'ac-search-button': ctrl.isSubSiteSearchEnabled()}"
                 ng-disabled="!ctrl.selectedMainSite || ctrl.selectedSubSite"
                 md-no-cache="true"
