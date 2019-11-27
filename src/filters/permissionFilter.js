@@ -7,7 +7,8 @@ module.exports = function (app) {
     function _searchInPermission(permission, text) {
         if (!permission)
             return false;
-        var english = permission.enName.toLowerCase() + '', arabic = permission.arName.toLowerCase() + '';
+        var english = (permission.enName || "").toLowerCase() + '',
+            arabic = (permission.arName || '').toLowerCase() + '';
         return english.indexOf(text) !== -1 || arabic.indexOf(text) !== -1;
     }
 
