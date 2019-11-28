@@ -105,6 +105,7 @@ module.exports = function (app) {
 
                         $node
                             .toggleClass('filtered', !!data.filtered)
+                            .toggleClass('deactivated', !data.status)
                             .find('.title')
                             .attr('layout', 'row')
                             .attr('layout-align', 'center center')

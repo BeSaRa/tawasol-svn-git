@@ -2430,6 +2430,16 @@ table.clone + md-table-container table tbody tr:first-child td {
   }
 }
 
+.orgchart .node.deactivated {
+  .title {
+    background-color: black;
+
+    md-icon {
+      fill: white;
+    }
+  }
+}
+
 /*
 // bootstrap style for components
 md-input-container {
