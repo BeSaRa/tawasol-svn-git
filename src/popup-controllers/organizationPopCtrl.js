@@ -441,7 +441,7 @@ module.exports = function (app) {
                         self.organization.faxId = '';
                     }
 
-                    if(self.organization.hasRegistry || self.organization.centralArchive){
+                    if(!self.organization.hasRegistry && !self.organization.centralArchive){
                         self.organization.internalG2gId = null;
                         self.organization.g2gId = null;
                     }
