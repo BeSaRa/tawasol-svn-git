@@ -164,7 +164,39 @@
                         <div ng-if="ctrl.isSimpleCorrespondenceSiteSearchType"
                              flex>
                             <!-- sub site result search -->
-                            <md-autocomplete
+                            <div class="cms-autocomplete-wrapper" flex>
+                                <span class="button-container">
+                                    <md-button ng-if="ctrl.isSubSiteSearchEnabled()"
+                                               ng-click="ctrl.loadSubSitesRecords($event)"
+                                               class="md-icon-button search-button"
+                                               tooltip="{{lang.load_more_records}}">
+                                        <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                    </md-button>
+                                </span>
+                                <div class="help-text-div text-center"
+                                     ng-if="ctrl.isSubSiteSearchEnabled()">
+                                    {{lang.press_enter_to_load_more_records}}
+                                </div>
+                                <md-autocomplete
+                                        ng-class="{'ac-search-button': ctrl.isSubSiteSearchEnabled()}"
+                                        md-no-cache="true"
+                                        md-select-on-match="true"
+                                        md-selected-item="ctrl.selectedSimpleSub"
+                                        md-selected-item-change="ctrl.onSimpleSubSiteSelectedChange(item)"
+                                        md-search-text="ctrl.simpleSubSiteResultSearchText"
+                                        md-items="item in ctrl.getSimpleSubSearchOptions(ctrl.simpleSubSiteResultSearchText)"
+                                        md-item-text="item.getTranslatedName()"
+                                        md-min-length="0"
+                                        placeholder="{{lang.sub_site}}"
+                                        md-autofocus
+                                        ng-keydown="ctrl.preventSearchKeyDown($event, 'subSiteSimple')">
+                                    <md-item-template>
+                                                    <span md-highlight-text="ctrl.simpleSubSiteResultSearchText"
+                                                          md-highlight-flags="i">{{item.getTranslatedName()}}</span>
+                                    </md-item-template>
+                                </md-autocomplete>
+                            </div>
+                            <!--<md-autocomplete
                                     flex
                                     md-no-cache="true"
                                     md-clear-button="true"
@@ -180,7 +212,7 @@
                                                 <span md-highlight-text="ctrl.simpleSubSiteResultSearchText"
                                                       md-highlight-flags="i">{{item.getTranslatedName()}}</span>
                                 </md-item-template>
-                            </md-autocomplete>
+                            </md-autocomplete>-->
                         </div>
                         <div>
                             <md-button tooltip="{{lang.sites_hide_search}}"

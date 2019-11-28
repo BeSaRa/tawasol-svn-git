@@ -383,9 +383,10 @@ module.exports = function (app) {
                 self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                 // self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
-                if (self.subSearchResult.length === 1) {
+
+                /*if (self.subSearchResult.length === 1) {
                     self.subSearchSelected.push(self.subSearchResult[0]);
-                }
+                }*/
 
                 // bind sub site search
                 if (self.isSimpleCorrespondenceSiteSearchType) {
@@ -663,6 +664,10 @@ module.exports = function (app) {
                 if (code === 13) {
                     if (fieldType === 'mainSiteSimple' || fieldType === 'mainSiteAdvanced') {
                         self.loadMainSitesRecords($event);
+                    } else if (fieldType === 'subSiteSimple'){
+                        self.loadSubSitesRecords($event).then(function () {
+                            angular.element($event.target).focus();
+                        });
                     }
                 }
                 // prevent keydown except arrow up and arrow down keys
@@ -706,6 +711,37 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description request service for loading sub site dropdown records with searchText
+         * @param $event
+         */
+        self.loadSubSitesRecords = function ($event) {
+            return correspondenceViewService.correspondenceSiteSearch('sub', {
+                type: self.selectedSiteTypeSimple ? self.selectedSiteTypeSimple.lookupKey : null,
+                parent: self.selectedMainSiteSimple ? self.selectedMainSiteSimple.id : null,
+                criteria: self.simpleSubSiteResultSearchText,
+                excludeOuSites: false
+            }).then(function (result) {
+                if (result.length) {
+                    var availableSubSitesIds = _.map(self.subSearchResultCopy, 'subSiteId');
+                    result = _.filter(result, function (corrSite) {
+                        return availableSubSitesIds.indexOf(corrSite.id) === -1;
+                    });
+                    result = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+
+                    self.subSearchResult = self.subSearchResult.concat(result);
+                    self.subSearchResultCopy = angular.copy(self.subSearchResult);
+
+                    self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
+                } else {
+                    self.subSearchResult = angular.copy(self.subSearchResultCopy);
+                }
+                return self.subSearchResult;
+            }).catch(function (error) {
+                return self.subSearchResult = angular.copy(self.subSearchResultCopy);
+            });
+        };
+
         var _selectDefaultMainSiteAndGetSubSites = function () {
             if (self.selectedSiteTypeSimple && self.selectedSiteTypeSimple.lookupKey === 1) {
                 self.selectedMainSiteSimple = _.find(self.mainSites, function (site) {
@@ -722,39 +758,15 @@ module.exports = function (app) {
                 });
                 self.selectedMainSiteAdvanced ? self.onMainSiteChangeAdvanced() : null;
             }
-        }
+        };
 
-        /*
-
-                /!**
-                 * @description filter the dropdown with searchText or request service if searched record not found
-                 * @param $event
-                 * @param fieldType
-                 *!/
-                self.filterDropdownRecords = function ($event, fieldType) {
-                    $timeout(function () {
-                        if (fieldType === 'mainSiteSimple' || fieldType === 'mainSiteAdvanced') {
-                            _filterSearchMainSites(fieldType);
-                        }
-                    })
-                };
-
-                var _filterSearchMainSites = function (fieldType) {
-                    var searchText = self.isSimpleCorrespondenceSiteSearchType ? self.mainSiteSimpleSearchText : self.mainSiteAdvancedSearchText;
-                    var searchResult = gridService.searchGridData({
-                        searchText: searchText,
-                        searchColumns: {
-                            arName: langService.current === 'ar' ? 'arName' : '',
-                            enName: langService.current === 'en' ? 'enName' : '',
-                        }
-                    }, self.mainSitesCopy);
-                    if (searchResult && searchResult.length) {
-                        self.mainSites = searchResult;
-                        //_selectDefaultMainSiteAndGetSubSites();
-                    } else {
-                        self.mainSites = [];
-                    }
-                };*/
+        /**
+         * @description Check if sub site search has text and is enabled
+         * @returns {string|boolean}
+         */
+        self.isSubSiteSearchEnabled = function () {
+            return self.simpleSubSiteResultSearchText;
+        };
 
     });
 };

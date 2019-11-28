@@ -49,15 +49,15 @@ module.exports = function (app) {
                 enName: lookup.defaultEnName,
                 id: lookup.lookupKey
             });
-            self.lookupNames['key_siteType']  = new Information({
+            self.lookupNames['key_siteType'] = new Information({
                 arName: langService.getByLangKey('correspondence_site_type', 'ar'),
                 enName: langService.getByLangKey('correspondence_site_type', 'en')
             });
-            self.lookupNames['key_mainSite']  = new Information({
+            self.lookupNames['key_mainSite'] = new Information({
                 arName: langService.getByLangKey('main_site', 'ar'),
                 enName: langService.getByLangKey('main_site', 'en')
             });
-            self.lookupNames['key_subSite']  = new Information({
+            self.lookupNames['key_subSite'] = new Information({
                 arName: langService.getByLangKey('sub_site', 'ar'),
                 enName: langService.getByLangKey('sub_site', 'en')
             });
@@ -236,8 +236,8 @@ module.exports = function (app) {
             }
         });
 
-        self.onChangeDocumentType = function($event){
-            if (self.filter.ui.key_2.value && self.filter.ui.key_2.value === 2){
+        self.onChangeDocumentType = function ($event) {
+            if (self.filter.ui.key_2.value && self.filter.ui.key_2.value === 2) {
                 self.filter.ui.key_siteType.value = null;
                 self.filter.ui.key_mainSite.value = null;
                 self.filter.ui.key_subSite.value = null;
@@ -269,8 +269,7 @@ module.exports = function (app) {
                         self.getSubSites(false);
                     }
                 });
-            }
-            else {
+            } else {
                 self.mainSites = [];
                 self.subSites = [];
                 self.filter.ui.key_mainSite.value = null;
@@ -298,8 +297,7 @@ module.exports = function (app) {
                     if (resetSub)
                         self.filter.ui.key_subSite.value = null;
                 });
-            }
-            else {
+            } else {
                 self.subSites = [];
                 self.filter.ui.key_subSite.value = null;
             }
@@ -326,6 +324,8 @@ module.exports = function (app) {
                 if (code === 13) {
                     if (fieldType === 'mainSite') {
                         self.loadMainSitesRecords($event);
+                    } else if (fieldType === 'subSite') {
+                        self.loadSubSitesRecords($event);
                     }
                 }
                 // prevent keydown except arrow up and arrow down keys
@@ -360,6 +360,36 @@ module.exports = function (app) {
                     self.mainSites = angular.copy(self.mainSitesCopy);
                 });
             }
+        };
+
+        /**
+         * @description request service for loading sub site dropdown records with searchText
+         * @param $event
+         */
+        self.loadSubSitesRecords = function ($event) {
+           var mainSite = self.filter.ui.key_mainSite.value && self.filter.ui.key_mainSite.value.hasOwnProperty('id') ? self.filter.ui.key_mainSite.value.id : self.filter.ui.key_mainSite.value;
+            correspondenceViewService.correspondenceSiteSearch('sub', {
+                type: self.filter.ui.key_siteType.value.hasOwnProperty('lookupKey') ? self.filter.ui.key_siteType.value.lookupKey : self.filter.ui.key_siteType.value,
+                parent: mainSite,
+                criteria: self.subSiteSearchText,
+                excludeOuSites: false,
+                includeDisabled: true // to include private regOu
+            }).then(function (result) {
+                if (result.length) {
+                    var availableSubSitesIds = _.map(self.subSitesCopy, 'id');
+                    result = _.filter(result, function (corrSite) {
+                        return availableSubSitesIds.indexOf(corrSite.id) === -1;
+                    });
+
+                    self.subSites = self.subSites.concat(result);
+                    self.subSitesCopy = angular.copy(self.subSites);
+
+                } else {
+                    self.subSites = angular.copy(self.subSitesCopy);
+                }
+            }).catch(function (error) {
+                return self.subSites = angular.copy(self.subSitesCopy);
+            });
         };
     });
 };

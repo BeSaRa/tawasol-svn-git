@@ -336,6 +336,7 @@
                                         <label for="mainSite">{{ctrl.lookupNames['key_mainSite'].getTranslatedName()}}</label>
                                         <md-select id="mainSite" name="mainSite"
                                                    ng-model="ctrl.filter.ui.key_mainSite.value"
+                                                   ng-model-options="{trackBy: '$value'}"
                                                    ng-disabled="!ctrl.filter.ui.key_siteType.value"
                                                    md-on-close="ctrl.clearSearchText('mainSite')"
                                                    ng-change="ctrl.getSubSites(true, $event)"
@@ -343,7 +344,6 @@
                                             <md-select-header class="select-header" layout="column">
                                                 <div layout="row" flex class="size-100">
                                                     <input ng-model="ctrl.mainSiteSearchText"
-                                                           ng-model-options="{trackBy: '$value'}"
                                                            ng-keydown="ctrl.handleSearchKeyDown($event, 'mainSite')"
                                                            placeholder="{{lang.search}}"
                                                            class="select-header-input">
@@ -373,18 +373,30 @@
                                         <label for="subSite">{{ctrl.lookupNames['key_subSite'].getTranslatedName()}}</label>
                                         <md-select id="subSite" name="subSite"
                                                    ng-model="ctrl.filter.ui.key_subSite.value"
+                                                   ng-model-options="{trackBy: '$value'}"
                                                    ng-disabled="!ctrl.filter.ui.key_siteType.value || !ctrl.filter.ui.key_mainSite.value"
                                                    md-on-close="ctrl.clearSearchText('subSite')"
                                                    data-md-container-class="select-header-container">
-                                            <md-select-header class="select-header">
-                                                <input ng-model="ctrl.subSiteSearchText"
-                                                       ng-keydown="ctrl.handleSearchKeyDown($event, 'subSite')"
-                                                       placeholder="{{lang.search}}"
-                                                       class="select-header-input">
+                                            <md-select-header class="select-header" layout="column">
+                                                <div layout="row" flex class="size-100">
+                                                    <input ng-model="ctrl.subSiteSearchText"
+                                                           ng-keydown="ctrl.handleSearchKeyDown($event, 'subSite')"
+                                                           placeholder="{{lang.search}}"
+                                                           class="select-header-input">
+                                                    <md-button ng-if="ctrl.subSiteSearchText"
+                                                               ng-click="ctrl.loadSubSitesRecords($event)"
+                                                               class="select-header-icon md-icon-button"
+                                                               tooltip="{{lang.load_more_records}}">
+                                                        <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                    </md-button>
+                                                </div>
+                                                <div class="help-text-div" ng-if="ctrl.subSiteSearchText">
+                                                    {{lang.press_enter_to_load_more_records}}
+                                                </div>
                                             </md-select-header>
                                             <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option
-                                                    ng-repeat="subSite in ctrl.subSites | translatedNameFilter: ctrl.subSiteSearchText track by $index"
+                                                    ng-repeat="subSite in ctrl.subSites | translatedNameFilter: ctrl.subSiteSearchText"
                                                     ng-value="subSite.id">
                                     <span
                                             md-highlight-text="ctrl.subSiteSearchText"

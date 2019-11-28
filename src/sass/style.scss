@@ -2398,10 +2398,15 @@ table.clone + md-table-container table tbody tr:first-child td {
     position: absolute;
     z-index: 1;
 
+
     .search-button {
       padding-left: 0;
       width: 30px;
       height: 30px;
+
+      md-icon {
+        fill: rgba(0, 0, 0, 0.54) !important;
+      }
     }
   }
 
