@@ -104,6 +104,7 @@ module.exports = function (app) {
 
 
                         $node
+                            .toggleClass('filtered', !!data.filtered)
                             .find('.title')
                             .attr('layout', 'row')
                             .attr('layout-align', 'center center')
@@ -114,6 +115,7 @@ module.exports = function (app) {
                             .find('.content')
                             .attr('layout', 'row')
                             .attr('layout-align', 'center center');
+
 
                         if (data.hasRegistry || data.centralArchive || !data.isFnSynched) {
                             $node.append(iconsWrapper);

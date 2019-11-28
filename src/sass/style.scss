@@ -2424,6 +2424,12 @@ table.clone + md-table-container table tbody tr:first-child td {
   }
 }
 
+.orgchart .node.filtered {
+  .title {
+    background-color: #0B9444;
+  }
+}
+
 /*
 // bootstrap style for components
 md-input-container {

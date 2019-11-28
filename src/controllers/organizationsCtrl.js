@@ -30,10 +30,12 @@ module.exports = function (app) {
         }
 
 
-        self.reloadOrganizations = function () {
+        self.reloadOrganizations = function (ignoreLoadOrganizations) {
             return referencePlanNumberService
                 .loadReferencePlanNumbers()
                 .then(function () {
+                    if (ignoreLoadOrganizations)
+                        return;
                     organizationService
                         .loadAllOrganizationsStructure()
                         .then(function (result) {
@@ -73,9 +75,14 @@ module.exports = function (app) {
 
         self.selectedItemChange = function (selected) {
             if (selected) {
-                self.selectedFilter = [selected];
+                self.reloadOrganizations(true).then(function () {
+                    organizationService.loadHierarchy(selected).then(function (result) {
+                        organizationChartService.createHierarchy(result , selected);
+                        self.selectedFilter = self.organizationChartService.rootOrganizations;
+                    });
+                });
             } else {
-                self.selectedFilter = self.organizationChartService.rootOrganizations;
+                self.reloadOrganizations();
             }
         };
 

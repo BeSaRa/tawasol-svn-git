@@ -100,6 +100,17 @@ module.exports = function (app) {
                 return self.allOrganizationsStructure;
             });
         };
+        /**
+         * load selcted organization with hierarchy
+         * @param selectedOrganization
+         * @returns {*}
+         */
+        self.loadHierarchy = function (selectedOrganization) {
+            var id = selectedOrganization.hasOwnProperty('id') ? selectedOrganization.id : selectedOrganization;
+            return $http.get(urlService.organizations + '/criteria/' + id).then(function (result) {
+                return generator.interceptReceivedCollection('Organization', generator.generateCollection(result.data.rs, Organization, self._sharedMethods));
+            });
+        };
 
         /**
          * @description Get/Load all organizations structure

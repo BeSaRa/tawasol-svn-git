@@ -10,6 +10,10 @@ module.exports = function (app) {
         // children organizations
         self.childrenOrganizations = {};
 
+        self.selectedFilter = false;
+
+        self.pushMeAsParent = null;
+
         /**
          * get current hierarchy
          * @return {*|{}}
@@ -21,7 +25,8 @@ module.exports = function (app) {
          * @description create hierarchy for the organization tree.
          * @returns {*|Organization}
          */
-        self.createHierarchy = function (organizations) {
+        self.createHierarchy = function (organizations, selectedFilter) {
+            self.selectedFilter = selectedFilter;
             self.organizations = angular.copy(organizations);
             return self.emptyParentsAndChildren().separateRootFromChild().getChildrenForParents().getHierarchy();
         };
@@ -43,6 +48,10 @@ module.exports = function (app) {
                 return self;
 
             _.map(self.organizations, function (organization) {
+                if (self.selectedFilter) {
+                    self.pushMeAsParent = organization.id === self.selectedFilter.parent ? organization : self.pushMeAsParent;
+                    organization.filtered = organization.id === self.selectedFilter.id;
+                }
                 // if it is root
                 if (!organization.parent) {
                     // self.rootOrganizations = organization;
@@ -57,6 +66,11 @@ module.exports = function (app) {
                 }
                 return organization;
             });
+
+            if (!self.rootOrganizations.length && self.selectedFilter) {
+                self.rootOrganizations.push(self.pushMeAsParent);
+            }
+
             return self;
         };
         /**
