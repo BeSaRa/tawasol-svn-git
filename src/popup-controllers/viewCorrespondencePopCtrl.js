@@ -545,13 +545,13 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewCorrespondenceSites = function (record, $event) {
-            if (self.recordType === 'g2g' || self.recordType === 'g2gmessaginghistory'){
-               return false;
+            if (self.recordType === 'g2g' || self.recordType === 'g2gmessaginghistory') {
+                return false;
             }
             correspondenceService.viewCorrespondenceSites(record, self.recordType, $event);
         };
 
-        var filterStickyActions = function(){
+        var filterStickyActions = function () {
             self.stickyActions = gridService.getStickyActions(self.actions);
             // show readonly manage destinations for outgoing only
             var record = self.workItem || self.correspondence;
@@ -566,14 +566,14 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             var record = self.workItem || self.correspondence;
-                            if (self.recordType === 'g2g' || self.recordType === 'g2gmessaginghistory'){
-                               return false;
+                            if (self.recordType === 'g2g' || self.recordType === 'g2gmessaginghistory') {
+                                return false;
                             }
                             return record.getInfo().documentClass === 'outgoing';
                         },
                         count: function () {
                             var record = self.workItem || self.correspondence;
-                            if (self.recordType === 'g2g' || self.recordType === 'g2gmessaginghistory'){
+                            if (self.recordType === 'g2g' || self.recordType === 'g2gmessaginghistory') {
                                 return false;
                             }
                             return record.getCorrespondenceSitesCount();
@@ -583,12 +583,19 @@ module.exports = function (app) {
                 );
             }
 
-            self.stickyActions= _.filter(self.stickyActions, function (action) {
-               return self.isShowViewerAction(action);
+            self.stickyActions = _.filter(self.stickyActions, function (action) {
+                return self.isShowViewerAction(action);
             });
             self.stickyActionsChunk = _.chunk(self.stickyActions, 5);
         };
 
+
+        self.canShowLinkedDocs = function () {
+            if ($state.current.name === 'app.department-inbox.incoming') {
+                return self.workItem.isTransferredDocument();
+            }
+            return true;
+        };
 
     });
 };
