@@ -11,6 +11,7 @@
 @import "import/virtual-repeater";
 @import "import/simple-checkbox";
 @import "import/scroll-bar";
+//@import "helper/cms-material-bootstrap";
 
 html {
   direction: ltr;
@@ -2443,38 +2444,3 @@ table.clone + md-table-container table tbody tr:first-child td {
     }
   }
 }
-
-/*
-// bootstrap style for components
-md-input-container {
-  &.md-input-focused {
-    .md-input {
-      border-width: 1px !important;
-    }
-  }
-
-  label {
-    padding-left: 7px !important;
-  }
-
-  .md-input, md-select {
-    height: 34px !important;
-    font-size: 14px;
-    line-height: 1.42857143;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-  }
-
-  md-select-value {
-    border-bottom: 1px solid #ccc;
-  }
-}*/
