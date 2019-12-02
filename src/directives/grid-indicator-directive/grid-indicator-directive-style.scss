@@ -72,6 +72,14 @@
   &.no-reassigned {
     color: #FF0000;
   }
+
+  &.outgoing {
+    color: #308DFC;
+  }
+
+  &.incoming {
+    color: #32CD32;
+  }
 }
 
 .indicator-td {
