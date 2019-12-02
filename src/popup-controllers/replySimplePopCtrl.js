@@ -120,7 +120,9 @@ module.exports = function (app) {
                         .setAction(result.action)
                         .setSendSMS(result.sendSMS)
                         .setSendEmail(result.sendEmail)
-                        .setSecureAction(result.isSecureAction);
+                        .setSecureAction(result.isSecureAction)
+                        .setEscalationStatus(result.escalationStatus)
+                        .setEscalationUser(result.escalationUser);
                 }
             } else {
                 distWorkflowItem
@@ -129,7 +131,9 @@ module.exports = function (app) {
                     .setAction(result.action)
                     .setSendSMS(result.sendSMS)
                     .setSendEmail(result.sendEmail)
-                    .setSecureAction(result.isSecureAction);
+                    .setSecureAction(result.isSecureAction)
+                    .setEscalationStatus(result.escalationStatus)
+                     .setEscalationUser(result.escalationUser);
             }
         }
 

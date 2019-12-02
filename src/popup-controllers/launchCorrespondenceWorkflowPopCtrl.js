@@ -38,6 +38,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
         self.inlineUserOUSearchText = '';
+        var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess;
 
         /**
          * get multi info in case the correspondence array.
@@ -656,7 +657,9 @@ module.exports = function (app) {
                 .setAction(result.action)
                 .setSendSMS(result.sendSMS)
                 .setSendEmail(result.sendEmail)
-                .setSecureAction(result.isSecureAction);
+                .setSecureAction(result.isSecureAction)
+                .setEscalationStatus(result.escalationStatus)
+                .setEscalationUser(result.escalationUser);
         }
 
         /**
@@ -678,6 +681,12 @@ module.exports = function (app) {
          */
         function _addUsersToSelectedGrid(users) {
             users = angular.isArray(users) ? users : [users];
+            _.map(users, function (item) {
+                if (!item.escalationStatus) {
+                    item.escalationStatus = currentOUEscalationProcess;
+                }
+                return item;
+            });
             self.selectedWorkflowItems = self.selectedWorkflowItems.concat(users);
         }
 
@@ -1110,17 +1119,19 @@ module.exports = function (app) {
          * @description open workflow item settings.
          * @returns {promise|*}
          */
-        self.workflowItemSettingDialog = function (dialogTitle, distWorkflowItem, $event) {
+        self.workflowItemSettingDialog = function (dialogTitle, distWorkflowItem, $event, currentGridName) {
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('workflow-item-settings'),
                 controller: 'workflowItemSettingPopCtrl',
                 controllerAs: 'ctrl',
                 targetEvent: $event,
+                bindToController: true,
                 locals: {
                     comments: self.comments,
                     workflowActions: self.workflowActions,
                     dialogTitle: dialogTitle,
-                    distWorkflowItem: distWorkflowItem
+                    distWorkflowItem: distWorkflowItem,
+                    gridName: currentGridName || false
                 }
             })
         };
@@ -1128,13 +1139,13 @@ module.exports = function (app) {
          * @description set default dist Workflow Item Properties
          * @param collection
          * @param distWorkflowItem
-         * @param notDefault
          * @param $event
+         * @param currentGridName
          */
-        self.setDefaultWorkflowItemsSettings = function (collection, distWorkflowItem, $event, notDefault) {
+        self.setDefaultWorkflowItemsSettings = function (collection, distWorkflowItem, $event, currentGridName) {
             // workflow_properties
             return self
-                .workflowItemSettingDialog(langService.get('set_default_workflow_attributes'), distWorkflowItem, $event)
+                .workflowItemSettingDialog(langService.get('set_default_workflow_attributes'), distWorkflowItem, $event, currentGridName)
                 .then(function (result) {
                     _setDistWorkflowItem(distWorkflowItem, result);
                     _.map(collection, function (item, index) {
@@ -1152,10 +1163,11 @@ module.exports = function (app) {
          * @description set setting to dist workflowItem.
          * @param distWorkflowItem
          * @param $event
+         * @param currentGridName
          */
-        self.setSettingsToDistWorkflowItem = function (distWorkflowItem, $event) {
+        self.setSettingsToDistWorkflowItem = function (distWorkflowItem, $event, currentGridName) {
             return self
-                .workflowItemSettingDialog((langService.get('workflow_properties') + ' ' + distWorkflowItem.getTranslatedName()), distWorkflowItem, $event)
+                .workflowItemSettingDialog((langService.get('workflow_properties') + ' ' + distWorkflowItem.getTranslatedName()), distWorkflowItem, $event, currentGridName)
                 .then(function (result) {
                     _setDistWorkflowItem(distWorkflowItem, result);
                     //self.addSelectedUsersToGrid(distWorkflowItem, $event);
@@ -1338,6 +1350,10 @@ module.exports = function (app) {
 
         self.addToSelected = function (workflowItem, checkProxy) {
             if (_getUsersNotExists(workflowItem).length) {
+                // && workflowItem.gridName.toLowerCase() !== 'oureg'
+                if (!workflowItem.escalationStatus) {
+                    workflowItem.escalationStatus = currentOUEscalationProcess;
+                }
                 self.selectedWorkflowItems.push(workflowItem);
             }
         };
@@ -1362,11 +1378,11 @@ module.exports = function (app) {
             var result = false, collections = self.selectedWorkflowItems;
             // unCompleted
             var unCompleted = _.filter(collections, function (item) {
-                return !item.isWFComplete();
+                return !item.isWFComplete() || !item.isEscalationComplate();
             });
             // completed
             var completed = _.filter(collections, function (item) {
-                return item.isWFComplete();
+                return item.isWFComplete() && item.isEscalationComplate();
             });
 
             var types = !self.getApprovedStatus() ? langService.get('users_or_organizations') : langService.get('user');
@@ -1414,7 +1430,5 @@ module.exports = function (app) {
             }
         };
 
-    })
-    ;
-}
-;
+    });
+};

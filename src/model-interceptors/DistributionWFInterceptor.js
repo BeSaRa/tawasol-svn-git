@@ -11,14 +11,14 @@ module.exports = function (app) {
             model.normalUsers = _.map(model.normalUsers, function (user) {
                 return user.mapSend();
             });
-            self.wfGroups = _.map(model.wfGroups, function (group) {
+            model.wfGroups = _.map(model.wfGroups, function (group) {
                 return group.mapSend();
             });
-            self.receivedOUs = _.map(model.receivedOUs, function (organization) {
+            model.receivedOUs = _.map(model.receivedOUs, function (organization) {
                 return organization.mapSend();
             });
-            self.receivedRegOUs = _.map(model.receivedRegOUs, function (organization) {
-                return organization.mapSend();
+            model.receivedRegOUs = _.map(model.receivedRegOUs, function (organization) {
+                return organization.mapSend(true);
             });
             return model;
         });

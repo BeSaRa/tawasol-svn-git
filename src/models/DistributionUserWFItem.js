@@ -141,6 +141,8 @@ module.exports = function (app) {
                 delete this.tempRegOUSection;
                 delete this.showCommentDropdown;
 
+                this.escalationStatus = (this.escalationStatus && this.escalationStatus.hasOwnProperty('id')) ? this.escalationStatus.lookupKey : this.escalationStatus;
+                this.escalationUser = (this.escalationUser && this.escalationUser.hasOwnProperty('id')) ? this.escalationUser.id : this.escalationUser;
                 this.action = this.action.hasOwnProperty('id') ? this.action.id : this.action;
                 return this;
             };

@@ -70,13 +70,16 @@ module.exports = function (app) {
         self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
         // ldap providers for entity
         self.entityLDAPProviders = entityLDAPProviders;
+        //get escalation process of global settings
+        self.entityEscalationProcess = rootEntity.getGlobalSettings().escalationProcess;
         // get permissions
         self.permissions = roleService.permissionsByGroup;
         // set copy of current organization if editMode true.
         self.organization = !self.editMode ? new Organization({
             wfsecurity: lookupService.getLookupByLookupKey(lookupService.workflowSecurity, rootEntity.getGlobalSettings().wfsecurity),
             securitySchema: lookupService.getLookupByLookupKey(lookupService.securitySchema, rootEntity.getGlobalSettings().securitySchema),
-            ldapCode: self.entityLDAPProviders.length === 1 ? self.entityLDAPProviders[0].ldapCode : null
+            ldapCode: self.entityLDAPProviders.length === 1 ? self.entityLDAPProviders[0].ldapCode : null,
+            escalationProcess: (self.entityEscalationProcess !== null) ? lookupService.getLookupByLookupKey(lookupService.escalationProcess, self.entityEscalationProcess) : null
         }) : angular.copy(organization);
         /////////////////////////// capture the current workflow security level before update //////////////////////////
         self.initialWFSecurity = self.organization.wfsecurity;
@@ -441,7 +444,7 @@ module.exports = function (app) {
                         self.organization.faxId = '';
                     }
 
-                    if(!self.organization.hasRegistry && !self.organization.centralArchive){
+                    if (!self.organization.hasRegistry && !self.organization.centralArchive) {
                         self.organization.internalG2gId = null;
                         self.organization.g2gId = null;
                     }
@@ -474,7 +477,7 @@ module.exports = function (app) {
                         self.organization.faxId = '';
                     }
 
-                    if(self.organization.hasRegistry || self.organization.centralArchive){
+                    if (self.organization.hasRegistry || self.organization.centralArchive) {
                         self.organization.internalG2gId = null;
                         self.organization.g2gId = null;
                     }

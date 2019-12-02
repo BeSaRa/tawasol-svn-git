@@ -137,4 +137,5 @@ module.exports = function (app) {
     require('./ouApplicationUserPopCtrl')(app);
     require('./ouDistributionListsPopCtrl')(app);
     require('./selectedDownloadPopCtrl')(app);
+    require('./selectEscalationUserPopCtrl')(app);
 };

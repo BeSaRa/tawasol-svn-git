@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                            $filter,
                                                            $timeout,
                                                            _,
+                                                           employeeService,
                                                            gridService) {
         'ngInject';
         var self = this;
@@ -85,7 +86,9 @@ module.exports = function (app) {
                 .setComments(result.comments)
                 .setAction(result.action)
                 .setSendSMS(result.sendSMS)
-                .setSendEmail(result.sendEmail);
+                .setSendEmail(result.sendEmail)
+                .setEscalationStatus(result.escalationStatus)
+                .setEscalationUser(result.escalationUser);
         }
 
         /**
@@ -105,6 +108,13 @@ module.exports = function (app) {
         };
 
         self.addWorkflowItem = function (workflowItem) {
+            if (!workflowItem.escalationStatus && workflowItem.isGroup()) {
+                var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess;
+                workflowItem.escalationStatus = currentOUEscalationProcess;
+            } else {
+                workflowItem.escalationStatus = null;
+            }
+
             self.selected.push(angular.copy(workflowItem));
         };
 
@@ -114,11 +124,13 @@ module.exports = function (app) {
                 controller: 'workflowItemSettingPopCtrl',
                 controllerAs: 'ctrl',
                 targetEvent: $event,
+                bindToController: true,
                 locals: {
                     comments: self.workflowComments,
                     workflowActions: self.workflowActions,
                     dialogTitle: dialogTitle,
-                    distWorkflowItem: distWorkflowItem
+                    distWorkflowItem: distWorkflowItem,
+                    gridName: self.gridName
                 }
             })
         };

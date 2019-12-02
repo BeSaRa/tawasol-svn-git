@@ -495,19 +495,19 @@
                                         <div layout="column">
                                             <md-switch id="escalationNotifySender"
                                                        ng-model="ctrl.organization.escalationNotifySender">
-                                                <span md-turncut>{{lang.notify_sender_when_deadline}}</span>
+                                                <span md-truncate>{{lang.notify_sender_when_deadline}}</span>
                                             </md-switch>
                                             <md-switch id="escalationNotifyReceiver"
                                                        ng-model="ctrl.organization.escalationNotifyReceiver">
-                                                <span md-turncut>{{lang.notify_receiver_when_deadline}}</span>
+                                                <span md-truncate>{{lang.notify_receiver_when_deadline}}</span>
                                             </md-switch>
                                             <md-switch id="enableEmailNotification"
                                                        ng-model="ctrl.organization.enableEmailNotification">
-                                                <span md-turncut>{{lang.enable_email_notification}}</span>
+                                                <span md-truncate>{{lang.enable_email_notification}}</span>
                                             </md-switch>
                                             <md-switch id="enableSmsnotification"
                                                        ng-model="ctrl.organization.enableSmsnotification">
-                                                <span md-turncut>{{lang.enable_sms_notification}}</span>
+                                                <span md-truncate>{{lang.enable_sms_notification}}</span>
                                             </md-switch>
                                             <md-input-container>
                                                 <label for="deadlineReminder">{{lang.send_a_reminder_before_deadline_date_with}}</label>
@@ -535,6 +535,7 @@
                                                 <md-select ng-model-options="{trackBy: '$value.id'}"
                                                            id="escalationProcess"
                                                            ng-model="ctrl.organization.escalationProcess">
+                                                    <md-option ng-value="null">{{lang.none}}</md-option>
                                                     <md-option tooltip="{{escalation.getTranslatedName(true)}}"
                                                                ng-value="escalation"
                                                                ng-repeat="escalation in ctrl.escalationProcess track by $index">

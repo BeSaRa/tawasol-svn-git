@@ -6,7 +6,13 @@ module.exports = function (app) {
                                                            workflowActions,
                                                            dialogTitle,
                                                            dialog,
+                                                           DistributionOUWFItem,
                                                            userCommentService,
+                                                           lookupService,
+                                                           cmsTemplate,
+                                                           UserSearchCriteria,
+                                                           Lookup,
+                                                           langService,
                                                            employeeService) {
         'ngInject';
         var self = this;
@@ -28,6 +34,36 @@ module.exports = function (app) {
 
         self.actionSearchText = '';
         self.commentSearchText = '';
+
+        // all escalation process
+        self.escalationProcess = lookupService.returnLookups(lookupService.escalationProcess);
+        self.escalationProcessCopy = angular.copy(self.escalationProcess);
+
+        var noneLookup = new Lookup({
+            id: -1,
+            defaultEnName: langService.getByLangKey('none', 'en'),
+            defaultArName: langService.getByLangKey('none', 'ar'),
+            lookupKey: -1
+        });
+        self.escalationProcessCopy.unshift(noneLookup);
+
+
+        var _setEscalationProcess = function () {
+            var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess || noneLookup;
+
+            // check if initial open WF dialog
+            if (self.distWorkflowItem.escalationStatus) {
+                if (self.distWorkflowItem.escalationStatus.hasOwnProperty('lookupKey') && distWorkflowItem.escalationStatus.lookupKey === -1) {
+                    self.distWorkflowItem.escalationStatus = noneLookup;
+                } else {
+                    self.distWorkflowItem.escalationStatus = lookupService.getLookupByLookupKey(lookupService.escalationProcess, self.distWorkflowItem.escalationStatus);
+                }
+            } else {
+                self.distWorkflowItem.escalationStatus = currentOUEscalationProcess;
+            }
+        };
+        _setEscalationProcess();
+
 
         /**
          * @description find matched comment if not edited.
@@ -93,6 +129,68 @@ module.exports = function (app) {
                     userCommentService.loadUserComments();
                 })
         };
+
+        self.isEscalationHidden = function () {
+            return self.gridName && (
+                (self.gridName.toLowerCase() === 'ous' && self.distWorkflowItem.getWorkflowItemType().toLowerCase() === 'organization' && self.distWorkflowItem.gridName.toLowerCase() === 'oureg') ||
+                (self.gridName.toLowerCase() === 'selectedgrid' && self.distWorkflowItem.getWorkflowItemType().toLowerCase() === 'organization' && self.distWorkflowItem.gridName.toLowerCase() === 'oureg') ||
+                (self.gridName.toLowerCase() === 'ous' && distWorkflowItem.getWorkflowItemType().toLowerCase() === 'bulksettings') ||
+                self.gridName.toLowerCase() === 'favoriteous');
+        };
+
+        /**
+         * @desc open dialog to select escalation user
+         * @param $event
+         * @returns {promise}
+         */
+        self.openEscalationUserDialog = function ($event) {
+            _openEscalationUserDialog($event)
+                .then(function (result) {
+                    self.distWorkflowItem.escalationUser = result;
+                });
+        };
+
+        var _openEscalationUserDialog = function ($event) {
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('select-escalation-user'),
+                controller: 'selectEscalationUserPopCtrl',
+                controllerAs: 'ctrl',
+                bindToController: true,
+                targetEvent: $event,
+                locals: {
+                    escalationUser: self.distWorkflowItem.escalationUser
+                },
+                resolve: {
+                    escalationUsers: function (distributionWFService) {
+                        'ngInject';
+                        // users search criteria
+                        var usersCriteria = new UserSearchCriteria({
+                            ou: employeeService.getEmployee().getOUID()
+                        });
+                        return distributionWFService.searchUsersByCriteria(usersCriteria);
+                    }
+                }
+            })
+        };
+
+        /**
+         * @description delete selected escalation user
+         */
+        self.deleteEscalationUser = function ($event) {
+            dialog
+                .confirmMessage(langService.get('confirm_delete').change({name: self.distWorkflowItem.escalationUser.getTranslatedName()}), null, null, $event)
+                .then(function () {
+                    self.distWorkflowItem.escalationUser = null;
+                });
+        };
+
+        /**
+         * @description reset escalation uer
+         * @param $event
+         */
+        self.onEscalationStatusChange = function ($event) {
+            self.distWorkflowItem.escalationUser = null;
+        }
 
     });
 };

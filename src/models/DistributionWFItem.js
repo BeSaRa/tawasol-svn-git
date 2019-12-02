@@ -6,7 +6,7 @@ module.exports = function (app) {
             self.dueDate = null;
             self.action = null;
             self.escalationUser = null;
-            self.escalationStatus = 0;
+            self.escalationStatus = null;
             self.comments = null;
             self.sendSMS = false;
             self.sendEmail = false;
@@ -129,8 +129,12 @@ module.exports = function (app) {
                 return this;
             };
             DistributionWFItem.prototype.isWFComplete = function () {
-                return (this.hasOwnProperty('isSecureAction') && this.isSecureAction)? !!this.action && this.comments : !!this.action;
+                return (this.hasOwnProperty('isSecureAction') && this.isSecureAction) ? !!this.action && this.comments : !!this.action;
             };
+            DistributionWFItem.prototype.isEscalationComplate = function () {
+                return (this.isCustomEscalationSelected()) ? this.escalationUser : true;
+            };
+
             DistributionWFItem.prototype.setGridName = function (gridName) {
                 this.gridName = gridName;
                 return this;
@@ -153,11 +157,13 @@ module.exports = function (app) {
             };
 
             DistributionWFItem.prototype.getWorkflowItemType = function () {
-                var title = 'user';
+                var title = 'BulkSettings';
                 if (this.isDepartment()) {
                     title = 'organization';
                 } else if (this.isGroup()) {
                     title = 'workflow_group'
+                } else if (this.isUser()) {
+                    title = 'user';
                 }
                 return title;
             };
@@ -186,6 +192,14 @@ module.exports = function (app) {
                 return langService.get('select_comment');
             };
 
+
+            /**
+             * @description check if custom escalation selected
+             * @returns {boolean}
+             */
+            DistributionWFItem.prototype.isCustomEscalationSelected = function () {
+                return this.escalationStatus && this.escalationStatus.hasOwnProperty('lookupKey') && this.escalationStatus.lookupKey === 2;
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

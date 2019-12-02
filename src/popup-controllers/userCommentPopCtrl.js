@@ -20,7 +20,6 @@ module.exports = function (app) {
                 return ou.id === self.model.ouId;
             })
         }
-        console.log('self.organizationsForAppUser', self.organizationsForAppUser);
 
         /**
          * @description Add the new user comment

@@ -77,7 +77,7 @@ module.exports = function (app) {
             model.referenceNumberPlanId = referencePlanNumberService.getReferencePlanNumberById(model.referenceNumberPlanId) || model.referenceNumberPlanId;
             model.securitySchema = lookupService.getLookupByLookupKey(lookupService.securitySchema, model.securitySchema);
             model.wfsecurity = lookupService.getLookupByLookupKey(lookupService.workflowSecurity, model.wfsecurity);
-            model.escalationProcess = lookupService.getLookupByLookupKey(lookupService.escalationProcess, model.escalationProcess);
+            model.escalationProcess = (model.escalationProcess !== null) ? lookupService.getLookupByLookupKey(lookupService.escalationProcess, model.escalationProcess) : null;
             model.correspondenceTypeId = correspondenceSiteTypeService.getCorrespondenceSiteTypeByLookupKey(model.correspondenceTypeId) || model.correspondenceTypeId;
             model.registryParentId = organizationService.getOrganizationById(model.registryParentId) || model.registryParentId;
             model.centralArchiveUnitId = organizationService.getOrganizationById(model.centralArchiveUnitId) || model.centralArchiveUnitId;

@@ -21,6 +21,8 @@ module.exports = function (app) {
         // selected workflow items
         self.selectedWorkflowItems = [];
 
+        self.gridName = 'selectedGrid';
+
         self.defaultWorkflowItemsSettings = new DistributionWFItem();
         self.sendRelatedDocsBulk = false;
 
@@ -46,7 +48,7 @@ module.exports = function (app) {
          */
         function _allActionsSelected(items) {
             return !_.some(items, function (item) {
-                return !item.isWFComplete();
+                return !item.isWFComplete() || !item.isEscalationComplate();
             });
         }
 
@@ -57,7 +59,10 @@ module.exports = function (app) {
                 .setAction(result.action)
                 .setSendEmail(result.sendEmail)
                 .setSendSMS(result.sendSMS)
-                .setSecureAction(result.isSecureAction);
+                .setSecureAction(result.isSecureAction)
+                .setEscalationStatus(result.escalationStatus)
+                .setEscalationUser(result.escalationUser);
+
             // hide the comment dropdown
             distWorkflowItem.showCommentDropdown = false;
         }
@@ -168,11 +173,13 @@ module.exports = function (app) {
                 controller: 'workflowItemSettingPopCtrl',
                 controllerAs: 'ctrl',
                 targetEvent: $event,
+                bindToController: true,
                 locals: {
                     comments: self.workflowComments,
                     workflowActions: self.workflowActions,
                     dialogTitle: dialogTitle,
-                    distWorkflowItem: distWorkflowItem
+                    distWorkflowItem: distWorkflowItem,
+                    gridName: self.gridName
                 }
             })
         };
@@ -194,9 +201,9 @@ module.exports = function (app) {
         };
 
 
-        self.setWorkflowItemSettings = function (workflowItem, $event) {
+        self.setWorkflowItemSettings = function (workflowItem, $event, currentGridName) {
             return self
-                .workflowItemSettingDialog((langService.get('workflow_properties') + ' ' + workflowItem.getTranslatedName()), workflowItem, $event)
+                .workflowItemSettingDialog((langService.get('workflow_properties') + ' ' + workflowItem.getTranslatedName()), workflowItem, $event, currentGridName)
                 .then(function (result) {
                     _setDistWorkflowItem(workflowItem, result);
                 });
