@@ -1974,6 +1974,10 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
   max-width: 200px !important;
 }
 
+.cms-fix-width-250 {
+  width: 250px !important;
+}
+
 .filter-tabs > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not(:first-child) {
   padding: 12px 20px 12px 30px;
 }
