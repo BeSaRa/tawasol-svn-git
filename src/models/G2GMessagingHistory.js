@@ -26,7 +26,8 @@ module.exports = function (app) {
                     },
                     correspondence_sites: function () {
                         return this.getTranslatedCorrespondenceSiteInfo();
-                    }
+                    },
+                    comment: 'comment'
                 };
 
             self.refDocId = null;

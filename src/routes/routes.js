@@ -1595,6 +1595,13 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_g2g'
             })
+            .state('app.g2g.returned-after-return', {
+                url: '/returnedAfterReturn',
+                templateUrl: cmsTemplateProvider.getView('g2g-returned-after-return'),
+                controller: 'g2gReturnedAfterReturnCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_g2g'
+            })
             .state('app.administration.menu-items', {
                 url: '/dynamic-menu-items',
                 templateUrl: cmsTemplateProvider.getView('dynamic-menu-items'),

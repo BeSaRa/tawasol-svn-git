@@ -67,7 +67,8 @@ module.exports = function (app) {
             g2g: {
                 incoming: 'g2gInc',
                 sentItem: 'g2gSent',
-                returned: 'g2gRet'
+                returned: 'g2gRet',
+                returnedAfterReturn: 'returnedAfterReturn'
             },
             centralArchive: {
                 readyToExport: 'caReadyToExport',

@@ -77,4 +77,5 @@ module.exports = function (app) {
     require('./taskCtrl')(app);
     require('./administratorsCtrl')(app);
     require('./g2gPendingCtrl')(app);
+    require('./g2gReturnedAfterReturnCtrl')(app);
 };

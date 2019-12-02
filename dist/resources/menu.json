@@ -1186,5 +1186,17 @@
         "sort_order": 1,
         "active": true,
         "sort_value": 0
+    },
+    {
+        "ID": 113,
+        "lang_key": "menu_item_government_returned_after_return",
+        "icon": "inbox-arrow-down",
+        "parent": 85,
+        "link": "#returned-after-return",
+        "state": "app.g2g.returned-after-return",
+        "icon_type": "font",
+        "sort_order": 6,
+        "active": true,
+        "sort_value": 0
     }
 ]

@@ -3,8 +3,8 @@
     <div layout="column" class="content">
         <!-- page-header start -->
         <div layout="row" layout-align="start center" class="page-header padding-header small">
-            <span>{{lang.menu_item_government_returned_mail}}</span>
-            <md-button ng-click="ctrl.reloadG2gItems()" class="md-icon-button" tooltip="{{lang.reload}}">
+            <span>{{lang.menu_item_government_returned_after_return}}</span>
+            <md-button ng-click="ctrl.reloadG2gReturnedAfterReturn()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
@@ -16,6 +16,15 @@
                     {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
                 </md-switch>
             </div>
+            <span ng-if="!!(ctrl.selectedMonthText && ctrl.selectedYear)">{{lang[ctrl.selectedMonthText]}}, {{ctrl.selectedYear}}</span>
+            <md-button ng-click="ctrl.getMonthYearForSentItems($event)" class="md-icon-button"
+                       tooltip="{{lang.select_month_and_year}}">
+                <md-icon md-svg-icon="calendar"></md-icon>
+            </md-button>
+            <md-button ng-if="ctrl.g2gItems.length"
+                       ng-click="ctrl.printResult($event)" class="md-icon-button" tooltip="{{lang.print}}">
+                <md-icon md-svg-icon="printer"></md-icon>
+            </md-button>
             <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div>
         <!-- end page-header -->
@@ -37,10 +46,6 @@
                                                 <span>{{ctrl.selectedG2gItems.length}} {{lang.items_selected}} </span>
                                                 <span flex></span>
                                             </div>
-                                        </th>
-                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
-                                            md-order-by="">
-                                            <!--Indicators-->
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
                                             md-order-by="subject">
@@ -82,24 +87,13 @@
                                         model="g2gItem"
                                         selected-length="{{ctrl.selectedG2gItems.length ? ctrl.selectedG2gItems.length : 0}}"
                                         ng-repeat="g2gItem in ctrl.g2gItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
-                                        <td md-cell class="indicator-td">
-                                            <grid-indicator-directive record="g2gItem"
-                                                                      indicator-type="isInternalG2G"
-                                                                      record-type="g2gmessaginghistory"></grid-indicator-directive>
-                                        </td>
                                         <td md-cell class="subject">
-                                            <!--<grid-document-subject-directive record="g2gItem"
-                                                                             plain-text-only="false"
-                                                                             click-callback="ctrl.viewDocument">
-                                            </grid-document-subject-directive>-->
-                                            <a href="" ng-if="ctrl.grid.truncateSubject"
-                                               class="view-doc subject-internal" md-truncate
-                                               tooltip="{{g2gItem.subject}}"
-                                               ng-click="ctrl.viewDocument(g2gItem, $event)">{{g2gItem.subject}}</a>
-                                            <a href="" ng-if="!ctrl.grid.truncateSubject"
-                                               class="view-doc subject-internal"
-                                               tooltip="{{g2gItem.subject}}"
-                                               ng-click="ctrl.viewDocument(g2gItem, $event)">{{g2gItem.subject}}</a>
+                                            <span ng-if="ctrl.grid.truncateSubject"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{g2gItem.subject}}">{{g2gItem.subject}}</span>
+                                            <span ng-if="!ctrl.grid.truncateSubject"
+                                                  class="view-doc subject-internal"
+                                                  tooltip="{{g2gItem.subject}}">{{g2gItem.subject}}</span>
                                         </td>
                                         <td md-cell>{{g2gItem.typeInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{g2gItem.outgoingSerial}}</td>

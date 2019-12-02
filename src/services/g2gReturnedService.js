@@ -16,6 +16,7 @@ module.exports = function (app) {
         self.serviceName = 'g2gReturnedService';
 
         self.g2gItems = [];
+        self.g2gReturnedAfterReturnItems = [];
 
         /**
          * @description Load the g2g inbox items from server.
@@ -29,6 +30,22 @@ module.exports = function (app) {
             }).catch(function (error) {
                 return [];
             });
+        };
+
+        /**
+         * @description g2g returned after return
+         * @returns {*}
+         */
+        self.loadG2gReturnedAfterReturn = function (month, year) {
+            month = month.hasOwnProperty('value') ? month.value : month;
+            return $http.get(urlService.g2gInbox + 'get-returned-by-ou/year/' + year + '/month/' + month)
+                .then(function (result) {
+                    self.g2gReturnedAfterReturnItems = generator.generateCollection(result.data.rs, G2GMessagingHistory, self._sharedMethods);
+                    self.g2gReturnedAfterReturnItems = generator.interceptReceivedCollection('G2GMessagingHistory', self.g2gReturnedAfterReturnItems);
+                    return self.g2gReturnedAfterReturnItems;
+                }).catch(function (error) {
+                    return [];
+                });
         };
 
         /**

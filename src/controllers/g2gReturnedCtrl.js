@@ -69,7 +69,8 @@ module.exports = function (app) {
                 date: 'updateDate',
                 mainSiteSubSiteString: function (record) {
                     return self.getSortingKey('mainSiteSubSiteString', 'Information');
-                }
+                },
+                comment: 'comment'
             },
             searchText: '',
             searchCallback: function (grid) {
