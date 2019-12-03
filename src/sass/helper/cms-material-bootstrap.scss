@@ -4,12 +4,15 @@ md-input-container:not(.cms-default) {
   }
 
   &.md-input-focused {
-    .md-input {
+    input {
       border-width: 1px !important;
     }
   }
 
-  .md-input:not(.md-datepicker-input), md-select {
+  input:not(.md-datepicker-input),
+  md-select,
+  textarea,
+  md-datepicker {
     min-height: 34px !important;
     font-size: 14px;
     line-height: 1.42857143;
@@ -46,13 +49,37 @@ md-input-container:not(.cms-default) {
   textarea {
     max-height: 100px !important;
   }
+
+  &.cms-datepicker {
+    label {
+      left: 0 !important;
+    }
+
+    button.md-datepicker-button {
+      margin-left: 0 !important;
+    }
+
+    input.md-datepicker-input {
+      border: none !important;
+    }
+  }
 }
 
 
 html.rtl {
-  md-input-container {
+  md-input-container:not(.cms-default) {
     label {
       padding-right: 7px !important;
+    }
+
+    &.cms-datepicker {
+      label {
+        right: 0 !important;
+      }
+
+      button.md-datepicker-button {
+        margin-right: 0 !important;
+      }
     }
   }
 }
