@@ -28,6 +28,7 @@ module.exports = function (app) {
                         controller: function (dialog) {
                             'ngInject';
                             this.cancelOperation = function () {
+                                this.buttonCallback();
                                 dialog.cancel();
                             }
                         },

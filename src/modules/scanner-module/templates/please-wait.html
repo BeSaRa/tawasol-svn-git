@@ -11,7 +11,7 @@
         <br>
         <md-progress-linear></md-progress-linear>
         <br>
-        <md-button class="md-raised" ng-if="ctrl.scanning && ctrl.buttonCallback " ng-click="ctrl.buttonCallback()">
+        <md-button class="md-raised" ng-if="ctrl.scanning && ctrl.buttonCallback " ng-click="ctrl.cancelOperation()">
             {{lang.cancel_scan}}
         </md-button>
     </div>

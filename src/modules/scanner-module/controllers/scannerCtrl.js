@@ -648,7 +648,7 @@ module.exports = function (app) {
             uploadComplete(data.ScanJobID, document);
 
 
-            PleaseWaitDialog.show(false);
+            //PleaseWaitDialog.show(false);
             $timeout(function () {
                 if (document.pages[0])
                     self.showPage(document.pages[0]);
