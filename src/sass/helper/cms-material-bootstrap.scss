@@ -1,4 +1,4 @@
-md-input-container {
+md-input-container:not(.cms-default) {
   label {
     padding-left: 7px !important;
   }

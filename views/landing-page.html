@@ -3,7 +3,9 @@
         <!-- page-header -->
         <div layout="row" layout-align="start center" class="page-header padding-header nmb small">
             <div ng-if="ctrl.employeeService.hasPermissionTo('LANDING_PAGE')">
-                <md-input-container id="layoutInputContainer" ng-class="{'disabled-container':ctrl.editMode}" flex
+                <md-input-container id="layoutInputContainer"
+                                    class="cms-default"
+                                    ng-class="{'disabled-container':ctrl.editMode}" flex
                                     ng-if="!ctrl.currentEdit">
                     <label for="layout">{{lang.dashboard_current_layout}}</label>
                     <md-select id="layout"
