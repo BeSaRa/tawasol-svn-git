@@ -15,6 +15,11 @@
                     <b>{{lang.support_phone}}</b>
                     <span class="p20">{{ctrl.globalSettings.supportPhoneNo}}</span>
                 </div>
+                <div ng-if="ctrl.helpUrl">
+                    <md-icon md-svg-icon="phone"></md-icon>
+                    <b>{{lang.help_url}}</b>
+                    <a href="{{ctrl.helpUrl}}" target="_blank" class="p20">{{ctrl.helpUrl}}</a>
+                </div>
                 <div ng-if="ctrl.globalSettings.loginAdditionalContent">
                     <md-icon md-svg-icon="information-variant"></md-icon>
                     <b>{{lang.login_information}}</b>
@@ -24,31 +29,3 @@
         </div>
     </md-dialog-content>
 </md-dialog>
-
-<!--
-<md-dialog class="dialog-extend"
-           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
-           ng-attr-aria-label="{{lang.help}}">
-    <div layout="column">
-        <popup-toolbar-directive header-text="{{lang.help}}"></popup-toolbar-directive>
-        <md-content scroll-directive layout-padding layout="column">
-            <div ng-if="ctrl.globalSettings.supportEmail">
-                <md-icon md-svg-icon="email"></md-icon>
-                <b>{{lang.support_email}}</b>
-                <span class="p20">{{ctrl.globalSettings.supportEmail}}</span>
-            </div>
-            <div ng-if="ctrl.globalSettings.supportPhoneNo">
-                <md-icon md-svg-icon="phone"></md-icon>
-                <b>{{lang.support_phone}}</b>
-                <span class="p20">{{ctrl.globalSettings.supportPhoneNo}}</span>
-            </div>
-            <div ng-if="ctrl.globalSettings.loginAdditionalContent">
-                <md-icon md-svg-icon="information-variant"></md-icon>
-                <b>{{lang.login_information}}</b>
-                <div class="p20">{{ctrl.globalSettings.loginAdditionalContent}}</div>
-            </div>
-        </md-content>
-    </div>
-
-</md-dialog>
--->

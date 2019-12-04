@@ -211,11 +211,12 @@ module.exports = function (app) {
                 escToCancel: true,
                 targetEvent: $event,
                 bindToController: true,
-                controller: function (rootEntity, dialog) {
+                controller: function (rootEntity, $sce, dialog) {
                     'ngInject';
                     var self = this;
                     self.globalSettings = rootEntity.getGlobalSettings();
-
+                    self.helpUrl = rootEntity.returnRootEntity().rootEntity.helpUrl;
+                    self.helpUrl = self.helpUrl ? $sce.trustAsResourceUrl(self.helpUrl) : false;
                     self.close = function () {
                         dialog.cancel();
                     };

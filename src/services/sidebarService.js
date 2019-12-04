@@ -191,9 +191,9 @@ module.exports = function (app) {
 
         self.toggleMenuItem = function (menuItem) {
             menuItem.toggleItem();
-            _.map(self.menuItems, function (item) {
+            _.map(self.allParents, function (item) {
                 item.ID !== menuItem.ID && item.closeItem();
-            })
+            });
         }
 
 
