@@ -28,10 +28,37 @@
         </md-button>
     </div>
     <div>
-        <md-button ng-if="ctrl.showEditContentInEditPopup()"
-                   class="md-raised" ng-click="ctrl.openEditContentInEditPopup()">
-            {{lang.edit_content}}
+        <md-button ng-if="ctrl.showEditContentInEditPopup() && !ctrl.isDefaultEditModeBoth"
+                   class="md-raised" ng-click="ctrl.editContentInEditPopup($event)">
+             {{lang.edit_content}}
         </md-button>
+
+        <md-menu-bar ng-if="ctrl.showEditContentInEditPopup() && ctrl.isDefaultEditModeBoth" class="p0">
+            <md-menu>
+                <md-button class="md-raised" ng-click="$mdMenu.open()">
+                <!-- <md-icon md-svg-icon="attachment"></md-icon>-->
+                    <span>{{lang.edit_content}}</span>
+                </md-button>
+                <md-menu-content width="3">
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.editInDesktop($event)">
+                            <div>
+                                <!-- <span><md-icon md-svg-icon="upload"></md-icon></span> -->
+                                <span>{{lang.grid_action_edit_in_desktop}}</span>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.editInOfficeOnline($event)">
+                            <div>
+                                <!-- <span><md-icon md-svg-icon="upload"></md-icon></span> -->
+                                <span>{{lang.edit_in_office_online}}</span>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </md-menu-bar>
     </div>
 
     <span ng-if="ctrl.displayPrepare && ctrl.documentInformation && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
@@ -48,8 +75,9 @@
         </md-icon>
     </div>
     <div>
+        <!-- edit content in add page/ edit after approved -->
         <md-button ng-if="ctrl.editContent && !ctrl.receiveDocument && ctrl.documentInformation" class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
-            {{lang.edit_content}}
+           {{lang.edit_content}}
         </md-button>
         <md-button ng-if="ctrl.receiveDocument" class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
             {{lang.view}}

@@ -804,6 +804,10 @@ module.exports = function (app) {
                 return correspondenceService.editWordInDesktop(this);
             };
 
+            WorkItem.prototype.editCorrespondenceInOfficeOnline = function () {
+                return correspondenceService.editDocumentInOfficeOnline(this);
+            };
+
             WorkItem.prototype.openSendSMSDialog = function ($event) {
                 return correspondenceService.openSendSMSDialog(this, $event);
             };

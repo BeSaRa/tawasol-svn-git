@@ -165,6 +165,9 @@ module.exports = function (app) {
 
             delete model.internalG2G; // temporary property added to correspondence when opening the G2G incoming
             delete model.isReceived;// temporary property added to correspondence when opening the G2G incoming
+
+            delete model.defaultModeIfEditing;
+
             return model;
         });
 

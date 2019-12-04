@@ -206,6 +206,17 @@ module.exports = function (app) {
             return $mdDialog.show(dialog);
         };
 
+        /**
+         * @description Opens the dialog with three buttons (button1, button2, cancel)
+         * @param content
+         * @param cancelButtonText
+         * @param button1Text
+         * @param button2Text
+         * @param escapeToCancel
+         * @param event
+         * @param hideIcon
+         * @returns {promise}
+         */
         self.confirmThreeButtonMessage = function (content, cancelButtonText, button1Text, button2Text, escapeToCancel, event, hideIcon) {
             var dialog = prepareThreeButtonDialog('confirm-three-button', content, cancelButtonText, escapeToCancel, event, hideIcon, false, button1Text, button2Text);
             return $mdDialog.show(dialog);

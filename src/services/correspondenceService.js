@@ -117,6 +117,12 @@ module.exports = function (app) {
             general: {}
         };
 
+        self.documentEditModes = {
+            desktopOfficeOnline: 0,
+            officeOnline: 1,
+            desktop: 2
+        };
+
         var merge = {
                 classifications: {
                     model: OUClassification,
@@ -1361,6 +1367,9 @@ module.exports = function (app) {
                     result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
                     if (correspondence.openInEditMode) {
                         result.data.rs.metaData.openInEditMode = correspondence.openInEditMode;
+                    }
+                    if (correspondence.defaultModeIfEditing) {
+                        result.data.rs.metaData.defaultModeIfEditing = correspondence.defaultModeIfEditing;
                     }
                     return result.data.rs;
                 })
@@ -3358,9 +3367,10 @@ module.exports = function (app) {
         /**
          * @description open word in desktop application.
          * @param correspondence
+         * @param officeOnlineCallback
          * @return {Promise}
          */
-        self.editWordInDesktop = function (correspondence) {
+        self.editWordInDesktop = function (correspondence, officeOnlineCallback) {
             var info = correspondence.getInfo();
             var url = urlService
                 .desktopEdit
@@ -3373,7 +3383,13 @@ module.exports = function (app) {
                 .replace('{documentClass}', info.documentClass);
             return $http.get(url, {
                 excludeLoading: true
-            });
+            }).catch(function (error) {
+                    if (error.xhrStatus === 'error' && error.status === -1) {
+                        _handleMissingEditInDesktop(correspondence, officeOnlineCallback);
+                    }
+                    return $q.reject(error);
+                }
+            );
         };
 
         /**
@@ -3396,6 +3412,71 @@ module.exports = function (app) {
                 excludeLoading: true
             });
         };
+
+        /**
+         * @description Opens dialog to confirm next action if edit in desktop fails to open
+         * @param record
+         * @param officeOnlineCallback
+         * @returns {*}
+         */
+        var _handleMissingEditInDesktop = function (record, officeOnlineCallback) {
+            var defer = $q.defer(),
+                buttonsMap = {
+                    button1: {
+                        id: 1,
+                        key: 'desktop',
+                        langKey: 'try_again'
+                    },
+                    button2: {
+                        id: 2,
+                        key: 'officeOnline',
+                        officeOnlineCallback: officeOnlineCallback,
+                        langKey: 'edit_in_office_online'
+                    }
+                };
+
+            dialog.confirmThreeButtonMessage(langService.get('missing_edit_in_desktop_tool_contact_admin'), '', langService.get(buttonsMap.button1.langKey), langService.get(buttonsMap.button2.langKey), false, null, false)
+                .then(function (result) {
+                    if (result.button === buttonsMap.button1.id) {
+                        defer.resolve(buttonsMap.button1);
+                    } else if (result.button === buttonsMap.button2.id) {
+                        defer.resolve(buttonsMap.button2);
+                    }
+                });
+            return defer.promise.then(function (button) {
+                if (button.key === 'officeOnline'){
+                    if (button.hasOwnProperty('officeOnlineCallback') && typeof button.officeOnlineCallback !== 'undefined' && button.officeOnlineCallback !== null) {
+                        officeOnlineCallback();
+                    } else {
+                        record.editCorrespondenceInOfficeOnline();
+                    }
+                } else if (button.key === 'desktop'){
+                    record.editCorrespondenceInDesktop(officeOnlineCallback);
+                }
+
+                /*if (button.hasOwnProperty('officeOnlineCallback') && typeof button.officeOnlineCallback !== 'undefined' && button.officeOnlineCallback !== null) {
+                    button.officeOnlineCallback();
+                } else {
+                    record[button.callback]();
+                }*/
+            });
+        };
+
+        /**
+         * @description open popup with document in office online edit mode.
+         * @param correspondence
+         */
+        self.editDocumentInOfficeOnline = function (correspondence) {
+            var info = correspondence.getInfo();
+            self.loadCorrespondenceByVsIdClass(info.vsId, info.documentClass)
+                .then(function (result) {
+                    result.openInEditMode = true;
+                    result.defaultModeIfEditing = self.documentEditModes.officeOnline;
+                    self.viewCorrespondence(result, [], true, true);
+                });
+        };
+
+
         /**
          * @description load document versions
          * @param correspondence
@@ -4300,5 +4381,7 @@ module.exports = function (app) {
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);
-    });
-};
+    })
+    ;
+}
+;

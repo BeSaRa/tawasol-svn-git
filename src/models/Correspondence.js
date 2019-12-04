@@ -768,8 +768,12 @@ module.exports = function (app) {
                 return correspondenceService.updateContentInformation(this, contentInformation);
             };
 
-            Correspondence.prototype.editCorrespondenceInDesktop = function () {
-                return correspondenceService.editWordInDesktop(this);
+            Correspondence.prototype.editCorrespondenceInDesktop = function (officeOnlineCallback) {
+                return correspondenceService.editWordInDesktop(this, officeOnlineCallback);
+            };
+
+            Correspondence.prototype.editCorrespondenceInOfficeOnline = function ($event) {
+                return correspondenceService.editDocumentInOfficeOnline(this);
             };
 
             Correspondence.prototype.openSendSMSDialog = function ($event) {

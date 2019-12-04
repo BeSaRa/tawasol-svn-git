@@ -27,6 +27,9 @@ module.exports = function (app) {
         self.documentInformation = null;
         self.lastTemplate = null;
 
+        self.defaultEditMode = employeeService.getEmployee().defaultEditMode;
+        self.isDefaultEditModeBoth = (self.defaultEditMode === correspondenceService.documentEditModes.desktopOfficeOnline);
+
         self.document = null;
         self.editContent = false;
         self.propertyConfigurations = [];
@@ -267,6 +270,21 @@ module.exports = function (app) {
             self.isContentFileAttached = false;
             self.simpleViewUrl = null;
         };
+
+
+        self.openScannerDialog = function (buttonType, $event) {
+            scannerService
+                .openScanner(true, $event)
+                .then(function () {
+                    var result = scannerService.getStoredImages();
+                    result.file.name = result.file.name + '.pdf';
+                    return self.checkContentFile([result.file]);
+                })
+        };
+
+        self.showEditContentInEditPopup = function () {
+            return (self.fromDialog && !self.document.getInfo().isPaper && self.document.contentSize && self.document.getInfo().docStatus < 24) && !self.editContent;
+        };
         /**
          * @description open edit correspondence when editAfterApproved = true.
          */
@@ -285,23 +303,36 @@ module.exports = function (app) {
                 });
         };
 
-        self.openScannerDialog = function (buttonType, $event) {
-            scannerService
-                .openScanner(true, $event)
-                .then(function () {
-                    var result = scannerService.getStoredImages();
-                    result.file.name = result.file.name + '.pdf';
-                    return self.checkContentFile([result.file]);
-                })
+        /**
+         * @description Opens the document in edit mode by checking the default edit mode.
+         * @returns {undefined}
+         */
+        self.editContentInEditPopup = function ($event) {
+            if(self.defaultEditMode === correspondenceService.documentEditModes.desktop){
+                self.editInDesktop($event);
+            } else if (self.defaultEditMode === correspondenceService.documentEditModes.officeOnline){
+                self.editInOfficeOnline($event);
+            }
+
+            /*self.document.openInEditMode = true;
+            return correspondenceService.viewCorrespondence(self.document, [], true, true);*/
         };
 
-        self.showEditContentInEditPopup = function () {
-            return (self.fromDialog && !self.document.getInfo().isPaper && self.document.contentSize && self.document.getInfo().docStatus < 24) && !self.editContent;
+
+        self.editInDesktop = function ($event) {
+            self.document.editCorrespondenceInDesktop()
+                .catch(function (error) {
+                    if (error === 'EDIT_IN_DESKTOP_MISSING') {
+                        dialog.confirmMessage(langService.get('missing_edit_in_desktop_tool_contact_admin'), langService.get('try_again'), langService.get('cancel'), $event)
+                            .then(function () {
+                                self.editInDesktop($event);
+                            })
+                    }
+                });
         };
 
-        self.openEditContentInEditPopup = function () {
-            self.document.openInEditMode = true;
-            return correspondenceService.viewCorrespondence(self.document, [], true, true);
+        self.editInOfficeOnline = function ($event) {
+            self.document.editCorrespondenceInOfficeOnline($event);
         };
 
 

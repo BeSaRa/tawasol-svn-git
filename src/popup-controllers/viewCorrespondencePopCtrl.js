@@ -60,28 +60,38 @@ module.exports = function (app) {
             internal: 'EDIT_INTERNAL_CONTENT'
         };
 
-        self.toggleCorrespondenceEditMode = function () {
-            var employee = self.employeeService.getEmployee();
+        self.toggleCorrespondenceEditMode = function (forcedDefaultMode) {
+            if (typeof forcedDefaultMode !== 'undefined' && forcedDefaultMode !== null && forcedDefaultMode === correspondenceService.documentEditModes.officeOnline) {
+                _editInOfficeOnline();
+            } else {
+                var employee = self.employeeService.getEmployee();
 
-            switch (employee.defaultEditMode) {
-                // application user both: desktop/web
-                case 0 :
-                    _defaultBehavior();
-                    break;
-                // Office online server
-                case 1:
-                    self.editMode = true;
-                    break;
-                // edit using desktop
-                case 2:
-                    _openInDesktop();
-                    break;
-                // application user both: desktop/web
-                default:
-                    _defaultBehavior();
+                switch (employee.defaultEditMode) {
+                    // both: desktop/web (0)
+                    case correspondenceService.documentEditModes.desktopOfficeOnline :
+                        _defaultBehavior();
+                        break;
+                    // Office online server (1)
+                    case correspondenceService.documentEditModes.officeOnline:
+                        _editInOfficeOnline();
+                        break;
+                    // edit using desktop (2)
+                    case correspondenceService.documentEditModes.desktop:
+                        _openInDesktop();
+                        break;
+                    // application user both: desktop/web
+                    default:
+                        _defaultBehavior();
+                }
             }
-
         };
+
+        function _editInOfficeOnline() {
+            self.editMode = true;
+            if (self.content.desktop) {
+                self.content.desktop.overlay = false;
+            }
+        }
 
         function _openInDesktop() {
             if (self.content.desktop) {
@@ -91,9 +101,12 @@ module.exports = function (app) {
                 dialog.hide('editInDesktop');
             }
             self.correspondence
-                .editCorrespondenceInDesktop()
+                .editCorrespondenceInDesktop(_editInOfficeOnline)
                 .then(function () {
                     dialog.hide('editInDesktop');
+                })
+                .catch(function () {
+
                 });
         }
 
@@ -101,10 +114,6 @@ module.exports = function (app) {
             var message, defer = $q.defer();
             message = langService.getConcatenated(['edit_in_desktop_confirmation_1', 'edit_in_desktop_confirmation_2', 'edit_in_desktop_confirmation_3']);
 
-            // if (!self.info.editByDeskTop) {
-            //     self.editMode = true;
-            //     return;
-            // }
             dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('edit-in-desktop-confirm-template'),
@@ -165,8 +174,11 @@ module.exports = function (app) {
             // _checkIfFromEditInDesktop(self.correspondence);
             if (self.correspondence) {
                 self.info = self.correspondence.getInfo();
-                // self.correspondence.openInEditMode ? self.toggleCorrespondenceEditMode() : null;
-                if (self.correspondence.openInEditMode) {
+
+                if (self.correspondence.defaultModeIfEditing === correspondenceService.documentEditModes.officeOnline) {
+                    self.editContentFrom = 'editContentFromGrid';
+                    self.toggleCorrespondenceEditMode(correspondenceService.documentEditModes.officeOnline);
+                } else if (self.correspondence.openInEditMode) {
                     self.editContentFrom = 'editContentFromGrid';
                     self.toggleCorrespondenceEditMode();
                 }
@@ -294,6 +306,18 @@ module.exports = function (app) {
                     });
             }
         };
+
+        function _rebuildIframe() {
+            var iframe = '<iframe ng-if="ctrl.mainDocument && ctrl.editMode" id="iframe-main-document"\n' +
+                '                        class="iframe-main-document"\n' +
+                '                        ng-src="{{ctrl.content.editURL}}" flex\n' +
+                '                        frameborder="0"></iframe>';
+            var newScope = $rootScope.$new(true);
+            newScope.ctrl = self;
+            var element = $compile(iframe)(newScope);
+            angular.element('#iframe-parent').prepend(element);
+        }
+
         /**
          * @description to display correspondence site accordion item.
          * @returns {boolean}
@@ -590,6 +614,10 @@ module.exports = function (app) {
         };
 
 
+        /**
+         * @description Checks if linked docs section can be shown under quick actions in view popup
+         * @returns {boolean|boolean|*}
+         */
         self.canShowLinkedDocs = function () {
             if ($state.current.name === 'app.department-inbox.incoming') {
                 return self.workItem.isTransferredDocument();
