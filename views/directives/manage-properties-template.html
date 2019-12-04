@@ -170,7 +170,7 @@
                     </div>
                 </md-input-container>
                 <!-- Date -->
-                <md-input-container ng-if="ctrl.checkStatus('docDate')">
+                <md-input-container ng-if="ctrl.checkStatus('docDate')" class="cms-datepicker" flex>
                     <label for="docDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.incoming_date :
                         lang.document_date }}</label>
                     <md-datepicker name="docDate" id="docDate"
@@ -338,18 +338,26 @@
                             {{documentType.getTranslatedName()}}
                         </md-option>
                     </md-select>
+                    <!-- Add Document Type -->
+                    <md-button class="md-icon-button cms-dropdown-button"
+                               tooltip="{{lang.add_new_document_type}}"
+                               ng-if="!ctrl.disableProperties && ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT_TYPE')"
+                               ng-disabled="!!ctrl.disableProperties"
+                               ng-click="ctrl.shortcut.addNewDocumentType($event)">
+                        <md-icon md-svg-icon="plus"></md-icon>
+                    </md-button>
                     <div ng-messages="outgoing_properties.docType.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
                 <!-- Add Document Type -->
-                <md-input-container ng-if="ctrl.checkStatus('docType') && !ctrl.disableProperties && ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT_TYPE')">
+                <!--<md-input-container ng-if="ctrl.checkStatus('docType') && !ctrl.disableProperties && ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT_TYPE')">
                     <md-button class="md-icon-button"
                                ng-disabled="!!ctrl.disableProperties"
                                ng-click="ctrl.shortcut.addNewDocumentType($event)">
                         <md-icon md-svg-icon="plus"></md-icon>
                     </md-button>
-                </md-input-container>
+                </md-input-container>-->
             </div>
 
             <div layout="row">
@@ -390,20 +398,26 @@
                                     md-highlight-flags="i">{{file.file.getTranslatedName()}}</span>
                         </md-option>
                     </md-select>
+                    <md-button class="md-icon-button cms-dropdown-button"
+                               tooltip="{{lang.outgoing_add_new_document_file}}"
+                               ng-if="!ctrl.disableProperties && ctrl.employeeService.hasPermissionTo('MANAGE_FILES')"
+                               ng-disabled="!!ctrl.disableProperties"
+                               ng-click="ctrl.shortcut.addNewDocumentFile($event)">
+                        <md-icon md-svg-icon="plus"></md-icon>
+                    </md-button>
                     <div ng-messages="outgoing_properties.fileId.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
                 <!-- Add File -->
-                <md-input-container ng-if="ctrl.checkStatus('fileId') && !ctrl.disableProperties && ctrl.employeeService.hasPermissionTo('MANAGE_FILES')">
+                <!--<md-input-container ng-if="ctrl.checkStatus('fileId') && !ctrl.disableProperties && ctrl.employeeService.hasPermissionTo('MANAGE_FILES')">
                     <md-button tooltip="{{lang.outgoing_add_new_document_file}}"
                                class="md-icon-button"
-
                                ng-disabled="!!ctrl.disableProperties"
                                ng-click="ctrl.shortcut.addNewDocumentFile($event)">
                         <md-icon md-svg-icon="plus"></md-icon>
                     </md-button>
-                </md-input-container>
+                </md-input-container>-->
                 <!-- File Code -->
                 <md-input-container ng-if="ctrl.checkStatus('fileCode')" flex>
                     <label for="fileCode">{{lang.outgoing_file_code}}</label>
