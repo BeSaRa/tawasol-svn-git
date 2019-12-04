@@ -2483,15 +2483,3 @@ md-input-container {
     border-bottom: 1px solid #ccc;
   }
 }*/
-
-body {
-  counter-reset: items;
-}
-
-li#menu-id-d1 {
-
-  & > ul > li:before {
-    counter-increment: items;
-    content: counter(items) !important;
-  }
-}
