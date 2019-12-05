@@ -60,7 +60,7 @@ module.exports = function (app) {
             internal: 'EDIT_INTERNAL_CONTENT'
         };
 
-        self.toggleCorrespondenceEditMode = function (forcedDefaultMode) {
+        self.toggleCorrespondenceEditMode = function (forcedDefaultMode, $event) {
             if (typeof forcedDefaultMode !== 'undefined' && forcedDefaultMode !== null && forcedDefaultMode === correspondenceService.documentEditModes.officeOnline) {
                 _editInOfficeOnline();
             } else {
@@ -171,10 +171,8 @@ module.exports = function (app) {
             // set action to review/user-inbox will enable edit of security level
             self.action = correspondenceService.getSecurityLevelEnabledAction();
 
-            // _checkIfFromEditInDesktop(self.correspondence);
             if (self.correspondence) {
                 self.info = self.correspondence.getInfo();
-
                 if (self.correspondence.defaultModeIfEditing === correspondenceService.documentEditModes.officeOnline) {
                     self.editContentFrom = 'editContentFromGrid';
                     self.toggleCorrespondenceEditMode(correspondenceService.documentEditModes.officeOnline);
