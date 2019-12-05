@@ -3444,13 +3444,13 @@ module.exports = function (app) {
                     }
                 });
             return defer.promise.then(function (button) {
-                if (button.key === 'officeOnline'){
+                if (button.key === 'officeOnline') {
                     if (button.hasOwnProperty('officeOnlineCallback') && typeof button.officeOnlineCallback !== 'undefined' && button.officeOnlineCallback !== null) {
                         officeOnlineCallback();
                     } else {
                         record.editCorrespondenceInOfficeOnline();
                     }
-                } else if (button.key === 'desktop'){
+                } else if (button.key === 'desktop') {
                     record.editCorrespondenceInDesktop(officeOnlineCallback);
                 }
 
@@ -4376,6 +4376,49 @@ module.exports = function (app) {
                     document.setMinorVersionNumber(result.data.rs.second);
                     return document;
                 });
+        };
+
+        /**
+         * @description Ends the document's all correspondence sites follow up
+         * @param record
+         * @param $event
+         * @param ignoreMessage
+         */
+        self.endCorrespondenceFollowup = function (record, $event, ignoreMessage) {
+            var info = record.getInfo(),
+                defer = $q.defer();
+            if (info.documentClass === 'outgoing') {
+                var message = langService.get('msg_end_followup') + '<br />' + langService.get('confirm_continue_message');
+                dialog.confirmMessage(message)
+                    .then(function () {
+                        defer.resolve(true)
+                    })
+            } else if (info.documentClass === 'incoming') {
+                defer.resolve(true);
+            } else {
+                return $q.reject('ACTION_NOT_ALLOWED');
+            }
+            return defer.promise.then(function () {
+                return self.showReasonDialog('terminate_reason', $event)
+                    .then(function (reason) {
+                        return $http
+                            .put(urlService.correspondence + "/" + info.documentClass + "/" + info.vsId + "/terminate-followup", reason)
+                            .then(function (result) {
+                                if (!result.data.rs) {
+                                    return "FAILED_TERMINATE_FOLLOWUP";
+                                }
+                                if (!ignoreMessage) {
+                                    toast.success(langService.get("follow_up_ended_successfully"));
+                                }
+                                return record;
+                            });
+                    })
+                    .catch(function (error) {
+                        return $q.reject(false);
+                    });
+            }).catch(function (error) {
+                return $q.reject(false);
+            })
         };
 
         $timeout(function () {

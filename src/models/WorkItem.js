@@ -861,6 +861,10 @@ module.exports = function (app) {
                 return rootEntity.returnRootEntity().rootEntity.faxEnabled;
             };
 
+            WorkItem.prototype.endFollowup = function ($event) {
+                return correspondenceService.endCorrespondenceFollowup(this, $event);
+            };
+
             WorkItem.prototype.getCorrespondenceSitesCount = function () {
                 var info = this.getInfo(),
                     sitesTo = [], sitesCC = [];

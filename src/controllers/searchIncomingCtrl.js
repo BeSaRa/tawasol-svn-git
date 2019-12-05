@@ -621,6 +621,24 @@ module.exports = function (app) {
         };
 
         /**
+         * @description End followup of correspondence site
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.endFollowup = function (correspondence, $event, defer) {
+            correspondence.endFollowup($event)
+                .then(function (result) {
+                    if (result !== 'FAILED_TERMINATE_FOLLOWUP') {
+                        self.reloadSearchedIncomingDocument(self.grid.page)
+                            .then(function () {
+                                new ResolveDefer(defer);
+                            });
+                    }
+                });
+        };
+
+        /**
          * @description Create Reply
          * @param correspondence
          * @param $event
@@ -1243,6 +1261,18 @@ module.exports = function (app) {
                 callback: self.createCopy,
                 class: "action-red",
                 hide: true,
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            // End Follow up
+            {
+                type: 'action',
+                icon: gridService.gridIcons.actions.endFollowup,
+                text: 'grid_action_end_follow_up',
+                callback: self.endFollowup,
+                class: "action-green",
+                permissionKey: "MANAGE_DESTINATIONS",
                 checkShow: function (action, model) {
                     return true;
                 }

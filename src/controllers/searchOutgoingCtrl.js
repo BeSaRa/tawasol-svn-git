@@ -578,6 +578,24 @@ module.exports = function (app) {
             console.log('create copy for searched outgoing document : ', searchedOutgoingDocument);
         };
 
+        /**
+         * @description End followup of correspondence site
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.endFollowup = function (correspondence, $event, defer) {
+            correspondence.endFollowup($event)
+                .then(function (result) {
+                    if (result !== 'FAILED_TERMINATE_FOLLOWUP') {
+                        self.reloadSearchedOutgoingDocument(self.grid.page)
+                            .then(function () {
+                                new ResolveDefer(defer);
+                            });
+                    }
+                });
+        };
+
 
         var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
@@ -1262,6 +1280,18 @@ module.exports = function (app) {
                 callback: self.createCopy,
                 class: "action-red",
                 hide: true,
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            // End Follow up
+            {
+                type: 'action',
+                icon: gridService.gridIcons.actions.endFollowup,
+                text: 'grid_action_end_follow_up',
+                callback: self.endFollowup,
+                class: "action-green",
+                permissionKey: "MANAGE_DESTINATIONS",
                 checkShow: function (action, model) {
                     return true;
                 }

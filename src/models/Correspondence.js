@@ -828,6 +828,10 @@ module.exports = function (app) {
                 return correspondenceService.updateDocumentVersion(this);
             };
 
+            Correspondence.prototype.endFollowup = function ($event) {
+                return correspondenceService.endCorrespondenceFollowup(this, $event);
+            };
+
             Correspondence.prototype.getCorrespondenceSitesCount = function () {
                 var info = this.getInfo(),
                     sitesTo = [], sitesCC = [];

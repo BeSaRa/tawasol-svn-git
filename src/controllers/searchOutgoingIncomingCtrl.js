@@ -579,7 +579,7 @@ module.exports = function (app) {
          * @param correspondence
          * @param $event
          */
-        self.downloadSelected = function(correspondence,$event){
+        self.downloadSelected = function (correspondence, $event) {
             downloadService.openSelectedDownloadDialog(correspondence, $event);
         };
 
@@ -652,6 +652,24 @@ module.exports = function (app) {
          */
         self.createCopy = function (correspondence, $event) {
             console.log('create copy for searched document : ', correspondence);
+        };
+
+        /**
+         * @description End followup of correspondence site
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.endFollowup = function (correspondence, $event, defer) {
+            correspondence.endFollowup($event)
+                .then(function (result) {
+                    if (result !== 'FAILED_TERMINATE_FOLLOWUP') {
+                        self.reloadSearchedOutgoingIncomingDocument(self.grid.page)
+                            .then(function () {
+                                new ResolveDefer(defer);
+                            });
+                    }
+                });
         };
 
         /**
@@ -1162,7 +1180,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",
@@ -1279,6 +1297,18 @@ module.exports = function (app) {
                 callback: self.createCopy,
                 class: "action-red",
                 hide: true,
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            // End Follow up
+            {
+                type: 'action',
+                icon: gridService.gridIcons.actions.endFollowup,
+                text: 'grid_action_end_follow_up',
+                callback: self.endFollowup,
+                class: "action-green",
+                permissionKey: "MANAGE_DESTINATIONS",
                 checkShow: function (action, model) {
                     return true;
                 }

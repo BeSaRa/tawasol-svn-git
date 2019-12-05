@@ -714,6 +714,24 @@ module.exports = function (app) {
         };
 
         /**
+         * @description End followup of correspondence site
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.endFollowup = function (workItem, $event, defer) {
+            workItem.endFollowup($event)
+                .then(function (result) {
+                    if (result !== 'FAILED_TERMINATE_FOLLOWUP') {
+                        self.reloadUserInboxes(self.grid.page)
+                            .then(function () {
+                                new ResolveDefer(defer);
+                            });
+                    }
+                });
+        };
+
+        /**
          * @description View Tracking Sheet
          * @param userInbox
          * @param params
@@ -865,7 +883,7 @@ module.exports = function (app) {
          * @param userInbox
          * @param $event
          */
-        self.downloadSelected = function(userInbox,$event){
+        self.downloadSelected = function (userInbox, $event) {
             downloadService.openSelectedDownloadDialog(userInbox, $event);
         };
 
@@ -1522,6 +1540,19 @@ module.exports = function (app) {
                 shortcut: true,
                 checkShow: gridService.checkToShowAction
             },
+            // End Follow up
+            {
+                type: 'action',
+                icon: gridService.gridIcons.actions.endFollowup,
+                text: 'grid_action_end_follow_up',
+                callback: self.endFollowup,
+                class: "action-green",
+                permissionKey: "MANAGE_DESTINATIONS",
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return info.documentClass === 'outgoing' || info.documentClass === 'incoming';
+                }
+            },
             // View Tracking Sheet (with sub menu)
             {
                 type: 'action',
@@ -1747,7 +1778,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",

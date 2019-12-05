@@ -674,6 +674,24 @@ module.exports = function (app) {
         };
 
         /**
+         * @description End followup of correspondence site
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.endFollowup = function (correspondence, $event, defer) {
+            correspondence.endFollowup($event)
+                .then(function (result) {
+                    if (result !== 'FAILED_TERMINATE_FOLLOWUP') {
+                        self.reloadSearchedGeneralDocuments(self.grid.page)
+                            .then(function () {
+                                new ResolveDefer(defer);
+                            });
+                    }
+                });
+        };
+
+        /**
          * @description Preview document
          * @param searchedGeneralDocument
          * @param $event
@@ -1314,6 +1332,19 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: function (action, model) {
                     return true;
+                }
+            },
+            // End Follow up
+            {
+                type: 'action',
+                icon: gridService.gridIcons.actions.endFollowup,
+                text: 'grid_action_end_follow_up',
+                callback: self.endFollowup,
+                class: "action-green",
+                permissionKey: "MANAGE_DESTINATIONS",
+                checkShow: function (action, model) {
+                    var info = model.getInfo()();
+                    return info.documentClass === 'outgoing' || info.documentClass === 'incoming';
                 }
             },
             // Duplicate

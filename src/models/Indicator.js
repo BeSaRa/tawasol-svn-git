@@ -4,7 +4,8 @@ module.exports = function (app) {
                                        Lookup,
                                        moment,
                                        langService,
-                                       gridService) {
+                                       gridService,
+                                       _) {
         'ngInject';
         return function Indicator(model) {
             var self = this;
