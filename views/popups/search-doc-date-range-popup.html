@@ -8,7 +8,7 @@
             <form name="searchDocDateForm" autocomplete="off">
                 <div layout="row">
                     <!-- Date From -->
-                    <md-input-container flex>
+                    <md-input-container flex class="cms-datepicker">
                         <label for="docDateFrom">{{lang.search_module_start_date}}</label>
                         <md-datepicker id="docDateFrom" name="docDateFrom" md-open-on-focus
                                        ng-change="ctrl.setMinMaxDocDate('picker',$event)"
@@ -22,7 +22,7 @@
                         </div>
                     </md-input-container>
                     <!-- Date To -->
-                    <md-input-container flex>
+                    <md-input-container flex class="cms-datepicker">
                         <label for="docDateTo">{{lang.search_module_end_date}}</label>
                         <md-datepicker id="docDateTo" name="docDateTo" md-open-on-focus
                                        ng-change="ctrl.setMinMaxDocDate('picker',$event)"

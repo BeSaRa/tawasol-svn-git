@@ -71,7 +71,7 @@
                                 </div>
 
                                 <div layout="row">
-                                    <md-input-container flex>
+                                    <md-input-container flex class="cms-datepicker">
                                         <label for="startDate">{{lang.start_date}}</label>
                                         <md-datepicker id="startDate" ng-required="!ctrl.alwaysActive"
                                                        md-max-date="ctrl.privateAnnouncement.endDate"
@@ -83,7 +83,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                    <md-input-container flex>
+                                    <md-input-container flex class="cms-datepicker">
                                         <label for="endDate">{{lang.end_date}}</label>
                                         <md-datepicker
                                                 ng-required="!ctrl.alwaysActive || ctrl.privateAnnouncement.startDate"

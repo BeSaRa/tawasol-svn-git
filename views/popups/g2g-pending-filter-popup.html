@@ -7,7 +7,7 @@
             <form name="g2gPendingSearchCriteriaForm" autocomplete="off">
                 <div layout="row">
                     <!-- Date From -->
-                    <md-input-container flex>
+                    <md-input-container flex class="cms-datepicker">
                         <label for="dateFrom">{{lang.search_module_start_date}}</label>
                         <md-datepicker id="dateFrom" name="dateFrom" md-open-on-focus
                                        required ng-model="ctrl.criteria.dateFrom"
@@ -18,7 +18,7 @@
                         </div>
                     </md-input-container>
                     <!-- Date To -->
-                    <md-input-container flex>
+                    <md-input-container flex class="cms-datepicker">
                         <label for="dateTo">{{lang.search_module_end_date}}</label>
                         <md-datepicker id="dateTo" name="dateTo" md-open-on-focus
                                        required ng-model="ctrl.criteria.dateTo"

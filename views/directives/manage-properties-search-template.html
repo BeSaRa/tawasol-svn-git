@@ -314,7 +314,7 @@
                     <fieldset>
                         <legend class="md-accent">{{lang.document_date}}</legend>
                         <!-- Date Label From -->
-                        <md-input-container>
+                        <md-input-container class="cms-datepicker">
                             <label for="refDocDateFrom">{{lang.search_module_start_date}}</label>
                             <md-datepicker id="refDocDateFrom" name="refDocDateFrom" md-open-on-focus
                                            ng-required="ctrl.document.refDocDateTo"
@@ -326,7 +326,7 @@
                             </div>
                         </md-input-container>
                         <!-- Date Label To -->
-                        <md-input-container>
+                        <md-input-container class="cms-datepicker">
                             <label for="refDocDateTo">{{lang.search_module_end_date}}</label>
                             <md-datepicker id="refDocDateTo" name="refDocDateTo" md-open-on-focus
                                            ng-required="ctrl.document.refDocDateFrom"
@@ -371,7 +371,7 @@
                     <fieldset>
                         <legend class="md-accent">{{lang.followup_date}}</legend>
                         <!-- Date Label From -->
-                        <md-input-container flex>
+                        <md-input-container flex class="cms-datepicker">
                             <label for="followUpFrom">{{lang.search_module_start_date}}</label>
                             <md-datepicker ng-disabled="!ctrl.displayFollowUpDates" id="followUpFrom"
                                            name="followUpFrom" md-open-on-focus
@@ -384,7 +384,7 @@
                             </div>
                         </md-input-container>
                         <!-- Date Label To -->
-                        <md-input-container flex>
+                        <md-input-container flex class="cms-datepicker">
                             <label for="followUpTo">{{lang.search_module_end_date}}</label>
                             <md-datepicker ng-disabled="!ctrl.displayFollowUpDates" id="followUpTo" name="followUpTo"
                                            md-open-on-focus
@@ -404,7 +404,7 @@
                     <fieldset>
                         <legend class="md-accent">{{lang.followup_date}}</legend>
                         <!-- Date Label From -->
-                        <md-input-container flex>
+                        <md-input-container flex class="cms-datepicker">
                             <label for="followUpFrom">{{lang.search_module_start_date}}</label>
                             <md-datepicker ng-disabled="!ctrl.displayFollowUpDates" id="followUpFrom"
                                            name="followUpFrom" md-open-on-focus
@@ -417,7 +417,7 @@
                             </div>
                         </md-input-container>
                         <!-- Date Label To -->
-                        <md-input-container flex>
+                        <md-input-container flex class="cms-datepicker">
                             <label for="followUpTo">{{lang.search_module_end_date}}</label>
                             <md-datepicker ng-disabled="!ctrl.displayFollowUpDates" id="followUpTo" name="followUpTo"
                                            md-open-on-focus
@@ -504,7 +504,7 @@
                 <fieldset>
                     <legend class="md-accent">{{lang.export_date}}</legend>
                     <!-- Date Label From -->
-                    <md-input-container flex>
+                    <md-input-container flex class="cms-datepicker">
                         <label for="exportDateFrom">{{lang.search_module_start_date}}</label>
                         <md-datepicker id="exportDateFrom"
                                        name="exportDateFrom" md-open-on-focus
@@ -517,7 +517,7 @@
                         </div>
                     </md-input-container>
                     <!-- Date Label To -->
-                    <md-input-container flex>
+                    <md-input-container flex class="cms-datepicker">
                         <label for="exportDateTo">{{lang.search_module_end_date}}</label>
                         <md-datepicker id="exportDateTo" name="exportDateTo"
                                        md-open-on-focus
@@ -636,7 +636,7 @@
                     </div>
                 </md-input-container>
                 <!-- Approver Date From -->
-                <md-input-container>
+                <md-input-container class="cms-datepicker">
                     <label for="approverFrom">{{lang.search_module_start_date}}</label>
                     <md-datepicker id="approverFrom" name="approverFrom" md-open-on-focus
                                    ng-required="ctrl.document.approveDateTo"
@@ -648,7 +648,7 @@
                     </div>
                 </md-input-container>
                 <!-- Approver Date To -->
-                <md-input-container>
+                <md-input-container class="cms-datepicker">
                     <label for="approverTo">{{lang.search_module_end_date}}</label>
                     <md-datepicker id="approverTo" name="approverTo" md-open-on-focus
                                    ng-required="ctrl.document.approveDateFrom"

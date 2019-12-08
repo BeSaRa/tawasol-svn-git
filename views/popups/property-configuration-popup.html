@@ -62,7 +62,7 @@
                             </div>
                         </md-input-container>
                         <!-- Default Value (Date) -->
-                        <md-input-container flex ng-show="ctrl.propertyConfiguration.dataType==='Date'">
+                        <md-input-container flex ng-show="ctrl.propertyConfiguration.dataType==='Date'" class="cms-datepicker">
                             <label for="defaultValueDatePicker">{{lang.default_value}}</label>
                             <md-datepicker id="defaultValueDatePicker"
                                            ng-change="ctrl.onDefaultValueDatePickerChange()"

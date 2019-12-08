@@ -739,7 +739,7 @@
                                             </div>
                                             <div layout="row">
                                                 <!-- Start Date -->
-                                                <md-input-container flex>
+                                                <md-input-container flex class="cms-datepicker">
                                                     <label for="proxyStartDate">{{lang.start_date}}</label>
                                                     <md-datepicker id="proxyStartDate" name="proxyStartDate"
                                                                    ng-required="ctrl.isOutOfOffice && (ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyEndDate)"
@@ -756,7 +756,7 @@
                                                 </md-input-container>
 
                                                 <!-- End Date -->
-                                                <md-input-container flex>
+                                                <md-input-container flex class="cms-datepicker">
                                                     <label for="proxyEndDate">{{lang.end_date}}</label>
                                                     <md-datepicker id="proxyEndDate" name="proxyEndDate"
                                                                    ng-required="ctrl.isOutOfOffice && (ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyStartDate)"
