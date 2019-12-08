@@ -56,12 +56,20 @@ md-input-container:not(.cms-default) {
     }
   }
 
-  button.cms-field-button {
+  &.md-input-invalid {
+    input {
+      border-color: rgb(221, 44, 0);
+      border-width: 1px !important;
+    }
+  }
+
+  button.cms-field-overlay-button {
     position: absolute;
     right: 20px;
     top: 0;
   }
-  md-checkbox.cms-dropdown-checkbox {
+
+  md-checkbox.cms-field-overlay-checkbox {
     position: absolute;
     right: 20px;
     top: 11px;
@@ -82,7 +90,7 @@ md-input-container:not(.cms-default) {
       border: none !important;
     }
 
-    .md-errors-spacer{
+    .md-errors-spacer {
       min-height: 18px !important;
     }
   }
@@ -105,7 +113,7 @@ html.rtl {
       }
     }
 
-    button.cms-field-button {
+    button.cms-field-overlay-button {
       left: 20px;
       right: auto;
     }

@@ -107,7 +107,7 @@
                                ng-disabled="true"
                                ng-readonly="true"
                                ng-value="ctrl.sourceModel.securityLevel.getTranslatedName()">
-                        <md-checkbox class="cms-dropdown-checkbox"
+                        <md-checkbox class="cms-field-overlay-checkbox"
                                      ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelCheckbox()"
                                      ng-model="ctrl.isSecurityLevelEnabled"
                                      aria-label="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}"
@@ -132,7 +132,7 @@
                                 {{level.getTranslatedName()}}
                             </md-option>
                         </md-select>
-                        <md-checkbox class="cms-dropdown-checkbox"
+                        <md-checkbox class="cms-field-overlay-checkbox"
                                      ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelCheckbox()"
                                      ng-model="ctrl.isSecurityLevelEnabled"
                                      aria-label="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}"
@@ -383,7 +383,7 @@
                             </md-option>
                         </md-select>
                         <!-- Add Document Type -->
-                        <md-button class="md-icon-button cms-field-button"
+                        <md-button class="md-icon-button cms-field-overlay-button"
                                    tooltip="{{lang.add_new_document_type}}"
                                    ng-if="!ctrl.disableProperties && ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT_TYPE')"
                                    ng-disabled="!!ctrl.disableProperties"
@@ -437,7 +437,7 @@
                             </md-option>
                         </md-select>
                         <!-- Add File -->
-                        <md-button class="md-icon-button cms-field-button"
+                        <md-button class="md-icon-button cms-field-overlay-button"
                                    tooltip="{{lang.outgoing_add_new_document_file}}"
                                    ng-if="!ctrl.disableProperties && ctrl.employeeService.hasPermissionTo('MANAGE_FILES')"
                                    ng-disabled="!!ctrl.disableProperties"
