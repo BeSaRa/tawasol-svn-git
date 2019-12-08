@@ -29,7 +29,7 @@ module.exports = function (app) {
         self.mainSiteSearchText = '';
         self.subSiteSearchText = '';
         self.receiverSearchText = '';
-        self.fromActionTimeMinValue = moment().subtract(1, 'years').toDate();
+        // self.fromActionTimeMinValue = moment().subtract(1, 'years').toDate();
         self.toActionTimeMaxValue = moment().endOf("day").toDate();
 
         $timeout(function () {
@@ -90,6 +90,21 @@ module.exports = function (app) {
             } else {
                 self.subSites = [];
                 self.searchCriteria.selectedSubSite = null;
+            }
+        };
+
+        /**
+         * @description Handles the change of from action date field
+         */
+        self.onChangeFromActionTime = function () {
+            if (!self.searchCriteria.fromActionTime) {
+                self.searchCriteria.toActionTime = null;
+            } else {
+                var fromYear = new Date(self.searchCriteria.fromActionTime).getFullYear();
+                var toYear = new Date(self.searchCriteria.toActionTime).getFullYear();
+                if (fromYear !== toYear) {
+                    self.searchCriteria.toActionTime = null;
+                }
             }
         };
 

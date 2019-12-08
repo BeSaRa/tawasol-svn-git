@@ -183,10 +183,11 @@
                             <label for="fromActionTime">{{lang.start_date}}</label>
                             <md-datepicker id="fromActionTime" name="fromActionTime"
                                            ng-required="true"
-                                           md-min-date="ctrl.fromActionTimeMinValue"
+                                           ng-change="ctrl.onChangeFromActionTime($event)"
                                            ng-model="ctrl.searchCriteria.fromActionTime"
                                            md-max-date="ctrl.searchCriteria.toActionTime"
                             ></md-datepicker>
+                            <!-- md-min-date="ctrl.fromActionTimeMinValue"-->
                             <div ng-messages="userSentItemSearchForm.fromActionTime.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
