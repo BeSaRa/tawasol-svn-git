@@ -30,17 +30,17 @@
                                         <label for="enFullName">{{lang.english_full_name}}</label>
                                         <input name="enFullName" id="enFullName" required minlength="4"
                                                ng-model="ctrl.applicationUser.enFullName" maxlength="80">
+                                        <md-button ng-if="!ctrl.editMode && ctrl.hrEnabled"
+                                                   class="md-icon-button cms-dropdown-button"
+                                                   tooltip="{{lang.load_user_information_from_hr}}"
+                                                   ng-click="ctrl.searchInHRIntegration($event)">
+                                            <md-icon md-svg-icon="account-arrow-left"></md-icon>
+                                        </md-button>
                                         <div ng-messages="applicationUserForm.enFullName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
                                             <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
                                         </div>
-                                    </md-input-container>
-                                    <md-input-container ng-if="!ctrl.editMode && ctrl.hrEnabled">
-                                        <md-button tooltip="{{lang.load_user_information_from_hr}}"
-                                                   ng-click="ctrl.searchInHRIntegration($event)" class="md-icon-button">
-                                            <md-icon md-svg-icon="account-arrow-left"></md-icon>
-                                        </md-button>
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
@@ -66,6 +66,13 @@
                                                    ng-model="ctrl.applicationUser.domainName" maxlength="50"
                                                    ng-disabled="ctrl.editMode && !ctrl.employeeService.getEmployee().isAdmin"
                                                    no-space-directive custom-validate-directive="FILE_NET_USER">
+                                            <md-button ng-if="!ctrl.applicationUser.id"
+                                                       ng-disabled="!ctrl.applicationUser.domainName"
+                                                       tooltip="{{lang.check_ldap_user}}"
+                                                       ng-click="ctrl.checkLDAPUser($event)"
+                                                       class="md-icon-button cms-dropdown-button">
+                                                <md-icon md-svg-icon="account-check"></md-icon>
+                                            </md-button>
                                             <div ng-messages="applicationUserForm.domainName.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                                 <div ng-message="minlength">{{lang.short}}</div>
@@ -73,14 +80,6 @@
                                                 </div>
                                                 <div ng-message="FILE_NET_USER">{{lang.english_number}}</div>
                                             </div>
-                                        </md-input-container>
-                                        <md-input-container ng-if="!ctrl.applicationUser.id">
-                                            <md-button ng-disabled="!ctrl.applicationUser.domainName"
-                                                       tooltip="{{lang.check_ldap_user}}"
-                                                       ng-click="ctrl.checkLDAPUser($event)"
-                                                       class="md-icon-button">
-                                                <md-icon md-svg-icon="account-check"></md-icon>
-                                            </md-button>
                                         </md-input-container>
                                     </div>
                                     <!-- Login Name -->
@@ -136,17 +135,14 @@
                                                     {{rank.getTranslatedName()}}
                                                 </md-option>
                                             </md-select>
+                                            <md-button tooltip="{{lang.add_new_rank}}"
+                                                       ng-click="ctrl.openAddRankDialog($event)"
+                                                       class="md-icon-button cms-dropdown-button">
+                                                <md-icon md-svg-icon="plus"></md-icon>
+                                            </md-button>
                                             <div ng-messages="applicationUserForm.rank.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                             </div>
-                                        </md-input-container>
-                                        <md-input-container>
-                                            <md-button
-                                                    tooltip="{{lang.add_new_rank}}"
-                                                    ng-click="ctrl.openAddRankDialog($event)"
-                                                    class="md-icon-button">
-                                                <md-icon md-svg-icon="plus"></md-icon>
-                                            </md-button>
                                         </md-input-container>
                                     </div>
                                     <!-- Job Title -->
@@ -163,17 +159,14 @@
                                                     {{jobTitle.getTranslatedName()}}
                                                 </md-option>
                                             </md-select>
+                                            <md-button tooltip="{{lang.add_new_job_title}}"
+                                                       ng-click="ctrl.openAddJobTitleDialog($event)"
+                                                       class="md-icon-button cms-dropdown-button">
+                                                <md-icon md-svg-icon="plus"></md-icon>
+                                            </md-button>
                                             <div ng-messages="applicationUserForm.jobTitle.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                             </div>
-                                        </md-input-container>
-                                        <md-input-container>
-                                            <md-button
-                                                    tooltip="{{lang.add_new_job_title}}"
-                                                    ng-click="ctrl.openAddJobTitleDialog($event)"
-                                                    class="md-icon-button">
-                                                <md-icon md-svg-icon="plus"></md-icon>
-                                            </md-button>
                                         </md-input-container>
                                     </div>
                                 </div>
@@ -232,17 +225,15 @@
                                                     {{theme.getTranslatedName()}}
                                                 </md-option>
                                             </md-select>
-                                            <div ng-messages="applicationUserForm.defaultThemeID.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                            </div>
-                                        </md-input-container>
-                                        <md-input-container>
                                             <md-button
                                                     tooltip="{{lang.add_new_theme}}"
                                                     ng-click="ctrl.openAddThemeDialog($event)"
-                                                    class="md-icon-button">
+                                                    class="md-icon-button cms-dropdown-button">
                                                 <md-icon md-svg-icon="plus"></md-icon>
                                             </md-button>
+                                            <div ng-messages="applicationUserForm.defaultThemeID.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
                                         </md-input-container>
                                     </div>
                                     <!-- Language -->

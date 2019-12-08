@@ -1,8 +1,8 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            aria-label="{{ctrl.dialogTitle}}">
-        <popup-toolbar-directive header-text="{{ctrl.dialogTitle}} - {{ctrl.record.getTranslatedName()}}"
-                                 close-callback="ctrl.closeLaunchPopup"></popup-toolbar-directive>
+    <popup-toolbar-directive header-text="{{ctrl.dialogTitle}} - {{ctrl.record.getTranslatedName()}}"
+                             close-callback="ctrl.closeLaunchPopup"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="distWorkflowItem_form" layout="column">
@@ -25,7 +25,8 @@
                                    md-selected-text="ctrl.getSelectedManagersText()"
                                    ng-model-options="{trackBy: '$value.id'}">
                             <md-option ng-value="manager" ng-repeat="manager in ctrl.managers">
-                                {{manager['ou' + ctrl.currentLangUCFirst + 'Name']}} - {{manager[lang.current + 'Name']}}
+                                {{manager['ou' + ctrl.currentLangUCFirst + 'Name']}} - {{manager[lang.current +
+                                'Name']}}
                             </md-option>
                         </md-select>
                         <div ng-messages="distWorkflowItem_form.managers.$error">
@@ -42,7 +43,8 @@
                                    ng-model-options="{trackBy: '$value.id'}">
                             <md-option ng-value="-1">{{lang.none}}</md-option>
                             <md-option ng-value="manager" ng-repeat="manager in ctrl.managers">
-                                {{manager['ou' + ctrl.currentLangUCFirst + 'Name']}} - {{manager[lang.current + 'Name']}}
+                                {{manager['ou' + ctrl.currentLangUCFirst + 'Name']}} - {{manager[lang.current +
+                                'Name']}}
                             </md-option>
                         </md-select>
                         <div class="help-text-div">{{lang.user_will_replaced_by_new_selection}}</div>
@@ -141,11 +143,11 @@
                                             md-highlight-flags="i">{{comment.getCommentTitle()}}</span>
                             </md-option>
                         </md-select>
+                        <md-button class="md-icon-button cms-dropdown-button"
+                                   ng-click="ctrl.openAddUserCommentDialog($event)">
+                            <md-icon md-svg-icon="plus"></md-icon>
+                        </md-button>
                     </md-input-container>
-                    <md-button class="md-icon-button"
-                               ng-click="ctrl.openAddUserCommentDialog($event)">
-                        <md-icon md-svg-icon="plus"></md-icon>
-                    </md-button>
                 </div>
                 <div layout="row">
                     <md-input-container flex>

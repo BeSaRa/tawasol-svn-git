@@ -120,17 +120,15 @@
                                                     {{rank.getTranslatedName()}}
                                                 </md-option>
                                             </md-select>
-                                            <div ng-messages="applicationUserForm.rank.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                            </div>
-                                        </md-input-container>
-                                        <md-input-container>
                                             <md-button
                                                     tooltip="{{lang.add_new_rank}}"
                                                     ng-click="ctrl.openAddRankDialog($event)"
-                                                    class="md-icon-button">
+                                                    class="md-icon-button cms-dropdown-button">
                                                 <md-icon md-svg-icon="plus"></md-icon>
                                             </md-button>
+                                            <div ng-messages="applicationUserForm.rank.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
                                         </md-input-container>
                                     </div>
                                     <!-- Job Title -->
@@ -147,17 +145,15 @@
                                                     {{jobTitle.getTranslatedName()}}
                                                 </md-option>
                                             </md-select>
-                                            <div ng-messages="applicationUserForm.jobTitle.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                            </div>
-                                        </md-input-container>
-                                        <md-input-container>
                                             <md-button
                                                     tooltip="{{lang.add_new_job_title}}"
                                                     ng-click="ctrl.openAddJobTitleDialog($event)"
-                                                    class="md-icon-button">
+                                                    class="md-icon-button cms-dropdown-button">
                                                 <md-icon md-svg-icon="plus"></md-icon>
                                             </md-button>
+                                            <div ng-messages="applicationUserForm.jobTitle.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
                                         </md-input-container>
                                     </div>
                                 </div>
@@ -216,17 +212,15 @@
                                                     {{theme.getTranslatedName()}}
                                                 </md-option>
                                             </md-select>
-                                            <div ng-messages="applicationUserForm.defaultThemeID.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                            </div>
-                                        </md-input-container>
-                                        <md-input-container>
                                             <md-button
                                                     tooltip="{{lang.add_new_theme}}"
                                                     ng-click="ctrl.openAddThemeDialog($event)"
-                                                    class="md-icon-button">
+                                                    class="md-icon-button cms-dropdown-button">
                                                 <md-icon md-svg-icon="plus"></md-icon>
                                             </md-button>
+                                            <div ng-messages="applicationUserForm.defaultThemeID.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
                                         </md-input-container>
                                     </div>
                                     <!-- Language -->

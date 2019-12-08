@@ -107,17 +107,15 @@
                                                 {{organizationType.getNames()}}
                                             </md-option>
                                         </md-select>
-                                        <div ng-messages="org_form.outype.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                        </div>
-                                    </md-input-container>
-                                    <md-input-container>
                                         <md-button
                                                 tooltip="{{lang.add_new_organization_type}}"
                                                 ng-click="ctrl.addNewOrganizationType($event)"
-                                                class="md-icon-button">
+                                                class="md-icon-button cms-dropdown-button">
                                             <md-icon md-svg-icon="plus"></md-icon>
                                         </md-button>
+                                        <div ng-messages="org_form.outype.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
@@ -306,6 +304,12 @@
                                                 {{planNumber.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
+                                        <md-button ng-if="ctrl.organization.hasRegistry"
+                                                   tooltip="{{lang.edit_start_serial}}"
+                                                   ng-click="ctrl.openStartSerialPopup()"
+                                                   class="md-icon-button cms-dropdown-button">
+                                            <md-icon md-svg-icon="settings-box"></md-icon>
+                                        </md-button>
                                         <div ng-messages="org_form.referenceNumberPlanId.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
@@ -314,14 +318,6 @@
                                              ng-if="ctrl.showReferenceHintIf(org_form.referenceNumberPlanId)">
                                             {{lang.reference_hint}}
                                         </div>
-                                    </md-input-container>
-                                    <md-input-container ng-if="ctrl.organization.hasRegistry">
-                                        <md-button
-                                                tooltip="{{lang.edit_start_serial}}"
-                                                ng-click="ctrl.openStartSerialPopup()"
-                                                class="md-icon-button">
-                                            <md-icon md-svg-icon="settings-box"></md-icon>
-                                        </md-button>
                                     </md-input-container>
                                     <!--<md-input-container ng-if="ctrl.organization.hasRegistry">
                                         <md-button
