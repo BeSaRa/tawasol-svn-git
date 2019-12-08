@@ -1,7 +1,8 @@
-<md-dialog class="dialog-extend cms-dialog" layout="column"
+<md-dialog class="dialog-extend mw60 cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="manage-properties-dialog"
            ng-attr-aria-label="{{lang.properties_manage_document_properties}}">
-    <popup-toolbar-directive
+    <popup-toolbar-directive full-screen-button="true" full-screen="ctrl.fullScreen"
             header-text="{{lang.properties_manage_document_properties}} : {{ctrl.model.docSubject}}"
             close-callback="ctrl.closeDocumentProperties"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>

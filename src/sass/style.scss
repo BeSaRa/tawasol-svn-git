@@ -2250,6 +2250,10 @@ md-dialog {
 }
 
 .cms-datepicker {
+  label {
+    width: calc(100% - 10px) !important;
+  }
+
   md-datepicker {
     display: inline-block;
     padding: 0 !important;
