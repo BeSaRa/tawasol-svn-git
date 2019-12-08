@@ -3,172 +3,146 @@
         <div layout="column">
             <div layout="row">
                 <!-- Correspondence registry (If show registry unit)-->
-                <md-input-container ng-if="ctrl.showRegistryUnit() && ctrl.checkStatus('registryOU')" flex>
-                    <label for="registryOU">{{lang.corr_registry}}</label>
-                    <md-select name="registryOU"
-                               id="registryOU"
-                               ng-change="ctrl.onRegistryChange(ctrl.document.registryOU)"
-                               ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
-                               ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
-                               ng-model="ctrl.document.registryOU"
-                               ng-required="ctrl.checkMandatory('registryOU')"
-                               md-on-close="ctrl.clearSearchText('registryOU')"
-                               data-md-container-class="select-header-container">
-                        <md-select-header class="select-header">
-                            <input ng-model="ctrl.registryOUSearchText"
-                                   ng-keydown="ctrl.handleSearchKeyDown($event)"
-                                   placeholder="{{lang.search}}"
-                                   class="select-header-input">
-                        </md-select-header>
-                        <md-option ng-value="null">{{lang.none}}</md-option>
-                        <md-option ng-value="organization.id"
-                                   ng-repeat="organization in ctrl.registryOrganizations | translatedNameFilter: ctrl.registryOUSearchText">
+                <div flex ng-if="ctrl.showRegistryUnit() && ctrl.checkStatus('registryOU')">
+                    <md-input-container ng-if="ctrl.showRegistryUnit() && ctrl.checkStatus('registryOU')"
+                                        class="md-block">
+                        <label for="registryOU">{{lang.corr_registry}}</label>
+                        <md-select name="registryOU"
+                                   id="registryOU"
+                                   ng-change="ctrl.onRegistryChange(ctrl.document.registryOU)"
+                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
+                                   ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
+                                   ng-model="ctrl.document.registryOU"
+                                   ng-required="ctrl.checkMandatory('registryOU')"
+                                   md-on-close="ctrl.clearSearchText('registryOU')"
+                                   data-md-container-class="select-header-container">
+                            <md-select-header class="select-header">
+                                <input ng-model="ctrl.registryOUSearchText"
+                                       ng-keydown="ctrl.handleSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option ng-value="null">{{lang.none}}</md-option>
+                            <md-option ng-value="organization.id"
+                                       ng-repeat="organization in ctrl.registryOrganizations | translatedNameFilter: ctrl.registryOUSearchText">
                             <span
                                     md-highlight-text="ctrl.registryOUSearchText"
                                     md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="outgoing_properties.ou.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="outgoing_properties.ou.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
                 <!-- OU (If show registry unit) -->
-                <md-input-container ng-if="ctrl.showRegistryUnit() && ctrl.checkStatus('ou')" flex>
-                    <label for="ou">{{lang.organization_unit}}</label>
-                    <md-select name="ou"
-                               id="ou"
-                               ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
-                               ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
-                               ng-model="ctrl.document.ou"
-                               ng-required="ctrl.checkMandatory('ou')"
-                               md-on-close="ctrl.clearSearchText('registrySection')"
-                               data-md-container-class="select-header-container">
-                        <md-select-header class="select-header">
-                            <input ng-model="ctrl.registrySectionSearchText"
-                                   ng-keydown="ctrl.handleSearchKeyDown($event)"
-                                   placeholder="{{lang.search}}"
-                                   class="select-header-input">
-                        </md-select-header>
-                        <md-option ng-value="null">{{lang.none}}</md-option>
-                        <md-option ng-value="organization.id"
-                                   ng-repeat="organization in ctrl.subOrganizations | translatedNameFilter: ctrl.registrySectionSearchText">
+                <div flex ng-if="ctrl.showRegistryUnit() && ctrl.checkStatus('ou')">
+                    <md-input-container ng-if="ctrl.showRegistryUnit() && ctrl.checkStatus('ou')" class="md-block">
+                        <label for="ou">{{lang.organization_unit}}</label>
+                        <md-select name="ou"
+                                   id="ou"
+                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
+                                   ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
+                                   ng-model="ctrl.document.ou"
+                                   ng-required="ctrl.checkMandatory('ou')"
+                                   md-on-close="ctrl.clearSearchText('registrySection')"
+                                   data-md-container-class="select-header-container">
+                            <md-select-header class="select-header">
+                                <input ng-model="ctrl.registrySectionSearchText"
+                                       ng-keydown="ctrl.handleSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option ng-value="null">{{lang.none}}</md-option>
+                            <md-option ng-value="organization.id"
+                                       ng-repeat="organization in ctrl.subOrganizations | translatedNameFilter: ctrl.registrySectionSearchText">
                             <span
                                     md-highlight-text="ctrl.registrySectionSearchText"
                                     md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="outgoing_properties.ou.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="outgoing_properties.ou.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
                 <!-- OU (If not show registry unit) -->
-                <md-input-container ng-if="!ctrl.showRegistryUnit() && ctrl.checkStatus('ou')" flex>
-                    <label for="ou">{{lang.organization_unit}}</label>
-                    <md-select name="ou"
-                               id="ou"
-                               ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
-                               ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
-                               ng-model="ctrl.document.ou"
-                               ng-required="ctrl.checkMandatory('ou')"
-                               md-on-close="ctrl.clearSearchText('ou')"
-                               data-md-container-class="select-header-container">
-                        <md-select-header class="select-header">
-                            <input ng-model="ctrl.ouSearchText"
-                                   ng-keydown="ctrl.handleSearchKeyDown($event)"
-                                   placeholder="{{lang.search}}"
-                                   class="select-header-input">
-                        </md-select-header>
-                        <md-option ng-value="null">{{lang.none}}</md-option>
-                        <md-option ng-value="organization.id"
-                                   ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.ouSearchText">
+                <div flex ng-if="!ctrl.showRegistryUnit() && ctrl.checkStatus('ou')">
+                    <md-input-container ng-if="!ctrl.showRegistryUnit() && ctrl.checkStatus('ou')" class="md-block">
+                        <label for="ou">{{lang.organization_unit}}</label>
+                        <md-select name="ou"
+                                   id="ou"
+                                   ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
+                                   ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
+                                   ng-model="ctrl.document.ou"
+                                   ng-required="ctrl.checkMandatory('ou')"
+                                   md-on-close="ctrl.clearSearchText('ou')"
+                                   data-md-container-class="select-header-container">
+                            <md-select-header class="select-header">
+                                <input ng-model="ctrl.ouSearchText"
+                                       ng-keydown="ctrl.handleSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option ng-value="null">{{lang.none}}</md-option>
+                            <md-option ng-value="organization.id"
+                                       ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.ouSearchText">
                             <span
                                     md-highlight-text="ctrl.ouSearchText"
                                     md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="outgoing_properties.ou.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
-                <!-- Security Level (Disabled Input) -->
-                <md-input-container ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelInput()" flex>
-                    <label for="securityLevelInput">{{lang.security_level}}</label>
-                    <input id="securityLevelInput" name="securityLevel"
-                           ng-disabled="true"
-                           ng-readonly="true"
-                           ng-value="ctrl.sourceModel.securityLevel.getTranslatedName()">
-                </md-input-container>
-                <!-- Security Level (Select) -->
-                <md-input-container ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelDDL()" flex>
-                    <label for="securityLevel">{{lang.security_level}}</label>
-                    <md-select name="securityLevel"
-                               id="securityLevel"
-                               ng-change="ctrl.onSecurityLevelChange()"
-                               ng-disabled="!!ctrl.disableProperties"
-                               ng-model="ctrl.document.securityLevel"
-                               ng-model-options="{trackBy: '$value.id'}"
-                               ng-required="ctrl.checkMandatory('securityLevel')">
-                        <md-option ng-value="level"
-                                   ng-repeat="level in ctrl.securityLevels"
-                                   ng-disabled="ctrl.isPrivateSecurityLevel(level) && ctrl.document.hasVsId()"
-                                   ng-readonly="ctrl.isPrivateSecurityLevel(level) && ctrl.document.hasVsId()">
-                            {{level.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="outgoing_properties.securityLevel.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
-                <!-- Security Level Checkbox -->
-                <md-input-container ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelCheckbox()">
-                    <md-checkbox ng-model="ctrl.isSecurityLevelEnabled"
-                                 aria-label="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}"
-                                 tooltip="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}">
-                    </md-checkbox>
-                </md-input-container>
-                <!-- Document Full Serial -->
-                <md-input-container flex ng-if="ctrl.isShowDocFullSerial()">
-                    <label for="docFullSerial">{{lang.serial_number}}</label>
-                    <input name="docFullSerial" id="docFullSerial"
-                           ng-required="ctrl.isShowDocFullSerial()"
-                           ng-disabled="!!ctrl.disableProperties"
-                           ng-model="ctrl.document.docFullSerial">
-                    <div ng-messages="outgoing_properties.docFullSerial.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
-                <!-- Document Number -->
-                <md-input-container flex
-                                    ng-if='ctrl.document.docClassName.toLowerCase() === "incoming" && ctrl.checkStatus("refDocNumber")'>
-                    <label for="refDocNumber">{{lang.document_number}}</label>
-                    <input name="refDocNumber" id="refDocNumber"
-                           ng-required="ctrl.checkMandatory('refDocNumber')"
-                           ng-disabled="!!ctrl.disableProperties || ctrl.checkDepartmentalReceived() || ctrl.checkG2gReceived()"
-                           ng-model="ctrl.document.refDocNumber">
-                    <!--custom-validate-directive="number"-->
-                    <div ng-messages="outgoing_properties.refDocNumber.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                        <!--<div ng-message="number">{{lang.numberonly}}</div>-->
-                    </div>
-                </md-input-container>
-                <!-- Type (Personal/Departmental) -->
-                <md-input-container flex
-                                    ng-if='ctrl.document.docClassName.toLowerCase() === "internal" && ctrl.checkStatus("internalDocType")'>
-                    <label for="type">{{lang.type}}</label>
-                    <md-select name="type" id="type"
-                               ng-disabled="!!ctrl.disableProperties"
-                               ng-model="ctrl.document.internalDocType"
-                               ng-required="ctrl.checkMandatory('internalDocType')"
-                               required>
-                        <md-option ng-value="type.value"
-                                   ng-repeat="type in ctrl.typeOptions track by $index">
-                            {{lang[type.key]}}
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="outgoing_properties.type.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="outgoing_properties.ou.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <!-- Security Level -->
+                <div flex>
+                    <!-- Security Level (Disabled Input) -->
+                    <md-input-container ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelInput()"
+                                        class="md-block">
+                        <label for="securityLevelInput">{{lang.security_level}}</label>
+                        <input id="securityLevelInput" name="securityLevel"
+                               ng-disabled="true"
+                               ng-readonly="true"
+                               ng-value="ctrl.sourceModel.securityLevel.getTranslatedName()">
+                        <md-checkbox class="cms-dropdown-checkbox"
+                                     ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelCheckbox()"
+                                     ng-model="ctrl.isSecurityLevelEnabled"
+                                     aria-label="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}"
+                                     tooltip="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}">
+                        </md-checkbox>
+                    </md-input-container>
+                    <!-- Security Level (Select) -->
+                    <md-input-container ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelDDL()"
+                                        class="md-block">
+                        <label for="securityLevel">{{lang.security_level}}</label>
+                        <md-select name="securityLevel"
+                                   id="securityLevel"
+                                   ng-change="ctrl.onSecurityLevelChange()"
+                                   ng-disabled="!!ctrl.disableProperties"
+                                   ng-model="ctrl.document.securityLevel"
+                                   ng-model-options="{trackBy: '$value.id'}"
+                                   ng-required="ctrl.checkMandatory('securityLevel')">
+                            <md-option ng-value="level"
+                                       ng-repeat="level in ctrl.securityLevels"
+                                       ng-disabled="ctrl.isPrivateSecurityLevel(level) && ctrl.document.hasVsId()"
+                                       ng-readonly="ctrl.isPrivateSecurityLevel(level) && ctrl.document.hasVsId()">
+                                {{level.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                        <md-checkbox class="cms-dropdown-checkbox"
+                                     ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelCheckbox()"
+                                     ng-model="ctrl.isSecurityLevelEnabled"
+                                     aria-label="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}"
+                                     tooltip="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}">
+                        </md-checkbox>
+                        <div ng-messages="outgoing_properties.securityLevel.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
                 <!-- Date -->
                 <div flex>
                     <md-input-container ng-if="ctrl.checkStatus('docDate')" class="cms-datepicker md-block">
@@ -187,22 +161,84 @@
                         </div>
                     </md-input-container>
                 </div>
-                <!-- RefDocDate -->
-                <md-input-container
-                        ng-if="ctrl.checkStatus('refDocDate') && ctrl.document.hasDocumentClass('incoming')">
-                    <label for="refDocDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.document_date :
-                        lang.incoming_date }}</label>
-                    <md-datepicker name="refDocDate" id="refDocDate"
+                <div flex ng-if="(ctrl.fieldsPerRow - ctrl.checkFieldCountFirstRow()) > 0"
+                     ng-repeat="divElem in [].constructor(ctrl.fieldsPerRow - ctrl.checkFieldCountFirstRow()) track by $index">
+                </div>
+            </div>
+            <div layout="row">
+                <!-- Document Full Serial -->
+                <div flex ng-if="ctrl.isShowDocFullSerial()">
+                    <md-input-container ng-if="ctrl.isShowDocFullSerial()" class="md-block">
+                        <label for="docFullSerial">{{lang.serial_number}}</label>
+                        <input name="docFullSerial" id="docFullSerial"
+                               ng-required="ctrl.isShowDocFullSerial()"
+                               ng-disabled="!!ctrl.disableProperties"
+                               ng-model="ctrl.document.docFullSerial">
+                        <div ng-messages="outgoing_properties.docFullSerial.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <!-- Document Number -->
+                <div flex
+                     ng-if='ctrl.document.docClassName.toLowerCase() === "incoming" && ctrl.checkStatus("refDocNumber")'>
+                    <md-input-container
+                            ng-if='ctrl.document.docClassName.toLowerCase() === "incoming" && ctrl.checkStatus("refDocNumber")'
+                            class="md-block">
+                        <label for="refDocNumber">{{lang.document_number}}</label>
+                        <input name="refDocNumber" id="refDocNumber"
+                               ng-required="ctrl.checkMandatory('refDocNumber')"
+                               ng-disabled="!!ctrl.disableProperties || ctrl.checkDepartmentalReceived() || ctrl.checkG2gReceived()"
+                               ng-model="ctrl.document.refDocNumber">
+                        <div ng-messages="outgoing_properties.refDocNumber.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <!-- Type (Personal/Departmental) -->
+                <div flex
+                     ng-if='ctrl.document.docClassName.toLowerCase() === "internal" && ctrl.checkStatus("internalDocType")'>
+                    <md-input-container
+                            ng-if='ctrl.document.docClassName.toLowerCase() === "internal" && ctrl.checkStatus("internalDocType")'
+                            class="md-block">
+                        <label for="type">{{lang.type}}</label>
+                        <md-select name="type" id="type"
                                    ng-disabled="!!ctrl.disableProperties"
-                                   ng-model="ctrl.document.refDocDate"
-                                   md-max-date="ctrl.document.docDate"
-                                   ng-required="ctrl.checkMandatory('refDocDate')"
-                                   md-open-on-focus></md-datepicker>
-                    <!--md-placeholder="{{lang.document_date}}"-->
-                    <div ng-messages="outgoing_properties.refDocDate.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
+                                   ng-model="ctrl.document.internalDocType"
+                                   ng-required="ctrl.checkMandatory('internalDocType')"
+                                   required>
+                            <md-option ng-value="type.value"
+                                       ng-repeat="type in ctrl.typeOptions track by $index">
+                                {{lang[type.key]}}
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="outgoing_properties.type.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <!-- RefDocDate -->
+                <div flex ng-if="ctrl.checkStatus('refDocDate') && ctrl.document.hasDocumentClass('incoming')">
+                    <md-input-container
+                            ng-if="ctrl.checkStatus('refDocDate') && ctrl.document.hasDocumentClass('incoming')"
+                            class="cms-datepicker md-block">
+                        <label for="refDocDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.document_date :
+                            lang.incoming_date }}</label>
+                        <md-datepicker name="refDocDate" id="refDocDate"
+                                       ng-disabled="!!ctrl.disableProperties"
+                                       ng-model="ctrl.document.refDocDate"
+                                       md-max-date="ctrl.document.docDate"
+                                       ng-required="ctrl.checkMandatory('refDocDate')"
+                                       md-open-on-focus></md-datepicker>
+                        <!--md-placeholder="{{lang.document_date}}"-->
+                        <div ng-messages="outgoing_properties.refDocDate.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex ng-if="(ctrl.fieldsPerRow - ctrl.checkFieldCountSecondRow()) > 0"
+                     ng-repeat="divElem in  [].constructor(ctrl.fieldsPerRow - ctrl.checkFieldCountSecondRow()) track by $index">
+                </div>
             </div>
             <div layout="row" ng-if="ctrl.checkStatus('docSubject')">
                 <!-- Subject -->
@@ -446,10 +482,10 @@
                 <div flex>
                 </div>
             </div>
-            <div layout="row">
+            <div layout="row" ng-if="ctrl.checkStatus('docNotes')">
                 <!-- Notes -->
                 <div flex>
-                    <md-input-container ng-if="ctrl.checkStatus('docNotes')" class="md-block">
+                    <md-input-container class="md-block">
                         <label for="docNotes">{{lang.properties_notes}}</label>
                         <textarea ng-required="ctrl.checkMandatory('docNotes')" name="docNotes" id="docNotes"
                                   ng-model="ctrl.document.docNotes" rows="5"
