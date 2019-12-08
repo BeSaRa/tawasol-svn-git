@@ -27,7 +27,7 @@ module.exports = function (app) {
         self.employeeService = employeeService;
 
         self.defaultOU = defaultOU;
-        self.SearchText = '';
+        self.ouSearchText = '';
 
         self.selectedTabIndex = 0;
         self.selectedTabName = "basic";

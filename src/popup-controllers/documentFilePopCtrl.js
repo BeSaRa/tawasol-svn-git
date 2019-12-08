@@ -23,6 +23,7 @@ module.exports = function (app) {
         self.controllerName = 'documentFilePopCtrl';
         self.editMode = editMode;
         self.employeeService = employeeService;
+        self.ouSearchText = '';
 
         self.documentFile = angular.copy(documentFile);
         self.documentClassFromUser = documentClassFromUser;
@@ -335,6 +336,26 @@ module.exports = function (app) {
                     .then(function (result) {
                         self.documentFile.relatedOus = result;
                     })
+            }
+        };
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of workflow action dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
             }
         };
     });

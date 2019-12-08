@@ -152,13 +152,23 @@
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label>{{lang.organization_unit}}</label>
-                                        <md-select ng-model="ctrl.ouDocumentFile.ouid" required>
-                                            <md-option ng-repeat="organization in ctrl.organizations track by $index"
-                                                       ng-model-options="{trackBy: '$value.id'}"
+                                        <md-select ng-model="ctrl.ouDocumentFile.ouid"
+                                                   required
+                                                   ng-model-options="{trackBy: '$value.id'}"
+                                                   md-on-close="ctrl.clearSearchText('ou')"
+                                                   data-md-container-class="select-header-container">
+                                            <md-select-header class="select-header">
+                                                <input ng-model="ctrl.ouSearchText"
+                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                            </md-select-header>
+                                            <md-option ng-repeat="organization in ctrl.organizations | translatedNameFilter:ctrl.ouSearchText"
                                                        ng-value="organization"
                                                        tooltip="{{organization.getTranslatedName(true)}}"
                                                        ng-if="!ctrl.excludeOrganizationIfExists(organization)">
-                                                {{ organization.getTranslatedName() }}
+                                                <span md-highlight-text="ctrl.ouSearchText"
+                                                      md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
                                             </md-option>
                                         </md-select>
                                     </md-input-container>

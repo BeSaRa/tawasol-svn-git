@@ -166,6 +166,7 @@
                                             <md-option
                                                     ng-repeat="organization in ctrl.organizations | translatedNameFilter:ctrl.ouSearchText track by organization.id"
                                                     ng-if="!ctrl.excludeOrganizationIfExists(organization)"
+                                                    tooltip="{{organization.getTranslatedName(true)}}"
                                                     ng-value="organization">
                                                 <span md-highlight-text="ctrl.ouSearchText"
                                                       md-highlight-flags="i">{{organization.getTranslatedName()}}</span>

@@ -28,6 +28,7 @@ module.exports = function (app) {
         self.model = angular.copy(self.classification);
 
         self.employeeService = employeeService;
+        self.ouSearchText = '';
 
         self.selectedTabIndex = 0;
         self.selectedTabName = "basic";
@@ -418,6 +419,26 @@ module.exports = function (app) {
 
         self.resetModel = function () {
             generator.resetFields(self.classification, self.model);
+        };
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of workflow action dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
         };
 
         self.closeClassificationDialog = function () {

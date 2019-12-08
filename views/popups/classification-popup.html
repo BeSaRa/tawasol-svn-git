@@ -114,12 +114,22 @@
                                 <div layout="row" layout-align="start center">
                                     <md-input-container flex>
                                         <md-select aria-label="{{lang.select_organization}}"
-                                                   ng-model="ctrl.selectedOrganization">
+                                                   ng-model="ctrl.selectedOrganization"
+                                                   md-on-close="ctrl.clearSearchText('ou')"
+                                                   data-md-container-class="select-header-container">
+                                            <md-select-header class="select-header">
+                                                <input ng-model="ctrl.ouSearchText"
+                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                            </md-select-header>
                                             <md-option
                                                     ng-if="!ctrl.excludeOrganizationIfExists(organization)"
                                                     ng-value="organization"
-                                                    ng-repeat="organization in ctrl.organizations track by organization.id">
-                                                {{organization.getTranslatedName()}}
+                                                    tooltip="{{organization.getTranslatedName(true)}}"
+                                                    ng-repeat="organization in ctrl.organizations | translatedNameFilter:ctrl.ouSearchText track by organization.id">
+                                                <span md-highlight-text="ctrl.ouSearchText"
+                                                      md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
