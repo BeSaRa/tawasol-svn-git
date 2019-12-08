@@ -87,7 +87,7 @@ module.exports = function (app) {
                 },
                 organizations: function (organizationService) {
                     'ngInject';
-                    return organizationService.getOrganizations();
+                    return organizationService.loadOrganizations(true);
                 }
             })
             .bulkResolveToState('app.administration.organizations', {
