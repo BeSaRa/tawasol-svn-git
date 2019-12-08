@@ -31,7 +31,7 @@
                                         <input name="enFullName" id="enFullName" required minlength="4"
                                                ng-model="ctrl.applicationUser.enFullName" maxlength="80">
                                         <md-button ng-if="!ctrl.editMode && ctrl.hrEnabled"
-                                                   class="md-icon-button cms-dropdown-button"
+                                                   class="md-icon-button cms-field-button"
                                                    tooltip="{{lang.load_user_information_from_hr}}"
                                                    ng-click="ctrl.searchInHRIntegration($event)">
                                             <md-icon md-svg-icon="account-arrow-left"></md-icon>
@@ -70,7 +70,7 @@
                                                        ng-disabled="!ctrl.applicationUser.domainName"
                                                        tooltip="{{lang.check_ldap_user}}"
                                                        ng-click="ctrl.checkLDAPUser($event)"
-                                                       class="md-icon-button cms-dropdown-button">
+                                                       class="md-icon-button cms-field-button">
                                                 <md-icon md-svg-icon="account-check"></md-icon>
                                             </md-button>
                                             <div ng-messages="applicationUserForm.domainName.$error">
@@ -137,7 +137,7 @@
                                             </md-select>
                                             <md-button tooltip="{{lang.add_new_rank}}"
                                                        ng-click="ctrl.openAddRankDialog($event)"
-                                                       class="md-icon-button cms-dropdown-button">
+                                                       class="md-icon-button cms-field-button">
                                                 <md-icon md-svg-icon="plus"></md-icon>
                                             </md-button>
                                             <div ng-messages="applicationUserForm.rank.$error">
@@ -161,7 +161,7 @@
                                             </md-select>
                                             <md-button tooltip="{{lang.add_new_job_title}}"
                                                        ng-click="ctrl.openAddJobTitleDialog($event)"
-                                                       class="md-icon-button cms-dropdown-button">
+                                                       class="md-icon-button cms-field-button">
                                                 <md-icon md-svg-icon="plus"></md-icon>
                                             </md-button>
                                             <div ng-messages="applicationUserForm.jobTitle.$error">
@@ -228,7 +228,7 @@
                                             <md-button
                                                     tooltip="{{lang.add_new_theme}}"
                                                     ng-click="ctrl.openAddThemeDialog($event)"
-                                                    class="md-icon-button cms-dropdown-button">
+                                                    class="md-icon-button cms-field-button">
                                                 <md-icon md-svg-icon="plus"></md-icon>
                                             </md-button>
                                             <div ng-messages="applicationUserForm.defaultThemeID.$error">

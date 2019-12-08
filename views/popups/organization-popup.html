@@ -110,7 +110,7 @@
                                         <md-button
                                                 tooltip="{{lang.add_new_organization_type}}"
                                                 ng-click="ctrl.addNewOrganizationType($event)"
-                                                class="md-icon-button cms-dropdown-button">
+                                                class="md-icon-button cms-field-button">
                                             <md-icon md-svg-icon="plus"></md-icon>
                                         </md-button>
                                         <div ng-messages="org_form.outype.$error">
@@ -307,7 +307,7 @@
                                         <md-button ng-if="ctrl.organization.hasRegistry"
                                                    tooltip="{{lang.edit_start_serial}}"
                                                    ng-click="ctrl.openStartSerialPopup()"
-                                                   class="md-icon-button cms-dropdown-button">
+                                                   class="md-icon-button cms-field-button">
                                             <md-icon md-svg-icon="settings-box"></md-icon>
                                         </md-button>
                                         <div ng-messages="org_form.referenceNumberPlanId.$error">
