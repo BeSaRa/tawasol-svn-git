@@ -222,25 +222,7 @@ html.rtl {
   }
 
   .cms-datepicker {
-    &._md-datepicker-floating-label {
-      &._md-datepicker-has-calendar-icon {
-        > label {
-          &:not(.md-no-float) {
-            &:not(.md-container-ignore) {
-              right: 34px;
-              left: 0;
-            }
-          }
-        }
-      }
-    }
-
     md-datepicker {
-      .md-datepicker-button {
-        margin-right: -12px;
-        margin-left: auto;
-      }
-
       .md-datepicker-input-container {
         .md-datepicker-triangle-button {
           left: 8px;
@@ -251,7 +233,7 @@ html.rtl {
 
     .md-input-messages-animation {
       .md-input-message-animation {
-        margin-right: 34px;
+        margin-right: 0;
         margin-left: auto;
       }
     }

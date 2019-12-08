@@ -6,18 +6,6 @@ md-input-container:not(.cms-default) {
     padding-left: 7px !important;
   }
 
-  &.md-input-focused {
-    input {
-      border-width: 1px !important;
-    }
-  }
-
-  button.cms-dropdown-button {
-    position: absolute;
-    right: 20px;
-    top: 0;
-  }
-
   input:not(.md-datepicker-input),
   md-select,
   textarea,
@@ -63,13 +51,27 @@ md-input-container:not(.cms-default) {
     max-height: 100px !important;
   }
 
+  &.md-input-focused {
+    input {
+      border-width: 1px !important;
+    }
+  }
+
+  button.cms-dropdown-button {
+    position: absolute;
+    right: 20px;
+    top: 0;
+  }
+
   &.cms-datepicker {
     label {
-      left: 0 !important;
+      left: 40px !important;
     }
 
-    button.md-datepicker-button {
-      margin-left: 0 !important;
+    &.md-input-focused, &.md-input-has-value {
+      label {
+        left: 0 !important;
+      }
     }
 
     input.md-datepicker-input {
@@ -83,6 +85,7 @@ html.rtl {
   md-input-container:not(.cms-default) {
     label {
       padding-right: 7px !important;
+      padding-left: auto !important;
     }
 
     md-select {
@@ -101,11 +104,15 @@ html.rtl {
 
     &.cms-datepicker {
       label {
-        right: 0 !important;
+        right: 40px !important;
+        left: auto !important;
       }
 
-      button.md-datepicker-button {
-        margin-right: 0 !important;
+      &.md-input-focused, &.md-input-has-value {
+        label {
+          right: 0 !important;
+          left: auto !important;
+        }
       }
     }
   }
