@@ -127,7 +127,7 @@ module.exports = function (app) {
         };
         var interval;
 
-        if (!employeeService.isAdminUser()) {
+        if (!employeeService.isAdminUser() && desktopNotificationService.isDesktopNotificationAvailable()) {
             desktopNotificationService
                 .askForPermission()
                 .then(function () {
