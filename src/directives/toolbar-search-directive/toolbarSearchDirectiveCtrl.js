@@ -26,7 +26,15 @@ module.exports = function (app) {
             {id: 2, key: 'DocFullSerial', value: 'full_serial', checkShow: gridService.checkToShowAction},
             {id: 3, key: 'Barcode', value: 'barcode', checkShow: gridService.checkToShowAction},
             {id: 4, key: 'Tags', value: 'tags', permissionKey: "TAG_SEARCH", checkShow: gridService.checkToShowAction},
-            {id: 5, key: 'Content', value: 'search_content', permissionKey: "CONTENT_SEARCH", checkShow: gridService.checkToShowAction}
+            {
+                id: 5,
+                key: 'Content',
+                value: 'search_content',
+                permissionKey: "CONTENT_SEARCH",
+                checkShow: gridService.checkToShowAction
+            },
+            {id: 6, key: 'WATERMARK_CODE', value: 'search_by_water_mark', checkShow: gridService.checkToShowAction},
+            {id: 7, key: 'QR', value: 'search_by_qr_code', checkShow: gridService.checkToShowAction}
         ];
 
         self.showSearch = function () {
@@ -60,7 +68,10 @@ module.exports = function (app) {
 
         self.setSelectedKey = function (menuItem) {
             self.searchCriteria = menuItem;
-            console.log(menuItem);
+            if (self.searchCriteria.key === 'QR') {
+                self.query = '';
+            }
+            angular.element($element).find('input#query').focus();
         };
 
         self.onKeyPressSearch = function (event) {
