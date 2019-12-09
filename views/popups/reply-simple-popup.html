@@ -1,54 +1,68 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            aria-label="{{ctrl.dialogTitle}}">
-    <popup-toolbar-directive header-text="{{ctrl.dialogTitle}} - {{ctrl.record.getTranslatedName()}}"
-                             close-callback="ctrl.closeLaunchPopup"></popup-toolbar-directive>
+        <popup-toolbar-directive header-text="{{ctrl.dialogTitle}} - {{ctrl.record.getTranslatedName()}}"
+                                 close-callback="ctrl.closeLaunchPopup"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="distWorkflowItem_form" layout="column">
                 <div layout="row">
-                    <!-- Reply To -->
-                    <md-input-container flex>
-                        <label for="to">{{lang.to}}</label>
-                        <input id="to" ng-model="ctrl.replyToText" required
+                    <!-- Reply To Options -->
+                    <md-input-container flex="">
+                        <label for="replyTo">{{lang.to}}</label>
+                        <md-select name="replyTo" id="replyTo" required
+                                   ng-model="ctrl.selectedReplyTo"
+                                   ng-change="ctrl.onChangeReplyTo($event)">
+                            <md-option ng-repeat="option in ctrl.replyToOptions track by $index"
+                                       ng-value="option.id">{{lang[option.key]}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <!-- Reply to sender -->
+                    <md-input-container flex ng-if="ctrl.selectedReplyTo === 1">
+                        <label for="sender">{{lang.sender}}</label>
+                        <input id="sender" name="sender" ng-model="ctrl.replyToText" required
                                ng-readonly="true" ng-disabled="true">
                         <div ng-messages="distWorkflowItem_form.to.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
                         </div>
                     </md-input-container>
                     <!-- Managers (Approved document/can send to many) -->
-                    <md-input-container flex ng-if="ctrl.canSendToManagers && !ctrl.getApprovedStatus()">
+                    <md-input-container flex
+                                        ng-if="ctrl.canSendToManagers && !ctrl.getApprovedStatus() && ctrl.selectedReplyTo === 2">
                         <label for="managers">{{lang.managers}}</label>
                         <md-select multiple name="managers" id="managers"
                                    ng-model="ctrl.selectedManagers"
                                    ng-change="ctrl.onChangeManager()"
                                    md-selected-text="ctrl.getSelectedManagersText()"
-                                   ng-model-options="{trackBy: '$value.id'}">
-                            <md-option ng-value="manager" ng-repeat="manager in ctrl.managers">
-                                {{manager['ou' + ctrl.currentLangUCFirst + 'Name']}} - {{manager[lang.current +
-                                'Name']}}
+                                   ng-model-options="{trackBy: '$value.id'}"
+                                   required>
+                            <md-option ng-value="option" ng-repeat="option in ctrl.managers">
+                                {{option['ou' + ctrl.currentLangUCFirst + 'Name']}} - {{option[lang.current + 'Name']}}
                             </md-option>
                         </md-select>
                         <div ng-messages="distWorkflowItem_form.managers.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
                         </div>
                     </md-input-container>
-                    <!-- Managers (UnApproved document/can send to one) -->
-                    <md-input-container flex ng-if="ctrl.canSendToManagers && ctrl.getApprovedStatus()">
-                        <label for="managers">{{lang.managers}}</label>
-                        <md-select name="managers" id="managers"
+                    <!-- Manager (UnApproved document/can send to one) -->
+                    <md-input-container flex
+                                        ng-if="ctrl.canSendToManagers && ctrl.getApprovedStatus() && ctrl.selectedReplyTo === 2">
+                        <label for="manager">{{lang.manager}}</label>
+                        <md-select name="manager" id="manager"
                                    ng-model="ctrl.selectedManagers"
                                    ng-change="ctrl.onChangeManager()"
                                    md-selected-text="ctrl.getSelectedManagersText()"
-                                   ng-model-options="{trackBy: '$value.id'}">
+                                   ng-model-options="{trackBy: '$value.id'}"
+                                   required>
                             <md-option ng-value="-1">{{lang.none}}</md-option>
-                            <md-option ng-value="manager" ng-repeat="manager in ctrl.managers">
-                                {{manager['ou' + ctrl.currentLangUCFirst + 'Name']}} - {{manager[lang.current +
-                                'Name']}}
+                            <md-option ng-value="option" ng-repeat="option in ctrl.managers">
+                                {{option['ou' + ctrl.currentLangUCFirst + 'Name']}} - {{option[lang.current + 'Name']}}
                             </md-option>
                         </md-select>
                         <div class="help-text-div">{{lang.user_will_replaced_by_new_selection}}</div>
-                        <div ng-messages="distWorkflowItem_form.managers.$error">
+                        <div ng-messages="distWorkflowItem_form.manager.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
                         </div>
                     </md-input-container>
@@ -164,7 +178,7 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised md-primary" ng-disabled="distWorkflowItem_form.$invalid"
+        <md-button class="md-raised md-primary" ng-disabled="!ctrl.isLaunchEnabled(distWorkflowItem_form)"
                    ng-click="ctrl.launch($event)">
             {{lang.reply}}
         </md-button>

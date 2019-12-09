@@ -49,6 +49,20 @@ module.exports = function (app) {
             return manager.id !== replyOn.id;
         });
 
+        self.replyToOptions = [
+            {
+                id: 1,
+                key: 'sender',
+                show: true
+            },
+            {
+                id: 2,
+                key: _getApprovedStatus() ? 'manager' : 'managers',
+                show: self.canSendToManagers
+            }
+        ];
+        self.selectedReplyTo = 1;
+
         self.actionSearchText = '';
         self.commentSearchText = '';
 
@@ -57,6 +71,14 @@ module.exports = function (app) {
         if (self.globalSettings.allowSendWFRelatedBook) {
             self.distWorkflowItem.sendRelatedDocs = true;
         }
+
+        self.onChangeReplyTo = function ($event) {
+            if (_getApprovedStatus()) {
+                self.selectedManagers = -1;
+            } else {
+                self.selectedManagers = [];
+            }
+        };
 
         /**
          * @description find matched comment if not edited.
@@ -75,6 +97,21 @@ module.exports = function (app) {
         self.onCommentChange = function () {
             self.distWorkflowItem.comments = self.comment.getComment();
         };
+
+        self.isLaunchEnabled = function (form) {
+            var isValid = false;
+            if (self.selectedReplyTo === 1) {
+                isValid = true;
+            } else if (self.selectedReplyTo === 2) {
+                if (_getApprovedStatus()) {
+                    isValid = !!self.selectedManagers && self.selectedManagers !== -1;
+                } else {
+                    isValid = self.selectedManagers.length;
+                }
+            }
+            return !form.$invalid && isValid;
+        };
+
         /**
          * @description save properties for distWorkItem
          */
