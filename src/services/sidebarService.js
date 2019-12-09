@@ -16,7 +16,7 @@ module.exports = function (app) {
             new Sidebar({
                 id: 1,
                 code: 'main-sidebar',
-                isLockedOpen: false,
+                isLockedOpen: true,
                 isOpen: true
             })
         ];

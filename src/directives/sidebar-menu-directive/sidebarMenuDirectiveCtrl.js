@@ -9,7 +9,8 @@ module.exports = function (app) {
                                                          quickSearchCorrespondenceService,
                                                          $timeout,
                                                          reportService,
-                                                         $scope) {
+                                                         $scope,
+                                                         langService) {
         'ngInject';
         var self = this;
         self.controllerName = 'sidebarMenuDirectiveCtrl';
@@ -53,6 +54,18 @@ module.exports = function (app) {
 
         self.showMenuItem = function (item) {
             return employeeService.employeeHasPermissionTo(item);
-        }
+        };
+
+        /**
+         * @description Gets the tooltip for menu item
+         * @param item
+         * @returns {string}
+         */
+        self.getTooltip = function (item) {
+            var text = langService.get(item.lang_key);
+            return self.counters.counter.hasCounter(item.lang_key)
+                ? (text.length > 15 ? text : '')
+                : (text.length > 25 ? text : '')
+        };
     });
 };

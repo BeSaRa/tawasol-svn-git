@@ -12,7 +12,10 @@
                layout-align="center center"
                ui-sref="{{item.state}}">
                 <md-icon ng-if="menu.level == 1" class="sidebar-menu-icon" md-svg-icon="{{item.icon}}"></md-icon>
-                <span class="menu-item-text" md-truncate md-highlight-flags="i" md-highlight-text="menu.search" flex>{{lang.get(item.lang_key)}}</span>
+                <span class="menu-item-text"
+                      tooltip="{{menu.getTooltip(item)}}"
+                      md-truncate
+                      md-highlight-flags="i" md-highlight-text="menu.search" flex>{{lang.get(item.lang_key)}}</span>
                 <span ng-if="menu.counters.counter.hasCounter(item.lang_key)"
                       ng-class="{'red':item.hasChildrenItems(),'orange':!item.hasChildrenItems()}"
                       class="menu-counter">{{menu.counters.counter.getCount(item.lang_key,'first')}}</span>
@@ -26,7 +29,10 @@
                layout-align="center center"
                ui-sref="{{menu.getMenuState(item)}}">
                 <md-icon ng-if="menu.level == 1" class="sidebar-menu-icon" md-svg-icon="{{item.icon}}"></md-icon>
-                <span class="menu-item-text" md-truncate md-highlight-flags="i" md-highlight-text="menu.search" flex>{{lang.get(item.lang_key)}}</span>
+                <span class="menu-item-text"
+                      tooltip="{{menu.getTooltip(item)}}"
+                      md-truncate
+                      md-highlight-flags="i" md-highlight-text="menu.search" flex>{{lang.get(item.lang_key)}}</span>
                 <span ng-if="menu.counters.counter.hasCounter(item.lang_key)"
                       ng-class="{'red':item.hasChildrenItems(),'orange':!item.hasChildrenItems()}"
                       class="menu-counter">{{menu.counters.counter.getCount(item.lang_key,'first')}}</span>
