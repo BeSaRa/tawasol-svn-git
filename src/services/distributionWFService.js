@@ -8,6 +8,9 @@ module.exports = function (app) {
                                                    $http,
                                                    $q,
                                                    generator,
+                                                   UserSearchCriteria,
+                                                   cmsTemplate,
+                                                   dialog,
                                                    _) {
         'ngInject';
         var self = this;
@@ -416,6 +419,30 @@ module.exports = function (app) {
                         data: result
                     }
                 });
+        };
+
+
+        self.openEscalationUserDialog = function (distWorkflowItem, $event) {
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('select-escalation-user'),
+                controller: 'selectEscalationUserPopCtrl',
+                controllerAs: 'ctrl',
+                bindToController: true,
+                targetEvent: $event,
+                locals: {
+                    escalationUserId: distWorkflowItem.escalationUserId
+                },
+                resolve: {
+                    escalationUsers: function (employeeService) {
+                        'ngInject';
+                        // users search criteria
+                        var usersCriteria = new UserSearchCriteria({
+                            regOU: employeeService.getEmployee().getRegistryOUID()
+                        });
+                        return self.searchUsersByCriteria(usersCriteria);
+                    }
+                }
+            })
         };
 
 

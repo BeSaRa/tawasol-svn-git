@@ -14,25 +14,19 @@
                                        md-on-reorder="ctrl.getSortedData">
                                 <tr md-row>
                                     <th md-column
-                                        md-order-by="arName">
-                                        <span>{{lang.arabic_name}}</span>
+                                        md-order-by="{{ctrl.getSortingKey('user','information')}}">
+                                        {{lang.name}}
                                     </th>
-                                    <th md-column
-                                        md-order-by="enName">
-                                        <span>{{lang.english_name}}</span>
-                                    </th>
-                                    <th md-column
-                                        md-order-by="domainName">
-                                        <span>{{lang.domain_name}}</span>
+                                    <th md-column md-order-by="{{ctrl.getSortingKey('ou','organization')}}">
+                                        {{lang.organization_unit}}
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody md-body>
                                 <tr md-row md-select="escalationUser"
                                     ng-repeat="escalationUser in ctrl.escalationUsers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
-                                    <td md-cell>{{escalationUser.arName}}</td>
-                                    <td md-cell>{{escalationUser.enName}}</td>
-                                    <td md-cell>{{escalationUser.domainName}}</td>
+                                    <td md-cell>{{escalationUser.getTranslatedName()}}</td>
+                                    <td md-cell><span>{{escalationUser.getTranslatedOrganizationName()}}</span></td>
                                 </tr>
                                 </tbody>
                             </table>

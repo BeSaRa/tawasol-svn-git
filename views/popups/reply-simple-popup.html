@@ -1,8 +1,8 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            aria-label="{{ctrl.dialogTitle}}">
-        <popup-toolbar-directive header-text="{{ctrl.dialogTitle}} - {{ctrl.record.getTranslatedName()}}"
-                                 close-callback="ctrl.closeLaunchPopup"></popup-toolbar-directive>
+    <popup-toolbar-directive header-text="{{ctrl.dialogTitle}} - {{ctrl.record.getTranslatedName()}}"
+                             close-callback="ctrl.closeLaunchPopup"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="distWorkflowItem_form" layout="column">
@@ -98,6 +98,7 @@
                         <label for="dueDate">{{lang.due_date}}</label>
                         <md-datepicker id="dueDate" md-open-on-focus
                                        md-min-date="ctrl.minDate"
+                                       ng-required="ctrl.isEscalationStatusSelected()"
                                        ng-model="ctrl.distWorkflowItem.dueDate"></md-datepicker>
                     </md-input-container>
                 </div>
@@ -135,6 +136,34 @@
                         </md-checkbox>
                         <div class="help-text-div">{{lang.secure_comment_note}}</div>
                     </div>
+                </div>
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="escalationStatus">{{lang.choose_escalation_process}}</label>
+                        <md-select ng-model-options="{trackBy: '$value.id'}"
+                                   id="escalationStatus"
+                                   ng-model="ctrl.distWorkflowItem.escalationStatus"
+                                   ng-change="ctrl.onEscalationStatusChange($event)">
+                            <md-option tooltip="{{escalation.getTranslatedName(true)}}"
+                                       ng-value="escalation"
+                                       ng-repeat="escalation in ctrl.escalationProcessCopy track by $index">
+                                {{escalation.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                        <md-button class="md-icon-button cms-field-overlay-button"
+                                   ng-disabled="!ctrl.isCustomEscalationStatusSelected()"
+                                   ng-click="ctrl.openEscalationUserDialog($event)" tooltip="{{lang.select_user}}">
+                            <md-icon md-svg-icon="account-plus"></md-icon>
+                        </md-button>
+                    </md-input-container>
+                </div>
+                <div layout="row" layout-align="start center">
+                    <span>{{lang.escalation_user}}:</span>
+                    <span class="user-tag" md-truncate ng-if="ctrl.distWorkflowItem.escalationUserId">
+                                    <span>{{ctrl.distWorkflowItem.escalationUserId.getTranslatedName()}} - {{ctrl.distWorkflowItem.escalationUserId.getTranslatedOrganizationName()}}</span>
+                                    <md-icon ng-click="ctrl.deleteEscalationUser($event)"
+                                             md-svg-icon="close-box"></md-icon>
+                                </span>
                 </div>
                 <div layout="row">
                     <!-- Comment -->
@@ -178,7 +207,8 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised md-primary" ng-disabled="!ctrl.isLaunchEnabled(distWorkflowItem_form)"
+        <md-button class="md-raised md-primary" ng-disabled="!ctrl.isLaunchEnabled(distWorkflowItem_form) ||
+                                    (ctrl.isCustomEscalationStatusSelected() && !ctrl.distWorkflowItem.escalationUserId)"
                    ng-click="ctrl.launch($event)">
             {{lang.reply}}
         </md-button>

@@ -15,6 +15,8 @@ module.exports = function (app) {
                                                    DistributionUserWFItem,
                                                    DistributionWF,
                                                    distributionWFService,
+                                                   Lookup,
+                                                   lookupService,
                                                    userCommentService) {
         'ngInject';
         var self = this;
@@ -29,6 +31,7 @@ module.exports = function (app) {
         self.workflowActions = workflowActions;
         // the distWorkflowItem
         self.distWorkflowItem = angular.copy(replyOn);
+
         self.replyToText = replyOn['ou' + self.currentLangUCFirst + 'Name'] + ' - ' + replyOn.getTranslatedName();
         // current date minimum date for the due date.
         self.minDate = new Date();
@@ -65,6 +68,31 @@ module.exports = function (app) {
 
         self.actionSearchText = '';
         self.commentSearchText = '';
+
+        // all escalation process
+        self.escalationProcess = lookupService.returnLookups(lookupService.escalationProcess);
+        self.escalationProcessCopy = angular.copy(self.escalationProcess);
+
+        var noneLookup = new Lookup({
+            id: -1,
+            defaultEnName: langService.getByLangKey('none', 'en'),
+            defaultArName: langService.getByLangKey('none', 'ar'),
+            lookupKey: -1
+        });
+        self.escalationProcessCopy.unshift(noneLookup);
+
+
+        var _setEscalationProcess = function () {
+            var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess || noneLookup;
+
+            // check if initial open WF dialog
+            (self.distWorkflowItem.escalationStatus) ?
+                self.distWorkflowItem.escalationStatus = lookupService.getLookupByLookupKey(lookupService.escalationProcess, self.distWorkflowItem.escalationStatus) :
+                self.distWorkflowItem.escalationStatus = currentOUEscalationProcess;
+
+        };
+        _setEscalationProcess();
+
 
         self.globalSettings = rootEntity.getGlobalSettings();
 
@@ -159,7 +187,8 @@ module.exports = function (app) {
                         .setSendEmail(result.sendEmail)
                         .setSecureAction(result.isSecureAction)
                         .setEscalationStatus(result.escalationStatus)
-                        .setEscalationUser(result.escalationUser);
+                        .setEscalationUser(result.escalationUserId)
+                        .setEscalationUserOUId(result.escalationUserId);
                 }
             } else {
                 distWorkflowItem
@@ -170,7 +199,8 @@ module.exports = function (app) {
                     .setSendEmail(result.sendEmail)
                     .setSecureAction(result.isSecureAction)
                     .setEscalationStatus(result.escalationStatus)
-                     .setEscalationUser(result.escalationUser);
+                    .setEscalationUser(result.escalationUserId)
+                    .setEscalationUserOUId(result.escalationUserId);
             }
         }
 
@@ -276,6 +306,58 @@ module.exports = function (app) {
          */
         self.getApprovedStatus = function () {
             return _getApprovedStatus();
+        };
+
+        /**
+         * @description delete selected escalation user
+         */
+        self.deleteEscalationUser = function ($event) {
+            dialog
+                .confirmMessage(langService.get('confirm_delete').change({name: self.distWorkflowItem.escalationUserId.getTranslatedName()}), null, null, $event)
+                .then(function () {
+                    self.distWorkflowItem.escalationUserId = null;
+                    self.distWorkflowItem.escalationUserOUId = null;
+                });
+        };
+
+
+        /**
+         * @desc open dialog to select escalation user
+         * @param $event
+         * @returns {promise}
+         */
+        self.openEscalationUserDialog = function ($event) {
+            distributionWFService.openEscalationUserDialog(self.distWorkflowItem, $event)
+                .then(function (result) {
+                    self.distWorkflowItem.escalationUserId = result;
+                    self.distWorkflowItem.escalationUserOUId = result;
+                });
+        };
+
+
+        /**
+         * @description reset escalation uer
+         * @param $event
+         */
+        self.onEscalationStatusChange = function ($event) {
+            self.distWorkflowItem.escalationUserId = null;
+            self.distWorkflowItem.escalationUserOUId = null;
+        };
+
+        /**
+         * @description check if any escalation status selected
+         * @returns {Lookup|*|boolean}
+         */
+        self.isEscalationStatusSelected = function () {
+            return self.distWorkflowItem.escalationStatus && self.distWorkflowItem.escalationStatus.hasOwnProperty('lookupKey') && self.distWorkflowItem.escalationStatus.lookupKey !== -1
+        };
+
+        /**
+         * @description check if send to custom escalation status selected
+         * @returns {Lookup|*|boolean}
+         */
+        self.isCustomEscalationStatusSelected = function () {
+            return self.distWorkflowItem.escalationStatus && self.distWorkflowItem.escalationStatus.hasOwnProperty('lookupKey') && self.distWorkflowItem.escalationStatus.lookupKey === 3;
         };
 
         /**

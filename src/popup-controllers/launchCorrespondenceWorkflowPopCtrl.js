@@ -659,7 +659,8 @@ module.exports = function (app) {
                 .setSendEmail(result.sendEmail)
                 .setSecureAction(result.isSecureAction)
                 .setEscalationStatus(result.escalationStatus)
-                .setEscalationUser(result.escalationUser);
+                .setEscalationUser(result.escalationUserId)
+                .setEscalationUserOUId(result.escalationUserId);
         }
 
         /**

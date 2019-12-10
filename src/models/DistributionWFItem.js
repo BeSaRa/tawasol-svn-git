@@ -5,8 +5,9 @@ module.exports = function (app) {
             var self = this;
             self.dueDate = null;
             self.action = null;
-            self.escalationUser = null;
+            self.escalationUserId = null;
             self.escalationStatus = null;
+            self.escalationUserOUId = null;
             self.comments = null;
             self.sendSMS = false;
             self.sendEmail = false;
@@ -72,7 +73,11 @@ module.exports = function (app) {
                 return this;
             };
             DistributionWFItem.prototype.setEscalationUser = function (escalationUser) {
-                this.escalationUser = escalationUser;
+                this.escalationUserId = escalationUser;
+                return this;
+            };
+            DistributionWFItem.prototype.setEscalationUserOUId = function (escalationUser) {
+                this.escalationUserOUId = escalationUser;
                 return this;
             };
             DistributionWFItem.prototype.setEscalationStatus = function (escalationStatus) {
@@ -132,7 +137,7 @@ module.exports = function (app) {
                 return (this.hasOwnProperty('isSecureAction') && this.isSecureAction) ? !!this.action && this.comments : !!this.action;
             };
             DistributionWFItem.prototype.isEscalationComplate = function () {
-                return (this.isCustomEscalationSelected()) ? this.escalationUser : true;
+                return (this.isCustomEscalationStatusSelected()) ? this.escalationUserId : true;
             };
 
             DistributionWFItem.prototype.setGridName = function (gridName) {
@@ -197,8 +202,8 @@ module.exports = function (app) {
              * @description check if custom escalation selected
              * @returns {boolean}
              */
-            DistributionWFItem.prototype.isCustomEscalationSelected = function () {
-                return this.escalationStatus && this.escalationStatus.hasOwnProperty('lookupKey') && this.escalationStatus.lookupKey === 2;
+            DistributionWFItem.prototype.isCustomEscalationStatusSelected = function () {
+                return this.escalationStatus && this.escalationStatus.hasOwnProperty('lookupKey') && this.escalationStatus.lookupKey === 3;
             };
 
             // don't remove CMSModelInterceptor from last line

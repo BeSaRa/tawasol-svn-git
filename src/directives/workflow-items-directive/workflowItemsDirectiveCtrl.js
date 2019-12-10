@@ -88,7 +88,8 @@ module.exports = function (app) {
                 .setSendSMS(result.sendSMS)
                 .setSendEmail(result.sendEmail)
                 .setEscalationStatus(result.escalationStatus)
-                .setEscalationUser(result.escalationUser);
+                .setEscalationUser(result.escalationUserId)
+                .setEscalationUserOUId(result.escalationUserId);
         }
 
         /**

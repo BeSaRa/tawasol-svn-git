@@ -34,7 +34,7 @@
                         <md-datepicker id="dueDate" md-open-on-focus
                                        md-min-date="ctrl.minDate"
                                        ng-model="ctrl.distWorkflowItem.dueDate"
-                                       ng-required="!ctrl.isEscalationHidden() && ctrl.distWorkflowItem.isCustomEscalationSelected()"></md-datepicker>
+                                       ng-required="!ctrl.isEscalationHidden() && ctrl.isEscalationStatusSelected()"></md-datepicker>
                         <div ng-messages="distWorkflowItem_form.dueDate.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
                         </div>
@@ -66,7 +66,7 @@
                         <div class="help-text-div mb10">{{lang.secure_comment_note}}</div>
                     </div>
                 </div>
-                <div layout="row" layout-align="start center" ng-if="!ctrl.isEscalationHidden()">
+                <div layout="row" ng-if="!ctrl.isEscalationHidden()">
                     <md-input-container flex>
                         <label for="escalationStatus">{{lang.choose_escalation_process}}</label>
                         <md-select ng-model-options="{trackBy: '$value.id'}"
@@ -80,18 +80,19 @@
                             </md-option>
                         </md-select>
                         <md-button class="md-icon-button cms-field-overlay-button"
-                                   ng-disabled="!ctrl.distWorkflowItem.isCustomEscalationSelected()"
+                                   ng-disabled="!ctrl.distWorkflowItem.isCustomEscalationStatusSelected()"
                                    ng-click="ctrl.openEscalationUserDialog($event)" tooltip="{{lang.select_user}}">
                             <md-icon md-svg-icon="account-plus"></md-icon>
                         </md-button>
                     </md-input-container>
-                    <div>
-                        <span class="user-tag" md-truncate ng-if="ctrl.distWorkflowItem.escalationUser">
-                                    <span>{{ctrl.distWorkflowItem.escalationUser.getTranslatedName()}}</span>
+                </div>
+                <div layout="row"  layout-align="start center" ng-if="!ctrl.isEscalationHidden()">
+                    <span>{{lang.escalation_user}}:</span>
+                    <span class="user-tag" md-truncate ng-if="ctrl.distWorkflowItem.escalationUserId">
+                                    <span>{{ctrl.distWorkflowItem.escalationUserId.getTranslatedName()}} - {{ctrl.distWorkflowItem.escalationUserId.getTranslatedOrganizationName()}}</span>
                                     <md-icon ng-click="ctrl.deleteEscalationUser($event)"
                                              md-svg-icon="close-box"></md-icon>
                                 </span>
-                    </div>
                 </div>
                 <div layout="row" layout-align="start center">
                     <md-input-container flex>
@@ -136,7 +137,7 @@
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised md-primary" ng-disabled="distWorkflowItem_form.$invalid ||
-                            (!ctrl.isEscalationHidden() && ctrl.distWorkflowItem.isCustomEscalationSelected() && !ctrl.distWorkflowItem.escalationUser)"
+                            (!ctrl.isEscalationHidden() && ctrl.distWorkflowItem.isCustomEscalationStatusSelected() && !ctrl.distWorkflowItem.escalationUserId)"
                    ng-click="ctrl.setDistWorkflowItemProperties()">
             {{lang.set}}
         </md-button>

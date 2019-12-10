@@ -37,6 +37,11 @@ module.exports = function (app) {
             WFUser.prototype.getTranslatedName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
+
+            WFUser.prototype.getTranslatedOrganizationName = function (reverse) {
+                return langService.current === 'ar' ? (reverse ? this.ouEnName : this.ouArName ) : (reverse ? this.ouArName : this.ouEnName);
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('WFUser', 'init', this);

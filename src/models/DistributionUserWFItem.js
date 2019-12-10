@@ -49,7 +49,10 @@ module.exports = function (app) {
                     .setRelationId(user.relationId)
                     .setProxyInfo(user.proxyInfo)
                     .setSendSMS(user.sendSMS)
-                    .setSendEmail(user.sendEmail);
+                    .setSendEmail(user.sendEmail)
+                    .setEscalationStatus(user.escalationStatus)
+                    .setEscalationUser(user.escalationUserId)
+                    .setEscalationUserOUId(user.escalationUserId);
             };
 
             DistributionUserWFItem.prototype.setToUserDomain = function (toUserDomain) {
@@ -142,7 +145,9 @@ module.exports = function (app) {
                 delete this.showCommentDropdown;
 
                 this.escalationStatus = (this.escalationStatus && this.escalationStatus.hasOwnProperty('id')) ? this.escalationStatus.lookupKey : this.escalationStatus;
-                this.escalationUser = (this.escalationUser && this.escalationUser.hasOwnProperty('id')) ? this.escalationUser.id : this.escalationUser;
+                this.escalationUserOUId = (this.escalationUserId && this.escalationUserId.hasOwnProperty('ouId')) ? this.escalationUserId.ouId : this.escalationUserOUId;
+                this.escalationUserId = (this.escalationUserId && this.escalationUserId.hasOwnProperty('id')) ? this.escalationUserId.id : this.escalationUserId;
+
                 this.action = this.action.hasOwnProperty('id') ? this.action.id : this.action;
                 return this;
             };

@@ -61,7 +61,8 @@ module.exports = function (app) {
                 .setSendSMS(result.sendSMS)
                 .setSecureAction(result.isSecureAction)
                 .setEscalationStatus(result.escalationStatus)
-                .setEscalationUser(result.escalationUser);
+                .setEscalationUser(result.escalationUserId)
+                .setEscalationUserOUId(result.escalationUserId);
 
             // hide the comment dropdown
             distWorkflowItem.showCommentDropdown = false;

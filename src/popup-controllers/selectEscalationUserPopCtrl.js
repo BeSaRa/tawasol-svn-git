@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                             employeeService,
                                                             $timeout,
                                                             $filter,
+                                                            generator,
                                                             _) {
         'ngInject';
         var self = this;
@@ -21,8 +22,8 @@ module.exports = function (app) {
         self.selectedEscalationUser = [];
 
         $timeout(function () {
-            if (self.escalationUser) {
-                var escalationUserId = self.escalationUser.hasOwnProperty('id') ? self.escalationUser.id : self.escalationUser;
+            if (self.escalationUserId) {
+                var escalationUserId = self.escalationUserId.hasOwnProperty('id') ? self.escalationUserId.id : self.escalationUserId;
 
                 self.selectedEscalationUser = _.filter(self.escalationUsers, function (wfUser) {
                     return wfUser.id === escalationUserId;
@@ -56,6 +57,21 @@ module.exports = function (app) {
 
         self.selectEscalationUser = function ($event) {
             dialog.hide(self.selectedEscalationUser[0]);
+        };
+
+        /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function (property, modelType) {
+            if (property === 'ou') {
+                return 'ou' + generator.ucFirst(langService.current) + 'Name';
+            } else if (property === 'user') {
+                return langService.current + 'Name';
+            }
+            return generator.getColumnSortingKey(property, modelType);
         };
 
         /**
