@@ -1060,8 +1060,12 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: "MANAGE_DESTINATIONS",
                 checkShow: function (action, model) {
+                    // only for outgoing/incoming
                     var info = model.getInfo();
-                    return info.documentClass === 'outgoing' || info.documentClass === 'incoming';
+                    if (info.documentClass === 'outgoing' || info.documentClass === 'incoming'){
+                        return !model.getFollowupEndDateForEndFollowup() && !model.getFollowupStatusForEndFollowup();
+                    }
+                    return false;
                 }
             },
             // Duplicate

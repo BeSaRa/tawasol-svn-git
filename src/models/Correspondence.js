@@ -851,6 +851,26 @@ module.exports = function (app) {
                 return 0;
             };
 
+            Correspondence.prototype.getFollowupStatusForEndFollowup = function () {
+                var info = this.getInfo();
+                // followupStatus for outgoing document represents the followup status of all sites for end followup only
+                if (info.documentClass === 'outgoing') {
+                    return this.followupStatus;
+                } else if (info.documentClass === 'incoming') {
+                    return this.followupStatus;
+                }
+            };
+
+            Correspondence.prototype.getFollowupEndDateForEndFollowup = function () {
+                var info = this.getInfo();
+                // followupEndDate for outgoing document represents the followup date of all sites for end followup only
+                if (info.documentClass === 'outgoing') {
+                    return this.followupEndDate;
+                } else if (info.documentClass === 'incoming') {
+                    return this.followupDate;
+                }
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Correspondence', 'init', this);

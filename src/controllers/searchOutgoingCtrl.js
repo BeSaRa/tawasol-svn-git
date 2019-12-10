@@ -503,7 +503,7 @@ module.exports = function (app) {
          * @param searchedOutgoingDocument
          * @param $event
          */
-        self.downloadSelected = function(searchedOutgoingDocument,$event){
+        self.downloadSelected = function (searchedOutgoingDocument, $event) {
             downloadService.openSelectedDownloadDialog(searchedOutgoingDocument, $event);
         };
 
@@ -1163,7 +1163,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",
@@ -1293,7 +1293,8 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: "MANAGE_DESTINATIONS",
                 checkShow: function (action, model) {
-                    return true;
+                    // only for outgoing/incoming
+                    return !model.getFollowupEndDateForEndFollowup() && !model.getFollowupStatusForEndFollowup();
                 }
             },
             // Duplicate

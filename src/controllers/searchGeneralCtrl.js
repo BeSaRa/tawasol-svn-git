@@ -1343,8 +1343,12 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: "MANAGE_DESTINATIONS",
                 checkShow: function (action, model) {
-                    var info = model.getInfo()();
-                    return info.documentClass === 'outgoing' || info.documentClass === 'incoming';
+                    // only for outgoing/incoming
+                    var info = model.getInfo();
+                    if (info.documentClass === 'outgoing' || info.documentClass === 'incoming'){
+                        return !model.getFollowupEndDateForEndFollowup() && !model.getFollowupStatusForEndFollowup();
+                    }
+                    return false;
                 }
             },
             // Duplicate

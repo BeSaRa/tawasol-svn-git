@@ -1547,10 +1547,15 @@ module.exports = function (app) {
                 text: 'grid_action_end_follow_up',
                 callback: self.endFollowup,
                 class: "action-green",
+                showInViewOnly: true,
                 permissionKey: "MANAGE_DESTINATIONS",
                 checkShow: function (action, model) {
+                    // only for outgoing/incoming
                     var info = model.getInfo();
-                    return info.documentClass === 'outgoing' || info.documentClass === 'incoming';
+                    if (info.documentClass === 'outgoing' || info.documentClass === 'incoming'){
+                        return !model.getFollowupEndDateForEndFollowup() && !model.getFollowupStatusForEndFollowup();
+                    }
+                    return false;
                 }
             },
             // View Tracking Sheet (with sub menu)
