@@ -892,7 +892,8 @@ module.exports = function (app) {
                 internalG2g: 'recycle',
                 lockedWorkItem: 'lock',
                 transferredDocument: 'bank-transfer-in',
-                broadcast: 'bullhorn'
+                broadcast: 'bullhorn',
+                siteFollowupDueDate: 'calendar'
             }
         };
     });

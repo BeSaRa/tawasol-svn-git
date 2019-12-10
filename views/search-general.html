@@ -183,10 +183,10 @@
                                         <grid-indicator-directive record="searchedGeneralDocument"
                                                                   indicator-type="hasLinkedDocuments"
                                                                   record-type="correspondence"></grid-indicator-directive>
-                                        <!-- Follow up Status -->
-                                        <!--<grid-indicator-directive record="searchedGeneralDocument"
-                                                                  indicator-type="followupStatus"
-                                                                  record-type="correspondence"></grid-indicator-directive>-->
+                                        <!-- Site Follow up Due Date -->
+                                        <grid-indicator-directive record="searchedGeneralDocument"
+                                                                  indicator-type="siteFollowUpDueDate"
+                                                                  record-type="correspondence"></grid-indicator-directive>
                                         <span flex
                                               ng-class="{'indicator-content': searchedGeneralDocument.followUpStatusIndicator}">
                                         <md-icon ng-if="searchedGeneralDocument.followUpStatusIndicator"

@@ -437,6 +437,18 @@ module.exports = function (app) {
                 return indicator.getIsBroadcastedIndicator(this.isBroadcasted());
             };
 
+            Correspondence.prototype.getSiteFollowupDueDateIndicator = function ($event) {
+                var info = this.getInfo();
+                if (info.documentClass !== 'outgoing' && info.documentClass !== 'incoming') {
+                    return false;
+                }
+                // if endFollowDate has value or follow date is missing, no indicator
+                if (this.getSiteFollowupEndDate() || !this.getSiteMaxFollowupDate()) {
+                    return false;
+                }
+                return indicator.getSiteFollowUpDueDateIndicator(this.getSiteMaxFollowupDate());
+            };
+
             Correspondence.prototype.getTagsCount = function ($event) {
                 return this.tags && this.tags.length ? this.tags.length : 0;
             };
@@ -851,7 +863,7 @@ module.exports = function (app) {
                 return 0;
             };
 
-            Correspondence.prototype.getFollowupStatusForEndFollowup = function () {
+            Correspondence.prototype.getSiteFollowupStatus = function () {
                 var info = this.getInfo();
                 // followupStatus for outgoing document represents the followup status of all sites for end followup only
                 if (info.documentClass === 'outgoing') {
@@ -861,11 +873,21 @@ module.exports = function (app) {
                 }
             };
 
-            Correspondence.prototype.getFollowupEndDateForEndFollowup = function () {
+            Correspondence.prototype.getSiteFollowupEndDate = function () {
                 var info = this.getInfo();
                 // followupEndDate for outgoing document represents the followup date of all sites for end followup only
                 if (info.documentClass === 'outgoing') {
                     return this.followupEndDate;
+                } else if (info.documentClass === 'incoming') {
+                    return this.followupDate;
+                }
+            };
+
+            Correspondence.prototype.getSiteMaxFollowupDate = function () {
+                var info = this.getInfo();
+                // maxFollowupDate for outgoing document represents the maximum followup date of all sites
+                if (info.documentClass === 'outgoing') {
+                    return this.maxFollowupDate;
                 } else if (info.documentClass === 'incoming') {
                     return this.followupDate;
                 }

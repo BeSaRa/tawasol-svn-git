@@ -50,13 +50,12 @@ module.exports = function (app) {
                 var securityLevelMap = _.find(_.map(securityLevels, function (lookup, index) {
                     return {
                         key: lookup.lookupKey,
-                        //class: 'indicator secure' + (index + 1),
                         class: 'indicator secure' + (lookup.lookupKey),
                         text: 'indicator_security_level',
                         icon: icon,
                         tooltip: 'indicator_security_level',
                         value: lookup,
-                        legendText: function () {
+                        legendText: function (indicator) {
                             return langService.get('security_level') + ' : ' + lookup.getTranslatedName();
                         }
                     }
@@ -80,7 +79,7 @@ module.exports = function (app) {
                             icon: self.getIndicatorIcons(lookupService.priorityLevel + '_' + priorityLevel.lookupKey),
                             tooltip: 'indicator_priority_level',
                             value: lookup,
-                            legendText: function () {
+                            legendText: function (indicator) {
                                 return langService.get('priority_level') + ' : ' + lookup.getTranslatedName();
                             }
                         }
@@ -100,7 +99,7 @@ module.exports = function (app) {
                     text: 'indicator_doc_has_attachment',
                     icon: self.getIndicatorIcons('attachment'),
                     tooltip: 'indicator_doc_has_attachment',
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return langService.get('attachments')
                     }
                 });
@@ -116,7 +115,7 @@ module.exports = function (app) {
                     text: 'indicator_doc_has_linked_doc',
                     icon: self.getIndicatorIcons('linkedDocs'),
                     tooltip: 'indicator_doc_has_linked_doc',
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return langService.get('linked_documents');
                     }
                 });
@@ -138,7 +137,7 @@ module.exports = function (app) {
                             icon: self.getIndicatorIcons('followupStatus' + lookup.lookupKey),
                             tooltip: 'indicator_followup_status',
                             value: lookup,
-                            legendText: function () {
+                            legendText: function (indicator) {
                                 return langService.get('follow_up_status') + ' : ' + lookup.getTranslatedName();
                             }
                         }
@@ -167,7 +166,7 @@ module.exports = function (app) {
                     text: diff < 0 ? 'indicator_date_passed' : (diff === 0 ? 'indicator_date_today' : 'indicator_date_coming'),
                     icon: self.getIndicatorIcons('dueDate'),
                     tooltip: 'indicator_due_date',
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return '';
                     }
                 });
@@ -184,7 +183,7 @@ module.exports = function (app) {
                     text: tagsCount,
                     icon: '',
                     tooltip: 'indicator_tags',
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return '';
                     }
                 });
@@ -204,7 +203,7 @@ module.exports = function (app) {
                     icon: self.getIndicatorIcons(docClass),
                     tooltip: 'indicator_' + docClass,
                     value: docClassCopy,
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return langService.get(docClass);
                     }
                 });
@@ -221,7 +220,7 @@ module.exports = function (app) {
                     text: (reassigned ? 'indicator_reassigned' : 'indicator_not_reassigned'),
                     icon: self.getIndicatorIcons('reassigned'),
                     tooltip: (reassigned ? 'indicator_reassigned' : 'indicator_not_reassigned'),
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return langService.get('reassigned');
                     }
                 }) : false;
@@ -238,7 +237,7 @@ module.exports = function (app) {
                     text: (opened ? 'indicator_opened' : 'indicator_not_opened'),
                     icon: (opened ? self.getIndicatorIcons('bookOpened') : self.getIndicatorIcons('bookNotOpened')),
                     tooltip: (opened ? 'indicator_opened' : 'indicator_not_opened'),
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return '';
                     }
                 });
@@ -255,7 +254,7 @@ module.exports = function (app) {
                     text: commentsCount,
                     icon: '',
                     tooltip: 'indicator_comments',
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return '';
                     }
                 });
@@ -273,7 +272,7 @@ module.exports = function (app) {
                     text: (isPaper ? 'indicator_paper_document' : 'indicator_electronic_document'),
                     icon: (isPaper ? self.getIndicatorIcons('paperDocument') : self.getIndicatorIcons('electronicDocument')),
                     tooltip: (isPaper ? 'indicator_paper_document' : 'indicator_electronic_document'),
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return isPaper ? langService.get('paper') : langService.get('electronic');
                     }
                 });
@@ -290,7 +289,7 @@ module.exports = function (app) {
                     text: 'export_via_central_archive',
                     icon: self.getIndicatorIcons('exportViaCentralArchive'),
                     tooltip: 'export_via_central_archive',
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return '';
                     }
                 }) : false;
@@ -306,7 +305,7 @@ module.exports = function (app) {
                     text: 'indicator_linked_exported_doc',
                     icon: self.getIndicatorIcons('linkedExportedDoc'),
                     tooltip: 'indicator_linked_exported_doc',
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return '';
                     }
                 });
@@ -323,7 +322,7 @@ module.exports = function (app) {
                     text: 'indicator_copy',
                     icon: self.getIndicatorIcons('copy'),
                     tooltip: 'indicator_copy',
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return '';
                     }
                 }) : false;
@@ -340,7 +339,7 @@ module.exports = function (app) {
                     text: 'indicator_locked_by',
                     icon: self.getIndicatorIcons('lockedG2g'),
                     tooltip: 'indicator_locked_by',
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return '';
                     }
                 }) : false;
@@ -357,7 +356,7 @@ module.exports = function (app) {
                     text: 'indicator_version_has_content',
                     icon: self.getIndicatorIcons('versionHasContent'),
                     tooltip: 'indicator_version_has_content',
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return '';
                     }
                 }) : false;
@@ -374,7 +373,7 @@ module.exports = function (app) {
                     text: 'indicator_internal_g2g',
                     icon: self.getIndicatorIcons('internalG2g'),
                     tooltip: 'indicator_internal_g2g',
-                    legendText: function () {
+                    legendText: function (indicator) {
                         return '';
                     }
                 }) : false;
@@ -393,7 +392,7 @@ module.exports = function (app) {
                         icon: self.getIndicatorIcons('lockedWorkItem'),
                         tooltip: 'indicator_locked_item_by',
                         value: record.getLockingUserInfo(),
-                        legendText: function () {
+                        legendText: function (indicator) {
                             return '';
                         }
                     }) : false;
@@ -411,7 +410,7 @@ module.exports = function (app) {
                         text: 'indicator_transferred_document',
                         icon: self.getIndicatorIcons('transferredDocument'),
                         tooltip: 'indicator_transferred_document',
-                        legendText: function () {
+                        legendText: function (indicator) {
                             return '';
                         }
                     }) : false;
@@ -429,10 +428,34 @@ module.exports = function (app) {
                         text: 'broadcasted',
                         icon: self.getIndicatorIcons('broadcast'),
                         tooltip: 'broadcasted',
-                        legendText: function () {
+                        legendText: function (indicator) {
                             return langService.get('broadcasted');
                         }
                     }) : false;
+            };
+
+            /**
+             * @description Returns the site followup status due indicator and description
+             * @param siteMaxFollowupDate
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getSiteFollowUpDueDateIndicator = function (siteMaxFollowupDate) {
+                if (!siteMaxFollowupDate) {
+                    return false;
+                }
+                var today = moment(new Date()).startOf('day');
+                var recordDueDate = moment(siteMaxFollowupDate).startOf('day');
+                var diff = recordDueDate.diff(today, 'days');
+                var dueDateStatus = (diff < 0) ? 'past' : (diff === 0 ? 'today' : 'future');
+                return new Indicator({
+                    class: 'indicator date-' + dueDateStatus,
+                    text: diff < 0 ? 'indicator_date_passed' : (diff === 0 ? 'indicator_date_today' : 'indicator_date_coming'),
+                    icon: self.getIndicatorIcons('siteFollowupDueDate'),
+                    tooltip: 'indicator_site_followup_due_date',
+                    legendText: function (indicator) {
+                        return langService.get('indicator_site_followup_due_date').change({due_date_status: langService.get(this.text)});
+                    }
+                });
             };
 
 

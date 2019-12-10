@@ -11,7 +11,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'legendIndicatorsDirectiveCtrl';
 
-        self.legends = [];
+        self.legendIndicators = [];
         var indicator = new Indicator();
 
         self.loadLegends = function () {
@@ -20,7 +20,7 @@ module.exports = function (app) {
                     case 'securityLevel':
                         var securityLevels = rootEntity.getGlobalSettings().securityLevels;
                         _.map(securityLevels, function (securityLevel) {
-                            self.legends.push(indicator.getSecurityLevelIndicator(securityLevel));
+                            self.legendIndicators.push(indicator.getSecurityLevelIndicator(securityLevel));
                         });
                         break;
                     case 'priorityLevel':
@@ -28,21 +28,21 @@ module.exports = function (app) {
                         _.map(priorityLevels, function (priorityLevel) {
                             var _priorityLevelIndicator = indicator.getPriorityLevelIndicator(priorityLevel);
                             if (_priorityLevelIndicator)
-                                self.legends.push(_priorityLevelIndicator);
+                                self.legendIndicators.push(_priorityLevelIndicator);
                         });
                         break;
                     case 'docClass':
                         var docClasses = ['outgoing', 'incoming', 'internal'];
                         _.map(docClasses, function (docClass) {
-                            self.legends.push(indicator.getDocClassIndicator(docClass));
+                            self.legendIndicators.push(indicator.getDocClassIndicator(docClass));
                         });
                         break;
                     case  'paperElectronic':
-                        self.legends.push(indicator.getIsPaperIndicator(true));
-                        self.legends.push(indicator.getIsPaperIndicator(false));
+                        self.legendIndicators.push(indicator.getIsPaperIndicator(true));
+                        self.legendIndicators.push(indicator.getIsPaperIndicator(false));
                         break;
                     case 'isReassigned':
-                        self.legends.push(indicator.getReassignedIndicator(true));
+                        self.legendIndicators.push(indicator.getReassignedIndicator(true));
                         break;
                     case 'followupStatus':
                         var followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
@@ -50,39 +50,47 @@ module.exports = function (app) {
                             var _followUpStatusIndicator = indicator.getFollowUpStatusIndicator(followUpStatus);
 
                             if (_followUpStatusIndicator)
-                                self.legends.push(_followUpStatusIndicator);
+                                self.legendIndicators.push(_followUpStatusIndicator);
                         });
                         break;
                     case 'hasLinkedDocuments':
-                        self.legends.push(indicator.getLinkedDocumentsIndicator());
+                        self.legendIndicators.push(indicator.getLinkedDocumentsIndicator());
                         break;
                     case 'hasAttachment':
-                        self.legends.push(indicator.getAttachmentsIndicator());
+                        self.legendIndicators.push(indicator.getAttachmentsIndicator());
                         break;
                     case 'exportViaCentralArchive':
-                        self.legends.push(indicator.getExportViaCentralArchiveIndicator(true));
+                        self.legendIndicators.push(indicator.getExportViaCentralArchiveIndicator(true));
                         break;
                     case 'linkedExportedDoc':
-                        self.legends.push(indicator.getIsLinkedExportedDocIndicator());
+                        self.legendIndicators.push(indicator.getIsLinkedExportedDocIndicator());
                         break;
                     case 'copy':
-                        self.legends.push(indicator.getOriginalCopyIndicator(1));
+                        self.legendIndicators.push(indicator.getOriginalCopyIndicator(1));
                         break;
                     case 'lockedG2g':
                     case 'lockedWorkItem':
-                        self.legends.push(indicator.getIsLockedG2GIndicator(true));
+                        self.legendIndicators.push(indicator.getIsLockedG2GIndicator(true));
                         break;
                     case 'versionHasContent':
-                        self.legends.push(indicator.getVersionHasContentIndicator(true));
+                        self.legendIndicators.push(indicator.getVersionHasContentIndicator(true));
                         break;
                     case 'internalG2g':
-                        self.legends.push(indicator.getIsInternalG2GIndicator(true));
+                        self.legendIndicators.push(indicator.getIsInternalG2GIndicator(true));
                         break;
                     case 'transferredDocument':
-                        self.legends.push(indicator.getIsTransferredDocumentIndicator(true));
+                        self.legendIndicators.push(indicator.getIsTransferredDocumentIndicator(true));
                         break;
                     case 'broadcast':
-                        self.legends.push(indicator.getIsBroadcastedIndicator(true));
+                        self.legendIndicators.push(indicator.getIsBroadcastedIndicator(true));
+                        break;
+                    case 'siteFollowUpDueDate':
+                        var today = new Date(), tomorrow = new Date(today), yesterday = new Date(today);
+                        tomorrow.setDate(tomorrow.getDate() + 1);
+                        yesterday.setDate(yesterday.getDate() - 1);
+                        _.map([yesterday, today, tomorrow], function (date) {
+                            self.legendIndicators.push(indicator.getSiteFollowUpDueDateIndicator(date));
+                        });
                         break;
                 }
             });

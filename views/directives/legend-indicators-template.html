@@ -1,10 +1,10 @@
 <div layout="row" class="grid-legend row-border-top" layout-align="center center">
-    <div ng-repeat="legend in ctrl.legends"
-         ng-if="$index < ctrl.visibleCount && legend.legendText()" class="p0p5">
-        <md-icon class="{{legend.class}}"
-                 md-svg-icon="{{legend.icon}}">
+    <div ng-repeat="indicator in ctrl.legendIndicators"
+         ng-if="$index < ctrl.visibleCount && indicator.legendText(indicator)" class="p0p5">
+        <md-icon class="{{indicator.class}}"
+                 md-svg-icon="{{indicator.icon}}">
         </md-icon>
-        <span>{{legend.legendText()}}</span>
+        <span>{{indicator.legendText(indicator)}}</span>
     </div>
 
     <div layout-padding>
@@ -14,18 +14,18 @@
                 <md-icon md-svg-icon="dots-vertical"></md-icon>
             </md-button>
             <md-menu-content width="3">
-                <md-menu-item ng-repeat="legend in ctrl.legends"
-                              ng-if="$index >= ctrl.visibleCount && legend.legendText()">
-                    <!--<md-icon class="{{legend.class}}"
-                             md-svg-icon="{{legend.icon}}">
+                <md-menu-item ng-repeat="indicator in ctrl.legendIndicators"
+                              ng-if="$index >= ctrl.visibleCount && indicator.legendText()">
+                    <!--<md-icon class="{{indicator.class}}"
+                             md-svg-icon="{{indicator.icon}}">
                     </md-icon>
-                    <span>{{legend.legendText()}}</span>-->
+                    <span>{{indicator.legendText()}}</span>-->
                     <md-button aria-label="Legend" md-prevent-menu-close>
                         <div layout="row" flex>
-                            <md-icon class="{{legend.class}}"
-                                     md-svg-icon="{{legend.icon}}">
+                            <md-icon class="{{indicator.class}}"
+                                     md-svg-icon="{{indicator.icon}}">
                             </md-icon>
-                            <p flex>{{legend.legendText()}}</p>
+                            <p flex>{{indicator.legendText(indicator)}}</p>
                         </div>
                     </md-button>
                 </md-menu-item>

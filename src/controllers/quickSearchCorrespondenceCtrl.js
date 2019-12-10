@@ -1063,7 +1063,7 @@ module.exports = function (app) {
                     // only for outgoing/incoming
                     var info = model.getInfo();
                     if (info.documentClass === 'outgoing' || info.documentClass === 'incoming'){
-                        return !model.getFollowupEndDateForEndFollowup() && !model.getFollowupStatusForEndFollowup();
+                        return !model.getSiteFollowupEndDate() && !model.getSiteFollowupStatus();
                     }
                     return false;
                 }
