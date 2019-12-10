@@ -1,7 +1,36 @@
+//$white: white;
+//$black: black;
+//$link: rgb(3, 155, 229);
+//$main-bg: #34495e;
+//$main-bg-color: lighten($main-bg, 50);
+//$main-bg-color-hover: darken($main-bg, 70);
+//$shadow-main-bg: #2c3e50;
+//
+//$header-bg-colors-list: red yellow green orange blue;
+//$header-bg-colors-map: (
+//        red : red,
+//        yellow :yellow,
+//        green : rgb(0,150,136),
+//        orange : orange,
+//        blue: rgb(63,81,181)
+//);
+//
+//@each $color in $header-bg-colors-list {
+//  @if map-has_key($header-bg-colors-map, $color) {
+//    .header-bg-#{$color} {
+//      background-color: map_get($header-bg-colors-map, $color);
+//    }
+//  } @else {
+//    @warn "Unfortunately, no value could be retrieved from"#{$color};
+//  }
+//
+//}
+
+
 $white: white;
 $black: black;
 $link: rgb(3, 155, 229);
-$main-bg: #34495e;
+$main-bg: white;
 $main-bg-color: lighten($main-bg, 50);
 $main-bg-color-hover: darken($main-bg, 70);
 $shadow-main-bg: #2c3e50;
@@ -10,9 +39,9 @@ $header-bg-colors-list: red yellow green orange blue;
 $header-bg-colors-map: (
         red : red,
         yellow :yellow,
-        green : rgb(0,150,136),
+        green : rgb(0, 150, 136),
         orange : orange,
-        blue: rgb(63,81,181)
+        blue: #a30234
 );
 
 @each $color in $header-bg-colors-list {
@@ -24,4 +53,31 @@ $header-bg-colors-map: (
     @warn "Unfortunately, no value could be retrieved from"#{$color};
   }
 
+}
+
+.md-button.md-default-theme.md-primary.md-fab, .md-button.md-primary.md-fab, .md-button.md-default-theme.md-primary.md-raised, .md-button.md-primary.md-raised {
+  background-color: #8c0233;
+}
+
+.md-button.md-default-theme.md-primary.md-fab:not([disabled]).md-focused, .md-button.md-primary.md-fab:not([disabled]).md-focused, .md-button.md-default-theme.md-primary.md-fab:not([disabled]):hover, .md-button.md-primary.md-fab:not([disabled]):hover, .md-button.md-default-theme.md-primary.md-raised:not([disabled]).md-focused, .md-button.md-primary.md-raised:not([disabled]).md-focused, .md-button.md-default-theme.md-primary.md-raised:not([disabled]):hover, .md-button.md-primary.md-raised:not([disabled]):hover {
+  background-color: #8c0233;
+}
+
+
+md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar) {
+  background-color: #a30234;
+}
+
+#sidebar-search {
+  background-color: $main-bg !important;
+  input {
+    color: #a30234 !important;
+  }
+}
+
+.counter.blue {
+  background-color: orange;
+}
+md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar) {
+  background-color: #8c0233;
 }
