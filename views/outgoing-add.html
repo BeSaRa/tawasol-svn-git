@@ -14,6 +14,70 @@
         <div layout="column" flex>
             <div scroll-directive>
                 <div class="page-padding">
+                    <div layout="row">
+                        <div>
+                            <md-button ng-disabled="ctrl.saveInProgress
+                                                    || ctrl.document_properties.$invalid
+                                                    || !ctrl.outgoing.sitesInfoTo.length
+                                                    || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist))
+                                                    && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
+                                       ng-click="ctrl.saveCorrespondence()" class="md-raised"
+                                       ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
+                                <!--|| (ctrl.documentInformation || ctrl.outgoing.contentFile)-->
+                                {{lang.outgoing_save}}
+                            </md-button>
+                        </div>
+                        <div ng-if="ctrl.outgoing.addMethod">
+                            <md-button ng-disabled="ctrl.saveInProgress
+                                                    || ctrl.document_properties.$invalid
+                                                    || !ctrl.outgoing.sitesInfoTo.length
+                                                    || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist))
+                                                    && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
+                                       ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised">
+                                {{lang.outgoing_save_print_barcode}}
+                            </md-button>
+                        </div>
+                        <div ng-if="(!ctrl.outgoing.addMethod && ctrl.duplicateVersion) || (!ctrl.outgoing.addMethod && !ctrl.editContent)">
+                            <md-button ng-disabled="ctrl.document_properties.$invalid
+                                                    || !ctrl.outgoing.sitesInfoTo.length
+                                                    || !(ctrl.documentInformation || ctrl.outgoing.contentFile)
+                                                    || ctrl.saveInProgress"
+                                       ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
+                                {{lang.outgoing_save_draft}}
+                            </md-button>
+                        </div>
+                        <div>
+                            <md-button ng-disabled="ctrl.saveInProgress"
+                                       ng-click="ctrl.confirmResetAddCorrespondence($event)" class="md-raised">
+                                {{lang.outgoing_new}}
+                            </md-button>
+                        </div>
+                        <div>
+                            <md-button ng-disabled="ctrl.saveInProgress"
+                                       ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
+                                {{lang.outgoing_cancel}}
+                            </md-button>
+                        </div>
+                        <div ng-if="ctrl.outgoing.hasVsId() && ctrl.requestCompleted">
+                            <md-input-container>
+                                <label for="documentAction">{{lang.document_action}}</label>
+                                <md-select name="documentAction" id="documentAction"
+                                           ng-disabled="!ctrl.isActionsAvailable || ctrl.saveInProgress"
+                                           ng-model="ctrl.documentAction">
+                                    <md-option ng-value="action" class="{{action.class}}"
+                                               ng-if="action.checkShow(action, ctrl.outgoing, $index)"
+                                               ng-repeat="action in ctrl.documentActions track by $index">
+                                        {{ ctrl.getActionText(action) }}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div ng-if="ctrl.outgoing.hasVsId() && ctrl.requestCompleted">
+                            <md-button class="md-raised" ng-disabled="!ctrl.documentAction || ctrl.saveInProgress"
+                                       ng-click="ctrl.performDocumentAction($event)">{{lang.action_submit}}
+                            </md-button>
+                        </div>
+                    </div>
                     <accordion-directive label-collapse="ctrl.collapse" validation="ctrl.validation">
                         <!-- Properties -->
                         <accordion-item active fail-when="ctrl.document_properties.$invalid"
