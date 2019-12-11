@@ -879,7 +879,7 @@ module.exports = function (app) {
                 if (info.documentClass === 'outgoing') {
                     return this.followupEndDate;
                 } else if (info.documentClass === 'incoming') {
-                    return this.followupDate;
+                    return this.followupEndDate;
                 }
             };
 

@@ -1294,7 +1294,8 @@ module.exports = function (app) {
                 permissionKey: "MANAGE_DESTINATIONS",
                 checkShow: function (action, model) {
                     // only for outgoing/incoming
-                    return !model.getSiteFollowupEndDate() && !model.getSiteFollowupStatus();
+                    // no follow up status = 0 (need reply)
+                    return !model.getSiteFollowupStatus() && !model.getSiteFollowupEndDate()// && model.getSiteMaxFollowupDate();
                 }
             },
             // Duplicate
