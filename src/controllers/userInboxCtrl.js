@@ -1550,11 +1550,12 @@ module.exports = function (app) {
                 showInViewOnly: true,
                 permissionKey: "MANAGE_DESTINATIONS",
                 checkShow: function (action, model) {
+                    var correspondence = model.hasOwnProperty('correspondence') ? model.correspondence : model;
                     // only for outgoing/incoming
-                    var info = model.getInfo();
-                    if (info.documentClass === 'outgoing' || info.documentClass === 'incoming'){
+                    var info = correspondence.getInfo();
+                    if (info.documentClass === 'outgoing' || info.documentClass === 'incoming') {
                         // no follow up status = 0 (need reply)
-                        return !model.getSiteFollowupStatus() && !model.getSiteFollowupEndDate()// && model.getSiteMaxFollowupDate();
+                        return !correspondence.getSiteFollowupStatus() && !correspondence.getSiteFollowupEndDate()// && model.getSiteMaxFollowupDate();
                     }
                     return false;
                 }
