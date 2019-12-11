@@ -379,6 +379,8 @@
                 .addToAllWithBase('downloadSelected','cms-entity/correspondence/common/merge-book')
                 // downlaod document content
                 .addToAllWithBase('downloadDocumentContent', 'cms-entity/correspondence/common/download-content/{vsId}')
+                // overdue Counters
+                .addToAllWithBase('overdueCounters', 'cms-entity/correspondence/search/quick/followup/{documentClass}')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

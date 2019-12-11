@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                   $timeout,
                                                   langService,
                                                   counterService,
+                                                  quickSearchCorrespondenceService,
                                                   LayoutWidgetOption,
                                                   employeeService,
                                                   dialog,
@@ -46,49 +47,57 @@ module.exports = function (app) {
                 permission: 'OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE',
                 state: 'app.department-inbox.ready-to-export'
             },
-            incomingPrepare : {
+            incomingPrepare: {
                 permission: 'INCOMING_SCAN_DOCUMENT',
                 state: 'app.incoming.scan'
             },
-            incomingReview : {
+            incomingReview: {
                 permission: 'REVIEW_INCOMING_DOCUMENT',
                 state: 'app.incoming.review'
             },
-            incomingReadyToSent : {
+            incomingReadyToSent: {
                 permission: 'SEND_INCOMING_QUEUE',
                 state: 'app.incoming.ready-to-send'
             },
-            incomingRejected : {
+            incomingRejected: {
                 permission: 'REJECTED_INCOMING_QUEUE',
                 state: 'app.incoming.rejected'
             },
-            internalPrepare : {
+            internalPrepare: {
                 permission: 'PREPARE_INTERNAL',
                 state: 'app.internal.prepare'
             },
-            internalDraft : {
+            internalDraft: {
                 permission: 'DRAFT_INTERNAL',
                 state: 'app.internal.draft'
             },
-            internalReview : {
+            internalReview: {
                 permission: 'REVIEW_INTERNAL',
                 state: 'app.internal.review'
             },
-            internalReadyToSent : {
+            internalReadyToSent: {
                 permission: 'READY_TO_SEND_INTERNAL',
                 state: 'app.internal.ready-to-send'
             },
-            internalRejected : {
+            internalRejected: {
                 permission: 'REJECTED_INTERNAL',
                 state: 'app.internal.rejected'
             },
-            internalApproved : {
+            internalApproved: {
                 permission: 'APPROVED_INTERNAL_DOCUMENT',
                 state: 'app.internal.approved'
             },
             outgoingReview: {
                 permission: 'REVIEW_OUTGOING_DOCUMENTS',
                 state: 'app.outgoing.review'
+            },
+            overdueIncomingDocuments: {
+                permission: false,
+                state: 'app.search.quick-search'
+            },
+            overdueOutgoingDocuments: {
+                permission: false,
+                state: 'app.search.quick-search'
             }
         };
 
@@ -128,72 +137,83 @@ module.exports = function (app) {
                 ar: langService.getKey('counter_outgoing_export', 'ar'),
                 en: langService.getKey('counter_outgoing_export', 'en'),
                 value: 'readyToExport'
+            }, {
+                id: 7,
+                ar: langService.getKey('counter_outgoing_review', 'ar'),
+                en: langService.getKey('counter_outgoing_review', 'en'),
+                value: 'outgoingReview'
             },
             {
-                id: 7,
+                id: 8,
+                ar: langService.getKey('overdue_outgoing_documents', 'ar'),
+                en: langService.getKey('overdue_outgoing_documents', 'en'),
+                value: 'overdueOutgoingDocuments'
+            },
+            {
+                id: 9,
                 ar: langService.getKey('counter_incoming_scan', 'ar'),
                 en: langService.getKey('counter_incoming_scan', 'en'),
                 value: 'incomingPrepare'
             },
             {
-                id: 8,
+                id: 10,
                 ar: langService.getKey('counter_incoming_review', 'ar'),
                 en: langService.getKey('counter_incoming_review', 'en'),
                 value: 'incomingReview'
             },
             {
-                id: 9,
+                id: 11,
                 ar: langService.getKey('counter_incoming_ready_to_send', 'ar'),
                 en: langService.getKey('counter_incoming_ready_to_send', 'en'),
                 value: 'incomingReadyToSent'
             },
             {
-                id: 10,
+                id: 12,
                 ar: langService.getKey('counter_incoming_rejected', 'ar'),
                 en: langService.getKey('counter_incoming_rejected', 'en'),
                 value: 'incomingRejected'
             },
             {
-                id: 11,
+                id: 13,
+                ar: langService.getKey('overdue_incoming_documents', 'ar'),
+                en: langService.getKey('overdue_incoming_documents', 'en'),
+                value: 'overdueIncomingDocuments'
+            },
+            {
+                id: 14,
                 ar: langService.getKey('counter_internal_prepare', 'ar'),
                 en: langService.getKey('counter_internal_prepare', 'en'),
                 value: 'internalPrepare'
             },
             {
-                id: 12,
+                id: 15,
                 ar: langService.getKey('counter_internal_draft', 'ar'),
                 en: langService.getKey('counter_internal_draft', 'en'),
                 value: 'internalDraft'
             },
             {
-                id: 13,
+                id: 16,
                 ar: langService.getKey('counter_internal_review', 'ar'),
                 en: langService.getKey('counter_internal_review', 'en'),
                 value: 'internalReview'
             },
             {
-                id: 14,
+                id: 17,
                 ar: langService.getKey('counter_internal_ready_to_send', 'ar'),
                 en: langService.getKey('counter_internal_ready_to_send', 'en'),
                 value: 'internalReadyToSent'
             },
             {
-                id: 15,
+                id: 18,
                 ar: langService.getKey('counter_internal_rejected', 'ar'),
                 en: langService.getKey('counter_internal_rejected', 'en'),
                 value: 'internalRejected'
             },
             {
-                id: 16,
+                id: 19,
                 ar: langService.getKey('counter_internal_approved', 'ar'),
                 en: langService.getKey('counter_internal_approved', 'en'),
                 value: 'internalApproved'
-            },
-            {
-                id: 17,
-                ar: langService.getKey('counter_outgoing_review', 'ar'),
-                en: langService.getKey('counter_outgoing_review', 'en'),
-                value: 'outgoingReview'
             }
         ];
 
@@ -223,6 +243,11 @@ module.exports = function (app) {
 
         self.model = angular.copy(self.options);
 
+        self.quickSearchClassMap = {
+            overdueIncomingDocuments: 'incoming',
+            overdueOutgoingDocuments: 'outgoing',
+        };
+
         function _updateModel(reverse) {
             if (!reverse)
                 self.model = angular.copy(self.options);
@@ -247,6 +272,15 @@ module.exports = function (app) {
         self.counterClicked = function ($event) {
             var option = self.dataSourcePermissions[self.options.dataSource.optionValue];
             $event.preventDefault();
+            if (!option.permission && option.state) {
+                (currentDataSource() === 'overdueIncomingDocuments' || currentDataSource() === 'overdueOutgoingDocuments') ? $state.go(option.state, {
+                    key: null,
+                    q: self.quickSearchClassMap[currentDataSource()],
+                    random: (Date.now()).toString()
+                }) : $state.go(option.state);
+                return;
+            }
+
             if (self.employeeService.hasPermissionTo(option.permission)) {
                 $state.go(option.state);
                 return;
@@ -312,8 +346,8 @@ module.exports = function (app) {
                 .setOptionValue(source.value)
                 .save()
                 .then(function () {
-                    self.reloadCounter();
-                })
+                    self.reloadCurrentCounter();
+                });
 
         };
 
@@ -321,9 +355,27 @@ module.exports = function (app) {
             counterService
                 .loadCounters()
                 .then(function (result) {
-                    console.log(result);
                     _setCountTo(result[self.options.dataSource.optionValue].first);
                 })
+        };
+
+        self.reloadCurrentCounter = function (ignoreReloadNormalCounter) {
+            switch (currentDataSource()) {
+                case 'overdueOutgoingDocuments':
+                    return self.reloadOverdueCounter('outgoing');
+                case 'overdueIncomingDocuments':
+                    return self.reloadOverdueCounter('incoming');
+            }
+
+            !ignoreReloadNormalCounter ? self.reloadCounter() : null;
+        };
+
+        self.reloadOverdueCounter = function (documentClass) {
+            quickSearchCorrespondenceService
+                .loadQuickSearchOverdueCorrespondence(documentClass)
+                .then(function (result) {
+                    _setCountTo(result.length);
+                });
         };
 
         self.removeCounter = function () {
@@ -336,7 +388,11 @@ module.exports = function (app) {
 
         self.isSelectedSource = function (source) {
             return currentDataSource() === source.value;
-        }
+        };
+
+        $timeout(function () {
+            self.reloadCurrentCounter(true);
+        });
 
     });
 };

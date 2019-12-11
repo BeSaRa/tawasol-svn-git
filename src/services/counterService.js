@@ -52,6 +52,10 @@ module.exports = function (app) {
                         result.data.rs.g2gDeptReturned = angular.copy(self.g2gReturnedCount);
 
                         self.counter = generator.interceptReceivedInstance('Counter', generator.generateInstance(result.data.rs, Counter));
+                        self.counter.overdueDocuments = self.counter.overdueIncomingDocuments = self.counter.overdueOutgoingDocuments = {
+                            first: 0,
+                            second: 0
+                        };
                         return self.counter;
                     }).catch(function (error) {
                         return errorCode.checkIf(error, 'ENTITY_NOT_FOUND', function () {
@@ -101,7 +105,7 @@ module.exports = function (app) {
         self.stopG2GCounter = function () {
             if (g2gInterval)
                 $interval.cancel(g2gInterval);
-        }
+        };
 
     });
 };

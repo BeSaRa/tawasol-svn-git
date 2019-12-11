@@ -31,7 +31,7 @@ module.exports = function (app) {
          * @description All Correspondence
          * @type {*}
          */
-        self.quickSearchCorrespondence = _mapResultToAvoidCorrespondenceCheck(quickSearchCorrespondence);
+        self.quickSearchCorrespondence = _mapResultToAvoidCorrespondenceCheck(quickSearchCorrespondenceService.quickSearchCorrespondence);
         self.quickSearchCorrespondenceCopy = angular.copy(self.quickSearchCorrespondence);
 
         /**
@@ -118,8 +118,27 @@ module.exports = function (app) {
             var searchJSON = {};
             searchJSON[$stateParams.key] = $stateParams.q;
 
+            if ($stateParams.q === 'outgoing' || $stateParams.q === 'incoming') {
+                return self.reloadQuickSearchOverdueCorrespondence(pageNumber, defer);
+            }
+
             return quickSearchCorrespondenceService
                 .loadQuickSearchCorrespondence(searchJSON)
+                .then(function (result) {
+                    self.quickSearchCorrespondence = _mapResultToAvoidCorrespondenceCheck(result);
+                    self.quickSearchCorrespondenceCopy = angular.copy(self.quickSearchCorrespondence);
+                    self.selectedQuickSearchCorrespondence = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.grid.page = pageNumber;
+                    self.getSortedData();
+                    return result;
+                });
+        };
+
+        self.reloadQuickSearchOverdueCorrespondence = function (pageNumber, defer) {
+            return quickSearchCorrespondenceService
+                .loadQuickSearchOverdueCorrespondence($stateParams.q)
                 .then(function (result) {
                     self.quickSearchCorrespondence = _mapResultToAvoidCorrespondenceCheck(result);
                     self.quickSearchCorrespondenceCopy = angular.copy(self.quickSearchCorrespondence);
@@ -299,7 +318,7 @@ module.exports = function (app) {
          * @param searchedCorrespondenceDocument
          * @param $event
          */
-        self.downloadSelected = function(searchedCorrespondenceDocument,$event){
+        self.downloadSelected = function (searchedCorrespondenceDocument, $event) {
             downloadService.openSelectedDownloadDialog(searchedCorrespondenceDocument, $event);
         };
 
@@ -930,7 +949,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",
@@ -1062,7 +1081,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     // only for outgoing/incoming
                     var info = model.getInfo();
-                    if (info.documentClass === 'outgoing' || info.documentClass === 'incoming'){
+                    if (info.documentClass === 'outgoing' || info.documentClass === 'incoming') {
                         // no follow up status = 0 (need reply)
                         return !model.getSiteFollowupStatus() && !model.getSiteFollowupEndDate()// && model.getSiteMaxFollowupDate();
                     }

@@ -96,7 +96,7 @@ module.exports = function (app) {
                         'userFavouriteDocument',
                         'foldersCount',
                         function (currentValue, counter, employee, property) {
-                            if (!employee.inRegistry() && employee.hasThesePermissions('GROUP_MAIL')){
+                            if (!employee.inRegistry() && employee.hasThesePermissions('GROUP_MAIL')) {
                                 currentValue = (counter.groupMail[property] + currentValue);
                             }
                             //currentValue = employee.inRegistry() ? currentValue : (counter.groupMail[property] + currentValue);
@@ -169,6 +169,11 @@ module.exports = function (app) {
             self.internalReview = null;
             self.internalRejected = null;
             self.internalReadyToSent = null;
+
+            // overdue outgoing  documents
+            self.overdueOutgoingDocuments = null;
+            // overdue incoming documents
+            self.overdueIncomingDocuments = null;
 
             /*Department Inbox*/
             self.readyToExport = null;

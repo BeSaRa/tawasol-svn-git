@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                               $rootScope,
                                                               correspondenceService,
                                                               $timeout,
+                                                              counterService,
                                                               _,
                                                               dialog,
                                                               langService,
@@ -18,6 +19,7 @@ module.exports = function (app) {
         self.serviceName = 'quickSearchCorrespondenceService';
 
         self.quickSearchCorrespondence = [];
+
 
         self.searchForm = false;
 
@@ -50,6 +52,17 @@ module.exports = function (app) {
                     // self.quickSearchCorrespondence = generator.generateCollection(result.data.rs, QuickSearchCorrespondence, self._sharedMethods);
                     self.quickSearchCorrespondence = correspondenceService.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs);
                     return self.quickSearchCorrespondence;
+                });
+        };
+
+        self.loadQuickSearchOverdueCorrespondence = function (documentClass) {
+            return $http.get(urlService.overdueCounters.replace('{documentClass}', documentClass))
+                .then(function (result) {
+                    counterService.counter['overdue' + generator.ucFirst(documentClass) + 'Documents'] = {
+                        first: result.data.rs.length,
+                        second: -1
+                    };
+                    return self.quickSearchCorrespondence = correspondenceService.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs);
                 });
         };
 

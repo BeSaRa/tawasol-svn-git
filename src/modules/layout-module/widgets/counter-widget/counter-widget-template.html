@@ -42,7 +42,7 @@
         </md-menu>
     </md-menu-bar>
     <md-button ng-if="ctrl.employeeService.hasPermissionTo('LANDING_PAGE')"
-            class="md-icon-button counter-refresh" ng-click="ctrl.reloadCounter()">
+            class="md-icon-button counter-refresh" ng-click="ctrl.reloadCurrentCounter()">
         <md-icon md-svg-icon="refresh"></md-icon>
     </md-button>
     <div class="counter-widget-content" layout="column">
