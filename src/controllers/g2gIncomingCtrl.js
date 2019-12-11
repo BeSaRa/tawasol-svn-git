@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                 G2G,
                                                 $q,
                                                 $filter,
+                                                Incoming,
                                                 langService,
                                                 counterService,
                                                 toast,
@@ -374,8 +375,12 @@ module.exports = function (app) {
                 //permissionKey: '',
                 showInView: true,
                 //showInViewOnly: true,
-                checkShow: function (action, model) {
-                    return true;
+                checkShow: function (action, model, viewExtraOptions) {
+                    if (viewExtraOptions) {
+                        return !(viewExtraOptions.g2gItem.isInternal && model.priorityLevelInfo.id === -1);
+                    } else {
+                        return !(model.isInternal && model.priorityLevel.id === -1);
+                    }
                 }
             }
         ];

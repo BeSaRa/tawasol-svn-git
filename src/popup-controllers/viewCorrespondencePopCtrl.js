@@ -461,16 +461,16 @@ module.exports = function (app) {
         self.isShowViewerAction = function (action) {
             if (action.showAlways) {
                 if (action.hasOwnProperty('checkAnyPermission')) {
-                    return action.checkShow(action, self.workItem, action.checkAnyPermission);
+                    return action.checkShow(action, self.workItem, {g2gItem: self.g2gItemCopy});
                 }
-                return action.checkShow(action, self.workItem);
+                return action.checkShow(action, self.workItem, {g2gItem: self.g2gItemCopy});
             } else {
                 if (!self.workItem)
                     return false;
                 if (action.hasOwnProperty('checkAnyPermission')) {
-                    return action.checkShow(action, self.workItem, action.checkAnyPermission);
+                    return action.checkShow(action, self.workItem, {g2gItem: self.g2gItemCopy});
                 }
-                return action.checkShow(action, self.workItem);
+                return action.checkShow(action, self.workItem, {g2gItem: self.g2gItemCopy});
             }
         };
 

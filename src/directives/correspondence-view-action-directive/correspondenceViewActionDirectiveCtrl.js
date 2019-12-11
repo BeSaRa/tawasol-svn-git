@@ -53,7 +53,7 @@ module.exports = function (app) {
         self.checkDisplayAction = function (action, workItem, correspondence) {
             var actionCopy = angular.copy(action);
             actionCopy.actionFrom = gridService.gridActionOptions.location.popup;
-            return actionCopy.checkShow(actionCopy, (workItem || correspondence), actionCopy.showInViewOnly);
+            return actionCopy.checkShow(actionCopy, (workItem || correspondence), {g2gItem : self.g2gItemCopy});
         };
         /**
          * @description hide this action from view correspondence.

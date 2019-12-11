@@ -1,11 +1,12 @@
 <div id="login-page" layout="row">
     <div id="login-background" ng-class="{'flip-bg':login.flipBg}"></div>
-    <div layout="column" flex ng-if="mediaSize('gt-sm')" ng-class="{'md':mediaSize('md')}" id="login-meta-wrapper">
+    <div layout="column" login-background-directive flex ng-if="mediaSize('gt-sm')" ng-class="{'md':mediaSize('md')}"
+         id="login-meta-wrapper">
         <div layout="row">
             <div class="login-logo-side">
                 <img ng-if="login.rootEntity.getLoginLogoUrl()" ng-src="{{login.rootEntity.getLoginLogoUrl()}}"
                      alt="{{login.rootEntity.getTranslatedAppName()}}">
-                <img ng-if="!login.rootEntity.getLoginLogoUrl()" src="../../assets/images/ebla-logo.png"
+                <img ng-if="!login.rootEntity.getLoginLogoUrl()" src="assets/images/ebla-logo.png"
                      alt="{{login.rootEntity.getTranslatedAppName()}}">
             </div>
             <div id="application-meta" layout="column" flex>
@@ -23,7 +24,7 @@
         <div ng-if="!mediaSize('gt-sm')" id="login-logo" layout="column" layout-align="center center">
             <img ng-if="login.rootEntity.getLoginLogoUrl()" ng-src="{{login.rootEntity.getLoginLogoUrl()}}"
                  alt="{{login.rootEntity.getTranslatedAppName()}}">
-            <img ng-if="!login.rootEntity.getLoginLogoUrl()" src="../../assets/images/ebla-logo.png"
+            <img ng-if="!login.rootEntity.getLoginLogoUrl()" src="assets/images/ebla-logo.png"
                  alt="{{login.rootEntity.getTranslatedAppName()}}">
         </div>
         <div ng-if="!mediaSize('gt-sm')" class="small-h application-data" layout="column" layout-align="center center">

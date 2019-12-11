@@ -79,7 +79,7 @@ module.exports = function (app) {
 
         self.jobOptions = {
             jobType: 'new', // new or add
-            addType: 'first', // first,last,location
+            addType: 'last', // first,last,location
             location: 'before',// before , after
             pageNumber: 0 // selected index in case use select location
         };
