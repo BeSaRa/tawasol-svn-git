@@ -157,9 +157,9 @@
                         </md-button>
                     </md-input-container>
                 </div>
-                <div layout="row" layout-align="start center">
+                <div layout="row" layout-align="start center" ng-if="ctrl.distWorkflowItem.escalationUserId">
                     <span>{{lang.escalation_user}}:</span>
-                    <span class="user-tag" md-truncate ng-if="ctrl.distWorkflowItem.escalationUserId">
+                    <span class="user-tag" md-truncate>
                                     <span>{{ctrl.distWorkflowItem.escalationUserId.getTranslatedName()}} - {{ctrl.distWorkflowItem.escalationUserId.getTranslatedOrganizationName()}}</span>
                                     <md-icon ng-click="ctrl.deleteEscalationUser($event)"
                                              md-svg-icon="close-box"></md-icon>
