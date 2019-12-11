@@ -148,7 +148,7 @@
                                                            ng-click="ctrl.manageLinkedDocuments($event)">
                                                     <md-icon md-svg-icon="note-multiple-outline"></md-icon>
                                                 </md-button>
-                                                <span class="counter blue">{{ctrl.internal.linkedDocs.length}}</span>
+                                                <span class="counter blue">{{ctrl.internal.linkedDocs ? ctrl.internal.linkedDocs.length : 0}}</span>
                                             </div>
                                             <!-- Linked Entities -->
                                             <div class="icon-relative" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">

@@ -880,7 +880,7 @@ module.exports = function (app) {
             })
             // add simple outgoing
             .state('app.outgoing.simple-add', {
-                url: '/simpleAdd?vsId?workItem?action',
+                url: '/simpleAdd?vsId?workItem?action?createAsAttachment',
                 templateUrl: templateProvider.getView('outgoing-simple-add'),
                 controller: 'simpleOutgoingCtrl',
                 controllerAs: 'ctrl',
@@ -1274,7 +1274,7 @@ module.exports = function (app) {
 
             // add simple internal
             .state('app.internal.simple-add', {
-                url: '/simpleAdd?vsId?workItem?action',
+                url: '/simpleAdd?vsId?workItem?action?createAsAttachment',
                 templateUrl: templateProvider.getView('internal-simple-add'),
                 controller: 'simpleInternalCtrl',
                 controllerAs: 'ctrl',

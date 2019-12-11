@@ -58,15 +58,18 @@
                             </accordion-directive>
                             <div layout="column">
                                 <div layout="row">
-                                    <md-button ng-disabled="ctrl.document_properties.$invalid || !ctrl.outgoing.sitesInfoTo.length ||
-                                        ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
+                                    <md-button ng-disabled="ctrl.document_properties.$invalid
+                                                            || !ctrl.outgoing.sitesInfoTo.length
+                                                            || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist))
+                                                                && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
                                                ng-click="ctrl.saveCorrespondence()" class="md-raised"
                                                ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
-                                        <!--|| (ctrl.documentInformation || ctrl.outgoing.contentFile)-->
                                         {{lang.outgoing_save}}
                                     </md-button>
-                                    <md-button ng-disabled="ctrl.document_properties.$invalid || !ctrl.outgoing.sitesInfoTo.length ||
-                                        ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
+                                    <md-button ng-disabled="ctrl.document_properties.$invalid
+                                                            || !ctrl.outgoing.sitesInfoTo.length
+                                                            || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist))
+                                                                && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
                                                ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised"
                                                ng-if="ctrl.outgoing.addMethod">
                                         {{lang.outgoing_save_print_barcode}}
@@ -156,7 +159,8 @@
                                                     is-simple-add="ctrl.simpleAdd"></manage-content-directive>
                                             <span flex></span>
                                             <!-- Attachments -->
-                                            <div class="icon-relative" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">
+                                            <div class="icon-relative"
+                                                 ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">
                                                 <md-button tooltip="{{lang.attachments}}"
                                                            class="md-raised md-icon-button"
                                                            ng-click="ctrl.manageAttachments($event)">
@@ -165,16 +169,18 @@
                                                 <span class="counter blue">{{ctrl.outgoing.attachments.length}}</span>
                                             </div>
                                             <!-- Linked Docs -->
-                                            <div class="icon-relative" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
+                                            <div class="icon-relative"
+                                                 ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
                                                 <md-button tooltip="{{lang.linked_documents}}"
                                                            class="md-raised md-icon-button"
                                                            ng-click="ctrl.manageLinkedDocuments($event)">
                                                     <md-icon md-svg-icon="note-multiple-outline"></md-icon>
                                                 </md-button>
-                                                <span class="counter blue">{{ctrl.outgoing.linkedDocs.length}}</span>
+                                                <span class="counter blue">{{ctrl.outgoing.linkedDocs ? ctrl.outgoing.linkedDocs.length : 0}}</span>
                                             </div>
                                             <!-- Linked Entities -->
-                                            <div class="icon-relative" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
+                                            <div class="icon-relative"
+                                                 ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
                                                 <md-button tooltip="{{lang.linked_entities}}"
                                                            class="md-raised md-icon-button"
                                                            ng-click="ctrl.manageLinkedEntities($event)">

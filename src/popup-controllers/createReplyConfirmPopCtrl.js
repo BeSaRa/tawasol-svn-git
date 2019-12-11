@@ -8,8 +8,14 @@ module.exports = function (app) {
 
         self.controllerName = 'createReplyPopCtrl';
 
+        self.replyForm = 1;
         self.replyType = 0;
         self.createAsAttachment = false;
+
+        self.replyFormOptions = [
+            {id: 0, key: 'simple'},
+            {id: 1, key: 'advanced'}
+        ];
         self.replyTypeOptions = [
             {id: 0, key: 'outgoing'},
             {id: 1, key: 'internal'}
@@ -25,7 +31,18 @@ module.exports = function (app) {
          */
         self.setCreateReply = function ($event) {
             var info = self.record.getInfo(),
-                page = self.replyType === 0 ? 'app.outgoing.add' : 'app.internal.add';
+                page,
+                pages = {
+                    outgoingAdd: 'app.outgoing.add',
+                    outgoingSimpleAdd: 'app.outgoing.simple-add',
+                    internalAdd: 'app.internal.add',
+                    internalSimpleAdd: 'app.internal.simple-add'
+                };
+            if (self.replyForm === 0) {
+                page = self.replyType === 0 ? pages.outgoingSimpleAdd : pages.internalSimpleAdd;
+            } else {
+                page = self.replyType === 0 ? pages.outgoingAdd : pages.internalAdd;
+            }
             dialog.hide();
             $state.go(page, {
                 workItem: info.wobNumber,

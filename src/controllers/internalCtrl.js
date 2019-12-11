@@ -73,7 +73,7 @@ module.exports = function (app) {
         self.isNewDocument = false;
         self.action = null;
         // internal document
-        self.internal = /*demoInternal;*/
+        self.internal =
             new Internal({
                 ou: self.employee.getOUID(),
                 addMethod: self.employee.isBacklogMode() ? 1 : 0,
@@ -101,7 +101,6 @@ module.exports = function (app) {
             self.documentInformation = self.internal.hasContent() ? duplicateVersion.content : null;
             self.editContent = true;
             self.action = 'duplicateVersion';
-            // console.log('duplicateVersion.content', duplicateVersion.content);
         }
 
         self.preventPropagation = function ($event) {
@@ -238,7 +237,6 @@ module.exports = function (app) {
             counterService.loadCounters();
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             if (replyTo) {
-                //mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                 replyTo = false;
             }
             self.internal.updateDocumentVersion();
@@ -273,37 +271,6 @@ module.exports = function (app) {
                 self.saveInProgress = false;
                 toast.success(langService.get(successKey));
             }
-            /*
-             if (status) {// || (self.internal.contentFile)
-             counterService.loadCounters();
-             toast.success(langService.get('internal_metadata_saved_success'));
-             $timeout(function () {
-             $state.go('app.internal.draft');
-             })
-             }
-             else {
-             /!*correspondenceService
-             .loadCorrespondenceById(newId, self.internal.docClassName)
-             .then(function (result) {
-             self.internal = result;
-             self.model = angular.copy(self.internal);
-             self.requestCompleted = true;
-             counterService.loadCounters();
-             toast.success(langService.get('internal_metadata_saved_success'));
-
-             });*!/
-
-             /!*correspondenceService
-             .loadCorrespondenceByVsIdClass(self.internal.vsId, self.internal.docClassName)
-             .then(function (result) {
-             self.internal = result;
-             self.model = angular.copy(self.internal);
-             self.requestCompleted = true;
-             counterService.loadCounters();
-             toast.success(langService.get('internal_metadata_saved_success'));
-
-             });*!/
-             }*/
         };
 
         /**

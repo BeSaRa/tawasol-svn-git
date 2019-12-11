@@ -18,7 +18,6 @@ module.exports = function (app) {
                                              $timeout,
                                              // templates,
                                              lookupService,
-                                             // demoOutgoing,
                                              langService,
                                              contextHelpService,
                                              organizations,
@@ -55,9 +54,6 @@ module.exports = function (app) {
         self.collapse = true;
         // current mode
         self.editMode = !!(editAfterApproved || editAfterExport || duplicateVersion || editAfterReturnG2G);
-        // self.editMode = false;
-        // copy of the current outgoing if saved.
-        // self.model = angular.copy(demoOutgoing);
         self.model = null;
         if (editAfterApproved) {
             self.model = angular.copy(editAfterApproved.metaData);
@@ -97,6 +93,7 @@ module.exports = function (app) {
         if (replyTo) {
             self.outgoing = replyTo;
             self.replyToOriginalName = angular.copy(replyTo.getTranslatedName());
+            self.action = 'createReply';
         }
 
         if (editAfterApproved) {
@@ -209,22 +206,12 @@ module.exports = function (app) {
                         self.outgoing.docStatus = queueStatusService.getDocumentStatus(status);
                     }
                     if (replyTo) {
-                        /*if ($stateParams.createAsAttachment === "true") {
-                            vsId = replyTo.attachments[0].vsId;
-                        } else {
-                            vsId = replyTo.linkedDocs[0].vsId;
-                        }*/
                         vsId = $stateParams.vsId;
                     }
                     promise = self.outgoing[method.withContent](self.documentInformation, vsId);
 
                 } else {
                     if (replyTo) {
-                        /*if ($stateParams.createAsAttachment === "true") {
-                            vsId = replyTo.attachments[0].vsId;
-                        } else {
-                            vsId = replyTo.linkedDocs[0].vsId;
-                        }*/
                         vsId = $stateParams.vsId;
                     }
                     promise = self.outgoing[method.metaData](status, vsId);
@@ -279,7 +266,6 @@ module.exports = function (app) {
             counterService.loadCounters();
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             if (replyTo) {
-                //mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                 replyTo = false;
             }
             self.outgoing.updateDocumentVersion();

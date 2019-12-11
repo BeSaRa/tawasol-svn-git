@@ -27,7 +27,11 @@ module.exports = function (app) {
                                                    draftInternalService,
                                                    editAfterApproved,
                                                    mailNotificationService,
-                                                   gridService) {
+                                                   gridService,
+                                                   replyTo,
+                                                   $stateParams,
+                                                   correspondenceService,
+                                                   $q) {
         'ngInject';
         var self = this;
 
@@ -63,20 +67,32 @@ module.exports = function (app) {
         self.isNewDocument = false;
 
         // internal document
-        self.internal = /*demoInternal;*/
+        self.internal =
             new Internal({
                 ou: self.employee.getOUID(),
                 addMethod: self.employee.isBacklogMode() ? 1 : 0,
                 createdOn: new Date(),
                 docDate: generator.convertDateToString(new Date()),
                 registryOU: self.employee.getRegistryOUID(),
-                securityLevel: lookups.securityLevels[0]
+                securityLevel: lookups.securityLevels[0],
+                linkedDocs: (replyTo && $stateParams.createAsAttachment !== "true") ? [replyTo] : [],
+                attachments: (replyTo && $stateParams.createAsAttachment === "true") ? [replyTo] : []
             });
+
+        if (replyTo) {
+            self.internal = replyTo;
+            if (self.internal.docDate) {
+                self.internal.docDate = generator.convertDateToString(self.internal.docDate);
+            }
+            self.replyToOriginalName = angular.copy(replyTo.getTranslatedName());
+            self.action = 'replyTo';
+        }
 
         if (editAfterApproved) {
             self.internal = editAfterApproved.metaData;
             self.documentInformation = editAfterApproved.content;
             self.editContent = true;
+            self.action = 'editAfterApproved';
         }
 
         self.isDocumentTypeSwitchDisabled = function () {
@@ -93,47 +109,79 @@ module.exports = function (app) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
                 return;
             }
+
+            self.saveInProgress = true;
             var promise = null;
-            //var isDocHasVsId = angular.copy(self.internal).hasVsId();
-
-            /*No document information(No prepare document selected)*/
-
-            if (self.documentInformation) {
-                if (status) {
-                    self.internal.docStatus = queueStatusService.getDocumentStatus(status);
-                }
-                angular.element('iframe#document-viewer').remove();
-                promise = $timeout(function () {
-                    return self.internal
-                        .saveDocumentWithContent(self.documentInformation);
-                }, 1000);
-
+            var defer = $q.defer();
+            if (replyTo && $stateParams.workItem) {
+                dialog.confirmMessage(langService.get('prompt_terminate').change({name: self.replyToOriginalName}), langService.get('yes'),langService.get('no'))
+                    .then(function () {
+                        self.terminateAfterCreateReply = true;
+                        defer.resolve(true);
+                    })
+                    .catch(function (error) {
+                        self.terminateAfterCreateReply = false;
+                        defer.resolve(true);
+                    })
             } else {
-                promise = self.internal
-                    .saveDocument(status)
+                self.terminateAfterCreateReply = false;
+                defer.resolve(true);
             }
-            return promise.then(function (result) {
-                self.internal = result;
-                self.model = angular.copy(self.internal);
-                self.documentInformationExist = !!angular.copy(self.documentInformation);
 
-
-                /*If content file was attached */
-                if (self.internal.contentFile) {
-                    return self.internal.addDocumentContentFile()
-                        .then(function () {
-                            self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
-                            self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
-
-                            saveCorrespondenceFinished(status);
-                        })
+            return defer.promise.then(function () {
+                var methods = {
+                    createReply: {
+                        withContent: 'saveCreateReplyDocumentWithContent',
+                        metaData: 'saveCreateReplyDocument'
+                    },
+                    normal: {
+                        withContent: 'saveDocumentWithContent',
+                        metaData: 'saveDocument'
+                    }
+                };
+                var method = (replyTo && !self.internal.vsId) ? methods.createReply : methods.normal,
+                    vsId = false;
+                /*No document information(No prepare document selected)*/
+                if (self.documentInformation && !self.internal.addMethod) {
+                    if (status) {
+                        self.internal.docStatus = queueStatusService.getDocumentStatus(status);
+                    }
+                    angular.element('iframe#document-viewer').remove();
+                    if (replyTo) {
+                        vsId = $stateParams.vsId;
+                    }
+                    promise = self.internal[method.withContent](self.documentInformation, vsId);
                 } else {
-                    self.contentFileExist = false;
-                    self.contentFileSizeExist = false;
-
-                    saveCorrespondenceFinished(status);
-                    return true;
+                    if (replyTo) {
+                        vsId = $stateParams.vsId;
+                    }
+                    promise = self.internal[method.metaData](status, vsId);
                 }
+                return promise.then(function (result) {
+                    self.internal = result;
+                    self.model = angular.copy(self.internal);
+                    self.documentInformationExist = !!angular.copy(self.documentInformation);
+
+
+                    /*If content file was attached */
+                    if (self.internal.contentFile) {
+                        return self.internal.addDocumentContentFile()
+                            .then(function () {
+                                self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
+                                self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
+
+                                saveCorrespondenceFinished(status);
+                            })
+                    }  else {
+                        self.contentFileExist = false;
+                        self.contentFileSizeExist = false;
+                        saveCorrespondenceFinished(status);
+                        return true;
+                    }
+                }).catch(function (error) {
+                    self.saveInProgress = false;
+                    return $q.reject(error);
+                });
             });
         };
 
@@ -147,6 +195,15 @@ module.exports = function (app) {
         var saveCorrespondenceFinished = function (status) {
             counterService.loadCounters();
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+            if (replyTo) {
+                replyTo = false;
+            }
+            self.internal.updateDocumentVersion();
+
+            if (self.terminateAfterCreateReply) {
+                correspondenceService.terminateWorkItemBehindScene($stateParams.workItem, 'incoming', langService.get('terminated_after_create_reply'))
+            }
+
             if (status) {// || (self.internal.contentFile)
                 toast.success(langService.get('save_success'));
                 $timeout(function () {
@@ -173,37 +230,6 @@ module.exports = function (app) {
                 self.requestCompleted = true;
                 toast.success(langService.get(successKey));
             }
-            /*
-             if (status) {// || (self.internal.contentFile)
-             counterService.loadCounters();
-             toast.success(langService.get('internal_metadata_saved_success'));
-             $timeout(function () {
-             $state.go('app.internal.draft');
-             })
-             }
-             else {
-             /!*correspondenceService
-             .loadCorrespondenceById(newId, self.internal.docClassName)
-             .then(function (result) {
-             self.internal = result;
-             self.model = angular.copy(self.internal);
-             self.requestCompleted = true;
-             counterService.loadCounters();
-             toast.success(langService.get('internal_metadata_saved_success'));
-
-             });*!/
-
-             /!*correspondenceService
-             .loadCorrespondenceByVsIdClass(self.internal.vsId, self.internal.docClassName)
-             .then(function (result) {
-             self.internal = result;
-             self.model = angular.copy(self.internal);
-             self.requestCompleted = true;
-             counterService.loadCounters();
-             toast.success(langService.get('internal_metadata_saved_success'));
-
-             });*!/
-             }*/
         };
 
         /**
