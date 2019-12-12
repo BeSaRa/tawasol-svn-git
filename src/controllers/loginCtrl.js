@@ -133,6 +133,7 @@ module.exports = function (app) {
                     /*errorCode.checkIf(error, 'PASSWORD_EMPTY', function () {
                         dialog.errorMessage(langService.get('access_denied'));
                     });*/
+                    return $q.reject(false);
                 });
         };
         /**

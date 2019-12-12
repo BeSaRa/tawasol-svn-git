@@ -61,6 +61,7 @@ module.exports = function (app) {
                     delete countRequests[result.config.uniqID];
                 }
                 !checkCount() ? loadingIndicatorService.endLoading() : null;
+                delete result.config.data;
                 return $q.reject(result);
             }
         }
