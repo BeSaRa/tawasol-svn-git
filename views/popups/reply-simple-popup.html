@@ -14,6 +14,7 @@
                                    ng-model="ctrl.selectedReplyTo"
                                    ng-change="ctrl.onChangeReplyTo($event)">
                             <md-option ng-repeat="option in ctrl.replyToOptions track by $index"
+                                       ng-if="option.show"
                                        ng-value="option.id">{{lang[option.key]}}
                             </md-option>
                         </md-select>
