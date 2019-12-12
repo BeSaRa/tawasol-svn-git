@@ -82,7 +82,8 @@ module.exports = function (app) {
                 },
                 subSiteTo: function (record) {
                     return self.getSortingKey('subSiteToIdInfo', 'CorrespondenceSite')
-                }
+                },
+                numberOfDays: 'numberOfDays'
             },
             searchText: '',
             searchCallback: function (grid) {

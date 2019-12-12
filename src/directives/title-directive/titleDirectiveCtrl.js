@@ -3,10 +3,5 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.service = titleService;
-
-        $timeout(function () {
-            titleService.setTitle("CMS PACKAGING");
-        }, 1000);
-
     });
 };

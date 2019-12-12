@@ -729,6 +729,28 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the difference in days between given dates
+         * @param date1
+         * @param date2
+         * If not given, date1 will be compared with today
+         * @param skipTime
+         * If true, dates will be compared regardless of time
+         * @returns {string|number}
+         */
+        self.getNumberOfDays = function (date1, date2, skipTime) {
+            if (!date1) {
+                return '';
+            }
+            date1 = moment(date1);
+            date2 = date2 ? moment(date2) : moment();
+            if (skipTime) {
+                date1 = date1.startOf('day');
+                date2 = date2.startOf('day');
+            }
+            return -(date1.diff(date2, 'days'));
+        };
+
+        /**
          * @description Deletes all the indicators from the model
          * @param record
          */

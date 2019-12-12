@@ -89,6 +89,10 @@
                                             md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'CorrespondenceSite')}}">
                                             <span>{{lang.sub_site_to}}</span>
                                         </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
+                                            md-order-by="numberOfDays">
+                                            <span>{{lang.number_of_days}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column>
                                             <!-- Grid Actions -->
                                         </th>
@@ -179,6 +183,11 @@
                                         <td md-cell class="td-data">
                                             <div layout="row">
                                                 <span flex>{{g2gItem.subSiteToIdInfo.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell class="td-data">
+                                            <div layout="row">
+                                                <span flex>{{g2gItem.numberOfDays}}</span>
                                             </div>
                                         </td>
                                         <td md-cell class="p-r0"

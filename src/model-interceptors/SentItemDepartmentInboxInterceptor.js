@@ -10,7 +10,8 @@ module.exports = function (app) {
                       Information,
                       LinkedObject,
                       langService,
-                      moment) {
+                      moment,
+                      _) {
         'ngInject';
 
         var modelName = 'SentItemDepartmentInbox';
@@ -48,6 +49,7 @@ module.exports = function (app) {
             delete model.securityLevelIndicator;
             delete model.docClassName;
             delete model.originalCopyIndicator;
+            delete model.numberOfDays;
 
             return model;
         });
@@ -88,6 +90,7 @@ module.exports = function (app) {
             model.originalCopyIndicator = model.getOriginalCopyIndicator();
 
             model.messageStatus = new Information(model.messageStatus);
+            model.numberOfDays = generator.getNumberOfDays(model.sentDate, null);
 
             return model;
         });
