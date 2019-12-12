@@ -621,7 +621,7 @@
                                 <!-- Escalation process -->
                                 <md-input-container flex>
                                     <label for="escalationProcess">{{$parent.lang.choose_escalation_process}}</label>
-                                    <md-select required name="escalationProcess" id="escalationProcess"
+                                    <md-select name="escalationProcess" id="escalationProcess"
                                                ng-model="ctrl.globalSetting.escalationProcess">
                                         <md-option ng-value="null">{{lang.none}}</md-option>
                                         <md-option tooltip="{{escalationProcess.getTranslatedName(true)}}"

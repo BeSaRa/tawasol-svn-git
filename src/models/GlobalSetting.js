@@ -89,7 +89,7 @@ module.exports = function (app) {
                 'enableEmailNotification',
                 'enableEscalation',
                 'useCentralArchiveInternally',
-                'escalationProcess',
+               // 'escalationProcess',
                 'simpleCorsSiteSearch',
                 'theme'
             ];
