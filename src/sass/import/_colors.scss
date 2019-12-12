@@ -1,7 +1,36 @@
+//$white: white;
+//$black: black;
+//$link: rgb(3, 155, 229);
+//$main-bg: #34495e;
+//$main-bg-color: lighten($main-bg, 50);
+//$main-bg-color-hover: darken($main-bg, 70);
+//$shadow-main-bg: #2c3e50;
+//
+//$header-bg-colors-list: red yellow green orange blue;
+//$header-bg-colors-map: (
+//        red : red,
+//        yellow :yellow,
+//        green : rgb(0,150,136),
+//        orange : orange,
+//        blue: rgb(63,81,181)
+//);
+//
+//@each $color in $header-bg-colors-list {
+//  @if map-has_key($header-bg-colors-map, $color) {
+//    .header-bg-#{$color} {
+//      background-color: map_get($header-bg-colors-map, $color);
+//    }
+//  } @else {
+//    @warn "Unfortunately, no value could be retrieved from"#{$color};
+//  }
+//
+//}
+
+
 $white: white;
 $black: black;
 $link: rgb(3, 155, 229);
-$main-bg: #34495e;
+$main-bg: white;
 $main-bg-color: lighten($main-bg, 50);
 $main-bg-color-hover: darken($main-bg, 70);
 $shadow-main-bg: #2c3e50;
@@ -10,9 +39,9 @@ $header-bg-colors-list: red yellow green orange blue;
 $header-bg-colors-map: (
         red : red,
         yellow :yellow,
-        green : rgb(0,150,136),
+        green : rgb(0, 150, 136),
         orange : orange,
-        blue: rgb(63,81,181)
+        blue: #a30234
 );
 
 @each $color in $header-bg-colors-list {
@@ -25,3 +54,94 @@ $header-bg-colors-map: (
   }
 
 }
+
+.md-button.md-default-theme.md-primary.md-fab, .md-button.md-primary.md-fab, .md-button.md-default-theme.md-primary.md-raised, .md-button.md-primary.md-raised {
+  background-color: darken(#5B6670, 5);
+}
+
+.md-button.md-default-theme.md-primary.md-fab:not([disabled]).md-focused, .md-button.md-primary.md-fab:not([disabled]).md-focused, .md-button.md-default-theme.md-primary.md-fab:not([disabled]):hover, .md-button.md-primary.md-fab:not([disabled]):hover, .md-button.md-default-theme.md-primary.md-raised:not([disabled]).md-focused, .md-button.md-primary.md-raised:not([disabled]).md-focused, .md-button.md-default-theme.md-primary.md-raised:not([disabled]):hover, .md-button.md-primary.md-raised:not([disabled]):hover {
+  background-color: #5B6670;
+}
+
+md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar) {
+  background-color: #5B6670;
+}
+
+#sidebar-search {
+  background-color: $main-bg !important;
+  input {
+    color: #a30234 !important;
+  }
+}
+
+
+#main-sidebar .pattern {
+  background-image: url("../../../assets/images/pattern-2.jpg");
+}
+
+.menu-counter.red {
+  background-color: #5B6670 !important;
+}
+
+.menu-counter.blue {
+  background-color: #969799 !important;
+}
+
+.counter.blue {
+  background-color: #D0B888;
+}
+
+.md-button.md-default-theme.md-fab[disabled], .md-button.md-fab[disabled], .md-button.md-default-theme.md-raised[disabled], .md-button.md-raised[disabled] {
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.md-button.md-primary.md-raised[disabled] {
+  background-color: rgb(139, 139, 139);
+  color: #f5f5f5ab;
+}
+
+// new Changes
+.header-bg-blue {
+  background-color: #5B6670 !important;
+}
+
+#main-sidebar a, #main-sidebar md-icon, #main-sidebar .sidebar-toolbar {
+  color: #5B6670 !important;
+}
+
+#main-sidebar #pin-btn > md-icon {
+  fill: #5B6670 !important;
+}
+
+.star-yellow {
+  color: #D0B888;
+}
+
+.md-tab {
+  background-color: #fafafa !important;
+}
+
+.md-tab.md-active {
+  background-color: black !important;
+  color: white !important;
+  border-right: none !important;
+  border-left: none !important;
+}
+
+a {
+  color: #004C97;
+}
+
+#main-sidebar .pattern {
+  background-image: none !important;
+}
+
+.background-tall, .background-short {
+  background-image: none !important;
+}
+
+.header-bg-blue {
+  background-color: rgb(91, 102, 112) !important;
+}
+
+
