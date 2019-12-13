@@ -3,10 +3,13 @@
 
 accordion-directive {
   display: block;
+
   &.validation {
     padding-right: 50px;
+
     accordion-item {
       position: relative;
+
       &:before {
         z-index: 2;
         position: absolute;
@@ -27,6 +30,7 @@ accordion-directive {
         vertical-align: middle;
         top: 0;
       }
+
       &.pass-validation {
         &:before {
           content: '\2713';
@@ -34,6 +38,7 @@ accordion-directive {
           border-color: #009688;
         }
       }
+
       &.fail-validation {
         &:before {
           content: '\2717';
@@ -41,6 +46,7 @@ accordion-directive {
           border-color: #db4437;
         }
       }
+
       &:not(:last-child):after {
         content: '';
         position: absolute;
@@ -51,6 +57,7 @@ accordion-directive {
         top: 10px;
         z-index: 1;
       }
+
       &:not(:last-child):not(.active):after {
         height: 100%;
       }
@@ -82,9 +89,11 @@ accordion-item {
     padding-right: 10px;
     padding-left: 10px;
   }
+
   accordion-content {
     display: none;
   }
+
   &.active {
     accordion-content {
       display: block;
@@ -103,10 +112,13 @@ accordion-content {
 .accordion-title {
   position: relative;
   padding-right: 40px;
-  button {
+
+  a.md-icon-button {
+    width: 40px;
+    height: 40px;
     position: absolute;
     right: 0;
-    top: -8px;
+    top: 2px;
     padding: 0 !important;
     margin: 0 !important;
   }

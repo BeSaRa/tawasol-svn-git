@@ -17,7 +17,7 @@ module.exports = function (app) {
             compile: function (tElement, attrs) {
                 var content = tElement.contents().detach();
                 var wrapper = angular.element('<div class="outline-none cursor-pointer " ng-click="toggleAccordion($event , index , \'labelCollapse\')"></div>');
-                var btn = angular.element('<md-button ng-click="toggleAccordion($event , index)" class="md-icon-button"><md-icon md-svg-icon="arrow-{{active ? \'up\' : \'down\'}}-bold-circle-outline"></md-icon></md-button>');
+                var btn = angular.element('<a aria-label="Toggle Collapse" ng-click="toggleAccordion($event , index)" class="md-icon-button"><md-icon md-svg-icon="arrow-{{active ? \'up\' : \'down\'}}-bold-circle-outline"></md-icon></a>');
 
                 content = angular.element('<span flex></span>').append(content);
 
