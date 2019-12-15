@@ -25,7 +25,7 @@ module.exports = function (app) {
             },
             {
                 langKey: 'menu_item_search_module_outgoing_incoming',
-                tabKey: 'outgoing_incoming'
+                tabKey: 'outgoingIncoming'
             }
         ];
         // current selected tab to display correct form search.
@@ -61,7 +61,7 @@ module.exports = function (app) {
                     selectedSearchedGeneralDocuments: []
                 }
             },
-            outgoing_incoming: {
+            outgoingIncoming: {
                 controller: {
                     selectedSearchedOutgoingIncomingDocuments: []
                 }
