@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                                  langService,
                                                                  toast,
                                                                  _,
+                                                                 Outgoing,
                                                                  counterService,
                                                                  viewDocumentService,
                                                                  managerService,
@@ -252,6 +253,46 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Export workitem and opens the launch screen
+         * @param readyToExport
+         * @param $event
+         * @param defer
+         */
+        self.exportAndSend = function (readyToExport, $event, defer) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
+                return;
+            }
+            var info = readyToExport.getInfo(),
+                correspondenceToLaunch = new Outgoing({
+                    docSubject: info.title,
+                    documentTitle: info.title,
+                    vsId: info.vsId,
+                    securityLevel: readyToExport.generalStepElm.securityLevel,
+                    sitesInfoTo: generator.isJsonString(readyToExport.generalStepElm.sitesInfoTo) ? JSON.parse(readyToExport.generalStepElm.sitesInfoTo) : readyToExport.generalStepElm.sitesInfoTo,
+                    sitesInfoCC: generator.isJsonString(readyToExport.generalStepElm.sitesInfoCC) ? JSON.parse(readyToExport.generalStepElm.sitesInfoCC) : readyToExport.generalStepElm.sitesInfoCC
+                });
+
+            readyToExport
+                .exportWorkItem($event, true)
+                .then(function () {
+                    return correspondenceToLaunch.launchWorkFlow($event, 'forward', 'favorites')
+                        .then(function () {
+                            self.reloadReadyToExports(self.grid.page);
+                            new ResolveDefer(defer);
+                        })
+                        .catch(function () {
+                            self.reloadReadyToExports(self.grid.page);
+                            new ResolveDefer(defer);
+                        });
+                })
+                .catch(function (error) {
+                    if (error && error !== 'close')
+                        toast.error(langService.get('export_failed'));
+                });
+        };
+
+        /**
          * @description Terminate Ready To Export Bulk
          * @param $event
          */
@@ -392,7 +433,7 @@ module.exports = function (app) {
          * @param readyToExport
          * @param $event
          */
-        self.downloadSelected = function(readyToExport,$event){
+        self.downloadSelected = function (readyToExport, $event) {
             downloadService.openSelectedDownloadDialog(readyToExport, $event);
         };
 
@@ -1001,6 +1042,21 @@ module.exports = function (app) {
                     return true;
                 }
             },
+            // Export and send
+            {
+                type: 'action',
+                icon: 'export',
+                text: 'grid_action_export_and_send',
+                shortcut: true,
+                callback: self.exportAndSend,
+                class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
             // Print Barcode
             {
                 type: 'action',
@@ -1278,7 +1334,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",

@@ -14,6 +14,7 @@ module.exports = function (app) {
                                                          toast,
                                                          counterService,
                                                          _,
+                                                         Outgoing,
                                                          viewDocumentService,
                                                          managerService,
                                                          contextHelpService,
@@ -247,6 +248,46 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Export workitem and opens the launch screen
+         * @param readyToExport
+         * @param $event
+         * @param defer
+         */
+        self.exportAndSend = function (readyToExport, $event, defer) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
+                return;
+            }
+            var info = readyToExport.getInfo(),
+                correspondenceToLaunch = new Outgoing({
+                    docSubject: info.title,
+                    documentTitle: info.title,
+                    vsId: info.vsId,
+                    securityLevel: readyToExport.generalStepElm.securityLevel,
+                    sitesInfoTo: generator.isJsonString(readyToExport.generalStepElm.sitesInfoTo) ? JSON.parse(readyToExport.generalStepElm.sitesInfoTo) : readyToExport.generalStepElm.sitesInfoTo,
+                    sitesInfoCC: generator.isJsonString(readyToExport.generalStepElm.sitesInfoCC) ? JSON.parse(readyToExport.generalStepElm.sitesInfoCC) : readyToExport.generalStepElm.sitesInfoCC
+                });
+
+            readyToExport
+                .exportWorkItem($event, true)
+                .then(function () {
+                    return correspondenceToLaunch.launchWorkFlow($event, 'forward', 'favorites')
+                        .then(function () {
+                            self.reloadReadyToExports(self.grid.page);
+                            new ResolveDefer(defer);
+                        })
+                        .catch(function () {
+                            self.reloadReadyToExports(self.grid.page);
+                            new ResolveDefer(defer);
+                        });
+                })
+                .catch(function (error) {
+                    if (error && error !== 'close')
+                        toast.error(langService.get('export_failed'));
+                });
+        };
+
+        /**
          * @description Terminate Ready To Export Bulk
          * @param $event
          */
@@ -374,7 +415,7 @@ module.exports = function (app) {
          * @param readyToExport
          * @param $event
          */
-        self.downloadSelected = function(readyToExport,$event){
+        self.downloadSelected = function (readyToExport, $event) {
             downloadService.openSelectedDownloadDialog(readyToExport, $event);
         };
 
@@ -861,8 +902,8 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // view
             {
@@ -879,8 +920,8 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // Preview
                     {
@@ -940,8 +981,8 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Terminate
@@ -957,8 +998,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Add To Favorite
             {
@@ -974,8 +1015,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Export
             {
@@ -989,8 +1030,23 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
+            },
+            // Export and send
+            {
+                type: 'action',
+                icon: 'export',
+                text: 'grid_action_export_and_send',
+                shortcut: true,
+                callback: self.exportAndSend,
+                class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
+                checkShow: function (action, model) {
+                    return true;
+                }
             },
             // Print Barcode
             {
@@ -1005,8 +1061,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Return
             {
@@ -1020,8 +1076,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Edit After Approve (Only electronic)
             {
@@ -1050,8 +1106,8 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
             },
             // Manage
@@ -1065,8 +1121,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
@@ -1211,8 +1267,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: [
                     // Direct Linked Documents
                     {
@@ -1247,8 +1303,8 @@ module.exports = function (app) {
                 text: 'grid_action_download',
                 shortcut: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
                     "DOWNLOAD_COMPOSITE_BOOK" // Composite Document
@@ -1285,7 +1341,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",
@@ -1353,8 +1409,8 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Duplicate
             {
@@ -1364,8 +1420,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",
                     "DUPLICATE_BOOK_FROM_VERSION"
