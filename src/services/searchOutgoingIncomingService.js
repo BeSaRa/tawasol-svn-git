@@ -59,6 +59,26 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Search the Incoming document
+         * @param model
+         * @param properties
+         * @return {Promise|searchOutgoingIncomings}
+         */
+        self.searchForDocuments = function (model, properties) {
+            var criteria = generator.interceptSendInstance('SearchOutgoingIncoming', model);
+            var ignoredPropertyConfiguration = ["FromRegOUId", "ToRegOUId"];
+            criteria = _checkPropertyConfiguration(criteria, properties, ignoredPropertyConfiguration);
+
+            return $http
+                .post(urlService.searchDocument.change({searchType: 'correspondence'}),
+                    generator.interceptSendInstance('SearchCriteria', criteria))
+                .then(function (result) {
+                    self.searchOutgoingIncomings = correspondenceService.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs);
+                    return self.searchOutgoingIncomings;
+                });
+        };
+
+        /**
          * @description Export searched Incoming Document item
          * @param searchedIncomingDocument
          */

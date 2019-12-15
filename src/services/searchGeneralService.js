@@ -38,14 +38,26 @@ module.exports = function (app) {
          * @return {Promise|searchGenerals}
          */
         self.searchGeneralDocuments = function (model, properties) {
-            /*return $http
+            var criteria = generator.interceptSendInstance('SearchGeneral', model);
+
+            criteria = _checkPropertyConfiguration(criteria, properties);
+
+            return $http
                 .post(urlService.searchDocument.change({searchType: 'general'}),
-                    generator.interceptSendInstance('SearchGeneral', model))
+                    generator.interceptSendInstance('SearchCriteria', criteria))
                 .then(function (result) {
                     self.searchGenerals = generator.generateCollection(result.data.rs, General, self._sharedMethods);
-                    self.searchGenerals = generator.interceptReceivedCollection(['Correspondence'], self.searchGenerals);
+                    self.searchGenerals = generator.interceptReceivedCollection(['Correspondence', 'General'], self.searchGenerals);
                     return self.searchGenerals;
-                });*/
+                });
+        };
+        /**
+         * @description Search the general document
+         * @param model
+         * @param properties
+         * @return {Promise|searchGenerals}
+         */
+        self.searchForDocuments = function (model, properties) {
             var criteria = generator.interceptSendInstance('SearchGeneral', model);
 
             criteria = _checkPropertyConfiguration(criteria, properties);

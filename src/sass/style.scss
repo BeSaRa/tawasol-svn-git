@@ -11,13 +11,14 @@
 @import "import/virtual-repeater";
 @import "import/simple-checkbox";
 @import "import/scroll-bar";
+@import "import/search";
 @import "helper/cms-material-bootstrap";
 
 html {
   direction: ltr;
 
   body, button, select, html, textarea, input {
-    font-family: Roboto, Arial, 'Noto Kufi Arabic', "Helvetica Neue", sans-serif;
+    font-family: Roboto, 'Noto Kufi Arabic', Arial, "Helvetica Neue", sans-serif;
     line-height: 1;
   }
 }

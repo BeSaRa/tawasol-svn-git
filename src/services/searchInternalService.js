@@ -35,13 +35,32 @@ module.exports = function (app) {
          * @param properties
          * @return {Promise|searchInternals}
          */
-        self.searchInternalDocuments = function (model , properties) {
+        self.searchInternalDocuments = function (model, properties) {
             var criteria = generator.interceptSendInstance('SearchInternal', model);
 
             criteria = _checkPropertyConfiguration(criteria, properties);
 
             return $http
-                .post(urlService.searchDocument.change({searchType :'internal'}),
+                .post(urlService.searchDocument.change({searchType: 'internal'}),
+                    generator.interceptSendInstance('SearchCriteria', criteria))
+                .then(function (result) {
+                    self.searchInternals = generator.generateCollection(result.data.rs, Internal, self._sharedMethods);
+                    self.searchInternals = generator.interceptReceivedCollection(['Correspondence', 'Internal'], self.searchInternals);
+                    return self.searchInternals;
+                });
+        };
+
+        /**
+         * @description Search the internal document
+         * @param model
+         * @param properties
+         * @return {Promise|searchInternals}
+         */
+        self.searchForDocuments = function (model, properties) {
+            var criteria = generator.interceptSendInstance('SearchInternal', model);
+            criteria = _checkPropertyConfiguration(criteria, properties);
+            return $http
+                .post(urlService.searchDocument.change({searchType: 'internal'}),
                     generator.interceptSendInstance('SearchCriteria', criteria))
                 .then(function (result) {
                     self.searchInternals = generator.generateCollection(result.data.rs, Internal, self._sharedMethods);

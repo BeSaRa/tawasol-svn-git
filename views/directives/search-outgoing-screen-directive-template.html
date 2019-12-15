@@ -1,0 +1,753 @@
+<div id="outgoing-search-form">
+    <accordion-directive label-collapse="ctrl.labelCollapse"
+                         validation="false">
+        <accordion-item active>
+            <accordion-title>
+                <div layout="row" layout-align="start center">
+                    <md-icon md-svg-icon="magnify"></md-icon>
+                    <span> {{lang.simple_search}}</span>
+                    <span flex></span>
+                </div>
+            </accordion-title>
+            <accordion-content>
+                <ng-form name="simpleSearchForm">
+                    <div layout="row">
+                        <div flex layout="row">
+                            <md-input-container flex>
+                                <label for="docSubject">{{lang.document_subject}}</label>
+                                <textarea id="docSubject" name="docSubject"
+                                          ng-model="ctrl.searchCriteria.docSubject"></textarea>
+                            </md-input-container>
+                        </div>
+                    </div> <!-- First row -->
+                    <div layout="row">
+                        <div flex layout="row">
+                            <md-input-container class="restrict-max" flex>
+                                <label for="serialNoFrom">{{lang.search_module_serial_from}}</label>
+                                <input id="serialNoFrom" name="serialNoFrom" ng-model="ctrl.searchCriteria.serialNoFrom"
+                                       custom-validate-directive="number" type="text">
+                                <div ng-messages="simpleSearchForm.serialNoFrom.$error">
+                                    <div ng-message="number">{{lang.numberonly}}</div>
+                                </div>
+                            </md-input-container>
+                        </div><!-- serialNoFrom -->
+                        <div flex layout="row">
+                            <md-input-container class="restrict-max" flex>
+                                <label>{{lang.search_module_serial_to}}</label>
+                                <input id="serialNoTo" name="serialNoTo" ng-model="ctrl.searchCriteria.serialNoTo"
+                                       custom-validate-directive="number" type="text">
+                                <div ng-messages="simpleSearchForm.serialNoTo.$error">
+                                    <div ng-message="number">{{lang.numberonly}}</div>
+                                </div>
+                            </md-input-container>
+                        </div><!-- serialNoTo -->
+                        <div flex layout="row">
+                            <md-input-container flex>
+                                <label for="registryOU">{{lang.select_organization}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="registryOU"
+                                           name="registryOU"
+                                           md-on-close="ctrl.registryOUSearchText = ''"
+                                           ng-change="ctrl.onRegistrySelectedChange()"
+                                           ng-model="ctrl.searchCriteria.registryOU">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.registryOUSearchText"
+                                                   type="search"
+                                                   ng-keydown="$event.stopPropagation()"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-if="!ctrl.registryOUSearchText.length" ng-value="null">{{lang.none}}
+                                    </md-option>
+                                    <md-option
+                                            md-highlight-text="ctrl.registryOUSearchText" md-highlight-flags="i"
+                                            ng-value="organization.id"
+                                            ng-repeat="organization in ctrl.registryOrganizations|translatedNameFilter:ctrl.registryOUSearchText">
+                                        {{organization.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container flex>
+                                <label for="ou">{{lang.department}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="ou"
+                                           name="ou"
+                                           md-on-close="ctrl.ouSearchText = ''"
+                                           ng-model="ctrl.searchCriteria.ou">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.ouSearchText"
+                                                   type="search"
+                                                   ng-keydown="$event.stopPropagation()"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-if="!ctrl.ouSearchText.length" ng-value="null">{{lang.none}}
+                                    </md-option>
+                                    <md-option
+                                            md-highlight-text="ctrl.ouSearchText" md-highlight-flags="i"
+                                            ng-value="organization.id"
+                                            ng-repeat="organization in ctrl.organizations|translatedNameFilter:ctrl.ouSearchText">
+                                        {{organization.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div> <!-- Second row -->
+                    <div layout="row">
+                        <div flex layout="row">
+                            <md-input-container flex="">
+                                <label for="siteType">{{lang.sites_select_site_type}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="siteType"
+                                           name="siteType"
+                                           ng-change="ctrl.onSiteTypeChanged()"
+                                           md-on-close="ctrl.siteTypeSearchText = ''"
+                                           ng-model="ctrl.searchCriteria.siteType">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.siteTypeSearchText"
+                                                   type="search"
+                                                   ng-keydown="$event.stopPropagation()"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-if="!ctrl.siteTypeSearchText.length" ng-value="null">{{lang.none}}
+                                    </md-option>
+                                    <md-option
+                                            ng-value="type"
+                                            ng-repeat="type in ctrl.siteTypes|filter:ctrl.siteTypeSearchText">
+                                        {{type.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container flex>
+                                <label for="mainSite">{{lang.main_site}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="mainSite"
+                                           name="mainSite"
+                                           ng-change="ctrl.onMainSiteChanged()"
+                                           ng-disabled="!ctrl.searchCriteria.siteType"
+                                           md-on-close="ctrl.mainSiteSearchText = ''"
+                                           ng-model="ctrl.searchCriteria.mainSite">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.mainSiteSearchText"
+                                                   type="search"
+                                                   ng-keyup="ctrl.setPropertiesSpaceBackIfNoLength($event , ctrl.mainSiteSearchText ,ctrl.setOldMainSites)"
+                                                   ng-keydown="ctrl.allowPropagationUpDownArrows($event,ctrl.loadMainSitesByCriteria)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                            <md-button
+                                                    ng-click="ctrl.loadMainSitesByCriteria($event)"
+                                                    tooltip="{{lang.load_more_records}}" class="md-icon-button">
+                                                <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-if="!ctrl.mainSiteSearchText.length" ng-value="null">{{lang.none}}
+                                    </md-option>
+                                    <md-option md-highlight-text="ctrl.mainSiteSearchText" md-highlight-flags="i"
+                                               ng-value="site"
+                                               ng-repeat="site in ctrl.mainSites|translatedNameFilter:ctrl.mainSiteSearchText">
+                                        {{site.getTranslatedName()}}
+                                    </md-option>
+                                    <md-option ng-click="ctrl.loadMainSitesByCriteria(ctrl.mainSiteSearchText , $event)"
+                                               ng-if="!(ctrl.mainSites|translatedNameFilter:ctrl.mainSiteSearchText).length && ctrl.mainSiteSearchText.length">
+                                        <span class="red-text">{{lang.press_enter_to_load_more_records}}</span>
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container flex="">
+                                <label for="subSite">{{lang.sub_site}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="subSite"
+                                           name="subSite"
+                                           ng-disabled="!ctrl.searchCriteria.mainSite"
+                                           ng-model-options="{trackBy:'$value.subSiteId'}"
+                                           md-on-close="ctrl.subSiteSearchText = ''"
+                                           ng-model="ctrl.searchCriteria.subSite">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.subSiteSearchText"
+                                                   type="text"
+                                                   ng-keyup="ctrl.setPropertiesSpaceBackIfNoLength($event , ctrl.subSiteSearchText ,ctrl.setOldSubSites)"
+                                                   ng-keydown="ctrl.allowPropagationUpDownArrows($event,ctrl.loadSubSitesByCriteria)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                            <md-button
+                                                    ng-click="ctrl.loadSubSitesByCriteria($event)"
+                                                    tooltip="{{lang.load_more_records}}" class="md-icon-button">
+                                                <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-if="!ctrl.subSiteSearchText.length" ng-value="null">{{lang.none}}
+                                    </md-option>
+                                    <md-option md-highlight-text="ctrl.subSiteSearchText" md-highlight-flags="i"
+                                               ng-value="site"
+                                               ng-repeat="site in ctrl.subSites|translatedNameFilter:ctrl.subSiteSearchText">
+                                        {{site.getTranslatedName()}}
+                                    </md-option>
+                                    <md-option ng-click="ctrl.loadSubSitesByCriteria(ctrl.subSiteSearchText , $event)"
+                                               ng-if="!(ctrl.subSites|translatedNameFilter:ctrl.subSiteSearchText).length && ctrl.subSiteSearchText.length">
+                                        <span class="red-text">{{lang.press_enter_to_load_more_records}}</span>
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container flex>
+                                <label for="originality">{{lang.originality}}</label>
+                                <md-select id="originality" name="originality"
+                                           ng-disabled="!ctrl.searchCriteria.mainSite"
+                                           ng-model="ctrl.searchCriteria.originality">
+                                    <md-option ng-value="item.id" ng-repeat="item in ctrl.originalities">
+                                        {{item.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div> <!-- Third row -->
+                    <div layout="row">
+                        <div flex layout="row">
+                            <md-input-container flex>
+                                <label>{{lang.security_level}}</label>
+                                <md-select ng-model="ctrl.searchCriteria.securityLevel">
+                                    <md-option ng-value="null">{{lang.all}}</md-option>
+                                    <md-option ng-value="security"
+                                               ng-repeat="security in ctrl.securityLevels">
+                                        {{security.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container flex="">
+                                <label for="year">{{lang.search_module_year}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="year"
+                                           name="year"
+                                           ng-change="ctrl.onYearChanged($event)"
+                                           md-on-close="ctrl.yearSearchText = ''"
+                                           ng-model="ctrl.searchCriteria.year">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.yearSearchText"
+                                                   type="search"
+                                                   ng-keydown="ctrl.allowPropagationUpDownArrows($event)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-value="'All'">{{lang.all}}</md-option>
+                                    <md-option
+                                            ng-value="year"
+                                            ng-repeat="year in ctrl.years|filter:ctrl.yearSearchText">
+                                        {{year}}
+                                    </md-option>
+                                </md-select>
+                                <md-button class="md-icon-button cms-field-overlay-button"
+                                           tooltip="{{lang.change_date_range}}"
+                                           ng-click="ctrl.changeYearRange($event)">
+                                    <md-icon md-svg-icon="calendar-today"></md-icon>
+                                </md-button>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container class="cms-datepicker md-block" flex>
+                                <label>{{lang.search_module_start_date}}</label>
+                                <input readonly disabled value="{{ctrl.searchCriteria.docDateFrom}}"/>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container class="cms-datepicker md-block" flex>
+                                <label>{{lang.search_module_end_date}}</label>
+                                <input readonly disabled value="{{ctrl.searchCriteria.docDateTo}}"/>
+                            </md-input-container>
+                        </div>
+                    </div> <!-- Fourth row -->
+                    <div layout="row">
+                        <md-button ng-click="ctrl.searchCorrespondence()" id="simple-search-button"
+                                   class="md-raised md-primary search-button">
+                            {{lang.search}}
+                        </md-button>
+                        <md-button ng-click="ctrl.cleanSearchCriteriaForms()"
+                                   class="md-raised search-button">
+                            {{lang.search_module_reset_filters}}
+                        </md-button>
+                        <span flex></span>
+                    </div> <!-- Fifth row -->
+                </ng-form>
+            </accordion-content>
+        </accordion-item>
+        <accordion-item>
+            <accordion-title>
+                <div layout="row" layout-align="start center">
+                    <md-icon md-svg-icon="database-search"></md-icon>
+                    <span> {{lang.advanced_search}}</span>
+                    <span flex></span>
+                </div>
+            </accordion-title>
+            <accordion-content>
+                <ng-form name="advancedSearchForm">
+                    <div layout="row">
+                        <div flex layout="row">
+                            <md-input-container flex>
+                                <label>{{lang.outgoing_priority_level}}</label>
+                                <md-select ng-model="ctrl.searchCriteria.priorityLevel">
+                                    <md-option ng-value="null">{{lang.all}}</md-option>
+                                    <md-option ng-value="priority" ng-repeat="priority in ctrl.priorityLevels">
+                                        {{priority.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container class="restrict-max" flex>
+                                <label>{{lang.search_module_serial}}</label>
+                                <input type="text" ng-model="ctrl.searchCriteria.docFullSerial">
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container flex="">
+                                <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="mainClassification"
+                                           name="mainClassification"
+                                           ng-change="ctrl.onMainClassificationChanged()"
+                                           md-on-close="ctrl.mainClassificationSearchText = ''"
+                                           ng-model="ctrl.searchCriteria.mainClassification">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.mainClassificationSearchText"
+                                                   autocomplete="off"
+                                                   type="text"
+                                                   ng-keyup="ctrl.setPropertiesSpaceBackIfNoLength($event , ctrl.mainClassificationSearchText ,ctrl.setOldMainClassification)"
+                                                   ng-keydown="ctrl.allowPropagationUpDownArrows($event,ctrl.loadMainClassificationByCriteria)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                            <md-button
+                                                    ng-click="ctrl.loadMainClassificationByCriteria($event)"
+                                                    tooltip="{{lang.load_more_records}}" class="md-icon-button">
+                                                <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-if="!ctrl.mainClassificationSearchText.length" ng-value="null">
+                                        {{lang.none}}
+                                    </md-option>
+                                    <md-option md-highlight-text="ctrl.mainClassificationSearchText"
+                                               md-highlight-flags="i"
+                                               ng-value="mainClassification.classification"
+                                               ng-repeat="mainClassification in ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText:'getIdNameByLanguage':'classification'">
+                                        {{mainClassification.classification.getTranslatedName()}}
+                                    </md-option>
+                                    <md-option
+                                            ng-click="ctrl.loadMainClassificationByCriteria(ctrl.mainClassificationSearchText , $event)"
+                                            ng-if="!(ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText:'getIdNameByLanguage':'classification').length && ctrl.mainClassificationSearchText.length">
+                                        <span class="red-text">{{lang.press_enter_to_load_more_records}}</span>
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container flex="">
+                                <label for="subClassification">{{lang.outgoing_sub_classification}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="subClassification"
+                                           name="subClassification"
+                                           md-on-close="ctrl.subClassificationSearchText = ''"
+                                           ng-model="ctrl.searchCriteria.subClassification">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.subClassificationSearchText"
+                                                   autocomplete="off"
+                                                   type="text"
+                                                   ng-keyup="ctrl.setPropertiesSpaceBackIfNoLength($event , ctrl.subClassificationSearchText ,ctrl.setOldSubClassification)"
+                                                   ng-keydown="ctrl.allowPropagationUpDownArrows($event,ctrl.loadSubClassificationByCriteria)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                            <md-button
+                                                    ng-click="ctrl.loadSubClassificationByCriteria($event)"
+                                                    tooltip="{{lang.load_more_records}}" class="md-icon-button">
+                                                <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-if="!ctrl.subClassificationSearchText.length" ng-value="null">
+                                        {{lang.none}}
+                                    </md-option>
+                                    <md-option md-highlight-text="ctrl.subClassificationSearchText"
+                                               md-highlight-flags="i"
+                                               ng-value="subClassification"
+                                               ng-repeat="subClassification in ctrl.subClassifications|translatedNameFilter:ctrl.subClassificationSearchText">
+                                        {{subClassification.getTranslatedName()}}
+                                    </md-option>
+                                    <md-option
+                                            ng-click="ctrl.loadSubClassificationByCriteria(ctrl.subClassificationSearchText , $event)"
+                                            ng-if="!(ctrl.subClassifications|translatedNameFilter:ctrl.subClassificationSearchText).length && ctrl.subClassificationSearchText.length">
+                                        <span class="red-text">{{lang.press_enter_to_load_more_records}}</span>
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div><!-- Sixth row -->
+                    <div layout="row">
+                        <div flex layout="row">
+                            <md-input-container flex>
+                                <label>{{lang.document_format}}</label>
+                                <md-select ng-model="ctrl.searchCriteria.addMethod">
+                                    <md-option ng-value="null">{{lang.all}}</md-option>
+                                    <md-option ng-value="format.value" ng-repeat="format in ctrl.documentformats">
+                                        {{lang.get(format.key)}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container flex="">
+                                <label for="docType">{{lang.outgoing_document_type}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="docType"
+                                           name="docType"
+                                           md-on-close="ctrl.docTypeSearchText = ''"
+                                           ng-model="ctrl.searchCriteria.docType">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.docTypeSearchText"
+                                                   type="search"
+                                                   ng-keydown="ctrl.allowPropagationUpDownArrows($event)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-if="!ctrl.docTypeSearchText.length" ng-value="null">{{lang.none}}
+                                    </md-option>
+                                    <md-option
+                                            md-highlight-text="ctrl.docTypeSearchText" md-highlight-flags="i"
+                                            ng-value="type.lookupKey"
+                                            ng-repeat="type in ctrl.docTypes|translatedNameFilter:ctrl.docTypeSearchText">
+                                        {{type.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container flex="">
+                                <label for="fromRegOUId">{{lang.from_reg_ou}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="fromRegOUId"
+                                           name="fromRegOUId"
+                                           md-on-close="ctrl.fromRegOUIdSearchText = ''"
+                                           ng-model="ctrl.searchCriteria.fromRegOUId">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.fromRegOUIdSearchText"
+                                                   type="search"
+                                                   ng-keydown="ctrl.allowPropagationUpDownArrows($event)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-if="!ctrl.fromRegOUIdSearchText.length" ng-value="null">
+                                        {{lang.none}}
+                                    </md-option>
+                                    <md-option
+                                            md-highlight-text="ctrl.fromRegOUIdSearchText" md-highlight-flags="i"
+                                            ng-value="regOu.id"
+                                            ng-repeat="regOu in ctrl.registryOrganizations|translatedNameFilter:ctrl.fromRegOUIdSearchText">
+                                        {{regOu.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container flex="">
+                                <label for="toRegOUId">{{lang.to_reg_ou}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="toRegOUId"
+                                           name="toRegOUId"
+                                           md-on-close="ctrl.toRegOUIdSearchText = ''"
+                                           ng-model="ctrl.searchCriteria.toRegOUId">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.toRegOUIdSearchText"
+                                                   type="search"
+                                                   ng-keydown="ctrl.allowPropagationUpDownArrows($event)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-if="!ctrl.toRegOUIdSearchText.length" ng-value="null">{{lang.none}}
+                                    </md-option>
+                                    <md-option
+                                            md-highlight-text="ctrl.toRegOUIdSearchText" md-highlight-flags="i"
+                                            ng-value="regOu.id"
+                                            ng-repeat="regOu in ctrl.registryOrganizations|translatedNameFilter:ctrl.toRegOUIdSearchText">
+                                        {{regOu.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div><!-- Seventh row -->
+                    <div layout="row">
+                        <div flex layout="row">
+                            <md-input-container flex>
+                                <label>{{lang.pc_followupstatus}}</label>
+                                <md-select multiple ng-change="ctrl.checkFollowUpStatusValue()"
+                                           ng-model-options="{trackBy: '$value.id'}"
+                                           ng-model="ctrl.searchCriteria.followupStatus">
+                                    <md-option ng-value="status" ng-repeat="status in ctrl.followUpStatuses">
+                                        {{status.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container class="cms-datepicker md-block" flex>
+                                <label>{{lang.search_module_start_date}}</label>
+                                <md-datepicker name="followUpFrom" ng-disabled="!ctrl.displayFollowUpDates"
+                                               ng-required="ctrl.searchCriteria.followUpTo"
+                                               md-max-date="ctrl.getLessDateOrToday(ctrl.searchCriteria.followUpTo)"
+                                               ng-model="ctrl.searchCriteria.followUpFrom"></md-datepicker>
+                                <div ng-messages="advancedSearchForm.followUpFrom.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container class="cms-datepicker md-block" flex>
+                                <label>{{lang.search_module_end_date}}</label>
+                                <md-datepicker name="followUpTo" ng-disabled="!ctrl.displayFollowUpDates"
+                                               ng-required="ctrl.searchCriteria.followUpFrom"
+                                               md-min-date="ctrl.searchCriteria.followUpFrom"
+                                               md-max-date="ctrl.maxCreateDate"
+                                               ng-model="ctrl.searchCriteria.followUpTo"></md-datepicker>
+                                <div ng-messages="advancedSearchForm.followUpTo.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+
+                        </div>
+                    </div><!-- Eighth row -->
+                    <div layout="row">
+                        <div flex layout="row">
+                            <md-input-container flex="">
+                                <label for="approvers">{{lang.approver}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="approvers"
+                                           name="approvers"
+                                           md-on-close="ctrl.approversSearchText = ''"
+                                           ng-model="ctrl.searchCriteria.approvers">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.approversSearchText"
+                                                   type="search"
+                                                   ng-keydown="ctrl.allowPropagationUpDownArrows($event)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-if="!ctrl.approversSearchText.length" ng-value="null">{{lang.none}}
+                                    </md-option>
+                                    <md-option
+                                            md-highlight-text="ctrl.approversSearchText" md-highlight-flags="i"
+                                            ng-value="approver"
+                                            ng-repeat="approver in ctrl.approvers|translatedNameFilter:ctrl.approversSearchText:'getAppUserAndOuTranslate'">
+                                        {{approver.getAppUserAndOuTranslate()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container class="cms-datepicker md-block" flex>
+                                <label for="approveDateFrom"> {{lang.approve_date_from}}</label>
+                                <md-datepicker name="approveDateFrom"
+                                               id="approveDateFrom"
+                                               ng-required="ctrl.searchCriteria.approveDateTo"
+                                               md-max-date="ctrl.getLessDateOrToday(ctrl.searchCriteria.approveDateTo)"
+                                               ng-model="ctrl.searchCriteria.approveDateFrom"></md-datepicker>
+                                <div ng-messages="advancedSearchForm.approveDateFrom.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+
+                        <div flex layout="row">
+                            <md-input-container class="cms-datepicker md-block" flex>
+                                <label for="approveDateTo"> {{lang.approve_date_to}}</label>
+                                <md-datepicker name="approveDateTo"
+                                               id="approveDateTo"
+                                               ng-required="ctrl.searchCriteria.approveDateFrom"
+                                               md-max-date="ctrl.maxCreateDate"
+                                               md-min-date="ctrl.searchCriteria.approveDateFrom"
+                                               ng-model="ctrl.searchCriteria.approveDateTo"></md-datepicker>
+
+                                <div ng-messages="advancedSearchForm.approveDateTo.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+
+                        </div>
+                    </div><!-- Ninth row -->
+                    <div layout="row">
+                        <div flex layout="row">
+                            <md-input-container flex class="cms-datepicker">
+                                <label for="exportDateFrom">{{lang.export_date_from}}</label>
+                                <md-datepicker id="exportDateFrom"
+                                               name="exportDateFrom" md-open-on-focus
+                                               ng-required="ctrl.searchCriteria.exportDateTo"
+                                               md-max-date="ctrl.getLessDateOrToday(ctrl.searchCriteria.exportDateTo)"
+                                               ng-model="ctrl.searchCriteria.exportDateFrom"
+                                ></md-datepicker>
+                                <div ng-messages="advancedSearchForm.exportDateFrom.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container flex class="cms-datepicker">
+                                <label for="exportDateTo">{{lang.export_date_to}}</label>
+                                <md-datepicker id="exportDateTo"
+                                               name="exportDateTo" md-open-on-focus
+                                               ng-required="ctrl.searchCriteria.exportDateFrom"
+                                               md-min-date="ctrl.searchCriteria.exportDateFrom"
+                                               ng-model="ctrl.searchCriteria.exportDateTo"
+                                               md-max-date="ctrl.maxCreateDate"
+                                ></md-datepicker>
+                                <div ng-messages="advancedSearchForm.exportDateTo.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container flex>
+                                <label for="selectedEntityType">{{lang.linked_entity}}</label>
+                                <md-select id="selectedEntityType"
+                                           ng-change="ctrl.openEntityTypePopup(true)"
+                                           name="selectedEntityType"
+                                           ng-model="ctrl.searchCriteria.selectedEntityType">
+                                    <md-option ng-value="null">{{lang.none}}</md-option>
+                                    <md-option ng-value="type" ng-repeat="type in ctrl.entityTypes">
+                                        {{type.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                                <!-- edit selected linked type  -->
+                                <md-button ng-click="ctrl.openEntityTypePopup(false)"
+                                           class="md-icon-button cms-field-overlay-button"
+                                           tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}"
+                                           tooltip="{{lang.edit}}">
+                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                </md-button>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container class="restrict-max" flex>
+                                <label>selected entity Name</label>
+                                <input type="text" value="{{ctrl.searchCriteria.linkedEntities.getName()}}" disabled>
+                            </md-input-container>
+                        </div>
+                    </div><!-- Tenth row -->
+                    <div layout="row">
+                        <div flex layout="row">
+                            <md-input-container flex="">
+                                <label for="documentFile">{{lang.outgoing_file}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="documentFile"
+                                           name="documentFile"
+                                           ng-change="ctrl.onFileChanged(ctrl.searchCriteria.fileId)"
+                                           md-on-close="ctrl.documentFileSearchText = ''"
+                                           ng-model="ctrl.searchCriteria.fileId">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.documentFileSearchText"
+                                                   type="text"
+                                                   ng-keyup="ctrl.setPropertiesSpaceBackIfNoLength($event , ctrl.documentFileSearchText ,ctrl.setOldDocumentFiles)"
+                                                   ng-keydown="ctrl.allowPropagationUpDownArrows($event,ctrl.loadDocumentFilesByCriteria)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                            <md-button
+                                                    ng-click="ctrl.loadDocumentFilesByCriteria( $event)"
+                                                    tooltip="{{lang.load_more_records}}" class="md-icon-button">
+                                                <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-if="!ctrl.documentFileSearchText.length" ng-value="null">{{lang.none}}
+                                    </md-option>
+                                    <md-option md-highlight-text="ctrl.documentFileSearchText" md-highlight-flags="i"
+                                               ng-value="file.file"
+                                               ng-repeat="file in ctrl.documentFiles|translatedNameFilter:ctrl.documentFileSearchText:null:'file'">
+                                        {{file.file.getTranslatedName()}}
+                                    </md-option>
+                                    <md-option
+                                            ng-click="ctrl.loadDocumentFilesByCriteria(ctrl.documentFileSearchText , $event)"
+                                            ng-if="!(ctrl.documentFiles|translatedNameFilter:ctrl.documentFileSearchText:null:'file').length && ctrl.documentFileSearchText.length">
+                                        <span class="red-text">{{lang.press_enter_to_load_more_records}}</span>
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container class="restrict-max" flex>
+                                <label for="fileCode">{{lang.outgoing_file_code}}</label>
+                                <input name="fileCode"
+                                       id="fileCode" ng-enter="ctrl.onFileCodeChanged()"
+                                       ng-model="ctrl.searchCriteria.fileCode"
+                                       type="text">
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+                            <md-input-container class="restrict-max" flex>
+                                <label for="fileSerial">{{lang.outgoing_file_serial}}</label>
+                                <input name="fileSerial" custom-validate-directive="number"
+                                       id="fileSerial"
+                                       ng-model="ctrl.searchCriteria.fileSerial">
+                                <div ng-messages="advancedSearchForm.fileSerial.$error">
+                                    <div ng-message="number">{{lang.numberonly}}</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+
+                        </div>
+                    </div><!-- Eleventh row -->
+                    <div layout="row">
+                        <div flex layout="row">
+                            <md-input-container flex>
+                                <label>{{lang.properties_notes}}</label>
+                                <textarea ng-model="ctrl.searchCriteria.docNotes" rows="5"></textarea>
+                            </md-input-container>
+                        </div>
+                    </div><!-- Twelfth row -->
+                    <div layout="row">
+                        <md-button ng-click="ctrl.searchCorrespondence()" id="advanced-search-button"
+                                   class="md-raised md-primary search-button">
+                            {{lang.search}}
+                        </md-button>
+                        <md-button ng-click="ctrl.cleanSearchCriteriaForms()"
+                                   class="md-raised search-button">
+                            {{lang.search_module_reset_filters}}
+                        </md-button>
+                        <span flex></span>
+                    </div><!-- Thirteen row -->
+                </ng-form>
+            </accordion-content>
+        </accordion-item>
+    </accordion-directive>
+</div>

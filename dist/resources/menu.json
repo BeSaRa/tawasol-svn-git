@@ -1198,5 +1198,17 @@
         "sort_order": 6,
         "active": true,
         "sort_value": 0
+    },
+    {
+        "ID": 114,
+        "lang_key": "menu_item_search_module",
+        "icon": "magnify",
+        "parent": null,
+        "link": "#search-screen",
+        "state": "app.search-screen",
+        "icon_type": "font",
+        "sort_order": 8,
+        "active": true,
+        "sort_value": 0
     }
 ]

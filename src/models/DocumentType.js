@@ -50,7 +50,7 @@ module.exports = function (app) {
              * @returns {string}
              */
             DocumentType.prototype.getTranslatedName = function (reverse) {
-                return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
+                return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
 
             /**
@@ -76,6 +76,14 @@ module.exports = function (app) {
              */
             DocumentType.prototype.isEmpty = function () {
                 return !(!!this.id && !!this.enName && !!this.arName);
+            };
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            DocumentType.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
             };
 
             // don't remove CMSModelInterceptor from last line

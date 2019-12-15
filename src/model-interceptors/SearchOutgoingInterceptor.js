@@ -11,6 +11,11 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+
+            if (model.subSite) {
+                model.originality === 1 ? model.sitesInfoTo = [angular.copy(model.subSite)] : model.sitesInfoCC = [angular.copy(model.subSite)];
+            }
+
             if (model.year === 'All' && model.docDateFrom && model.docDateTo) {
                 model.docDate = {
                     From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),

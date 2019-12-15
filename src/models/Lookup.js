@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('Lookup', function (CMSModelInterceptor) {
+    app.factory('Lookup', function (CMSModelInterceptor, generator) {
         'ngInject';
         return function Lookup(model) {
             var self = this, langService;
@@ -61,6 +61,14 @@ module.exports = function (app) {
             Lookup.prototype.hasValueOrSpace = function () {
                 //console.log('this.lookupStrKey.length', this.lookupStrKey.length);
                 return this.lookupStrKey.length;
+            };
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            Lookup.prototype.getNameByLanguage = function (language) {
+                return this['default' + generator.ucFirst(language) + 'Name'];
             };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

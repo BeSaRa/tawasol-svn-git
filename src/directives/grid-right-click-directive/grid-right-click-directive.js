@@ -2,7 +2,8 @@ module.exports = function (app) {
     app.directive('gridRightClickDirective', function ($parse, $compile, $timeout, _, $window, gridService) {
         'ngInject';
         return function (scope, element, attrs) {
-            var cursorLeft, cursorTop, sideBar, sideBarVisibleInitially = false, sideBarWidth, parentRow, contextRowClass = '', subLeft, subTop;
+            var cursorLeft, cursorTop, sideBar, sideBarVisibleInitially = false, sideBarWidth, parentRow,
+                contextRowClass = '', subLeft, subTop;
             element.bind('contextmenu', function (event) {
                 var $target = $(event.target),
                     tagName = event.target.tagName.toLowerCase();
@@ -58,7 +59,7 @@ module.exports = function (app) {
                             parentRow.classList.add(contextRowClass);
 
                             var menu = angular.element('<grid-actions-directive />', {
-                                'context-actions': 'ctrl.contextMenuActions',
+                                'context-actions': attrs.contextMenuActions ? attrs.contextMenuActions : 'ctrl.contextMenuActions',
                                 'model': attrs.model,
                                 'actions-direction': gridService.gridActionOptions.direction.context,
                                 'context-row-class': contextRowClass

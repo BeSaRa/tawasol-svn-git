@@ -16,6 +16,7 @@ module.exports = function (app) {
         self.serviceName = 'searchIncomingService';
 
         self.searchIncomings = [];
+
         function _findProperty(property, model) {
             var value = null;
             _.map(model, function (item, key) {
@@ -25,7 +26,7 @@ module.exports = function (app) {
             return value;
         }
 
-        function _checkPropertyConfiguration(model, properties,ignoredProperties) {
+        function _checkPropertyConfiguration(model, properties, ignoredProperties) {
             var criteria = {};
             _.map(properties, function (item) {
                 criteria[item.symbolicName] = _findProperty(item.symbolicName.toLowerCase(), model);
@@ -39,6 +40,7 @@ module.exports = function (app) {
             }
             return criteria;
         }
+
         /**
          * @description Search the Incoming document
          * @param model
@@ -46,6 +48,26 @@ module.exports = function (app) {
          * @return {Promise|searchIncomings}
          */
         self.searchIncomingDocuments = function (model, properties) {
+            var criteria = generator.interceptSendInstance('SearchIncoming', model);
+            var ignoredPropertyConfiguration = ["FromRegOUId", "ToRegOUId"];
+            criteria = _checkPropertyConfiguration(criteria, properties, ignoredPropertyConfiguration);
+            return $http
+                .post(urlService.searchDocument.change({searchType: 'incoming'}),
+                    generator.interceptSendInstance('SearchCriteria', criteria))
+                .then(function (result) {
+                    self.searchIncomings = generator.generateCollection(result.data.rs, Incoming, self._sharedMethods);
+                    self.searchIncomings = generator.interceptReceivedCollection(['Correspondence', 'Incoming'], self.searchIncomings);
+                    return self.searchIncomings;
+                });
+        };
+
+        /**
+         * @description Search the Incoming document
+         * @param model
+         * @param properties
+         * @return {Promise|searchIncomings}
+         */
+        self.searchForDocuments = function (model, properties) {
             var criteria = generator.interceptSendInstance('SearchIncoming', model);
             var ignoredPropertyConfiguration = ["FromRegOUId", "ToRegOUId"];
             criteria = _checkPropertyConfiguration(criteria, properties, ignoredPropertyConfiguration);

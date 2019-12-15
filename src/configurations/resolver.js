@@ -30,7 +30,7 @@ module.exports = function (app) {
                         .getInformation($stateParams.identifier)
                         .then(function () {
                             // get load languages
-                           langService.setEntityCurrentLang();
+                            langService.setEntityCurrentLang();
                             $timeout(function () {
                                 return application.setReadyStatus();
                             }, 1000);
@@ -672,6 +672,66 @@ module.exports = function (app) {
                 dynamicMenuItems: function (dynamicMenuItemService) {
                     'ngInject';
                     return dynamicMenuItemService.loadParentDynamicMenuItems();
+                }
+            })
+            .bulkResolveToState('app.search-screen', {
+                lookups: function (correspondenceService) {
+                    'ngInject';
+                    return correspondenceService.getCorrespondenceLookups('common');
+                },
+                registryOrganizations: function (employeeService, langService, $q, _, organizationService) {
+                    'ngInject';
+
+                    function _sortResultByCurrentLang(result) {
+                        return _.sortBy(result, function (item) {
+                            item[langService.current + 'Name'].toLowerCase();
+                        });
+                    }
+
+                    // if user has permission to search in all ou load all organizations and ignore role security
+                    return organizationService.loadOrganizations(employeeService.hasPermissionTo('SEARCH_IN_ALL_OU'))
+                        .then(function (result) {
+                            // to sort registry organizations after retrieve
+                            return _sortResultByCurrentLang(_.filter(result, function (organization) {
+                                return organization.hasRegistry;
+                            }));
+                            // defer.resolve(_sortResultByCurrentLang(result));
+                        });
+
+                    //TODO: need to check business because i commented the old way and i still get the same result :)
+                    // which mean why we use "SEARCH_IN_ALL_OU" Permission if all ways return same results. :)
+
+                    // organizationService.getUserViewPermissionOusByUserId(employeeService.getEmployee().id)
+                    //     .then(function (result) {
+                    //         defer.resolve(_sortResultByCurrentLang(result));
+                    //     });
+                    // return defer.promise.then(function (organizations) {
+                    //     return _.filter(organizations, function (organization) {
+                    //         return organization.hasRegistry;
+                    //     })
+                    // })
+                },
+                propertyConfigurations: function ($q, propertyConfigurationService, employeeService) {
+                    'ngInject';
+                    var ouId = employeeService.getEmployee().organization.ouid;
+                    var methodName = propertyConfigurationService
+                        .loadPropertyConfigurationsByDocumentClassAndOU;
+                    return $q.all({
+                        incoming: methodName('incoming', ouId),
+                        outgoing: methodName('outgoing', ouId),
+                        internal: methodName('internal', ouId),
+                        general: methodName('general', ouId),
+                    }).then(function (result) {
+                        result.outgoingIncoming = angular.copy(result.incoming);
+                        return result;
+                    });
+                },
+                approvers: function (ouApplicationUserService, employeeService, registryOrganizations) {
+                    'ngInject';
+                    return ouApplicationUserService
+                        .searchByCriteria({
+                            regOu: employeeService.getEmployee().organization.ouRegistryID
+                        });
                 }
             })
             .registerResolver();

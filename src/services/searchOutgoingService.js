@@ -63,6 +63,28 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Search the outgoing document
+         * @param model
+         * @param properties
+         * @return {Promise|searchOutgoings}
+         */
+        self.searchForDocuments = function (model, properties) {
+            var criteria = generator.interceptSendInstance('SearchOutgoing', model);
+            var ignoredPropertyConfiguration = ["FromRegOUId", "ToRegOUId", "ExportDate"];
+            criteria = _checkPropertyConfiguration(criteria, properties, ignoredPropertyConfiguration);
+
+            return $http
+                .post(urlService.searchDocument.change({searchType: 'outgoing'}),
+                    generator.interceptSendInstance('SearchCriteria', criteria))
+                .then(function (result) {
+                    self.searchOutgoings = generator.generateCollection(result.data.rs, Outgoing, self._sharedMethods);
+                    self.searchOutgoings = generator.interceptReceivedCollection(['Correspondence', 'Outgoing'], self.searchOutgoings);
+                    return self.searchOutgoings;
+                });
+        };
+
+
+        /**
          * @description Export searched Outgoing Document item
          * @param searchedOutgoingDocument
          */

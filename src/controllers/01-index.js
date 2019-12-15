@@ -78,4 +78,5 @@ module.exports = function (app) {
     require('./administratorsCtrl')(app);
     require('./g2gPendingCtrl')(app);
     require('./g2gReturnedAfterReturnCtrl')(app);
+    require('./searchScreenCtrl')(app);
 };

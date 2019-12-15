@@ -1673,5 +1673,12 @@ module.exports = function (app) {
                     }
                 }
             })
+            .state('app.search-screen', {
+                url: '/search-screen',
+                templateUrl: templateProvider.getView('search-screen'),
+                controller: 'searchScreenCtrl',
+                controllerAs: 'ctrl'
+            })
+
     });
 };

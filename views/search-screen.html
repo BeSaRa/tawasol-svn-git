@@ -1,0 +1,218 @@
+<!-- start of view -->
+<div background-directive="short" color="blue" flex class="page-content">
+    <div layout="column" class="content">
+        <div layout="row" layout-align="start center" class="page-header nmb padding-header small">
+            <span>{{lang.menu_item_search_module}}</span>
+            <md-button ng-click="ctrl.reloadCurrentSearch()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+        </div><!-- page-header -->
+        <div class="search-forms">
+            <md-tabs class="content white-bg"
+                     md-selected="ctrl.searchScreens[ctrl.selectedTabName].controller.selectedTab">
+                <md-tab label="{{lang.search}}">
+                    <md-content scroll-directive class="white-bg page-padding">
+                        <div layout="column">
+                            <div class="navigation-row" layout="row">
+                                <md-card class="m0" flex>
+                                    <ul id="search-navigation-list">
+                                        <li ng-class="{active: tab.tabKey === ctrl.selectedTabName}"
+                                            ng-repeat=" tab in ctrl.searchTabs"><a
+                                                ng-click="ctrl.onTabClicked(tab , $event)"
+                                                href="#">{{lang.get(tab.langKey)}}</a>
+                                        </li>
+                                    </ul>
+                                </md-card>
+                            </div>
+                            <search-outgoing-screen-directive
+                                    controller="ctrl.searchScreens.outgoing"
+                                    approvears="ctrl.approvers"
+                                    ng-show="ctrl.selectedTabName === 'outgoing'"
+                                    registry-organizations="ctrl.registryOrganizations"
+                                    property-configurations="ctrl.propertyConfigurations.outgoing"
+                                    label-collapse="ctrl.labelCollapse">
+                            </search-outgoing-screen-directive>
+                        </div>
+                    </md-content>
+                </md-tab>
+                <md-tab label="{{lang.search_module_search_results}}">
+                    <md-table-container ng-if="ctrl.selectedTabName === 'outgoing'">
+                        <div flex scroll-directive>
+                            <table md-table md-row-select multiple
+                                   ng-model="ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments"
+                                   md-progress="ctrl.searchScreens.outgoing.controller.grid.progress">
+                                <thead md-head md-order="ctrl.searchScreens.outgoing.controller.grid.order"
+                                       md-on-reorder="ctrl.searchScreens.outgoing.controller.getSortedData">
+                                <tr md-row>
+                                    <th colspan="{{ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length > 1 ? 9 : 10}}"
+                                        ng-if="ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length"
+                                        md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                            <!-- Add to Favorite -->
+                                            <md-button class="md-icon-button" class="action-green"
+                                                       tooltip="{{lang.grid_action_add_to_favorite}}"
+                                                       ng-if="ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length"
+                                                       ng-click="ctrl.searchScreens.outgoing.controller.addToFavoriteBulk($event)">
+                                                <md-icon md-svg-icon="star"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </th>
+                                    <th md-column>
+                                        <!-- Indicators -->
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length"
+                                        md-column
+                                        md-order-by="docFullSerial">
+                                        <span>{{lang.label_serial}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length"
+                                        md-column
+                                        md-order-by="docSubject">
+                                        <span>{{lang.subject}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length"
+                                        md-column
+                                        md-order-by="{{ctrl.searchScreens.outgoing.controller.getSortingKey('priorityLevel', 'Lookup')}}">
+                                        <span>{{lang.priority_level}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length"
+                                        md-column
+                                        md-order-by="{{ctrl.searchScreens.outgoing.controller.getSortingKey('docTypeForSearchGrid', 'DocumentType')}}">
+                                        <span>{{lang.label_document_type}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length"
+                                        md-column
+                                        md-order-by="{{ctrl.searchScreens.outgoing.controller.getSortingKey('creatorInfo', 'Information')}}">
+                                        <span>{{lang.creator}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length"
+                                        md-column
+                                        md-order-by="createdOn">
+                                        <span>{{lang.created_on}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length"
+                                        md-column
+                                        md-order-by="{{ctrl.searchScreens.outgoing.controller.getSortingKey('mainSiteSubSiteString','Information')}}">
+                                        <span>{{lang.correspondence_sites}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length && ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length < 2"
+                                        md-column>
+                                        <span></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="searchedOutgoingDocument" grid-right-click-directive
+                                    context-menu-actions="ctrl.searchScreens.outgoing.controller.contextMenuActions"
+                                    model="searchedOutgoingDocument"
+                                    selected-length="{{ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length ? ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length : 0}}"
+                                    ng-repeat="searchedOutgoingDocument in searchResults = (ctrl.searchScreens.outgoing.controller.searchedOutgoingDocuments | filter:ctrl.searchScreens.outgoing.controller.searchModel | limitTo: ctrl.searchScreens.outgoing.controller.grid.limit: ((ctrl.searchScreens.outgoing.controller.grid.page - 1) * ctrl.searchScreens.outgoing.controller.grid.limit)) track by $index">
+                                    <td md-cell class="indicator-td">
+                                        <!-- Security Level -->
+                                        <grid-indicator-directive record="searchedOutgoingDocument"
+                                                                  indicator-type="securityLevel"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Paper/Electronic-->
+                                        <grid-indicator-directive record="searchedOutgoingDocument"
+                                                                  indicator-type="paperElectronic"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Priority Level -->
+                                        <grid-indicator-directive record="searchedOutgoingDocument"
+                                                                  indicator-type="priorityLevel"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Has Attachments -->
+                                        <grid-indicator-directive record="searchedOutgoingDocument"
+                                                                  indicator-type="hasAttachment"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Linked Documents -->
+                                        <grid-indicator-directive record="searchedOutgoingDocument"
+                                                                  indicator-type="hasLinkedDocuments"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Site Follow up Due Date -->
+                                        <grid-indicator-directive record="searchedOutgoingDocument"
+                                                                  indicator-type="siteFollowUpDueDate"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <span flex
+                                              ng-class="{'indicator-content': searchedOutgoingDocument.followUpStatusIndicator}">
+                                        <md-icon ng-if="searchedOutgoingDocument.followUpStatusIndicator"
+                                                 class="{{searchedOutgoingDocument.followUpStatusIndicator.class}}"
+                                                 md-svg-icon="{{searchedOutgoingDocument.followUpStatusIndicator.icon}}"
+                                                 tooltip="{{lang[searchedOutgoingDocument.followUpStatusIndicator.tooltip].change({name: searchedOutgoingDocument.followupStatusLookup.getTranslatedName()})}}"
+                                        ></md-icon>
+                                    </span>
+                                    </td>
+                                    <td md-cell><span
+                                            class="serial-td">{{searchedOutgoingDocument.docFullSerial}}</span></td>
+                                    <td md-cell class="subject">
+                                        <!--<grid-document-subject-directive record="searchedOutgoingDocument"
+                                                                         plain-text-only="!searchedOutgoingDocument.hasContent()"
+                                                                         click-callback="ctrl.searchScreens.outgoing.controller.viewDocument">
+                                        </grid-document-subject-directive>-->
+                                        <a href=""
+                                           ng-if="searchedOutgoingDocument.hasContent() && ctrl.searchScreens.outgoing.controller.grid.truncateSubject"
+                                           class="view-doc subject-internal" md-truncate
+                                           tooltip="{{searchedOutgoingDocument.docSubject}}"
+                                           ng-click="ctrl.searchScreens.outgoing.controller.viewDocument(searchedOutgoingDocument, $event)">{{searchedOutgoingDocument.docSubject}}</a>
+                                        <span ng-if="!searchedOutgoingDocument.hasContent() && ctrl.searchScreens.outgoing.controller.grid.truncateSubject"
+                                              class="view-doc subject-internal" md-truncate
+                                              tooltip="{{searchedOutgoingDocument.docSubject}}">{{searchedOutgoingDocument.docSubject}}</span>
+                                        <a href=""
+                                           ng-if="searchedOutgoingDocument.hasContent() && !ctrl.searchScreens.outgoing.controller.grid.truncateSubject"
+                                           class="view-doc subject-internal"
+                                           tooltip="{{searchedOutgoingDocument.docSubject}}"
+                                           ng-click="ctrl.searchScreens.outgoing.controller.viewDocument(searchedOutgoingDocument, $event)">{{searchedOutgoingDocument.docSubject}}</a>
+                                        <span ng-if="!searchedOutgoingDocument.hasContent() && !ctrl.searchScreens.outgoing.controller.grid.truncateSubject"
+                                              class="view-doc subject-internal"
+                                              tooltip="{{searchedOutgoingDocument.docSubject}}">{{searchedOutgoingDocument.docSubject}}</span>
+                                    </td>
+                                    <td md-cell>{{searchedOutgoingDocument.priorityLevel.getTranslatedName()}}</td>
+                                    <td md-cell>{{searchedOutgoingDocument.docTypeInfo.getTranslatedName()}}</td>
+                                    <td md-cell>{{searchedOutgoingDocument.creatorInfo.getTranslatedName()}}</td>
+                                    <td md-cell>{{searchedOutgoingDocument.createdOn}}</td>
+                                    <td md-cell class="td-data">
+                                        <main-site-sub-site-directive
+                                                item="searchedOutgoingDocument"></main-site-sub-site-directive>
+                                    </td>
+                                    <td md-cell
+                                        ng-if="ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length < 2">
+                                        <div layout-align="start center" ng-if="!ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length
+                                                  || ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments.length===1 && ctrl.searchScreens.outgoing.controller.selectedSearchedOutgoingDocuments[0].id === searchedOutgoingDocument.id">
+                                            <grid-actions-directive
+                                                    shortcut-actions="ctrl.searchScreens.outgoing.controller.shortcutActions"
+                                                    model="searchedOutgoingDocument">
+                                            </grid-actions-directive>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr md-row
+                                    ng-if="!ctrl.searchScreens.outgoing.controller.searchedOutgoingDocuments.length">
+                                    <td md-cell colspan="8" class="red-text text-center">{{lang.no_records_found}}
+                                    </td>
+                                </tr>
+                                <tr md-row
+                                    ng-if="ctrl.searchScreens.outgoing.controller.searchedOutgoingDocuments.length && !searchResults.length">
+                                    <td md-cell colspan="8" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.searchScreens.outgoing.controller.grid.limitOptions"
+                                md-limit="ctrl.searchScreens.outgoing.controller.grid.limit"
+                                md-page="ctrl.searchScreens.outgoing.controller.grid.page"
+                                md-total="{{(ctrl.searchScreens.outgoing.controller.searchedOutgoingDocuments | filter:ctrl.searchScreens.outgoing.controller.searchModel).length}}"
+                                md-page-select
+                                md-on-paginate="ctrl.searchScreens.outgoing.controller.grid.pagingCallback">
+                        </md-table-pagination>
+                    </md-table-container>
+                </md-tab>
+            </md-tabs>
+        </div>
+    </div>
+</div>
+<!-- end of view -->
