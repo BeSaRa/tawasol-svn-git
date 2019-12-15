@@ -110,4 +110,5 @@ module.exports = function (app) {
     require('./login-background-directive/login-background-directive')(app);
     require('./search-outgoing-screen-directive/01-index')(app);
     require('./search-internal-screen-directive/01-index')(app);
+    require('./search-incoming-screen-directive/01-index')(app);
 };

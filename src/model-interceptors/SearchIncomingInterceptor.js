@@ -19,6 +19,10 @@ module.exports = function (app) {
                 model.createdOn = {From: angular.copy(model.createdFrom), To: angular.copy(model.createdTo)};
             }*/
 
+            if (model.subSite) {
+                model.sitesInfoIncoming = [model.subSite];
+            }
+
             model.FollowupStatus = (model.followupStatus && model.followupStatus.length) ?
                 angular.toJson(_.map(model.followupStatus, "lookupKey")) : null;
 
@@ -27,28 +31,24 @@ module.exports = function (app) {
                     From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
                     To: angular.copy(moment(model.docDateTo).format("YYYY-MM-DD"))
                 };
-            }
-            else if (model.year !== 'All') {
+            } else if (model.year !== 'All') {
                 if (!model.docDateFrom && model.docDateTo) {
                     model.docDate = {
                         From: angular.copy(model.year),
                         To: angular.copy(moment(model.docDateTo).format("YYYY-MM-DD"))
                     };
-                }
-                else if (model.docDateFrom && !model.docDateTo) {
+                } else if (model.docDateFrom && !model.docDateTo) {
                     model.docDate = {
                         From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
                         To: angular.copy(model.year)
                     };
-                }
-                else if (!model.docDateFrom && !model.docDateTo) {
+                } else if (!model.docDateFrom && !model.docDateTo) {
                     model.docDate = {
                         From: angular.copy(model.year),
                         //TODO : 14 Jan, 2018. This if condition is added for Iyad to check something.
                         To: angular.copy(model.year)
                     };
-                }
-                else if (model.docDateFrom && model.docDateTo) {
+                } else if (model.docDateFrom && model.docDateTo) {
                     model.docDate = {
                         From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
                         To: angular.copy(moment(model.docDateTo).format("YYYY-MM-DD"))
