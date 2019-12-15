@@ -38,6 +38,17 @@ module.exports = function (app) {
                 return generator.interceptReceivedCollection('PropertyConfiguration', collection);
             });
         };
+        /**
+         * @description load propertyConfiguration by documentClass and ouId.
+         */
+        self.loadAllPropertyConfigurationsByOU = function () {
+            // ouId = ouId.hasOwnProperty('id') ? ouId.id : ouId;
+            //ou/' + ouId + '
+            return $http.get(urlService.propertyConfigurations + '/all').then(function (result) {
+                var hashMap = generator.generateHashMap(result.data.rs, PropertyConfiguration, self._sharedMethods);
+                return generator.interceptReceivedHashMap('PropertyConfiguration', hashMap);
+            });
+        };
 
         /**
          * @description Get property configurations from self.propertyConfigurations if found and if not load it from server again.
@@ -147,7 +158,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     return true;
                 })
-                .catch(function(error){
+                .catch(function (error) {
                     return false;
                 });
         };
@@ -164,7 +175,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     return true;
                 })
-                .catch(function(error){
+                .catch(function (error) {
                     return false;
                 });
         };

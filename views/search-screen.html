@@ -16,10 +16,10 @@
                             <div class="navigation-row" layout="row">
                                 <md-card class="m0" flex>
                                     <ul id="search-navigation-list">
-                                        <li ng-class="{active: tab.tabKey === ctrl.selectedTabName}"
-                                            ng-repeat=" tab in ctrl.searchTabs"><a
-                                                ng-click="ctrl.onTabClicked(tab , $event)"
-                                                href="#">{{lang.get(tab.langKey)}}</a>
+                                        <li class="md-tab" ng-class="{'md-active': tab.tabKey === ctrl.selectedTabName}"
+                                            ng-click="ctrl.onTabClicked(tab , $event)"
+                                            ng-repeat=" tab in ctrl.searchTabs">
+                                            {{lang.get(tab.langKey)}}
                                         </li>
                                     </ul>
                                 </md-card>
