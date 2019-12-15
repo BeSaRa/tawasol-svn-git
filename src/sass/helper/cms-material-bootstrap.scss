@@ -61,7 +61,10 @@ md-input-container:not(.cms-default) {
   }
 
   &.md-input-invalid {
-    input {
+    input:not(.md-datepicker-input),
+    md-select,
+    textarea,
+    md-datepicker {
       border-color: #dc3545;
       border-width: 1px !important;
 
