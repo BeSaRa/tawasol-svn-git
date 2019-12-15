@@ -13,7 +13,7 @@ md-input-container:not(.cms-default) {
     font-size: 14px;
     line-height: 1.42857143;
     background-color: #fff;
-    border: 1px solid #ccc;
+    border: 1px solid #eee;
     border-radius: 4px;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
@@ -30,6 +30,10 @@ md-input-container:not(.cms-default) {
       > span {
         padding-left: 5px;
       }
+    }
+
+    &:focus {
+      border-color: #66afe9 !important;
     }
 
     &[disabled] {
@@ -58,8 +62,12 @@ md-input-container:not(.cms-default) {
 
   &.md-input-invalid {
     input {
-      border-color: rgb(221, 44, 0);
+      border-color: #dc3545;
       border-width: 1px !important;
+
+      &:focus {
+        border-color: #dc3545 !important;
+      }
     }
   }
 
