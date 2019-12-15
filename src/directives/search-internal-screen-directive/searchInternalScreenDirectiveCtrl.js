@@ -1,6 +1,6 @@
 module.exports = function (app) {
-    app.controller('searchOutgoingScreenDirectiveCtrl', function (searchOutgoingService,
-                                                                  OutgoingSearch,
+    app.controller('searchInternalScreenDirectiveCtrl', function (searchInternalService,
+                                                                  InternalSearch,
                                                                   $scope,
                                                                   employeeService,
                                                                   LangWatcher,
@@ -36,7 +36,7 @@ module.exports = function (app) {
                                                                   printService) {
         'ngInject';
         var self = this;
-        self.controllerName = 'searchOutgoingScreenDirectiveCtrl';
+        self.controllerName = 'searchInternalScreenDirectiveCtrl';
         // watcher to make langService available for view
         LangWatcher($scope);
         // current employee
@@ -48,11 +48,11 @@ module.exports = function (app) {
 
 
         // the main service for controller
-        self.controllerService = searchOutgoingService;
+        self.controllerService = searchInternalService;
         // screen search criteria
         self.searchCriteria = _createNewSearchCriteria();
-        self.selectedSearchedOutgoingDocuments = [];
-        self.searchedOutgoingDocuments = [];
+        self.selectedSearchedInternalDocuments = [];
+        self.searchedInternalDocuments = [];
         // to use it later in reload search
         self.searchCriteriaModel = angular.copy(self.searchCriteria);
         /********** end special properties **********/
@@ -155,7 +155,7 @@ module.exports = function (app) {
 
 
         function _createNewSearchCriteria() {
-            return new OutgoingSearch({
+            return new InternalSearch({
                 registryOU: self.employee.getRegistryOUID(),
                 originality: 1,
                 year: new Date().getFullYear(),
@@ -401,7 +401,7 @@ module.exports = function (app) {
             self.loadSitesByCriteria('sub')
                 .then(function (sites) {
                     self.subSites = _.map(sites, _mapSubSites);
-                    console.log('self.subSites',self.subSites);
+                    console.log('self.subSites', self.subSites);
                 });
         };
         /**
@@ -680,8 +680,8 @@ module.exports = function (app) {
                         .searchForDocuments(self.searchCriteria, self.propertyConfigurations)
                         .then(function (result) {
                             self.searchCriteriaModel = angular.copy(self.searchCriteria);
-                            self.searchedOutgoingDocuments = _mapResultToAvoidCorrespondenceCheck(result);
-                            self.selectedSearchedOutgoingDocuments = [];
+                            self.searchedInternalDocuments = _mapResultToAvoidCorrespondenceCheck(result);
+                            self.selectedSearchedInternalDocuments = [];
                             self.selectedTab = 1;
                         })
                         .catch(function (error) {
@@ -704,8 +704,8 @@ module.exports = function (app) {
                 .searchForDocuments(self.searchCriteriaModel, self.propertyConfigurations)
                 .then(function (result) {
                     counterService.loadCounters();
-                    self.searchedOutgoingDocuments = _mapResultToAvoidCorrespondenceCheck(result);
-                    self.selectedSearchedOutgoingDocuments = [];
+                    self.searchedInternalDocuments = _mapResultToAvoidCorrespondenceCheck(result);
+                    self.selectedSearchedInternalDocuments = [];
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
@@ -714,7 +714,6 @@ module.exports = function (app) {
                 });
         };
 
-        /************** Normal Search Controller Methods / Properties **********/
 
         /**
          * @description Contains options for grid configuration
@@ -722,17 +721,17 @@ module.exports = function (app) {
          */
         self.grid = {
             progress: null,
-            limit: gridService.getGridPagingLimitByGridName(gridService.grids.search.outgoing) || 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.search.internal) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.search.outgoing, self.searchedOutgoingDocuments),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.search.internal, self.searchedInternalDocuments),
             pagingCallback: function (page, limit) {
-                gridService.setGridPagingLimitByGridName(gridService.grids.search.outgoing, limit);
+                gridService.setGridPagingLimitByGridName(gridService.grids.search.internal, limit);
             },
             filter: {search: {}},
-            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.search.outgoing),
-            setTruncateSubject: function () {
-                gridService.setGridSubjectTruncateByGridName(gridService.grids.search.outgoing, self.grid.truncateSubject);
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.search.internal),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.search.internal, self.grid.truncateSubject);
             }
         };
 
@@ -750,29 +749,7 @@ module.exports = function (app) {
          * @description Gets the grid records by sorting
          */
         self.getSortedData = function () {
-            self.searchedOutgoingDocuments = $filter('orderBy')(self.searchedOutgoingDocuments, self.grid.order);
-        };
-
-        /**
-         * @description Reload the grid of searched outgoing documents
-         * @param pageNumber
-         * @return {*|Promise<U>}
-         */
-        self.reloadSearchedOutgoingDocument = function (pageNumber) {
-            var defer = $q.defer();
-            self.grid.progress = defer.promise;
-            return searchOutgoingService
-                .searchOutgoingDocuments(self.searchOutgoingModel, self.propertyConfigurations)
-                .then(function (result) {
-                    counterService.loadCounters();
-                    self.searchedOutgoingDocuments = _mapResultToAvoidCorrespondenceCheck(result);
-                    self.selectedSearchedOutgoingDocuments = [];
-                    defer.resolve(true);
-                    if (pageNumber)
-                        self.grid.page = pageNumber;
-                    self.getSortedData();
-                    return result;
-                });
+            self.searchedInternalDocuments = $filter('orderBy')(self.searchedInternalDocuments, self.grid.order);
         };
 
         /**
@@ -781,9 +758,28 @@ module.exports = function (app) {
          */
         self.addToFavoriteBulk = function ($event) {
             favoriteDocumentsService.controllerMethod
-                .favoriteDocumentAddBulk(self.selectedSearchedOutgoingDocuments, $event)
-                .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                .favoriteDocumentAddBulk(self.selectedSearchedInternalDocuments, $event)
+                .then(function (result) {
+                    self.reloadSearchedInternalDocuments(self.grid.page);
+                });
+        };
+
+        /**
+         * @description add an item to the favorite documents
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.addToFavorite = function (searchedInternalDocument, $event) {
+            favoriteDocumentsService.controllerMethod
+                .favoriteDocumentAdd(searchedInternalDocument.getInfo().vsId, $event)
+                .then(function (result) {
+                    if (result.status) {
+                        toast.success(langService.get("add_to_favorite_specific_success").change({
+                            name: searchedInternalDocument.getTranslatedName()
+                        }));
+                    } else {
+                        dialog.alertMessage(langService.get(result.message));
+                    }
                 });
         };
 
@@ -796,53 +792,230 @@ module.exports = function (app) {
         self.addToIcnArchive = function (correspondence, $event, defer) {
             correspondence.addToIcnArchiveDialog($event)
                 .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                    self.reloadSearchedInternalDocuments(self.grid.page);
+                    new ResolveDefer(defer);
+                });
+        };
+        /**
+         * @description Launch distribution workflow for internal item
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.launchDistributionWorkflow = function (searchedInternalDocument, $event) {
+            if (!searchedInternalDocument.hasContent()) {
+                dialog.alertMessage(langService.get("content_not_found"));
+                return;
+            }
+
+            searchedInternalDocument.launchWorkFlowAndCheckApprovedInternal($event, null, 'favorites')
+                .then(function () {
+                    self.reloadSearchedInternalDocuments(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
+                });
+        };
+
+        /**
+         * @description Print Barcode
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.printBarcode = function (searchedInternalDocument, $event) {
+            searchedInternalDocument.barcodePrint($event);
+        };
+
+        self.addDocumentTask = function (correspondence, $event) {
+            correspondence.createDocumentTask($event)
+        };
+
+        /**
+         * @description View Tracking Sheet
+         * @param searchedInternalDocument
+         * @param params
+         * @param $event
+         */
+        self.viewTrackingSheet = function (searchedInternalDocument, params, $event) {
+            viewTrackingSheetService
+                .controllerMethod
+                .viewTrackingSheetPopup(searchedInternalDocument, params, $event).then(function (result) {
+            });
+        };
+
+        /**
+         * @description manage tag for searched internal document
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.manageTags = function (searchedInternalDocument, $event) {
+            //console.log('manage tag for searched internal document : ', searchedInternalDocument);
+            managerService.manageDocumentTags(searchedInternalDocument.vsId, searchedInternalDocument.docClassName, searchedInternalDocument.docSubject, $event)
+                .then(function (tags) {
+                    searchedInternalDocument.tags = tags;
+                })
+                .catch(function (tags) {
+                    searchedInternalDocument.tags = tags;
+                });
+        };
+
+        /**
+         * @description manage comments for searched internal document
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.manageComments = function (searchedInternalDocument, $event) {
+            //console.log('manage comments for searched internal document : ', searchedInternalDocument);
+            managerService.manageDocumentComments(searchedInternalDocument.vsId, searchedInternalDocument.docSubject, $event)
+                .then(function (documentComments) {
+                    searchedInternalDocument.documentComments = documentComments;
+                })
+                .catch(function (documentComments) {
+                    searchedInternalDocument.documentComments = documentComments;
+                });
+        };
+
+        /**
+         * @description manage tasks for searched internal document
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.manageTasks = function (searchedInternalDocument, $event) {
+            console.log('manage tasks for searched internal document : ', searchedInternalDocument);
+        };
+
+        /**
+         * @description manage attachments for searched internal document
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.manageAttachments = function (searchedInternalDocument, $event) {
+            searchedInternalDocument.manageDocumentAttachments($event)
+                .then(function () {
+                    self.reloadSearchedInternalDocuments(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadSearchedInternalDocuments(self.grid.page);
+                })
+            ;
+        };
+
+        /**
+         * @description manage linked documents for searched internal document
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.manageLinkedDocuments = function (searchedInternalDocument, $event) {
+            //console.log('manage linked documents for searched internal document : ', searchedInternalDocument);
+            var info = searchedInternalDocument.getInfo();
+            return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass)
+                .then(function () {
+                    self.reloadSearchedInternalDocuments(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadSearchedInternalDocuments(self.grid.page);
+                })
+                ;
+        };
+
+        /**
+         * @description Manage Linked Entities
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.manageLinkedEntities = function (searchedInternalDocument, $event) {
+            managerService
+                .manageDocumentEntities(searchedInternalDocument.vsId, searchedInternalDocument.docClassName, searchedInternalDocument.docSubject, $event);
+        };
+
+        /**
+         * @description download main document for searched internal document
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.downloadMainDocument = function (searchedInternalDocument, $event) {
+            downloadService.controllerMethod
+                .mainDocumentDownload(searchedInternalDocument.vsId);
+        };
+
+        /**
+         * @description download composite document for searched internal document
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.downloadCompositeDocument = function (searchedInternalDocument, $event) {
+            downloadService.controllerMethod.compositeDocumentDownload(searchedInternalDocument.vsId);
+        };
+
+        /**
+         * @description download selected document
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.downloadSelected = function(searchedInternalDocument,$event){
+            downloadService.openSelectedDownloadDialog(searchedInternalDocument, $event);
+        };
+
+        /**
+         * @description send link to document for searched internal document
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.sendLinkToDocumentByEmail = function (searchedInternalDocument, $event) {
+            downloadService.getMainDocumentEmailContent(searchedInternalDocument.getInfo().vsId);
+        };
+
+        /**
+         * @description send composite document as attachment for searched internal document
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.sendCompositeDocumentAsAttachmentByEmail = function (searchedInternalDocument, $event) {
+            downloadService.getCompositeDocumentEmailContent(searchedInternalDocument.getInfo().vsId);
+        };
+
+
+        /**
+         * @description send main document fax for searched internal document
+         * @param searchedInternalDocument
+         * @param $event
+         */
+        self.sendMainDocumentFax = function (searchedInternalDocument, $event) {
+            searchedInternalDocument.openSendFaxDialog($event);
+        };
+
+        /**
+         * @description send sms for searched internal document
+         * @param searchedInternalDocument
+         * @param $event
+         * @param defer
+         */
+        self.sendSMS = function (searchedInternalDocument, $event, defer) {
+            searchedInternalDocument.openSendSMSDialog($event)
+                .then(function (result) {
                     new ResolveDefer(defer);
                 });
         };
 
         /**
-         * @description add an item to the favorite documents
-         * @param searchedOutgoingDocument
+         * @description Send Document Link
+         * @param searchedInternalDocument
          * @param $event
          */
-        self.addToFavorite = function (searchedOutgoingDocument, $event) {
-            favoriteDocumentsService.controllerMethod
-                .favoriteDocumentAdd(searchedOutgoingDocument.getInfo().vsId, $event)
-                .then(function (result) {
-                    if (result.status) {
-                        toast.success(langService.get("add_to_favorite_specific_success").change({
-                            name: searchedOutgoingDocument.getTranslatedName()
-                        }));
-                    } else {
-                        dialog.alertMessage(langService.get(result.message));
-                    }
-                });
+        self.sendDocumentLink = function (searchedInternalDocument, $event) {
+            searchedInternalDocument.openSendDocumentURLDialog($event);
         };
 
         /**
-         * @description Launch distribution workflow for outgoing item
-         * @param searchedOutgoingDocument
+         * @description get link for searched internal document
+         * @param searchedInternalDocument
          * @param $event
          */
-        self.launchDistributionWorkflow = function (searchedOutgoingDocument, $event) {
-            if (!searchedOutgoingDocument.hasContent()) {
-                dialog.alertMessage(langService.get("content_not_found"));
-                return;
-            }
-            // we can launch the document if the document not in inbox
-            if (searchedOutgoingDocument.docStatus !== 22) {
-                return searchedOutgoingDocument.launchWorkFlow($event, null, 'favorites');
-            }
-
-            // if the document status === 22 we should check if the document have active workflow
-            searchedOutgoingDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
-                .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page)
-                        .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                        });
-                });
+        self.getLink = function (searchedInternalDocument, $event) {
+            viewDocumentService.loadDocumentViewUrlWithOutEdit(searchedInternalDocument.vsId).then(function (result) {
+                //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
+                dialog.successMessage(langService.get('link_message').change({result: result}), null, null, null, null, true);
+                return true;
+            });
         };
 
         /**
@@ -855,251 +1028,21 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Print Barcode
-         * @param searchedOutgoingDocument
+         * @description create copy for searched internal document
+         * @param searchedInternalDocument
          * @param $event
          */
-        self.printBarcode = function (searchedOutgoingDocument, $event) {
-            searchedOutgoingDocument.barcodePrint($event);
-        };
-
-        self.addDocumentTask = function (correspondence, $event) {
-            correspondence.createDocumentTask($event)
-        };
-
-
-        /**
-         * @description View Tracking Sheet
-         * @param searchedOutgoingDocument
-         * @param params
-         * @param $event
-         */
-        self.viewTrackingSheet = function (searchedOutgoingDocument, params, $event) {
-            viewTrackingSheetService
-                .controllerMethod
-                .viewTrackingSheetPopup(searchedOutgoingDocument, params, $event).then(function (result) {
-            });
-        };
-
-        /**
-         * @description manage tag for searched outgoing document
-         * @param searchedOutgoingDocument
-         * @param $event
-         */
-        self.manageTags = function (searchedOutgoingDocument, $event) {
-            managerService.manageDocumentTags(searchedOutgoingDocument.vsId, searchedOutgoingDocument.docClassName, searchedOutgoingDocument.docSubject, $event)
-                .then(function (tags) {
-                    searchedOutgoingDocument.tags = tags;
-                })
-                .catch(function (tags) {
-                    searchedOutgoingDocument.tags = tags;
-                });
-        };
-
-        /**
-         * @description manage comments for searched outgoing document
-         * @param searchedOutgoingDocument
-         * @param $event
-         */
-        self.manageComments = function (searchedOutgoingDocument, $event) {
-            managerService.manageDocumentComments(searchedOutgoingDocument.vsId, searchedOutgoingDocument.docSubject, $event)
-                .then(function (documentComments) {
-                    searchedOutgoingDocument.documentComments = documentComments;
-                })
-                .catch(function (documentComments) {
-                    searchedOutgoingDocument.documentComments = documentComments;
-                });
-        };
-
-        /**
-         * @description manage tasks for searched outgoing document
-         * @param searchedOutgoingDocument
-         */
-        self.manageTasks = function (searchedOutgoingDocument) {
-            console.log('manage tasks for searched outgoing document : ', searchedOutgoingDocument);
-        };
-
-        /**
-         * @description manage attachments for searched outgoing document
-         * @param searchedOutgoingDocument
-         * @param $event
-         */
-        self.manageAttachments = function (searchedOutgoingDocument, $event) {
-            searchedOutgoingDocument.manageDocumentAttachments($event)
-                .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
-                });
-        };
-
-        /**
-         * @description manage linked documents for searched outgoing document
-         * @param searchedOutgoingDocument
-         */
-        self.manageLinkedDocuments = function (searchedOutgoingDocument) {
-            var info = searchedOutgoingDocument.getInfo();
-            return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass)
-                .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
-                });
-        };
-
-        /**
-         * @description Manage Linked Entities
-         * @param searchedOutgoingDocument
-         * @param $event
-         */
-        self.manageLinkedEntities = function (searchedOutgoingDocument, $event) {
-            managerService
-                .manageDocumentEntities(searchedOutgoingDocument.vsId, searchedOutgoingDocument.docClassName, searchedOutgoingDocument.docSubject, $event);
-        };
-
-
-        /**
-         * @description Destinations
-         * @param searchedOutgoingDocument
-         * @param $event
-         */
-        self.manageDestinations = function (searchedOutgoingDocument, $event) {
-            searchedOutgoingDocument.manageDocumentCorrespondence($event)
-                .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
-                });
-        };
-
-        /**
-         * @description download main document for searched outgoing document
-         * @param searchedOutgoingDocument
-         */
-        self.downloadMainDocument = function (searchedOutgoingDocument) {
-            downloadService.controllerMethod
-                .mainDocumentDownload(searchedOutgoingDocument.vsId);
-        };
-
-        /**
-         * @description download composite document for searched outgoing document
-         * @param searchedOutgoingDocument
-         */
-        self.downloadCompositeDocument = function (searchedOutgoingDocument) {
-            downloadService.controllerMethod
-                .compositeDocumentDownload(searchedOutgoingDocument.vsId);
-        };
-
-        /**
-         * @description download selected document
-         * @param searchedOutgoingDocument
-         * @param $event
-         */
-        self.downloadSelected = function (searchedOutgoingDocument, $event) {
-            downloadService.openSelectedDownloadDialog(searchedOutgoingDocument, $event);
-        };
-
-        /**
-         * @description send link to document for searched outgoing document
-         * @param searchedOutgoingDocument
-         */
-        self.sendLinkToDocumentByEmail = function (searchedOutgoingDocument) {
-            downloadService.getMainDocumentEmailContent(searchedOutgoingDocument.getInfo().vsId);
-        };
-
-        /**
-         * @description send composite document as attachment for searched outgoing document
-         * @param searchedOutgoingDocument
-         */
-        self.sendCompositeDocumentAsAttachmentByEmail = function (searchedOutgoingDocument) {
-            downloadService.getCompositeDocumentEmailContent(searchedOutgoingDocument.getInfo().vsId);
-        };
-
-
-        /**
-         * @description send main document fax for searched outgoing document
-         * @param searchedOutgoingDocument
-         * @param $event
-         */
-        self.sendMainDocumentFax = function (searchedOutgoingDocument, $event) {
-            searchedOutgoingDocument.openSendFaxDialog($event);
-        };
-
-        /**
-         * @description send sms for searched outgoing document
-         * @param searchedOutgoingDocument
-         * @param $event
-         * @param defer
-         */
-        self.sendSMS = function (searchedOutgoingDocument, $event, defer) {
-            searchedOutgoingDocument.openSendSMSDialog($event)
-                .then(function () {
-                    new ResolveDefer(defer);
-                });
-        };
-
-        /**
-         * @description Send Document Link
-         * @param searchedOutgoingDocument
-         * @param $event
-         */
-        self.sendDocumentLink = function (searchedOutgoingDocument, $event) {
-            searchedOutgoingDocument.openSendDocumentURLDialog($event);
-        };
-
-        /**
-         * @description get link for searched outgoing document
-         * @param searchedOutgoingDocument
-         */
-        self.getLink = function (searchedOutgoingDocument) {
-            viewDocumentService.loadDocumentViewUrlWithOutEdit(searchedOutgoingDocument.vsId).then(function (result) {
-                dialog.successMessage(langService.get('link_message').change({result: result}), null, null, null, null, true);
-                return true;
-            });
-        };
-
-        /**
-         * @description create copy for searched outgoing document
-         * @param searchedOutgoingDocument
-         */
-        self.createCopy = function (searchedOutgoingDocument) {
-            console.log('create copy for searched outgoing document : ', searchedOutgoingDocument);
-        };
-
-        /**
-         * @description End followup of correspondence site
-         * @param correspondence
-         * @param $event
-         * @param defer
-         */
-        self.endFollowup = function (correspondence, $event, defer) {
-            correspondence.endFollowup($event)
-                .then(function (result) {
-                    if (result !== 'FAILED_TERMINATE_FOLLOWUP') {
-                        self.reloadSearchedOutgoingDocument(self.grid.page)
-                            .then(function () {
-                                new ResolveDefer(defer);
-                            });
-                    }
-                });
-        };
-
-
-        var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
-            var info = model.getInfo();
-            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
-            var allowed = hasPermission && info.docStatus < 25;
-            if (checkForViewPopup)
-                return !(allowed);
-            return allowed;
+        self.createCopy = function (searchedInternalDocument, $event) {
+            console.log('create copy for searched internal document : ', searchedInternalDocument);
         };
 
         /**
          * @description Preview document
-         * @param searchedOutgoingDocument
+         * @param searchedInternalDocument
+         * @param $event
          */
-        self.previewDocument = function (searchedOutgoingDocument) {
-            if (!searchedOutgoingDocument.hasContent()) {
+        self.previewDocument = function (searchedInternalDocument, $event) {
+            if (!searchedInternalDocument.hasContent()) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
@@ -1107,12 +1050,12 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(searchedOutgoingDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedOutgoingDocument, true))
+            correspondenceService.viewCorrespondence(searchedInternalDocument, self.gridActions, true, true)
                 .then(function () {
-                    //return self.reloadSearchedOutgoingDocument(self.grid.page);
+                    //  return self.reloadSearchedInternalDocuments(self.grid.page);
                 })
                 .catch(function () {
-                    // return self.reloadSearchedOutgoingDocument(self.grid.page);
+                    //  return self.reloadSearchedInternalDocuments(self.grid.page);
                 });
         };
 
@@ -1126,17 +1069,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondence.viewFromQueue(self.gridActions, 'searchOutgoing', $event)
+            correspondence.viewFromQueue(self.gridActions, 'searchInternal', $event)
                 .then(function () {
-                    //   return self.reloadSearchedOutgoingDocument(self.grid.page);
+                    // return self.reloadSearchedInternalDocuments(self.grid.page);
                 })
                 .catch(function () {
-                    //  return self.reloadSearchedOutgoingDocument(self.grid.page);
+                    //  return self.reloadSearchedInternalDocuments(self.grid.page);
                 });
-        };
-
-        self.viewInDeskTop = function (workItem) {
-            return correspondenceService.viewWordInDesktop(workItem);
         };
 
         /**
@@ -1159,7 +1098,7 @@ module.exports = function (app) {
             return correspondence
                 .duplicateVersion($event)
                 .then(function () {
-                    $state.go('app.outgoing.add', {
+                    $state.go('app.internal.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
                         workItem: info.wobNum
@@ -1177,7 +1116,7 @@ module.exports = function (app) {
             return correspondence
                 .duplicateSpecificVersion($event)
                 .then(function () {
-                    $state.go('app.outgoing.add', {
+                    $state.go('app.internal.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
                         workItem: info.wobNum
@@ -1185,53 +1124,23 @@ module.exports = function (app) {
                 });
         };
 
+        self.viewInDeskTop = function (workItem) {
+            return correspondenceService.viewWordInDesktop(workItem);
+        };
+
         /**
-         * @description do broadcast for workItem.
+         * @description do broadcast for correspondence.
          */
         self.broadcast = function (correspondence, $event, defer) {
             correspondence
                 .correspondenceBroadcast()
                 .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page)
+                    self.reloadSearchedInternalDocuments(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         })
                 })
-        };
-        /**
-         * @description Partial Export
-         * @param correspondence
-         * @param $event
-         * @param defer
-         */
-        self.partialExportCallback = function (correspondence, $event, defer) {
-            correspondence
-                .partialExport($event)
-                .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page)
-                        .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                            new ResolveDefer(defer);
-                        })
-                });
-        };
-
-        self.printResult = function ($event) {
-            var printTitle = langService.get("search_module_search_results") + " " + langService.get("from") + " " + generator.convertDateToString(self.searchOutgoing.docDateFrom) +
-                " " + langService.get("to") + " " + generator.convertDateToString(self.searchOutgoing.docDateTo);
-
-            var headers = ['label_serial',
-                'subject',
-                'priority_level',
-                'label_document_type',
-                'creator',
-                'created_on',
-                'correspondence_sites'];
-
-            printService
-                .printData(self.searchedOutgoingDocuments, headers, printTitle);
-
         };
 
         self.gridActions = [
@@ -1248,7 +1157,7 @@ module.exports = function (app) {
                         checkShow: function (action, model) {
                             return true;
                         },
-                        gridName: 'search-outgoing'
+                        gridName: 'search-internal'
                     }
                 ],
                 class: "action-green",
@@ -1393,28 +1302,13 @@ module.exports = function (app) {
              icon: 'export',
              text: 'grid_action_export',
              shortcut: true,
-             callback: self.exportSearchOutgoingDocument,
+             callback: self.exportSearchInternalDocument,
+             hide: true,
              class: "action-green",
              checkShow: function (action, model) {
-             //If document is paper outgoing and unapproved/partially approved, show the button.
-             return model.docStatus < 24 && model.addMethod === 1;
-             }
+                            return true;
+                        }
              },*/
-            // Partial Export
-            {
-                type: 'action',
-                icon: 'backburger',
-                text: 'grid_action_partial_export',
-                shortcut: false,
-                permissionKey: 'PARTIAL_EXPORT',
-                callback: self.partialExportCallback,
-                class: "action-green",
-                checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    // When document is EXPORTED or PARTIALLY_EXPORTED, show partial export button.
-                    return (info.docStatus === 25 || info.docStatus === 26) && (model.registryOU === employeeService.getEmployee().getRegistryOUID()) && !model.isPrivateSecurityLevel();
-                }
-            },
             // Launch Distribution Workflow
             {
                 type: 'action',
@@ -1477,7 +1371,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return true;
                 },
-                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid', gridService.grids.search.outgoing)
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid', gridService.grids.search.internal)
             },
             // add task
             {
@@ -1504,8 +1398,7 @@ module.exports = function (app) {
                     "MANAGE_TASKS",
                     "MANAGE_ATTACHMENTS",
                     "MANAGE_LINKED_DOCUMENTS",
-                    "MANAGE_LINKED_ENTITIES",
-                    "MANAGE_DESTINATIONS"
+                    "MANAGE_LINKED_ENTITIES"
                 ],
                 checkAnyPermission: true,
                 showInView: false,
@@ -1572,7 +1465,6 @@ module.exports = function (app) {
                         permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
-                        //hide:true,
                         checkShow: function (action, model) {
                             return true;
                         }
@@ -1589,19 +1481,6 @@ module.exports = function (app) {
                         checkShow: function (action, model) {
                             return true;
                         }
-                    },
-                    // Destinations
-                    {
-                        type: 'action',
-                        icon: 'stop',
-                        text: 'grid_action_destinations',
-                        shortcut: false,
-                        callback: self.manageDestinations,
-                        permissionKey: "MANAGE_DESTINATIONS",
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            return checkIfEditCorrespondenceSiteAllowed(model, false);
-                        }
                     }
                 ]
             },
@@ -1616,7 +1495,7 @@ module.exports = function (app) {
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
-                    "DOWNLOAD_COMPOSITE_BOOK" //Composite Document
+                    "DOWNLOAD_COMPOSITE_BOOK"
                 ],
                 checkAnyPermission: true,
                 subMenu: [
@@ -1650,7 +1529,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text: 'selective_document',
+                        text:'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",
@@ -1710,12 +1589,12 @@ module.exports = function (app) {
                         icon: 'fax',
                         text: 'grid_action_send_document_by_fax',
                         shortcut: false,
-                        permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
                         class: "action-green",
                         checkShow: function (action, model) {
                             return model.canSendByFax();
-                        }
+                        },
+                        permissionKey: "SEND_DOCUMENT_BY_FAX"
                     },
                     // SMS
                     {
@@ -1771,20 +1650,6 @@ module.exports = function (app) {
                     return true;
                 }
             },
-            // End Follow up
-            {
-                type: 'action',
-                icon: gridService.gridIcons.actions.endFollowup,
-                text: 'grid_action_end_follow_up',
-                callback: self.endFollowup,
-                class: "action-green",
-                permissionKey: "MANAGE_DESTINATIONS",
-                checkShow: function (action, model) {
-                    // only for outgoing/incoming
-                    // no follow up status = 0 (need reply)
-                    return !model.getSiteFollowupStatus() && !model.getSiteFollowupEndDate()// && model.getSiteMaxFollowupDate();
-                }
-            },
             // Duplicate
             {
                 type: 'action',
@@ -1836,6 +1701,7 @@ module.exports = function (app) {
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
+
 
         self.$onInit = function () {
             self.onRegistrySelectedChange();

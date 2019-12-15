@@ -32,6 +32,14 @@
                                     property-configurations="ctrl.propertyConfigurations.outgoing"
                                     label-collapse="ctrl.labelCollapse">
                             </search-outgoing-screen-directive>
+                            <search-internal-screen-directive
+                                    controller="ctrl.searchScreens.internal"
+                                    approvears="ctrl.approvers"
+                                    ng-show="ctrl.selectedTabName === 'internal'"
+                                    registry-organizations="ctrl.registryOrganizations"
+                                    property-configurations="ctrl.propertyConfigurations.internal"
+                                    label-collapse="ctrl.labelCollapse">
+                            </search-internal-screen-directive>
                         </div>
                     </md-content>
                 </md-tab>
@@ -208,6 +216,158 @@
                                 md-total="{{(ctrl.searchScreens.outgoing.controller.searchedOutgoingDocuments | filter:ctrl.searchScreens.outgoing.controller.searchModel).length}}"
                                 md-page-select
                                 md-on-paginate="ctrl.searchScreens.outgoing.controller.grid.pagingCallback">
+                        </md-table-pagination>
+                    </md-table-container>
+                    <md-table-container ng-if="ctrl.selectedTabName === 'internal'">
+                        <div flex scroll-directive>
+                            <table md-table md-row-select multiple
+                                   ng-model="ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments"
+                                   md-progress="ctrl.searchScreens.internal.controller.grid.progress">
+                                <thead md-head md-order="ctrl.searchScreens.internal.controller.grid.order"
+                                       md-on-reorder="ctrl.searchScreens.internal.controller.getSortedData">
+                                <tr md-row>
+                                    <th colspan="{{ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length > 1 ? 8 : 9}}"
+                                        ng-if="ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length"
+                                        md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                            <!-- Add to Favorite -->
+                                            <md-button class="md-icon-button" class="action-green"
+                                                       tooltip="{{lang.grid_action_add_to_favorite}}"
+                                                       ng-if="ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length"
+                                                       ng-click="ctrl.searchScreens.internal.controller.addToFavoriteBulk($event)">
+                                                <md-icon md-svg-icon="star"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </th>
+                                    <th md-column>
+                                        <!-- Indicators -->
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length"
+                                        md-column
+                                        md-order-by="docFullSerial">
+                                        <span>{{lang.label_serial}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length"
+                                        md-column
+                                        md-order-by="docSubject">
+                                        <span>{{lang.subject}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length"
+                                        md-column
+                                        md-order-by="{{ctrl.searchScreens.internal.controller.getSortingKey('priorityLevel', 'Lookup')}}">
+                                        <span>{{lang.priority_level}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length"
+                                        md-column
+                                        md-order-by="{{ctrl.searchScreens.internal.controller.getSortingKey('docTypeForSearchGrid', 'DocumentType')}}">
+                                        <span>{{lang.label_document_type}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length"
+                                        md-column
+                                        md-order-by="{{ctrl.searchScreens.internal.controller.getSortingKey('creatorInfo', 'Information')}}">
+                                        <span>{{lang.creator}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length"
+                                        md-column
+                                        md-order-by="createdOn">
+                                        <span>{{lang.created_on}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length && ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length < 2"
+                                        md-column>
+                                        <span></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="searchedInternalDocument" grid-right-click-directive
+                                    context-menu-actions="ctrl.searchScreens.internal.controller.contextMenuActions"
+                                    model="searchedInternalDocument"
+                                    selected-length="{{ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length ? ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length : 0}}"
+                                    ng-repeat="searchedInternalDocument in searchResults = (ctrl.searchScreens.internal.controller.searchedInternalDocuments | filter:ctrl.searchScreens.internal.controller.searchModel | limitTo: ctrl.searchScreens.internal.controller.grid.limit: ((ctrl.searchScreens.internal.controller.grid.page - 1) * ctrl.searchScreens.internal.controller.grid.limit)) track by $index">
+                                    <td md-cell class="indicator-td">
+                                        <!-- Security Level -->
+                                        <grid-indicator-directive record="searchedInternalDocument"
+                                                                  indicator-type="securityLevel"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Paper/Electronic-->
+                                        <grid-indicator-directive record="searchedInternalDocument"
+                                                                  indicator-type="paperElectronic"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Priority Level -->
+                                        <grid-indicator-directive record="searchedInternalDocument"
+                                                                  indicator-type="priorityLevel"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Has Attachments -->
+                                        <grid-indicator-directive record="searchedInternalDocument"
+                                                                  indicator-type="hasAttachment"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Linked Documents -->
+                                        <grid-indicator-directive record="searchedInternalDocument"
+                                                                  indicator-type="hasLinkedDocuments"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                    </td>
+                                    <td md-cell><span
+                                            class="serial-td">{{searchedInternalDocument.docFullSerial}}</span></td>
+                                    <td md-cell class="subject">
+                                        <!--<grid-document-subject-directive record="searchedInternalDocument"
+                                                                         plain-text-only="!searchedInternalDocument.hasContent()"
+                                                                         click-callback="ctrl.searchScreens.internal.controller.viewDocument">
+                                        </grid-document-subject-directive>-->
+                                        <a href=""
+                                           ng-if="searchedInternalDocument.hasContent() && ctrl.searchScreens.internal.controller.grid.truncateSubject"
+                                           class="view-doc subject-internal" md-truncate
+                                           tooltip="{{searchedInternalDocument.docSubject}}"
+                                           ng-click="ctrl.searchScreens.internal.controller.viewDocument(searchedInternalDocument, $event)">{{searchedInternalDocument.docSubject}}</a>
+                                        <span ng-if="!searchedInternalDocument.hasContent() && ctrl.searchScreens.internal.controller.grid.truncateSubject"
+                                              class="view-doc subject-internal" md-truncate
+                                              tooltip="{{searchedInternalDocument.docSubject}}">{{searchedInternalDocument.docSubject}}</span>
+                                        <a href=""
+                                           ng-if="searchedInternalDocument.hasContent() && !ctrl.searchScreens.internal.controller.grid.truncateSubject"
+                                           class="view-doc subject-internal"
+                                           tooltip="{{searchedInternalDocument.docSubject}}"
+                                           ng-click="ctrl.searchScreens.internal.controller.viewDocument(searchedInternalDocument, $event)">{{searchedInternalDocument.docSubject}}</a>
+                                        <span ng-if="!searchedInternalDocument.hasContent() && !ctrl.searchScreens.internal.controller.grid.truncateSubject"
+                                              class="view-doc subject-internal"
+                                              tooltip="{{searchedInternalDocument.docSubject}}">{{searchedInternalDocument.docSubject}}</span>
+                                    </td>
+                                    <td md-cell>{{searchedInternalDocument.priorityLevel.getTranslatedName()}}</td>
+                                    <td md-cell>{{searchedInternalDocument.docTypeInfo.getTranslatedName()}}</td>
+                                    <td md-cell>{{searchedInternalDocument.creatorInfo.getTranslatedName()}}</td>
+                                    <td md-cell>{{searchedInternalDocument.createdOn}}</td>
+                                    <td md-cell
+                                        ng-if="ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length < 2">
+                                        <div layout-align="start center" ng-if="!ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length
+                                                  || ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments.length===1 && ctrl.searchScreens.internal.controller.selectedSearchedInternalDocuments[0].id === searchedInternalDocument.id">
+                                            <grid-actions-directive
+                                                    shortcut-actions="ctrl.searchScreens.internal.controller.shortcutActions"
+                                                    model="searchedInternalDocument">
+                                            </grid-actions-directive>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr md-row
+                                    ng-if="!ctrl.searchScreens.internal.controller.searchedInternalDocuments.length">
+                                    <td md-cell colspan="8" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row
+                                    ng-if="ctrl.searchScreens.internal.controller.searchedInternalDocuments.length && !searchResults.length">
+                                    <td md-cell colspan="8" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.searchScreens.internal.controller.grid.limitOptions"
+                                md-limit="ctrl.searchScreens.internal.controller.grid.limit"
+                                md-page="ctrl.searchScreens.internal.controller.grid.page"
+                                md-total="{{(ctrl.searchScreens.internal.controller.searchedInternalDocuments | filter:ctrl.searchScreens.internal.controller.searchModel).length}}"
+                                md-page-select
+                                md-on-paginate="ctrl.searchScreens.internal.controller.grid.pagingCallback">
                         </md-table-pagination>
                     </md-table-container>
                 </md-tab>
