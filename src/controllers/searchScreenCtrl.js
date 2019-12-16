@@ -2,7 +2,6 @@ module.exports = function (app) {
     app.controller('searchScreenCtrl', function (registryOrganizations, propertyConfigurations, approvers, employeeService) {
         var self = this;
         self.controllerName = 'searchScreenCtrl';
-
         // to give the user the ability to collapse the accordion by clicking on it's label.
         self.labelCollapse = true;
         // all available navigation tabs for search screens
@@ -43,9 +42,7 @@ module.exports = function (app) {
         self.propertyConfigurations = propertyConfigurations;
 
         self.approvers = approvers;
-
         // all controller for available search screens
-
         self.searchScreens = {
             outgoing: {
                 controller: {

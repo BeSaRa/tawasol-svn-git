@@ -681,15 +681,15 @@ module.exports = function (app) {
                 },
                 registryOrganizations: function (employeeService, langService, $q, _, organizationService) {
                     'ngInject';
-
                     function _sortResultByCurrentLang(result) {
                         return _.sortBy(result, function (item) {
-                            item[langService.current + 'Name'].toLowerCase();
+                            return item[langService.current + 'Name'].toLowerCase();
                         });
                     }
+
                     // if user has permission to search in all ou load all organizations and ignore role security
                     if (employeeService.hasPermissionTo('SEARCH_IN_ALL_OU')) {
-                        organizationService.loadOrganizations(employeeService.hasPermissionTo('SEARCH_IN_ALL_OU'))
+                        return organizationService.loadOrganizations(employeeService.hasPermissionTo('SEARCH_IN_ALL_OU'))
                             .then(function (result) {
                                 // to sort registry organizations after retrieve
                                 return _sortResultByCurrentLang(_.filter(result, function (organization) {
@@ -697,7 +697,7 @@ module.exports = function (app) {
                                 }));
                             });
                     } else {
-                        organizationService.getUserViewPermissionOusByUserId(employeeService.getEmployee().id)
+                        return organizationService.getUserViewPermissionOusByUserId(employeeService.getEmployee().id)
                             .then(function (result) {
                                 return _sortResultByCurrentLang(_.filter(result, function (organization) {
                                     return organization.hasRegistry;
@@ -705,9 +705,8 @@ module.exports = function (app) {
                             });
                     }
                 },
-                propertyConfigurations: function ($q, propertyConfigurationService, employeeService) {
+                propertyConfigurations: function ($q, propertyConfigurationService) {
                     'ngInject';
-                    var ouId = employeeService.getEmployee().organization.ouid;
                     return propertyConfigurationService
                         .loadAllPropertyConfigurations();
                 },
