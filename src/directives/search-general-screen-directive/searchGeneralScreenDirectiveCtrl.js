@@ -1851,6 +1851,45 @@ module.exports = function (app) {
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
 
+        /**
+         * @description Get the allowed max and min values for the serial number and values to be displayed in error
+         * @param field
+         * @param minOrMax
+         * @returns {*}
+         */
+        self.getMinMaxSerialNumberValues = function (field, minOrMax) {
+            if (field === 'from') {
+                if (minOrMax === 'min') {
+                    return {
+                        value: 1,
+                        errorValue: 0
+                    };
+                } else if (minOrMax === 'max') {
+                    if (self.searchCriteria.serialNoTo) {
+                        return {
+                            value: Number(self.searchCriteria.serialNoTo) - 1,
+                            errorValue: Number(self.searchCriteria.serialNoTo)
+                        };
+                    }
+                }
+            } else if (field === 'to') {
+                if (minOrMax === 'min') {
+                    if (self.searchCriteria.serialNoFrom) {
+                        return {
+                            value: Number(self.searchCriteria.serialNoFrom) + 1,
+                            errorValue: self.searchCriteria.serialNoFrom
+                        };
+                    }
+                    return {
+                        value: 2,
+                        errorValue: 1
+                    }
+                } else {
+
+                }
+            }
+        };
+
         self.$onInit = function () {
             self.onRegistrySelectedChange();
             // assign current controller to search screen ctrl.

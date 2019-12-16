@@ -95,6 +95,7 @@ module.exports = function (app) {
                 model.docDate.To = '' + model.docDate.To;
 
             model.docDate = angular.toJson(model.docDate);
+            model.docSerial = (model.serialNoFrom && model.serialNoTo) ? model.serialNoFrom + ',' + model.serialNoTo : null;
 
             delete model.followUpFrom;
             delete model.followUpTo;

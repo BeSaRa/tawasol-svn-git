@@ -165,6 +165,8 @@ module.exports = function (app) {
                 model.exportDate = angular.toJson(exportDate);
             }
 
+            model.docSerial = (model.serialNoFrom && model.serialNoTo) ? model.serialNoFrom + ',' + model.serialNoTo : null;
+
 
             delete model.selectedEntityType;
             delete model.docStatus;

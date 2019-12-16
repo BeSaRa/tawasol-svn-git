@@ -52,6 +52,7 @@ module.exports = function (app) {
             } else {
                 model.linkedEntities = null;
             }
+            model.docSerial = (model.serialNoFrom && model.serialNoTo) ? model.serialNoFrom + ',' + model.serialNoTo : null;
 
             delete model.approvedBy;
             delete model.approveDateFrom;
