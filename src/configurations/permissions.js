@@ -100,11 +100,11 @@ module.exports = function (app) {
             .end()
             .addMenuPermission('menu_item_dashboard', 'LANDING_PAGE')
             .addMenuPermissionGroup('menu_item_search_module')
-            /*.addMenuPermission('menu_item_search_module_outgoing', 'SEARCH_OUTGOING')
+            .addMenuPermission('menu_item_search_module_outgoing', 'SEARCH_OUTGOING')
             .addMenuPermission('menu_item_search_module_incoming', 'SEARCH_INCOMING')
             .addMenuPermission('menu_item_search_module_internal', 'SEARCH_INTERNAL_DOCUMENT')
             .addMenuPermission('menu_item_search_module_general', 'GENERAL_SEARCH')
-            .addMenuPermissions('menu_item_search_module_outgoing_incoming', ['SEARCH_OUTGOING', 'SEARCH_INCOMING'])*/
+            .addMenuPermissions('menu_item_search_module_outgoing_incoming', ['SEARCH_OUTGOING', 'SEARCH_INCOMING'])
             .addMenuPermission('menu_item_search_module', function (employee) {
                 return employee.hasAnyPermissions(['SEARCH_OUTGOING', 'SEARCH_INCOMING', 'SEARCH_INTERNAL_DOCUMENT', 'GENERAL_SEARCH']);
             })
