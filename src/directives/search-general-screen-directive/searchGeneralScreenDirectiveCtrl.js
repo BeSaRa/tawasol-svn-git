@@ -30,6 +30,7 @@ module.exports = function (app) {
                                                                  viewTrackingSheetService,
                                                                  downloadService,
                                                                  counterService,
+                                                                 rootEntity,
                                                                  favoriteDocumentsService,
                                                                  mailNotificationService,
                                                                  userSubscriptionService,
@@ -97,7 +98,7 @@ module.exports = function (app) {
             })
         ];
         // security levels for current employee.
-        self.securityLevels = angular.copy(self.employee.organization.getSecurityAsLookup());
+        self.securityLevels = angular.copy(rootEntity.getGlobalSettings().securityLevels);
         // search text for filtering fromRegOu DDL
         self.fromRegOUIdSearchText = '';
         // priority levels lookup

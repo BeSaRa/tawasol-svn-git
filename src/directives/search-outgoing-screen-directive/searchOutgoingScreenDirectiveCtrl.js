@@ -33,6 +33,7 @@ module.exports = function (app) {
                                                                   favoriteDocumentsService,
                                                                   mailNotificationService,
                                                                   userSubscriptionService,
+                                                                  rootEntity,
                                                                   printService) {
         'ngInject';
         var self = this;
@@ -99,7 +100,7 @@ module.exports = function (app) {
             })
         ];
         // security levels for current employee.
-        self.securityLevels = angular.copy(self.employee.organization.getSecurityAsLookup());
+        self.securityLevels = angular.copy(rootEntity.getGlobalSettings().securityLevels);
         // search text for filtering fromRegOu DDL
         self.fromRegOUIdSearchText = '';
         // priority levels lookup
