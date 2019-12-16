@@ -687,29 +687,23 @@ module.exports = function (app) {
                             item[langService.current + 'Name'].toLowerCase();
                         });
                     }
-
                     // if user has permission to search in all ou load all organizations and ignore role security
-                    return organizationService.loadOrganizations(employeeService.hasPermissionTo('SEARCH_IN_ALL_OU'))
-                        .then(function (result) {
-                            // to sort registry organizations after retrieve
-                            return _sortResultByCurrentLang(_.filter(result, function (organization) {
-                                return organization.hasRegistry;
-                            }));
-                            // defer.resolve(_sortResultByCurrentLang(result));
-                        });
-
-                    //TODO: need to check business because i commented the old way and i still get the same result :)
-                    // which mean why we use "SEARCH_IN_ALL_OU" Permission if all ways return same results. :)
-
-                    // organizationService.getUserViewPermissionOusByUserId(employeeService.getEmployee().id)
-                    //     .then(function (result) {
-                    //         defer.resolve(_sortResultByCurrentLang(result));
-                    //     });
-                    // return defer.promise.then(function (organizations) {
-                    //     return _.filter(organizations, function (organization) {
-                    //         return organization.hasRegistry;
-                    //     })
-                    // })
+                    if (employeeService.hasPermissionTo('SEARCH_IN_ALL_OU')) {
+                        organizationService.loadOrganizations(employeeService.hasPermissionTo('SEARCH_IN_ALL_OU'))
+                            .then(function (result) {
+                                // to sort registry organizations after retrieve
+                                return _sortResultByCurrentLang(_.filter(result, function (organization) {
+                                    return organization.hasRegistry;
+                                }));
+                            });
+                    } else {
+                        organizationService.getUserViewPermissionOusByUserId(employeeService.getEmployee().id)
+                            .then(function (result) {
+                                return _sortResultByCurrentLang(_.filter(result, function (organization) {
+                                    return organization.hasRegistry;
+                                }));
+                            });
+                    }
                 },
                 propertyConfigurations: function ($q, propertyConfigurationService, employeeService) {
                     'ngInject';
