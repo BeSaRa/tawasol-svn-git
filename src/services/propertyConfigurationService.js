@@ -39,14 +39,14 @@ module.exports = function (app) {
             });
         };
         /**
-         * @description load propertyConfiguration by documentClass and ouId.
+         * @description  load all property configurations.
          */
-        self.loadAllPropertyConfigurationsByOU = function () {
-            // ouId = ouId.hasOwnProperty('id') ? ouId.id : ouId;
-            //ou/' + ouId + '
+        self.loadAllPropertyConfigurations = function () {
             return $http.get(urlService.propertyConfigurations + '/all').then(function (result) {
                 var hashMap = generator.generateHashMap(result.data.rs, PropertyConfiguration, self._sharedMethods);
-                return generator.interceptReceivedHashMap('PropertyConfiguration', hashMap);
+                result = generator.interceptReceivedHashMap('PropertyConfiguration', hashMap);
+                result.OutgoingIncoming = angular.copy(result.Incoming);
+                return result;
             });
         };
 

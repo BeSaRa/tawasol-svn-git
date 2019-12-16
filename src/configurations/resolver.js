@@ -714,17 +714,8 @@ module.exports = function (app) {
                 propertyConfigurations: function ($q, propertyConfigurationService, employeeService) {
                     'ngInject';
                     var ouId = employeeService.getEmployee().organization.ouid;
-                    var methodName = propertyConfigurationService
-                        .loadPropertyConfigurationsByDocumentClassAndOU;
-                    return $q.all({
-                        incoming: methodName('incoming', ouId),
-                        outgoing: methodName('outgoing', ouId),
-                        internal: methodName('internal', ouId),
-                        general: methodName('general', ouId),
-                    }).then(function (result) {
-                        result.outgoingIncoming = angular.copy(result.incoming);
-                        return result;
-                    });
+                    return propertyConfigurationService
+                        .loadAllPropertyConfigurations();
                 },
                 approvers: function (ouApplicationUserService, employeeService, registryOrganizations) {
                     'ngInject';
