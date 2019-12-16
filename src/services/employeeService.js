@@ -166,6 +166,9 @@ module.exports = function (app) {
          * @return {boolean}
          */
         self.isCurrentOUApplicationUser = function (ouApplicationUser) {
+            // cladmin user
+            if(!employee.organization)
+                return false;
             var ouAppUserOuId = ouApplicationUser.ouid.hasOwnProperty('id') ? ouApplicationUser.ouid.id : ouApplicationUser.ouid;
             var userId = ouApplicationUser.applicationUser.hasOwnProperty('id') ? ouApplicationUser.applicationUser.id : ouApplicationUser.applicationUser;
             var employeeOuId = (employee.organization.ouid && employee.organization.ouid.hasOwnProperty('id')) ? employee.organization.ouid.id : employee.organization.ouid;
