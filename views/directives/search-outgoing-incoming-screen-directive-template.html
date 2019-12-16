@@ -23,16 +23,6 @@
                     <div layout="row">
                         <div flex layout="row">
                             <md-input-container class="restrict-max" flex>
-                                <label for="refDocNumber">{{lang.document_number}}</label>
-                                <input id="refDocNumber" name="refDocNumber" ng-model="ctrl.searchCriteria.refDocNumber"
-                                       type="text">
-                                <div ng-messages="simpleSearchForm.refDocNumber.$error">
-                                    <div ng-message="number">{{lang.numberonly}}</div>
-                                </div>
-                            </md-input-container>
-                        </div><!-- serialNoFrom -->
-                        <div flex layout="row">
-                            <md-input-container class="restrict-max" flex>
                                 <label for="serialNoFrom">{{lang.search_module_serial_from}}</label>
                                 <input id="serialNoFrom" name="serialNoFrom" ng-model="ctrl.searchCriteria.serialNoFrom"
                                        min="1" max="ctrl.getMinMaxSerialNumberValues('from', 'max').value"
@@ -71,9 +61,6 @@
                                 </div>
                             </md-input-container>
                         </div><!-- serialNoTo -->
-                        <div flex layout="row"></div>
-                    </div> <!-- Second row -->
-                    <div layout="row">
                         <div flex layout="row">
                             <md-input-container flex>
                                 <label for="registryOU">{{lang.select_organization}}</label>
@@ -131,34 +118,7 @@
                                 </md-select>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
-                            <md-input-container class="cms-datepicker md-block" flex>
-                                <label for="refDocDateFrom">{{lang.doc_date_from}}</label>
-                                <md-datepicker id="refDocDateFrom"
-                                               name="refDocDateFrom"
-                                               ng-required="ctrl.searchCriteria.refDocDateFrom"
-                                               md-max-date="ctrl.getLessDateOrToday(ctrl.searchCriteria.refDocDateTo)"
-                                               ng-model="ctrl.searchCriteria.refDocDateFrom"></md-datepicker>
-                                <div ng-messages="advancedSearchForm.refDocDateFrom.$error">
-                                    <div ng-message="required">{{lang.field_required}}</div>
-                                </div>
-                            </md-input-container>
-                        </div>
-                        <div flex layout="row">
-                            <md-input-container class="cms-datepicker md-block" flex>
-                                <label for="refDocDateTo">{{lang.doc_date_to}}</label>
-                                <md-datepicker id="refDocDateTo"
-                                               name="refDocDateTo"
-                                               ng-required="ctrl.searchCriteria.refDocDateFrom"
-                                               md-min-date="ctrl.searchCriteria.refDocDateFrom"
-                                               md-max-date="ctrl.maxCreateDate"
-                                               ng-model="ctrl.searchCriteria.refDocDateTo"></md-datepicker>
-                                <div ng-messages="advancedSearchForm.refDocDateTo.$error">
-                                    <div ng-message="required">{{lang.field_required}}</div>
-                                </div>
-                            </md-input-container>
-                        </div>
-                    </div>
+                    </div> <!-- Second row -->
                     <div layout="row">
                         <div flex layout="row">
                             <md-input-container flex="">
@@ -285,7 +245,7 @@
                         </div>
                         <div flex layout="row">
                             <md-input-container flex="">
-                                <label for="year">{{lang.incoming_date_year}}</label>
+                                <label for="year">{{lang.search_module_year}}</label>
                                 <md-select data-md-container-class="select-header-container sticky-search-bar"
                                            id="year"
                                            name="year"
@@ -317,13 +277,13 @@
                         </div>
                         <div flex layout="row">
                             <md-input-container class="cms-datepicker md-block" flex>
-                                <label>{{lang.incoming_date_from}}</label>
+                                <label>{{lang.search_module_start_date}}</label>
                                 <input readonly disabled value="{{ctrl.searchCriteria.docDateFrom}}"/>
                             </md-input-container>
                         </div>
                         <div flex layout="row">
                             <md-input-container class="cms-datepicker md-block" flex>
-                                <label>{{lang.incoming_date_to}}</label>
+                                <label>{{lang.search_module_end_date}}</label>
                                 <input readonly disabled value="{{ctrl.searchCriteria.docDateTo}}"/>
                             </md-input-container>
                         </div>
