@@ -21,6 +21,12 @@ module.exports = function (app) {
                     creator: function () {
                         return this.creatorInfo.getTranslatedName();
                     },
+                    created_by: function () {
+                        if (typeof this.createdBy === 'string') {
+                            return this.createdBy;
+                        }
+                        return this.createdBy.getTranslatedName();
+                    },
                     created_on: 'createdOn',
                     correspondence_sites: function () {
                         return this.getTranslatedCorrespondenceSiteInfo();

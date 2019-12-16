@@ -21,7 +21,8 @@ module.exports = function (app) {
                                                               mailNotificationService,
                                                               generator,
                                                               gridService,
-                                                              userSubscriptionService) {
+                                                              userSubscriptionService,
+                                                              printService) {
         'ngInject';
         var self = this;
 
@@ -149,6 +150,22 @@ module.exports = function (app) {
                     self.getSortedData();
                     return result;
                 });
+        };
+
+        self.printResult = function ($event) {
+            var printTitle = langService.get("search_module_search_results");
+
+            var headers = [
+                'label_serial',
+                'subject',
+                'priority_level',
+                'label_document_type',
+                'created_by',
+                'created_on'
+            ];
+
+            printService
+                .printData(self.quickSearchCorrespondence, headers, printTitle);
         };
 
 

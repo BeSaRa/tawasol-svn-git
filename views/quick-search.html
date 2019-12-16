@@ -7,6 +7,11 @@
                        tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
+            <md-button ng-if="ctrl.quickSearchCorrespondence.length"
+                       ng-click="ctrl.printResult($event)" class="md-icon-button"
+                       tooltip="{{lang.print}}">
+                <md-icon md-svg-icon="printer"></md-icon>
+            </md-button>
             <span flex></span>
             <div class="p020">
                 <md-switch aria-label="{{lang.truncate_subject}}"
@@ -47,7 +52,7 @@
                                         </th>
                                         <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
                                             md-order-by="docSubject">
-                                            <span>{{lang.document_subject}}</span>
+                                            <span>{{lang.subject}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
                                             md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
@@ -88,7 +93,7 @@
                                                                       indicator-type="siteFollowUpDueDate"
                                                                       record-type="correspondence"></grid-indicator-directive>
                                         </td>
-                                        <td  md-cell><span class="serial-td">{{quickSearch.docFullSerial}}</span></td>
+                                        <td md-cell><span class="serial-td">{{quickSearch.docFullSerial}}</span></td>
                                         <td md-cell class="subject">
                                             <!--<grid-document-subject-directive record="quickSearch"
                                                                              plain-text-only="!quickSearch.hasContent()"
