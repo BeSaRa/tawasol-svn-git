@@ -10,13 +10,13 @@
                 </div>
             </accordion-title>
             <accordion-content>
-                <ng-form name="simpleSearchForm">
+                <ng-form ng-enter="ctrl.searchCorrespondence()" name="simpleSearchForm">
                     <div layout="row">
                         <div flex layout="row">
                             <md-input-container flex>
                                 <label for="docSubject">{{lang.document_subject}}</label>
-                                <textarea id="docSubject" name="docSubject"
-                                          ng-model="ctrl.searchCriteria.docSubject"></textarea>
+                                <input id="docSubject" name="docSubject"
+                                          ng-model="ctrl.searchCriteria.docSubject"/>
                             </md-input-container>
                         </div>
                     </div> <!-- First row -->
@@ -318,7 +318,7 @@
                 </div>
             </accordion-title>
             <accordion-content>
-                <ng-form name="advancedSearchForm">
+                <ng-form ng-enter="ctrl.searchCorrespondence()" name="advancedSearchForm">
                     <div layout="row">
                         <div flex layout="row">
                             <md-input-container flex>
