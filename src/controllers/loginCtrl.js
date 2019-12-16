@@ -85,6 +85,10 @@ module.exports = function (app) {
                 themeId = result.userInfo.defaultThemeID;
                 // to make some delay for the promise.
                 $timeout(function () {
+                    if (!themeId) {
+                        promise.resolve(true);
+                        return;
+                    }
                     themeService.loadThemeById(themeId).then(function (theme) {
                         themeService.setCurrentTheme(theme);
                         promise.resolve(true);

@@ -146,6 +146,10 @@ module.exports = function (app) {
                                     var themeId = result.userInfo.defaultThemeID;
                                     var promise = $q.defer();
                                     $timeout(function () {
+                                        if (!themeId) {
+                                            promise.resolve(true);
+                                            return;
+                                        }
                                         themeService.loadThemeById(themeId).then(function (theme) {
                                             themeService.setCurrentTheme(theme);
                                             promise.resolve(true);

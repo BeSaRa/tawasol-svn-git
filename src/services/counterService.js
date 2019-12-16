@@ -10,7 +10,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this, g2gInterval;
         self.serviceName = 'counterService';
-        self.counter = {};
+        self.counter = new Counter();
         self.folderCount = {};
         self.g2gIncomingCount = {
             first: 0,
