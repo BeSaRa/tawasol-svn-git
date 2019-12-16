@@ -811,7 +811,7 @@ module.exports = function (app) {
             favoriteDocumentsService.controllerMethod
                 .favoriteDocumentAddBulk(self.selectedSearchedOutgoingIncomingDocuments, $event)
                 .then(function (result) {
-                    self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -843,7 +843,7 @@ module.exports = function (app) {
         self.addToIcnArchive = function (correspondence, $event, defer) {
             correspondence.addToIcnArchiveDialog($event)
                 .then(function () {
-                    self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                     new ResolveDefer(defer);
                 });
         };
@@ -883,7 +883,7 @@ module.exports = function (app) {
 
             correspondence.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
-                    self.reloadSearchedOutgoingIncomingDocument(self.grid.page)
+                    self.reloadSearchCorrespondence(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
@@ -973,10 +973,10 @@ module.exports = function (app) {
         self.manageAttachments = function (correspondence, $event) {
             correspondence.manageDocumentAttachments($event)
                 .then(function () {
-                    self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -989,9 +989,9 @@ module.exports = function (app) {
             var info = correspondence.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass)
                 .then(function () {
-                    self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 }).catch(function () {
-                    self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1013,7 +1013,7 @@ module.exports = function (app) {
         self.manageDestinations = function (correspondence, $event) {
             correspondence.manageDocumentCorrespondence($event)
                 .then(function () {
-                    self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1137,7 +1137,7 @@ module.exports = function (app) {
             correspondence.endFollowup($event)
                 .then(function (result) {
                     if (result !== 'FAILED_TERMINATE_FOLLOWUP') {
-                        self.reloadSearchedOutgoingIncomingDocument(self.grid.page)
+                        self.reloadSearchCorrespondence(self.grid.page)
                             .then(function () {
                                 new ResolveDefer(defer);
                             });
@@ -1161,10 +1161,10 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(correspondence, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(correspondence, true))
                 .then(function () {
-                    //   return self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                    //   return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    //   return self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                    //   return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1180,10 +1180,10 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'searchOutgoingIncoming', $event)
                 .then(function () {
-                    // return self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                    // return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function (error) {
-                    // return self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                    // return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1240,7 +1240,7 @@ module.exports = function (app) {
             correspondence
                 .correspondenceBroadcast()
                 .then(function () {
-                    self.reloadSearchedOutgoingIncomingDocument(self.grid.page)
+                    self.reloadSearchCorrespondence(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);

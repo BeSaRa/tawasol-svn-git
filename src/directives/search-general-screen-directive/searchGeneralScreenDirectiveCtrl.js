@@ -809,7 +809,7 @@ module.exports = function (app) {
             favoriteDocumentsService.controllerMethod
                 .favoriteDocumentAddBulk(self.selectedSearchedGeneralDocuments, $event)
                 .then(function (result) {
-                    self.reloadSearchedGeneralDocuments(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -841,7 +841,7 @@ module.exports = function (app) {
         self.addToIcnArchive = function (correspondence, $event, defer) {
             correspondence.addToIcnArchiveDialog($event)
                 .then(function () {
-                    self.reloadSearchedGeneralDocuments(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                     new ResolveDefer(defer);
                 });
         };
@@ -883,7 +883,7 @@ module.exports = function (app) {
             }
 
             promise.then(function () {
-                self.reloadSearchedGeneralDocuments(self.grid.page)
+                self.reloadSearchCorrespondence(self.grid.page)
                     .then(function () {
                         mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     });
@@ -973,10 +973,10 @@ module.exports = function (app) {
         self.manageAttachments = function (searchedGeneralDocument, $event) {
             searchedGeneralDocument.manageDocumentAttachments($event)
                 .then(function () {
-                    self.reloadSearchedGeneralDocuments(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    self.reloadSearchedGeneralDocuments(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -989,9 +989,9 @@ module.exports = function (app) {
             var info = searchedGeneralDocument.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass)
                 .then(function () {
-                    self.reloadSearchedGeneralDocuments(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 }).catch(function () {
-                    self.reloadSearchedGeneralDocuments(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1013,7 +1013,7 @@ module.exports = function (app) {
         self.manageDestinations = function (correspondence, $event) {
             correspondence.manageDocumentCorrespondence($event)
                 .then(function () {
-                    self.reloadSearchedGeneralDocuments(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1137,7 +1137,7 @@ module.exports = function (app) {
             correspondence.endFollowup($event)
                 .then(function (result) {
                     if (result !== 'FAILED_TERMINATE_FOLLOWUP') {
-                        self.reloadSearchedGeneralDocuments(self.grid.page)
+                        self.reloadSearchCorrespondence(self.grid.page)
                             .then(function () {
                                 new ResolveDefer(defer);
                             });
@@ -1161,10 +1161,10 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(searchedGeneralDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedGeneralDocument, true))
                 .then(function () {
-                    // return self.reloadSearchedGeneralDocuments(self.grid.page);
+                    // return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    //  return self.reloadSearchedGeneralDocuments(self.grid.page);
+                    //  return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1180,10 +1180,10 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'searchGeneral', $event)
                 .then(function () {
-                    //  return self.reloadSearchedGeneralDocuments(self.grid.page);
+                    //  return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function (error) {
-                    // return self.reloadSearchedGeneralDocuments(self.grid.page);
+                    // return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1244,7 +1244,7 @@ module.exports = function (app) {
             correspondence
                 .correspondenceBroadcast()
                 .then(function () {
-                    self.reloadSearchedGeneralDocuments(self.grid.page)
+                    self.reloadSearchCorrespondence(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);

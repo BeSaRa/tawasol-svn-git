@@ -779,28 +779,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Reload the grid of searched outgoing documents
-         * @param pageNumber
-         * @return {*|Promise<U>}
-         */
-        self.reloadSearchedOutgoingDocument = function (pageNumber) {
-            var defer = $q.defer();
-            self.grid.progress = defer.promise;
-            return searchOutgoingService
-                .searchOutgoingDocuments(self.searchOutgoingModel, self.propertyConfigurations)
-                .then(function (result) {
-                    counterService.loadCounters();
-                    self.searchedOutgoingDocuments = _mapResultToAvoidCorrespondenceCheck(result);
-                    self.selectedSearchedOutgoingDocuments = [];
-                    defer.resolve(true);
-                    if (pageNumber)
-                        self.grid.page = pageNumber;
-                    self.getSortedData();
-                    return result;
-                });
-        };
-
-        /**
          * @description add selected items to the favorite documents
          * @param $event
          */
@@ -808,7 +786,7 @@ module.exports = function (app) {
             favoriteDocumentsService.controllerMethod
                 .favoriteDocumentAddBulk(self.selectedSearchedOutgoingDocuments, $event)
                 .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -821,7 +799,7 @@ module.exports = function (app) {
         self.addToIcnArchive = function (correspondence, $event, defer) {
             correspondence.addToIcnArchiveDialog($event)
                 .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                     new ResolveDefer(defer);
                 });
         };
@@ -863,7 +841,7 @@ module.exports = function (app) {
             // if the document status === 22 we should check if the document have active workflow
             searchedOutgoingDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page)
+                    self.reloadSearchCorrespondence(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
@@ -952,10 +930,10 @@ module.exports = function (app) {
         self.manageAttachments = function (searchedOutgoingDocument, $event) {
             searchedOutgoingDocument.manageDocumentAttachments($event)
                 .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -967,10 +945,10 @@ module.exports = function (app) {
             var info = searchedOutgoingDocument.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass)
                 .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -993,7 +971,7 @@ module.exports = function (app) {
         self.manageDestinations = function (searchedOutgoingDocument, $event) {
             searchedOutgoingDocument.manageDocumentCorrespondence($event)
                 .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1101,7 +1079,7 @@ module.exports = function (app) {
             correspondence.endFollowup($event)
                 .then(function (result) {
                     if (result !== 'FAILED_TERMINATE_FOLLOWUP') {
-                        self.reloadSearchedOutgoingDocument(self.grid.page)
+                        self.reloadSearchCorrespondence(self.grid.page)
                             .then(function () {
                                 new ResolveDefer(defer);
                             });
@@ -1134,10 +1112,10 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(searchedOutgoingDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedOutgoingDocument, true))
                 .then(function () {
-                    //return self.reloadSearchedOutgoingDocument(self.grid.page);
+                    //return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    // return self.reloadSearchedOutgoingDocument(self.grid.page);
+                    // return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1153,10 +1131,10 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'searchOutgoing', $event)
                 .then(function () {
-                    //   return self.reloadSearchedOutgoingDocument(self.grid.page);
+                    //   return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    //  return self.reloadSearchedOutgoingDocument(self.grid.page);
+                    //  return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1217,7 +1195,7 @@ module.exports = function (app) {
             correspondence
                 .correspondenceBroadcast()
                 .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page)
+                    self.reloadSearchCorrespondence(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
@@ -1234,7 +1212,7 @@ module.exports = function (app) {
             correspondence
                 .partialExport($event)
                 .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page)
+                    self.reloadSearchCorrespondence(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);

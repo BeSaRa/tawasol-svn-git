@@ -783,7 +783,7 @@ module.exports = function (app) {
             favoriteDocumentsService.controllerMethod
                 .favoriteDocumentAddBulk(self.selectedSearchedInternalDocuments, $event)
                 .then(function (result) {
-                    self.reloadSearchedInternalDocuments(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -815,7 +815,7 @@ module.exports = function (app) {
         self.addToIcnArchive = function (correspondence, $event, defer) {
             correspondence.addToIcnArchiveDialog($event)
                 .then(function () {
-                    self.reloadSearchedInternalDocuments(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                     new ResolveDefer(defer);
                 });
         };
@@ -832,7 +832,7 @@ module.exports = function (app) {
 
             searchedInternalDocument.launchWorkFlowAndCheckApprovedInternal($event, null, 'favorites')
                 .then(function () {
-                    self.reloadSearchedInternalDocuments(self.grid.page)
+                    self.reloadSearchCorrespondence(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
@@ -914,10 +914,10 @@ module.exports = function (app) {
         self.manageAttachments = function (searchedInternalDocument, $event) {
             searchedInternalDocument.manageDocumentAttachments($event)
                 .then(function () {
-                    self.reloadSearchedInternalDocuments(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    self.reloadSearchedInternalDocuments(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 })
             ;
         };
@@ -932,10 +932,10 @@ module.exports = function (app) {
             var info = searchedInternalDocument.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass)
                 .then(function () {
-                    self.reloadSearchedInternalDocuments(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    self.reloadSearchedInternalDocuments(self.grid.page);
+                    self.reloadSearchCorrespondence(self.grid.page);
                 })
                 ;
         };
@@ -1075,10 +1075,10 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(searchedInternalDocument, self.gridActions, true, true)
                 .then(function () {
-                    //  return self.reloadSearchedInternalDocuments(self.grid.page);
+                    //  return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    //  return self.reloadSearchedInternalDocuments(self.grid.page);
+                    //  return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1094,10 +1094,10 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'searchInternal', $event)
                 .then(function () {
-                    // return self.reloadSearchedInternalDocuments(self.grid.page);
+                    // return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    //  return self.reloadSearchedInternalDocuments(self.grid.page);
+                    //  return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1158,7 +1158,7 @@ module.exports = function (app) {
             correspondence
                 .correspondenceBroadcast()
                 .then(function () {
-                    self.reloadSearchedInternalDocuments(self.grid.page)
+                    self.reloadSearchCorrespondence(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
