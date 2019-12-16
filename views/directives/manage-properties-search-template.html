@@ -9,7 +9,7 @@
                                ng-model="ctrl.document.registryOU"
                                ng-change="ctrl.onRegistryChanged()"
                                md-on-close="ctrl.clearSearchText('regOU')"
-                               data-md-container-class="select-header-container">
+                               data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header">
                             <input ng-model="ctrl.regOUSearchText"
                                    ng-keydown="ctrl.handleSearchKeyDown($event, 'regOU')"
@@ -36,7 +36,7 @@
                                ng-disabled="!ctrl.document.registryOU"
                                ng-readonly="!ctrl.document.registryOU"
                                md-on-close="ctrl.clearSearchText('sectionOU')"
-                               data-md-container-class="select-header-container">
+                               data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header">
                             <input ng-model="ctrl.sectionOUSearchText"
                                    ng-keydown="ctrl.handleSearchKeyDown($event, 'sectionOU')"
@@ -205,7 +205,7 @@
                                ng-required="ctrl.checkMandatory('mainClassification')"
                                ng-change="ctrl.onChangeMainClassification($event)"
                                md-on-close="ctrl.clearSearchText('mainClassification')"
-                               data-md-container-class="select-header-container">
+                               data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header" layout="column">
                             <div layout="row" flex class="size-100">
                                 <input ng-model="ctrl.mainClassificationSearchText"
@@ -247,7 +247,7 @@
                             ng-model="ctrl.document.subClassification"
                             ng-required="ctrl.checkMandatory('subClassification')"
                             md-on-close="ctrl.clearSearchText('subClassification')"
-                            data-md-container-class="select-header-container">
+                            data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header" layout="column">
                             <div layout="row" flex class="size-100">
                                 <input ng-model="ctrl.subClassificationSearchText"
@@ -443,7 +443,7 @@
                                ng-model-options="{trackBy: '$value.id'}"
                                ng-required="ctrl.checkMandatory('fileId')"
                                md-on-close="ctrl.clearSearchText('documentFile')"
-                               data-md-container-class="select-header-container">
+                               data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header" layout="column">
                             <div layout="row" flex class="size-100">
                                 <input ng-model="ctrl.documentFileSearchText"
@@ -615,7 +615,7 @@
                                ng-model="ctrl.document.approvers"
                                ng-required="ctrl.checkMandatory('approvers')"
                                md-on-close="ctrl.clearSearchText('approver')"
-                               data-md-container-class="select-header-container">
+                               data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header">
                             <input ng-model="ctrl.approverSearchText"
                                    ng-keydown="ctrl.handleSearchKeyDown($event)"
@@ -672,7 +672,7 @@
                                ng-model="ctrl.document.fromRegOUId"
                                ng-model-options="{trackBy: '$value'}"
                                md-on-close="ctrl.clearSearchText('fromDept')"
-                               data-md-container-class="select-header-container">
+                               data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header">
                             <input ng-model="ctrl.fromDeptSearchText"
                                    ng-keydown="ctrl.handleSearchKeyDown($event)"
@@ -696,7 +696,7 @@
                                ng-model="ctrl.document.toRegOUId"
                                ng-model-options="{trackBy: '$value'}"
                                md-on-close="ctrl.clearSearchText('toDept')"
-                               data-md-container-class="select-header-container">
+                               data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header">
                             <input ng-model="ctrl.toDeptSearchText"
                                    ng-keydown="ctrl.handleSearchKeyDown($event)"

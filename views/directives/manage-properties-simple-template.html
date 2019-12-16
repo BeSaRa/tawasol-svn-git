@@ -13,7 +13,7 @@
                                ng-model="ctrl.document.registryOU"
                                ng-required="ctrl.checkMandatory('registryOU')"
                                md-on-close="ctrl.clearSearchText('registryOU')"
-                               data-md-container-class="select-header-container">
+                               data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header">
                             <input ng-model="ctrl.registryOUSearchText"
                                    ng-keydown="ctrl.handleSearchKeyDown($event, 'registryOU')"
@@ -44,7 +44,7 @@
                                ng-model="ctrl.document.ou"
                                ng-required="ctrl.checkMandatory('ou')"
                                md-on-close="ctrl.clearSearchText('registrySection')"
-                               data-md-container-class="select-header-container">
+                               data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header">
                             <input ng-model="ctrl.registrySectionSearchText"
                                    ng-keydown="ctrl.handleSearchKeyDown($event, 'registrySection')"
@@ -73,7 +73,7 @@
                                ng-model="ctrl.document.ou"
                                ng-required="ctrl.checkMandatory('ou')"
                                md-on-close="ctrl.clearSearchText('ou')"
-                               data-md-container-class="select-header-container">
+                               data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header">
                             <input ng-model="ctrl.ouSearchText"
                                    ng-keydown="ctrl.handleSearchKeyDown($event, 'ou')"
@@ -254,7 +254,7 @@
                                ng-required="ctrl.checkMandatory('mainClassification')"
                                ng-change="ctrl.onChangeMainClassification($event)"
                                md-on-close="ctrl.clearSearchText('mainClassification')"
-                               data-md-container-class="select-header-container">
+                               data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header" layout="column">
                             <div layout="row" flex class="size-100">
                                 <input ng-model="ctrl.mainClassificationSearchText"
@@ -295,7 +295,7 @@
                             ng-model="ctrl.document.subClassification"
                             ng-required="ctrl.checkMandatory('subClassification')"
                             md-on-close="ctrl.clearSearchText('subClassification')"
-                            data-md-container-class="select-header-container">
+                            data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header" layout="column">
                             <div layout="row" flex class="size-100">
                                 <input ng-model="ctrl.subClassificationSearchText"

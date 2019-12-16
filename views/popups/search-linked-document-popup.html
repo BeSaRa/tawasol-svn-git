@@ -44,7 +44,7 @@
                                                name="registryOU"
                                                ng-model="ctrl.correspondence.registryOU"
                                                md-on-close="ctrl.clearSearchText('linkedDocOu')"
-                                               data-md-container-class="select-header-container">
+                                               data-md-container-class="select-header-container sticky-search-bar">
                                         <md-select-header class="select-header">
                                             <input ng-model="ctrl.linkedDocOuSearchText"
                                                    ng-keydown="ctrl.handleSearchKeyDown($event, 'registryOU')"
@@ -90,7 +90,7 @@
                                                ng-model-options="{trackBy: '$value.id'}"
                                                ng-change="ctrl.onChangeMainClassification($event)"
                                                md-on-close="ctrl.clearSearchText('mainClassification')"
-                                               data-md-container-class="select-header-container">
+                                               data-md-container-class="select-header-container sticky-search-bar">
                                         <md-select-header class="select-header" layout="column">
                                             <div layout="row" flex class="size-100">
                                                 <input ng-model="ctrl.mainClassificationSearchText"
@@ -126,7 +126,7 @@
                                                ng-model="ctrl.correspondence.subClassification"
                                                ng-model-options="{trackBy: '$value.id'}"
                                                md-on-close="ctrl.clearSearchText('subClassification')"
-                                               data-md-container-class="select-header-container">
+                                               data-md-container-class="select-header-container sticky-search-bar">
                                         <md-select-header class="select-header" layout="column">
                                             <div layout="row" flex class="size-100">
                                                 <input ng-model="ctrl.subClassificationSearchText"
@@ -160,7 +160,7 @@
                                                ng-model="ctrl.correspondence.fileId"
                                                ng-model-options="{trackBy: '$value.id'}"
                                                md-on-close="ctrl.clearSearchText('documentFile')"
-                                               data-md-container-class="select-header-container">
+                                               data-md-container-class="select-header-container sticky-search-bar">
                                         <md-select-header class="select-header" layout="column">
                                             <div layout="row" flex class="size-100">
                                                 <input ng-model="ctrl.documentFileSearchText"

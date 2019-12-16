@@ -338,7 +338,7 @@
                                                    ng-model-options="{trackBy:'$value.id'}"
                                                    ng-model="ctrl.ouApplicationUser.customRoleId"
                                                    md-on-close="ctrl.clearSearchText('role')"
-                                                   data-md-container-class="select-header-container">
+                                                   data-md-container-class="select-header-container sticky-search-bar">
                                             <md-select-header class="select-header">
                                                 <input ng-model="ctrl.roleSearchText"
                                                        ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -1051,7 +1051,7 @@
                                                    ng-model-options="{trackBy : '$value.id'}"
                                                    ng-model="ctrl.ouViewPermission.ouId"
                                                    md-on-close="ctrl.clearSearchText('inlineUserOU')"
-                                                   data-md-container-class="select-header-container">
+                                                   data-md-container-class="select-header-container sticky-search-bar">
                                             <md-select-header class="select-header">
                                                 <input ng-model="ctrl.inlineOuSearchText"
                                                        ng-keydown="ctrl.preventSearchKeyDown($event)"

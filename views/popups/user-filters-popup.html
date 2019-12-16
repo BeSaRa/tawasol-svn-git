@@ -116,7 +116,7 @@
                                         <md-select name="sender" id="sender"
                                                    ng-model="ctrl.filter.ui.key_9.value"
                                                    md-on-close="ctrl.clearSearchText('sender')"
-                                                   data-md-container-class="select-header-container">
+                                                   data-md-container-class="select-header-container sticky-search-bar">
                                             <md-select-header class="select-header">
                                                 <input ng-model="ctrl.senderSearchText"
                                                        ng-keydown="ctrl.handleSearchKeyDown($event, 'sender')"
@@ -137,7 +137,7 @@
                                         <md-select name="action" id="action"
                                                    ng-model="ctrl.filter.ui.key_7.value"
                                                    md-on-close="ctrl.clearSearchText('action')"
-                                                   data-md-container-class="select-header-container">
+                                                   data-md-container-class="select-header-container sticky-search-bar">
                                             <md-select-header class="select-header">
                                                 <input ng-model="ctrl.actionSearchText"
                                                        ng-keydown="ctrl.handleSearchKeyDown($event, 'action')"
@@ -314,7 +314,7 @@
                                                    ng-model="ctrl.filter.ui.key_siteType.value"
                                                    md-on-close="ctrl.clearSearchText('siteType')"
                                                    ng-change="ctrl.getMainSites(true, $event)"
-                                                   data-md-container-class="select-header-container">
+                                                   data-md-container-class="select-header-container sticky-search-bar">
                                             <md-select-header class="select-header">
                                                 <input ng-model="ctrl.siteTypeSearchText"
                                                        ng-keydown="ctrl.handleSearchKeyDown($event, 'siteType')"
@@ -340,7 +340,7 @@
                                                    ng-disabled="!ctrl.filter.ui.key_siteType.value"
                                                    md-on-close="ctrl.clearSearchText('mainSite')"
                                                    ng-change="ctrl.getSubSites(true, $event)"
-                                                   data-md-container-class="select-header-container">
+                                                   data-md-container-class="select-header-container sticky-search-bar">
                                             <md-select-header class="select-header" layout="column">
                                                 <div layout="row" flex class="size-100">
                                                     <input ng-model="ctrl.mainSiteSearchText"
@@ -376,7 +376,7 @@
                                                    ng-model-options="{trackBy: '$value'}"
                                                    ng-disabled="!ctrl.filter.ui.key_siteType.value || !ctrl.filter.ui.key_mainSite.value"
                                                    md-on-close="ctrl.clearSearchText('subSite')"
-                                                   data-md-container-class="select-header-container">
+                                                   data-md-container-class="select-header-container sticky-search-bar">
                                             <md-select-header class="select-header" layout="column">
                                                 <div layout="row" flex class="size-100">
                                                     <input ng-model="ctrl.subSiteSearchText"

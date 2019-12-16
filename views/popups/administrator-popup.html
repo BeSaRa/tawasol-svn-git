@@ -23,7 +23,7 @@
                                        ng-disabled="ctrl.editMode"
                                        ng-change="ctrl.onChangeUser($event)"
                                        md-on-close="ctrl.clearSearchText('applicationUser')"
-                                       data-md-container-class="select-header-container">
+                                       data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
                                     <input ng-model="ctrl.applicationUserSearchText"
                                            ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -51,7 +51,7 @@
                                        ng-disabled="ctrl.administrator.isSuperAdmin || !ctrl.administrator.userId"
                                        ng-required="!ctrl.administrator.isSuperAdmin && ctrl.administrator.userId"
                                        md-on-close="ctrl.clearSearchText('regOu')"
-                                       data-md-container-class="select-header-container">
+                                       data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
                                     <input ng-model="ctrl.regOuSearchText"
                                            ng-keydown="ctrl.preventSearchKeyDown($event)"

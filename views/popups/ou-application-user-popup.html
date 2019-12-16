@@ -18,7 +18,7 @@
                                    ng-disabled="ctrl.ouApplicationUser.id"
                                    ng-model="ctrl.ouApplicationUser.ouid"
                                    md-on-close="ctrl.clearSearchText('ou')"
-                                   data-md-container-class="select-header-container">
+                                   data-md-container-class="select-header-container sticky-search-bar">
                             <md-select-header class="select-header">
                                 <input ng-model="ctrl.ouSearchText"
                                        ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -59,7 +59,7 @@
                                    ng-disabled="!ctrl.ouApplicationUser.ouid"
                                    ng-model="ctrl.ouApplicationUser.ouRegistryID"
                                    md-on-close="ctrl.clearSearchText('parentOu')"
-                                   data-md-container-class="select-header-container">
+                                   data-md-container-class="select-header-container sticky-search-bar">
                             <md-select-header class="select-header">
                                 <input ng-model="ctrl.parentOuSearchText"
                                        ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -88,7 +88,7 @@
                                    ng-model-options="{trackBy: '$value.id'}"
                                    ng-model="ctrl.ouApplicationUser.customRoleId"
                                    md-on-close="ctrl.clearSearchText('role')"
-                                   data-md-container-class="select-header-container">
+                                   data-md-container-class="select-header-container sticky-search-bar">
                             <md-select-header class="select-header">
                                 <input ng-model="ctrl.roleSearchText"
                                        ng-keydown="ctrl.preventSearchKeyDown($event)"

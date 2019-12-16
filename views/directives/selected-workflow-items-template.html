@@ -106,7 +106,7 @@
                                    ng-model-options="{trackBy:'$value.id'}"
                                    aria-label="workflow action"
                                    md-on-close="workflowItem.clearWFActionSearchText()"
-                                   data-md-container-class="select-header-container"
+                                   data-md-container-class="select-header-container sticky-search-bar"
                                    placeholder="{{workflowItem.getActionMessage()}}">
                             <md-select-header class="select-header">
                                 <input ng-model="workflowItem.actionSearchText"
@@ -138,7 +138,7 @@
                                        ng-change="ctrl.setWFComment(workflowItem, $event)"
                                        aria-label="workflow action"
                                        md-on-close="ctrl.onCloseCommentsDropdown(workflowItem)"
-                                       data-md-container-class="select-header-container"
+                                       data-md-container-class="select-header-container sticky-search-bar"
                                        placeholder="{{workflowItem.getCommentMessage()}}"
                                        md-selected-text="ctrl.getCommentText(workflowItem)">
                                 <md-select-header class="select-header">

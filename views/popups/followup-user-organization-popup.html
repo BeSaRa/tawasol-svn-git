@@ -16,7 +16,7 @@
                                            ng-model="ctrl.regOu"
                                            ng-change="ctrl.onRegistryChanged()"
                                            md-on-close="ctrl.clearSearchText('inlineUserOU')"
-                                           data-md-container-class="select-header-container">
+                                           data-md-container-class="select-header-container sticky-search-bar">
                                     <md-select-header class="select-header">
                                         <input ng-model="ctrl.inlineUserOUSearchText"
                                                ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -42,7 +42,7 @@
                                            ng-disabled="!ctrl.regOu"
                                            ng-readonly="!ctrl.regOu"
                                            md-on-close="ctrl.clearSearchText('sectionOU')"
-                                           data-md-container-class="select-header-container">
+                                           data-md-container-class="select-header-container sticky-search-bar">
                                     <md-select-header class="select-header">
                                         <input ng-model="ctrl.sectionOUSearchText"
                                                ng-keydown="ctrl.preventSearchKeyDown($event)"

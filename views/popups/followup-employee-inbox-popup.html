@@ -15,7 +15,7 @@
                                        aria-label="{{lang.organization_unit}}"
                                        ng-model="ctrl.selectedOrganization"
                                        md-on-close="ctrl.clearSearchText('inlineOU')"
-                                       data-md-container-class="select-header-container">
+                                       data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
                                     <input ng-model="ctrl.inlineOUSearchText"
                                            ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -43,7 +43,7 @@
                                        aria-label="{{lang.app_users}}"
                                        ng-model="ctrl.selectedApplicationUser"
                                        md-on-close="ctrl.clearSearchText('inlineAppUser')"
-                                       data-md-container-class="select-header-container">
+                                       data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
                                     <input ng-model="ctrl.inlineAppUserSearchText"
                                            ng-keydown="ctrl.preventSearchKeyDown($event)"

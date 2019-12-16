@@ -13,7 +13,7 @@
                             <md-select ng-change="ctrl.setReason()" id="comment"
                                        ng-model="ctrl.selectedComment"
                                        md-on-close="ctrl.clearSearchText('comment')"
-                                       data-md-container-class="select-header-container">
+                                       data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
                                     <input ng-model="ctrl.commentSearchText"
                                            ng-keydown="ctrl.preventSearchKeyDown($event)"

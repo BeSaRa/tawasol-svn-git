@@ -17,7 +17,7 @@
                        aria-label="{{lang.organizations}}"
                        ng-change="ctrl.loadUsersByOU($event)"
                        md-on-close="ctrl.clearSearchText('inlineOu')"
-                       data-md-container-class="select-header-container">
+                       data-md-container-class="select-header-container sticky-search-bar">
                 <md-select-header class="select-header">
                     <input ng-model="ctrl.inlineOuSearchText"
                            ng-keydown="ctrl.preventSearchKeyDown($event)"

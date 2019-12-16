@@ -119,7 +119,7 @@
                                    aria-label="workflow action"
                                    md-on-close="workflowItem.clearWFActionSearchText()"
                                    ng-model-options="{trackBy:'$value.id'}"
-                                   data-md-container-class="select-header-container"
+                                   data-md-container-class="select-header-container sticky-search-bar"
                                    placeholder="{{workflowItem.getActionMessage()}}">
                             <md-select-header class="select-header">
                                 <input ng-model="workflowItem.actionSearchText"
@@ -214,7 +214,7 @@
                                    class="select-wf-action"
                                    aria-label="workflow action"
                                    md-on-close="workflowItem.clearWFActionSearchText()"
-                                   data-md-container-class="select-header-container"
+                                   data-md-container-class="select-header-container sticky-search-bar"
                                    placeholder="{{workflowItem.getActionMessage()}}">
                             <md-select-header class="select-header">
                                 <input ng-model="workflowItem.actionSearchText"

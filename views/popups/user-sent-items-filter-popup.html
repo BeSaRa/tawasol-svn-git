@@ -81,7 +81,7 @@
                             <md-select name="userToId" id="userToId"
                                        ng-model="ctrl.searchCriteria.userToId"
                                        md-on-close="ctrl.clearSearchText('receiver')"
-                                       data-md-container-class="select-header-container">
+                                       data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
                                     <input ng-model="ctrl.receiverSearchText"
                                            ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -107,7 +107,7 @@
                                        ng-model-options="{trackBy:'$value.id'}"
                                        md-on-close="ctrl.clearSearchText('siteType')"
                                        ng-change="ctrl.getMainSites(true, $event)"
-                                       data-md-container-class="select-header-container">
+                                       data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
                                     <input ng-model="ctrl.siteTypeSearchText"
                                            ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -135,7 +135,7 @@
                                        ng-disabled="!ctrl.searchCriteria.selectedSiteType || !ctrl.searchCriteria.selectedSiteType.id"
                                        md-on-close="ctrl.clearSearchText('mainSite')"
                                        ng-change="ctrl.getSubSites(true, $event)"
-                                       data-md-container-class="select-header-container">
+                                       data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
                                     <input ng-model="ctrl.mainSiteSearchText"
                                            ng-keydown="ctrl.preventSearchKeyDown($event)"
@@ -159,7 +159,7 @@
                                        ng-model-options="{trackBy:'$value.id'}"
                                        ng-disabled="!ctrl.searchCriteria.selectedSiteType || !ctrl.searchCriteria.selectedSiteType.id || !ctrl.searchCriteria.selectedMainSite"
                                        md-on-close="ctrl.clearSearchText('subSite')"
-                                       data-md-container-class="select-header-container">
+                                       data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
                                     <input ng-model="ctrl.subSiteSearchText"
                                            ng-keydown="ctrl.preventSearchKeyDown($event)"
