@@ -654,7 +654,7 @@ module.exports = function (app) {
                     }
                 }
             })
-            .state('app.search', {
+            /*.state('app.search', {
                 abstract: true,
                 url: '/search',
                 template: '<div id="sub-view-wrapper"><ui-view flex layout="column" class="sub-view" /></div>',
@@ -843,7 +843,7 @@ module.exports = function (app) {
                             .loadPropertyConfigurationsByDocumentClassAndOU('incoming', ouId);
                     }
                 }
-            })
+            })*/
             // Viewers Log
             .state('app.administration.viewers-log', {
                 url: '/viewers-log',
