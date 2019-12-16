@@ -6,6 +6,9 @@
             <md-button ng-click="ctrl.reloadCurrentSearch()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
+            <md-button ng-if="ctrl.isShowPrintButton()" ng-click="ctrl.print($event)" class="md-icon-button" tooltip="{{lang.print}}">
+                <md-icon md-svg-icon="printer"></md-icon>
+            </md-button>
         </div><!-- page-header -->
         <div class="search-forms">
             <md-tabs class="content white-bg"

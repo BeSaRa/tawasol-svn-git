@@ -1,5 +1,8 @@
 module.exports = function (app) {
-    app.controller('searchScreenCtrl', function (registryOrganizations, propertyConfigurations, approvers, employeeService) {
+    app.controller('searchScreenCtrl', function (registryOrganizations,
+                                                 propertyConfigurations,
+                                                 approvers,
+                                                 employeeService) {
         var self = this;
         self.controllerName = 'searchScreenCtrl';
         // to give the user the ability to collapse the accordion by clicking on it's label.
@@ -9,31 +12,37 @@ module.exports = function (app) {
             {
                 langKey: 'menu_item_search_module_outgoing',
                 tabKey: 'outgoing',
-                show: employeeService.hasPermissionTo('SEARCH_OUTGOING')
+                show: employeeService.hasPermissionTo('SEARCH_OUTGOING'),
+                resultKey: 'searchedOutgoingDocuments'
             },
             {
                 langKey: 'menu_item_search_module_incoming',
                 tabKey: 'incoming',
-                show: employeeService.hasPermissionTo('SEARCH_INCOMING')
+                show: employeeService.hasPermissionTo('SEARCH_INCOMING'),
+                resultKey: 'searchedIncomingDocuments'
             },
             {
                 langKey: 'menu_item_search_module_internal',
                 tabKey: 'internal',
-                show: employeeService.hasPermissionTo('SEARCH_INTERNAL_DOCUMENT')
+                show: employeeService.hasPermissionTo('SEARCH_INTERNAL_DOCUMENT'),
+                resultKey: 'searchedInternalDocuments'
             },
             {
                 langKey: 'menu_item_search_module_general',
                 tabKey: 'general',
-                show: employeeService.hasPermissionTo('GENERAL_SEARCH')
+                show: employeeService.hasPermissionTo('GENERAL_SEARCH'),
+                resultKey: 'searchedGeneralDocuments'
             },
             {
                 langKey: 'menu_item_search_module_outgoing_incoming',
                 tabKey: 'outgoingIncoming',
-                show: employeeService.getEmployee().hasThesePermissions(['SEARCH_OUTGOING', 'SEARCH_INCOMING'])
+                show: employeeService.getEmployee().hasThesePermissions(['SEARCH_OUTGOING', 'SEARCH_INCOMING']),
+                resultKey: 'searchedOutgoingIncomingDocuments'
             }
         ];
         // current selected tab to display correct form search.
         self.selectedTabName = '';
+        self.selectedTabResultKey = '';
         _setSelectedTabName();
 
         // registry organizations
@@ -46,31 +55,39 @@ module.exports = function (app) {
         self.searchScreens = {
             outgoing: {
                 controller: {
-                    selectedSearchedOutgoingDocuments: []
+                    selectedSearchedOutgoingDocuments: [],
+                    searchedOutgoingDocuments: []
                 }
             },
             incoming: {
                 controller: {
-                    selectedSearchedIncomingDocuments: []
+                    selectedSearchedIncomingDocuments: [],
+                    searchedIncomingDocuments: []
                 }
             },
             internal: {
                 controller: {
-                    selectedSearchedInternalDocuments: []
+                    selectedSearchedInternalDocuments: [],
+                    searchedInternalDocuments: []
                 }
             },
             general: {
                 controller: {
-                    selectedSearchedGeneralDocuments: []
+                    selectedSearchedGeneralDocuments: [],
+                    searchedGeneralDocuments: []
                 }
             },
             outgoingIncoming: {
                 controller: {
-                    selectedSearchedOutgoingIncomingDocuments: []
+                    selectedSearchedOutgoingIncomingDocuments: [],
+                    searchedOutgoingIncomingDocuments: []
                 }
             }
         };
 
+        /**
+         * @description Reloads the current tab result data
+         */
         self.reloadCurrentSearch = function () {
             self.searchScreens[self.selectedTabName].controller.reloadSearchCorrespondence()
                 .then(function () {
@@ -86,7 +103,7 @@ module.exports = function (app) {
          */
         self.onTabClicked = function (tab, $event) {
             $event.preventDefault();
-            _setSelectedTabName(tab.tabKey);
+            _setSelectedTabName(tab);
         };
 
         /**
@@ -103,7 +120,21 @@ module.exports = function (app) {
                     }
                 }
             }
-            self.selectedTabName = tab.hasOwnProperty('tabKey') ? tab.tabKey : tab;
+            self.selectedTabResultKey = tab.resultKey;
+            self.selectedTabName = tab.tabKey;
         }
+
+        self.isShowPrintButton = function () {
+            return self.searchScreens[self.selectedTabName].controller[self.selectedTabResultKey].length > 0;
+        };
+
+        /**
+         * @description Prints the current tab result data
+         * @param $event
+         */
+        self.print = function ($event) {
+            self.searchScreens[self.selectedTabName].controller.printResult();
+
+        };
     });
 };

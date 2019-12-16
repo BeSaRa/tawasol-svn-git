@@ -714,6 +714,10 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Prints the result
+         * @param $event
+         */
         self.printResult = function ($event) {
             var printTitle = langService.get("search_module_search_results") + " " + langService.get("from") + " " + generator.convertDateToString(self.searchIncoming.docDateFrom) +
                 " " + langService.get("to") + " " + generator.convertDateToString(self.searchIncoming.docDateTo);

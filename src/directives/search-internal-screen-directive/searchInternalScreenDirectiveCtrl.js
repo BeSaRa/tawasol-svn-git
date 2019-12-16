@@ -715,6 +715,28 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Prints the result
+         * @param $event
+         */
+        self.printResult = function ($event) {
+            var printTitle = langService.get("search_module_search_results") + " " +
+                langService.get("from") + " " + generator.convertDateToString(self.searchCriteria.docDateFrom) + " " +
+                langService.get("to") + " " + generator.convertDateToString(self.searchCriteria.docDateTo);
+
+            var headers = [
+                'label_serial',
+                'subject',
+                'priority_level',
+                'label_document_type',
+                'creator',
+                'created_on'
+            ];
+
+            printService
+                .printData(self.searchedInternalDocuments, headers, printTitle);
+
+        };
 
         /**
          * @description Contains options for grid configuration
@@ -952,7 +974,7 @@ module.exports = function (app) {
          * @param searchedInternalDocument
          * @param $event
          */
-        self.downloadSelected = function(searchedInternalDocument,$event){
+        self.downloadSelected = function (searchedInternalDocument, $event) {
             downloadService.openSelectedDownloadDialog(searchedInternalDocument, $event);
         };
 
@@ -1530,7 +1552,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",

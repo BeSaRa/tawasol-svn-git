@@ -402,7 +402,7 @@ module.exports = function (app) {
             self.loadSitesByCriteria('sub')
                 .then(function (sites) {
                     self.subSites = _.map(sites, _mapSubSites);
-                    console.log('self.subSites',self.subSites);
+                    console.log('self.subSites', self.subSites);
                 });
         };
         /**
@@ -713,6 +713,30 @@ module.exports = function (app) {
                     self.getSortedData();
                     return result;
                 });
+        };
+
+        /**
+         * @description Prints the result
+         * @param $event
+         */
+        self.printResult = function ($event) {
+            var printTitle = langService.get("search_module_search_results") + " " +
+                langService.get("from") + " " + generator.convertDateToString(self.searchCriteria.docDateFrom) + " " +
+                langService.get("to") + " " + generator.convertDateToString(self.searchCriteria.docDateTo);
+
+            var headers = [
+                'label_serial',
+                'subject',
+                'priority_level',
+                'label_document_type',
+                'creator',
+                'created_on',
+                'correspondence_sites'
+            ];
+
+            printService
+                .printData(self.searchedOutgoingDocuments, headers, printTitle);
+
         };
 
         /************** Normal Search Controller Methods / Properties **********/
@@ -1216,23 +1240,6 @@ module.exports = function (app) {
                             new ResolveDefer(defer);
                         })
                 });
-        };
-
-        self.printResult = function ($event) {
-            var printTitle = langService.get("search_module_search_results") + " " + langService.get("from") + " " + generator.convertDateToString(self.searchOutgoing.docDateFrom) +
-                " " + langService.get("to") + " " + generator.convertDateToString(self.searchOutgoing.docDateTo);
-
-            var headers = ['label_serial',
-                'subject',
-                'priority_level',
-                'label_document_type',
-                'creator',
-                'created_on',
-                'correspondence_sites'];
-
-            printService
-                .printData(self.searchedOutgoingDocuments, headers, printTitle);
-
         };
 
         self.gridActions = [

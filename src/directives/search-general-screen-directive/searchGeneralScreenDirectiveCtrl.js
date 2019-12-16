@@ -742,17 +742,23 @@ module.exports = function (app) {
                 });
         };
 
-
+        /**
+         * @description Prints the result
+         * @param $event
+         */
         self.printResult = function ($event) {
-            var printTitle = langService.get("search_module_search_results") + " " + langService.get("from") + " " + generator.convertDateToString(self.searchGeneral.docDateFrom) +
-                " " + langService.get("to") + " " + generator.convertDateToString(self.searchGeneral.docDateTo);
+            var printTitle = langService.get("search_module_search_results") + " " +
+                langService.get("from") + " " + generator.convertDateToString(self.searchCriteria.docDateFrom) + " " +
+                langService.get("to") + " " + generator.convertDateToString(self.searchCriteria.docDateTo);
 
-            var headers = ['label_serial',
+            var headers = [
+                'label_serial',
                 'subject',
                 'priority_level',
                 'label_document_type',
                 'creator',
-                'created_on'];
+                'created_on'
+            ];
 
             printService
                 .printData(self.searchedGeneralDocuments, headers, printTitle);

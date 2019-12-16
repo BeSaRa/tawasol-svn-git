@@ -744,17 +744,24 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Prints the result
+         * @param $event
+         */
         self.printResult = function ($event) {
-            var printTitle = langService.get("search_module_search_results") + " " + langService.get("from") + " " + generator.convertDateToString(self.searchOutgoingIncoming.docDateFrom) +
-                " " + langService.get("to") + " " + generator.convertDateToString(self.searchOutgoingIncoming.docDateTo);
+            var printTitle = langService.get("search_module_search_results") + " " +
+                langService.get("from") + " " + generator.convertDateToString(self.searchCriteria.docDateFrom) + " " +
+                langService.get("to") + " " + generator.convertDateToString(self.searchCriteria.docDateTo);
 
-            var headers = ['label_serial',
+            var headers = [
+                'label_serial',
                 'subject',
                 'priority_level',
                 'label_document_type',
                 'creator',
                 'created_on',
-                'correspondence_sites'];
+                'correspondence_sites'
+            ];
 
             printService
                 .printData(self.searchedOutgoingIncomingDocuments, headers, printTitle);
