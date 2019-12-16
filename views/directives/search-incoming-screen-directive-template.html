@@ -136,7 +136,7 @@
                                                ng-required="ctrl.searchCriteria.refDocDateFrom"
                                                md-max-date="ctrl.getLessDateOrToday(ctrl.searchCriteria.refDocDateTo)"
                                                ng-model="ctrl.searchCriteria.refDocDateFrom"></md-datepicker>
-                                <div ng-messages="advancedSearchForm.followUpFrom.$error">
+                                <div ng-messages="advancedSearchForm.refDocDateFrom.$error">
                                     <div ng-message="required">{{lang.field_required}}</div>
                                 </div>
                             </md-input-container>
@@ -150,7 +150,7 @@
                                                md-min-date="ctrl.searchCriteria.refDocDateFrom"
                                                md-max-date="ctrl.maxCreateDate"
                                                ng-model="ctrl.searchCriteria.refDocDateTo"></md-datepicker>
-                                <div ng-messages="advancedSearchForm.followUpTo.$error">
+                                <div ng-messages="advancedSearchForm.refDocDateTo.$error">
                                     <div ng-message="required">{{lang.field_required}}</div>
                                 </div>
                             </md-input-container>
@@ -557,7 +557,7 @@
                                 <label>{{lang.search_module_start_date}}</label>
                                 <md-datepicker name="followUpFrom" ng-disabled="!ctrl.displayFollowUpDates"
                                                ng-required="ctrl.searchCriteria.followUpTo"
-                                               md-max-date="ctrl.getLessDateOrToday(ctrl.searchCriteria.followUpTo)"
+                                               md-max-date="ctrl.searchCriteria.followUpTo"
                                                ng-model="ctrl.searchCriteria.followUpFrom"></md-datepicker>
                                 <div ng-messages="advancedSearchForm.followUpFrom.$error">
                                     <div ng-message="required">{{lang.field_required}}</div>
@@ -570,7 +570,6 @@
                                 <md-datepicker name="followUpTo" ng-disabled="!ctrl.displayFollowUpDates"
                                                ng-required="ctrl.searchCriteria.followUpFrom"
                                                md-min-date="ctrl.searchCriteria.followUpFrom"
-                                               md-max-date="ctrl.maxCreateDate"
                                                ng-model="ctrl.searchCriteria.followUpTo"></md-datepicker>
                                 <div ng-messages="advancedSearchForm.followUpTo.$error">
                                     <div ng-message="required">{{lang.field_required}}</div>
