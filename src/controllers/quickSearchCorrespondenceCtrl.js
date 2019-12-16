@@ -848,8 +848,8 @@ module.exports = function (app) {
                     "MANAGE_TASKS",
                     "MANAGE_ATTACHMENTS",
                     "MANAGE_LINKED_DOCUMENTS",
-                    "MANAGE_LINKED_ENTITIES"//,
-                    //"MANAGE_DESTINATIONS"
+                    "MANAGE_LINKED_ENTITIES",
+                    "MANAGE_DESTINATIONS"
                 ],
                 checkAnyPermission: true,
                 subMenu: [
@@ -940,7 +940,6 @@ module.exports = function (app) {
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
-                        hide: true,
                         checkShow: function (action, model) {
                             return model.getInfo().documentClass !== 'internal';
                         }
