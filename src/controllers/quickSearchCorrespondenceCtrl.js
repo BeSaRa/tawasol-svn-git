@@ -310,6 +310,18 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Manage Destinations
+         * @param searchedCorrespondenceDocument
+         * @param $event
+         */
+        self.manageDestinations = function (searchedCorrespondenceDocument, $event) {
+            searchedCorrespondenceDocument.manageDocumentCorrespondence($event)
+                .then(function () {
+                    self.reloadQuickSearchCorrespondence(self.grid.page);
+                });
+        };
+
+        /**
          * @description download main document for searched Correspondence document
          * @param searchedCorrespondenceDocument
          * @param $event
@@ -836,7 +848,8 @@ module.exports = function (app) {
                     "MANAGE_TASKS",
                     "MANAGE_ATTACHMENTS",
                     "MANAGE_LINKED_DOCUMENTS",
-                    "MANAGE_LINKED_ENTITIES"
+                    "MANAGE_LINKED_ENTITIES"//,
+                    //"MANAGE_DESTINATIONS"
                 ],
                 checkAnyPermission: true,
                 subMenu: [
@@ -917,6 +930,19 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;
+                        }
+                    },
+                    // Destinations
+                    {
+                        type: 'action',
+                        icon: 'stop',
+                        text: 'grid_action_destinations',
+                        callback: self.manageDestinations,
+                        permissionKey: "MANAGE_DESTINATIONS",
+                        class: "action-green",
+                        hide: true,
+                        checkShow: function (action, model) {
+                            return model.getInfo().documentClass !== 'internal';
                         }
                     }
                 ]
