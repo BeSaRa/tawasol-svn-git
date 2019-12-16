@@ -127,6 +127,10 @@ module.exports = function (app) {
                 return this.ccVerion ? langService.get('sites_copy') : langService.get('sites_original');
             };
 
+            Site_Search.prototype.getNameByLanguage = function (lang) {
+                return this['sub' + generator.ucFirst(lang) + 'SiteText'];
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Site_Search', 'init', this);
