@@ -507,12 +507,13 @@ md-sidenav {
 .owl-dot {
   width: 10px;
   height: 10px;
-  background-color: lighten(gray, 20) !important;
+  background-color: lighten(#31708f, 20) !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, .6);
   margin: 5px;
   border-radius: 50%;
 
   &.active {
-    background-color: gray !important;
+    background-color: #31708f !important;
   }
 }
 

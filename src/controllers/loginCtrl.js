@@ -22,6 +22,7 @@ module.exports = function (app) {
                                           OrganizationLogin,
                                           langService,
                                           publicAnnouncementService,
+                                          privateAnnouncementService,
                                           authenticationService) {
         'ngInject';
         var self = this;
@@ -106,6 +107,10 @@ module.exports = function (app) {
             // when resolve the promise complete the login.
             promise.promise.then(function () {
                 _setEmployeeWithPermissions(result); // set employee
+                $timeout(function () {
+                    _showPrivateAnnouncements();
+                }, 3000);
+
                 if (!callback) {
                     _redirect();
                 } else {
@@ -229,6 +234,34 @@ module.exports = function (app) {
         self.isHelpAvailable = function () {
             var globalSettings = rootEntity.getGlobalSettings();
             return !!globalSettings.supportEmail || !!globalSettings.supportPhoneNo || !!globalSettings.loginAdditionalContent;
+        };
+
+
+        /**
+         * @description open popup to show private announcements, if not available then show alert
+         * @param $event
+         */
+        var _showPrivateAnnouncements = function ($event) {
+            if (privateAnnouncementService.count === 0) {
+                return;
+            }
+
+            dialog
+                .showDialog({
+                    targetEvent: $event || null,
+                    templateUrl: cmsTemplate.getPopup('show-private-announcement'),
+                    controller: 'showPrivateAnnouncementPopCtrl',
+                    controllerAs: 'ctrl',
+                    resolve: {
+                        privateAnnouncements: function () {
+                            'ngInject';
+                            return privateAnnouncementService.getPrivateAnnouncementByOUID().then(function (result) {
+                                self.countPrivateAnnouncements = result.length;
+                                return result;
+                            });
+                        }
+                    }
+                });
         };
     });
 };
