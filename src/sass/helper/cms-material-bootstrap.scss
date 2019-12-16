@@ -89,11 +89,13 @@ md-input-container:not(.cms-default) {
   &.cms-datepicker {
     label {
       left: 40px !important;
+      width: calc(100% - 84px) !important;
     }
 
     &.md-input-focused, &.md-input-has-value {
       label {
         left: 0 !important;
+        width: calc(100% - 10px) !important;
       }
     }
 
