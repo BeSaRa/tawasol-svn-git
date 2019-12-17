@@ -1992,6 +1992,8 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
 
 .cms-fix-width-250 {
   width: 250px !important;
+  max-width: 250px !important;
+  word-break: break-word;
 }
 
 .filter-tabs > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not(:first-child) {

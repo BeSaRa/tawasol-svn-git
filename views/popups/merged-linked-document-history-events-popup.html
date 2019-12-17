@@ -3,7 +3,7 @@
            id="merged-linked-doc-history-events-dialog"
            ng-attr-aria-label="{{lang.view_tracking_sheet_actions}}">
     <popup-toolbar-directive full-screen-button="true" full-screen="ctrl.fullScreen"
-            header-text="{{lang.view_tracking_sheet_actions}} : {{ctrl.mergedLinkedDocHistorySubject}}" ></popup-toolbar-directive>
+                             header-text="{{lang.view_tracking_sheet_actions}} : {{ctrl.mergedLinkedDocHistorySubject}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <md-card>
@@ -42,7 +42,7 @@
                                 <td md-cell>{{mergedLinkedDocHistoryEvent.documentCreationDate_vts}}
                                 </td>
                                 <td md-cell>{{mergedLinkedDocHistoryEvent.actionDate_vts}}</td>
-                                <td md-cell>{{mergedLinkedDocHistoryEvent.comments}}</td>
+                                <td md-cell class="cms-fix-width-250">{{mergedLinkedDocHistoryEvent.comments}}</td>
                             </tr>
                             </tbody>
                         </table>
