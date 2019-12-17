@@ -1318,10 +1318,12 @@ module.exports = function (app) {
                 .then(function (result) {
                     result.data.rs.first = _.map(result.data.rs.first, function (site) {
                         site.docClassName = info.documentClass;
+                        site.followupEndDate = correspondence.followupEndDate;
                         return site;
                     });
                     result.data.rs.second = _.map(result.data.rs.second, function (site) {
                         site.docClassName = info.documentClass;
+                        site.followupEndDate = correspondence.followupEndDate;
                         return site;
                     });
                     return generator.interceptReceivedHashMap('Site', generator.generateHashMap(result.data.rs, Site));

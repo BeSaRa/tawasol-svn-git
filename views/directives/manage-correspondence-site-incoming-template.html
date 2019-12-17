@@ -363,6 +363,9 @@
                             <th md-column ng-if="!ctrl.disableCorrespondence">
                                 <span>{{lang.sites_follow_up_date}}</span>
                             </th>
+                            <th md-column>
+                                <span>{{lang.sites_follow_up_end_date}}</span>
+                            </th>
                         </tr>
                         </thead>
                         <tbody md-body>
@@ -388,6 +391,10 @@
                             </td>
                             <td md-cell>
                                 <div layout="row"><span flex>{{ctrl.site.followupDate|date:'yyyy-MM-dd'}}</span></div>
+                            </td>
+                            <td md-cell>
+                                <div layout="row"><span flex>{{ctrl.site.followupEndDate|date:'yyyy-MM-dd'}}</span>
+                                </div>
                             </td>
                             <td md-cell ng-if="!ctrl.disableCorrespondence">
                                 <div flex layout="row" layout-align="start center">

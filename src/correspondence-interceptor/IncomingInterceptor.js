@@ -44,6 +44,7 @@ module.exports = function (app) {
                 subSiteId: model.subSiteId,
                 followupStatus: new Information(model.siteInfo.followupStatusResult),
                 followupDate: model.siteInfo.followupDate,
+                followupEndDate: model.followupEndDate,
                 mainEnSiteText: model.siteInfo.mainSite ? model.siteInfo.mainSite.enName : null,
                 mainArSiteText: model.siteInfo.mainSite ? model.siteInfo.mainSite.arName : null,
                 subEnSiteText: model.siteInfo.subSite ? model.siteInfo.subSite.enName : null,

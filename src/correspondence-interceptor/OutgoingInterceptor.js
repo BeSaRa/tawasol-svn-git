@@ -47,15 +47,20 @@ module.exports = function (app) {
             return model;
         });
 
-        function _prepareSites(item) {
+        function _prepareSites(item, model) {
             item.docClassName = 'outgoing';
+            item.followupEndDate = model.followupEndDate;
             return new Site(item);
         }
 
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.sitesInfoCC = !angular.isArray(model.sitesInfoCC) && model.sitesInfoCC ? generator.interceptReceivedCollection('Site', _.map(model.ccSitesList, _prepareSites)) : [];
-            model.sitesInfoTo = !angular.isArray(model.sitesInfoTo) && model.sitesInfoTo ? generator.interceptReceivedCollection('Site', _.map(model.toSitesList, _prepareSites)) : [];
+            model.sitesInfoCC = !angular.isArray(model.sitesInfoCC) && model.sitesInfoCC ? generator.interceptReceivedCollection('Site', _.map(model.ccSitesList, function (item) {
+                return _prepareSites(item, model);
+            })) : [];
+            model.sitesInfoTo = !angular.isArray(model.sitesInfoTo) && model.sitesInfoTo ? generator.interceptReceivedCollection('Site', _.map(model.toSitesList, function (item) {
+                return _prepareSites(item, model);
+            })) : [];
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
 

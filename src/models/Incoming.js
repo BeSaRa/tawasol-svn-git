@@ -76,6 +76,7 @@ module.exports = function (app) {
                     subSiteId: self.subSiteId,
                     followupStatus: new Information(self.siteInfo.followupStatusResult),
                     followupDate: self.siteInfo.followupDate,
+                    followupEndDate: self.followupEndDate,
                     mainEnSiteText: self.siteInfo.mainSite ? self.siteInfo.mainSite.enName : null,
                     mainArSiteText: self.siteInfo.mainSite ? self.siteInfo.mainSite.arName : null,
                     subEnSiteText: self.siteInfo.subSite ? self.siteInfo.subSite.enName : null,
