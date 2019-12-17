@@ -103,7 +103,8 @@
                         <!--<md-checkbox ng-checked="ctrl.toggleSelect()" aria-label="select"></md-checkbox>-->
                     </div>
                     <div layout="row" flex class="magazine-icon">
-                        <md-icon flex md-svg-icon="{{workItem.getTypeIcon()}}"></md-icon>
+                        <md-icon flex md-svg-icon="{{workItem.getTypeIcon().icon}}"
+                                 class="{{workItem.getTypeIcon().class}}"></md-icon>
                     </div>
                     <div class="magazine-date">
                         <span tooltip="{{lang.get('received_date')}}">{{workItem.getReceivedDate()}}</span>

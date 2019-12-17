@@ -685,7 +685,10 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.getTypeIcon = function () {
-                var icons = ['arrow-up-bold-box', 'arrow-down-bold-box', 'recycle'];
+                var icons = [
+                    {icon: 'arrow-up-bold-box', class: 'outgoing'},
+                    {icon: 'arrow-down-bold-box', class: 'incoming'},
+                    {icon: 'recycle', class: ''}];
                 return icons[this.generalStepElm.docType];
             };
 

@@ -8,13 +8,16 @@
   //border-radius: 5px;
   position: relative;
   overflow: hidden;
+
   & > div {
     margin-right: 2.5px;
     margin-left: 2.5px;
   }
+
   & > div > div:not(:last-child) {
     padding-bottom: 5px;
   }
+
   &.selected {
     background-color: #fdfbc9;
   }
@@ -40,15 +43,18 @@
   border-radius: 5px;
   font-size: 12px;
   font-weight: bold;
+
   &.date {
     &.past {
       color: #FFFFFF !important;
       background: #FF0000 !important;
     }
+
     &.today {
       color: #FFFFFF !important;
       background: #308DFC !important;
     }
+
     &.future {
       color: #FFFFFF !important;
       background: #32CD32 !important;
@@ -67,7 +73,13 @@
 }
 
 .magazine-icon {
+  .outgoing {
+    color: #308DFC;
+  }
 
+  .incoming {
+    color: #32CD32;
+  }
 }
 
 .magazine-image, .magazine-action {
@@ -122,6 +134,7 @@
   & > div.magazine-check-box, &:hover > div.magazine-icon {
     display: none !important;
   }
+
   &:hover > div.magazine-check-box {
     display: flex !important;
   }
@@ -143,6 +156,7 @@ html.rtl {
       //right: 64+25px;
       //left: 25px;
     }
+
     &.sidebar-opened.gt-small {
       //right: 240+25px;
       //left: 25px;
@@ -163,6 +177,7 @@ html.rtl {
   &.gt-small {
     //left: 64+25px;
   }
+
   &.sidebar-opened.gt-small {
     //left: 240+25px;
   }
@@ -170,6 +185,7 @@ html.rtl {
 
 .top-bar-meta-data {
   padding: 8px;
+
   & > div:first-child {
     min-width: 79.39px;
     max-width: 79.39px;
@@ -184,9 +200,11 @@ html.rtl {
   min-width: auto !important;
   padding: 0 10px;
   margin: 0;
+
   &.page-prev, &.page-next {
     text-transform: none;
   }
+
   &.selected-page {
     background-color: #EEE;
   }
@@ -194,6 +212,7 @@ html.rtl {
 
 .magazine-table-pagination {
   border: none;
+
   & > * {
     height: auto;
   }
@@ -212,6 +231,7 @@ html.rtl {
   left: 0;
   background-color: #0067B0;
   margin: 0 !important;
+
   &.read {
     opacity: .3;
   }
