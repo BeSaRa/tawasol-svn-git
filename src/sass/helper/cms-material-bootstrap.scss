@@ -112,6 +112,7 @@ md-input-container:not(.cms-default) {
 
 html.rtl {
   md-input-container:not(.cms-default) {
+    margin: 15px 5px;
     label {
       padding-right: 7px !important;
       padding-left: auto !important;
