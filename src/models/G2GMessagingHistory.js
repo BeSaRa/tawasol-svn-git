@@ -27,7 +27,8 @@ module.exports = function (app) {
                     correspondence_sites: function () {
                         return this.getTranslatedCorrespondenceSiteInfo();
                     },
-                    comment: 'comment'
+                    comment: 'comment',
+                    returned_by: 'senderForTrackingSheet'
                 };
 
             self.refDocId = null;

@@ -49,7 +49,8 @@ module.exports = function (app) {
                 mainSiteSubSiteString: function (record) {
                     return self.getSortingKey('mainSiteSubSiteString', 'Information');
                 },
-                comment: 'comment'
+                comment: 'comment',
+                senderForTrackingSheet: 'senderForTrackingSheet'
             },
             searchText: '',
             searchCallback: function (grid) {
@@ -87,7 +88,8 @@ module.exports = function (app) {
                     'received_date',
                     'status',
                     'correspondence_sites',
-                    'comment'
+                    'comment',
+                    'returned_by'
                 ];
             printService
                 .printData(self.g2gItems, headers, printTitle);
