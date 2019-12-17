@@ -506,8 +506,10 @@ module.exports = function (app) {
          */
         self.onSubSiteSearchAdvanced = function (skipSubSiteText) {
             if (!skipSubSiteText) {
-                if (self.subSiteAdvancedSearchText.length < 3) {
-                    self.subSearchResult = [];
+                if (!self.subSiteAdvancedSearchText.length) {
+                    refreshDebounce();
+                } else if (self.subSiteAdvancedSearchText.length < 3) {
+                    //self.subSearchResult = [];
                     return;
                 }
             } else {
@@ -527,12 +529,12 @@ module.exports = function (app) {
                             parent: self.selectedMainSiteAdvanced ? self.selectedMainSiteAdvanced.id : null,
                             criteria: self.subSiteAdvancedSearchText
                         }).then(function (result) {
-                            if (!skipSubSiteText) {
+                            /*if (!skipSubSiteText) {
                                 if (self.subSiteAdvancedSearchText.length < 3) {
                                     self.subSearchResult = [];
                                     return;
                                 }
-                            }
+                            }*/
                             self.defaultSubSearch = angular.copy(_.map(result, _mapSubSites));
                             self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                             resolve(self.subSearchResult);
@@ -664,7 +666,7 @@ module.exports = function (app) {
                 if (code === 13) {
                     if (fieldType === 'mainSiteSimple' || fieldType === 'mainSiteAdvanced') {
                         self.loadMainSitesRecords($event);
-                    } else if (fieldType === 'subSiteSimple'){
+                    } else if (fieldType === 'subSiteSimple') {
                         self.loadSubSitesRecords($event).then(function () {
                             angular.element($event.target).focus();
                         });
