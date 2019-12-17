@@ -97,7 +97,7 @@ module.exports = function (app) {
             reminderSmsdays: 'reminder_sms_days',
             reminderEmailDays: 'reminder_email_days',
             viewInboxAsGrid: 'view_inbox_as',
-            inboxRefreshInterval:'inbox_refresh_interval'
+            inboxRefreshInterval: 'inbox_refresh_interval'
         };
 
         self.validateSignatureLabels = {
@@ -887,7 +887,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeOUApplicationUserFromCtrl = function (ouApplicationUser, $event) {
-            if (self.disableOUApplicationUserActions(ouApplicationUser)) {
+            if (self.disableOUApplicationUserDelete()) {
                 return;
             }
             ouApplicationUserService
@@ -1216,6 +1216,14 @@ module.exports = function (app) {
         };
 
         /**
+         *@description Check if delete button will be enabled for current user.
+         * @returns {boolean}
+         */
+        self.disableOUApplicationUserDelete = function () {
+            return employeeService.isCurrentEmployee(self.applicationUser.id);
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -1274,7 +1282,7 @@ module.exports = function (app) {
                     return true;
                 },
                 disabled: function (model) {
-                    return self.disableOUApplicationUserActions(model);
+                    return self.disableOUApplicationUserDelete();
                 },
             }
         ];
@@ -1362,7 +1370,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.reloadOUApplicationUsers();
                 })
-                .catch(function(error){
+                .catch(function (error) {
 
                 });
         };
@@ -1392,7 +1400,7 @@ module.exports = function (app) {
                 });
         };
 
-        self.getSortedOUApplicationUserData = function(){
+        self.getSortedOUApplicationUserData = function () {
             self.ouApplicationUsers = $filter('orderBy')(self.ouApplicationUsers, self.ouApplicationUsersGrid.order);
         };
 
