@@ -130,11 +130,9 @@ module.exports = function (app) {
 
         /**
          * @description Prints the current tab result data
-         * @param $event
          */
-        self.print = function ($event) {
+        self.print = function () {
             self.searchScreens[self.selectedTabName].controller.printResult();
-
         };
     });
 };
