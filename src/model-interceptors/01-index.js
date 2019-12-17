@@ -110,4 +110,5 @@ module.exports = function (app) {
     require('./HREmployeeInterceptor')(app);
     require('./DocumentLinkInterceptor')(app);
     require('./TaskCalenderItemInterceptor')(app);
+    require('./WFUserInterceptor')(app);
 };

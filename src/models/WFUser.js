@@ -39,7 +39,15 @@ module.exports = function (app) {
             };
 
             WFUser.prototype.getTranslatedOrganizationName = function (reverse) {
-                return langService.current === 'ar' ? (reverse ? this.ouEnName : this.ouArName ) : (reverse ? this.ouArName : this.ouEnName);
+                return langService.current === 'ar' ? (reverse ? this.ouEnName : this.ouArName) : (reverse ? this.ouArName : this.ouEnName);
+            };
+
+            WFUser.prototype.getTranslatedNameAndOU = function (reverse) {
+                return this.getTranslatedName(reverse) + " - " + this.getTranslatedOrganizationName(reverse);
+            };
+
+            WFUser.prototype.getNameByLanguage = function (language) {
+                return this.getTranslatedNameAndOU();
             };
 
             // don't remove CMSModelInterceptor from last line

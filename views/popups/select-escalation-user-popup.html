@@ -4,47 +4,38 @@
     <popup-toolbar-directive header-text="{{lang.select_user}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
-            <form name="escalationUser" autocomplete="off">
-                <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                    <md-table-container>
-                        <div scroll-bar-directive>
-                            <table md-table md-row-select ng-model="ctrl.selectedEscalationUser"
-                                   md-progress="ctrl.grid.progress">
-                                <thead md-head md-order="ctrl.grid.order"
-                                       md-on-reorder="ctrl.getSortedData">
-                                <tr md-row>
-                                    <th md-column
-                                        md-order-by="{{ctrl.getSortingKey('user','information')}}">
-                                        {{lang.name}}
-                                    </th>
-                                    <th md-column md-order-by="{{ctrl.getSortingKey('ou','organization')}}">
-                                        {{lang.organization_unit}}
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody md-body>
-                                <tr md-row md-select="escalationUser"
-                                    ng-repeat="escalationUser in ctrl.escalationUsers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
-                                    <td md-cell>{{escalationUser.getTranslatedName()}}</td>
-                                    <td md-cell><span>{{escalationUser.getTranslatedOrganizationName()}}</span></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </md-table-container>
-                    <md-table-pagination
-                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                            md-limit-options="ctrl.grid.limitOptions"
-                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                            md-total="{{(ctrl.escalationUsers).length}}"
-                            md-page-select>
-                    </md-table-pagination>
-                </md-card>
+            <form name="escalationUser_form" autocomplete="off" layout="row" flex>
+                <md-input-container flex>
+                    <label for="escalationUser">{{lang.escalation_user}}</label>
+                    <md-select ng-required="true" id="escalationUser"
+                               name="escalationUser"
+                               ng-model="ctrl.selectedEscalationUser"
+                               ng-model-options="{trackBy:'$value.ouUSerId'}"
+                               md-on-close="ctrl.clearSearchText('escalationUser')"
+                               data-md-container-class="select-header-container sticky-search-bar">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.escalationUserSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
+                        <md-option ng-value="escalationUser"
+                                   ng-repeat="escalationUser in ctrl.escalationUsers | translatedNameFilter: ctrl.escalationUserSearchText">
+                                    <span
+                                            md-highlight-text="ctrl.escalationUserSearchText"
+                                            md-highlight-flags="i">{{escalationUser.getTranslatedNameAndOU()}}</span>
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="escalationUser_form.escalationUser.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
             </form>
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised md-primary" ng-disabled="!ctrl.selectedEscalationUser.length"
+        <md-button class="md-raised md-primary"
+                   ng-disabled="escalationUser_form.$invalid"
                    ng-click="ctrl.selectEscalationUser($event)">
             {{lang.set}}
         </md-button>
