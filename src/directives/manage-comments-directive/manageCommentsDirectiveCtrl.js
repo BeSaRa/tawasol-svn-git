@@ -480,7 +480,7 @@ module.exports = function (app) {
                             _.map(self.documentComment[skipIdsFromSearchType], 'id').indexOf(item.id) === -1;
 
                     criteria = criteria.toLowerCase();
-                    return item.display.toLowerCase().indexOf(criteria) !== -1 && ids.indexOf(item.id) === -1 &&
+                    return item.getTranslatedName().toLowerCase().indexOf(criteria) !== -1 && ids.indexOf(item.id) === -1 &&
                         _.map(self.documentComment[skipIdsFromSearchType], 'id').indexOf(item.id) === -1;
                 });
             });
