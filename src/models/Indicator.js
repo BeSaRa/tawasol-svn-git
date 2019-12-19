@@ -458,6 +458,27 @@ module.exports = function (app) {
                 });
             };
 
+            /**
+             * @description Returns the site followup ended indicator and description
+             * @param isEnded
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getSiteFollowUpEndedIndicator = function (isEnded) {
+                if (!isEnded) {
+                    return false;
+                }
+
+                return new Indicator({
+                    class: 'indicator date-past',
+                    text: 'indicator_followup_ended',
+                    icon: self.getIndicatorIcons('siteFollowupEnded'),
+                    tooltip: 'indicator_followup_ended',
+                    legendText: function (indicator) {
+                        return langService.get('indicator_followup_ended');
+                    }
+                });
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

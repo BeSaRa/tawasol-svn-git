@@ -167,6 +167,10 @@
                                         <grid-indicator-directive record="searchedOutgoingDocument"
                                                                   indicator-type="siteFollowUpDueDate"
                                                                   record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Site Follow up Ended -->
+                                        <grid-indicator-directive record="searchedOutgoingDocument"
+                                                                  indicator-type="siteFollowUpEnded"
+                                                                  record-type="correspondence"></grid-indicator-directive>
                                         <span flex
                                               ng-class="{'indicator-content': searchedOutgoingDocument.followUpStatusIndicator}">
                                         <md-icon ng-if="searchedOutgoingDocument.followUpStatusIndicator"
@@ -489,6 +493,10 @@
                                         <grid-indicator-directive record="searchedIncomingDocument"
                                                                   indicator-type="siteFollowUpDueDate"
                                                                   record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Site Follow up Ended -->
+                                        <grid-indicator-directive record="searchedIncomingDocument"
+                                                                  indicator-type="siteFollowUpEnded"
+                                                                  record-type="correspondence"></grid-indicator-directive>
                                     </td>
                                     <td md-cell>
                                         <span class="serial-td">{{searchedIncomingDocument.docFullSerial}}</span>
@@ -659,6 +667,10 @@
                                         <!-- Site Follow up Due Date -->
                                         <grid-indicator-directive record="searchedOutgoingIncomingDocument"
                                                                   indicator-type="siteFollowUpDueDate"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Site Follow up Ended -->
+                                        <grid-indicator-directive record="searchedOutgoingIncomingDocument"
+                                                                  indicator-type="siteFollowUpEnded"
                                                                   record-type="correspondence"></grid-indicator-directive>
                                     </td>
                                     <td md-cell><span class="serial-td">{{searchedOutgoingIncomingDocument.docFullSerial}}</span>
@@ -839,6 +851,10 @@
                                         <!-- Site Follow up Due Date -->
                                         <grid-indicator-directive record="searchedGeneralDocument"
                                                                   indicator-type="siteFollowUpDueDate"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Site Follow up Ended -->
+                                        <grid-indicator-directive record="searchedGeneralDocument"
+                                                                  indicator-type="siteFollowUpEnded"
                                                                   record-type="correspondence"></grid-indicator-directive>
                                         <span flex
                                               ng-class="{'indicator-content': searchedGeneralDocument.followUpStatusIndicator}">

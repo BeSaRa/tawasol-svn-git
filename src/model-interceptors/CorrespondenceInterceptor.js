@@ -128,6 +128,7 @@ module.exports = function (app) {
             delete model.securityLevelIndicator;
             delete model.securityLevelLookup;
             delete model.siteFollowUpDueDateIndicator;
+            delete model.siteFollowUpEndedIndicator;
             delete model.priorityLevelLookup;
             delete model.attachmentsIndicator;
             delete model.linkedDocsIndicator;
@@ -236,6 +237,7 @@ module.exports = function (app) {
             model.tagsIndicator = (model.tags && model.tags.length) ? model.getTagsIndicator(model.tags.length) : null;
             model.isPaperIndicator = model.getInfo().documentClass !== 'incoming' ? model.getIsPaperIndicator(model.hasOwnProperty('addMethod') ? model.addMethod : 1) : null;
             model.siteFollowUpDueDateIndicator = model.getSiteFollowupDueDateIndicator();
+            model.siteFollowUpEndedIndicator = model.getSiteFollowupEndedIndicator();
             model.setMainSiteSubSiteString();
 
             return model;

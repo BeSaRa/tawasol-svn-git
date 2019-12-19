@@ -449,6 +449,18 @@ module.exports = function (app) {
                 return indicator.getSiteFollowUpDueDateIndicator(this.getSiteMaxFollowupDate());
             };
 
+            Correspondence.prototype.getSiteFollowupEndedIndicator = function ($event) {
+                var info = this.getInfo();
+                if (info.documentClass !== 'outgoing' && info.documentClass !== 'incoming') {
+                    return false;
+                }
+                // if endFollowDate has value, show indicator
+                if (this.getSiteFollowupEndDate()) {
+                    return indicator.getSiteFollowUpEndedIndicator(true);
+                }
+                return false;
+            };
+
             Correspondence.prototype.getTagsCount = function ($event) {
                 return this.tags && this.tags.length ? this.tags.length : 0;
             };

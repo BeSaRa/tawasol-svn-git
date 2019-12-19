@@ -865,7 +865,7 @@ module.exports = function (app) {
                 duplicateSpecificVersion: 'content-duplicate',
                 fullScreen: 'fullscreen',
                 fullScreenExit: 'fullscreen-exit',
-                endFollowup: 'stop'
+                endFollowup: 'calendar-remove-outline'
             },
             indicators: {
                 securityLevel: 'security',
@@ -893,7 +893,8 @@ module.exports = function (app) {
                 lockedWorkItem: 'lock',
                 transferredDocument: 'bank-transfer-in',
                 broadcast: 'bullhorn',
-                siteFollowupDueDate: 'calendar'
+                siteFollowupDueDate: 'calendar',
+                siteFollowupEnded: 'calendar-remove'
             }
         };
     });
