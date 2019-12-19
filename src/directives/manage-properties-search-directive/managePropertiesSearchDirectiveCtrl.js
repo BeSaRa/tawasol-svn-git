@@ -59,15 +59,18 @@ module.exports = function (app) {
         self.typeOptions = [
             {
                 value: null,
-                key: 'all'
+                key: 'all',
+                sortIndex: 0
             },
             {
                 value: 0,
-                key: "personal"
+                key: "personal",
+                sortIndex: 2
             },
             {
                 value: 1,
-                key: "departmental"
+                key: "departmental",
+                sortIndex: 1
             }
         ];
 

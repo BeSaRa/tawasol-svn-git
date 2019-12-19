@@ -208,7 +208,7 @@
                                    ng-required="ctrl.checkMandatory('internalDocType')"
                                    required>
                             <md-option ng-value="type.value"
-                                       ng-repeat="type in ctrl.typeOptions track by $index">
+                                       ng-repeat="type in ctrl.typeOptions | orderBy:'sortIndex' track by $index">
                                 {{lang[type.key]}}
                             </md-option>
                         </md-select>

@@ -430,11 +430,13 @@ module.exports = function (app) {
         self.typeOptions = [
             {
                 key: 'personal',
-                value: 0
+                value: 0,
+                sortIndex: 2
             },
             {
                 key: 'departmental',
-                value: 1
+                value: 1,
+                sortIndex: 1
             }
         ];
 
