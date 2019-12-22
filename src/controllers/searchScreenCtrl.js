@@ -42,14 +42,14 @@ module.exports = function (app) {
         ];
         // current selected tab to display correct form search.
         self.selectedTabName = '';
+        // selected
         self.selectedTabResultKey = '';
         _setSelectedTabName();
-
         // registry organizations
         self.registryOrganizations = registryOrganizations;
-
+        // all property configurations
         self.propertyConfigurations = propertyConfigurations;
-
+        // the approvers for (outgoing , internal ) documents
         self.approvers = approvers;
         // all controller for available search screens
         self.searchScreens = {
@@ -84,7 +84,6 @@ module.exports = function (app) {
                 }
             }
         };
-
         /**
          * @description Reloads the current tab result data
          */
@@ -94,8 +93,6 @@ module.exports = function (app) {
                     console.log('Reloaded Complete ', self.selectedTabName);
                 });
         };
-
-
         /**
          * @description used to change selected tab after user click on one of navigation tabs.
          * @param tab
@@ -105,7 +102,6 @@ module.exports = function (app) {
             $event.preventDefault();
             _setSelectedTabName(tab);
         };
-
         /**
          * @description Sets the selected tab name
          * @param tab
@@ -123,11 +119,13 @@ module.exports = function (app) {
             self.selectedTabResultKey = tab.resultKey;
             self.selectedTabName = tab.tabKey;
         }
-
+        /**
+         * @description check if print button for current tab should display or not.
+         * @returns {boolean}
+         */
         self.isShowPrintButton = function () {
             return self.searchScreens[self.selectedTabName].controller[self.selectedTabResultKey].length > 0;
         };
-
         /**
          * @description Prints the current tab result data
          */
