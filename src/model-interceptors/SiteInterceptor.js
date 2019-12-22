@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       moment,
                       lookupService,
+                      generator,
                       correspondenceService) {
         'ngInject';
 
@@ -51,6 +52,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            model.followupDate = (model.followupDate) ? generator.getDateFromTimeStamp(model.followupDate) : model.followupDate;
             model.siteType = correspondenceService.getLookup(model.docClassName, 'siteTypes', model.siteType) || model.siteType;
             model.followupStatus = lookupService.getLookupByLookupKey(lookupService.followupStatus, model.followupStatus);
             model.mainEnSiteText = model.mainSite.enName;
