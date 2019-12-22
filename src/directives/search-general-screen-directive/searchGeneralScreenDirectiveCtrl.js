@@ -429,7 +429,6 @@ module.exports = function (app) {
             self.loadSitesByCriteria('sub')
                 .then(function (sites) {
                     self.subSites = _.map(sites, _mapSubSites);
-                    console.log('self.subSites', self.subSites);
                 });
         };
         /**
@@ -481,7 +480,7 @@ module.exports = function (app) {
 
             self.loadSitesByCriteria('sub', self.subSiteSearchText)
                 .then(function (sites) {
-                    self.subSites = sites;
+                    self.subSites = _.map(sites, _mapSubSites);
                 });
         };
         /**

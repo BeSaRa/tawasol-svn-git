@@ -149,6 +149,8 @@ module.exports = function (app) {
         // old document Files
         self.previousDocumentFiles = [];
 
+        self.configurations = {};
+
         var noneLookup = new Lookup({
             defaultEnName: langService.getByLangKey('none', 'en'),
             defaultArName: langService.getByLangKey('none', 'ar')
@@ -315,7 +317,7 @@ module.exports = function (app) {
             var key = $event.keyCode || $event.which;
             if (key === 13 && enterCallback) {
                 enterCallback($event);
-                $event.stopPropagation();
+                return;
             }
             var allowedKeys = [38 /* UP */, 40 /* DOWN */];
             allowedKeys.indexOf(key) === -1 ? $event.stopPropagation() : null;
@@ -402,7 +404,6 @@ module.exports = function (app) {
             self.loadSitesByCriteria('sub')
                 .then(function (sites) {
                     self.subSites = _.map(sites, _mapSubSites);
-                    console.log('self.subSites', self.subSites);
                 });
         };
         /**
@@ -454,7 +455,7 @@ module.exports = function (app) {
 
             self.loadSitesByCriteria('sub', self.subSiteSearchText)
                 .then(function (sites) {
-                    self.subSites = sites;
+                    self.subSites = _.map(sites, _mapSubSites);
                 });
         };
         /**
