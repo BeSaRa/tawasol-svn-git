@@ -865,7 +865,8 @@ module.exports = function (app) {
                 duplicateSpecificVersion: 'content-duplicate',
                 fullScreen: 'fullscreen',
                 fullScreenExit: 'fullscreen-exit',
-                endFollowup: 'calendar-remove-outline'
+                endFollowup: 'calendar-remove-outline',
+                exportAndSend: 'file-export-outline'
             },
             indicators: {
                 securityLevel: 'security',

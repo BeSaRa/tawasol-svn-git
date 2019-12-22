@@ -1036,7 +1036,7 @@ module.exports = function (app) {
             // Export and send
             {
                 type: 'action',
-                icon: 'export',
+                icon: 'file-export-outline',
                 text: 'grid_action_export_and_send',
                 shortcut: true,
                 callback: self.exportAndSend,
