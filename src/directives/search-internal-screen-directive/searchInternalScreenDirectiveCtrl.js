@@ -154,6 +154,19 @@ module.exports = function (app) {
             defaultArName: langService.getByLangKey('none', 'ar')
         });
 
+        self.internalTypesOptions = [
+            {
+                key: 'personal',
+                value: 0,
+                sortIndex: 2
+            },
+            {
+                key: 'departmental',
+                value: 1,
+                sortIndex: 1
+            }
+        ];
+
 
         function _createNewSearchCriteria() {
             return new InternalSearch({
@@ -161,7 +174,8 @@ module.exports = function (app) {
                 originality: 1,
                 year: new Date().getFullYear(),
                 docDateFrom: generator.convertDateToString(new Date(self.maxCreateDate.getFullYear(), 0, 1, 0, 0, 0, 0)),
-                docDateTo: generator.convertDateToString(self.maxCreateDate)
+                docDateTo: generator.convertDateToString(self.maxCreateDate),
+                internalDocType: null
             });
         }
 

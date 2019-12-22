@@ -175,6 +175,28 @@
                         </div>
                     </div> <!-- Fourth row -->
                     <div layout="row">
+                        <div flex layout="row">
+                            <md-input-container flex>
+                                <label>{{lang.type}}</label>
+                                <md-select ng-model="ctrl.searchCriteria.internalDocType">
+                                    <md-option ng-value="null">{{lang.all}}</md-option>
+                                    <md-option ng-value="internalType.value"
+                                               ng-repeat="internalType in ctrl.internalTypesOptions">
+                                        {{lang[internalType.key]}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex layout="row">
+
+                        </div>
+                        <div flex layout="row">
+                        </div>
+                        <div flex layout="row">
+
+                        </div>
+                    </div> <!-- Fourth row -->
+                    <div layout="row">
                         <md-button ng-click="ctrl.searchCorrespondence()" id="simple-search-button"
                                    class="md-raised md-primary search-button">
                             {{lang.search}}
