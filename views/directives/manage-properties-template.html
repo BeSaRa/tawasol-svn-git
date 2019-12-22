@@ -108,7 +108,7 @@
                                ng-readonly="true"
                                ng-value="ctrl.sourceModel.securityLevel.getTranslatedName()">
                         <md-checkbox class="cms-field-overlay-checkbox"
-                                     ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelCheckbox()"
+                                     ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelCheckbox() && !ctrl.isPrivateSecurityLevel(ctrl.document.securityLevel)"
                                      ng-model="ctrl.isSecurityLevelEnabled"
                                      aria-label="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}"
                                      tooltip="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}">
@@ -133,7 +133,7 @@
                             </md-option>
                         </md-select>
                         <md-checkbox class="cms-field-overlay-checkbox"
-                                     ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelCheckbox()"
+                                     ng-if="ctrl.checkStatus('securityLevel') && ctrl.isShowSecurityLevelCheckbox() && !ctrl.isPrivateSecurityLevel(ctrl.document.securityLevel)"
                                      ng-model="ctrl.isSecurityLevelEnabled"
                                      aria-label="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}"
                                      tooltip="{{ ctrl.getTranslatedEnableDisableSecurityLevel() }}">
