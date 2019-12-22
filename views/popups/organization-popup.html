@@ -523,6 +523,7 @@
                                         <legend class="md-accent">{{lang.escalation_settings}}</legend>
                                         <div layout="column">
                                             <md-switch id="enableEscalation"
+                                                       ng-change="ctrl.enableEscalationChanged($event)"
                                                        ng-model="ctrl.organization.enableEscalation">
                                                 {{lang.enable_escalation_mode}}
                                             </md-switch>
@@ -530,6 +531,7 @@
                                                 <label for="escalationProcess">{{lang.choose_escalation_process}}</label>
                                                 <md-select ng-model-options="{trackBy: '$value.id'}"
                                                            id="escalationProcess"
+                                                           ng-disabled="!ctrl.organization.enableEscalation"
                                                            ng-model="ctrl.organization.escalationProcess">
                                                     <md-option ng-value="null">{{lang.none}}</md-option>
                                                     <md-option tooltip="{{escalation.getTranslatedName(true)}}"
@@ -1424,11 +1426,11 @@
                                                                 md-order-by="applicationUser.enFullName">
                                                                 <span>{{lang.english_name}}</span>
                                                             </th>
-                                                          <!--  <th ng-if="!ctrl.selectedOUApplicationUsers.length"
-                                                                md-column
-                                                                md-order-by="applicationUser.loginName">
-                                                                <span>{{lang.login_name}}</span>
-                                                            </th>-->
+                                                            <!--  <th ng-if="!ctrl.selectedOUApplicationUsers.length"
+                                                                  md-column
+                                                                  md-order-by="applicationUser.loginName">
+                                                                  <span>{{lang.login_name}}</span>
+                                                              </th>-->
                                                             <th ng-if="!ctrl.selectedOUApplicationUsers.length"
                                                                 md-column
                                                                 md-order-by="applicationUser.domainName">
@@ -1553,11 +1555,11 @@
                                                                 md-order-by="applicationUser.enFullName">
                                                                 <span>{{lang.english_name}}</span>
                                                             </th>
-                                                           <!-- <th ng-if="!ctrl.selectedDepartmentUsers.length"
-                                                                md-column
-                                                                md-order-by="applicationUser.loginName">
-                                                                <span>{{lang.login_name}}</span>
-                                                            </th>-->
+                                                            <!-- <th ng-if="!ctrl.selectedDepartmentUsers.length"
+                                                                 md-column
+                                                                 md-order-by="applicationUser.loginName">
+                                                                 <span>{{lang.login_name}}</span>
+                                                             </th>-->
                                                             <th ng-if="!ctrl.selectedDepartmentUsers.length"
                                                                 md-column
                                                                 md-order-by="applicationUser.domainName">
@@ -1588,9 +1590,9 @@
                                                             <td md-cell>
                                                                 {{ouApplicationUser.applicationUser.enFullName}}
                                                             </td>
-                                                           <!-- <td md-cell>
-                                                                {{ouApplicationUser.applicationUser.loginName}}
-                                                            </td>-->
+                                                            <!-- <td md-cell>
+                                                                 {{ouApplicationUser.applicationUser.loginName}}
+                                                             </td>-->
                                                             <td md-cell>
                                                                 {{ouApplicationUser.applicationUser.domainName}}
                                                             </td>

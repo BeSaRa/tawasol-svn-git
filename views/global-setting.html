@@ -605,6 +605,7 @@
                             <div layout="row" class="p20">
                                 <!-- Enable Escalation Process -->
                                 <md-switch flex ng-model="ctrl.globalSetting.enableEscalation"
+                                           ng-change="ctrl.enableEscalationChanged($event)"
                                            aria-label="{{lang.enable_escalation_process}}">
                                     <span>{{lang.enable_escalation_process}} : </span>{{
                                     ctrl.globalSetting.getTranslatedYesNo('enableEscalation')}}
@@ -622,6 +623,7 @@
                                 <md-input-container flex>
                                     <label for="escalationProcess">{{$parent.lang.choose_escalation_process}}</label>
                                     <md-select name="escalationProcess" id="escalationProcess"
+                                               ng-disabled="!ctrl.globalSetting.enableEscalation"
                                                ng-model="ctrl.globalSetting.escalationProcess">
                                         <md-option ng-value="null">{{lang.none}}</md-option>
                                         <md-option tooltip="{{escalationProcess.getTranslatedName(true)}}"

@@ -32,6 +32,7 @@ module.exports = function (app) {
         self.comment = _getMatchedComment(self.distWorkflowItem);
 
         self.globalSettings = rootEntity.getGlobalSettings();
+        self.currentOUEmployee = employeeService.getEmployee().userOrganization;
 
         self.actionSearchText = '';
         self.commentSearchText = '';
@@ -50,7 +51,7 @@ module.exports = function (app) {
 
 
         var _setEscalationProcess = function () {
-            var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess || noneLookup;
+            var currentOUEscalationProcess = self.currentOUEmployee.escalationProcess || noneLookup;
 
             // check if initial open WF dialog
             if (self.distWorkflowItem.escalationStatus) {
@@ -131,6 +132,10 @@ module.exports = function (app) {
                 })
         };
 
+        /**
+         * @description escalation will be only available in case of Users, Group Mail, Workflow Groups but not organization unit
+         * @returns {*|boolean}
+         */
         self.isEscalationHidden = function () {
             return self.gridName && (
                 (self.gridName.toLowerCase() === 'ous' && self.distWorkflowItem.getWorkflowItemType().toLowerCase() === 'organization' && self.distWorkflowItem.gridName.toLowerCase() === 'oureg') ||

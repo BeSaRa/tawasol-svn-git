@@ -34,7 +34,7 @@
                         <md-datepicker id="dueDate" md-open-on-focus
                                        md-min-date="ctrl.minDate"
                                        ng-model="ctrl.distWorkflowItem.dueDate"
-                                       ng-required="!ctrl.isEscalationHidden() && ctrl.isEscalationStatusSelected()"></md-datepicker>
+                                       ng-required="ctrl.currentOUEmployee.enableEscalation && !ctrl.isEscalationHidden() && ctrl.isEscalationStatusSelected()"></md-datepicker>
                         <div ng-messages="distWorkflowItem_form.dueDate.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
                         </div>
@@ -66,7 +66,7 @@
                         <div class="help-text-div mb10">{{lang.secure_comment_note}}</div>
                     </div>
                 </div>
-                <div layout="row" ng-if="!ctrl.isEscalationHidden()">
+                <div layout="row" ng-if="ctrl.currentOUEmployee.enableEscalation && !ctrl.isEscalationHidden()">
                     <md-input-container flex>
                         <label for="escalationStatus">{{lang.choose_escalation_process}}</label>
                         <md-select ng-model-options="{trackBy: '$value.id'}"

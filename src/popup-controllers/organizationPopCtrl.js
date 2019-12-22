@@ -81,6 +81,7 @@ module.exports = function (app) {
             ldapCode: self.entityLDAPProviders.length === 1 ? self.entityLDAPProviders[0].ldapCode : null,
             escalationProcess: (self.entityEscalationProcess !== null) ? lookupService.getLookupByLookupKey(lookupService.escalationProcess, self.entityEscalationProcess) : null
         }) : angular.copy(organization);
+        self.organizationCopy = angular.copy(self.organization);
         /////////////////////////// capture the current workflow security level before update //////////////////////////
         self.initialWFSecurity = self.organization.wfsecurity;
 
@@ -2005,6 +2006,9 @@ module.exports = function (app) {
                 });
         };
 
+        self.enableEscalationChanged = function ($event) {
+            self.organization.escalationProcess = (self.organization.enableEscalation) ? self.organizationCopy.escalationProcess : null;
+        };
         /**
          * @description Change the status of selected job titles
          * @param status
