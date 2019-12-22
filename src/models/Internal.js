@@ -31,7 +31,7 @@ module.exports = function (app) {
                 Correspondence.call(this);
                 self.docClassName = 'Internal';
                 self.classDescription = 'Internal';
-                self.internalDocType = null;
+                self.internalDocType = 1;
                 self.docStatus = 2; // by default
                 self.fromEditOnDesktop = false;
 
