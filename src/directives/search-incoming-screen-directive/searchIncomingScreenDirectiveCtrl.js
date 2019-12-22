@@ -719,8 +719,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.printResult = function ($event) {
-            var printTitle = langService.get("search_module_search_results") + " " + langService.get("from") + " " + generator.convertDateToString(self.searchIncoming.docDateFrom) +
-                " " + langService.get("to") + " " + generator.convertDateToString(self.searchIncoming.docDateTo);
+            var printTitle = langService.get("search_module_search_results") + " " +
+                langService.get("from") + " " + generator.convertDateToString(self.searchCriteria.docDateFrom) + " " +
+                langService.get("to") + " " + generator.convertDateToString(self.searchCriteria.docDateTo);
 
             var headers = [
                 'label_serial',
