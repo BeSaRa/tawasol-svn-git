@@ -113,4 +113,5 @@ module.exports = function (app) {
     require('./search-incoming-screen-directive/01-index')(app);
     require('./search-outgoing-incoming-screen-directive/01-index')(app);
     require('./search-general-screen-directive/01-index')(app);
+    require('./generate-remaining-search-div-directive/generate-remaining-search-div-directive')(app);
 };

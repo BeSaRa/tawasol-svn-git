@@ -11,20 +11,21 @@
             </accordion-title>
             <accordion-content>
                 <ng-form ng-enter="ctrl.searchCorrespondence()" name="simpleSearchForm">
-                    <div layout="row">
+                    <div ng-if="ctrl.checkFieldStatus('docSubject')" layout="row">
                         <div flex layout="row">
                             <md-input-container flex>
                                 <label for="docSubjectInternal">{{lang.document_subject}}</label>
                                 <input id="docSubjectInternal" name="docSubject"
-                                          ng-model="ctrl.searchCriteria.docSubject"/>
+                                       ng-model="ctrl.searchCriteria.docSubject"/>
                             </md-input-container>
                         </div>
                     </div> <!-- First row -->
                     <div layout="row">
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('docSerial')" flex layout="row">
                             <md-input-container class="restrict-max" flex>
                                 <label for="serialNoFromInternal">{{lang.search_module_serial_from}}</label>
-                                <input id="serialNoFromInternal" name="serialNoFrom" ng-model="ctrl.searchCriteria.serialNoFrom"
+                                <input id="serialNoFromInternal" name="serialNoFrom"
+                                       ng-model="ctrl.searchCriteria.serialNoFrom"
                                        min="1" max="ctrl.getMinMaxSerialNumberValues('from', 'max').value"
                                        ng-required="ctrl.searchCriteria.serialNoTo"
                                        custom-validate-directive="number" type="text"
@@ -32,19 +33,22 @@
                                 <div ng-messages="simpleSearchForm.serialNoFrom.$error">
                                     <div ng-message="required">{{lang.field_required}}</div>
                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                    <div ng-message="min">{{lang.min_number.change({number: ctrl.getMinMaxSerialNumberValues('from',
+                                    <div ng-message="min">{{lang.min_number.change({number:
+                                        ctrl.getMinMaxSerialNumberValues('from',
                                         'min').errorValue})}}
                                     </div>
-                                    <div ng-message="max">{{lang.max_number.change({number: ctrl.getMinMaxSerialNumberValues('from',
+                                    <div ng-message="max">{{lang.max_number.change({number:
+                                        ctrl.getMinMaxSerialNumberValues('from',
                                         'max').errorValue})}}
                                     </div>
                                 </div>
                             </md-input-container>
                         </div><!-- serialNoFrom -->
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('docSerial')" flex layout="row">
                             <md-input-container class="restrict-max" flex>
                                 <label>{{lang.search_module_serial_to}}</label>
-                                <input id="serialNoToInternal" name="serialNoTo" ng-model="ctrl.searchCriteria.serialNoTo"
+                                <input id="serialNoToInternal" name="serialNoTo"
+                                       ng-model="ctrl.searchCriteria.serialNoTo"
                                        ng-required="ctrl.searchCriteria.serialNoFrom"
                                        custom-validate-directive="number" type="text"
                                        min="ctrl.getMinMaxSerialNumberValues('to', 'min').value"
@@ -52,13 +56,14 @@
                                 <div ng-messages="simpleSearchForm.serialNoTo.$error">
                                     <div ng-message="required">{{lang.field_required}}</div>
                                     <div ng-message="number">{{lang.numberonly}}</div>
-                                    <div ng-message="min">{{lang.min_number.change({number: ctrl.getMinMaxSerialNumberValues('to',
+                                    <div ng-message="min">{{lang.min_number.change({number:
+                                        ctrl.getMinMaxSerialNumberValues('to',
                                         'min').errorValue})}}
                                     </div>
                                 </div>
                             </md-input-container>
                         </div><!-- serialNoTo -->
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('registryOU')" flex layout="row">
                             <md-input-container flex>
                                 <label for="registryOU">{{lang.select_organization}}</label>
                                 <md-select data-md-container-class="select-header-container sticky-search-bar"
@@ -87,7 +92,7 @@
                                 </md-select>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('ou')" flex layout="row">
                             <md-input-container flex>
                                 <label for="ou">{{lang.department}}</label>
                                 <md-select data-md-container-class="select-header-container sticky-search-bar"
@@ -115,9 +120,10 @@
                                 </md-select>
                             </md-input-container>
                         </div>
+                        <!-- directive: generate-remaining-search-div-directive -->
                     </div> <!-- Second row -->
                     <div layout="row">
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('securityLevel')" flex layout="row">
                             <md-input-container flex>
                                 <label>{{lang.security_level}}</label>
                                 <md-select ng-model="ctrl.searchCriteria.securityLevel">
@@ -129,7 +135,7 @@
                                 </md-select>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('docDate')" flex layout="row">
                             <md-input-container flex="">
                                 <label for="year">{{lang.search_module_year}}</label>
                                 <md-select data-md-container-class="select-header-container sticky-search-bar"
@@ -161,20 +167,23 @@
                                 </md-button>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
-                            <md-input-container class="cms-datepicker md-block" flex>
+                        <div ng-if="ctrl.checkFieldStatus('docDate')" flex layout="row">
+                            <md-input-container class="cms-datepicker md-block"
+                                                flex>
                                 <label>{{lang.search_module_start_date}}</label>
                                 <input readonly disabled value="{{ctrl.searchCriteria.docDateFrom}}"/>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
-                            <md-input-container class="cms-datepicker md-block" flex>
+                        <div ng-if="ctrl.checkFieldStatus('docDate')" flex layout="row">
+                            <md-input-container class="cms-datepicker md-block"
+                                                flex>
                                 <label>{{lang.search_module_end_date}}</label>
                                 <input readonly disabled value="{{ctrl.searchCriteria.docDateTo}}"/>
                             </md-input-container>
                         </div>
+                        <!-- directive: generate-remaining-search-div-directive -->
                     </div> <!-- Fourth row -->
-                    <div layout="row">
+                    <div ng-if="ctrl.checkFieldStatus('internalDocType')" layout="row">
                         <div flex layout="row">
                             <md-input-container flex>
                                 <label>{{lang.type}}</label>
@@ -187,14 +196,9 @@
                                 </md-select>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
-
-                        </div>
-                        <div flex layout="row">
-                        </div>
-                        <div flex layout="row">
-
-                        </div>
+                        <div flex layout="row"></div>
+                        <div flex layout="row"></div>
+                        <div flex layout="row"></div>
                     </div> <!-- Fourth row -->
                     <div layout="row">
                         <md-button ng-click="ctrl.searchCorrespondence()" id="simple-search-button"
@@ -221,7 +225,7 @@
             <accordion-content>
                 <ng-form ng-enter="ctrl.searchCorrespondence()" name="advancedSearchForm">
                     <div layout="row">
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('priorityLevel')" flex layout="row">
                             <md-input-container flex>
                                 <label>{{lang.outgoing_priority_level}}</label>
                                 <md-select ng-model="ctrl.searchCriteria.priorityLevel">
@@ -232,13 +236,13 @@
                                 </md-select>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('docFullSerial')" flex layout="row">
                             <md-input-container class="restrict-max" flex>
                                 <label>{{lang.search_module_serial}}</label>
                                 <input type="text" ng-model="ctrl.searchCriteria.docFullSerial">
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('mainClassification')" flex layout="row">
                             <md-input-container flex="">
                                 <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
                                 <md-select data-md-container-class="select-header-container sticky-search-bar"
@@ -280,7 +284,7 @@
                                 </md-select>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('subClassification')" flex layout="row">
                             <md-input-container flex="">
                                 <label for="subClassification">{{lang.outgoing_sub_classification}}</label>
                                 <md-select data-md-container-class="select-header-container sticky-search-bar"
@@ -321,9 +325,10 @@
                                 </md-select>
                             </md-input-container>
                         </div>
+                        <!-- directive: generate-remaining-search-div-directive -->
                     </div><!-- Sixth row -->
                     <div layout="row">
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('addMethod')" flex layout="row">
                             <md-input-container flex>
                                 <label>{{lang.document_format}}</label>
                                 <md-select ng-model="ctrl.searchCriteria.addMethod">
@@ -334,7 +339,7 @@
                                 </md-select>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('docType')" flex layout="row">
                             <md-input-container flex="">
                                 <label for="docType">{{lang.outgoing_document_type}}</label>
                                 <md-select data-md-container-class="select-header-container sticky-search-bar"
@@ -362,7 +367,7 @@
                                 </md-select>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('LinkedEntities')" flex layout="row">
                             <md-input-container flex>
                                 <label for="selectedEntityType">{{lang.linked_entity}}</label>
                                 <md-select id="selectedEntityType"
@@ -383,14 +388,15 @@
                                 </md-button>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('LinkedEntities')" flex layout="row">
                             <md-input-container class="restrict-max" flex>
                                 <label>{{lang.selected_entity_name}}</label>
                                 <input type="text" value="{{ctrl.searchCriteria.linkedEntities.getName()}}" disabled>
                             </md-input-container>
                         </div>
+                        <!-- directive: generate-remaining-search-div-directive -->
                     </div><!-- Seventh row -->
-                    <div layout="row">
+                    <div ng-if="ctrl.checkFieldStatus('approvers')" layout="row">
                         <div flex layout="row">
                             <md-input-container flex="">
                                 <label for="approvers">{{lang.approver}}</label>
@@ -453,7 +459,7 @@
                         </div>
                     </div><!-- Ninth row -->
                     <div layout="row">
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('fileId')" flex layout="row">
                             <md-input-container flex="">
                                 <label for="documentFile">{{lang.outgoing_file}}</label>
                                 <md-select data-md-container-class="select-header-container sticky-search-bar"
@@ -492,7 +498,7 @@
                                 </md-select>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('fileCode')" flex layout="row">
                             <md-input-container class="restrict-max" flex>
                                 <label for="fileCodeInternal">{{lang.outgoing_file_code}}</label>
                                 <input name="fileCode"
@@ -501,7 +507,7 @@
                                        type="text">
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
+                        <div ng-if="ctrl.checkFieldStatus('fileSerial')" flex layout="row">
                             <md-input-container class="restrict-max" flex>
                                 <label for="fileSerialInternal">{{lang.outgoing_file_serial}}</label>
                                 <input name="fileSerial" custom-validate-directive="number"
@@ -512,11 +518,10 @@
                                 </div>
                             </md-input-container>
                         </div>
-                        <div flex layout="row">
-
-                        </div>
+                        <div flex layout="row"></div>
+                        <!-- directive: generate-remaining-search-div-directive -->
                     </div><!-- Eleventh row -->
-                    <div layout="row">
+                    <div ng-if="ctrl.checkFieldStatus('docNotes')" layout="row">
                         <div flex layout="row">
                             <md-input-container flex>
                                 <label>{{lang.properties_notes}}</label>

@@ -148,6 +148,8 @@ module.exports = function (app) {
         self.documentFiles = [];
         // old document Files
         self.previousDocumentFiles = [];
+        // mapped property configurations
+        self.configurations = {};
 
         var noneLookup = new Lookup({
             defaultEnName: langService.getByLangKey('none', 'en'),
@@ -1777,10 +1779,33 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description to return value of fieldName in property configurations.
+         * @param fieldName
+         * @param property
+         * @returns {*}
+         */
+        self.checkFieldPropertyValue = function (fieldName, property) {
+            fieldName = fieldName.toLowerCase();
+            return self.configurations[fieldName][property];
+        };
+        /**
+         * @description to check status value for given field in property configurations.
+         * @param fieldName
+         * @returns {*}
+         */
+        self.checkFieldStatus = function (fieldName) {
+            return self.checkFieldPropertyValue(fieldName, 'status');
+        };
+
         self.$onInit = function () {
             self.onRegistrySelectedChange();
             // assign current controller to search screen ctrl.
             self.controller.controller = self;
+            // re map by symbolic name all property configurations
+            _.map(self.propertyConfigurations, function (property) {
+                self.configurations[property.symbolicName.toLowerCase()] = property;
+            });
         };
 
     });
