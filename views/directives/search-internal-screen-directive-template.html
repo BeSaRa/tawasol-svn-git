@@ -14,8 +14,8 @@
                     <div layout="row">
                         <div flex layout="row">
                             <md-input-container flex>
-                                <label for="docSubject">{{lang.document_subject}}</label>
-                                <input id="docSubject" name="docSubject"
+                                <label for="docSubjectInternal">{{lang.document_subject}}</label>
+                                <input id="docSubjectInternal" name="docSubject"
                                           ng-model="ctrl.searchCriteria.docSubject"/>
                             </md-input-container>
                         </div>
@@ -23,8 +23,8 @@
                     <div layout="row">
                         <div flex layout="row">
                             <md-input-container class="restrict-max" flex>
-                                <label for="serialNoFrom">{{lang.search_module_serial_from}}</label>
-                                <input id="serialNoFrom" name="serialNoFrom" ng-model="ctrl.searchCriteria.serialNoFrom"
+                                <label for="serialNoFromInternal">{{lang.search_module_serial_from}}</label>
+                                <input id="serialNoFromInternal" name="serialNoFrom" ng-model="ctrl.searchCriteria.serialNoFrom"
                                        min="1" max="ctrl.getMinMaxSerialNumberValues('from', 'max').value"
                                        ng-required="ctrl.searchCriteria.serialNoTo"
                                        custom-validate-directive="number" type="text"
@@ -44,7 +44,7 @@
                         <div flex layout="row">
                             <md-input-container class="restrict-max" flex>
                                 <label>{{lang.search_module_serial_to}}</label>
-                                <input id="serialNoTo" name="serialNoTo" ng-model="ctrl.searchCriteria.serialNoTo"
+                                <input id="serialNoToInternal" name="serialNoTo" ng-model="ctrl.searchCriteria.serialNoTo"
                                        ng-required="ctrl.searchCriteria.serialNoFrom"
                                        custom-validate-directive="number" type="text"
                                        min="ctrl.getMinMaxSerialNumberValues('to', 'min').value"
@@ -472,18 +472,18 @@
                         </div>
                         <div flex layout="row">
                             <md-input-container class="restrict-max" flex>
-                                <label for="fileCode">{{lang.outgoing_file_code}}</label>
+                                <label for="fileCodeInternal">{{lang.outgoing_file_code}}</label>
                                 <input name="fileCode"
-                                       id="fileCode" ng-enter="ctrl.onFileCodeChanged()"
+                                       id="fileCodeInternal" ng-enter="ctrl.onFileCodeChanged()"
                                        ng-model="ctrl.searchCriteria.fileCode"
                                        type="text">
                             </md-input-container>
                         </div>
                         <div flex layout="row">
                             <md-input-container class="restrict-max" flex>
-                                <label for="fileSerial">{{lang.outgoing_file_serial}}</label>
+                                <label for="fileSerialInternal">{{lang.outgoing_file_serial}}</label>
                                 <input name="fileSerial" custom-validate-directive="number"
-                                       id="fileSerial"
+                                       id="fileSerialInternal"
                                        ng-model="ctrl.searchCriteria.fileSerial">
                                 <div ng-messages="advancedSearchForm.fileSerial.$error">
                                     <div ng-message="number">{{lang.numberonly}}</div>
