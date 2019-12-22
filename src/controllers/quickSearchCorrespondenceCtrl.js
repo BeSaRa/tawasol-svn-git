@@ -32,7 +32,7 @@ module.exports = function (app) {
          * @description All Correspondence
          * @type {*}
          */
-        self.quickSearchCorrespondence = _mapResultToAvoidCorrespondenceCheck(quickSearchCorrespondenceService.quickSearchCorrespondence);
+        self.quickSearchCorrespondence = _mapResultToAvoidCorrespondenceCheck(quickSearchCorrespondence);
         self.quickSearchCorrespondenceCopy = angular.copy(self.quickSearchCorrespondence);
 
         /**
@@ -119,9 +119,8 @@ module.exports = function (app) {
             var searchJSON = {};
             searchJSON[$stateParams.key] = $stateParams.q;
 
-            if ($stateParams.q === 'outgoing' || $stateParams.q === 'incoming') {
+            if ($stateParams.q === 'overdueIncomingDocuments' || $stateParams.q === 'overdueOutgoingDocuments')
                 return self.reloadQuickSearchOverdueCorrespondence(pageNumber, defer);
-            }
 
             return quickSearchCorrespondenceService
                 .loadQuickSearchCorrespondence(searchJSON)
@@ -138,8 +137,8 @@ module.exports = function (app) {
         };
 
         self.reloadQuickSearchOverdueCorrespondence = function (pageNumber, defer) {
-            return quickSearchCorrespondenceService
-                .loadQuickSearchOverdueCorrespondence($stateParams.q)
+            var method = 'load' + generator.ucFirst($stateParams.q);
+            return quickSearchCorrespondenceService[method]()
                 .then(function (result) {
                     self.quickSearchCorrespondence = _mapResultToAvoidCorrespondenceCheck(result);
                     self.quickSearchCorrespondenceCopy = angular.copy(self.quickSearchCorrespondence);

@@ -543,7 +543,7 @@ module.exports = function (app) {
          * @returns {string}
          */
         self.ucFirst = function (string) {
-            return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+            return string.charAt(0).toUpperCase() + string.slice(1);
         };
         /**
          * to check if the model has any changes or not

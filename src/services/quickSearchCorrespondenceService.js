@@ -56,14 +56,22 @@ module.exports = function (app) {
         };
 
         self.loadQuickSearchOverdueCorrespondence = function (documentClass) {
-            return $http.get(urlService.overdueCounters.replace('{documentClass}', documentClass))
+            return $http.get(urlService.ouicksearchOverdueCounters.replace('{documentClass}', documentClass))
                 .then(function (result) {
-                    counterService.counter['overdue' + generator.ucFirst(documentClass) + 'Documents'] = {
-                        first: result.data.rs.length,
-                        second: -1
-                    };
-                    return self.quickSearchCorrespondence = correspondenceService.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs);
+                    return correspondenceService.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs);
                 });
+        };
+        /**
+         * @description load outgoing overdue documents
+         */
+        self.loadOverdueOutgoingDocuments = function () {
+            return self.loadQuickSearchOverdueCorrespondence('outgoing');
+        };
+        /**
+         * @description load incoming overdue documents
+         */
+        self.loadOverdueIncomingDocuments = function () {
+            return self.loadQuickSearchOverdueCorrespondence('incoming');
         };
 
         /**

@@ -99,6 +99,20 @@ module.exports = function (app) {
             }, (15 * 60 * 1000));
         };
 
+        self.loadOverdueCounters = function () {
+            return $http.get(urlService.overdueCounters).then(function (result) {
+                self.counter.overdueOutgoingDocuments = {
+                    first: result.data.rs.first,
+                    second: 0
+                };
+                self.counter.overdueIncomingDocuments = {
+                    first: result.data.rs.second,
+                    second: 0
+                };
+                return self.counter;
+            })
+        };
+
         /**
          * @description Stops the G2G counter service requests
          */

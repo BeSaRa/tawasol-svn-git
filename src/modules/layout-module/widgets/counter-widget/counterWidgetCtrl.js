@@ -275,7 +275,7 @@ module.exports = function (app) {
             if (!option.permission && option.state) {
                 (currentDataSource() === 'overdueIncomingDocuments' || currentDataSource() === 'overdueOutgoingDocuments') ? $state.go(option.state, {
                     key: null,
-                    q: self.quickSearchClassMap[currentDataSource()],
+                    q: currentDataSource(),
                     random: (Date.now()).toString()
                 }) : $state.go(option.state);
                 return;
@@ -371,10 +371,10 @@ module.exports = function (app) {
         };
 
         self.reloadOverdueCounter = function (documentClass) {
-            quickSearchCorrespondenceService
-                .loadQuickSearchOverdueCorrespondence(documentClass)
+            counterService
+                .loadOverdueCounters(documentClass)
                 .then(function (result) {
-                    _setCountTo(result.length);
+                    _setCountTo(result[currentDataSource()].first);
                 });
         };
 

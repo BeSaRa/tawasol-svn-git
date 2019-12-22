@@ -1146,10 +1146,13 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_quick_search',
                 resolve: {
-                    quickSearchCorrespondence: function (quickSearchCorrespondenceService, $stateParams) {
+                    quickSearchCorrespondence: function (quickSearchCorrespondenceService, generator, $stateParams) {
                         'ngInject';
-                        if (!$stateParams.key) {
+                        if (!$stateParams.key && !$stateParams.q) {
                             return [];
+                        }
+                        if ($stateParams.q === 'overdueIncomingDocuments' || $stateParams.q === 'overdueOutgoingDocuments') {
+                            return quickSearchCorrespondenceService['load' + generator.ucFirst($stateParams.q)]();
                         }
                         var searchJSON = {};
                         searchJSON[$stateParams.key] = $stateParams.q;
