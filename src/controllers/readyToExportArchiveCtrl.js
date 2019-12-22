@@ -269,7 +269,7 @@ module.exports = function (app) {
                 });
 
             readyToExport
-                .exportWorkItem($event, true)
+                .exportWorkItem($event)
                 .then(function () {
                     return correspondenceToLaunch.launchWorkFlow($event, 'forward', 'favorites')
                         .then(function () {
