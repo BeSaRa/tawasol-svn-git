@@ -5,9 +5,7 @@ module.exports = function (app) {
                                       Correspondence,
                                       Site,
                                       Information,
-                                      Indicator,
-                                      cmsTemplate,
-                                      dialog) {
+                                      Indicator) {
         'ngInject';
         return function Incoming(model) {
             var self = this, correspondenceService, exportData = {
@@ -15,7 +13,12 @@ module.exports = function (app) {
                 subject: 'docSubject',
                 document_number: 'refDocNumber',
                 label_document_type: function () {
-                    return this.docTypeInfo.getTranslatedName();
+                    if (this.docTypeInfo && this.docTypeInfo.hasOwnProperty('id') && this.docTypeInfo.id){
+                        return this.docTypeInfo.getTranslatedName();
+                    } else if (this.docType && this.docType.hasOwnProperty('id') && this.docType.id){
+                        return this.docType.getTranslatedName();
+                    }
+                    return '';
                 },
                 creator: function () {
                     return this.creatorInfo.getTranslatedName();

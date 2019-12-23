@@ -15,7 +15,12 @@ module.exports = function (app) {
                         return this.priorityLevel.getTranslatedName();
                     },
                     label_document_type: function () {
-                        return this.docTypeInfo.getTranslatedName();
+                        if (this.docTypeInfo && this.docTypeInfo.hasOwnProperty('id') && this.docTypeInfo.id){
+                            return this.docTypeInfo.getTranslatedName();
+                        } else if (this.docType && this.docType.hasOwnProperty('id') && this.docType.id){
+                            return this.docType.getTranslatedName();
+                        }
+                        return '';
                     },
                     creator: function () {
                         return this.creatorInfo.getTranslatedName();
