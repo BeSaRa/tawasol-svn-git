@@ -864,6 +864,15 @@ module.exports = function (app) {
                 return rootEntity.returnRootEntity().rootEntity.faxEnabled;
             };
 
+            WorkItem.prototype.getSiteFollowupStatus = function () {
+                var info = this.getInfo();
+                // followupStatus = 0 (need reply)
+                if (info.documentClass === 'outgoing' || info.documentClass === 'incoming') {
+                    return this.siteInfo ? this.siteInfo.followupStatus : null;
+                }
+                return null;
+            };
+
             WorkItem.prototype.endFollowup = function ($event) {
                 return correspondenceService.endCorrespondenceFollowup(this, $event);
             };

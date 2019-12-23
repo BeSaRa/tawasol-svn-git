@@ -39,7 +39,8 @@ module.exports = function (app) {
                                               userSubscriptionService,
                                               fromNotification,
                                               emailItem,
-                                              gridService) {
+                                              gridService,
+                                              WorkItem) {
         'ngInject';
         var self = this;
         self.controllerName = 'userInboxCtrl';
@@ -1547,15 +1548,20 @@ module.exports = function (app) {
                 text: 'grid_action_end_follow_up',
                 callback: self.endFollowup,
                 class: "action-green",
-                showInViewOnly: true,
+                //showInViewOnly: true,
                 permissionKey: "MANAGE_DESTINATIONS",
                 checkShow: function (action, model) {
-                    var correspondence = model.hasOwnProperty('correspondence') ? model.correspondence : model;
                     // only for outgoing/incoming
+                    // no follow up status = 0 (need reply)
+                    var correspondence = model.hasOwnProperty('correspondence') ? model.correspondence : model;
                     var info = correspondence.getInfo();
+
                     if (info.documentClass === 'outgoing' || info.documentClass === 'incoming') {
-                        // no follow up status = 0 (need reply)
-                        return !correspondence.getSiteFollowupStatus() && !correspondence.getSiteFollowupEndDate()// && model.getSiteMaxFollowupDate();
+                        if (!(correspondence instanceof WorkItem)) {
+                            return !correspondence.getSiteFollowupStatus() && !correspondence.getSiteFollowupEndDate()// && model.getSiteMaxFollowupDate();
+                        } else {
+                            return model.getSiteFollowupStatus() === 0;
+                        }
                     }
                     return false;
                 }
