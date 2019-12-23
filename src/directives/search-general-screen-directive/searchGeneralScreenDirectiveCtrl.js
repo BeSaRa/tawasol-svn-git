@@ -408,10 +408,10 @@ module.exports = function (app) {
          * @description fir after site type changed to reload main sites related to selected site type.
          */
         self.onSiteTypeChanged = function () {
+            self.searchCriteria.mainSite = null;
+            self.searchCriteria.subSite = null;
+            self.previousMainSites = [];
             if (!self.searchCriteria.siteType) {
-                self.searchCriteria.mainSite = null;
-                self.searchCriteria.subSite = null;
-                self.previousMainSites = [];
                 return;
             }
             self.loadSitesByCriteria('main')
