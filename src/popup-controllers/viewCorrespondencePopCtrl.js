@@ -101,13 +101,7 @@ module.exports = function (app) {
                 dialog.hide('editInDesktop');
             }
             self.correspondence
-                .editCorrespondenceInDesktop(_editInOfficeOnline)
-                .then(function () {
-                    dialog.hide('editInDesktop');
-                })
-                .catch(function () {
-
-                });
+                .editCorrespondenceInDesktop(_editInOfficeOnline);
         }
 
         function _defaultBehavior() {
