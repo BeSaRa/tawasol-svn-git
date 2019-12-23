@@ -1,8 +1,17 @@
 md-input-container:not(.cms-default) {
+  min-height: 48px !important;
   margin: 10px 5px;
 
   label {
     padding-left: 7px !important;
+  }
+
+  .md-errors-spacer {
+    min-height: 19px !important;
+  }
+
+  &.restrict-max {
+    max-height: 48px !important;
   }
 
   input:not(.md-datepicker-input),
