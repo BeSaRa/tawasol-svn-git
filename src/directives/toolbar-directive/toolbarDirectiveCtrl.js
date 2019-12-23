@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                      rootEntity,
                                                      $mdMedia,
                                                      authenticationService,
+                                                     privateAnnouncementService,
                                                      $state,
                                                      dialog,
                                                      contextHelpService,
@@ -71,7 +72,9 @@ module.exports = function (app) {
                 .selectDepartmentToLogin(organization)
                 .then(function () {
                     self.employee = employeeService.getEmployee();
-                    $state.reload();
+                    $state.reload().then(function () {
+                        privateAnnouncementService.openPrivateAnnouncementsDialog();
+                    })
                 })
                 .catch(function (error) {
                     errorCode.checkIf(error, 'INACTIVE_USER_ENTITY', function () {

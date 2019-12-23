@@ -374,6 +374,29 @@ module.exports = function (app) {
         };
 
         /**
+         * @description open popup to show private announcements, if not available then show alert
+         * @param $event
+         */
+        self.openPrivateAnnouncementsDialog = function ($event) {
+         return self.getPrivateAnnouncementByOUID().then(function (result) {
+                if (self.count === 0) {
+                    return;
+                }
+
+            return dialog
+                    .showDialog({
+                        targetEvent: $event || null,
+                        templateUrl: cmsTemplate.getPopup('show-private-announcement'),
+                        controller: 'showPrivateAnnouncementPopCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            privateAnnouncements: result
+                        }
+                    });
+            });
+        };
+
+        /**
          * @description Create the shared method to the model.
          * @type {{delete: generator.delete, update: generator.update}}
          * @private

@@ -25,22 +25,7 @@ module.exports = function (app) {
                 return;
             }
 
-            dialog
-                .showDialog({
-                    targetEvent: $event,
-                    templateUrl: cmsTemplate.getPopup('show-private-announcement'),
-                    controller: 'showPrivateAnnouncementPopCtrl',
-                    controllerAs: 'ctrl',
-                    resolve: {
-                        privateAnnouncements: function (privateAnnouncementService) {
-                            'ngInject';
-                            return privateAnnouncementService.getPrivateAnnouncementByOUID().then(function (result) {
-                                self.countPrivateAnnouncements = result.length;
-                                return result;
-                            });
-                        }
-                    }
-                });
+            self.service.openPrivateAnnouncementsDialog($event);
         };
 
 

@@ -112,7 +112,7 @@ module.exports = function (app) {
             promise.promise.then(function () {
                 _setEmployeeWithPermissions(result); // set employee
                 $timeout(function () {
-                    _showPrivateAnnouncements();
+                    privateAnnouncementService.openPrivateAnnouncementsDialog();
                 }, 3000);
 
                 if (!callback) {
@@ -241,31 +241,5 @@ module.exports = function (app) {
         };
 
 
-        /**
-         * @description open popup to show private announcements, if not available then show alert
-         * @param $event
-         */
-        var _showPrivateAnnouncements = function ($event) {
-            if (privateAnnouncementService.count === 0) {
-                return;
-            }
-
-            dialog
-                .showDialog({
-                    targetEvent: $event || null,
-                    templateUrl: cmsTemplate.getPopup('show-private-announcement'),
-                    controller: 'showPrivateAnnouncementPopCtrl',
-                    controllerAs: 'ctrl',
-                    resolve: {
-                        privateAnnouncements: function () {
-                            'ngInject';
-                            return privateAnnouncementService.getPrivateAnnouncementByOUID().then(function (result) {
-                                self.countPrivateAnnouncements = result.length;
-                                return result;
-                            });
-                        }
-                    }
-                });
-        };
     });
 };
