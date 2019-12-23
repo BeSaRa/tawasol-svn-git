@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('searchScreenCtrl', function (registryOrganizations,
                                                  propertyConfigurations,
                                                  approvers,
+                                                 availableRegistryOrganizations,
                                                  employeeService) {
         var self = this;
         self.controllerName = 'searchScreenCtrl';
@@ -52,6 +53,9 @@ module.exports = function (app) {
         // the approvers for (outgoing , internal ) documents
         self.approvers = approvers;
         // all controller for available search screens
+
+        self.availableRegistryOrganizations = availableRegistryOrganizations;
+
         self.searchScreens = {
             outgoing: {
                 controller: {
@@ -102,6 +106,7 @@ module.exports = function (app) {
             $event.preventDefault();
             _setSelectedTabName(tab);
         };
+
         /**
          * @description Sets the selected tab name
          * @param tab
@@ -119,6 +124,7 @@ module.exports = function (app) {
             self.selectedTabResultKey = tab.resultKey;
             self.selectedTabName = tab.tabKey;
         }
+
         /**
          * @description check if print button for current tab should display or not.
          * @returns {boolean}

@@ -150,6 +150,8 @@ module.exports = function (app) {
         self.previousDocumentFiles = [];
         // mapped property configurations
         self.configurations = {};
+        // registry ous came from bindings.
+        self.availableRegistryOrganizations = [];
 
         var noneLookup = new Lookup({
             defaultEnName: langService.getByLangKey('none', 'en'),

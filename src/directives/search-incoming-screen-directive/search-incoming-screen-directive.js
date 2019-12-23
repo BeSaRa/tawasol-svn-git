@@ -12,7 +12,8 @@ module.exports = function (app) {
                 labelCollapse: '=',
                 registryOrganizations: '=',
                 propertyConfigurations: '=',
-                controller: '='
+                controller: '=',
+                availableRegistryOrganizations: '='
             }
         }
     });

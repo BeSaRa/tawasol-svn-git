@@ -70,3 +70,8 @@ md-input-container.restrict-max {
     bottom: 0;
   }
 }
+
+md-option[disabled] {
+  cursor: not-allowed;
+  color: #ddd;
+}

@@ -6,7 +6,8 @@
             <md-button ng-click="ctrl.reloadCurrentSearch()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
-            <md-button ng-if="ctrl.isShowPrintButton()" ng-click="ctrl.print($event)" class="md-icon-button" tooltip="{{lang.print}}">
+            <md-button ng-if="ctrl.isShowPrintButton()" ng-click="ctrl.print($event)" class="md-icon-button"
+                       tooltip="{{lang.print}}">
                 <md-icon md-svg-icon="printer"></md-icon>
             </md-button>
         </div><!-- page-header -->
@@ -30,6 +31,7 @@
                             </div>
                             <search-outgoing-screen-directive
                                     controller="ctrl.searchScreens.outgoing"
+                                    available-registry-organizations="ctrl.availableRegistryOrganizations"
                                     approvers="ctrl.approvers"
                                     ng-show="ctrl.selectedTabName === 'outgoing'"
                                     registry-organizations="ctrl.registryOrganizations"
@@ -46,6 +48,7 @@
                             </search-internal-screen-directive>
                             <search-incoming-screen-directive
                                     controller="ctrl.searchScreens.incoming"
+                                    available-registry-organizations="ctrl.availableRegistryOrganizations"
                                     ng-show="ctrl.selectedTabName === 'incoming'"
                                     registry-organizations="ctrl.registryOrganizations"
                                     property-configurations="ctrl.propertyConfigurations.Incoming"
@@ -53,6 +56,7 @@
                             </search-incoming-screen-directive>
                             <search-outgoing-incoming-screen-directive
                                     controller="ctrl.searchScreens.outgoingIncoming"
+                                    available-registry-organizations="ctrl.availableRegistryOrganizations"
                                     ng-show="ctrl.selectedTabName === 'outgoingIncoming'"
                                     registry-organizations="ctrl.registryOrganizations"
                                     property-configurations="ctrl.propertyConfigurations.OutgoingIncoming"

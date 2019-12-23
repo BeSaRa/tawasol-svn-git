@@ -469,9 +469,10 @@
                                         {{lang.none}}
                                     </md-option>
                                     <md-option
+                                            ng-disabled="regOu.id == ctrl.searchCriteria.toRegOUId"
                                             md-highlight-text="ctrl.fromRegOUIdSearchText" md-highlight-flags="i"
                                             ng-value="regOu.id"
-                                            ng-repeat="regOu in ctrl.registryOrganizations|translatedNameFilter:ctrl.fromRegOUIdSearchText">
+                                            ng-repeat="regOu in ctrl.availableRegistryOrganizations|translatedNameFilter:ctrl.fromRegOUIdSearchText">
                                         {{regOu.getTranslatedName()}}
                                     </md-option>
                                 </md-select>
@@ -497,9 +498,10 @@
                                     <md-option ng-if="!ctrl.toRegOUIdSearchText.length" ng-value="null">{{lang.none}}
                                     </md-option>
                                     <md-option
+                                            ng-disabled="regOu.id == ctrl.searchCriteria.fromRegOUId"
                                             md-highlight-text="ctrl.toRegOUIdSearchText" md-highlight-flags="i"
                                             ng-value="regOu.id"
-                                            ng-repeat="regOu in ctrl.registryOrganizations|translatedNameFilter:ctrl.toRegOUIdSearchText">
+                                            ng-repeat="regOu in ctrl.availableRegistryOrganizations|translatedNameFilter:ctrl.toRegOUIdSearchText">
                                         {{regOu.getTranslatedName()}}
                                     </md-option>
                                 </md-select>

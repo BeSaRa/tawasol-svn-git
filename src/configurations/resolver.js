@@ -681,6 +681,7 @@ module.exports = function (app) {
                 },
                 registryOrganizations: function (employeeService, langService, $q, _, organizationService) {
                     'ngInject';
+
                     function _sortResultByCurrentLang(result) {
                         return _.sortBy(result, function (item) {
                             return item[langService.current + 'Name'].toLowerCase();
@@ -716,6 +717,13 @@ module.exports = function (app) {
                         .searchByCriteria({
                             regOu: employeeService.getEmployee().organization.ouRegistryID
                         });
+                },
+                availableRegistryOrganizations: function (_, employeeService, registryOrganizations, organizationService) {
+                    'ngInject';
+                    return employeeService.hasPermissionTo('SEARCH_IN_ALL_OU') ? angular.copy(registryOrganizations) : (organizationService.loadOrganizations(true)
+                        .then(function (organizations) {
+                            return _.filter(organizations, 'hasRegistry');
+                        }));
                 }
             })
             .registerResolver();
