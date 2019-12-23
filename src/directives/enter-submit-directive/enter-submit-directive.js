@@ -23,7 +23,7 @@ module.exports = function (app) {
             return function (scope, element, attrs) {
                 element.on('keydown keypress', function (e) {
                     var code = e.keyCode || e.which;
-                    if (code === 13) {
+                    if (code === 13 && (!e.shiftKey && !e.altKey && !e.ctrlKey)) {
                         scope.$apply(function () {
                             scope.$eval(attrs['ngEnter']);
                         });
