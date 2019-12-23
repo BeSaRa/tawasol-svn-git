@@ -144,8 +144,8 @@
                     </md-input-container>
                 </div>
                 <!-- Date -->
-                <div flex>
-                    <md-input-container ng-if="ctrl.checkStatus('docDate')" class="cms-datepicker md-block">
+                <div flex ng-if="ctrl.checkStatus('docDate')">
+                    <md-input-container class="cms-datepicker md-block">
                         <label for="docDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.incoming_date :
                             lang.document_date }}</label>
                         <md-datepicker name="docDate" id="docDate"
@@ -161,14 +161,15 @@
                         </div>
                     </md-input-container>
                 </div>
-                <div flex ng-if="(ctrl.fieldsPerRow - ctrl.checkFieldCountFirstRow()) > 0"
+                <!--<div flex ng-if="(ctrl.fieldsPerRow - ctrl.checkFieldCountFirstRow()) > 0"
                      ng-repeat="divElem in [].constructor(ctrl.fieldsPerRow - ctrl.checkFieldCountFirstRow()) track by $index">
-                </div>
+                </div>-->
+                <!-- directive: generate-remaining-search-div-directive -->
             </div>
             <div layout="row">
                 <!-- Document Full Serial -->
                 <div flex ng-if="ctrl.isShowDocFullSerial()">
-                    <md-input-container ng-if="ctrl.isShowDocFullSerial()" class="md-block">
+                    <md-input-container class="md-block">
                         <label for="docFullSerial">{{lang.serial_number}}</label>
                         <input name="docFullSerial" id="docFullSerial"
                                ng-required="ctrl.isShowDocFullSerial()"
@@ -182,9 +183,7 @@
                 <!-- Document Number -->
                 <div flex
                      ng-if='ctrl.document.docClassName.toLowerCase() === "incoming" && ctrl.checkStatus("refDocNumber")'>
-                    <md-input-container
-                            ng-if='ctrl.document.docClassName.toLowerCase() === "incoming" && ctrl.checkStatus("refDocNumber")'
-                            class="md-block">
+                    <md-input-container class="md-block">
                         <label for="refDocNumber">{{lang.document_number}}</label>
                         <input name="refDocNumber" id="refDocNumber"
                                ng-required="ctrl.checkMandatory('refDocNumber')"
@@ -198,9 +197,7 @@
                 <!-- Type (Personal/Departmental) -->
                 <div flex
                      ng-if='ctrl.document.docClassName.toLowerCase() === "internal" && ctrl.checkStatus("internalDocType")'>
-                    <md-input-container
-                            ng-if='ctrl.document.docClassName.toLowerCase() === "internal" && ctrl.checkStatus("internalDocType")'
-                            class="md-block">
+                    <md-input-container class="md-block">
                         <label for="type">{{lang.type}}</label>
                         <md-select name="type" id="type"
                                    ng-disabled="!!ctrl.disableProperties"
@@ -219,9 +216,7 @@
                 </div>
                 <!-- RefDocDate -->
                 <div flex ng-if="ctrl.checkStatus('refDocDate') && ctrl.document.hasDocumentClass('incoming')">
-                    <md-input-container
-                            ng-if="ctrl.checkStatus('refDocDate') && ctrl.document.hasDocumentClass('incoming')"
-                            class="cms-datepicker md-block">
+                    <md-input-container class="cms-datepicker md-block">
                         <label for="refDocDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.document_date :
                             lang.incoming_date }}</label>
                         <md-datepicker name="refDocDate" id="refDocDate"
@@ -236,9 +231,11 @@
                         </div>
                     </md-input-container>
                 </div>
-                <div flex ng-if="(ctrl.fieldsPerRow - ctrl.checkFieldCountSecondRow()) > 0"
+                <!--<div flex ng-if="(ctrl.fieldsPerRow - ctrl.checkFieldCountSecondRow()) > 0"
                      ng-repeat="divElem in  [].constructor(ctrl.fieldsPerRow - ctrl.checkFieldCountSecondRow()) track by $index">
-                </div>
+                </div>-->
+
+                <!-- directive: generate-remaining-search-div-directive -->
             </div>
             <div layout="row" ng-if="ctrl.checkStatus('docSubject')">
                 <!-- Subject -->
@@ -261,8 +258,8 @@
             </div>
             <div layout="row">
                 <!-- Main Classification -->
-                <div flex>
-                    <md-input-container ng-if="ctrl.checkStatus('mainClassification')" class="md-block">
+                <div flex ng-if="ctrl.checkStatus('mainClassification')">
+                    <md-input-container class="md-block">
                         <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
                         <md-select name="mainClassification"
                                    id="mainClassification"
@@ -304,8 +301,8 @@
                     </md-input-container>
                 </div>
                 <!-- Sub Classification -->
-                <div flex>
-                    <md-input-container ng-if="ctrl.checkStatus('subClassification')" class="md-block">
+                <div flex ng-if="ctrl.checkStatus('subClassification')" >
+                    <md-input-container class="md-block">
                         <label for="subClassification">{{lang.outgoing_sub_classification}}</label>
                         <md-select
                                 ng-disabled="!!ctrl.disableProperties || !ctrl.document.mainClassification"
@@ -347,8 +344,8 @@
                     </md-input-container>
                 </div>
                 <!-- Priority Level -->
-                <div flex>
-                    <md-input-container ng-if="ctrl.checkStatus('priorityLevel')" class="md-block">
+                <div flex ng-if="ctrl.checkStatus('priorityLevel')" >
+                    <md-input-container class="md-block">
                         <label for="priorityLevel">{{lang.outgoing_priority_level}}</label>
                         <md-select name="priorityLevel"
                                    id="priorityLevel"
@@ -367,8 +364,8 @@
                     </md-input-container>
                 </div>
                 <!-- Document Type -->
-                <div flex>
-                    <md-input-container ng-if="ctrl.checkStatus('docType')" class="md-block">
+                <div flex  ng-if="ctrl.checkStatus('docType')">
+                    <md-input-container class="md-block">
                         <label for="docType">{{lang.outgoing_document_type}}</label>
                         <md-select name="docType"
                                    id="docType"
@@ -395,12 +392,12 @@
                         </div>
                     </md-input-container>
                 </div>
+                <!-- directive: generate-remaining-search-div-directive -->
             </div>
             <div layout="row">
-
                 <!-- File -->
-                <div flex>
-                    <md-input-container ng-if="ctrl.checkStatus('fileId')" class="md-block">
+                <div flex ng-if="ctrl.checkStatus('fileId')">
+                    <md-input-container class="md-block">
                         <label for="fileId">{{lang.outgoing_file}}</label>
                         <md-select name="fileId"
                                    id="fileId"
@@ -450,8 +447,8 @@
                     </md-input-container>
                 </div>
                 <!-- File Code -->
-                <div flex>
-                    <md-input-container ng-if="ctrl.checkStatus('fileCode')" class="md-block">
+                <div flex ng-if="ctrl.checkStatus('fileCode')">
+                    <md-input-container class="md-block">
                         <label for="fileCode">{{lang.outgoing_file_code}}</label>
                         <input name="fileCode"
                                id="fileCode"
@@ -465,8 +462,8 @@
                     </md-input-container>
                 </div>
                 <!-- File Serial -->
-                <div flex>
-                    <md-input-container ng-if="ctrl.checkStatus('fileSerial')" class="md-block">
+                <div flex ng-if="ctrl.checkStatus('fileSerial')">
+                    <md-input-container class="md-block">
                         <label for="fileSerial">{{lang.outgoing_file_serial}}</label>
                         <input name="fileSerial"
                                id="fileSerial"
@@ -479,8 +476,7 @@
                         </div>
                     </md-input-container>
                 </div>
-                <div flex>
-                </div>
+                <!-- directive: generate-remaining-search-div-directive -->
             </div>
             <div layout="row" ng-if="ctrl.checkStatus('docNotes')">
                 <!-- Notes -->
