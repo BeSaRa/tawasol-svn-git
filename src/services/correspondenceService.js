@@ -1399,7 +1399,7 @@ module.exports = function (app) {
                         resolve: {
                             organizations: function (organizationService) {
                                 'ngInject';
-                                return organizationService.getOrganizations();
+                                return organizationService.loadOrganizations(true);
                             },
                             lookups: function (correspondenceService) {
                                 'ngInject';
@@ -1475,7 +1475,7 @@ module.exports = function (app) {
                         resolve: {
                             organizations: function (organizationService) {
                                 'ngInject';
-                                return organizationService.getOrganizations();
+                                return organizationService.loadOrganizations(true);
                             },
                             lookups: function (correspondenceService) {
                                 'ngInject';
@@ -1533,7 +1533,7 @@ module.exports = function (app) {
                             resolve: {
                                 organizations: function (organizationService) {
                                     'ngInject';
-                                    return organizationService.getOrganizations();
+                                    return organizationService.loadOrganizations(true);
                                 },
                                 lookups: function (correspondenceService) {
                                     'ngInject';
@@ -1595,7 +1595,7 @@ module.exports = function (app) {
                         resolve: {
                             organizations: function (organizationService) {
                                 'ngInject';
-                                return organizationService.getOrganizations();
+                                return organizationService.loadOrganizations(true);
                             },
                             lookups: function (correspondenceService) {
                                 'ngInject';
@@ -3304,7 +3304,7 @@ module.exports = function (app) {
                         resolve: {
                             organizations: function (organizationService) {
                                 'ngInject';
-                                return organizationService.getOrganizations();
+                                return organizationService.loadOrganizations(true);
                             },
                             lookups: function (correspondenceService) {
                                 'ngInject';
