@@ -92,6 +92,9 @@ module.exports = function (app) {
                             self.legendIndicators.push(indicator.getSiteFollowUpDueDateIndicator(date));
                         });
                         break;
+                    case 'siteFollowUpEnded':
+                        self.legendIndicators.push(indicator.getSiteFollowUpEndedIndicator(true));
+                        break;
                 }
             });
         };
