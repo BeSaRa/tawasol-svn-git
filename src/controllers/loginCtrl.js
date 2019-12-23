@@ -112,7 +112,7 @@ module.exports = function (app) {
             promise.promise.then(function () {
                 _setEmployeeWithPermissions(result); // set employee
                 $timeout(function () {
-                    privateAnnouncementService.openPrivateAnnouncementsDialog();
+                    privateAnnouncementService.openPrivateAnnouncementsDialog(true);
                 }, 3000);
 
                 if (!callback) {

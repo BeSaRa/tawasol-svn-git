@@ -376,21 +376,24 @@ module.exports = function (app) {
         /**
          * @description open popup to show private announcements, if not available then show alert
          * @param $event
+         * @param isCloseAutomatically
          */
-        self.openPrivateAnnouncementsDialog = function ($event) {
-         return self.getPrivateAnnouncementByOUID().then(function (result) {
+        self.openPrivateAnnouncementsDialog = function (isCloseAutomatically, $event) {
+            return self.getPrivateAnnouncementByOUID().then(function (result) {
                 if (self.count === 0) {
                     return;
                 }
 
-            return dialog
+                return dialog
                     .showDialog({
                         targetEvent: $event || null,
                         templateUrl: cmsTemplate.getPopup('show-private-announcement'),
                         controller: 'showPrivateAnnouncementPopCtrl',
                         controllerAs: 'ctrl',
+                        bindToController:true,
                         locals: {
-                            privateAnnouncements: result
+                            privateAnnouncements: result,
+                            isCloseAutomatically: isCloseAutomatically
                         }
                     });
             });

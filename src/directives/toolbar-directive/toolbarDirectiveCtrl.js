@@ -73,7 +73,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.employee = employeeService.getEmployee();
                     $state.reload().then(function () {
-                        privateAnnouncementService.openPrivateAnnouncementsDialog();
+                        privateAnnouncementService.openPrivateAnnouncementsDialog(true);
                     })
                 })
                 .catch(function (error) {

@@ -25,7 +25,7 @@ module.exports = function (app) {
                 return;
             }
 
-            self.service.openPrivateAnnouncementsDialog($event);
+            self.service.openPrivateAnnouncementsDialog(false,$event);
         };
 
 
