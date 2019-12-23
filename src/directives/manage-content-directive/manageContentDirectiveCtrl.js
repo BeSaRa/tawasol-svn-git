@@ -117,6 +117,9 @@ module.exports = function (app) {
                         if (self.vsId && !self.fromDialog) {
                             correspondenceService
                                 .updateCorrespondenceWithContent(self.document, self.documentInformation)
+                                .then(function () {
+                                    self.document.updateDocumentVersion();
+                                });
                         }
                     } else {
                         self.removeTemplateOrContentFile();
@@ -308,9 +311,9 @@ module.exports = function (app) {
          * @returns {undefined}
          */
         self.editContentInEditPopup = function ($event) {
-            if(self.defaultEditMode === correspondenceService.documentEditModes.desktop){
+            if (self.defaultEditMode === correspondenceService.documentEditModes.desktop) {
                 self.editInDesktop($event);
-            } else if (self.defaultEditMode === correspondenceService.documentEditModes.officeOnline){
+            } else if (self.defaultEditMode === correspondenceService.documentEditModes.officeOnline) {
                 self.editInOfficeOnline($event);
             }
 
