@@ -608,6 +608,7 @@ module.exports = function (app) {
                 self.emptySubRecords = false;
                 self.selectedSiteTypeSimple = null;
                 self.selectedMainSiteSimple = null;
+                self.selectedMainSiteAdvanced = null;
                 self.selectedSiteTypeAdvanced = null;
                 self.mainSiteAdvancedSearchText = '';
                 self.subSiteAdvancedSearchText = '';
