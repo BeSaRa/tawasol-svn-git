@@ -233,7 +233,7 @@ module.exports = function (app) {
                     errorCode.checkIf(error, 'MAIP_PROTECTED_TEMPLATE', function () {
                         dialog.errorMessage(langService.get('protected_template'));
                     });
-                    errorCode.checkIf(error, 'SIZE_EXTENSION_NOT_ALLOWED', function () {
+                    errorCode.checkIf(error, 'FAILED_INSERT_DOCUMENT', function () {
                         dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
                     });
                 })
@@ -430,7 +430,7 @@ module.exports = function (app) {
                     errorCode.checkIf(error, 'MAIP_PROTECTED_TEMPLATE', function () {
                         dialog.errorMessage(langService.get('protected_template'));
                     });
-                    errorCode.checkIf(error, 'SIZE_EXTENSION_NOT_ALLOWED', function () {
+                    errorCode.checkIf(error, 'FAILED_INSERT_DOCUMENT', function () {
                         dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
                     });
                 })

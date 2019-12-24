@@ -238,7 +238,7 @@ module.exports = function (app) {
                     }
                 })
                 .catch(function (error) {
-                    errorCode.checkIf(error, 'SIZE_EXTENSION_NOT_ALLOWED', function () {
+                    errorCode.checkIf(error, 'FAILED_INSERT_DOCUMENT', function () {
                         dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
                     });
                 });
@@ -272,7 +272,7 @@ module.exports = function (app) {
                     });
                 }).catch(function (error) {
                     if (single)
-                        errorCode.checkIf(error, 'SIZE_EXTENSION_NOT_ALLOWED', function () {
+                        errorCode.checkIf(error, 'FAILED_INSERT_DOCUMENT', function () {
                             dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
                         });
                     else
@@ -330,7 +330,7 @@ module.exports = function (app) {
                     self.attachment = null;
                 }
             }).catch(function (error) {
-                errorCode.checkIf(error, 'SIZE_EXTENSION_NOT_ALLOWED', function () {
+                errorCode.checkIf(error, 'FAILED_INSERT_DOCUMENT', function () {
                     dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
                 });
             });
