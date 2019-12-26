@@ -416,9 +416,16 @@ module.exports = function (app) {
                             });
                         });
                 },
-                centralArchives: function ($q, organizations, employeeService, organizationService) {
+                centralArchives: function ($q, organizations, employeeService, _, organizationService) {
                     'ngInject';
-                    return !employeeService.isCentralArchiveHasRegistry() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                    var currentOU = employeeService.getEmployee().userOrganization;
+
+                    return employeeService.isCentralArchive() ? (organizationService.centralArchiveOrganizations().then(function (organizations) {
+                        if (employeeService.isCentralArchiveHasRegistry() && (_.map(organizations, 'id').indexOf(currentOU.id) === -1)) {
+                            organizations.push(currentOU);
+                        }
+                        return organizations;
+                    })) : $q.resolve(false);
                 }
             })
             .bulkResolveToState('app.incoming.simple-add', {
@@ -458,9 +465,16 @@ module.exports = function (app) {
                         });
                     }
                 },
-                centralArchives: function ($q, organizations, employeeService, organizationService) {
+                centralArchives: function ($q, organizations, employeeService, organizationService, receiveG2G, receive) {
                     'ngInject';
-                    return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                    var currentOU = employeeService.getEmployee().userOrganization;
+
+                    return employeeService.isCentralArchive() ? (organizationService.centralArchiveOrganizations().then(function (organizations) {
+                        if (employeeService.isCentralArchiveHasRegistry() && (_.map(organizations, 'id').indexOf(currentOU.id) === -1)) {
+                            organizations.push(currentOU);
+                        }
+                        return organizations;
+                    })) : $q.resolve(false);
                 }
             })
             .bulkResolveToState('app.internal.add', {
