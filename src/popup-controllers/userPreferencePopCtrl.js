@@ -97,6 +97,8 @@ module.exports = function (app) {
         );
         // tomorrow
         self.tomorrow = (new Date()).setDate(self.today.getDate() + 1);
+        self.jobTitleSearchText = '';
+        self.rankSearchText = '';
 
 
         self.rootEntity = rootEntity;
@@ -204,7 +206,7 @@ module.exports = function (app) {
             reminderSmsdays: 'reminder_sms_days',
             reminderEmailDays: 'reminder_email_days',
             viewInboxAsGrid: 'view_inbox_as',
-            inboxRefreshInterval:'inbox_refresh_interval'
+            inboxRefreshInterval: 'inbox_refresh_interval'
         };
 
         self.validateSignatureLabels = {
@@ -1289,7 +1291,27 @@ module.exports = function (app) {
          */
         self.currentUser = function (proxyUser) {
             return proxyUser.applicationUser.id === self.ouApplicationUser.applicationUser.id;
-        }
+        };
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
+        };
 
     });
 };

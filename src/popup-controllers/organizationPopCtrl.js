@@ -139,6 +139,8 @@ module.exports = function (app) {
         self.documentTemplates = documentTemplates;
         self.documentTemplatesCopy = angular.copy(self.documentTemplates);
 
+        self.unAssignedUserSearchText = '';
+
         self.privateRegOUs = [];
         self.privateRegOUsCopy = angular.copy(self.privateRegOUs);
         self.selectedPrivateRegOUs = [];
@@ -778,6 +780,27 @@ module.exports = function (app) {
             });
             self.organizationChildrenCopy = angular.copy(self.organizationChildren);
         };
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
+        };
+
         /**
          * @description to close the current dialog and send the current model to catch block.
          */

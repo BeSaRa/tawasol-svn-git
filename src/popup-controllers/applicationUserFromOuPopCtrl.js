@@ -59,9 +59,12 @@ module.exports = function (app) {
         self.model = angular.copy(applicationUser);
         self.currentOrganization = currentOrganization;
         self.notFound = {};
+
         self.inlineUserOUSearchText = '';
         self.inlineOuSearchText = '';
         self.roleSearchText = '';
+        self.jobTitleSearchText = '';
+        self.rankSearchText = '';
 
         self.rootEntity = rootEntity;
 

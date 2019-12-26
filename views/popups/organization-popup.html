@@ -1368,11 +1368,22 @@
                                         <label for="appUser">{{lang.unassigned_users}}</label>
                                         <md-select id="appUser" name="appUser" aria-label="{{lang.unassigned_users}}"
                                                    ng-change="ctrl.assignUserToOU($event)"
-                                                   ng-model="ctrl.selectedUnassignedUser">
+                                                   ng-model="ctrl.selectedUnassignedUser"
+                                                   ng-model-options="{trackBy: '$value.id'}"
+                                                   md-on-close="ctrl.clearSearchText('unAssignedUser')"
+                                                   data-md-container-class="select-header-container">
+                                            <md-select-header class="select-header">
+                                                <input ng-model="ctrl.unAssignedUserSearchText"
+                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                            </md-select-header>
                                             <md-option ng-if="!ctrl.userExistsInOrganization(appUser)"
                                                        ng-value="appUser"
-                                                       ng-repeat="appUser in ctrl.unAssignedUsers track by $index">
-                                                {{appUser.getTranslatedName()}}
+                                                       ng-repeat="appUser in ctrl.unAssignedUsers | translatedNameFilter: ctrl.unAssignedUserSearchText">
+                                                <span
+                                                        md-highlight-text="ctrl.unAssignedUserSearchText"
+                                                        md-highlight-flags="i">{{appUser.getTranslatedName()}}</span>
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
@@ -1380,11 +1391,22 @@
                                         <label for="appUser">{{lang.unassigned_users}}</label>
                                         <md-select id="appUser" name="appUser" aria-label="{{lang.unassigned_users}}"
                                                    ng-change="ctrl.assignUserToOU($event)"
-                                                   ng-model="ctrl.selectedUnassignedUser">
+                                                   ng-model="ctrl.selectedUnassignedUser"
+                                                   ng-model-options="{trackBy: '$value.id'}"
+                                                   md-on-close="ctrl.clearSearchText('unAssignedUser')"
+                                                   data-md-container-class="select-header-container">
+                                            <md-select-header class="select-header">
+                                                <input ng-model="ctrl.unAssignedUserSearchText"
+                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                            </md-select-header>
                                             <md-option ng-if="!ctrl.userExistsInOrganization(appUser)"
                                                        ng-value="appUser"
-                                                       ng-repeat="appUser in ctrl.unAssignedUsers track by $index">
-                                                {{appUser.getTranslatedName()}}
+                                                       ng-repeat="appUser in ctrl.unAssignedUsers | translatedNameFilter: ctrl.unAssignedUserSearchText">
+                                                <span
+                                                        md-highlight-text="ctrl.unAssignedUserSearchText"
+                                                        md-highlight-flags="i">{{appUser.getTranslatedName()}}</span>
                                             </md-option>
                                         </md-select>
                                     </md-input-container>

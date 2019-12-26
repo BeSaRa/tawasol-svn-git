@@ -39,6 +39,14 @@ module.exports = function (app) {
             Rank.prototype.getTranslatedStatus = function () {
                 return this.status ? langService.get('active') : langService.get('inactive');
             };
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            Rank.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
+            };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Rank', 'init', this);

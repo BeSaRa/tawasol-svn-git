@@ -60,6 +60,8 @@ module.exports = function (app) {
         self.rootEntity = rootEntity;
         self.inlineUserOUSearchText = '';
         self.inlineOuSearchText = '';
+        self.jobTitleSearchText = '';
+        self.rankSearchText = '';
 
         self.hrEnabled = self.rootEntity.returnRootEntity().rootEntity.hrEnabled;
 

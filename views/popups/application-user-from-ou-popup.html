@@ -114,10 +114,22 @@
                                         <md-input-container flex>
                                             <label for="rank">{{lang.rank}}</label>
                                             <md-select id="rank" name="rank"
-                                                       ng-model="ctrl.applicationUser.rank"><!-- required-->
+                                                       ng-model="ctrl.applicationUser.rank"
+                                                       ng-model-options="{trackBy: '$value'}"
+                                                       md-on-close="ctrl.clearSearchText('rank')"
+                                                       data-md-container-class="select-header-container">
+                                                <!-- required-->
+                                                <md-select-header class="select-header">
+                                                    <input ng-model="ctrl.rankSearchText"
+                                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                           placeholder="{{lang.search}}"
+                                                           class="select-header-input">
+                                                </md-select-header>
                                                 <md-option ng-if="rank.status" ng-value="rank.lookupKey"
-                                                           ng-repeat="rank in ctrl.ranks track by $index">
-                                                    {{rank.getTranslatedName()}}
+                                                           ng-repeat="rank in ctrl.ranks | translatedNameFilter: ctrl.rankSearchText">
+                                                    <span
+                                                            md-highlight-text="ctrl.rankSearchText"
+                                                            md-highlight-flags="i">{{rank.getTranslatedName()}}</span>
                                                 </md-option>
                                             </md-select>
                                             <md-button
@@ -136,13 +148,24 @@
                                         <md-input-container flex>
                                             <label for="jobTitle">{{lang.job_title}}</label>
                                             <md-select id="jobTitle" name="jobTitle" required
-                                                       ng-model="ctrl.applicationUser.jobTitle">
+                                                       ng-model="ctrl.applicationUser.jobTitle"
+                                                       ng-model-options="{trackBy: '$value'}"
+                                                       md-on-close="ctrl.clearSearchText('jobTitle')"
+                                                       data-md-container-class="select-header-container">
+                                                <md-select-header class="select-header">
+                                                    <input ng-model="ctrl.jobTitleSearchText"
+                                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                           placeholder="{{lang.search}}"
+                                                           class="select-header-input">
+                                                </md-select-header>
                                                 <md-option ng-disabled="!jobTitle.status"
                                                            ng-value="jobTitle.lookupKey"
                                                            tooltip="{{(!jobTitle.status) ? lang.inactive : ''}}"
-                                                           ng-repeat="jobTitle in ctrl.jobTitles track by $index">
+                                                           ng-repeat="jobTitle in ctrl.jobTitles | translatedNameFilter:ctrl.jobTitleSearchText">
                                                     <!--ng-if="jobTitle.status" -->
-                                                    {{jobTitle.getTranslatedName()}}
+                                                    <span
+                                                            md-highlight-text="ctrl.jobTitleSearchText"
+                                                            md-highlight-flags="i">{{jobTitle.getTranslatedName()}}</span>
                                                 </md-option>
                                             </md-select>
                                             <md-button
