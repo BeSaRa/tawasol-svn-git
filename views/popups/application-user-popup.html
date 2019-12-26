@@ -132,7 +132,7 @@
                                                        ng-model="ctrl.applicationUser.rank"
                                                        ng-model-options="{trackBy: '$value'}"
                                                        md-on-close="ctrl.clearSearchText('rank')"
-                                                       data-md-container-class="select-header-container">
+                                                       data-md-container-class="select-header-container sticky-search-bar">
                                                 <!-- required-->
                                                 <md-select-header class="select-header">
                                                     <input ng-model="ctrl.rankSearchText"
@@ -165,7 +165,7 @@
                                                        ng-model="ctrl.applicationUser.jobTitle"
                                                        ng-model-options="{trackBy: '$value'}"
                                                        md-on-close="ctrl.clearSearchText('jobTitle')"
-                                                       data-md-container-class="select-header-container">
+                                                       data-md-container-class="select-header-container sticky-search-bar">
                                                 <md-select-header class="select-header">
                                                     <input ng-model="ctrl.jobTitleSearchText"
                                                            ng-keydown="ctrl.preventSearchKeyDown($event)"
