@@ -1377,7 +1377,9 @@ module.exports = function (app) {
                 })
                 .then(function (result) {
                     result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
-                    result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                    if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                        result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                    }
                     generator.addPopupNumber();
                     return dialog.showDialog({
                         templateUrl: cmsTemplate.getPopup('view-correspondence'),
@@ -1636,6 +1638,9 @@ module.exports = function (app) {
                 .then(function (result) {
                     generator.addPopupNumber();
                     result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                    if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                        result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                    }
                     return dialog.showDialog({
                         templateUrl: cmsTemplate.getPopup('view-document-readonly'),
                         controller: 'viewDocumentReadOnlyPopCtrl',
@@ -1703,6 +1708,9 @@ module.exports = function (app) {
                 })
                 .then(function (result) {
                     result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                    if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                        result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                    }
                     generator.addPopupNumber();
                     return dialog.showDialog({
                         templateUrl: cmsTemplate.getPopup('view-correspondence-g2g'),

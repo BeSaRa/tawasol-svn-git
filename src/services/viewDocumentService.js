@@ -237,6 +237,9 @@ module.exports = function (app) {
                     .then(function (result) {
                         result.metaData.viewVersion = true;
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                            result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                        }
                         result.content.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
@@ -298,8 +301,10 @@ module.exports = function (app) {
                         return result.data.rs;
                     })
                     .then(function (result) {
-                        result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                            result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                        }
                         result.content.desktop = desktop;
                         disabled = _checkDisabled(pageName, result.metaData);
 
@@ -381,6 +386,9 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                            result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                        }
                         result.content.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
@@ -752,7 +760,9 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
-                        result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                        if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                            result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                        }
                         result.content.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
@@ -981,6 +991,9 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                            result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                        }
                         result.content.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
@@ -1137,6 +1150,9 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                            result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                        }
                         result.content.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
@@ -1205,6 +1221,9 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                            result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                        }
                         result.content.desktop = desktop;
                         generator.addPopupNumber();
                         return dialog.showDialog({
@@ -1379,6 +1398,9 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                            result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                        }
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             /*templateUrl: cmsTemplate.getPopup('view-correspondence-g2g'),
@@ -1455,6 +1477,9 @@ module.exports = function (app) {
                         }
 
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                            result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                        }
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
