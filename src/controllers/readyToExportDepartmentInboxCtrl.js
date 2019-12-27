@@ -1228,7 +1228,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 checkShow: function (action, model) {
-                    return !model.isBroadcasted();
+                    return model.canSendByFax();
                 },
                 permissionKey: [
                     "SEND_DOCUMENT_BY_FAX"
