@@ -7,16 +7,16 @@
             <md-button ng-click="ctrl.reloadProxyMailInboxes()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
-            <span flex></span>
             <div class="p020">
-                <md-switch aria-label="{{lang.truncate_subject}}"
+                <md-switch md-invert aria-label="{{lang.truncate_subject}}"
                            ng-model="ctrl.grid.truncateSubject"
                            ng-change="ctrl.grid.setTruncateSubject($event)">
                     <span>{{lang.truncate_subject}} : </span>
                     {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
                 </md-switch>
             </div>
-            <md-input-container flex>
+            <span flex></span>
+            <md-input-container flex class="cms-default">
                 <label for="selectUser">{{lang.select_user}}</label>
                 <md-select id="selectUser"
                            name="selectUser"

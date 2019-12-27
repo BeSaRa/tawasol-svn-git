@@ -1580,6 +1580,6 @@ module.exports = function (app) {
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
 
-        console.log(self.shortcutActions, self.contextMenuActions);
+        //console.log(self.shortcutActions, self.contextMenuActions);
     });
 };
