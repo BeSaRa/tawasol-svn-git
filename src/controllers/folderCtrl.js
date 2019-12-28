@@ -1000,13 +1000,14 @@ module.exports = function (app) {
                 icon: 'plus',
                 text: 'grid_action_add_to',
                 class: "action-green",
-                permissionKey: [
+                /*permissionKey: [
                     'MANAGE_FAVORITE',
                     'ICN_ENTRY_TEMPLATE'
-                ],
+                ],*/
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                    return true;
+                    return (employeeService.hasPermissionTo('MANAGE_FAVORITE') && !model.isBroadcasted())
+                        || employeeService.hasPermissionTo('ICN_ENTRY_TEMPLATE');
                 },
                 subMenu: [
                     // Add To Favorite
