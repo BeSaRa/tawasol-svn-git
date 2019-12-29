@@ -1162,12 +1162,12 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(correspondence, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(correspondence, true))
+            correspondenceService.viewCorrespondence(correspondence, self.gridActions, checkIfEditPropertiesAllowed(correspondence, true), checkIfEditCorrespondenceSiteAllowed(correspondence, true))
                 .then(function () {
-                    //   return self.reloadSearchCorrespondence(self.grid.page);
+                       return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    //   return self.reloadSearchCorrespondence(self.grid.page);
+                       return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1183,10 +1183,10 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'searchOutgoingIncoming', $event)
                 .then(function () {
-                    // return self.reloadSearchCorrespondence(self.grid.page);
+                    return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function (error) {
-                    // return self.reloadSearchCorrespondence(self.grid.page);
+                    return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1253,6 +1253,53 @@ module.exports = function (app) {
 
         self.viewInDeskTop = function (workItem) {
             return correspondenceService.viewWordInDesktop(workItem);
+        };
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var info = model.getInfo();
+            var hasPermission = false;
+            if (info.documentClass === "incoming")
+                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+            else if (info.documentClass === "outgoing") {
+                //If approved outgoing electronic, don't allow to edit
+                if (info.docStatus >= 24 && !info.isPaper)
+                    hasPermission = false;
+                else
+                    hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+            }
+            if (checkForViewPopup)
+                return !hasPermission || model.isBroadcasted();
+            return hasPermission && !model.isBroadcasted();
+        };
+
+        /**
+         * @description Edit Content
+         * @param model
+         * @param $event
+         */
+        self.editContent = function (model, $event) {
+            model.manageDocumentContent($event)
+                .then(function () {
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                });
+        };
+
+        /**
+         * @description Edit Properties
+         * @param model
+         * @param $event
+         */
+        self.editProperties = function (model, $event) {
+            var info = model.getInfo();
+            managerService
+                .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
+                .finally(function (e) {
+                    self.reloadSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
+
+                });
         };
 
         self.gridActions = [
@@ -1794,6 +1841,71 @@ module.exports = function (app) {
                     }
                     return false;
                 }
+            },
+            // Edit
+            {
+                type: 'action',
+                icon: 'pencil',
+                text: 'grid_action_edit',
+                showInView: false,
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    var hasPermission = false;
+                    if (info.documentClass === "incoming") {
+                        hasPermission = checkIfEditPropertiesAllowed(model) || (employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT") && info.docStatus < 23);
+                    } else if (info.documentClass === "outgoing") {
+                        hasPermission = checkIfEditPropertiesAllowed(model) || ((info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT")) && info.docStatus < 23);
+                    }
+                    return hasPermission;
+                },
+                subMenu: [
+                    // Content
+                    {
+                        type: 'action',
+                        icon: 'pencil-box',
+                        //text: 'grid_action_content',
+                        text: function () {
+                            return {
+                                contextText: 'grid_action_content',
+                                shortcutText: 'grid_action_edit_content'
+                            };
+                        },
+                        callback: self.editContent,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            /*If partially approved, don't show edit content*/
+                            if (info.docStatus === 23)
+                                return false;
+                            var hasPermission = false;
+                            if (info.documentClass === "incoming")
+                                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
+                            else if (info.documentClass === "outgoing") {
+                                hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                            }
+
+                            return hasPermission && info.docStatus < 23;
+                            /*If partially or fully approved, don't show edit content*/
+                        }
+                    },
+                    // Properties
+                    {
+                        type: 'action',
+                        icon: 'pencil',
+                        //text: 'grid_action_properties',
+                        text: function () {
+                            return {
+                                contextText: 'grid_action_properties',
+                                shortcutText: 'grid_action_edit_properties'
+                            };
+                        },
+                        callback: self.editProperties,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return checkIfEditPropertiesAllowed(model);
+                        }
+                    }
+                ]
             },
             // Duplicate
             {

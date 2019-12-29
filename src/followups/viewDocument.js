@@ -34,8 +34,13 @@ module.exports = function (app) {
             })
             // Search
             .getPageNameOverride('searchOutgoing', 'draftOutgoing', {
-                disableProperties: function () {
-                    return true;
+                disableProperties: function (model) {
+                    var info = model.getInfo(), hasPermission = false;
+                    if (info.docStatus >= 24 && !info.isPaper)
+                        hasPermission = false;
+                    else
+                        hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                    return !(hasPermission && !model.isBroadcasted());
                 },
                 disableSites: function (model) {
                     var info = model.getInfo();
@@ -43,21 +48,51 @@ module.exports = function (app) {
                 }
             })
             .getPageNameOverride('searchIncoming', 'draftOutgoing', {
-                disableProperties: function () {
-                    return true;
+                disableProperties: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+
+                    return !(hasPermission && !model.isBroadcasted());
                 }
             })
             .getPageNameOverride('searchInternal', 'draftOutgoing', {
-                disableProperties: function () {
-                    return true;
+                disableProperties: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = false;
+
+                    //If approved internal electronic, don't allow to edit
+                    if (info.docStatus >= 24 && !info.isPaper)
+                        hasPermission = false;
+                    else
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+
+                    return !(hasPermission && !model.isBroadcasted());
                 },
                 disableSites: function () {
                     return true;
                 }
             })
             .getPageNameOverride('searchGeneral', 'draftOutgoing', {
-                disableProperties: function () {
-                    return true;
+                disableProperties: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = false;
+                    if (info.documentClass === "internal") {
+                        //If approved internal electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                    } else if (info.documentClass === "incoming")
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+                    else if (info.documentClass === "outgoing") {
+                        //If approved outgoing electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                    }
+
+                    return !(hasPermission && !model.isBroadcasted());
                 },
                 disableSites: function (model) {
                     var info = model.getInfo();
@@ -68,8 +103,20 @@ module.exports = function (app) {
                 }
             })
             .getPageNameOverride('searchOutgoingIncoming', 'draftOutgoing', {
-                disableProperties: function () {
-                    return true;
+                disableProperties: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = false;
+                    if (info.documentClass === "incoming")
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+                    else if (info.documentClass === "outgoing") {
+                        //If approved outgoing electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                    }
+
+                    return !(hasPermission && !model.isBroadcasted());
                 },
                 disableSites: function (model) {
                     var info = model.getInfo();

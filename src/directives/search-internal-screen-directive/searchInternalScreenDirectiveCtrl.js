@@ -1088,12 +1088,12 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(searchedInternalDocument, self.gridActions, true, true)
+            correspondenceService.viewCorrespondence(searchedInternalDocument, self.gridActions, checkIfEditPropertiesAllowed(searchedInternalDocument, true), true)
                 .then(function () {
-                    //  return self.reloadSearchCorrespondence(self.grid.page);
+                    return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    //  return self.reloadSearchCorrespondence(self.grid.page);
+                    return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1109,10 +1109,10 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'searchInternal', $event)
                 .then(function () {
-                    // return self.reloadSearchCorrespondence(self.grid.page);
+                    return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                    //  return self.reloadSearchCorrespondence(self.grid.page);
+                    return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1179,6 +1179,51 @@ module.exports = function (app) {
                             new ResolveDefer(defer);
                         })
                 })
+        };
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var info = model.getInfo();
+            var hasPermission = false;
+
+            //If approved internal electronic, don't allow to edit
+            if (info.docStatus >= 24 && !info.isPaper)
+                hasPermission = false;
+            else
+                hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+
+            if (checkForViewPopup)
+                return !hasPermission || model.isBroadcasted();
+            return hasPermission && !model.isBroadcasted();
+        };
+
+        /**
+         * @description Edit Content
+         * @param correspondence
+         * @param $event
+         */
+        self.editContent = function (correspondence, $event) {
+            correspondence.manageDocumentContent($event)
+                .then(function () {
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                });
+        };
+
+        /**
+         * @description Edit Properties
+         * @param correspondence
+         * @param $event
+         */
+        self.editProperties = function (correspondence, $event) {
+            var info = correspondence.getInfo();
+            managerService
+                .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
+                .finally(function (e) {
+                    self.reloadSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        })
+
+                });
         };
 
         self.gridActions = [
@@ -1687,6 +1732,66 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return true;
                 }
+            },
+            // Edit
+            {
+                type: 'action',
+                icon: 'pencil',
+                text: 'grid_action_edit',
+                showInView: false,
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    var hasPermission = checkIfEditPropertiesAllowed(model);
+                    var hasContentPermission = false;
+                    if (info.docStatus === 23) {
+                        hasContentPermission = false;
+                    } else {
+                        hasContentPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT") && info.docStatus < 23;
+                    }
+                    return hasPermission || hasContentPermission;
+                },
+                subMenu: [
+                    // Content
+                    {
+                        type: 'action',
+                        icon: 'pencil-box',
+                        //text: 'grid_action_content',
+                        text: function () {
+                            return {
+                                contextText: 'grid_action_content',
+                                shortcutText: 'grid_action_edit_content'
+                            };
+                        },
+                        callback: self.editContent,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            /*If partially approved, don't show edit content*/
+                            if (info.docStatus === 23)
+                                return false;
+                            var hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
+                            return hasPermission && info.docStatus < 23;
+                            /*If partially or fully approved, don't show edit content*/
+                        }
+                    },
+                    // Properties
+                    {
+                        type: 'action',
+                        icon: 'pencil',
+                        //text: 'grid_action_properties',
+                        text: function () {
+                            return {
+                                contextText: 'grid_action_properties',
+                                shortcutText: 'grid_action_edit_properties'
+                            };
+                        },
+                        callback: self.editProperties,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return checkIfEditPropertiesAllowed(model);
+                        }
+                    }
+                ]
             },
             // Duplicate
             {
