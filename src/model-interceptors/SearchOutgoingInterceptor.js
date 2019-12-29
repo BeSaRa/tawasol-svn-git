@@ -165,6 +165,8 @@ module.exports = function (app) {
                 model.exportDate = angular.toJson(exportDate);
             }
 
+            model.serialNoFrom = (!model.serialNoFrom && model.serialNoTo) ? Number(model.serialNoTo) -1 : model.serialNoFrom;
+            model.serialNoTo = (model.serialNoFrom && !model.serialNoTo) ? Number(model.serialNoFrom) + 1 : model.serialNoTo;
             model.docSerial = (model.serialNoFrom && model.serialNoTo) ? model.serialNoFrom + ',' + model.serialNoTo : null;
 
 

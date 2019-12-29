@@ -87,6 +87,9 @@ module.exports = function (app) {
             delete model.followUpFrom;
             delete model.followUpTo;
             model.FollowUpDate = (model.FollowUpDate) ? angular.toJson(model.FollowUpDate) : null;
+
+            model.serialNoFrom = (!model.serialNoFrom && model.serialNoTo) ? Number(model.serialNoTo) -1 : model.serialNoFrom;
+            model.serialNoTo = (model.serialNoFrom && !model.serialNoTo) ? Number(model.serialNoFrom) + 1 : model.serialNoTo;
             model.docSerial = (model.serialNoFrom && model.serialNoTo) ? model.serialNoFrom + ',' + model.serialNoTo : null;
 
             delete model.approvedBy;

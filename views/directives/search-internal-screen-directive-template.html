@@ -27,11 +27,9 @@
                                 <input id="serialNoFromInternal" name="serialNoFrom"
                                        ng-model="ctrl.searchCriteria.serialNoFrom"
                                        min="1" max="ctrl.getMinMaxSerialNumberValues('from', 'max').value"
-                                       ng-required="ctrl.searchCriteria.serialNoTo"
                                        custom-validate-directive="number" type="text"
                                        min-max-number-directive>
                                 <div ng-messages="simpleSearchForm.serialNoFrom.$error">
-                                    <div ng-message="required">{{lang.field_required}}</div>
                                     <div ng-message="number">{{lang.numberonly}}</div>
                                     <div ng-message="min">{{lang.min_number.change({number:
                                         ctrl.getMinMaxSerialNumberValues('from',
@@ -49,12 +47,10 @@
                                 <label>{{lang.search_module_serial_to}}</label>
                                 <input id="serialNoToInternal" name="serialNoTo"
                                        ng-model="ctrl.searchCriteria.serialNoTo"
-                                       ng-required="ctrl.searchCriteria.serialNoFrom"
                                        custom-validate-directive="number" type="text"
                                        min="ctrl.getMinMaxSerialNumberValues('to', 'min').value"
                                        min-max-number-directive>
                                 <div ng-messages="simpleSearchForm.serialNoTo.$error">
-                                    <div ng-message="required">{{lang.field_required}}</div>
                                     <div ng-message="number">{{lang.numberonly}}</div>
                                     <div ng-message="min">{{lang.min_number.change({number:
                                         ctrl.getMinMaxSerialNumberValues('to',

@@ -59,6 +59,9 @@ module.exports = function (app) {
                 model.docDate.To = '' + model.docDate.To;
 
             model.docDate = angular.toJson(model.docDate);
+
+            model.serialNoFrom = (!model.serialNoFrom && model.serialNoTo) ? Number(model.serialNoTo) -1 : model.serialNoFrom;
+            model.serialNoTo = (model.serialNoFrom && !model.serialNoTo) ? Number(model.serialNoFrom) + 1 : model.serialNoTo;
             model.docSerial = (model.serialNoFrom && model.serialNoTo) ? model.serialNoFrom + ',' + model.serialNoTo : null;
 
             typeof model.prepareApproved === 'function' ? model.prepareApproved() : null;
