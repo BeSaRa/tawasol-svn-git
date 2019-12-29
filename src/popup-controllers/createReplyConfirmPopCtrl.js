@@ -8,7 +8,7 @@ module.exports = function (app) {
 
         self.controllerName = 'createReplyPopCtrl';
 
-        self.replyForm = 1;
+        self.replyForm = 0;
         self.replyType = 0;
         self.createAsAttachment = false;
 
