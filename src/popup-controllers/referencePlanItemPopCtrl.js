@@ -49,7 +49,7 @@ module.exports = function (app) {
         self.documentClasses.unshift(lookup);
 
         self.documentClasses = _.map(self.documentClasses, function (item) {
-            item.customLookupKey = generator.ucFirst(item.lookupStrKey);
+            item.customLookupKey = generator.ucFirst(item.lookupStrKey.toLowerCase());
             return item;
         });
 
