@@ -103,6 +103,8 @@ module.exports = function (app) {
              * @param rootEntity
              * @param correspondenceService
              * @param fileTypeService
+             * @param tokenService
+             * @param langService
              * @return {provider}
              */
             provider.$get = function (urlService,

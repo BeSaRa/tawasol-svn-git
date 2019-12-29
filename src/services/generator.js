@@ -338,7 +338,7 @@ module.exports = function (app) {
          */
         self.getResultFromSelectedCollectionDocumentClass = function (collection) {
             return _.reduce(collection, function (prev, next, index) {
-                return prev + documentClassMap[collection[index]['lookupStrKey']];
+                return prev + documentClassMap[collection[index]['lookupStrKey'].toUpperCase()];
             }, 0);
         };
         /**
@@ -353,7 +353,7 @@ module.exports = function (app) {
             result = !result ? 0 : result;
             var copyCollection = angular.copy(collection);
             _.map(copyCollection, function (item, index) {
-                copyCollection[index][key] = documentClassMap[item.lookupStrKey];
+                copyCollection[index][key] = documentClassMap[item.lookupStrKey.toUpperCase()];
             });
             for (var i = 0; i < copyCollection.length; i++) {
                 if (copyCollection[i][key] <= result)
