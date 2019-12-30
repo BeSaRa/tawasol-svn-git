@@ -55,7 +55,7 @@ module.exports = function (app) {
             // all document types
             self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
             self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
-            properties = lookupService.getPropertyConfigurations(self.document.docClassName);
+            properties = angular.copy(lookupService.getPropertyConfigurations(self.document.docClassName));
             _getClassifications(false);
             _getDocumentFiles(false);
 
@@ -70,8 +70,41 @@ module.exports = function (app) {
         // required fields for the current document class
         self.required = {};
         // need  timeout here to start init each property mandatory.
+
+        /**
+         * @description Finds the property configuration by symbolic name
+         * @param symbolicName
+         * @returns {*|null}
+         * @private
+         */
+        var _findPropertyConfiguration = function (symbolicName) {
+            if (!symbolicName) {
+                return null;
+            }
+            return _.find(properties, function (item) {
+                return item.symbolicName.toLowerCase() === symbolicName.toLowerCase();
+            }) || null;
+        };
+
+        /**
+         * @description Forcefully set the mandatory property for given symbolicName
+         * @param forceMandatorySymbolicName
+         * @private
+         */
+        var _forceSetMandatory = function (forceMandatorySymbolicName) {
+            var property = _findPropertyConfiguration(forceMandatorySymbolicName);
+            if (property) {
+                property.isMandatory = true;
+                self.required[forceMandatorySymbolicName.toLowerCase()] = true;
+            }
+        };
+
         $timeout(function () {
             _.map(properties, function (item) {
+                // if subClassification is required, force require the mainClassification as well
+                if (item.symbolicName.toLowerCase() === 'subclassification' && item.isMandatory) {
+                    _forceSetMandatory('MainClassification');
+                }
                 self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
             });
         });
