@@ -116,12 +116,20 @@ md-input-container:not(.cms-default) {
       min-height: 18px !important;
     }
   }
-}
 
+  ~ md-progress-linear {
+    .md-container.md-mode-indeterminate {
+      top: 13px;
+      width: 97% !important;
+      left: 7px;
+    }
+  }
+}
 
 html.rtl {
   md-input-container:not(.cms-default) {
     margin: 15px 5px;
+
     label {
       padding-right: 7px !important;
       padding-left: auto !important;
@@ -157,6 +165,14 @@ html.rtl {
           right: 0 !important;
           left: auto !important;
         }
+      }
+    }
+
+    ~ md-progress-linear {
+      .md-container.md-mode-indeterminate {
+        top: 7px;
+        left: auto;
+        right:7px;
       }
     }
   }
