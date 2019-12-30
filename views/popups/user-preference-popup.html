@@ -19,7 +19,7 @@
                                         <input name="arFullName" id="arFullName" required minlength="2"
                                                ng-model="ctrl.applicationUser.arFullName"
                                                ng-disabled="true" ng-readonly="true"
-                                               custom-validate-directive="ANS" maxlength="80">
+                                               maxlength="80">
                                         <div ng-messages="userPreferencesForm.arFullName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
@@ -33,7 +33,7 @@
                                         <input name="enFullName" id="enFullName" required minlength="2"
                                                ng-model="ctrl.applicationUser.enFullName"
                                                ng-disabled="true" ng-readonly="true"
-                                               custom-validate-directive="ENS" maxlength="80">
+                                               maxlength="80">
                                         <div ng-messages="userPreferencesForm.enFullName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
