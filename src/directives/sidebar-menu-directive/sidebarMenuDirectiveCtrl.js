@@ -63,6 +63,9 @@ module.exports = function (app) {
          */
         self.getTooltip = function (item) {
             var text = langService.get(item.lang_key);
+            if (typeof (self.counters.counter.hasCounter) === 'undefined'){
+                return '';
+            }
             return self.counters.counter.hasCounter(item.lang_key)
                 ? (text.length > 15 ? text : '')
                 : (text.length > 25 ? text : '')

@@ -167,7 +167,7 @@ module.exports = function (app) {
          */
         self.isCurrentOUApplicationUser = function (ouApplicationUser) {
             // cladmin user
-            if(!employee.organization)
+            if (!employee.organization)
                 return false;
             var ouAppUserOuId = ouApplicationUser.ouid.hasOwnProperty('id') ? ouApplicationUser.ouid.id : ouApplicationUser.ouid;
             var userId = ouApplicationUser.applicationUser.hasOwnProperty('id') ? ouApplicationUser.applicationUser.id : ouApplicationUser.applicationUser;
@@ -223,6 +223,15 @@ module.exports = function (app) {
         self.isSubAdminUser = function () {
             return employee && employee.isSubAdmin;
         };
+
+        /**
+         * @description Checks if the current employee is clAdmin (default first application user).
+         * @returns {boolean}
+         */
+        self.isClAdmin = function () {
+            return !employee.organization || !employee.organization.hasOwnProperty('ouid') || employee.organization.ouid === -1;
+        };
+
         /**
          * @description if the current employee has proxy user.
          * @returns {*}

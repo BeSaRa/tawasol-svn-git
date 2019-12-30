@@ -342,7 +342,11 @@ module.exports = function (app) {
          * @description get private announcements by ouID
          */
         self.getPrivateAnnouncementByOUID = function () {
-            var ouID = employeeService.getEmployee().organization.ouid;
+            var employee = employeeService.getEmployee();
+            var ouID = employee.hasOwnProperty('organization') ? employee.organization.ouid : null;
+            if (!ouID) {
+                return $q.resolve([]);
+            }
             return $http.get(urlService.privateAnnouncements + "/ou/" + ouID, {
                 excludeLoading: true
             }).then(function (result) {

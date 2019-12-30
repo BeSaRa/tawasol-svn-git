@@ -61,10 +61,11 @@
                 <md-icon md-svg-icon="logout"></md-icon>
             </md-button>
             <documents-notify-directive
-                    ng-if="toolbar.employeeService.hasPermissionTo('USER_INBOX')"></documents-notify-directive>
-            <task-list-directive></task-list-directive>
-            <private-announcement-directive></private-announcement-directive>
-            <user-subscription-directive></user-subscription-directive>
+                    ng-if="!toolbar.employeeService.isClAdmin() && toolbar.employeeService.hasPermissionTo('USER_INBOX')"></documents-notify-directive>
+            <task-list-directive ng-if="!toolbar.employeeService.isClAdmin()"></task-list-directive>
+            <private-announcement-directive
+                    ng-if="!toolbar.employeeService.isClAdmin()"></private-announcement-directive>
+            <user-subscription-directive ng-if="!toolbar.employeeService.isClAdmin()"></user-subscription-directive>
             <md-button tooltip="{{lang.help}}" fixed-position="true"
                        ng-click="toolbar.openHelp()" class="md-icon-button">
                 <md-icon md-svg-icon="help"></md-icon>
