@@ -285,7 +285,7 @@
                     </div>
                 </md-input-container>
                 <!-- Sub Classification -->
-                <md-input-container flex ng-if="ctrl.checkMandatory('subClassification')">
+                <md-input-container flex>
                     <label for="subClassification">{{lang.outgoing_sub_classification}}</label>
                     <md-select
                             ng-disabled="!!ctrl.disableProperties || !ctrl.document.mainClassification"
