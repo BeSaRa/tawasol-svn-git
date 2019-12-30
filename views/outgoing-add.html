@@ -58,7 +58,7 @@
                             </md-button>
                         </div>
                         <div ng-if="ctrl.outgoing.hasVsId() && ctrl.requestCompleted">
-                            <md-input-container>
+                            <md-input-container class="mt5">
                                 <label for="documentAction">{{lang.document_action}}</label>
                                 <md-select name="documentAction" id="documentAction"
                                            ng-disabled="!ctrl.isActionsAvailable || ctrl.saveInProgress"
@@ -292,7 +292,7 @@
                             </md-button>
                         </div>
                         <div ng-if="ctrl.outgoing.hasVsId() && ctrl.requestCompleted">
-                            <md-input-container>
+                            <md-input-container class="mt5">
                                 <label for="documentAction">{{lang.document_action}}</label>
                                 <md-select name="documentAction" id="documentAction"
                                            ng-disabled="!ctrl.isActionsAvailable || ctrl.saveInProgress"
