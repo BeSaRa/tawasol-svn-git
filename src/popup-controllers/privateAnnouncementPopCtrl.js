@@ -32,6 +32,9 @@ module.exports = function (app) {
         }
 
         function _checkCurrentOu(model) {
+            if (employeeService.isClAdmin()) {
+                return false;
+            }
             var ouId = employeeService.getEmployee().organization.ouid;
             return _.some(model.subscribers, function (item) {
                 return item.ouId === ouId && !item.announcementType;
@@ -366,8 +369,7 @@ module.exports = function (app) {
             if (self.privateAnnouncement.startDate) {
                 var endDate = angular.copy(self.privateAnnouncement.startDate);
                 self.minEndDate = new Date(endDate.setDate(endDate.getDate() + 1));
-            }
-            else {
+            } else {
                 self.privateAnnouncement.endDate = null;
                 self.minEndDate = null;
             }

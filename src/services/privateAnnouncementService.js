@@ -372,6 +372,9 @@ module.exports = function (app) {
         };
 
         function isCurrentOU(currentUserOUID) {
+            if (employeeService.isClAdmin()){
+                return false;
+            }
             var ouID = employeeService.getEmployee().organization.ouid;
             return currentUserOUID === ouID;
 

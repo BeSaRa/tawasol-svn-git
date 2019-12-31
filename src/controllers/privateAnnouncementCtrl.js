@@ -31,6 +31,9 @@ module.exports = function (app) {
         self.privateAnnouncementsCopy = angular.copy(self.privateAnnouncements);
 
         function _checkCurrentOu(model) {
+            if (employeeService.isClAdmin()) {
+                return false;
+            }
             var ouId = employeeService.getEmployee().organization.ouid;
             return _.some(model.subscribers, function (item) {
                 return item.ouId === ouId && !item.announcementType;
