@@ -455,6 +455,7 @@ module.exports = function (app) {
                     })
                     .then(function (generalStepElementView) {
                         generalStepElementView.documentViewInfo.desktop = desktop;
+                        generalStepElementView.allInternalSites = workItem.allInternalSites;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -472,7 +473,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName: pageName
+                                pageName: pageName,
                             },
                             resolve: {
                                 organizations: function (organizationService) {

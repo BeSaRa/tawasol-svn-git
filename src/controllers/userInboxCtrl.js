@@ -1967,7 +1967,6 @@ module.exports = function (app) {
                         icon: 'account-multiple-check',
                         callback: self.approveAndExport,
                         sticky: false,
-                        showInView: false,
                         class: "action-green",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
