@@ -1912,7 +1912,7 @@ module.exports = function (app) {
                         text: 'grid_action_approve_and_export',
                         icon: 'account-multiple-check',
                         callback: self.approveAndExport,
-                        sticky: false,
+                        sticky: true,
                         class: "action-green",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
