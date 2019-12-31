@@ -1906,23 +1906,22 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 subMenu: [
-                    // Approve and send
+                    // approve and export
                     {
                         type: 'action',
-                        icon: 'account-check',
-                        text: 'grid_action_electronic_approve_and_send',
-                        callback: self.signESignatureAndSend,
+                        text: 'grid_action_approve_and_export',
+                        icon: 'account-multiple-check',
+                        callback: self.approveAndExport,
+                        sticky: false,
                         class: "action-green",
-                        sticky: true,
-                        stickyIndex: 7,
-                        permissionKey: "ELECTRONIC_SIGNATURE",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            return !model.isBroadcasted()
-                                && !info.isPaper
-                                && (info.documentClass !== 'incoming')
+                            return !info.isPaper
+                                && (info.documentClass === 'outgoing')
+                                && model.needApprove()
+                                && model.allInternalSites
                                 && model.hasSingleSignature()
-                                && model.needApprove();
+                                && !model.isPrivateSecurityLevel();
                         }
                     },
                     // e-Signature
@@ -1960,22 +1959,23 @@ module.exports = function (app) {
                                 && model.needApprove();
                         }
                     },
-                    // approve and export
+                    // Approve and send
                     {
                         type: 'action',
-                        text: 'grid_action_approve_and_export',
-                        icon: 'account-multiple-check',
-                        callback: self.approveAndExport,
-                        sticky: false,
+                        icon: 'account-check',
+                        text: 'grid_action_electronic_approve_and_send',
+                        callback: self.signESignatureAndSend,
                         class: "action-green",
+                        sticky: true,
+                        stickyIndex: 7,
+                        permissionKey: "ELECTRONIC_SIGNATURE",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            return !info.isPaper
-                                && (info.documentClass === 'outgoing')
-                                && model.needApprove()
-                                && model.allInternalSites
+                            return !model.isBroadcasted()
+                                && !info.isPaper
+                                && (info.documentClass !== 'incoming')
                                 && model.hasSingleSignature()
-                                && !model.isPrivateSecurityLevel();
+                                && model.needApprove();
                         }
                     }
                 ]
