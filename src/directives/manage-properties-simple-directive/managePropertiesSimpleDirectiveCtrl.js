@@ -69,7 +69,6 @@ module.exports = function (app) {
         self.subOrganizations = [];
         // required fields for the current document class
         self.required = {};
-        // need  timeout here to start init each property mandatory.
 
         /**
          * @description Finds the property configuration by symbolic name
@@ -99,6 +98,7 @@ module.exports = function (app) {
             }
         };
 
+        // need  timeout here to start init each property mandatory.
         $timeout(function () {
             _.map(properties, function (item) {
                 // if subClassification is required, force require the mainClassification as well

@@ -68,10 +68,20 @@ module.exports = function (app) {
             if (documentSecurityLevelLookupKey.hasOwnProperty('lookupKey')) {
                 documentSecurityLevelLookupKey = documentSecurityLevelLookupKey.lookupKey;
             }
-            properties = lookupService.getPropertyConfigurations(self.document.docClassName);
+            properties = angular.copy(lookupService.getPropertyConfigurations(self.document.docClassName));
 
             _.map(properties, function (item) {
                 // self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
+
+                // if subClassification is required, force require the mainClassification as well
+                if (item.symbolicName.toLowerCase() === 'subclassification') {
+                    if (item.status) {
+                        _forceSetActive('MainClassification');
+                    }
+                    if (item.isMandatory) {
+                        _forceSetMandatory('MainClassification');
+                    }
+                }
                 self.required[item.symbolicName.toLowerCase()] = {isMandatory: item.isMandatory, status: item.status};
             });
 
@@ -117,6 +127,53 @@ module.exports = function (app) {
             _getClassifications(false);
             _getDocumentFiles(false);
         });
+
+
+        /**
+         * @description Finds the property configuration by symbolic name
+         * @param symbolicName
+         * @returns {*|null}
+         * @private
+         */
+        var _findPropertyConfiguration = function (symbolicName) {
+            if (!symbolicName) {
+                return null;
+            }
+            return _.find(properties, function (item) {
+                return item.symbolicName.toLowerCase() === symbolicName.toLowerCase();
+            }) || null;
+        };
+
+        /**
+         * @description Forcefully set the mandatory property for given symbolicName
+         * @param forceMandatorySymbolicName
+         * @private
+         */
+        var _forceSetMandatory = function (forceMandatorySymbolicName) {
+            var property = _findPropertyConfiguration(forceMandatorySymbolicName);
+            if (property) {
+                property.isMandatory = true;
+                self.required[forceMandatorySymbolicName.toLowerCase()] = {isMandatory: true, status: property.status};
+            }
+        };
+
+        /**
+         * @description Forcefully set the status active for given symbolicName
+         * @param forceActiveSymbolicName
+         * @private
+         */
+        var _forceSetActive = function (forceActiveSymbolicName) {
+            var property = _findPropertyConfiguration(forceActiveSymbolicName);
+            if (property) {
+                property.status = true;
+                self.required[forceActiveSymbolicName.toLowerCase()] = {
+                    isMandatory: property.isMandatory,
+                    status: true
+                };
+            }
+        };
+
+
         // current employee
         self.employee = employeeService.getEmployee();
         // for sub organizations

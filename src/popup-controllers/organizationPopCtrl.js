@@ -1425,15 +1425,18 @@ module.exports = function (app) {
                     self.propertyConfigurations = result;
                     self.propertyConfigurationsCopy = angular.copy(self.propertyConfigurations);
                     defer.resolve(true);
-                    var currentUserOrg = employeeService.getEmployee().userOrganization;
-                    var loggedInOuId = currentUserOrg.hasOwnProperty('id') ? currentUserOrg.id : currentUserOrg;
-                    if (self.organization.id === loggedInOuId) {
-                        return lookupService.replacePropertyConfigurationsByDocumentClass(result, docClass.toLowerCase());
-                    }
+
                     self.selectedPropertyConfigurations = [];
                     if (pageNumber)
                         self.propertyConfigurationGrid.page = pageNumber;
+
+                    var currentUserOrg = employeeService.getEmployee().userOrganization;
+                    var loggedInOuId = currentUserOrg.hasOwnProperty('id') ? currentUserOrg.id : currentUserOrg;
+                    if (self.organization.id === loggedInOuId) {
+                        lookupService.replacePropertyConfigurationsByDocumentClass(result, docClass.toLowerCase());
+                    }
                     self.getSortedDataPropertyConfiguration();
+                    self.propertyConfigurationGrid.searchCallback();
                     return result;
                 })
         };
@@ -1442,6 +1445,8 @@ module.exports = function (app) {
             var docClass = (self.selectedDocumentClass.hasOwnProperty('lookupKey') ? self.selectedDocumentClass.lookupStrKey : self.selectedDocumentClass);
             self.propertyConfigurations = self.allPropertyConfigurations[docClass.toLowerCase()];
             self.propertyConfigurationsCopy = angular.copy(self.propertyConfigurations);
+            self.getSortedDataPropertyConfiguration();
+            self.propertyConfigurationGrid.searchCallback();
         };
 
         self.openAddPropertyConfigurationsDialog = function ($event) {
