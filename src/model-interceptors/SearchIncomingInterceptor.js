@@ -19,6 +19,10 @@ module.exports = function (app) {
                 model.createdOn = {From: angular.copy(model.createdFrom), To: angular.copy(model.createdTo)};
             }*/
 
+            if (model.mainSite) {
+                model.sitesInfoIncoming = [model.mainSite.convertToSiteSearchModel()];
+            }
+
             if (model.subSite) {
                 model.sitesInfoIncoming = [model.subSite];
             }
@@ -74,7 +78,7 @@ module.exports = function (app) {
 
             if (angular.isArray(model.sitesInfoIncoming) && model.sitesInfoIncoming.length) {
                 model.sitesInfoIncoming = model.sitesInfoIncoming[0];
-                model.sitesInfoIncoming.getSiteToIncoming(model);
+                model.sitesInfoIncoming.getSiteToIncoming(model,);
             } else {
                 model.siteType = model.siteType ? model.siteType.lookupKey : null;
             }
@@ -96,7 +100,7 @@ module.exports = function (app) {
 
             model.docDate = angular.toJson(model.docDate);
 
-            model.serialNoFrom = (!model.serialNoFrom && model.serialNoTo) ? Number(model.serialNoTo) -1 : model.serialNoFrom;
+            model.serialNoFrom = (!model.serialNoFrom && model.serialNoTo) ? Number(model.serialNoTo) - 1 : model.serialNoFrom;
             model.serialNoTo = (model.serialNoFrom && !model.serialNoTo) ? Number(model.serialNoFrom) + 1 : model.serialNoTo;
             model.docSerial = (model.serialNoFrom && model.serialNoTo) ? model.serialNoFrom + ',' + model.serialNoTo : null;
 

@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('SiteView', function (CMSModelInterceptor,
                                       langService,
+                                      Site_Search,
                                       Information) {
         'ngInject';
         return function SiteView(model) {
@@ -35,7 +36,7 @@ module.exports = function (app) {
             };
 
             SiteView.prototype.getTranslatedName = function (reverse) {
-                return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
+                return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
             /**
              * @description Get the name of record with passed language name
@@ -45,6 +46,17 @@ module.exports = function (app) {
             SiteView.prototype.getNameByLanguage = function (language) {
                 return this[language + 'Name'];
             };
+
+            SiteView.prototype.convertToSiteSearchModel = function () {
+                return new Site_Search({
+                    mainSiteId: this.id,
+                    siteType: this.correspondenceSiteTypeId,
+                    followupStatus: {
+                        lookupKey: null
+                    }
+                });
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('SiteView', 'init', this);

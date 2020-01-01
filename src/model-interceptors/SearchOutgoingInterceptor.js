@@ -12,6 +12,10 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
 
+            if (model.mainSite) {
+                model.originality === 1 ? model.sitesInfoTo = [angular.copy(model.mainSite.convertToSiteSearchModel())] : model.sitesInfoCC = [model.mainSite.convertToSiteSearchModel()];
+            }
+
             if (model.subSite) {
                 model.originality === 1 ? model.sitesInfoTo = [angular.copy(model.subSite)] : model.sitesInfoCC = [angular.copy(model.subSite)];
             }
@@ -165,7 +169,7 @@ module.exports = function (app) {
                 model.exportDate = angular.toJson(exportDate);
             }
 
-            model.serialNoFrom = (!model.serialNoFrom && model.serialNoTo) ? Number(model.serialNoTo) -1 : model.serialNoFrom;
+            model.serialNoFrom = (!model.serialNoFrom && model.serialNoTo) ? Number(model.serialNoTo) - 1 : model.serialNoFrom;
             model.serialNoTo = (model.serialNoFrom && !model.serialNoTo) ? Number(model.serialNoFrom) + 1 : model.serialNoTo;
             model.docSerial = (model.serialNoFrom && model.serialNoTo) ? model.serialNoFrom + ',' + model.serialNoTo : null;
 

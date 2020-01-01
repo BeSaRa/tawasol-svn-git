@@ -18,33 +18,39 @@ module.exports = function (app) {
                 model.createdTo = (model.createdTo) ? model.createdTo : moment().format("YYYY-MM-DD");
                 model.createdOn = {From: angular.copy(model.createdFrom), To: angular.copy(model.createdTo)};
             }*/
+
+            if (model.mainSite) {
+                model.sitesInfoIncoming = [model.mainSite.convertToSiteSearchModel()];
+            }
+
+            if (model.subSite) {
+                model.sitesInfoIncoming = [model.subSite];
+            }
+
+
             if (model.year === 'All' && model.docDateFrom && model.docDateTo) {
                 model.docDate = {
                     From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
                     To: angular.copy(moment(model.docDateTo).format("YYYY-MM-DD"))
                 };
-            }
-            else if (model.year !== 'All') {
+            } else if (model.year !== 'All') {
                 if (!model.docDateFrom && model.docDateTo) {
                     model.docDate = {
                         From: angular.copy(model.year),
                         To: angular.copy(moment(model.docDateTo).format("YYYY-MM-DD"))
                     };
-                }
-                else if (model.docDateFrom && !model.docDateTo) {
+                } else if (model.docDateFrom && !model.docDateTo) {
                     model.docDate = {
                         From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
                         To: angular.copy(model.year)
                     };
-                }
-                else if (!model.docDateFrom && !model.docDateTo) {
+                } else if (!model.docDateFrom && !model.docDateTo) {
                     model.docDate = {
                         From: angular.copy(model.year),
                         //TODO : 14 Jan, 2018. This if condition is added for Iyad to check something.
                         To: angular.copy(model.year)
                     };
-                }
-                else if (model.docDateFrom && model.docDateTo) {
+                } else if (model.docDateFrom && model.docDateTo) {
                     model.docDate = {
                         From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
                         To: angular.copy(moment(model.docDateTo).format("YYYY-MM-DD"))
@@ -88,7 +94,7 @@ module.exports = function (app) {
             delete model.followUpTo;
             model.FollowUpDate = (model.FollowUpDate) ? angular.toJson(model.FollowUpDate) : null;
 
-            model.serialNoFrom = (!model.serialNoFrom && model.serialNoTo) ? Number(model.serialNoTo) -1 : model.serialNoFrom;
+            model.serialNoFrom = (!model.serialNoFrom && model.serialNoTo) ? Number(model.serialNoTo) - 1 : model.serialNoFrom;
             model.serialNoTo = (model.serialNoFrom && !model.serialNoTo) ? Number(model.serialNoFrom) + 1 : model.serialNoTo;
             model.docSerial = (model.serialNoFrom && model.serialNoTo) ? model.serialNoFrom + ',' + model.serialNoTo : null;
 

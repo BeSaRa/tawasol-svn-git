@@ -67,7 +67,6 @@ module.exports = function (app) {
                         self[key] = _.get(siteView, property);
                     }
                 });
-                console.log(self);
                 return self;
             };
 
