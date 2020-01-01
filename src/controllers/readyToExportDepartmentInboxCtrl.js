@@ -908,7 +908,7 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 }
             },
             // view
@@ -926,7 +926,7 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 subMenu: [
                     // Preview
@@ -1111,7 +1111,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
@@ -1228,7 +1228,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 checkShow: function (action, model) {
-                    return model.canSendByFax();
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "SEND_DOCUMENT_BY_FAX"
@@ -1257,7 +1257,7 @@ module.exports = function (app) {
                 shortcut: false,
                 hide: true,
                 checkShow: function (action, model) {
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
@@ -1296,7 +1296,7 @@ module.exports = function (app) {
                 text: 'grid_action_download',
                 shortcut: false,
                 checkShow: function (action, model) {
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
@@ -1355,9 +1355,7 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    var hasPermission = checkIfEditPropertiesAllowed(model) || (employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") && info.docStatus !== 26);
-                    return hasPermission && info.isPaper;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 checkAnyPermission: true,
                 subMenu: [
@@ -1412,7 +1410,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",

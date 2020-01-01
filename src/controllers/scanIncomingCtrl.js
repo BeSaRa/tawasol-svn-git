@@ -381,7 +381,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                         },
                 subMenu: [
                     {
@@ -456,7 +456,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                         },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",

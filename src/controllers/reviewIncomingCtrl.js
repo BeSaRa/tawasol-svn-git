@@ -596,7 +596,7 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 }
             },
             // view
@@ -614,7 +614,7 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 subMenu: [
                     // Preview
@@ -769,7 +769,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "EDIT_INCOMING’S_CONTENT",
@@ -837,7 +837,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
@@ -963,7 +963,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "DUPLICATE_BOOK_FROM_VERSION"

@@ -376,8 +376,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
+                },
                 subMenu: [
                     {
                         type: 'info',
@@ -392,8 +392,8 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Remove
@@ -406,8 +406,8 @@ module.exports = function (app) {
                 callback: self.removePrepareInternal,
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Edit Internal properties
             {
@@ -420,8 +420,8 @@ module.exports = function (app) {
                 callback: self.editProperties,
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Send to draft (Send to draft without content is not allowed and if you add content, document will automatically go to review queue)
             /*{
@@ -439,8 +439,8 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // View Tracking Sheet
             {
@@ -450,8 +450,8 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
             },
             // Manage
@@ -462,8 +462,8 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
+                },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
@@ -550,8 +550,8 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Create Content
             {
@@ -605,8 +605,8 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // duplicate current version
             {
@@ -634,8 +634,8 @@ module.exports = function (app) {
                 showInView: true,
                 permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             }
         ];
 

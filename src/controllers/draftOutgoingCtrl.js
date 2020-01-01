@@ -561,7 +561,7 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function(action, model){
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 }
             },
             // view
@@ -579,7 +579,7 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function(action, model){
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 subMenu: [
                     // Preview
@@ -698,11 +698,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                    var info = model.getInfo(),
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES")
-                            || (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"))
-                        );
-                    return hasPermission;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 subMenu: [
                     // Content
@@ -791,7 +787,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                         },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
@@ -918,7 +914,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                            return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                         },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",

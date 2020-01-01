@@ -276,7 +276,7 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 }
             },
             // view
@@ -293,7 +293,7 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
-                    return true;
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 subMenu: [
                     // Preview

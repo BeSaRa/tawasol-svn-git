@@ -487,6 +487,24 @@ module.exports = function (app) {
         };
 
         /**
+         *
+         * @param action
+         * @param model
+         * @returns {boolean|*}
+         */
+        self.checkToShowMainMenuBySubMenu = function (action, model) {
+            if (action.hasOwnProperty('subMenu') && angular.isArray(action.subMenu) && action.subMenu.length) {
+                return _.some(action.subMenu, function (subMenuAction) {
+                    return subMenuAction.checkShow(subMenuAction, model);
+                })
+            } else if (action.hasOwnProperty('subMenu') && action.subMenu) {
+                return action.subMenu.checkShow(action.subMenu, model);
+            } else {
+                return true;
+            }
+        };
+
+        /**
          * @description Filters the shortcut actions for grid
          * @param actions
          * @param direction
