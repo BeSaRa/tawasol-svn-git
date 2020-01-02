@@ -375,7 +375,7 @@
                                                md-highlight-flags="i"
                                                ng-value="mainClassification.classification"
                                                ng-repeat="mainClassification in ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText:'getIdNameByLanguage':'classification'">
-                                        {{mainClassification.classification.getTranslatedName()}}
+                                        {{mainClassification.classification.getIdNameByLanguage()}}
                                     </md-option>
                                     <md-option
                                             ng-click="ctrl.loadMainClassificationByCriteria(ctrl.mainClassificationSearchText , $event)"
@@ -416,7 +416,7 @@
                                                md-highlight-flags="i"
                                                ng-value="subClassification"
                                                ng-repeat="subClassification in ctrl.subClassifications|translatedNameFilter:ctrl.subClassificationSearchText">
-                                        {{subClassification.getTranslatedName()}}
+                                        {{subClassification.getIdNameByLanguage()}}
                                     </md-option>
                                     <md-option
                                             ng-click="ctrl.loadSubClassificationByCriteria(ctrl.subClassificationSearchText , $event)"
