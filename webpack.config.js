@@ -70,10 +70,8 @@ module.exports = function (env) {
                         }
                     }
                 }
-            ],
-
+            ]
         },
-		
         performance: {
             hints: false
         },
