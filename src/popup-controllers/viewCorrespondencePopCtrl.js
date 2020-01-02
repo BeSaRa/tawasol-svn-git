@@ -106,7 +106,8 @@ module.exports = function (app) {
 
         function _defaultBehavior() {
             var message, defer = $q.defer();
-            message = langService.getConcatenated(['edit_in_desktop_confirmation_1', 'edit_in_desktop_confirmation_2', 'edit_in_desktop_confirmation_3']);
+            // message = langService.getConcatenated(['edit_in_desktop_confirmation_1', 'edit_in_desktop_confirmation_2', 'edit_in_desktop_confirmation_3']);
+            message = langService.getConcatenated(['short_edit_in_desktop_confirmation_1', 'short_edit_in_desktop_confirmation_2']);
 
             dialog
                 .showDialog({
