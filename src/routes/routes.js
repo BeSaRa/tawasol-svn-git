@@ -18,7 +18,7 @@ module.exports = function (app) {
         versionServiceProvider
             .setVersionNumber('2.2.2')
             .setBuildNumber('T#5230')
-            .setPrivateBuildNumber('T#5230');
+            .setPrivateBuildNumber('T#5231');
 
 
         $urlRouterProvider.otherwise('/404');
@@ -658,6 +658,9 @@ module.exports = function (app) {
                 abstract: true,
                 url: '/search',
                 template: '<div id="sub-view-wrapper"><ui-view flex layout="column" class="sub-view" /></div>',
+                locals: {
+                    ignoreHelp: false
+                },
                 resolve: {
                     lookups: function (correspondenceService) {
                         'ngInject';

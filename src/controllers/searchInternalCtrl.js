@@ -32,11 +32,12 @@ module.exports = function (app) {
                                                    approvers,
                                                    userSubscriptionService,
                                                    printService,
+                                                   ignoreHelp,
                                                    $timeout) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchInternalCtrl';
-        contextHelpService.setHelpTo('search-internal');
+        contextHelpService.setHelpTo('search-internal' , ignoreHelp);
         // employee service to check the permission in html
         self.employeeService = employeeService;
 
