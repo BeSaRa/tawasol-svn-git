@@ -21,7 +21,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewersLogCtrl';
-        contextHelpService.setHelpTo('viewers-log');
+        contextHelpService.setHelpTo('viewers_log');
 
         self.watermarkSearchText = '';
         self.allSearchableRecords = [];
