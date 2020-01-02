@@ -1,10 +1,12 @@
 module.exports = function (app) {
-    app.controller('taskCtrl', function (taskService, generator, Task) {
+    app.controller('taskCtrl', function (taskService, contextHelpService) {
         'ngInject';
         var self = this;
         self.controllerName = 'taskCtrl';
 
-        self.openAddTaskDialog = function ($event) {
+        contextHelpService.setHelpTo('tasks');
+
+        self.openAddTaskDialog = function () {
             taskService
                 .controllerMethod
                 .taskAdd()
