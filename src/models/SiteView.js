@@ -52,6 +52,7 @@ module.exports = function (app) {
                     mainSiteId: this.id,
                     siteType: this.correspondenceSiteTypeId,
                     followupStatus: {
+                        id: -1,
                         lookupKey: null
                     }
                 });
