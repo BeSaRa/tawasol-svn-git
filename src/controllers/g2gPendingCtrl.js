@@ -22,7 +22,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'g2gPendingCtrl';
-        contextHelpService.setHelpTo('g2g-pending');
+        contextHelpService.setHelpTo('pending_g2g');
         counterService.loadG2GCounters();
         self.docClassName = 'outgoing';
         /**
