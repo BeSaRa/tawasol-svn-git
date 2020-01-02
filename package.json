@@ -44,6 +44,7 @@
     "overlayscrollbars": "^1.6.0",
     "owl.carousel": "^2.3.4",
     "perfect-scrollbar": "^0.7.1",
+    "production": "0.0.2",
     "textangular": "^1.5.16",
     "tinycolor2": "^1.4.1"
   },
