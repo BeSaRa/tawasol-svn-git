@@ -658,10 +658,10 @@ module.exports = function (app) {
                 abstract: true,
                 url: '/search',
                 template: '<div id="sub-view-wrapper"><ui-view flex layout="column" class="sub-view" /></div>',
-                locals: {
-                    ignoreHelp: false
-                },
                 resolve: {
+                    ignoreHelp: function () {
+                        return false;
+                    },
                     lookups: function (correspondenceService) {
                         'ngInject';
                         return correspondenceService.getCorrespondenceLookups('common');
