@@ -31,7 +31,7 @@
                             </div>
                             <search-outgoing-screen-directive
                                     controller="ctrl.searchScreens.outgoing"
-                                    organizations="ctrl.organizations"
+                                    ous="ctrl.organizations"
                                     available-registry-organizations="ctrl.availableRegistryOrganizations"
                                     approvers="ctrl.approvers"
                                     ng-show="ctrl.selectedTabName === 'outgoing'"
@@ -41,7 +41,7 @@
                             </search-outgoing-screen-directive>
                             <search-internal-screen-directive
                                     controller="ctrl.searchScreens.internal"
-                                    organizations="ctrl.organizations"
+                                    ous="ctrl.organizations"
                                     approvers="ctrl.approvers"
                                     ng-show="ctrl.selectedTabName === 'internal'"
                                     registry-organizations="ctrl.registryOrganizations"
@@ -50,7 +50,7 @@
                             </search-internal-screen-directive>
                             <search-incoming-screen-directive
                                     controller="ctrl.searchScreens.incoming"
-                                    organizations="ctrl.organizations"
+                                    ous="ctrl.organizations"
                                     available-registry-organizations="ctrl.availableRegistryOrganizations"
                                     ng-show="ctrl.selectedTabName === 'incoming'"
                                     registry-organizations="ctrl.registryOrganizations"
@@ -59,7 +59,7 @@
                             </search-incoming-screen-directive>
                             <search-outgoing-incoming-screen-directive
                                     controller="ctrl.searchScreens.outgoingIncoming"
-                                    organizations="ctrl.organizations"
+                                    ous="ctrl.organizations"
                                     available-registry-organizations="ctrl.availableRegistryOrganizations"
                                     ng-show="ctrl.selectedTabName === 'outgoingIncoming'"
                                     registry-organizations="ctrl.registryOrganizations"
@@ -68,7 +68,7 @@
                             </search-outgoing-incoming-screen-directive>
                             <search-general-screen-directive
                                     controller="ctrl.searchScreens.general"
-                                    organizations="ctrl.organizations"
+                                    ous="ctrl.organizations"
                                     ng-show="ctrl.selectedTabName === 'general'"
                                     registry-organizations="ctrl.registryOrganizations"
                                     property-configurations="ctrl.propertyConfigurations.Correspondence"

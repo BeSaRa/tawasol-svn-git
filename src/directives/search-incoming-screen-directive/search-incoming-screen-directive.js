@@ -10,7 +10,7 @@ module.exports = function (app) {
             templateUrl: cmsTemplate.getDirective('search-incoming-screen-directive-template.html'),
             scope: {
                 labelCollapse: '=',
-                organizations: '=',
+                ous: '=',
                 registryOrganizations: '=',
                 propertyConfigurations: '=',
                 controller: '=',
