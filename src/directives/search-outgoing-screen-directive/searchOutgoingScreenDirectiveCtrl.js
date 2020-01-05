@@ -1982,7 +1982,7 @@ module.exports = function (app) {
         };
 
         self.$onInit = function () {
-            self.onRegistrySelectedChange();
+            // self.onRegistrySelectedChange();
             // assign current controller to search screen ctrl.
             self.controller.controller = self;
             // re map by symbolic name all property configurations

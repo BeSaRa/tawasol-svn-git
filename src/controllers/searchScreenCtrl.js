@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                  propertyConfigurations,
                                                  approvers,
                                                  availableRegistryOrganizations,
+                                                 organizationService,
                                                  employeeService) {
         var self = this;
         self.controllerName = 'searchScreenCtrl';
@@ -88,6 +89,10 @@ module.exports = function (app) {
                 }
             }
         };
+
+        self.organizations = [];
+
+        self.employee = employeeService.getEmployee();
         /**
          * @description Reloads the current tab result data
          */
@@ -138,5 +143,24 @@ module.exports = function (app) {
         self.print = function () {
             self.searchScreens[self.selectedTabName].controller.printResult();
         };
+
+        self.loadSubOrganizationsToAllScreens = function () {
+            // load children organizations by selected regOUId
+            organizationService
+                .loadChildrenOrganizations(self.employee.getRegistryOUID())
+                .then(function (organizations) {
+                    var organizationsIdList = _.map(organizations, 'id');
+                    // the use logged in with reg ou
+                    if (self.employee.isInDepartment()) {
+                        organizationsIdList.indexOf(self.employee.getOUID()) === -1 && organizations.unshift(angular.copy(self.employee.userOrganization));
+                    } else {
+                        organizationsIdList.indexOf(self.employee.getRegistryOUID()) === -1 && organizations.unshift(organizationService.getOrganizationById(self.employee.getRegistryOUID(), true));
+                    }
+                    self.organizations = organizations;
+                });
+        };
+        self.$onInit = function () {
+            self.loadSubOrganizationsToAllScreens();
+        }
     });
 };

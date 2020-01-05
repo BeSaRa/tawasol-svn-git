@@ -11,6 +11,7 @@ module.exports = function (app) {
             scope: {
                 labelCollapse: '=',
                 registryOrganizations: '=',
+                organizations: '=',
                 propertyConfigurations: '=',
                 approvers: '=',
                 controller: '=',
