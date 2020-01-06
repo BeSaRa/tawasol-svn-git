@@ -331,13 +331,19 @@
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <div ng-if="ctrl.editContentFrom === 'editContentFromGrid'">
-            <md-button class="md-raised md-primary" ng-click="ctrl.saveCorrespondenceChanges($event, false)">{{lang.save}}
+            <md-button class="md-raised md-primary" ng-click="ctrl.saveCorrespondenceChanges($event, false)">
+                {{lang.save}}
             </md-button>
         </div>
         <div ng-if="ctrl.editContentFrom !== 'editContentFromGrid' && ctrl.correspondence && !ctrl.correspondence.viewVersion && !ctrl.g2gItemCopy &&  !ctrl.disableEverything
-                    && ( ctrl.pageName !=='departmentIncoming' || (ctrl.pageName === 'departmentIncoming' && ctrl.workItem &&  ctrl.workItem.generalStepElm.isReassigned))">
+                    && ctrl.pageName !=='departmentReadyToExport' && ( ctrl.pageName !=='departmentIncoming' || (ctrl.pageName === 'departmentIncoming' && ctrl.workItem &&  ctrl.workItem.generalStepElm.isReassigned))">
             <md-button class="md-raised md-primary" ng-click="ctrl.saveCorrespondenceChanges($event, false)"
                        ng-disabled="ctrl.checkDisabled() || ctrl.document_properties.$invalid">{{lang.save}}
+            </md-button>
+        </div>
+        <div ng-if="ctrl.pageName ==='departmentReadyToExport'">
+            <md-button ng-disabled="!ctrl.document_properties.$dirty" class="md-raised md-primary"
+                       ng-click="ctrl.saveCorrespondenceChanges($event, false)">{{lang.save}}
             </md-button>
         </div>
         <div ng-if="ctrl.editContentFrom !== 'editContentFromGrid' && !ctrl.correspondence && !ctrl.g2gItemCopy">
