@@ -75,10 +75,21 @@
                                     <label for="mainSite">{{lang.main_site}}</label>
                                     <md-select id="mainSite" ng-model="ctrl.selectedMainSite"
                                                ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
-                                               ng-change="ctrl.getSubSites($event)">
-                                        <md-option ng-value="type" ng-repeat="type in ctrl.mainSites">
-                                            {{type.getTranslatedName()}}
+                                               ng-change="ctrl.getSubSites($event)"
+                                               md-on-close="ctrl.clearSearchText('mainSite')"
+                                               data-md-container-class="select-header-container sticky-search-bar">
+                                        <md-select-header class="select-header">
+                                            <input ng-model="ctrl.selectedMainSiteSearchText"
+                                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </md-select-header>
+                                        <md-option ng-value="type"
+                                                   ng-repeat="type in ctrl.mainSites | translatedNameFilter:ctrl.selectedMainSiteSearchText">
+                              <span md-highlight-text="ctrl.selectedMainSiteSearchText"
+                                    md-highlight-flags="i">{{type.getTranslatedName()}}</span>
                                         </md-option>
+                                        <md-option ng-value="null">{{lang.none}}</md-option>
                                     </md-select>
                                 </md-input-container>
                             </div>
