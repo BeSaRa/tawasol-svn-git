@@ -1,0 +1,11 @@
+<div layout="row" layout-align="center center" class="water-mark-a4-page">
+    <div class="water-mark-barcode">
+        <img src="../../assets/images/qrcode-sample-128.png">
+    </div>
+    <span flex></span>
+    <span id="security-text" ng-if="ctrl.documentSecuritySetting.textOrientation"
+          style="opacity: {{ctrl.documentSecurity.opacity * 0.1}};font-size: {{(ctrl.documentSecuritySetting.textSize * .64)}}px"
+          class="orientation-{{ctrl.documentSecuritySetting.textOrientation}}">ABCDEF-ABCDEF-ABCDEF
+    </span>
+    <span flex></span>
+</div>

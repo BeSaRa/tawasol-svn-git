@@ -1,0 +1,21 @@
+.water-mark-a4-page {
+  width: 520px !important;
+  height: 740px !important;
+  border: 1px solid #CCC;
+  background-color: #EEE;
+  box-sizing: border-box;
+  direction: ltr !important;
+  position: relative;
+}
+
+.water-mark-barcode {
+  width: 45px;
+  height: 45px;
+  cursor: move;
+  display: inline-block;
+  position: absolute;
+  z-index: 3;
+  img {
+    max-width: 100%;
+  }
+}

@@ -1,9 +1,10 @@
 <div layout="row" flex class="p20">
     <div flex layout="column">
-        <ng-form name="documentSecurityForm" edit-mode-path="$parent.$parent.ctrl.editMode" ng-if="ctrl.documentSecurity">
+        <ng-form name="documentSecurityForm" edit-mode-path="$parent.$parent.ctrl.editMode"
+                 ng-if="ctrl.documentSecurity">
             <div>
                 <!-- Show Watermark -->
-                <md-switch  ng-model="ctrl.documentSecurity.status"
+                <md-switch ng-model="ctrl.documentSecurity.status"
                            aria-label="{{lang.apply_document_protection}}">
                     <span>{{lang.apply_document_protection}} : </span>
                     {{ctrl.documentSecurity.getTranslatedYesNo('status')}}
@@ -227,7 +228,7 @@
                 <md-tab label="{{lang.internal}}" ng-if="ctrl.showWatermarkTab('internal')"
                         md-on-select="ctrl.setCurrentWatermarkTab('internal', 2)">
                     <md-content class="white-bg">
-                        <div layout="column"  scroll-directive>
+                        <div layout="column" scroll-directive>
                             <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Status -->
                                 <md-switch flex ng-model="ctrl.documentSecurityInternal.status"
@@ -314,7 +315,7 @@
                 <md-tab label="{{lang.attachments}}" ng-if="ctrl.showWatermarkTab('tawasolattachment')"
                         md-on-select="ctrl.setCurrentWatermarkTab('tawasolattachment', 4)">
                     <md-content class="white-bg">
-                        <div layout="column"  scroll-directive>
+                        <div layout="column" scroll-directive>
                             <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Status -->
                                 <md-switch flex ng-model="ctrl.documentSecurityTawasolAttachment.status"
@@ -418,7 +419,23 @@
     </div>
     <div>
         <span>{{ctrl.selectedWatermarkTabDocType.getTranslatedName()}} {{lang.document_security}} ({{ctrl.documentSecurityPage.type}})</span>
-        <document-security-co-ordinates-directive
+        <water-mark-security-a4-barcode-directive
+                ng-if="ctrl.selectedWatermarkTabName === 'outgoing'"
+                document-security="ctrl.documentSecurity"
+                document-security-setting="ctrl.documentSecurityOutgoing"></water-mark-security-a4-barcode-directive>
+        <water-mark-security-a4-barcode-directive
+                ng-if="ctrl.selectedWatermarkTabName === 'incoming'"
+                document-security="ctrl.documentSecurity"
+                document-security-setting="ctrl.documentSecurityIncoming"></water-mark-security-a4-barcode-directive>
+        <water-mark-security-a4-barcode-directive
+                ng-if="ctrl.selectedWatermarkTabName === 'internal'"
+                document-security="ctrl.documentSecurity"
+                document-security-setting="ctrl.documentSecurityInternal"></water-mark-security-a4-barcode-directive>
+        <water-mark-security-a4-barcode-directive
+                ng-if="ctrl.selectedWatermarkTabName === 'tawasolattachment'"
+                document-security="ctrl.documentSecurity"
+                document-security-setting="ctrl.documentSecurityTawasolAttachment"></water-mark-security-a4-barcode-directive>
+        <!--<document-security-co-ordinates-directive
                 ng-if="ctrl.selectedWatermarkTabName === 'outgoing'"
                 global-setting="ctrl.globalSetting"
                 document-security="ctrl.documentSecurity"
@@ -441,6 +458,6 @@
                 global-setting="ctrl.globalSetting"
                 document-security="ctrl.documentSecurity"
                 document-security-setting="ctrl.documentSecurityTawasolAttachment"
-        ></document-security-co-ordinates-directive>
+        ></document-security-co-ordinates-directive>-->
     </div>
 </div>
