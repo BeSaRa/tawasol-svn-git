@@ -18,6 +18,7 @@ module.exports = function (app) {
                                                            correspondenceService,
                                                            employeeService,
                                                            $timeout,
+                                                           validationService,
                                                            documentTemplateService) {
         'ngInject';
         var self = this;
@@ -62,10 +63,29 @@ module.exports = function (app) {
                 }
             });
 
-            if (method === 'reject') {
-                dialog.errorMessage(langService.get('some_properties_required'), null, null, $event);
+            if (self.document.docClassName.toLowerCase() !== 'outgoing') {
+                if (method === 'reject') {
+                    dialog.errorMessage(langService.get('some_properties_required'), null, null, $event);
+                }
+                return $q[method](true);
             }
-            return $q[method](true);
+
+            // check siteInfoTo if outgoing document class
+            return validationService
+                .createValidation('ADD_CORRESPONDENCE_SITES')
+                .addStep('check_required', false, self.document, function (result) {
+                    return result.sitesInfoTo.length;
+                })
+                .notifyFailure(function () {
+                    method = 'reject';
+                })
+                .validate()
+                .then(function (result) {
+                    if (method === 'reject') {
+                        dialog.errorMessage(langService.get('some_properties_required'), null, null, $event);
+                    }
+                    return $q[method](true);
+                })
         };
 
         self.openPrepareTemplateDialog = function ($event) {
