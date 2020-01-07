@@ -38,9 +38,9 @@ module.exports = function (app) {
                 .notifyFailure(function () {
                     toast.error(langService.get('name_lookupstringkey_duplicate'));
                 })
-                .addStep('checkItemOrder', true, generator.checkDuplicateItemOrder, [self.organizationType, self.organizationTypes, false] , function(result){
+                .addStep('checkItemOrder', true, generator.checkDuplicateItemOrder, [self.organizationType, self.organizationTypes, false], function (result) {
                     return !result;
-                },true)
+                }, true)
                 .notifyFailure(function () {
                     toast.error(langService.get('item_order_duplicated'));
                 })
@@ -48,8 +48,8 @@ module.exports = function (app) {
                 .then(function () {
                     organizationTypeService
                         .addOrganizationType(self.organizationType)
-                        .then(function () {
-                            dialog.hide(self.organizationType);
+                        .then(function (organizationType) {
+                            dialog.hide(organizationType);
                         });
                 })
                 .catch(function () {

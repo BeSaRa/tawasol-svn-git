@@ -135,8 +135,8 @@ module.exports = function (app) {
             return $http
                 .post(urlService.organizationTypes,
                     generator.interceptSendInstance('OrganizationType', organizationType))
-                .then(function () {
-                    return organizationType;
+                .then(function (result) {
+                    return new OrganizationType(result.data.rs);
                 });
         };
 
