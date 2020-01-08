@@ -141,7 +141,7 @@ module.exports = function (app) {
             self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount);
 
             interval = $interval(function () {
-                if (stopNotification) {
+                if (stopNotification || !employeeService.getEmployee()) {
                     $interval.cancel(interval);
                     return;
                 }
