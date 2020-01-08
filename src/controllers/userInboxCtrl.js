@@ -208,8 +208,8 @@ module.exports = function (app) {
         // just for start
         function _prepareFilters() {
             self.filterGrid = [];
-            self.workItemsFilters = new Array(self.userFilters.length);
-            self.workItemsFiltersCopy = new Array(self.userFilters.length);
+            // self.workItemsFilters = new Array(self.userFilters.length);
+            // self.workItemsFiltersCopy = new Array(self.userFilters.length);
             for (var i = 0; i < self.userFilters.length; i++) {
                 self.filterGrid.push({
                     name: 'filterGrid_' + i,
@@ -319,10 +319,19 @@ module.exports = function (app) {
          * @param order
          */
         self.selectFilter = function (filter, $index, order) {
-            self.selectedUserInboxes = [];
+            var selectedWorkItemsWobNums = [];
             $timeout(function () {
                 self.selectedTab = ($index + self.fixedTabsCount);
             });
+
+
+            if (self.selectedFilter && self.selectedFilter.filter.id === filter.id && self.selectedUserInboxes.length) {
+                selectedWorkItemsWobNums = _.map(self.selectedUserInboxes, 'generalStepElm.workObjectNumber');
+            } else {
+                self.selectedUserInboxes = [];
+            }
+
+
             self.selectedFilter = {
                 index: $index,
                 filter: angular.copy(filter)
@@ -338,6 +347,12 @@ module.exports = function (app) {
                 correspondenceService.loadWorkItemsByFilterID(filter).then(function (workItems) {
                     self.workItemsFilters[$index] = workItems;
                     self.workItemsFiltersCopy[$index] = workItems;
+
+                    if (selectedWorkItemsWobNums.length) {
+                        self.selectedUserInboxes = _.filter(self.workItemsFilters[$index], function (item) {
+                            return selectedWorkItemsWobNums.indexOf(item.generalStepElm.workObjectNumber) !== -1;
+                        });
+                    }
                     if (order) {
                         self.filterGrid[self.selectedFilter.index].order = order;
                         self.getSortedDataForFilter(order);
@@ -394,6 +409,7 @@ module.exports = function (app) {
          * @return {*|Promise<WorkItem>}
          */
         self.reloadUserInboxes = function (pageNumber) {
+            debugger;
             var defer = $q.defer();
             if (self.selectedFilter) {
                 self.filterGrid[self.selectedFilter.index].progress = defer.promise;
@@ -401,6 +417,8 @@ module.exports = function (app) {
                 self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index, selectedFilterSortOrder);
                 return;
             }
+
+            var workItemsWobNumbers = _.map(self.selectedUserInboxes, 'generalStepElm.workObjectNumber');
 
             self.grid.progress = defer.promise;
             if (self.selectedGridType === 'starred') {
@@ -415,7 +433,9 @@ module.exports = function (app) {
                     self.userInboxesCopy = angular.copy(self.userInboxes);
                     self.starredUserInboxes = _.filter(result, 'generalStepElm.starred');
                     self.starredUserInboxesCopy = angular.copy(self.starredUserInboxes);
-                    self.selectedUserInboxes = [];
+                    self.selectedUserInboxes = _.filter(self.userInboxes, function (item) {
+                        return workItemsWobNumbers.indexOf(item.generalStepElm.workObjectNumber) !== -1;
+                    });
                     defer.resolve(true);
                     if (pageNumber) {
                         self.grid.page = pageNumber;
