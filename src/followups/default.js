@@ -32,13 +32,14 @@ module.exports = function (app) {
         exception.addGeneralExceptionHandler(401, function (xhr) {
             var url = xhr.config.url;
 
+            /*
             if (url === urlService.login && xhr.hasOwnProperty('data') && xhr.data.hasOwnProperty('ec') && xhr.data.ec === 9017) {
                 return;
             }
+            */
 
             if (url === urlService.login) {
-                dialog
-                    .errorMessage(langService.get('access_denied'))
+                errorCode.showErrorDialog(xhr);
             } else {
                 if (xhr.data.ec === 9002 && localStorageService.get('CR')) {
                     localStorageService.remove('CR');
@@ -58,8 +59,7 @@ module.exports = function (app) {
         exception.addGeneralExceptionHandler(500, function (xhr) {
             var url = xhr.config.url;
             if (url === urlService.login) {
-                dialog
-                    .errorMessage(langService.get('internal_server_error'))
+                errorCode.showErrorDialog(xhr);
             } else {
                 if (!errorCode.hasErrorCode(xhr) && (xhr.data.ec !== 1005 && xhr.config.method !== 'DELETE')) {
                     dialog

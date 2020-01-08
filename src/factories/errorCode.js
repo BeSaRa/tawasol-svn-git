@@ -58,7 +58,9 @@ module.exports = function (app) {
                 INVALID_LINK: 3041,
                 ERROR_RUNNING_JOB: 3029,
                 ERROR_MISSING_REQUIRED_TEMPLATE_FIELDS: 2023,
-                OPERATION_NOT_SUPPORTED: 3002
+                OPERATION_NOT_SUPPORTED: 3002,
+                USER_NOT_EXIST: 9006,
+                USER_NOT_LINKED_WITH_DEPARTMENT: 9007
             },
             errorLangKeys = {
                 1001: 'no_records_found',
@@ -80,7 +82,11 @@ module.exports = function (app) {
                 14013: 'g2g_error_can_not_resend_already_pending_book',
                 //14028: 'g2g_error_occurred_while_terminate'
                 4019: 'error_save_document_already_modified_by_other_user',
-                2059: 'incoming_book_exists_same_number_site_year'
+                2059: 'incoming_book_exists_same_number_site_year',
+                9006: 'user_not_exist',
+                9017: 'password_not_correct',
+                9016: 'user_not_active',
+                9007: 'user_not_linked_with_department'
             };
 
         return {
