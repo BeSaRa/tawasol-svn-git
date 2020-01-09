@@ -497,13 +497,10 @@ module.exports = function (app) {
                         'ngInject';
                         return roleService.loadRoles();
                     },
-                    ouApplicationUsers: function (ouApplicationUserService, applicationUsers) {
-                        'ngInject';
-                        return ouApplicationUserService.loadOUApplicationUsers();
-                    },
                     userClassificationViewPermissions: function (userClassificationViewPermissionService, classifications) {
                         'ngInject';
-                        return userClassificationViewPermissionService.loadUserClassificationViewPermissions();
+                        // return userClassificationViewPermissionService.loadUserClassificationViewPermissions();
+                        return [];
                     },
                     applicationUsers: function (applicationUserService, jobTitles, ranks, themes, organizations, classifications, permissions, userClassificationViewPermissions) {
                         'ngInject';

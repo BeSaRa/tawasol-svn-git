@@ -2,7 +2,7 @@ module.exports = function (app) {
     app.controller('applicationUserCtrl', function (lookupService,
                                                     applicationUserService,
                                                     applicationUsers,
-                                                    ouApplicationUsers,
+                                                    // ouApplicationUsers,
                                                     $q,
                                                     $filter,
                                                     langService,
@@ -15,7 +15,7 @@ module.exports = function (app) {
                                                     themes,
                                                     roles,
                                                     permissions,
-                                                    userClassificationViewPermissions,
+                                                    // userClassificationViewPermissions,
                                                     contextHelpService,
                                                     employeeService,
                                                     gridService) {
@@ -86,7 +86,7 @@ module.exports = function (app) {
         self.openAddApplicationUserDialog = function ($event) {
             applicationUserService
                 .controllerMethod
-                .applicationUserAdd(jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, $event)
+                .applicationUserAdd(jobTitles, ranks, organizations, classifications, themes, roles, permissions, [], $event)
                 .then(function () {
                     self.reloadApplicationUsers(self.grid.page);
                 })
@@ -103,7 +103,7 @@ module.exports = function (app) {
         self.openEditApplicationUserDialog = function (applicationUser, $event) {
             applicationUserService
                 .controllerMethod
-                .applicationUserEdit(applicationUser, jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, $event)
+                .applicationUserEdit(applicationUser, jobTitles, ranks, organizations, classifications, themes, roles, permissions, [], $event)
                 .then(function (result) {
                     self.reloadApplicationUsers(self.grid.page)
                         .then(function () {

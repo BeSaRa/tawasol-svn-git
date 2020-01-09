@@ -951,12 +951,12 @@
                         </md-content>
                     </md-tab>
                     <!-- Classification View Permission Tab -->
-                    <md-tab label="{{lang.classification_view_permission}}" ng-if="ctrl.editMode"
+                    <!--<md-tab label="{{lang.classification_view_permission}}" ng-if="ctrl.editMode"
                             md-on-select="ctrl.setCurrentTab('cvp')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row" flex>
-                                    <!-- Classifications Dropdown -->
+                                    &lt;!&ndash; Classifications Dropdown &ndash;&gt;
                                     <md-input-container flex ng-if="!ctrl.classificationViewPermission.id">
                                         <label for="classification">{{lang.classification}}</label>
                                         <md-select id="classification" name="classification"
@@ -971,7 +971,7 @@
                                         </md-select>
                                     </md-input-container>
 
-                                    <!-- Classifications Textbox-->
+                                    &lt;!&ndash; Classifications Textbox&ndash;&gt;
                                     <md-input-container flex ng-if="ctrl.classificationViewPermission.id">
                                         <label for="classification">{{lang.classification}}</label>
                                         <input ng-value="ctrl.classificationViewPermission.classificationId.getTranslatedName()"
@@ -980,7 +980,7 @@
                                                ng-disabled="true" ng-readonly="true">
                                     </md-input-container>
 
-                                    <!-- Security Levels -->
+                                    &lt;!&ndash; Security Levels &ndash;&gt;
                                     <md-input-container flex>
                                         <label for="securityLevel">{{lang.security_levels}}</label>
                                         <md-select id="securityLevel" name="securityLevel" multiple
@@ -994,7 +994,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                    <!-- Buttons -->
+                                    &lt;!&ndash; Buttons &ndash;&gt;
                                     <div class="p20">
                                         <md-button class="md-raised md-primary"
                                                    ng-if="!ctrl.classificationViewPermission.id"
@@ -1003,7 +1003,7 @@
                                                    ng-click="ctrl.addClassificationViewPermissionFromCtrl()">
                                             {{lang.add}}
                                         </md-button>
-                                        <!--<md-button class="md-raised" ng-if="ctrl.classificationViewPermission.id"
+                                        &lt;!&ndash;<md-button class="md-raised" ng-if="ctrl.classificationViewPermission.id"
                                                    ng-disabled="!ctrl.classificationViewPermission.classificationId
                                                || !ctrl.classificationViewPermission.securityLevels.length"
                                                    ng-click="ctrl.updateClassificationViewPermissionFromCtrl()">
@@ -1012,7 +1012,7 @@
                                         <md-button class="md-raised" ng-if="ctrl.classificationViewPermission.id"
                                                    ng-click="ctrl.cancelClassificationViewPermissionFromCtrl()">
                                             {{lang.cancel}}
-                                        </md-button>-->
+                                        </md-button>&ndash;&gt;
                                     </div>
                                 </div>
                                 <div layout="row" flex>
@@ -1046,10 +1046,10 @@
                                                                        ng-click="ctrl.removeClassificationViewPermission(classificationViewPermission, $event)">
                                                                 <md-icon md-svg-icon="delete"></md-icon>
                                                             </md-button>
-                                                            <!--<md-button class="md-icon-button" title="{{lang.edit}}"
+                                                            &lt;!&ndash;<md-button class="md-icon-button" title="{{lang.edit}}"
                                                                        ng-click="ctrl.editClassificationViewPermission(classificationViewPermission, $event)">
                                                                 <md-icon md-svg-icon="pencil"></md-icon>
-                                                            </md-button>-->
+                                                            </md-button>&ndash;&gt;
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -1060,7 +1060,7 @@
                                 </div>
                             </div>
                         </md-content>
-                    </md-tab>
+                    </md-tab>-->
                     <!-- OU View Permission Tab -->
                     <md-tab label="{{lang.ou_view_permission}}" ng-if="ctrl.editMode"
                             md-on-select="ctrl.setCurrentTab('ouvp')">

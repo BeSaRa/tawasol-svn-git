@@ -23,7 +23,7 @@ module.exports = function (app) {
                                                        OUViewPermission,
                                                        ouViewPermissions,
                                                        themes,
-                                                       userClassificationViewPermissions,
+                                                       // userClassificationViewPermissions,
                                                        roles,
                                                        permissions,
                                                        OUApplicationUser,
@@ -210,17 +210,17 @@ module.exports = function (app) {
          */
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
 
-        /**
-         * @description List of user classification view permissions
-         * @type {*}
-         */
-        self.classificationViewPermissions = userClassificationViewPermissions;
+        // /**
+        //  * @description List of user classification view permissions
+        //  * @type {*}
+        //  */
+        // self.classificationViewPermissions = userClassificationViewPermissions;
 
-        /**
-         * @description Filter already added classification to skip it in dropdown.
-         * @returns {Array}
-         */
-        self.excludedClassifications = _.map(self.classificationViewPermissions, 'classificationId.id');
+        // /**
+        //  * @description Filter already added classification to skip it in dropdown.
+        //  * @returns {Array}
+        //  */
+        // self.excludedClassifications = _.map(self.classificationViewPermissions, 'classificationId.id');
 
         self.excludeClassificationsIfExists = function (classification) {
             return self.excludedClassifications.indexOf(classification.id) === -1;
@@ -440,9 +440,9 @@ module.exports = function (app) {
                             self.model = angular.copy(self.applicationUser);
                             self.editMode = true;
 
-                            self.classificationViewPermissions = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
-                                return Number(userClassificationViewPermission.userId) === Number(self.applicationUser.id);
-                            });
+                            // self.classificationViewPermissions = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
+                            //     return Number(userClassificationViewPermission.userId) === Number(self.applicationUser.id);
+                            // });
                             self.cancelClassificationViewPermissionFromCtrl();
 
                             toast.success(langService.get('add_success').change({name: self.applicationUser.getNames()}));

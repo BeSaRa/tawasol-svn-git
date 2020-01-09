@@ -130,17 +130,6 @@ module.exports = function (app) {
                                 'ngInject';
                                 return ouApplicationUserService.getOUsViewPermissionForUser(applicationUser.id);
                             }
-                            /* // by BeSaRa to resolve the signature if found
-                             signature: function (applicationUserSignatureService, $q) {
-                                 'ngInject';
-
-                                 /!*if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
-                                     return $q.when(applicationUser.signature);*!/
-
-                                 return applicationUserSignatureService.loadApplicationUserSignatures(applicationUser.id).then(function (result) {
-                                     applicationUser.signature = result;
-                                 });
-                             }*/
                         }
                     });
             },

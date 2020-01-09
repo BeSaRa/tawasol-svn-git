@@ -1598,28 +1598,28 @@ module.exports = function (app) {
             var applicationUser = ouApplicationUser.applicationUser;
             applicationUser = (applicationUser instanceof ApplicationUser) ? applicationUser : new ApplicationUser(applicationUser);
 
-            validationService
-                .createValidation('LOAD_USER_CLASSIFICATION_VIEW_PERMISSIONS')
-                .addStep('load_user_classification', true, userClassificationViewPermissionService.loadUserClassificationViewPermissions, organization.id, function (result) {
-                    self.userClassificationViewPermissions = result;
-                    return result;
-                })
-                .notifyFailure(function (step, result) {
-
-                })
-                .validate()
+            // validationService
+            //     .createValidation('LOAD_USER_CLASSIFICATION_VIEW_PERMISSIONS')
+            //     .addStep('load_user_classification', true, userClassificationViewPermissionService.loadUserClassificationViewPermissions, organization.id, function (result) {
+            //         self.userClassificationViewPermissions = result;
+            //         return result;
+            //     })
+            //     .notifyFailure(function (step, result) {
+            //
+            //     })
+            //     .validate()
+            //     .then(function () {
+            applicationUserService
+                .controllerMethod
+                .applicationUserFromOuEdit(applicationUser, self.jobTitles, self.ranks, organizations, classifications, self.themes, self.roles, self.permissions, [], organization, $event)
                 .then(function () {
-                    applicationUserService
-                        .controllerMethod
-                        .applicationUserFromOuEdit(applicationUser, self.jobTitles, self.ranks, organizations, classifications, self.themes, self.roles, self.permissions, self.userClassificationViewPermissions, organization, $event)
-                        .then(function () {
-                            self.reloadOuApplicationUsers(self.appUserGrid.page);
-                            self.reloadDepartmentUsers(self.departmentUsersGrid.page);
-                        });
-                })
-                .catch(function () {
-
+                    self.reloadOuApplicationUsers(self.appUserGrid.page);
+                    self.reloadDepartmentUsers(self.departmentUsersGrid.page);
                 });
+            // })
+            // .catch(function () {
+            //
+            // });
         };
         //console.log('self.organization.centralArchiveUnitId', self.organization.centralArchiveUnitId, self.organization.registryParentId);
         /**
