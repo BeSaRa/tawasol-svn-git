@@ -69,6 +69,10 @@ module.exports = function (app) {
             }
         };
 
+        self.searchMode = false;
+
+        self.searchModel = '';
+
         /**
          * @description Contains methods for CRUD operations for application users
          */
@@ -127,6 +131,8 @@ module.exports = function (app) {
         self.reloadApplicationUsers = function (pageNumber) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
+            self.searchMode = false;
+            self.searchModel = '';
             return applicationUserService
                 .loadApplicationUsers()
                 .then(function (result) {
@@ -139,6 +145,17 @@ module.exports = function (app) {
                     self.getSortedData();
                     return result;
                 });
+        };
+
+        self.searchInApplicationUser = function (searchText) {
+            if (!searchText)
+                return;
+            self.searchMode = true;
+            return applicationUserService
+                .applicationUserSearch(searchText)
+                .then(function (result) {
+                    self.applicationUsers = result;
+                })
         };
 
         /**

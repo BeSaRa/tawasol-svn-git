@@ -737,6 +737,18 @@ module.exports = function (app) {
                 })
         };
 
+        self.applicationUserSearch = function (criteria) {
+            return $http.get(urlService.applicationUsers + '/criteria', {
+                params: {
+                    criteria: criteria
+                }
+            }).then(function (result) {
+                self.applicationUsers = generator.generateCollection(result.data.rs, ApplicationUser, self._sharedMethods);
+                self.applicationUsers = generator.interceptReceivedCollection('ApplicationUser', self.applicationUsers);
+                return self.applicationUsers;
+            })
+        };
+
         /**
          * @description Create the shared method to the model.
          * @type {{delete: generator.delete, update: generator.update}}

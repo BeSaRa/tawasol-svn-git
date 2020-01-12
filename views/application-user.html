@@ -12,7 +12,9 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
-            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
+            <search-filter-directive change-icon-model="ctrl.searchMode" cancel-callback="ctrl.reloadApplicationUsers()"
+                                     on-change="ctrl.searchInApplicationUser"
+                                     model="ctrl.searchModel"></search-filter-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -46,10 +48,10 @@
                                             md-order-by="enFullName">
                                             <span>{{lang.english_name}}</span>
                                         </th>
-                                      <!--  <th ng-if="!ctrl.selectedApplicationUsers.length" md-column
-                                            md-order-by="loginName">
-                                            <span>{{lang.login_name}}</span>
-                                        </th>-->
+                                        <!--  <th ng-if="!ctrl.selectedApplicationUsers.length" md-column
+                                              md-order-by="loginName">
+                                              <span>{{lang.login_name}}</span>
+                                          </th>-->
                                         <th ng-if="!ctrl.selectedApplicationUsers.length" md-column
                                             md-order-by="domainName">
                                             <span>{{lang.domain_name}}</span>
