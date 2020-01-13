@@ -6,7 +6,7 @@ module.exports = function (app) {
                 EMPTY_RESULT: 2014,
                 CAN_NOT_DELETE_LOOKUP: 3014,
                 FAILED_DELETE: 1004,
-                FAILED_DUE_TO_LINKED_OBJECT: 1005,
+                // FAILED_DUE_TO_LINKED_OBJECT: 1005,
                 DOCUMENT_NO_PREVIEW_UNAVAILABLE_MISSING: 2040,
                 WORK_ITEM_NOT_FOUND: 2043,
                 FAILED_DELETE_DOCUMENT: 2034,

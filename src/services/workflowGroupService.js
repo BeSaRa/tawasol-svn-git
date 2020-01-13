@@ -95,10 +95,6 @@ module.exports = function (app) {
                             }
                             return response;
                         });
-                    }).catch(function (response) {
-                        if (response.data.ec === 1005) {
-                            dialog.alertMessage(langService.get("cannot_delete_records"));
-                        }
                     });
             },
             showGroupMembers: function (groupMembers, $event) {
