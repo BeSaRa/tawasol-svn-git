@@ -29,4 +29,5 @@ module.exports = function (app) {
     //  require('./g-2-g-inbox-e2e')(app);
     //  require('./g-2-g-returned-e2e')(app);
     //  require('./g-2-g-sent-items-e2e')(app);
+    //require('./general-search-e2e')(app);
 };
