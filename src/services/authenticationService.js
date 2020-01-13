@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                    Credentials,
                                                    titleService,
                                                    gridService,
+                                                   encryptionService,
                                                    $q,
                                                    errorCode,
                                                    dialog,
@@ -24,11 +25,11 @@ module.exports = function (app) {
         function _saveToStorage(credentials) {
             var c = angular.copy(credentials);
             delete c.ouId;
-            localStorageService.set('CR', base64Factory.encode(JSON.stringify(credentials)));
+            localStorageService.set('CR', encryptionService.encrypt(JSON.stringify(credentials)));
         }
 
         function _getFromStorage() {
-            return JSON.parse(base64Factory.decode(localStorageService.get('CR')));
+            return JSON.parse(encryptionService.decrypt(localStorageService.get('CR')));
         }
 
         /**
@@ -44,7 +45,12 @@ module.exports = function (app) {
             credentials.setTawasolEntityId(rootEntity.getRootEntityIdentifier());
             cacheCredentials = angular.copy(credentials);
             // call backend service to login.
-            return $http.post(urlService.login, credentials).then(function (result) {
+            cacheCredentials.password = encryptionService.encrypt(cacheCredentials.password);
+            return $http.post(urlService.login, cacheCredentials, {
+                params: {
+                    withEncryption: true
+                }
+            }).then(function (result) {
                 titleService.setTitle(rootEntity.returnRootEntity().getTranslatedAppName());
                 _saveToStorage(credentials);
                 gridService.removeAllSorting();
@@ -71,8 +77,7 @@ module.exports = function (app) {
             // set current tawasol root entity identifier.
             cacheCredentials.setTawasolEntityId(rootEntity.getRootEntityIdentifier());
             cacheCredentials.setUserName(employee.domainName);
-            // cacheCredentials.loginUsingDefaultOu = false;
-
+            cacheCredentials.password = null;
             return $http.post(urlService.selectOrganizationLogin, cacheCredentials).then(function (result) {
                 result = result.data.rs;
                 self.setLastLoginOrganizationId(organization); // after login success

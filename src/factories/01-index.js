@@ -9,4 +9,5 @@ module.exports = function (app) {
     require('./errorCode')(app);
     require('./ResolveDefer')(app);
     require('./base64Factory')(app);
+    require('./CryptoJS')(app);
 };

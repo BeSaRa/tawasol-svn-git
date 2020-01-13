@@ -242,5 +242,5 @@ module.exports = (function () {
     window.FullCalendarLocales.ar = require('@fullcalendar/core/locales/ar');
     window.FullCalendarDayGrid = require('@fullcalendar/daygrid');
     window.FullCalendarTimeGrid = require('@fullcalendar/timegrid');
-    window.FullCalendarInteraction = require('@fullcalendar/interaction')
+    window.FullCalendarInteraction = require('@fullcalendar/interaction');
 })();
