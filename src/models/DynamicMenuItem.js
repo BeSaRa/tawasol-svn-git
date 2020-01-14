@@ -297,6 +297,8 @@ module.exports = function (app) {
                         return langService.current;
                     case 'ROOT_ENTITY_NAME':
                         return rootEntity.returnRootEntity().identifier;
+                    case 'CURRENT_OU_ID':
+                        return employeeService.getEmployee().getOUID();
                 }
             };
 
