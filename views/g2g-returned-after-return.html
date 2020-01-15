@@ -70,11 +70,11 @@
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
                                             md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString','Information')}}">
                                             <span>{{lang.correspondence_sites}}</span>
-                                        </th>
+                                        </th><!--
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
                                             md-order-by="senderForTrackingSheet">
                                             <span>{{lang.returned_by}}</span>
-                                        </th>
+                                        </th>-->
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
                                             md-order-by="comment">
                                             <span>{{lang.comment}}</span>
@@ -106,7 +106,7 @@
                                             <main-site-sub-site-directive item="g2gItem"
                                                                           type="G2GMessagingHistory"></main-site-sub-site-directive>
                                         </td>
-                                        <td md-cell>{{g2gItem.senderForTrackingSheet}}</td>
+                                        <!--<td md-cell>{{g2gItem.senderForTrackingSheet}}</td>-->
                                         <td md-cell>{{g2gItem.comment}}</td>
                                         <td md-cell class="p-r0"
                                             ng-if="ctrl.selectedG2gItems.length < 2">
