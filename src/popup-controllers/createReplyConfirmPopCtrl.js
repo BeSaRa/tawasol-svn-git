@@ -17,8 +17,8 @@ module.exports = function (app) {
             {id: 1, key: 'advanced'}
         ];
         self.replyTypeOptions = [
-            {id: 0, key: 'outgoing'},
-            {id: 1, key: 'internal'}
+            {id: 0, key: 'reply_outgoing'},
+            {id: 1, key: 'reply_internal'}
         ];
         self.createAsOptions = [
             {id: true, key: 'attachments'},
