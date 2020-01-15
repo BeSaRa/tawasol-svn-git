@@ -3,7 +3,7 @@ module.exports = function (app) {
         'ngInject';
 
         permissionServiceProvider
-        // group of system administration
+            // group of system administration
             .addMenuPermissionGroup('menu_item_system_administration')
             .addMenuPermissions('menu_item_global_settings', ['MANAGE_GLOBAL_SETTINGS'])
             .addMenuPermissions('menu_item_government_entities', ['MANAGE_GOVERNMENT_ENTITIES'])
@@ -123,9 +123,18 @@ module.exports = function (app) {
                 return true;
             })
             .end()
-            .addMenuPermission('menu_item_g2g', function (employee) {
+            .addMenuPermissionGroup('menu_item_g2g')
+            .addMenuPermission('menu_item_government_inbox', function (employee) {
                 return employee.hasAnyPermissions(["GOVERNMENT_TO_GOVERNMENT", "OLD_SYSTEM_COMMUINCATION"]);
             })
+            .addMenuPermission('menu_item_government_returned_mail', function (employee) {
+                return employee.hasAnyPermissions(["GOVERNMENT_TO_GOVERNMENT", "OLD_SYSTEM_COMMUINCATION"]);
+            })
+            .addMenuPermission('menu_item_government_sent_items', function (employee) {
+                return employee.hasAnyPermissions(["GOVERNMENT_TO_GOVERNMENT", "OLD_SYSTEM_COMMUINCATION"]);
+            })
+            .addMenuPermission('menu_item_government_returned_after_return', 'GOVERNMENT_TO_GOVERNMENT')
+            .end()
             .addMenuPermissionGroup('menu_item_reports')
             .addMenuPermission('menu_item_reports_statistical_correspondence_report', 'CORRESPONDENCE_REPORT')
             .addMenuPermission('menu_item_reports_statistical_report', 'CORRESPONDENCE_SITE_REPORT')
