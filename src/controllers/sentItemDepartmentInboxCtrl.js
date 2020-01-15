@@ -93,7 +93,7 @@ module.exports = function (app) {
             },
             searchText: '',
             searchCallback: function (grid) {
-                self.returnedDepartmentInboxes = gridService.searchGridData(self.grid, self.sentItemDepartmentInboxesCopy);
+                self.sentItemDepartmentInboxes = gridService.searchGridData(self.grid, self.sentItemDepartmentInboxesCopy);
             }
         };
 
