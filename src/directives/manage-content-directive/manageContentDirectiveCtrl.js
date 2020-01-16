@@ -49,6 +49,22 @@ module.exports = function (app) {
 
         self.checkRequired = function ($event) {
             var method = 'resolve';
+            var labels = [];
+            self.validateLabels = {
+                ou: 'organization_unit',
+                securityLevel: 'security_level',
+                docDate: self.document.hasDocumentClass('incoming') ? 'incoming_date' : 'document_date',
+                mainClassification: 'outgoing_main_classification',
+                subClassification: 'outgoing_sub_classification',
+                docSubject: 'document_subject',
+                priorityLevel: 'outgoing_priority_level',
+                docType: 'document_type',
+                fileId: 'outgoing_file',
+                fileCode: 'outgoing_file_code',
+                fileSerial: 'outgoing_file_serial',
+                sitesInfoTo: 'correspondence_sites'
+            };
+
             var properties = self.document.getMainProperties();
             self.propertyConfigurations = lookupService.getPropertyConfigurations(self.document.docClassName);
 
@@ -56,16 +72,19 @@ module.exports = function (app) {
                 self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
             });
 
-
             _.map(properties, function (item) {
                 if (_isMandatory(item) && !self.document[item]) {
                     method = 'reject';
+                    labels.push(item);
                 }
             });
 
-            if (self.document.docClassName.toLowerCase() !== 'outgoing') {
+            if (!self.document.hasDocumentClass('outgoing')) {
                 if (method === 'reject') {
-                    dialog.errorMessage(langService.get('some_properties_required'), null, null, $event);
+                    labels = _.map(labels, function (label) {
+                        return self.validateLabels[label];
+                    });
+                    generator.generateErrorFields('check_this_fields', labels);
                 }
                 return $q[method](true);
             }
@@ -76,13 +95,17 @@ module.exports = function (app) {
                 .addStep('check_required', false, self.document, function (result) {
                     return result.sitesInfoTo.length;
                 })
-                .notifyFailure(function () {
+                .notifyFailure(function (step, result) {
                     method = 'reject';
+                    labels.push("sitesInfoTo");
                 })
                 .validate()
                 .then(function (result) {
                     if (method === 'reject') {
-                        dialog.errorMessage(langService.get('some_properties_required'), null, null, $event);
+                        labels = _.map(labels, function (label) {
+                            return self.validateLabels[label];
+                        });
+                        generator.generateErrorFields('check_this_fields', labels);
                     }
                     return $q[method](true);
                 })
