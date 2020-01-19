@@ -749,6 +749,13 @@ module.exports = function (app) {
             })
         };
 
+        self.totalApplicationUsersCount = function () {
+            return $http.get(urlService.applicationUsers + '/count')
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        };
+
         /**
          * @description Create the shared method to the model.
          * @type {{delete: generator.delete, update: generator.update}}

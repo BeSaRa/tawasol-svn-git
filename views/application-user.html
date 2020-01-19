@@ -93,14 +93,20 @@
                                 </table>
                             </div>
                         </md-table-container>
-                        <md-table-pagination
-                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                md-limit-options="ctrl.grid.limitOptions"
-                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                md-total="{{(ctrl.applicationUsers).length}}"
-                                md-page-select
-                                md-on-paginate="ctrl.grid.pagingCallback">
-                        </md-table-pagination>
+                        <div layout="row">
+                            <div layout="row" class="grid-legend row-border-top" layout-padding layout-align="start center">
+                                <span>{{lang.application_users_count}} : {{ctrl.applicationUsersCount}} {{lang.user}}</span>
+                            </div>
+                            <span flex class="row-border-top"></span>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{(ctrl.applicationUsers).length}}"
+                                    md-page-select
+                                    md-on-paginate="ctrl.grid.pagingCallback">
+                            </md-table-pagination>
+                        </div>
                     </md-card>
                 </div>
             </div>

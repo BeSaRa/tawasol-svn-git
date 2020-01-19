@@ -18,7 +18,8 @@ module.exports = function (app) {
                                                     // userClassificationViewPermissions,
                                                     contextHelpService,
                                                     employeeService,
-                                                    gridService) {
+                                                    gridService,
+                                                    applicationUsersCount) {
         'ngInject';
         var self = this;
         self.controllerName = 'applicationUserCtrl';
@@ -36,7 +37,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.currentEmployee = employeeService.getEmployee();
-
+        self.applicationUsersCount = applicationUsersCount;
         /**
          * @description Contains the selected application users
          * @type {Array}

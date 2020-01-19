@@ -509,6 +509,10 @@ module.exports = function (app) {
                     permissions: function (roleService) {
                         'ngInject';
                         return roleService.getPermissionByGroup();
+                    },
+                    applicationUsersCount: function (applicationUserService) {
+                        'ngInject';
+                        return applicationUserService.totalApplicationUsersCount();
                     }
                 }
             })
