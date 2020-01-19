@@ -365,8 +365,8 @@
                                     </md-input-container>
                                     <!-- Organization Unit -->
                                     <md-input-container flex ng-if="ctrl.editMode">
-                                        <label for="defaultOUID">{{lang.organization_unit}}</label>
-                                        <md-select id="defaultOUID" name="defaultOUID" required
+                                        <label for="defaultOUID">{{lang.organization_unit}} *</label>
+                                        <md-select id="defaultOUID" name="defaultOUID"
                                                    ng-model="ctrl.applicationUser.defaultOUID">
                                             <md-option ng-value="organization.ou.id"
                                                        ng-disabled="!organization.status"
@@ -375,9 +375,9 @@
                                                 {{organization.ou.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
-                                        <div ng-messages="applicationUserForm.defaultOUID.$error">
+                                        <!--<div ng-messages="applicationUserForm.defaultOUID.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                        </div>
+                                        </div>-->
                                     </md-input-container>
                                     <md-input-container flex ng-if="!ctrl.editMode"></md-input-container>
                                 </div>

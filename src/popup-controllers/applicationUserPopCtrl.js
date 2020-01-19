@@ -288,11 +288,10 @@ module.exports = function (app) {
         self.checkRequiredFieldsAppUser = function (model) {
             var required = new ApplicationUser().getRequiredFields(), result = [];
 
-            /*
-             if(!self.applicationUser.id){
-             required.splice(required.indexOf('defaultOUID'),1);
-             }
-             */
+            if (!self.applicationUser.id) {
+                required.splice(required.indexOf('defaultOUID'), 1);
+            }
+
             /* If notification property is false, remove the property from required */
             for (var i = 0; i < self.notificationProperties.length; i++) {
                 var property = self.notificationProperties[i].property;

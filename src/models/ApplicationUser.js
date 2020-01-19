@@ -72,7 +72,7 @@ module.exports = function (app) {
                 'jobTitle',
                 'mobile',
                 'email',
-                // 'defaultOUID',
+                'defaultOUID',
                 'domainName',
                 'defaultThemeID',
                 'searchAmountLimit',
