@@ -275,7 +275,6 @@ module.exports = function (app) {
                         return correspondenceService
                             .createReplyFromCorrespondence('incoming', vsId, 'outgoing', {createAsAttachment: createAsAttachment})
                             .then(function (outgoing) {
-                                debugger;
                                 if (!createAsAttachment) {
                                     outgoing.linkedDocs = [outgoing.linkedDocList[0]];
                                 } else {

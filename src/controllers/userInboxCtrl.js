@@ -409,7 +409,6 @@ module.exports = function (app) {
          * @return {*|Promise<WorkItem>}
          */
         self.reloadUserInboxes = function (pageNumber) {
-            debugger;
             var defer = $q.defer();
             if (self.selectedFilter) {
                 self.filterGrid[self.selectedFilter.index].progress = defer.promise;
