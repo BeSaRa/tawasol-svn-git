@@ -259,37 +259,7 @@ module.exports = function (app) {
                 templateUrl: templateProvider.getView('organizations'),
                 controller: 'organizationsCtrl',
                 controllerAs: 'ctrl',
-                permission: 'menu_item_organization_chart',
-                resolve: {
-                    jobTitles: function (jobTitleService) {
-                        'ngInject';
-                        return jobTitleService.loadJobTitles();
-                    },
-                    ranks: function (rankService) {
-                        'ngInject';
-                        return rankService.loadRanks();
-                    },
-                    themes: function (themeService) {
-                        'ngInject';
-                        return themeService.loadThemes();
-                    },
-                    roles: function (roleService) {
-                        'ngInject';
-                        return roleService.loadRoles();
-                    },
-                    permissions: function (roleService) {
-                        'ngInject';
-                        return roleService.getPermissionByGroup();
-                    },
-                    globalCorrespondenceSitesForG2GId: function (correspondenceViewService) {
-                        'ngInject';
-                        return correspondenceViewService.getGlobalCorrespondenceSitesForG2GId();
-                    },
-                    globalCorrespondenceSitesForInternalG2GId: function (correspondenceViewService) {
-                        'ngInject';
-                        return correspondenceViewService.getGlobalCorrespondenceSitesForInternalG2GId();
-                    }
-                }
+                permission: 'menu_item_organization_chart'
             })
             // correspondence site types
             .state('app.administration.correspondence-site-types', {

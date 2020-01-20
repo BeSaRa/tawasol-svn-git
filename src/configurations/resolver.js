@@ -127,6 +127,30 @@ module.exports = function (app) {
                 organizations: function (organizationService, correspondenceSiteTypes, applicationUsers, organizationTypes, referencePlanNumbers, escalationProcess) {
                     'ngInject';
                     return organizationService.loadAllOrganizationsStructure();
+                },
+                jobTitles: function (jobTitleService) {
+                    'ngInject';
+                    return jobTitleService.loadJobTitles();
+                },
+                ranks: function (rankService) {
+                    'ngInject';
+                    return rankService.loadRanks();
+                },
+                themes: function (themeService) {
+                    'ngInject';
+                    return themeService.loadThemes();
+                },
+                permissions: function (roleService) {
+                    'ngInject';
+                    return roleService.getPermissionByGroup();
+                },
+                globalCorrespondenceSitesForG2GId: function (correspondenceViewService) {
+                    'ngInject';
+                    return correspondenceViewService.getGlobalCorrespondenceSitesForG2GId();
+                },
+                globalCorrespondenceSitesForInternalG2GId: function (correspondenceViewService) {
+                    'ngInject';
+                    return correspondenceViewService.getGlobalCorrespondenceSitesForInternalG2GId();
                 }
             })
             .bulkResolveToState('app.outgoing.add', {
