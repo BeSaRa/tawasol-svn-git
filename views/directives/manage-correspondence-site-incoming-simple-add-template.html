@@ -78,7 +78,7 @@
                 placeholder="{{lang.sub_site}}"
                 ng-keydown="ctrl.preventSearchKeyDown($event, 'subSite')">
             <md-item-template>
-                <span md-highlight-text="ctrl.subSiteSearchText"
+                <span md-highlight-text="ctrl.subSiteSearchText" tooltip="{{item.getTranslatedName()}}"
                       md-highlight-flags="i">{{item.getTranslatedName()}}</span>
             </md-item-template>
         </md-autocomplete>
