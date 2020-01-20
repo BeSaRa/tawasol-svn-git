@@ -565,10 +565,18 @@ module.exports = function (app) {
                     locals: {
                         rootMode: !organization.parent,
                         editMode: true,
-                        organization: organization,
+                        // organization: organization,
                         organizations: self.allOrganizationsStructure
                     },
                     resolve: {
+                        organization: function (organizationService) {
+                            'ngInject';
+                            return organizationService.loadOrganizationById(organization.id)
+                                .then(function (item) {
+                                    item.referenceNumberPlanId.referencePlanItemStartSerialList = angular.copy(item.referencePlanItemStartSerialList);
+                                    return item;
+                                });
+                        },
                         children: function () {
                             'ngInject';
                             return self.loadOrganizationChildren(organization, false);
