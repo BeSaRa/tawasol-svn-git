@@ -1290,6 +1290,7 @@ module.exports = function (app) {
                     })
                     .then(function (generalStepElementView) {
                         generalStepElementView.documentViewInfo.desktop = desktop;
+                        generalStepElementView.allInternalSites = workItem.allInternalSites;
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
