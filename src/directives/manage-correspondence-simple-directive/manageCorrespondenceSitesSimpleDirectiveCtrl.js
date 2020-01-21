@@ -32,6 +32,10 @@ module.exports = function (app) {
         self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
         self.querySearchDefer = false;
 
+        self.selectedSiteType = null;
+        self.selectedMainSite = null;
+        self.selectedSubSite = null;
+
         $timeout(function () {
             self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
             self.correspondenceSiteTypesCopy = angular.copy(self.correspondenceSiteTypes);
@@ -41,14 +45,19 @@ module.exports = function (app) {
 
             self.subSites = [];
             self.subSitesCopy = angular.copy(self.subSites);
+            if (self.correspondence.sitesToList && self.correspondence.sitesToList.length) {
+                var oldSites = angular.copy(self.correspondence.sitesToList);
+                self.selectedSiteType = self.correspondence.sitesToList[0].siteType;
+                self.onSiteTypeChange().then(function () {
+                    self.selectedMainSite = oldSites[0].mainSite;
+                    self.correspondence.sitesToList = oldSites;
+                });
+            }
         });
 
         // get the main sites for selected correspondence site type
         self.subRecords = _concatCorrespondenceSites(true);
 
-        self.selectedSiteType = null;
-        self.selectedMainSite = null;
-        self.selectedSubSite = null;
 
         self.sitesInfoLength = 0;
         self.vsId = null;
@@ -143,7 +152,7 @@ module.exports = function (app) {
             self.selectedSubSite = null;
 
             if (self.selectedSiteType) {
-                correspondenceViewService.correspondenceSiteSearch('main', {
+                return correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                     criteria: null,
                     excludeOuSites: false
@@ -152,7 +161,8 @@ module.exports = function (app) {
                     self.mainSitesCopy = angular.copy(self.mainSites);
                     self.subSites = [];
                     self.subSitesCopy = [];
-                    _selectDefaultMainSiteAndGetSubSites()
+                    _selectDefaultMainSiteAndGetSubSites();
+                    return self.mainSites;
                 });
             } else {
                 self.mainSites = [];
@@ -160,6 +170,7 @@ module.exports = function (app) {
                 self.subSites = [];
                 self.subSitesCopy = angular.copy(self.subSites);
                 self.subSiteSearchText = '';
+                return $q.when(true);
             }
         };
 
