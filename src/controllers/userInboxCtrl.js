@@ -1921,6 +1921,7 @@ module.exports = function (app) {
                         callback: self.approveAndExport,
                         sticky: true,
                         class: "action-green",
+                        permissionKey:'ELECTRONIC_SIGNATURE',
                         checkShow: function (action, model) {
                             var info = model.getInfo();
                             return !info.isPaper
