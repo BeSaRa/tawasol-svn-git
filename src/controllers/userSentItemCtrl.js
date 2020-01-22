@@ -731,7 +731,7 @@ module.exports = function (app) {
                     if (!(model instanceof EventHistory)) {
                         model = angular.copy(self.userSentItemCopy);
                     }
-                    return (model.workflowActionId !== 9 && model.actionType !== 3 && model.wfId !== null);
+                    return (model.workflowActionId !== 9 && model.actionType !== 3 && model.wfId !== null && model.wobNum !== null);
                 }
             },
             // Reassign
