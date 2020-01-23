@@ -255,6 +255,10 @@ module.exports = function (app) {
                 return indicator.getIsBroadcastedIndicator(this.isBroadcasted());
             };
 
+            WorkItem.prototype.getCommentsIndicator = function () {
+                return indicator.getCommentsIndicator(this.getCommentsCount());
+            };
+
             /**
              * @description Checks if the document is transferred
              * if no incomingVSID, then its directly sent from launch(transferred), otherwise its exported to organization

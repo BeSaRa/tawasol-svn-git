@@ -91,6 +91,9 @@
                     <span>{{lang.correspondence_sites}}</span>
                 </th>
                 <th ng-if="!ctrl.selectedWorkItems.length" md-column>
+                    <span>{{lang.comments}}</span>
+                </th>
+                <th ng-if="!ctrl.selectedWorkItems.length" md-column>
                     <!-- Grid Actions -->
                     <md-button tooltip="{{lang.view_magazine}}"
                                ng-click="ctrl.employeeService.getEmployee().toggleInboxView()"
@@ -204,6 +207,11 @@
                 </td>
                 <td md-cell class="td-data">
                     <main-site-sub-site-directive item="userInbox"></main-site-sub-site-directive>
+                </td>
+                <td md-cell class="indicator-td">
+                    <grid-indicator-directive record="userInbox"
+                                              indicator-type="comments"
+                                              record-type="WorkItem">
                 </td>
                 <td md-cell class="p-r0"
                     ng-if="ctrl.selectedWorkItems.length < 2">

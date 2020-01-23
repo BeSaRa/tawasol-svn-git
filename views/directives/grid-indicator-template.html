@@ -203,3 +203,12 @@
              tooltip="{{ctrl.langService.get(ctrl.record.siteFollowUpEndedIndicator.tooltip)}}"
     ></md-icon>
 </span>
+<!-- comments -->
+<span ng-if="ctrl.indicatorType === 'comments' && ctrl.record.generalStepElm.comments" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.commentsIndicator}">
+    <md-icon ng-if="ctrl.record.commentsIndicator && ctrl.isShowIndicator()"
+             md-svg-icon="{{ctrl.record.commentsIndicator.icon}}"
+             tooltip="{{ctrl.record.generalStepElm.comments}}"
+    ></md-icon>
+</span>
+
