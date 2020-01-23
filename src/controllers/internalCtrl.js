@@ -138,7 +138,7 @@ module.exports = function (app) {
             var promise = null;
             var defer = $q.defer();
             if (replyTo && $stateParams.workItem) {
-                dialog.confirmMessage(langService.get('prompt_terminate').change({name: self.replyToOriginalName}), langService.get('yes'),langService.get('no'))
+                dialog.confirmMessage(langService.get('prompt_terminate').change({name: self.replyToOriginalName}), langService.get('yes'), langService.get('no'))
                     .then(function () {
                         self.terminateAfterCreateReply = true;
                         defer.resolve(true);
@@ -354,6 +354,30 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description approve and send the document
+         * @param model
+         * @param $event
+         * @param defer
+         * @return {*}
+         */
+        self.signESignatureAndSend = function (model, $event, defer) {
+            if (!self.internal.hasContent()) {
+                dialog.alertMessage(langService.get("content_not_found"));
+                return;
+            }
+
+            model.approveDocument($event, defer, false)
+                .then(function (result) {
+                    model.launchWorkFlow($event, 'forward', 'favorites')
+                        .then(function () {
+                            counterService.loadCounters();
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            self.resetAddCorrespondence();
+                        });
+                })
+        };
+
         self.docActionSendToReview = function (document, $event) {
             draftInternalService.controllerMethod
                 .draftInternalSendToReview(self.internal, $event);
@@ -438,6 +462,18 @@ module.exports = function (app) {
                     isVisible = gridService.checkToShowAction(action) && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
+                }
+            },
+            // Approve and sent
+            {
+                text: langService.get('grid_action_electronic_approve_and_send'),
+                callback: self.signESignatureAndSend,
+                class: "action-green",
+                permissionKey: 'ELECTRONIC_SIGNATURE',
+                checkShow: function (action, model, index) {
+                    var info = model.getInfo();
+                    return !info.isPaper &&
+                        model.isInternalPersonal()
                 }
             },
             // Send To Review
