@@ -1921,8 +1921,11 @@ module.exports = function (app) {
                         callback: self.approveAndExport,
                         sticky: true,
                         class: "action-green",
-                        permissionKey:'ELECTRONIC_SIGNATURE',
                         checkShow: function (action, model) {
+                            var employee = employeeService.getEmployee();
+                            if (!employee.hasPermissionTo('ELECTRONIC_SIGNATURE') || !employee.hasPermissionTo('OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE'))
+                                return false;
+
                             var info = model.getInfo();
                             return !info.isPaper
                                 && (info.documentClass === 'outgoing')
