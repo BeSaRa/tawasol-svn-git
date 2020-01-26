@@ -469,7 +469,7 @@ module.exports = function (app) {
                 text: langService.get('grid_action_electronic_approve_and_send'),
                 callback: self.signESignatureAndSend,
                 class: "action-green",
-                permissionKey: 'ELECTRONIC_SIGNATURE',
+                permissionKey: 'ELECTRONIC_SIGNATURE_MEMO',
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
                     return !info.isPaper &&
