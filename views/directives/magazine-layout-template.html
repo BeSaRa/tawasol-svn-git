@@ -139,6 +139,10 @@
                                  ng-click="ctrl.reply(workItem, $event)"></md-icon>-->
                         <div class="magazine-sender">{{lang.sender }} -
                             {{workItem.senderInfo.getTranslatedName()}}
+                                <grid-indicator-directive record="workItem"
+                                                          class="p0p5"
+                                                          indicator-type="comments"
+                                                          record-type="WorkItem"></grid-indicator-directive>
                         </div>
                     </div>
                     <div layout="column" class="magazine-middle">

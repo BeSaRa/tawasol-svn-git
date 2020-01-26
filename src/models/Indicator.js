@@ -252,7 +252,7 @@ module.exports = function (app) {
                 return new Indicator({
                     class: 'indicator badge',
                     text: commentsCount,
-                    icon: 'comment',
+                    icon: 'comment-account-outline',
                     tooltip: 'indicator_comments',
                     legendText: function (indicator) {
                         return '';
