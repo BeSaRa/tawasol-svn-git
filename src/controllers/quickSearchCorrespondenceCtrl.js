@@ -107,6 +107,10 @@ module.exports = function (app) {
             self.quickSearchCorrespondence = $filter('orderBy')(self.quickSearchCorrespondence, self.grid.order);
         };
 
+        self.isOverdueSearch = function () {
+            return ($stateParams.q === 'overdueIncomingDocuments' || $stateParams.q === 'overdueOutgoingDocuments')
+        };
+
         /**
          * @description Reload the grid of Correspondence
          * @param pageNumber
@@ -119,7 +123,7 @@ module.exports = function (app) {
             var searchJSON = {};
             searchJSON[$stateParams.key] = $stateParams.q;
 
-            if ($stateParams.q === 'overdueIncomingDocuments' || $stateParams.q === 'overdueOutgoingDocuments')
+            if (self.isOverdueSearch())
                 return self.reloadQuickSearchOverdueCorrespondence(pageNumber, defer);
 
             return quickSearchCorrespondenceService

@@ -68,6 +68,10 @@
                                         <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
                                             md-order-by="createdOn">
                                             <span>{{lang.created_on}}</span></th>
+                                        <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length && ctrl.isOverdueSearch()" md-column
+                                            md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString','Information')}}">
+                                            <span>{{lang.correspondence_sites}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column>
                                             {{lang.action}}
                                         </th>
@@ -118,6 +122,9 @@
                                         <td md-cell>{{quickSearch.docType.getTranslatedName()}}</td>
                                         <td md-cell>{{quickSearch.createdBy}}</td>
                                         <td md-cell>{{quickSearch.createdOn}}</td>
+                                        <td ng-if="ctrl.isOverdueSearch()" md-cell class="td-data">
+                                            <main-site-sub-site-directive item="quickSearch"></main-site-sub-site-directive>
+                                        </td>
                                         <td md-cell ng-if="ctrl.selectedQuickSearchCorrespondence.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedQuickSearchCorrespondence.length
                                                   || ctrl.selectedQuickSearchCorrespondence.length===1 && ctrl.selectedQuickSearchCorrespondence[0].id === quickSearch.id">
