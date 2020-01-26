@@ -616,6 +616,8 @@ module.exports = function (app) {
 
         self.selectedProxyUserChange = function (proxyUser) {
             self.ouApplicationUser.proxyAuthorityLevels = null;
+            self.ouApplicationUser.proxyStartDate = null;
+            self.ouApplicationUser.proxyEndDate = null;
         };
 
 

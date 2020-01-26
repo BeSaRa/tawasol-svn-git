@@ -23,8 +23,8 @@ module.exports = function (app) {
          * @description Load the application users from server.
          * @returns {Promise|applicationUsers}
          */
-        self.loadApplicationUsers = function () {
-            return $http.get(urlService.applicationUsers).then(function (result) {
+        self.loadApplicationUsers = function (limited) {
+            return $http.get(urlService.applicationUsers + (limited ? '/limited' : '')).then(function (result) {
                 self.applicationUsers = generator.generateCollection(result.data.rs, ApplicationUser, self._sharedMethods);
                 self.applicationUsers = generator.interceptReceivedCollection('ApplicationUser', self.applicationUsers);
                 return self.applicationUsers;
@@ -35,8 +35,8 @@ module.exports = function (app) {
          * @description Get application users from self.applicationUsers if found and if not load it from server again.
          * @returns {Promise|applicationUsers}
          */
-        self.getApplicationUsers = function () {
-            return self.applicationUsers.length ? $q.when(self.applicationUsers) : self.loadApplicationUsers();
+        self.getApplicationUsers = function (limited) {
+            return self.applicationUsers.length ? $q.when(self.applicationUsers) : self.loadApplicationUsers(limited);
         };
 
         /**

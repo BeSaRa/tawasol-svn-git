@@ -135,7 +135,7 @@ module.exports = function (app) {
             self.searchMode = false;
             self.searchModel = '';
             return applicationUserService
-                .loadApplicationUsers()
+                .loadApplicationUsers(true)
                 .then(function (result) {
                     self.applicationUsers = result;
                     self.applicationUsersCopy = angular.copy(self.applicationUsers);

@@ -474,7 +474,7 @@ module.exports = function (app) {
                     },
                     applicationUsers: function (applicationUserService, jobTitles, ranks, themes, organizations, classifications, permissions, userClassificationViewPermissions) {
                         'ngInject';
-                        return applicationUserService.loadApplicationUsers();
+                        return applicationUserService.loadApplicationUsers(true);
                     },
                     permissions: function (roleService) {
                         'ngInject';
