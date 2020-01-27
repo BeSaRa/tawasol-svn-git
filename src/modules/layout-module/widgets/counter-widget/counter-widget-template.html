@@ -1,6 +1,6 @@
 <md-card id="{{widget.getWidgetTagId()}}" flex
          class="card-color widget {{ctrl.options.color.optionValue ? ctrl.options.color.optionValue : ctrl.default}} counter-widget">
-    <md-menu-bar class="widget-options" ng-if="ctrl.employeeService.hasPermissionTo('LANDING_PAGE')">
+    <md-menu-bar class="widget-options">
         <md-menu>
             <md-button ng-click="$mdMenu.open()" class="md-icon-button">
                 <md-icon md-svg-icon="dots-vertical"></md-icon>
@@ -19,13 +19,15 @@
                         </md-menu-content>
                     </md-menu>
                 </md-menu-item>
-                <md-menu-item>
+                <md-menu-item ng-if="ctrl.employeeService.hasPermissionTo('LANDING_PAGE_ADJUSTMENT')">
                     <md-menu>
                         <md-button ng-click="$mdMenu.open()">
                             {{lang.counter_widget_data_source}}
                         </md-button>
                         <md-menu-content class="menu-content-no-padding" width="1">
-                            <md-menu-item ng-class="{selected:ctrl.isSelectedSource(source)}" ng-repeat="source in ctrl.dataSources track by $index">
+                            <md-menu-item ng-repeat="source in ctrl.dataSources track by $index"
+                                          ng-if="ctrl.hasSourcePermission(source)"
+                                          ng-class="{selected:ctrl.isSelectedSource(source)}">
                                 <md-button
                                         aria-label="{{source[lang.current]}}"
                                         ng-click="ctrl.setCurrentSelectedDataSource(source)">
@@ -35,19 +37,19 @@
                         </md-menu-content>
                     </md-menu>
                 </md-menu-item>
-                <md-menu-item>
+                <md-menu-item ng-if="ctrl.employeeService.hasPermissionTo('LANDING_PAGE_ADJUSTMENT')">
                     <md-button ng-click="ctrl.removeCounter()">{{lang.remove}}</md-button>
                 </md-menu-item>
             </md-menu-content>
         </md-menu>
     </md-menu-bar>
-    <md-button ng-if="ctrl.employeeService.hasPermissionTo('LANDING_PAGE')"
-            class="md-icon-button counter-refresh" ng-click="ctrl.reloadCurrentCounter()">
+    <md-button class="md-icon-button counter-refresh" ng-click="ctrl.reloadCurrentCounter()">
         <md-icon md-svg-icon="refresh"></md-icon>
     </md-button>
     <div class="counter-widget-content" layout="column">
         <div class="counter-widget-count">
-            <a href="#" ng-click="ctrl.counterClicked($event)" class="counter-count" counter-directive="ctrl.counter"></a>
+            <a href="#" ng-click="ctrl.counterClicked($event)" class="counter-count"
+               counter-directive="ctrl.counter"></a>
         </div>
         <div class="counter-widget-label">
             <h4 ng-if="!ctrl.hideLabel" ng-dblclick="ctrl.onHideLabel($event)">

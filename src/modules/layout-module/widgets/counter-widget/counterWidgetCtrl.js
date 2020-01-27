@@ -256,7 +256,7 @@ module.exports = function (app) {
         }
 
         self.onHideLabel = function () {
-            if (!self.employeeService.hasPermissionTo('LANDING_PAGE'))
+            if (!self.employeeService.hasPermissionTo('LANDING_PAGE_ADJUSTMENT'))
                 return false;
             self.hideLabel = true;
             $timeout(function () {
@@ -388,6 +388,12 @@ module.exports = function (app) {
 
         self.isSelectedSource = function (source) {
             return currentDataSource() === source.value;
+        };
+
+        self.hasSourcePermission = function (source) {
+            if (!source.permission)
+                return true;
+            return employeeService.hasPermissionTo(self.dataSourcePermissions[source.value].permission);
         };
 
         $timeout(function () {
