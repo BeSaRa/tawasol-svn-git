@@ -137,12 +137,11 @@
                         <md-icon md-svg-icon="reply" class="cursor-pointer action-green"
                                  tooltip="{{lang.grid_action_reply}}"
                                  ng-click="ctrl.reply(workItem, $event)"></md-icon>-->
-                        <div class="magazine-sender">{{lang.sender }} -
+                        <div class="magazine-sender">
+                            <grid-indicator-directive record="workItem"
+                                                      indicator-type="comments"
+                                                      record-type="WorkItem"></grid-indicator-directive>{{lang.sender }} -
                             {{workItem.senderInfo.getTranslatedName()}}
-                                <grid-indicator-directive record="workItem"
-                                                          class="p0p5"
-                                                          indicator-type="comments"
-                                                          record-type="WorkItem"></grid-indicator-directive>
                         </div>
                     </div>
                     <div layout="column" class="magazine-middle">
