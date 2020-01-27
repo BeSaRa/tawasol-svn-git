@@ -100,7 +100,7 @@ module.exports = function (app) {
             reminderEmailPriority: 'reminder_email_priority',
             reminderSmsdays: 'reminder_sms_days',
             reminderEmailDays: 'reminder_email_days',
-            inboxRefreshInterval:'inbox_refresh_interval'
+            inboxRefreshInterval: 'inbox_refresh_interval'
         };
 
         self.validateSignatureLabels = {
@@ -1062,7 +1062,7 @@ module.exports = function (app) {
                             return organizationService.loadOrganizations();
                         },
                         privateUsers: function (ouApplicationUserService) {
-                            'ngInject'
+                            'ngInject';
                             return ouApplicationUserService.loadAllPrivateUsers();
                         }
                     }
@@ -1134,6 +1134,25 @@ module.exports = function (app) {
                             return ouApplicationUserService.loadFollowupUserOrganization(ouApplicationUser);
                         }
                     }
+                });
+        };
+
+        self.openEditOUApplicationUserDialog = function (ouApplicationUser, $event) {
+            ouApplicationUserService.controllerMethod
+                .editOUApplicationUserDialog(ouApplicationUser, self.applicationUser, true, $event)
+                .then(function (result) {
+                    ouApplicationUserService.loadOUApplicationUsersByUserId(self.applicationUser.id)
+                        .then(function (result) {
+                            self.ouApplicationUsersCopy = angular.copy(result);
+                            var ouAppUser = _.find(result, function (ouAppUser) {
+                                return ouAppUser.ouid.id === self.currentOrganization.id;
+                            });
+
+                            var indexOfUpdatedOUApplicationUser = _.findIndex(self.ouApplicationUsers, function (x) {
+                                return x.ouid.id === self.currentOrganization.id;
+                            });
+                            self.ouApplicationUsers.splice(indexOfUpdatedOUApplicationUser, 1, ouAppUser);
+                        })
                 });
         };
 

@@ -213,7 +213,7 @@ module.exports = function (app) {
                     });
             },
 
-            addOUApplicationUserDialog: function (applicationUser, $event) {
+            addOUApplicationUserDialog: function (applicationUser, popupFromOU, $event) {
                 var deferOus = $q.defer();
                 return dialog
                     .showDialog({
@@ -225,7 +225,8 @@ module.exports = function (app) {
                             editMode: false,
                             ouApplicationUser: new OUApplicationUser({
                                 applicationUser: applicationUser
-                            })
+                            }),
+                            popupFromOU: popupFromOU
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -254,7 +255,7 @@ module.exports = function (app) {
                         }
                     });
             },
-            editOUApplicationUserDialog: function (ouApplicationUser, applicationUser, $event) {
+            editOUApplicationUserDialog: function (ouApplicationUser, applicationUser, popupFromOU, $event) {
                 var deferOus = $q.defer();
                 return dialog
                     .showDialog({
@@ -264,7 +265,8 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         locals: {
                             editMode: true,
-                            ouApplicationUser: angular.copy(ouApplicationUser)
+                            ouApplicationUser: angular.copy(ouApplicationUser),
+                            popupFromOU: popupFromOU
                         },
                         resolve: {
                             organizations: function (organizationService) {

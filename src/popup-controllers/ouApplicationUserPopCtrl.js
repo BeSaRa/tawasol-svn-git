@@ -14,11 +14,13 @@ module.exports = function (app) {
                                                          ouApplicationUserService,
                                                          UserOuPermission,
                                                          tokenService,
-                                                         employeeService) {
+                                                         employeeService,
+                                                         popupFromOU) {
         'ngInject';
         var self = this;
         self.controllerName = 'ouApplicationUserPopCtrl';
         self.editMode = editMode;
+        self.popupFromOU = popupFromOU;
 
         self.ouApplicationUsers = ouApplicationUsers;
         self.roles = roles;

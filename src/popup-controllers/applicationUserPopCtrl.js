@@ -1367,7 +1367,7 @@ module.exports = function (app) {
 
         self.openAddOUApplicationUserDialog = function ($event) {
             ouApplicationUserService.controllerMethod
-                .addOUApplicationUserDialog(self.applicationUser, $event)
+                .addOUApplicationUserDialog(self.applicationUser, false, $event)
                 .then(function (result) {
                     self.reloadOUApplicationUsers();
                 })
@@ -1378,7 +1378,7 @@ module.exports = function (app) {
 
         self.openEditOUApplicationUserDialog = function (ouApplicationUser, $event) {
             ouApplicationUserService.controllerMethod
-                .editOUApplicationUserDialog(ouApplicationUser, self.applicationUser, $event)
+                .editOUApplicationUserDialog(ouApplicationUser, self.applicationUser, false, $event)
                 .then(function (result) {
                     self.reloadOUApplicationUsers();
                 });
