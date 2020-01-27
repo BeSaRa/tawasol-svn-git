@@ -2462,3 +2462,14 @@ table.md-table td.md-cell {
   word-wrap: break-word;
   -ms-word-wrap: break-word;
 }
+
+.cms-switch-container {
+  padding: 2px;
+  margin: 10px 5px;
+
+  md-switch {
+    margin-top: 0;
+    margin-bottom: 0;
+    display: inline-block;
+  }
+}

@@ -1,10 +1,10 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_document_type : ctrl.model.getNames()}}">
-        <popup-toolbar-directive ng-if="!ctrl.model.id"
-                                 header-text="{{lang.add_new_document_type}}"></popup-toolbar-directive>
-        <popup-toolbar-directive ng-if="ctrl.model.id"
-                                 header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="!ctrl.model.id"
+                             header-text="{{lang.add_new_document_type}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.model.id"
+                             header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="documentTypeForm" autocomplete="off">
@@ -75,7 +75,7 @@
                                 <div ng-message="number">{{lang.numberonly}}</div>
                             </div>
                         </md-input-container>
-                        <div flex class="p20">
+                        <div flex class="cms-switch-container">
                             <md-switch ng-model="ctrl.documentType.status" aria-label="{{lang.status}}">
                                 <label>{{lang.status}} : {{ctrl.documentType.getTranslatedStatus()}}</label>
                             </md-switch>

@@ -636,8 +636,11 @@ module.exports = function (app) {
                 text: langService.get('grid_action_approve_and_export'),
                 callback: self.docActionApproveAndExport,
                 class: "action-green",
-                permissionKey: "ELECTRONIC_SIGNATURE",
                 checkShow: function (action, model, index) {
+                    var employee = employeeService.getEmployee();
+                    if (!employee.hasPermissionTo('ELECTRONIC_SIGNATURE') || !employee.hasPermissionTo('OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE'))
+                        return false;
+
                     var info = model.getInfo();
                     //Don't show if its paper outgoing or any site is external/g2g or signatures count more than 1 or personal/private security level
                     isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && !info.isPaper && !_hasExternalOrG2GSite(model) && _hasContent() && _hasSingleSignature(model);
