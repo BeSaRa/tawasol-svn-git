@@ -24,6 +24,7 @@ module.exports = function (app) {
             } else if (typeof model.securityLevel !== 'number' && model.securityLevel.hasOwnProperty('id')) {
                 model.securityLevel = model.securityLevel.id;
             }
+            model.priorityLevel = model.priorityLevel.lookupKey;
 
             delete model.file;
             delete model.refVSID;
@@ -60,6 +61,13 @@ module.exports = function (app) {
                 // if no value, set FREE_TO_EDIT by default
                 model.updateActionStatus = lookupService.getLookupByLookupKey(lookupService.attachmentUpdateAction, 0);
             }
+
+            if (typeof model.priorityLevel !== 'undefined' && model.priorityLevel !== null && model.priorityLevel !== '') {
+                model.priorityLevel = lookupService.getLookupByLookupKey(lookupService.attachmentPriority, model.priorityLevel);
+            } else {
+                model.priorityLevel = lookupService.getLookupByLookupKey(lookupService.attachmentPriority, 1);
+            }
+
             model.isDeletable = !!model.isDeletable;
             model.attachmentTypeInfo = new Information(model.attachmentTypeInfo);
             return model;

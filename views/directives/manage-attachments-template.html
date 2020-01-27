@@ -112,6 +112,17 @@
                     <div ng-message="required">{{lang.field_required}}</div>
                 </div>
             </md-input-container>
+            <md-input-container>
+                <label for="priorityLevel">{{lang.priority_level}}</label>
+                <md-select ng-model-options="{trackBy: '$value.lookupKey'}"
+                           id="priorityLevel"
+                           name="priorityLevel"
+                           ng-model="ctrl.attachment.priorityLevel">
+                    <md-option ng-value="priority" ng-repeat="priority in ctrl.priorityLevels">
+                        {{priority.getTranslatedName()}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
             <div>
                 <md-button ng-if="!ctrl.attachment.vsId"
                            ng-disabled="attachment_form.$invalid" ng-click="ctrl.addFileToAttachments()"
@@ -172,6 +183,10 @@
                         md-order-by="{{ctrl.getSortingKey('securityLevel','Lookup')}}">
                         <span>{{lang.attachment_attachment_security_level}}</span>
                     </th>
+                    <th ng-if="!ctrl.selectedAttachments.length" md-column
+                        md-order-by="priorityLevel.lookupKey">
+                        <span>{{lang.priority_level}}</span>
+                    </th>
                     <th ng-if="!ctrl.selectedAttachments.length" md-column>
                         <span>{{lang.actions}}</span>
                     </th>
@@ -196,6 +211,7 @@
                     </td>
                     <td md-cell>{{attachment.attachmentType.getTranslatedName()}}</td>
                     <td md-cell>{{attachment.getSecurityLevels()}}</td>
+                    <td md-cell>{{attachment.priorityLevel.getTranslatedName()}}</td>
                     <td md-cell>
                         <div flex layout="row" layout-align="start center">
                             <md-button class="md-icon-button" title="{{lang.attachment_view}}"

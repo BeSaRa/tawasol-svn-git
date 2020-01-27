@@ -40,6 +40,8 @@ module.exports = function (app) {
             // all security level
             self.securityLevel = correspondenceService.getLookup(self.documentClass, 'securityLevels');
             self.attachmentUpdateActions = lookupService.returnLookups(lookupService.attachmentUpdateAction);
+            self.priorityLevels = lookupService.returnLookups(lookupService.attachmentPriority);
+            self.getSortedData();
         });
 
         // to hide buttons when one of the process work.
@@ -57,7 +59,7 @@ module.exports = function (app) {
         self.grid = {
             limit: 5, // default limit
             page: 1, // first page
-            order: '', // default sorting order
+            order: '-priorityLevel.lookupKey', // default sorting order
             limitOptions: [5, 10, 20, // limit options
                 {
                     label: langService.get('all'),
@@ -92,7 +94,8 @@ module.exports = function (app) {
                     file: file,
                     securityLevel: self.document ? securityLevel : null,
                     updateActionStatus: self.attachmentUpdateActions[0],
-                    attachmentType: (activeAttachmentTypes.length) ? activeAttachmentTypes[0] : null
+                    attachmentType: (activeAttachmentTypes.length) ? activeAttachmentTypes[0] : null,
+                    priorityLevel: self.priorityLevels[0]
                 });
             }
         }
@@ -157,6 +160,7 @@ module.exports = function (app) {
                             } else {
                                 self.attachments = self.attachments.concat(attachments);
                             }
+                            self.getSortedData();
                         }
                     }
                 });
@@ -193,6 +197,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.attachments = result;
                     self.model = managerService.deepCopyAttachments(self.attachments);
+                    self.getSortedData();
                     self.selectedAttachments = [];
                     return result;
                 });
@@ -222,10 +227,12 @@ module.exports = function (app) {
                                 toast.success(langService.get('add_success').change({name: attachment.documentTitle}));
                             })
                     } else {
+                     //   debugger;
                         toast.success(langService.get('add_success').change({name: attachment.documentTitle}));
                         attachment.isDeletable = self.isAttachmentDeletable(attachment);
                         self.attachments.push(attachment);
                         self.model = managerService.deepCopyAttachments(self.attachments);
+                        self.getSortedData();
                         self.attachment = null;
                     }
                 })
@@ -381,7 +388,7 @@ module.exports = function (app) {
                         .openScannerForEdit(true, content, $event)
                         .then(function (file) {
                             attachment.file = file.file;
-                            attachment.sourceType  = 2 ; // scanned attachment.
+                            attachment.sourceType = 2; // scanned attachment.
                             attachmentService
                                 .updateAttachment(self.document, attachment)
                                 .then(function () {
@@ -423,6 +430,7 @@ module.exports = function (app) {
                         });
                         self.attachments.splice(existingAttachmentIndex, 1, attachment);
                         self.model = managerService.deepCopyAttachments(self.attachments);
+                        self.getSortedData();
                         self.attachment = null;
                     }
                 })

@@ -1,8 +1,8 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.attachment_attachments}}">
-        <popup-toolbar-directive ng-if="!ctrl.model.id" header-text="{{lang.attachment_attachments}}"
-                                 close-callback="ctrl.closeDrag"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="!ctrl.model.id" header-text="{{lang.attachment_attachments}}"
+                             close-callback="ctrl.closeDrag"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <!-- Add attachment-->
@@ -50,6 +50,19 @@
                                    ng-value="type"
                                    ng-if="type.status">
                             {{type.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <!-- Priority Level -->
+                <md-input-container>
+                    <label for="priorityLevel">{{lang.priority_level}}</label>
+                    <md-select ng-model-options="{trackBy: '$value.lookupKey'}"
+                               id="priorityLevel"
+                               name="priorityLevel"
+                               ng-change="ctrl.changeValueOf('priorityLevel',ctrl.priorityLevel)"
+                               ng-model="ctrl.priorityLevel">
+                        <md-option ng-value="priority" ng-repeat="priority in ctrl.priorityLevels">
+                            {{priority.getTranslatedName()}}
                         </md-option>
                     </md-select>
                 </md-input-container>
@@ -114,6 +127,19 @@
                                    ng-if="ctrl.checkAttachmentTypeIsAvailable(type)"
                                    ng-disabled="!type.status">
                             {{type.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <!-- Priority Level -->
+                <md-input-container>
+                    <label for="priorityLevel">{{lang.priority_level}}</label>
+                    <md-select ng-model-options="{trackBy: '$value.lookupKey'}"
+                               id="priorityLevel"
+                               name="priorityLevel"
+                               ng-change="ctrl.changeValueOf('priorityLevel',ctrl.priorityLevel)"
+                               ng-model="ctrl.attachment.priorityLevel">
+                        <md-option ng-value="priority" ng-repeat="priority in ctrl.priorityLevels">
+                            {{priority.getTranslatedName()}}
                         </md-option>
                     </md-select>
                 </md-input-container>
@@ -184,6 +210,24 @@
                                     </md-menu>
                                 </md-menu-bar>
                             </div>
+                            <div>
+                                <md-menu-bar>
+                                    <md-menu>
+                                        <md-button ng-click="$mdMenu.open()">
+                                            {{attachment.priorityLevel.getTranslatedName()}}
+                                        </md-button>
+                                        <md-menu-content>
+                                            <md-menu-item ng-repeat="priority in ctrl.priorityLevels track by $index">
+                                                <md-button
+                                                        ng-click="ctrl.changeValueOfFor('priorityLevel',attachment , priority)"
+                                                        ng-class="{'menu-select':priority.currentId(ctrl.priorityLevel)}">
+                                                    {{priority.getTranslatedName()}}
+                                                </md-button>
+                                            </md-menu-item>
+                                        </md-menu-content>
+                                    </md-menu>
+                                </md-menu-bar>
+                            </div>
                             <div ng-if="!ctrl.inheritSecurity">
                                 <md-menu-bar>
                                     <md-menu>
@@ -248,6 +292,11 @@
                             <div ng-if="!ctrl.inheritSecurity">
                                 <md-button>
                                     {{attachment.securityLevel.getTranslatedName()}}
+                                </md-button>
+                            </div>
+                            <div>
+                                <md-button>
+                                    {{attachment.priorityLevel.getTranslatedName()}}
                                 </md-button>
                             </div>
                             <div ng-if="!ctrl.attachment">

@@ -22,6 +22,7 @@ module.exports = function (app) {
             self.isCurrent = null;
             self.attachmentType = null;
             self.securityLevel = null;
+            self.priorityLevel = null;
             self.updateActionStatus = null;
             self.isDeletable = null;
             self.sourceType = 1;

@@ -54,8 +54,10 @@ module.exports = function (app) {
         self.attachmentType = activeAttachmentTypes.length ? activeAttachmentTypes[0] : null;
         // all update action status
         self.attachmentUpdateActions = lookupService.returnLookups(lookupService.attachmentUpdateAction);
+        self.priorityLevels = lookupService.returnLookups(lookupService.attachmentPriority);
         // the selected updateActionStatus
         self.updateActionStatus = self.attachmentUpdateActions[0];
+        self.priorityLevel = self.priorityLevels[0];
         // the uploaded Files
         self.successFilesUploaded = [];
         // the failed uploaded.
@@ -173,6 +175,7 @@ module.exports = function (app) {
                                         file: files[i],
                                         securityLevel: self.securityLevel,
                                         attachmentType: self.attachmentType,
+                                        priorityLevel: self.priorityLevel,
                                         updateActionStatus: self.updateActionStatus,
                                         documentTitle: files[i].name,
                                         docSubject: files[i].name,
@@ -182,7 +185,7 @@ module.exports = function (app) {
                                     failedFiles.push(files[i]);
                                 }
                             }
-                            if (failedFiles.length){
+                            if (failedFiles.length) {
                                 dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(resultExtension.allowedExtensions.join(', ')));
                             }
                         })
