@@ -14,6 +14,7 @@ module.exports = function (app) {
             self.perOu = false;
             self.referncePlanId = null;
             self.components = [];
+            self.itemOrder = null;
             self.expressionComponents = {
                 classDescription: "",
                 securityLevel: null,

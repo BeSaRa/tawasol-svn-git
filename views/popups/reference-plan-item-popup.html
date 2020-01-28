@@ -1,10 +1,10 @@
 <md-dialog class="dialog-extend cms-tabs-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_reference_plan_number: ctrl.model.getNames()}}">
-        <popup-toolbar-directive ng-if="!ctrl.model.id"
-                                 header-text="{{lang.add_new_reference_plan_Item}}"></popup-toolbar-directive>
-        <popup-toolbar-directive ng-if="ctrl.model.id"
-                                 header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="!ctrl.model.id"
+                             header-text="{{lang.add_new_reference_plan_Item}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.model.id"
+                             header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div>
             <form name="referencePlanNumberForm" autocomplete="off">
@@ -49,6 +49,15 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="itemOrder">{{lang.item_order}}</label>
+                                        <input type="text" id="itemOrder" name="itemOrder"
+                                               custom-validate-directive="number"
+                                               ng-model="ctrl.referencePlanItem.itemOrder"/>
+                                        <div ng-messages="referencePlanNumberForm.itemOrder.$error">
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                        </div>
+                                    </md-input-container>
                                 </div>
                             </div>
                         </md-content>
@@ -64,11 +73,11 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised md-primary" ng-if="!ctrl.editMode"
+        <md-button class="md-raised md-primary" ng-disabled="referencePlanNumberForm.$invalid" ng-if="!ctrl.editMode"
                    ng-click="ctrl.saveReferencePlanItem()">
             {{lang.add}}
         </md-button>
-        <md-button class="md-raised md-primary" ng-if="ctrl.editMode"
+        <md-button class="md-raised md-primary" ng-disabled="referencePlanNumberForm.$invalid" ng-if="ctrl.editMode"
                    ng-click="ctrl.saveReferencePlanItem()">
             {{lang.save}}
         </md-button>

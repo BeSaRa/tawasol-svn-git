@@ -132,8 +132,7 @@ module.exports = function (app) {
                 self.referencePlanNumber.resetDay = null;
                 self.referencePlanNumber.resetMonth = null;
                 self.resetDisabled = true;
-            }
-            else {
+            } else {
                 self.resetDisabled = false;
             }
         };
@@ -168,7 +167,7 @@ module.exports = function (app) {
                     controller: 'referencePlanItemPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
-                        referencePlanNumber: referencePlanNumber,
+                        referencePlanNumber: self.referencePlanNumber,
                         referencePlanItem: referenceItem
                     },
                     resolve: {
@@ -190,7 +189,7 @@ module.exports = function (app) {
                     controller: 'referencePlanItemPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
-                        referencePlanNumber: referencePlanNumber,
+                        referencePlanNumber: self.referencePlanNumber,
                         referencePlanItem: false
                     },
                     resolve: {
