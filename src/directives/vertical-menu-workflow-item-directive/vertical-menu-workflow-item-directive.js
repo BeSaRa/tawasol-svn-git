@@ -13,7 +13,9 @@ module.exports = function (app) {
                 ignoreCallback: '=',
                 display: '=',
                 displayButton: '=',
-                release: '='
+                release: '=',
+                gridName: '=',
+                wfGroupCallback: '=?'
             }
         }
     })

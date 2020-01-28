@@ -23,13 +23,22 @@ module.exports = function (app) {
             self.callback && typeof self.callback === 'function' ? self.callback(self.item, $event) : null;
             self.releaseSelected();
         };
+
         /**
          * @description to release selected
          */
         self.releaseSelected = function () {
             if (self.release && angular.isArray(self.release))
                 self.release = [];
-        }
+        };
+
+        /**
+         * @description Runs the wfGroup member button callback
+         * @param $event
+         */
+        self.runWfGroupMemberCallback = function ($event) {
+            self.gridName === 'workflowGroups' &&  self.wfGroupCallback && typeof self.wfGroupCallback === 'function' ? self.wfGroupCallback(self.item, $event) : null;
+        };
 
     });
 };

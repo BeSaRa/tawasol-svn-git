@@ -579,6 +579,7 @@ module.exports = function (app) {
          */
         function _mapWFGroup(collection, gridName) {
             return _.map(collection, function (workflowOrganization) {
+                workflowOrganization.members = _mapWFUser(workflowOrganization.members, gridName);
                 return (new DistributionGroupWFItem()).mapFromWFGroup(workflowOrganization).setGridName(gridName || null);
             });
         }

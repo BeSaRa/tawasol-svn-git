@@ -218,5 +218,25 @@ module.exports = function (app) {
             self.workflowItems = $filter('orderBy')(self.workflowItems, self.grid.order);
         };
 
+        /**
+         * @description Opens the dialog to select wfGroup members
+         * @param wfGroup
+         * @param $event
+         */
+        self.openWFMemberDialog = function (wfGroup, $event) {
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('select-dist-workflow-group-members'),
+                controller: 'distWorkflowGroupMembersPopCtrl',
+                controllerAs: 'ctrl',
+                targetEvent: $event,
+                bindToController: true,
+                locals: {
+                    wfGroup: wfGroup
+                }
+            }).then(function (result) {
+                self.wfGroupMemberAddCallback(result);
+            });
+        };
+
     });
 };

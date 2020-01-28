@@ -32,4 +32,8 @@
     <md-button ng-if="ctrl.displayButton" class="md-icon-button" ng-click="ctrl.runCallback($event)">
         <md-icon md-svg-icon="plus"></md-icon>
     </md-button>
+    <md-button ng-if="ctrl.displayButton && ctrl.gridName === 'workflowGroups'" class="md-icon-button"
+               ng-click="ctrl.runWfGroupMemberCallback($event)">
+        <md-icon md-svg-icon="account-plus"></md-icon>
+    </md-button>
 </div>

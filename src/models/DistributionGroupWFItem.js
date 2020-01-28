@@ -6,6 +6,8 @@ module.exports = function (app) {
             DistributionWFItem.call(this);
             self.wfGroupId = null;
             self.sendRelatedDocs = rootEntity.getGlobalSettings().allowSendWFRelatedBook;
+            self.members = [];
+
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
@@ -45,13 +47,18 @@ module.exports = function (app) {
             DistributionGroupWFItem.prototype.isGroup = function () {
                 return true;
             };
+            DistributionGroupWFItem.prototype.setWfMembers = function (members) {
+                this.members = members;
+                return this;
+            };
             DistributionGroupWFItem.prototype.mapFromWFGroup = function (workflowGroup) {
                 return this
                     .setArName(workflowGroup.arName)
                     .setEnName(workflowGroup.enName)
                     .setWfGroupId(workflowGroup.id)
                     .setSendSMS(workflowGroup.sendSMS)
-                    .setSendSMS(workflowGroup.sendEmail);
+                    .setSendSMS(workflowGroup.sendEmail)
+                    .setWfMembers(workflowGroup.members);
             };
             DistributionGroupWFItem.prototype.setWfGroupId = function (wfGroupId) {
                 this.wfGroupId = wfGroupId;

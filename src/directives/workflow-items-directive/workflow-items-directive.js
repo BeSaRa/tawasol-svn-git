@@ -22,7 +22,8 @@ module.exports = function (app) {
                 multiSelect: '=',
                 toggleFav: '=',
                 gridName: '@',
-                grid: '='
+                grid: '=',
+                wfGroupMemberAddCallback: '=?'
             }
         }
     })

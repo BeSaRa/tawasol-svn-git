@@ -93,7 +93,7 @@ module.exports = function (app) {
             };
 
             DistributionWFItem.prototype.setSendSMS = function (sendSMS) {
-                this.sendSMS = sendSMS;
+                this.sendSMS = sendSMS || false;
                 return this;
             };
             DistributionWFItem.prototype.setSecureAction = function (isSecureAction) {
@@ -101,7 +101,7 @@ module.exports = function (app) {
                 return this;
             };
             DistributionWFItem.prototype.setSendEmail = function (sendEmail) {
-                this.sendEmail = sendEmail;
+                this.sendEmail = sendEmail || false;
                 return this;
             };
             DistributionWFItem.prototype.setRegOuId = function (regOuId) {
