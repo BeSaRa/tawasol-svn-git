@@ -26,7 +26,8 @@ module.exports = function (app) {
                                                          ResolveDefer,
                                                          generator,
                                                          mailNotificationService,
-                                                         gridService) {
+                                                         gridService,
+                                                         $timeout) {
         'ngInject';
         var self = this;
         self.controllerName = 'readyToExportArchiveCtrl';
@@ -1483,5 +1484,19 @@ module.exports = function (app) {
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
+
+
+        self.refreshGrid = function (time) {
+            $timeout(function () {
+                $state.is('app.central-archive.ready-to-export') && self.reloadReadyToExports(self.grid.page);
+            }, time)
+                .then(function () {
+                    $state.is('app.central-archive.ready-to-export') && self.refreshGrid(time);
+                });
+        };
+
+        if (employeeService.getEmployee().getIntervalMin()){
+            self.refreshGrid(employeeService.getEmployee().getIntervalMin());
+        }
     });
 };

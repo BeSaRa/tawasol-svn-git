@@ -2162,9 +2162,8 @@ module.exports = function (app) {
         self.openEmailItem();
 
 
-        if (self.globalSetting.inboxRefreshInterval) {
-            var timer = (self.globalSetting.inboxRefreshInterval * 60 * 100 * 10);
-            self.refreshInbox(timer);
+        if (employeeService.getEmployee().getIntervalMin()){
+            self.refreshInbox(employeeService.getEmployee().getIntervalMin());
         }
 
         $scope.$on('$folder_deleted', function (event) {

@@ -640,6 +640,21 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Change the passed time unit value to milliseconds
+         * @param hours
+         * @param minutes
+         * @param seconds
+         * @returns {number}
+         */
+        self.convertToMilliseconds = function (hours, minutes, seconds) {
+            // if hours or minutes available, change to seconds
+            hours = hours ? (hours * 60 * 60) : 0;
+            minutes = minutes ? (minutes * 60) : 0;
+            seconds = seconds || 0;
+            return ((hours + minutes + seconds) * 1000);
+        };
+
+        /**
          * @description Gets the date in default format
          * @param timeStamp
          * @param dateAndTime

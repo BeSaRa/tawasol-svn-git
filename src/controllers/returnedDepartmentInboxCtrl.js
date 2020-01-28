@@ -272,14 +272,14 @@ module.exports = function (app) {
             // but it need in DW popup to create URL, records will always come from Outgoing export
             workItem.generalStepElm.workFlowName = "Outgoing";
             dialog.confirmMessage(langService.get("confirm_launch_workflow")).then(function () {
-            workItem.launchWorkFlow($event, 'forward', 'favorites')
-                .then(function () {
-                    self.reloadReturnedDepartmentInboxes(self.grid.page)
-                        .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                            new ResolveDefer(defer);
-                        });
-                });
+                workItem.launchWorkFlow($event, 'forward', 'favorites')
+                    .then(function () {
+                        self.reloadReturnedDepartmentInboxes(self.grid.page)
+                            .then(function () {
+                                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                                new ResolveDefer(defer);
+                            });
+                    });
             });
         };
 
@@ -426,7 +426,7 @@ module.exports = function (app) {
          * @param returnedDepartmentInbox
          * @param $event
          */
-        self.downloadSelected = function(returnedDepartmentInbox,$event){
+        self.downloadSelected = function (returnedDepartmentInbox, $event) {
             downloadService.openSelectedDownloadDialog(returnedDepartmentInbox, $event);
         };
 
@@ -1143,7 +1143,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",
@@ -1364,5 +1364,16 @@ module.exports = function (app) {
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);
 
+        self.refreshGrid = function (time) {
+            $timeout(function () {
+                $state.is('app.department-inbox.returned') && self.reloadReturnedDepartmentInboxes(self.grid.page);
+            }, time)
+                .then(function () {
+                    $state.is('app.department-inbox.returned') && self.refreshGrid(time);
+                });
+        };
+        if (employeeService.getEmployee().getIntervalMin()){
+            self.refreshGrid(employeeService.getEmployee().getIntervalMin());
+        }
     });
 };

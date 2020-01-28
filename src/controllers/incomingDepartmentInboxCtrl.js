@@ -24,7 +24,8 @@ module.exports = function (app) {
                                                             _,
                                                             emailItem,
                                                             mailNotificationService,
-                                                            gridService) {
+                                                            gridService,
+                                                            $timeout) {
         'ngInject';
         var self = this;
 
@@ -1026,5 +1027,17 @@ module.exports = function (app) {
         // to open Email item if it exists.
         self.openEmailItem();
 
+        self.refreshGrid = function (time) {
+            $timeout(function () {
+                $state.is('app.department-inbox.incoming') && self.reloadIncomingDepartmentInboxes(self.grid.page);
+            }, time)
+                .then(function () {
+                    $state.is('app.department-inbox.incoming') && self.refreshGrid(time);
+                });
+        };
+
+        if (employeeService.getEmployee().getIntervalMin()){
+            self.refreshGrid(employeeService.getEmployee().getIntervalMin());
+        }
     });
 };
