@@ -14,7 +14,7 @@ module.exports = function (app) {
             self.status = true;
             self.global = true;
             self.groupMembers = [];
-
+            self.itemOrder = null;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [

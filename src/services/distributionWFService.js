@@ -137,8 +137,10 @@ module.exports = function (app) {
          */
         self.loadDistWorkflowGroups = function () {
             return $http.get(urlService.distributionWFGroups).then(function (result) {
-                return self.workflowGroups = generator.interceptReceivedCollection('WFGroup', _.map(result.data.rs, 'wfgroup'));
-            })
+                self.workflowGroups = generator.interceptReceivedCollection('WFGroup', result.data.rs);
+
+                return _.sortBy(self.workflowGroups, 'itemOrder');
+            });
         };
         /**
          * @description to use it for on demand.

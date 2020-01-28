@@ -53,6 +53,9 @@
                                         <th ng-if="!ctrl.selectedWorkflowGroups.length" md-column md-order-by="">
                                             <span>{{lang.group_members}}</span>
                                         </th>
+                                        <th ng-if="!ctrl.selectedWorkflowGroups.length" md-column
+                                            md-order-by="itemOrder"><span>{{lang.item_order}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedWorkflowGroups.length" md-column>{{lang.action}}</th>
                                     </tr>
                                     </thead>
@@ -88,7 +91,7 @@
                                                 <md-icon md-svg-icon="coins"></md-icon>
                                             </md-button>
                                         </td>
-
+                                        <td md-cell>{{workflowGroup.itemOrder}}</td>
                                         <td md-cell>
                                             <div flex layout="row" layout-align="start center">
                                                 <md-button class="md-icon-button" title="{{lang.edit}}"

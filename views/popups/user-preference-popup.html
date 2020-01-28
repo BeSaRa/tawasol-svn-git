@@ -990,15 +990,18 @@
                                                             </th>
                                                             <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
                                                                 md-column
-                                                                md-order-by=""><span>{{lang.arabic_name}}</span>
+                                                                md-order-by="wfgroup.arName"><span>{{lang.arabic_name}}</span>
                                                             </th>
                                                             <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
                                                                 md-column
-                                                                md-order-by=""><span>{{lang.english_name}}</span>
+                                                                md-order-by="wfgroup.enName"><span>{{lang.english_name}}</span>
                                                             </th>
                                                             <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
                                                                 md-column
-                                                                md-order-by=""><span>{{lang.status}}</span>
+                                                                md-order-by="wfgroup.status"><span>{{lang.status}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedUserWorkflowGroups.length" md-column
+                                                                md-order-by="wfgroup.itemOrder"><span>{{lang.item_order}}</span>
                                                             </th>
                                                         </tr>
                                                         </thead>
@@ -1013,6 +1016,7 @@
                                                                            ng-change="ctrl.changeStatusUserWorkflowGroup(userWorkflowGroup.wfgroup)"
                                                                            title="{{userWorkflowGroup.wfgroup.getTranslatedStatus()}}"></md-switch>
                                                             </td>
+                                                            <td md-cell>{{userWorkflowGroup.wfgroup.itemOrder}}</td>
                                                             <td md-cell>
                                                                 <div flex layout="row" layout-align="start center">
                                                                     <md-button class="md-icon-button"
