@@ -1909,6 +1909,7 @@ module.exports = function (app) {
                 },
                 permissionKey: [
                     "ELECTRONIC_SIGNATURE",
+                    "ELECTRONIC_SIGNATURE_MEMO"
                     // "DIGITAL_SIGNATURE"
                 ],
                 checkAnyPermission: true,
@@ -1945,12 +1946,11 @@ module.exports = function (app) {
                         class: "action-green",
                         sticky: true,
                         stickyIndex: 6,
-                        permissionKey: "ELECTRONIC_SIGNATURE",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
                             return !model.isBroadcasted()
                                 && !info.isPaper
-                                && (info.documentClass !== 'incoming')
+                                && model.checkElectronicSignaturePermission()
                                 && model.needApprove();
                         }
                     },
@@ -1980,12 +1980,11 @@ module.exports = function (app) {
                         class: "action-green",
                         sticky: true,
                         stickyIndex: 7,
-                        permissionKey: "ELECTRONIC_SIGNATURE",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
                             return !model.isBroadcasted()
                                 && !info.isPaper
-                                && (info.documentClass !== 'incoming')
+                                && model.checkElectronicSignaturePermission()
                                 && model.hasSingleSignature()
                                 && model.needApprove();
                         }
@@ -2162,7 +2161,7 @@ module.exports = function (app) {
         self.openEmailItem();
 
 
-        if (employeeService.getEmployee().getIntervalMin()){
+        if (employeeService.getEmployee().getIntervalMin()) {
             self.refreshInbox(employeeService.getEmployee().getIntervalMin());
         }
 

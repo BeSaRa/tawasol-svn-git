@@ -531,7 +531,7 @@ module.exports = function (app) {
                 text: langService.get('grid_action_approve'),
                 callback: self.docActionApprove,
                 class: "action-green",
-                permissionKey: "ELECTRONIC_SIGNATURE",
+                permissionKey: "ELECTRONIC_SIGNATURE_MEMO",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
                     isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent() && !model.isPrivateSecurityLevel() && !model.isInternalPersonal(); //Don't show if its paper internal

@@ -82,10 +82,10 @@ module.exports = function (app) {
                 serial: 'generalStepElm.docFullSerial',
                 subject: 'generalStepElm.docSubject',
                 receivedDate: 'generalStepElm.receivedDate',
-                action: function(record){
+                action: function (record) {
                     return self.getSortingKey('action', 'WorkflowAction');
                 },
-                sender: function(record){
+                sender: function (record) {
                     return self.getSortingKey('senderInfo', 'SenderInfo');
                 },
                 dueDate: 'generalStepElm.dueDate',
@@ -509,7 +509,7 @@ module.exports = function (app) {
          * @param workItem
          * @param $event
          */
-        self.downloadSelected = function(workItem,$event){
+        self.downloadSelected = function (workItem, $event) {
             downloadService.openSelectedDownloadDialog(workItem, $event);
         };
 
@@ -1286,7 +1286,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",
@@ -1390,12 +1390,13 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     return !model.isBroadcasted()
                         && !info.isPaper
-                        && (info.documentClass !== 'incoming')
+                        && model.checkElectronicSignaturePermission()
                         && model.needApprove()
                         && gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "ELECTRONIC_SIGNATURE",
+                    "ELECTRONIC_SIGNATURE_MEMO"
                     // "DIGITAL_SIGNATURE"
                 ],
                 checkAnyPermission: true,
@@ -1406,7 +1407,6 @@ module.exports = function (app) {
                         //icon: 'link-variant',
                         text: 'grid_action_electronic',//e_signature
                         shortcut: false,
-                        permissionKey: "ELECTRONIC_SIGNATURE",
                         callback: self.signProxyMailInboxESignature,
                         class: "action-green",
                         checkShow: function (action, model) {
@@ -1462,11 +1462,9 @@ module.exports = function (app) {
                             var hasPermission = false;
                             if (info.documentClass === "internal") {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
-                            }
-                            else if (info.documentClass === "incoming") {
+                            } else if (info.documentClass === "incoming") {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
-                            }
-                            else if (info.documentClass === "outgoing") {
+                            } else if (info.documentClass === "outgoing") {
                                 hasPermission = (info.isPaper ? employeeService.hasPermissionTo("EDIT_OUTGOING_PAPER") : employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
                             }
                             return hasPermission && info.docStatus < 23;

@@ -73,10 +73,10 @@ module.exports = function (app) {
                 serial: 'generalStepElm.docFullSerial',
                 subject: 'generalStepElm.docSubject',
                 receivedDate: 'generalStepElm.receivedDate',
-                action: function(record){
+                action: function (record) {
                     return self.getSortingKey('action', 'WorkflowAction');
                 },
-                sender: function(record){
+                sender: function (record) {
                     return self.getSortingKey('senderInfo', 'SenderInfo');
                 },
                 dueDate: 'generalStepElm.dueDate'
@@ -552,7 +552,7 @@ module.exports = function (app) {
          * @param workItem
          * @param $event
          */
-        self.downloadSelected = function(workItem,$event){
+        self.downloadSelected = function (workItem, $event) {
             downloadService.openSelectedDownloadDialog(workItem, $event);
         };
 
@@ -1385,7 +1385,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",
@@ -1490,12 +1490,13 @@ module.exports = function (app) {
                      */
                     var info = model.getInfo();
                     return !info.isPaper
-                        && (info.documentClass !== 'incoming')
+                        && model.checkElectronicSignaturePermission()
                         && model.needApprove()
                         && gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "ELECTRONIC_SIGNATURE",
+                    "ELECTRONIC_SIGNATURE_MEMO"
                     // "DIGITAL_SIGNATURE"
                 ],
                 checkAnyPermission: true,
@@ -1508,7 +1509,6 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.signESignature,
                         class: "action-green",
-                        permissionKey: "ELECTRONIC_SIGNATURE",
                         checkShow: function (action, model) {
                             return true;
                         }

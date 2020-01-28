@@ -1457,6 +1457,7 @@ module.exports = function (app) {
                 },
                 permissionKey: [
                     "ELECTRONIC_SIGNATURE",
+                    "ELECTRONIC_SIGNATURE_MEMO"
                     // "DIGITAL_SIGNATURE"
                 ],
                 checkAnyPermission: true,
@@ -1470,7 +1471,6 @@ module.exports = function (app) {
                         sticky: true,
                         callback: self.signESignature,
                         class: "action-green",
-                        permissionKey: "ELECTRONIC_SIGNATURE",
                         checkShow: function (action, model) {
                             //addMethod = 0 (Electronic/Digital) - show the button
                             //addMethod = 1 (Paper) - hide the button
@@ -1483,7 +1483,7 @@ module.exports = function (app) {
                             var info = model.getInfo();
                             return !model.isBroadcasted()
                                 && !info.isPaper
-                                && (info.documentClass !== 'incoming')
+                                && model.checkElectronicSignaturePermission()
                                 && model.needApprove();
                         }
                     },
@@ -1749,12 +1749,11 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.signESignature,
                 class: "",
-                permissionKey: "ELECTRONIC_SIGNATURE",
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return gridService.checkToShowAction(action) && !model.isBroadcasted()
                         && !info.isPaper
-                        && (info.documentClass !== 'incoming')
+                        && model.checkElectronicSignaturePermission()
                         && model.needApprove();
                 }
             }

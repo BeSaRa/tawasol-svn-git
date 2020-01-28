@@ -900,6 +900,15 @@ module.exports = function (app) {
                 return 0;
             };
 
+            /**
+             * @description
+             */
+            WorkItem.prototype.checkElectronicSignaturePermission = function () {
+                var info = this.getInfo();
+                var employee = employeeService.getEmployee();
+                return ((info.documentClass === 'outgoing' && employee.hasPermissionTo('ELECTRONIC_SIGNATURE')) ||
+                    (info.documentClass === 'internal' && employee.hasPermissionTo('ELECTRONIC_SIGNATURE_MEMO')))
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
