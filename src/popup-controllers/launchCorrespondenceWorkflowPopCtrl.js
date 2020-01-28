@@ -149,7 +149,7 @@ module.exports = function (app) {
         // all registry organizations
         self.registryOrganizations = _mapWFOrganization(distributionWFService.registryOrganizations, 'OUReg');
         // all organizations for users tab -> organization mail unit dropdown
-        self.organizationGroups = _mapOrganizationByType(distributionWFService.organizationGroups, true);
+        self.organizationGroups = _mapOrganizationByType(distributionWFService.organizationGroups, true, true);
         // users search criteria
         self.usersCriteria = new UserSearchCriteria({
             ou: self.organizationGroups.length ? _.find(self.organizationGroups, function (item) {
@@ -503,7 +503,7 @@ module.exports = function (app) {
         //_checkFavoritesError();
 
 
-        function _mapOrganizationByType(organizations, includeCentralArchive) {
+        function _mapOrganizationByType(organizations, includeCentralArchive, allOuGroup) {
             // filter all regOU (has registry)
             var regOus = _.filter(organizations, function (ou) {
                     return ou.hasRegistry;
@@ -539,7 +539,7 @@ module.exports = function (app) {
             });
 
             sections = _mapWFOrganization(sections, 'OUGroup');
-            regOus = _mapWFOrganization(regOus, 'OUReg');
+            regOus = _mapWFOrganization(regOus, allOuGroup ? 'OUGroup' : 'OUReg');
             if (includeCentralArchive) {
                 centralArchiveOUs = _.map(centralArchiveOUs, function (ou) {
                     ou.tempRegOUSection = new Information({

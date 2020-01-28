@@ -159,8 +159,14 @@
                                     </md-select>
                                 </md-input-container>
                                 <div ng-if="!ctrl.usersCriteria.hide">
+<!--                                    <md-button tooltip="{{lang.send_to_whole_department}}" id="add_organization"-->
+<!--                                               ng-disabled="ctrl.getApprovedStatus() || !ctrl.workItemNotExists(ctrl.usersCriteria.ou) || ctrl.loadingIndicatorService.loading || !ctrl.usersCriteria.ou || ctrl.usersCriteria.ou.isRegOU() || ctrl.isPrivateDoc()"-->
+<!--                                               class="md-icon-button mt16"-->
+<!--                                               ng-click="ctrl.addToSelected(ctrl.usersCriteria.ou)">-->
+<!--                                        <md-icon md-svg-icon="plus"></md-icon>-->
+<!--                                    </md-button>-->
                                     <md-button tooltip="{{lang.send_to_whole_department}}" id="add_organization"
-                                               ng-disabled="ctrl.getApprovedStatus() || !ctrl.workItemNotExists(ctrl.usersCriteria.ou) || ctrl.loadingIndicatorService.loading || !ctrl.usersCriteria.ou || ctrl.usersCriteria.ou.isRegOU() || ctrl.isPrivateDoc()"
+                                               ng-disabled="!ctrl.workItemNotExists(ctrl.usersCriteria.ou) || ctrl.loadingIndicatorService.loading || !ctrl.usersCriteria.ou || ctrl.isPrivateDoc()"
                                                class="md-icon-button mt16"
                                                ng-click="ctrl.addToSelected(ctrl.usersCriteria.ou)">
                                         <md-icon md-svg-icon="plus"></md-icon>

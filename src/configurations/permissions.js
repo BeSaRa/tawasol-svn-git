@@ -91,7 +91,7 @@ module.exports = function (app) {
                 return employee.hasAnyPermissions(['FOLLOW-UP_EMPLOYEES’_INBOXES', 'FOLLOW_UP_OU_INBOX']);
             })
             .addMenuPermission('menu_item_group_inbox', function (employee) {
-                return !employee.inRegistry() && employee.hasThesePermissions('GROUP_MAIL');
+                return /*!employee.inRegistry() &&*/ employee.hasThesePermissions('GROUP_MAIL');
             })
             .addMenuPermission('menu_item_proxy_mail_inbox', function (employee) {
                 return !employee.isAdmin && employee.isProxyUser();// && _.map(employee.proxyUsers, 'proxyUserOU').indexOf(employee.organization.ouid) > -1;
