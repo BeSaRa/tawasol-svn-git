@@ -29,10 +29,12 @@
             </md-menu-content>
         </md-menu>
     </md-menu-bar>
-    <md-button ng-if="ctrl.displayButton" class="md-icon-button" ng-click="ctrl.runCallback($event)">
+    <md-button ng-if="ctrl.displayButton" class="md-icon-button" ng-click="ctrl.runCallback($event)"
+    tooltip="{{ctrl.gridName === 'workflowGroups' ? lang.add_workflow_group : '' }}">
         <md-icon md-svg-icon="plus"></md-icon>
     </md-button>
     <md-button ng-if="ctrl.displayButton && ctrl.gridName === 'workflowGroups'" class="md-icon-button"
+               tooltip="{{lang.add_workflow_group_member}}"
                ng-click="ctrl.runWfGroupMemberCallback($event)">
         <md-icon md-svg-icon="account-plus"></md-icon>
     </md-button>

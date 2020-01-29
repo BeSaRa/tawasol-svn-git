@@ -98,7 +98,6 @@ module.exports = function (app) {
              * @returns {boolean}
              */
             DistributionUserWFItem.prototype.isSameUser = function (user) {
-                debugger
                 return user.toUserId === this.toUserId && user.toUserDomain === this.toUserDomain && user.appUserOUID === this.appUserOUID;
             };
 

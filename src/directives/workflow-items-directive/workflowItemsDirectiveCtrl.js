@@ -229,7 +229,6 @@ module.exports = function (app) {
                 controller: 'distWorkflowGroupMembersPopCtrl',
                 controllerAs: 'ctrl',
                 targetEvent: $event,
-                bindToController: true,
                 locals: {
                     wfGroup: wfGroup
                 }

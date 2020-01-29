@@ -316,7 +316,6 @@ module.exports = function (app) {
                         return correspondenceService
                             .createReplyFromWorkItem('incoming', workItem, 'outgoing', {createAsAttachment: createAsAttachment})
                             .then(function (outgoing) {
-                                debugger
                                 if (!createAsAttachment) {
                                     outgoing.linkedDocs = [outgoing.linkedDocList[0]];
                                 } else {
