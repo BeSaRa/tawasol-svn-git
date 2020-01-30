@@ -36,20 +36,30 @@ module.exports = function (app) {
         self.selectedMainSite = null;
         self.selectedSubSite = null;
 
+        var subSitesDefer = $q.defer();
+
         $timeout(function () {
             self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
             self.correspondenceSiteTypesCopy = angular.copy(self.correspondenceSiteTypes);
 
             self.mainSites = [];
-            self.mainSitesCopy = angular.copy(self.mainSite);
+            self.mainSitesCopy = angular.copy(self.mainSites);
 
             self.subSites = [];
             self.subSitesCopy = angular.copy(self.subSites);
+
             if (self.correspondence.sitesToList && self.correspondence.sitesToList.length) {
                 var oldSites = angular.copy(self.correspondence.sitesToList);
                 self.selectedSiteType = self.correspondence.sitesToList[0].siteType;
                 self.onSiteTypeChange().then(function () {
-                    self.selectedMainSite = oldSites[0].mainSite;
+                    self.selectedMainSite = _.find(self.mainSites, function (mainSite) {
+                        return mainSite.id === oldSites[0].mainSiteId;
+                    });
+                    subSitesDefer.promise.then(function () {
+                        self.selectedSubSite = _.find(self.subSites, function (subSite) {
+                            return subSite.subSiteId === oldSites[0].subSiteId;
+                        });
+                    });
                     self.correspondence.sitesToList = oldSites;
                 });
             }
@@ -186,7 +196,7 @@ module.exports = function (app) {
                 self.subSiteSearchText = '';
                 return;
             }
-            correspondenceViewService.correspondenceSiteSearch('sub', {
+            return correspondenceViewService.correspondenceSiteSearch('sub', {
                 type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                 parent: self.selectedMainSite ? self.selectedMainSite.id : null,
                 criteria: null,
@@ -199,6 +209,8 @@ module.exports = function (app) {
                     self.selectedSubSite = self.subSites[0];
                     self.changeSubCorrespondence(self.selectedSubSite);
                 }
+                subSitesDefer.resolve(true);
+                return self.subSites;
             });
         };
 
