@@ -9,15 +9,15 @@
                 <!--<div layout="row" class="p20" flex ng-if="ctrl.canExportAnyRelatedData()">
                     <md-input-container flex>
                         <label>{{lang.select_export_type}}</label>
-                        <md-select ng-model="ctrl.exportType"
+                        <md-select ng-model="ctrl.isGroupExport"
                                    ng-change="ctrl.onChangeExportTypeAll($event)">
-                            <md-option ng-value="type.id" ng-repeat="type in ctrl.exportTypeList">
+                            <md-option ng-value="type.value" ng-repeat="type in ctrl.exportTypeList">
                                 {{lang.get(type.key)}}
                             </md-option>
                         </md-select>
                     </md-input-container>
                 </div>-->
-                <div ng-if="ctrl.exportType === 1" layout="row">
+                <div ng-if="ctrl.isGroupExport" layout="row">
                     <div ng-repeat="option in ctrl.exportOptions" flex
                          ng-if="ctrl.canExportRelatedData(option)">
                         <md-checkbox ng-true-value="true" ng-false-value="false" aria-label="{{option}}"
@@ -36,7 +36,7 @@
                             </md-card-title-text>
                         </md-card-title>
                         <md-card-content>
-                            <div ng-if="workItem.exportType === 1" layout="row">
+                            <div ng-if="workItem.isGroupExport" layout="row">
                                 <div ng-repeat="option in workItem.exportOptions" flex
                                      ng-if="ctrl.canExportRelatedData(option)">
                                     <md-checkbox ng-true-value="true" ng-false-value="false" aria-label="{{option}}"

@@ -63,15 +63,15 @@
                             </md-input-container>
                             <md-input-container flex>
                                 <label for="exportType">{{lang.select_export_type}}</label>
-                                <md-select id="exportType" ng-model="ctrl.exportType" ng-change="ctrl.onChangeExportType()">
-                                    <md-option ng-value="type.id" ng-repeat="type in ctrl.exportTypeList">
+                                <md-select id="exportType" ng-model="ctrl.isGroupExport" ng-change="ctrl.onChangeExportType()">
+                                    <md-option ng-value="type.value" ng-repeat="type in ctrl.exportTypeList">
                                         {{lang.get(type.key)}}
                                     </md-option>
                                 </md-select>
                             </md-input-container>
                         </div>
                         <!-- Group selection -->
-                        <div ng-if="ctrl.exportType === 1" layout="row">
+                        <div ng-if="ctrl.isGroupExport" layout="row">
                             <div ng-repeat="option in ctrl.exportOptions" flex
                                  ng-if="ctrl.canExportRelatedData(option)">
                                 <md-checkbox ng-true-value="true" ng-false-value="false" aria-label="{{option}}"
@@ -82,7 +82,7 @@
                         </div>
 
                         <!-- Individual selection -->
-                        <div ng-if="ctrl.exportType !== 1" layout="row">
+                        <div ng-if="!ctrl.isGroupExport" layout="row">
                             <div flex ng-repeat="option in ctrl.exportOptions" ng-if="ctrl.canExportRelatedData(option)"
                                  layout="column">
                                 <div>{{lang.get(ctrl.labels[$index])}}</div>
@@ -96,7 +96,7 @@
                             </div>
                         </div>
                         <div layout="row"
-                             ng-if="ctrl.exportType === 1 || (ctrl.exportType === 2 && ctrl.partialExportList.exportItems.RELATED_BOOKS.length)">
+                             ng-if="ctrl.isGroupExport || (!ctrl.isGroupExport && ctrl.partialExportList.exportItems.RELATED_BOOKS.length)">
                             <span flex></span>
                             <md-button class="md-raised" ng-click="ctrl.openLinkedDocsAttachmentDialog($event)">
                                 {{lang.export_attachments_related_to_linked_documents}}

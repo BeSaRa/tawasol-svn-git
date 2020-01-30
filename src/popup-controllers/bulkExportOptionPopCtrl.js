@@ -22,10 +22,11 @@ module.exports = function (app) {
         self.controllerName = 'bulkExportOptionPopCtrl';
 
         self.progress = null;
+        self.settings = rootEntity.getGlobalSettings();
         self.workItemsCopy = workItems;
         self.workItems = angular.copy(workItems);
         self.workItems = _.map(self.workItems, function (workItem) {
-            workItem.exportType = 1;
+            workItem.isGroupExport = true;
             workItem.relatedThings = [];
             workItem.model = new ReadyToExportOption();
             workItem.partialExportList = new PartialExportCollection();
@@ -34,11 +35,10 @@ module.exports = function (app) {
         });
 
         self.resend = resend;
-        self.settings = rootEntity.getGlobalSettings();
 
         self.exportTypeList = [
-            {id: 1, key: 'export_by_group'},
-            {id: 2, key: 'export_by_selection'}
+            {key: 'export_by_group', value: true},
+            {key: 'export_by_selection', value: false}
         ];
 
         self.model = new ReadyToExportOption();
@@ -47,7 +47,8 @@ module.exports = function (app) {
         self.labels = _.map(self.partialExportList.getKeys(), function (label) {
             return label.toLowerCase();
         });
-        self.exportType = 1;
+
+        self.isGroupExport = self.settings.defaultExportTypeGrouping;
 
         var canExportOptions = {
             'ATTACHMENTS': 'Attachment',
@@ -66,7 +67,7 @@ module.exports = function (app) {
             for (var i = 0; i < self.workItems.length; i++) {
                 workItem = self.workItems[i];
                 if (self.canExportAnyRelatedData()) {
-                    workItem.exportType = self.exportType;
+                    workItem.isGroupExport = self.isGroupExport;
                     self.onChangeExportType(workItem);
                 }
             }
@@ -98,7 +99,7 @@ module.exports = function (app) {
 
         self.onChangeExportType = function (workItem) {
             workItem.partialExportList = workItem.partialExportList.changeExportType();
-            if (workItem.exportType === 2) {
+            if (!workItem.isGroupExport) {
                 correspondenceService
                     .loadRelatedThingsForCorrespondence(workItem)
                     .then(function (result) {
@@ -158,7 +159,7 @@ module.exports = function (app) {
         // validate all workitems before send to export
         self.validateAllWorkItemsExportOption = function () {
             for (var i = 0; i < self.workItems.length; i++) {
-                if (self.workItems[i].exportType === 1)
+                if (self.workItems[i].isGroupExport)
                     self.workItems[i].model = self.validateExportOption(self.workItems[i].model);
             }
         };

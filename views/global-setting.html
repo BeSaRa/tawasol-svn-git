@@ -497,6 +497,18 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
+                                <!-- Default Export Type -->
+                                <md-input-container flex>
+                                    <label for="defaultExportTypeGrouping">{{lang.default_export_type}}</label>
+                                    <md-select name="defaultExportTypeGrouping"
+                                               id="defaultExportTypeGrouping"
+                                               ng-model="ctrl.globalSetting.defaultExportTypeGrouping">
+                                        <md-option ng-repeat="type in ctrl.exportTypeList"
+                                                   ng-value="type.value">
+                                            {{lang[type.key]}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
                             </div>
                         </div>
                         <br/>

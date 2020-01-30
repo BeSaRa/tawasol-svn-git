@@ -2935,7 +2935,7 @@ module.exports = function (app) {
         self.resendBulkCorrespondenceWorkItems = function (workItems) {
             var regular, resendOptions, resendModels = [];
             for (var i = 0; i < workItems.length; i++) {
-                resendOptions = workItems[i].exportType === 1 ? workItems[i].model : workItems[i].partialExportList;
+                resendOptions = workItems[i].isGroupExport ? workItems[i].model : workItems[i].partialExportList;
                 regular = !resendOptions.isSelective();
                 delete resendOptions.ATTACHMENT_LINKED_DOCS;
                 resendOptions = !regular ? generator.interceptSendInstance('PartialExportSelective', resendOptions) : resendOptions;

@@ -27,8 +27,10 @@ module.exports = function (app) {
         self.correspondence = correspondence;
         // partial exported list
         self.partialExportList = new PartialExportCollection();
+
+        self.settings = rootEntity.getGlobalSettings();
         // to check if the search is simple or not
-        self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
+        self.isSimpleCorrespondenceSiteSearchType = self.settings.simpleCorsSiteSearch;
         // followup statuses
         self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
 
@@ -59,13 +61,13 @@ module.exports = function (app) {
 
         self.subRecords = [];
         _concatCorrespondenceSites(false);
-        self.exportType = 1;
 
         self.exportTypeList = [
-            {id: 1, key: 'export_by_group'},
-            {id: 2, key: 'export_by_selection'}
+            {key: 'export_by_group', value: true},
+            {key: 'export_by_selection', value: false}
         ];
 
+        self.isGroupExport = self.settings.defaultExportTypeGrouping;
         self.exportOptions = self.partialExportList.getKeys();
 
         self.labels = _.map(self.partialExportList.getKeys(), function (label) {
@@ -76,7 +78,7 @@ module.exports = function (app) {
 
         self.onChangeExportType = function () {
             self.partialExportList = self.partialExportList.changeExportType();
-            if (self.exportType === 2) {
+            if (!self.isGroupExport) {
                 correspondenceService
                     .loadRelatedThingsForCorrespondence(self.correspondence)
                     .then(function (result) {
@@ -574,7 +576,7 @@ module.exports = function (app) {
                         linkedDocs: function (correspondenceService) {
                             'ngInject';
                             var info = self.correspondence.getInfo();
-                            return self.exportType === 1 ? correspondenceService
+                            return self.isGroupExport ? correspondenceService
                                 .getLinkedDocumentsByVsIdClass(info.vsId, info.documentClass) : self.partialExportList.exportItems.RELATED_BOOKS;
                         }
                     }

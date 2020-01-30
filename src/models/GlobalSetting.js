@@ -35,6 +35,7 @@ module.exports = function (app) {
             self.exportDocHistory = false;
             self.exportLinkedObj = false;
             self.securitySchema = null;
+            self.defaultExportTypeGrouping = true;
             self.securityLevels = null;
             self.wfsecurity = null;
             self.enableEscalation = false;

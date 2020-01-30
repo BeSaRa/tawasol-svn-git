@@ -59,6 +59,10 @@ module.exports = function (app) {
                 value: false
             }
         ];
+        self.exportTypeList = [
+            {key: 'export_by_selection', value: false},
+            {key: 'export_by_group', value: true}
+        ];
 
         /**
          * @description Contains the list of tabs that can be shown
@@ -341,7 +345,7 @@ module.exports = function (app) {
         };
 
         self.enableEscalationChanged = function ($event) {
-            self.globalSetting.escalationProcess =  (self.globalSetting.enableEscalation) ? self.globalSettingCopy.escalationProcess : null;
+            self.globalSetting.escalationProcess = (self.globalSetting.enableEscalation) ? self.globalSettingCopy.escalationProcess : null;
         };
 
         self.getMaxSearchAmountLimit = function () {

@@ -57,23 +57,23 @@ module.exports = function (app) {
             return langService.get(exportWayMap[prepareExport.exportWay]);
         };
         self.exportWayTextMain = self.getExportWayText();
-        self.isElectronicExport = function(){
+        self.isElectronicExport = function () {
             return prepareExport.exportWay === 1;
         };
-        self.isManualExport = function(){
+        self.isManualExport = function () {
             return prepareExport.exportWay === 2;
         };
-        self.isFaxExport = function(){
+        self.isFaxExport = function () {
             return prepareExport.exportWay === 3;
         };
 
-        self.exportType = 1;
 
         self.exportTypeList = [
-            {id: 1, key: 'export_by_group'},
-            {id: 2, key: 'export_by_selection'}
+            {key: 'export_by_group', value: true},
+            {key: 'export_by_selection', value: false}
         ];
 
+        self.isGroupExport = self.settings.defaultExportTypeGrouping;
         // partial exported list
         self.partialExportList = new PartialExportCollection();
         self.exportOptions = self.partialExportList.getKeys();
@@ -122,7 +122,7 @@ module.exports = function (app) {
 
         self.onChangeExportType = function () {
             self.partialExportList = self.partialExportList.changeExportType();
-            if (self.exportType === 2) {
+            if (!self.isGroupExport) {
                 correspondenceService
                     .loadRelatedThingsForCorrespondence(self.readyToExport)
                     .then(function (result) {
@@ -160,7 +160,7 @@ module.exports = function (app) {
         self.exportCorrespondenceWorkItem = function () {
             if (self.resend) {
                 return correspondenceService
-                    .resendCorrespondenceWorkItem(self.readyToExport, self.exportType === 1 ? self.validateExportOption(self.model) : self.partialExportList, g2gData)
+                    .resendCorrespondenceWorkItem(self.readyToExport, self.isGroupExport ? self.validateExportOption(self.model) : self.partialExportList, g2gData)
                     .then(function (result) {
                         dialog.hide(result);
                     })
@@ -175,7 +175,7 @@ module.exports = function (app) {
                     });
             }
 
-            if (self.exportType === 1) {
+            if (self.isGroupExport) {
                 readyToExportService
                     .exportReadyToExport(self.readyToExport, self.validateExportOption(self.model))
                     .then(function (result) {
@@ -253,24 +253,24 @@ module.exports = function (app) {
                     controller: 'linkedDocsAttachmentPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
-                        exportOptions: self.exportType === 1 ? self.model : self.partialExportList,
+                        exportOptions: self.isGroupExport ? self.model : self.partialExportList,
                         model: self.readyToExport
                     },
                     resolve: {
                         linkedDocs: function (correspondenceService) {
                             'ngInject';
                             var info = self.readyToExport.getInfo();
-                            return self.exportType === 1 ? correspondenceService
+                            return self.isGroupExport ? correspondenceService
                                 .getLinkedDocumentsByVsIdClass(info.vsId, info.documentClass) : self.partialExportList.exportItems.RELATED_BOOKS;
                         }
                     }
                 })
                 .then(function (selectedCorrespondences) {
-                    var currentModel = self.exportType === 1 ? self.model : self.partialExportList;
+                    var currentModel = self.isGroupExport ? self.model : self.partialExportList;
                     currentModel.setAttachmentLinkedDocs(selectedCorrespondences);
                 })
                 .catch(function (selectedCorrespondences) {
-                    var currentModel = self.exportType === 1 ? self.model : self.partialExportList;
+                    var currentModel = self.isGroupExport ? self.model : self.partialExportList;
                     currentModel.setAttachmentLinkedDocs(selectedCorrespondences);
                 })
         }

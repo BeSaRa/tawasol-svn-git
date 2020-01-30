@@ -799,7 +799,7 @@ module.exports = function (app) {
              * @returns {*}
              */
             WorkItem.prototype.handleExportPropertiesForSend = function ($event) {
-                delete this.exportType;
+                delete this.isGroupExport;
                 delete this.relatedThings;
                 delete this.model;
                 delete this.partialExportList;
