@@ -2,7 +2,8 @@
     <div layout="column" class="content">
         <div layout="row" layout-align="start center" class="page-header nmb padding-header small">
             <span>{{lang.menu_item_search_viewers_log}}</span>
-            <md-button ng-if="ctrl.selectedDocument" ng-click="ctrl.reloadViewerLog()" class="md-icon-button" tooltip="{{lang.reload}}">
+            <md-button ng-if="ctrl.selectedDocument" ng-click="ctrl.reloadViewerLog()" class="md-icon-button"
+                       tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
@@ -19,7 +20,8 @@
                     <div layout="row">
                         <!-- Search Area -->
                         <md-card flex="30">
-                            <form name="watermarkSearchForm" class="white-bg" flex layout="column" autocomplete="off">
+                            <form name="viewerLogSearchForm" id="viewerLogSearchForm" class="white-bg" flex
+                                  layout="column" autocomplete="off">
                                 <!-- Search Box and button -->
                                 <div layout="row">
                                     <md-input-container flex>
@@ -27,7 +29,7 @@
                                         <input ng-model="ctrl.watermarkSearchText"
                                                id="watermarkSearchText" name="watermarkSearchText"
                                                custom-validate-directive="E">
-                                        <div ng-messages="watermarkSearchForm.watermarkSearchText.$error">
+                                        <div ng-messages="viewerLogSearchForm.watermarkSearchText.$error">
                                             <div ng-message="E">{{lang.english_only}}</div>
                                         </div>
                                     </md-input-container>
@@ -68,6 +70,11 @@
                                                      class="md-secondary"
                                                      aria-label="{{lang.remove}}"
                                                      ng-click="ctrl.removeCorrespondence(record, $event)"></md-icon>
+                                            <md-icon md-svg-icon="{{ctrl.gridService.gridIcons.actions.trackingSheet}}"
+                                                     title="{{lang.view_tracking_sheet}}"
+                                                     class="md-secondary"
+                                                     aria-label="{{lang.view_tracking_sheet}}"
+                                                     ng-click="ctrl.viewTrackingSheet(record, $event)"></md-icon>
                                             <!--<md-icon md-svg-icon="book-open-variant" title="{{lang.view}}"
                                                      class="md-secondary"
                                                      aria-label="{{lang.view}}"
@@ -80,7 +87,7 @@
                         <!-- Viewers Log -->
                         <md-card flex>
                             <md-subheader class="md-no-sticky">
-                                <div class="cms-subheader-text">
+                                <div class="cms-subheader-text" layout="row">
                                     <span ng-if="!ctrl.selectedDocument">{{lang.menu_item_search_viewers_log}}</span>
                                     <!--<span ng-if="ctrl.selectedDocument">{{ctrl.selectedDocument.getTranslatedName()}}</span>-->
                                     <span ng-if="ctrl.grid.truncateSubject && ctrl.selectedDocument"
@@ -89,6 +96,8 @@
                                     <span ng-if="!ctrl.grid.truncateSubject && ctrl.selectedDocument"
                                           class="view-doc subject-internal"
                                           tooltip="{{ctrl.selectedDocument.getTranslatedName()}}">{{ctrl.selectedDocument.getTranslatedName()}}</span>
+                                    <span flex></span>
+                                    <grid-search-directive grid="ctrl.grid" ng-if="ctrl.selectedDocument"></grid-search-directive>
                                 </div>
                                 <!--<md-icon md-svg-icon="file-excel" ng-if="ctrl.selectedDocument"
                                          title="{{lang.export_to_excel}}"

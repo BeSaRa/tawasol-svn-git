@@ -1,27 +1,29 @@
 module.exports = function (app) {
     app.controller('viewersLogCtrl', function (lookupService,
-                                                     langService,
-                                                     ResolveDefer,
-                                                     $q,
-                                                     _,
-                                                     $filter,
-                                                     generator,
-                                                     $state,
-                                                     rootEntity,
-                                                     managerService,
-                                                     contextHelpService,
-                                                     toast,
-                                                     employeeService,
-                                                     dialog,
-                                                     gridService,
-                                                     cmsTemplate,
-                                                     counterService,
-                                                     correspondenceService,
-                                                     documentSecurityService) {
+                                               langService,
+                                               ResolveDefer,
+                                               $q,
+                                               _,
+                                               $filter,
+                                               generator,
+                                               $state,
+                                               rootEntity,
+                                               managerService,
+                                               contextHelpService,
+                                               toast,
+                                               employeeService,
+                                               dialog,
+                                               gridService,
+                                               cmsTemplate,
+                                               counterService,
+                                               correspondenceService,
+                                               documentSecurityService,
+                                               viewTrackingSheetService) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewersLogCtrl';
         contextHelpService.setHelpTo('viewers_log');
+        self.gridService = gridService;
 
         self.watermarkSearchText = '';
         self.allSearchableRecords = [];
@@ -35,7 +37,7 @@ module.exports = function (app) {
             limit: 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions:gridService.getGridLimitOptions(gridService.grids.administration.viewersLog, self.viewerLogs),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.viewersLog, self.viewerLogs),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.viewersLog, limit);
             },
@@ -140,7 +142,7 @@ module.exports = function (app) {
             self.reloadViewerLog();
         };
 
-        self.reloadViewerLog = function(pageNumber, $event){
+        self.reloadViewerLog = function (pageNumber, $event) {
             if (!self.selectedDocument)
                 return;
 
@@ -173,6 +175,21 @@ module.exports = function (app) {
         self.exportViewerLogToPDF = function ($event) {
             var heading = langService.get('menu_item_search_viewers_log') + ' - ' + self.selectedDocument.getTranslatedName();
             documentSecurityService.exportViewerLogToPDF(heading, self.viewerLogs);
+        };
+
+
+        /**
+         * @description View Tracking Sheet
+         * @param record
+         * @param $event
+         */
+        self.viewTrackingSheet = function (record, $event) {
+            viewTrackingSheetService
+                .controllerMethod
+                .viewTrackingSheetPopup(record, ['view_tracking_sheet', 'tabs', gridService.grids.administration.viewersLog], $event)
+                .then(function (result) {
+
+                });
         };
     });
 };

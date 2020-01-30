@@ -2300,12 +2300,13 @@ md-dialog {
 
 .md-subheader {
   .cms-subheader-text {
-    display: inline-block !important;
+    //display: inline-block !important;
     //width: 91% !important;
   }
 
   .subject-internal {
-    max-width: 930px !important;
+    //max-width: 930px !important;
+    max-width: 488px !important;
   }
 }
 
@@ -2471,5 +2472,11 @@ table.md-table td.md-cell {
     margin-top: 0;
     margin-bottom: 0;
     display: inline-block;
+  }
+}
+
+#viewerLogSearchForm {
+  .md-list-item-inner {
+    width: 70% !important;
   }
 }
