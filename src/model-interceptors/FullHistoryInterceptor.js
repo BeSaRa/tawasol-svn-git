@@ -22,6 +22,8 @@ module.exports = function (app) {
             model.actionByInfo = new Information(model.actionByInfo);
             model.actionTypeInfo = new Information(model.actionTypeInfo);
             model.actionByOUInfo = new Information(model.actionByOUInfo);
+            model.actionToInfo = new Information(model.actionToInfo);
+
             return model;
         });
 

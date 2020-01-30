@@ -170,6 +170,8 @@
                                             md-order-by="{{ctrl.getSortingKey('actionByOUInfo', 'Information')}}">
                                             <span>{{lang.view_tracking_sheet_action_by_department}}</span>
                                         </th>
+                                        <th md-column md-order-by="{{ctrl.getSortingKey('actionToInfo', 'Information')}}">
+                                            <span>{{lang.view_tracking_sheet_action_to}}</span></th>
                                         <th md-column
                                             md-order-by="{{ctrl.getSortingKey('actionTypeInfo', 'Information')}}">
                                             <span>{{lang.view_tracking_sheet_action_type}}</span>
@@ -187,6 +189,7 @@
                                         <td md-cell>{{fullHistoryRecord.actionDate}}</td>
                                         <td md-cell>{{fullHistoryRecord.actionByOUInfo.getTranslatedName()}}
                                         </td>
+                                        <td md-cell>{{fullHistoryRecord.actionToInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{fullHistoryRecord.actionTypeInfo.getTranslatedName()}}
                                         </td>
                                         <td md-cell class="cms-comment">{{fullHistoryRecord.comments}}</td>

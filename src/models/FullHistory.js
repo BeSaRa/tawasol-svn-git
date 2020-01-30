@@ -16,6 +16,7 @@ module.exports = function (app) {
             self.actionByInfo = null;
             self.actionByOUInfo = null;
             self.actionTypeInfo = null;
+            self.actionToInfo = null;
 
             if (model)
                 angular.extend(this, model);
