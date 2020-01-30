@@ -56,6 +56,7 @@ module.exports = function (app) {
             self.removeMAIPSecurity = true;
             self.separateActionOnTransfer = false;
             self.defaultDisplayLang = 1;
+            self.excludedConversionFileTypes = [];
             //endregion
 
             // every model has required fields
@@ -90,7 +91,7 @@ module.exports = function (app) {
                 'enableEmailNotification',
                 'enableEscalation',
                 'useCentralArchiveInternally',
-               // 'escalationProcess',
+                // 'escalationProcess',
                 'simpleCorsSiteSearch',
                 'theme'
             ];

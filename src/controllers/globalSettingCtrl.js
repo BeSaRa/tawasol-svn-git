@@ -42,6 +42,11 @@ module.exports = function (app) {
         self.saveBanner = true;
         self.saveLogo = true;
         self.fileTypes = fileTypes;
+
+        var filterExcludedFileTypes = ["xlsx", "docx", "doc"];
+        self.excludedFileTypes = _.filter(self.fileTypes, function (fileType) {
+            return filterExcludedFileTypes.indexOf(fileType.getExtension()) !== -1;
+        });
         self.fileSizes = lookupService.returnLookups(lookupService.fileSize);
         self.escalationProcesses = lookupService.returnLookups(lookupService.escalationProcess);
         self.documentSecuritySchemas = lookupService.returnLookups(lookupService.securitySchema);

@@ -510,6 +510,20 @@
                                     </md-select>
                                 </md-input-container>
                             </div>
+                            <div layout="row" class="p20">
+                                <!-- Excluded Conversion File Types -->
+                                <md-input-container flex>
+                                    <label for="excludedConversionFileTypes">{{lang.excluded_conversion_file_types}}</label>
+                                    <md-select multiple name="excludedConversionFileTypes" id="excludedConversionFileTypes"
+                                               ng-model-options="{trackBy: '$value'}"
+                                               ng-model="ctrl.globalSetting.excludedConversionFileTypes">
+                                        <md-option ng-repeat="fileType in ctrl.excludedFileTypes" ng-value="fileType.id">
+                                            {{fileType.getExtension()}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <div flex></div>
+                            </div>
                         </div>
                         <br/>
                         <br/>

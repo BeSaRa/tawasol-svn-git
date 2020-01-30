@@ -20,7 +20,7 @@ module.exports = function (app) {
             model.excludedUsersFromAudit = JSON.stringify(_.map(model.excludedUsersFromAudit, 'id'));
             model.fileType = angular.toJson(model.fileType);
             model.barcodeElements = model.barcodeElements.mapSend();
-
+            model.excludedConversionFileTypes = JSON.stringify(model.excludedConversionFileTypes);
             delete model.bannerLogo;
             delete model.loginLogo;
             return model;
@@ -28,6 +28,7 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.fileType = angular.fromJson(model.fileType);
+            model.excludedConversionFileTypes = JSON.parse(model.excludedConversionFileTypes);
             model.theme = model.theme && model.theme.hasOwnProperty('id') ? model.theme.id : model.theme;
             var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
             model.securityLevels = generator.getSelectedCollectionFromResult(securityLevels, model.securityLevels, 'lookupKey');
