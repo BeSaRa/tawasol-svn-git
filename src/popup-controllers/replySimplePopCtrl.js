@@ -17,7 +17,8 @@ module.exports = function (app) {
                                                    distributionWFService,
                                                    Lookup,
                                                    lookupService,
-                                                   userCommentService) {
+                                                   userCommentService,
+                                                   DistributionOUWFItem) {
         'ngInject';
         var self = this;
         self.controllerName = 'replySimplePopCtrl';
@@ -42,6 +43,11 @@ module.exports = function (app) {
         self.comment = _getMatchedComment(self.distWorkflowItem);
         // selected managers
         self.selectedManagers = [];
+        // selected receivedRegOu(sender department)
+        self.selectedReceivedRegOu = [];
+
+        self.globalSettings = rootEntity.getGlobalSettings();
+
         var approvedStatus = self.record.getInfo().needToApprove();
         if (_getApprovedStatus()) {
             // -1 is value of none option in manager ddl
@@ -62,6 +68,11 @@ module.exports = function (app) {
                 id: 2,
                 key: _getApprovedStatus() ? 'manager' : 'managers',
                 show: self.canSendToManagers
+            },
+            {
+                id: 3,
+                key: 'sender_department',
+                show: true
             }
         ];
         self.selectedReplyTo = 1;
@@ -81,7 +92,6 @@ module.exports = function (app) {
         });
         self.escalationProcessCopy.unshift(noneLookup);
 
-
         var _setEscalationProcess = function () {
             var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess || noneLookup;
 
@@ -93,9 +103,6 @@ module.exports = function (app) {
         };
         _setEscalationProcess();
 
-
-        self.globalSettings = rootEntity.getGlobalSettings();
-
         if (self.globalSettings.allowSendWFRelatedBook) {
             self.distWorkflowItem.sendRelatedDocs = true;
         }
@@ -105,6 +112,18 @@ module.exports = function (app) {
                 self.selectedManagers = -1;
             } else {
                 self.selectedManagers = [];
+            }
+
+            if (self.selectedReplyTo === 1) {
+                self.replyToText = replyOn['ou' + self.currentLangUCFirst + 'Name'] + ' - ' + replyOn.getTranslatedName();
+            } else if (self.selectedReplyTo === 3) {
+                self.distWorkflowItem.isSecureAction = false;
+                self.replyToText = replyOn['ou' + self.currentLangUCFirst + 'Name'];
+
+                self.distWorkflowItem.sendSMS = angular.copy(self.registeryOu.sendSMS);
+                self.distWorkflowItem.sendEmail = angular.copy(self.registeryOu.sendEmail);
+            } else {
+                self.replyToText = '';
             }
         };
 
@@ -128,7 +147,7 @@ module.exports = function (app) {
 
         self.isLaunchEnabled = function (form) {
             var isValid = false;
-            if (self.selectedReplyTo === 1) {
+            if (self.selectedReplyTo === 1 || self.selectedReplyTo === 3) {
                 isValid = true;
             } else if (self.selectedReplyTo === 2) {
                 if (_getApprovedStatus()) {
@@ -145,30 +164,51 @@ module.exports = function (app) {
          */
         self.launch = function ($event) {
             var sendRelatedDocs = self.distWorkflowItem.sendRelatedDocs,
-                user = (new DistributionUserWFItem()).mapFromWFUser(self.distWorkflowItem),
-                managers = angular.copy(self.selectedManagers),
-                allUsers = [],
-                distributionWF = new DistributionWF();
-            user.sendRelatedDocs = sendRelatedDocs;
+                selectedManagers = angular.copy(self.selectedManagers),
+                allUsers = [], regOus = [],
+                distributionWF = new DistributionWF(),
+                user, ou;
+
+            if (self.selectedReplyTo !== 3) {
+                user = (new DistributionUserWFItem()).mapFromWFUser(self.distWorkflowItem);
+                user.sendRelatedDocs = sendRelatedDocs;
+            } else {
+                ou = (new DistributionOUWFItem())
+                    .setArName(replyOn.registeryOu.ouArName)
+                    .setEnName(replyOn.registeryOu.ouEnName)
+                    .setToOUId(replyOn.registeryOu.id)
+                    .setRelationId(replyOn.registeryOu.relationId)
+                    .setSendSMS(self.distWorkflowItem.sendSMS)
+                    .setSendEmail(self.distWorkflowItem.sendEmail)
+                    .setHasRegistry(self.registeryOu.hasRegistry);
+
+                ou.sendRelatedDocs = sendRelatedDocs;
+            }
+
             if (self.getApprovedStatus()) {
-                if (managers === -1) {
-                    managers = [];
+                if (selectedManagers === -1) {
+                    selectedManagers = [];
                 } else {
-                    managers = [managers];
+                    selectedManagers = [selectedManagers];
                 }
             }
-            managers = _.map(managers, function (manager) {
+            selectedManagers = _.map(selectedManagers, function (manager) {
                 return (new DistributionUserWFItem()).mapFromWFUser(manager);
             });
 
-            if (managers && managers.length) {
-                _setDistWorkflowItem(managers, self.distWorkflowItem);
-                allUsers = allUsers.concat(managers);
-            } else {
+            if (self.selectedReplyTo === 2 && selectedManagers && selectedManagers.length) {
+                _setDistWorkflowItem(selectedManagers, self.distWorkflowItem);
+                allUsers = allUsers.concat(selectedManagers);
+                distributionWF.setNormalUsers(allUsers);
+            } else if (self.selectedReplyTo === 1) {
                 _setDistWorkflowItem(user, self.distWorkflowItem);
                 allUsers = allUsers.concat([user]);
+                distributionWF.setNormalUsers(allUsers);
+            } else {
+                _setDistWorkflowItem(ou, self.distWorkflowItem);
+                regOus = regOus.concat([ou]);
+                distributionWF.setReceivedRegOUs(regOus);
             }
-            distributionWF.setNormalUsers(allUsers);
             distributionWFService.startLaunchWorkflow(distributionWF, record)
                 .then(function () {
                     toast.success(langService.get('launch_success_distribution_workflow'));

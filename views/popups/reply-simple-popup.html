@@ -67,6 +67,16 @@
                             <div ng-message="required">{{lang.field_required}}</div>
                         </div>
                     </md-input-container>
+                    <!-- Sender Department -->
+                    <md-input-container flex ng-if="ctrl.selectedReplyTo === 3">
+                        <label for="senderDepartment">{{lang.sender_department}}</label>
+                        <input id="senderDepartment" name="toReceivedRegOu"
+                               ng-model="ctrl.replyToText" required
+                               ng-readonly="true" ng-disabled="true">
+                        <div ng-messages="distWorkflowItem_form.senderDepartment.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
                 </div>
                 <div layout="row">
                     <!-- Action -->
@@ -131,6 +141,7 @@
                     <div flex>
                         <!-- Secure comment -->
                         <md-checkbox
+                                ng-disabled="ctrl.selectedReplyTo === 3"
                                 ng-model="ctrl.distWorkflowItem.isSecureAction"
                                 aria-label="{{lang.secure_comment}}">
                             {{lang.secure_comment}}
