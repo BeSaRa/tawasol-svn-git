@@ -304,7 +304,6 @@ module.exports = function (app) {
         self.saveAndSend = function ($event) {
             return self.saveCorrespondenceChanges($event, false)
                 .then(function (result) {
-                    debugger;
                     dialog.hide(true);
                     self.workItem.launchWorkFlow($event, 'forward', 'favorites');
                 })
