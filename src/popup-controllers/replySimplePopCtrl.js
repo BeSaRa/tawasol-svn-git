@@ -18,7 +18,8 @@ module.exports = function (app) {
                                                    Lookup,
                                                    lookupService,
                                                    userCommentService,
-                                                   DistributionOUWFItem) {
+                                                   DistributionOUWFItem,
+                                                   defaultReplyToIdentifier) {
         'ngInject';
         var self = this;
         self.controllerName = 'replySimplePopCtrl';
@@ -62,20 +63,38 @@ module.exports = function (app) {
             {
                 id: 1,
                 key: 'sender',
-                show: true
+                show: true,
+                identifier: 'sender'
             },
             {
                 id: 2,
                 key: _getApprovedStatus() ? 'manager' : 'managers',
-                show: self.canSendToManagers
+                show: self.canSendToManagers,
+                identifier: 'manager'
             },
             {
                 id: 3,
                 key: 'sender_department',
-                show: true
+                show: true,
+                identifier: 'senderDepartment'
             }
         ];
-        self.selectedReplyTo = 1;
+
+        var _setDefaultReplyTo = function () {
+            if (defaultReplyToIdentifier) {
+                var selectedReplyTo = _.find(self.replyToOptions, function (replyToOption) {
+                    return replyToOption.identifier === defaultReplyToIdentifier;
+                });
+                if (selectedReplyTo) {
+                    self.selectedReplyTo = selectedReplyTo.id;
+                    self.onChangeReplyTo();
+                } else {
+                    self.selectedReplyTo = 1;
+                }
+            } else {
+                self.selectedReplyTo = 1;
+            }
+        };
 
         self.actionSearchText = '';
         self.commentSearchText = '';
@@ -120,12 +139,13 @@ module.exports = function (app) {
                 self.distWorkflowItem.isSecureAction = false;
                 self.replyToText = replyOn['ou' + self.currentLangUCFirst + 'Name'];
 
-                self.distWorkflowItem.sendSMS = angular.copy(self.registeryOu.sendSMS);
-                self.distWorkflowItem.sendEmail = angular.copy(self.registeryOu.sendEmail);
+                self.distWorkflowItem.sendSMS = angular.copy(replyOn.registeryOu.sendSMS);
+                self.distWorkflowItem.sendEmail = angular.copy(replyOn.registeryOu.sendEmail);
             } else {
                 self.replyToText = '';
             }
         };
+        _setDefaultReplyTo();
 
         /**
          * @description find matched comment if not edited.

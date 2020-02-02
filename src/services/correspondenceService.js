@@ -2082,7 +2082,7 @@ module.exports = function (app) {
          * @param $event
          * @returns {promise|*}
          */
-        self.replySimple = function (record, $event, action) {
+        self.replySimple = function (record, $event, action, defaultReplyToIdentifier) {
             action = action || 'reply';
             var errorMessage = [];
             return dialog
@@ -2095,7 +2095,8 @@ module.exports = function (app) {
                         record: record,
                         actionKey: action,
                         errorMessage: errorMessage,
-                        dialogTitle: langService.get('reply')
+                        dialogTitle: langService.get('reply'),
+                        defaultReplyToIdentifier: defaultReplyToIdentifier
                     },
                     resolve: {
                         comments: function (userCommentService) {

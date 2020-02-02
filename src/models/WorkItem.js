@@ -331,10 +331,11 @@ module.exports = function (app) {
              * @description to start simple launch workflow item.
              * @param $event
              * @param action
+             * @param defaultReplyToIdentifier
              * @returns {promise|*}
              */
-            WorkItem.prototype.replySimple = function ($event, action) {
-                return correspondenceService.replySimple(this, $event, action);
+            WorkItem.prototype.replySimple = function ($event, action, defaultReplyToIdentifier) {
+                return correspondenceService.replySimple(this, $event, action, defaultReplyToIdentifier);
             };
             /**
              * @description send the document after approve , this is custom method , don't use it anywhere, just made to use after approve form inbox.

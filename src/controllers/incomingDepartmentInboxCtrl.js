@@ -661,6 +661,22 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Reply workItem
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.reply = function (workItem, $event, defer) {
+            workItem.replySimple($event, 'reply', 'senderDepartment')
+                .then(function () {
+                    self.reloadIncomingDepartmentInboxes(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
             var hasPermission = false;
@@ -803,6 +819,18 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function (action, model) {
                     return checkIfEditPropertiesAllowed(model) && model.isTransferredDocument();
+                }
+            },
+            // Quick Reply
+            {
+                type: 'action',
+                icon: 'reply',
+                text: 'grid_action_reply',
+                callback: self.reply,
+                sticky: false,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return model.isTransferredDocument();
                 }
             },
             // Manage
