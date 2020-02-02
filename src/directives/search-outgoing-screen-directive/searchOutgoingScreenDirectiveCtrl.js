@@ -34,6 +34,7 @@ module.exports = function (app) {
                                                                   mailNotificationService,
                                                                   userSubscriptionService,
                                                                   rootEntity,
+                                                                  reviewOutgoingService,
                                                                   printService) {
         'ngInject';
         var self = this;
@@ -1223,6 +1224,24 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Remove single correspondence
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.removeCorrespondence = function (correspondence, $event, defer) {
+            correspondenceService
+                .deleteCorrespondence(correspondence, $event)
+                .then(function () {
+                    self.reloadSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
             var hasPermission = false;
@@ -1485,6 +1504,19 @@ module.exports = function (app) {
                 callback: self.broadcast,
                 checkShow: function (action, model) {
                     return !model.needApprove() && (model.getSecurityLevelLookup().lookupKey !== 4);
+                }
+            },
+            // Remove
+            {
+                type: 'action',
+                icon: 'delete',
+                text: 'grid_action_remove',
+                shortcut: true,
+                permissionKey: "DELETE_OUTGOING",
+                callback: self.removeCorrespondence,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return model.registryOU === self.employee.getRegistryOUID()
                 }
             },
             // Print Barcode

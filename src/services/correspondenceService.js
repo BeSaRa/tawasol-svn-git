@@ -4431,6 +4431,36 @@ module.exports = function (app) {
             })
         };
 
+        /**
+         *
+         * @param correspondence
+         * @param $event
+         * @returns {*}
+         */
+        self.deleteCorrespondence = function (correspondence, $event) {
+            var vsId = correspondence.hasOwnProperty('vsId') ? correspondence.vsId : correspondence;
+            var info = correspondence.getInfo();
+            var urlServiceList = {
+                outgoing: urlService.outgoings,
+                incoming: urlService.incomings,
+                internal: urlService.internals
+            };
+            return dialog.confirmMessage(langService.get('confirm_remove').change({name: correspondence.getNames()}), null, null, $event)
+                .then(function () {
+                    return $http
+                        .put(urlServiceList[info.documentClass] + '/' + vsId + '/remove')
+                        .then(function (result) {
+                            toast.success(langService.get("remove_specific_success").change({name: correspondence.getNames()}));
+                            return true;
+                        });
+                });
+
+
+            var info = correspondence.getInfo();
+            var vsId = correspondence.hasOwnProperty('vsId') ? correspondence.vsId : correspondence;
+
+        };
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);

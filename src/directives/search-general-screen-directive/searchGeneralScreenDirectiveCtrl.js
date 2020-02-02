@@ -1165,7 +1165,7 @@ module.exports = function (app) {
                     return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function () {
-                     return self.reloadSearchCorrespondence(self.grid.page);
+                    return self.reloadSearchCorrespondence(self.grid.page);
                 });
         };
 
@@ -1181,7 +1181,7 @@ module.exports = function (app) {
             }
             correspondence.viewFromQueue(self.gridActions, 'searchGeneral', $event)
                 .then(function () {
-                     return self.reloadSearchCorrespondence(self.grid.page);
+                    return self.reloadSearchCorrespondence(self.grid.page);
                 })
                 .catch(function (error) {
                     return self.reloadSearchCorrespondence(self.grid.page);
@@ -1251,6 +1251,24 @@ module.exports = function (app) {
                             new ResolveDefer(defer);
                         })
                 })
+        };
+
+        /**
+         * @description Remove single correspondence
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.removeCorrespondence = function (correspondence, $event, defer) {
+            correspondenceService
+                .deleteCorrespondence(correspondence, $event)
+                .then(function () {
+                    self.reloadSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                });
         };
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
@@ -1523,6 +1541,21 @@ module.exports = function (app) {
                 callback: self.broadcast,
                 checkShow: function (action, model) {
                     return (!model.needApprove() || model.hasDocumentClass('incoming')) && (model.getSecurityLevelLookup().lookupKey !== 4);
+                }
+            },
+            // Remove
+            {
+                type: 'action',
+                icon: 'delete',
+                text: 'grid_action_remove',
+                shortcut: true,
+                callback: self.removeCorrespondence,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return model.registryOU === self.employee.getRegistryOUID() &&
+                        ((model.hasDocumentClass('outgoing') && employeeService.hasPermissionTo('DELETE_OUTGOING')) ||
+                            (model.hasDocumentClass('incoming') && employeeService.hasPermissionTo('DELETE_INCOMING')) ||
+                            (model.hasDocumentClass('internal') && employeeService.hasPermissionTo('DELETE_INTERNAL')))
                 }
             },
             // Print Barcode

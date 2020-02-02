@@ -1251,6 +1251,24 @@ module.exports = function (app) {
                 })
         };
 
+        /**
+         * @description Remove single correspondence
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.removeCorrespondence = function (correspondence, $event, defer) {
+            correspondenceService
+                .deleteCorrespondence(correspondence, $event)
+                .then(function () {
+                    self.reloadSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
         self.viewInDeskTop = function (workItem) {
             return correspondenceService.viewWordInDesktop(workItem);
         };
@@ -1505,6 +1523,20 @@ module.exports = function (app) {
                 callback: self.broadcast,
                 checkShow: function (action, model) {
                     return (!model.needApprove() || model.hasDocumentClass('incoming')) && (model.getSecurityLevelLookup().lookupKey !== 4);
+                }
+            },
+            // Remove
+            {
+                type: 'action',
+                icon: 'delete',
+                text: 'grid_action_remove',
+                shortcut: true,
+                callback: self.removeCorrespondence,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return model.registryOU === self.employee.getRegistryOUID() &&
+                        ((model.hasDocumentClass('outgoing') && employeeService.hasPermissionTo('DELETE_OUTGOING')) ||
+                            (model.hasDocumentClass('incoming') && employeeService.hasPermissionTo('DELETE_INCOMING')))
                 }
             },
             // Print Barcode
