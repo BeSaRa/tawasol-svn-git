@@ -26,6 +26,7 @@ module.exports = function (app) {
             self.updateActionStatus = null;
             self.isDeletable = null;
             self.sourceType = 1;
+            self.exportStatus = false;
             self.refVSID = null;//This is for the linked Exported Documents
             // will removed when send to backend.
             self.file = null;
@@ -58,6 +59,10 @@ module.exports = function (app) {
              */
             Attachment.prototype.getTranslatedName = function () {
                 return this.docSubject;
+            };
+
+            Attachment.prototype.getTranslatedYesNo = function (fieldName) {
+                return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
             var indicator = new Indicator();

@@ -6,145 +6,191 @@
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <!-- Add attachment-->
-            <div layout="row" ng-if="!ctrl.attachment">
-                <!-- Security Level -->
-                <md-input-container ng-if="!ctrl.inheritSecurity" flex>
-                    <label for="securityLevel">{{lang.attachment_attachment_security_level}}</label>
-                    <md-select ng-required="true"
-                               id="securityLevel"
-                               ng-model-options="{trackBy:'$value.lookupKey'}"
-                               ng-change="ctrl.changeValueOf('securityLevel',ctrl.securityLevel)"
-                               ng-model="ctrl.securityLevel">
-                        <md-option ng-value="level" ng-repeat="level in ctrl.securityLevels">
-                            {{level.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
-                <!-- Update Action Status -->
-                <md-input-container flex>
-                    <label for="updateActionStatus">{{lang.attachment_update_action_status}}</label>
-                    <md-select id="updateActionStatus"
-                               name="updateActionStatus"
-                               ng-required="true"
-                               ng-model-options="{trackBy:'$value.lookupKey'}"
-                               ng-change="ctrl.changeValueOf('updateActionStatus',ctrl.updateActionStatus)"
-                               ng-model="ctrl.updateActionStatus">
-                        <md-option ng-value="updateAction"
-                                   ng-repeat="updateAction in ctrl.attachmentUpdateActions">
-                            {{updateAction.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="attachment_form.updateActionStatus.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
+            <div layout="column" ng-if="!ctrl.attachment">
+                <div layout="row">
+                    <!-- Update Action Status -->
+                    <md-input-container flex>
+                        <label for="updateActionStatus">{{lang.attachment_update_action_status}}</label>
+                        <md-select id="updateActionStatus"
+                                   name="updateActionStatus"
+                                   ng-required="true"
+                                   ng-model-options="{trackBy:'$value.lookupKey'}"
+                                   ng-change="ctrl.changeValueOf('updateActionStatus',ctrl.updateActionStatus)"
+                                   ng-model="ctrl.updateActionStatus">
+                            <md-option ng-value="updateAction"
+                                       ng-repeat="updateAction in ctrl.attachmentUpdateActions">
+                                {{updateAction.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="attachment_form.updateActionStatus.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                    <!-- Attachment Type -->
+                    <md-input-container flex>
+                        <label for="attachmentType">{{lang.attachment_attachment_type}}</label>
+                        <md-select ng-change="ctrl.changeValueOf('attachmentType',ctrl.attachmentType)"
+                                   id="attachmentType"
+                                   ng-required="true"
+                                   ng-model-options="{trackBy:'$value.lookupKey'}"
+                                   ng-model="ctrl.attachmentType">
+                            <md-option ng-repeat="type in ctrl.attachmentTypes"
+                                       ng-value="type"
+                                       ng-if="type.status">
+                                {{type.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+
+                <div layout="row">
+                    <!-- Priority Level -->
+                    <md-input-container flex>
+                        <label for="priorityLevel">{{lang.priority_level}}</label>
+                        <md-select ng-model-options="{trackBy: '$value.lookupKey'}"
+                                   id="priorityLevel"
+                                   name="priorityLevel"
+                                   ng-change="ctrl.changeValueOf('priorityLevel',ctrl.priorityLevel)"
+                                   ng-model="ctrl.priorityLevel">
+                            <md-option ng-value="priority" ng-repeat="priority in ctrl.priorityLevels">
+                                {{priority.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <!-- Export Status -->
+                    <div flex class="cms-input-container">
+                        <md-switch flex ng-model="ctrl.exportStatus"
+                                   aria-label="{{lang.export_status}}">
+                            <label>{{lang.export_status}} : {{ctrl.exportStatus ? lang.yes : lang.no}}</label>
+                        </md-switch>
                     </div>
-                </md-input-container>
-                <!-- Attachment Type -->
-                <md-input-container flex>
-                    <label for="attachmentType">{{lang.attachment_attachment_type}}</label>
-                    <md-select ng-change="ctrl.changeValueOf('attachmentType',ctrl.attachmentType)"
-                               id="attachmentType"
-                               ng-required="true"
-                               ng-model-options="{trackBy:'$value.lookupKey'}"
-                               ng-model="ctrl.attachmentType">
-                        <md-option ng-repeat="type in ctrl.attachmentTypes"
-                                   ng-value="type"
-                                   ng-if="type.status">
-                            {{type.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
-                <!-- Priority Level -->
-                <md-input-container>
-                    <label for="priorityLevel">{{lang.priority_level}}</label>
-                    <md-select ng-model-options="{trackBy: '$value.lookupKey'}"
-                               id="priorityLevel"
-                               name="priorityLevel"
-                               ng-change="ctrl.changeValueOf('priorityLevel',ctrl.priorityLevel)"
-                               ng-model="ctrl.priorityLevel">
-                        <md-option ng-value="priority" ng-repeat="priority in ctrl.priorityLevels">
-                            {{priority.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
-                <!-- Buttons -->
-                <div>
-                    <!-- Add -->
-                    <md-button class="md-raised md-primary"
-                               ng-disabled="!ctrl.checkValidAttachmentFields()"
-                               ng-click="ctrl.startUploadAttachments()">
-                        {{lang.attachment_add}}
-                    </md-button>
+                </div>
+
+                <div layout="row">
+                    <!-- Security Level -->
+                    <md-input-container ng-if="!ctrl.inheritSecurity" flex>
+                        <label for="securityLevel">{{lang.attachment_attachment_security_level}}</label>
+                        <md-select ng-required="true"
+                                   id="securityLevel"
+                                   ng-model-options="{trackBy:'$value.lookupKey'}"
+                                   ng-change="ctrl.changeValueOf('securityLevel',ctrl.securityLevel)"
+                                   ng-model="ctrl.securityLevel">
+                            <md-option ng-value="level" ng-repeat="level in ctrl.securityLevels">
+                                {{level.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <!-- Buttons -->
+                    <div flex class="cms-input-container">
+                        <!-- Add -->
+                        <md-button class="md-raised md-primary"
+                                   ng-disabled="!ctrl.checkValidAttachmentFields()"
+                                   ng-click="ctrl.startUploadAttachments()">
+                            {{lang.attachment_add}}
+                        </md-button>
+                    </div>
                 </div>
             </div>
+
             <!-- Edit attachment-->
-            <div layout="row" ng-if="ctrl.attachment">
-                <!-- Title -->
-                <md-input-container flex>
-                    <label for="documentTitle">{{lang.attachment_document_title}}</label>
-                    <input ng-model="ctrl.attachment.documentTitle" name="documentTitle" id="documentTitle">
-                </md-input-container>
-                <!-- Security Level -->
-                <md-input-container ng-if="!ctrl.inheritSecurity" flex>
-                    <label for="securityLevel">{{lang.attachment_attachment_security_level}}</label>
-                    <md-select ng-required="true"
-                               id="securityLevel"
-                               ng-model-options="{trackBy:'$value.lookupKey'}"
-                               ng-change="ctrl.changeValueOf('securityLevel',ctrl.securityLevel)"
-                               ng-model="ctrl.attachment.securityLevel">
-                        <md-option ng-value="level" ng-repeat="level in ctrl.securityLevels">
-                            {{level.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
-                <!-- Update Action Status -->
-                <md-input-container flex>
-                    <label for="updateActionStatus">{{lang.attachment_update_action_status}}</label>
-                    <md-select id="updateActionStatus"
-                               name="updateActionStatus"
-                               ng-required="true"
-                               ng-model-options="{trackBy:'$value.lookupKey'}"
-                               ng-change="ctrl.changeValueOf('updateActionStatus',ctrl.updateActionStatus)"
-                               ng-model="ctrl.attachment.updateActionStatus">
-                        <md-option ng-value="updateAction"
-                                   ng-repeat="updateAction in ctrl.attachmentUpdateActions">
-                            {{updateAction.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="attachment_form.updateActionStatus.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
+            <div layout="column" ng-if="ctrl.attachment">
+                <div layout="row">
+                    <!-- Title -->
+                    <md-input-container flex>
+                        <label for="documentTitle">{{lang.attachment_document_title}}</label>
+                        <input ng-model="ctrl.attachment.documentTitle" name="documentTitle" id="documentTitle">
+                    </md-input-container>
+                    <!-- Update Action Status -->
+                    <md-input-container flex>
+                        <label for="updateActionStatus">{{lang.attachment_update_action_status}}</label>
+                        <md-select id="updateActionStatus"
+                                   name="updateActionStatus"
+                                   ng-required="true"
+                                   ng-model-options="{trackBy:'$value.lookupKey'}"
+                                   ng-change="ctrl.changeValueOf('updateActionStatus',ctrl.updateActionStatus)"
+                                   ng-model="ctrl.attachment.updateActionStatus">
+                            <md-option ng-value="updateAction"
+                                       ng-repeat="updateAction in ctrl.attachmentUpdateActions">
+                                {{updateAction.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="attachment_form.updateActionStatus.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout="row">
+                    <!-- Attachment Type -->
+                    <md-input-container flex>
+                        <label for="attachmentType">{{lang.attachment_attachment_type}}</label>
+                        <md-select ng-change="ctrl.changeValueOf('attachmentType',ctrl.attachmentType)"
+                                   id="attachmentType"
+                                   ng-required="true"
+                                   ng-model-options="{trackBy:'$value.lookupKey'}"
+                                   ng-model="ctrl.attachment.attachmentType">
+                            <md-option ng-repeat="type in ctrl.attachmentTypes"
+                                       ng-value="type"
+                                       ng-if="ctrl.checkAttachmentTypeIsAvailable(type)"
+                                       ng-disabled="!type.status">
+                                {{type.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <!-- Priority Level -->
+                    <md-input-container flex>
+                        <label for="priorityLevel">{{lang.priority_level}}</label>
+                        <md-select ng-model-options="{trackBy: '$value.lookupKey'}"
+                                   id="priorityLevel"
+                                   name="priorityLevel"
+                                   ng-change="ctrl.changeValueOf('priorityLevel',ctrl.priorityLevel)"
+                                   ng-model="ctrl.attachment.priorityLevel">
+                            <md-option ng-value="priority" ng-repeat="priority in ctrl.priorityLevels">
+                                {{priority.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+
+                <div layout="row">
+                    <!-- Security Level -->
+                    <md-input-container ng-if="ctrl.inheritSecurity" flex>
+                        <label for="securityLevel">{{lang.attachment_attachment_security_level}}</label>
+                        <md-select ng-required="true"
+                                   id="securityLevel"
+                                   ng-model-options="{trackBy:'$value.lookupKey'}"
+                                   ng-change="ctrl.changeValueOf('securityLevel',ctrl.securityLevel)"
+                                   ng-model="ctrl.attachment.securityLevel">
+                            <md-option ng-value="level" ng-repeat="level in ctrl.securityLevels">
+                                {{level.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <!-- Export Status -->
+                    <div flex class="cms-input-container">
+                        <md-switch flex ng-model="ctrl.attachment.exportStatus"
+                                   aria-label="{{lang.export_status}}">
+                            <label>{{lang.export_status}} :
+                                {{ctrl.attachment.getTranslatedYesNo('exportStatus')}}</label>
+                        </md-switch>
                     </div>
-                </md-input-container>
-                <!-- Attachment Type -->
-                <md-input-container flex>
-                    <label for="attachmentType">{{lang.attachment_attachment_type}}</label>
-                    <md-select ng-change="ctrl.changeValueOf('attachmentType',ctrl.attachmentType)"
-                               id="attachmentType"
-                               ng-required="true"
-                               ng-model-options="{trackBy:'$value.lookupKey'}"
-                               ng-model="ctrl.attachment.attachmentType">
-                        <md-option ng-repeat="type in ctrl.attachmentTypes"
-                                   ng-value="type"
-                                   ng-if="ctrl.checkAttachmentTypeIsAvailable(type)"
-                                   ng-disabled="!type.status">
-                            {{type.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
-                <!-- Priority Level -->
-                <md-input-container>
-                    <label for="priorityLevel">{{lang.priority_level}}</label>
-                    <md-select ng-model-options="{trackBy: '$value.lookupKey'}"
-                               id="priorityLevel"
-                               name="priorityLevel"
-                               ng-change="ctrl.changeValueOf('priorityLevel',ctrl.priorityLevel)"
-                               ng-model="ctrl.attachment.priorityLevel">
-                        <md-option ng-value="priority" ng-repeat="priority in ctrl.priorityLevels">
-                            {{priority.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
-                <!-- Buttons -->
-                <div>
+
+                    <div class="cms-input-container" flex ng-if="!ctrl.inheritSecurity">
+                        <!-- Save -->
+                        <md-button class="md-raised md-primary"
+                                   ng-click="ctrl.updateAttachment()"
+                                   ng-disabled="!ctrl.attachmentTypes.length">
+                            {{lang.save}}
+                        </md-button>
+                        <!-- Cancel -->
+                        <md-button class="md-raised red-text"
+                                   ng-click="ctrl.cancelUpdate()">
+                            {{lang.cancel}}
+                        </md-button>
+                    </div>
+                </div>
+
+                <div class="cms-input-container" flex ng-if="ctrl.inheritSecurity">
                     <!-- Save -->
                     <md-button class="md-raised md-primary"
                                ng-click="ctrl.updateAttachment()"
@@ -158,6 +204,7 @@
                     </md-button>
                 </div>
             </div>
+
             <!-- Attachments list -->
             <div layout="column" flex>
                 <!-- Ready to upload Files -->
@@ -313,6 +360,7 @@
                     </md-card>
                 </div>
             </div>
+
             <!-- Drop zone -->
             <div id="drop-area" layout="row" layout-align="center center" class="drag-dop">
                 <p>{{ctrl.attachment ? lang.attachments_drop_one_file_only : lang.attachments_drop_your_file}}</p>

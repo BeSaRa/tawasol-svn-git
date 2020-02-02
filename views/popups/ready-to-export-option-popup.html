@@ -1,7 +1,8 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            id="ready-to-export-options" ng-attr-aria-label="{{lang.export_message}}">
-        <popup-toolbar-directive header-text="{{lang.export_message}}" close-callback="ctrl.closeExportPopupFromCtrl"></popup-toolbar-directive>
+    <popup-toolbar-directive header-text="{{lang.export_message}}"
+                             close-callback="ctrl.closeExportPopupFromCtrl"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="readyToExportOptionsForm" autocomplete="off">
@@ -55,15 +56,18 @@
                             </div>
                         </md-table-container>
                     </md-card>
+                    <br />
                     <div ng-if="ctrl.canExportAnyRelatedData()">
                         <div layout="row" flex>
                             <md-input-container flex ng-if="ctrl.isFaxExport()">
                                 <label for="exportTypeMain">{{lang.export_type}}</label>
-                                <input id="exportTypeMain" ng-model="ctrl.exportWayTextMain" ng-disabled="true" ng-readonly="true">
+                                <input id="exportTypeMain" ng-model="ctrl.exportWayTextMain" ng-disabled="true"
+                                       ng-readonly="true">
                             </md-input-container>
                             <md-input-container flex>
                                 <label for="exportType">{{lang.select_export_type}}</label>
-                                <md-select id="exportType" ng-model="ctrl.isGroupExport" ng-change="ctrl.onChangeExportType()">
+                                <md-select id="exportType" ng-model="ctrl.isGroupExport"
+                                           ng-change="ctrl.onChangeExportType()">
                                     <md-option ng-value="type.value" ng-repeat="type in ctrl.exportTypeList">
                                         {{lang.get(type.key)}}
                                     </md-option>
@@ -88,7 +92,12 @@
                                 <div>{{lang.get(ctrl.labels[$index])}}</div>
                                 <br/>
                                 <div ng-repeat="item in ctrl.loadRelatedThings[option] track by $index">
-                                    <md-checkbox aria-label="item"
+                                    <md-checkbox ng-if="option === 'ATTACHMENTS'" aria-label="item"
+                                                 ng-model="item.exportStatus"
+                                                 ng-change="ctrl.toggleSelectedItem(item , option)">
+                                        {{item.getTranslatedName()}}
+                                    </md-checkbox>
+                                    <md-checkbox ng-if="option !== 'ATTACHMENTS'" aria-label="item"
                                                  ng-click="ctrl.toggleSelectedItem(item , option)">
                                         {{item.getTranslatedName()}}
                                     </md-checkbox>

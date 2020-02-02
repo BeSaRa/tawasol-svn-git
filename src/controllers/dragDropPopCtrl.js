@@ -58,6 +58,8 @@ module.exports = function (app) {
         // the selected updateActionStatus
         self.updateActionStatus = self.attachmentUpdateActions[0];
         self.priorityLevel = self.priorityLevels[0];
+        self.exportStatus = false;
+
         // the uploaded Files
         self.successFilesUploaded = [];
         // the failed uploaded.
@@ -392,6 +394,6 @@ module.exports = function (app) {
 
         self.checkValidAttachmentFields = function () {
             return !!(self.attachmentType && self.updateActionStatus && self.securityLevel);
-        }
+        };
     });
 };

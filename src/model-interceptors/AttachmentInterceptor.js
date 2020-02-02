@@ -70,6 +70,7 @@ module.exports = function (app) {
 
             model.isDeletable = !!model.isDeletable;
             model.attachmentTypeInfo = new Information(model.attachmentTypeInfo);
+            model.exportStatus = model.exportStatus || false;
             return model;
         });
 

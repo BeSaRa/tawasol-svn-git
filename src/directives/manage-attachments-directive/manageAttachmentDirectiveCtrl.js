@@ -227,7 +227,6 @@ module.exports = function (app) {
                                 toast.success(langService.get('add_success').change({name: attachment.documentTitle}));
                             })
                     } else {
-                     //   debugger;
                         toast.success(langService.get('add_success').change({name: attachment.documentTitle}));
                         attachment.isDeletable = self.isAttachmentDeletable(attachment);
                         self.attachments.push(attachment);
