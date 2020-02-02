@@ -4455,10 +4455,6 @@ module.exports = function (app) {
                         });
                 });
 
-
-            var info = correspondence.getInfo();
-            var vsId = correspondence.hasOwnProperty('vsId') ? correspondence.vsId : correspondence;
-
         };
 
         $timeout(function () {
