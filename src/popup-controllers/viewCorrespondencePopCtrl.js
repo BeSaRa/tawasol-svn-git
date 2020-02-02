@@ -245,6 +245,7 @@ module.exports = function (app) {
                 dialog.hide(self.workItem);
             }
         };
+
         /**
          * @description save correspondence Changes for content.
          * @param $event
@@ -298,6 +299,15 @@ module.exports = function (app) {
                         return true;
                     });
             }
+        };
+
+        self.saveAndSend = function ($event) {
+            return self.saveCorrespondenceChanges($event, false)
+                .then(function (result) {
+                    debugger;
+                    dialog.hide(true);
+                    self.workItem.launchWorkFlow($event, 'forward', 'favorites');
+                })
         };
 
         function _rebuildIframe() {
