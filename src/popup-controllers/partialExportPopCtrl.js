@@ -67,6 +67,7 @@ module.exports = function (app) {
             {key: 'export_by_selection', value: false}
         ];
 
+        // if selective export from global settings then false, otherwise true
         self.isGroupExport = self.settings.defaultExportTypeGrouping;
         self.exportOptions = self.partialExportList.getKeys();
 
@@ -76,14 +77,24 @@ module.exports = function (app) {
 
         self.loadRelatedThings = null;
 
+        function _loadRecordsForSelection() {
+            correspondenceService
+                .loadRelatedThingsForCorrespondence(self.correspondence)
+                .then(function (result) {
+                    /*_.map((result.ATTACHMENTS || result.attachments), function (attachment) {
+                        if (attachment.exportStatus) {
+                            _addItem(attachment, 'ATTACHMENTS');
+                        }
+                        return attachment;
+                    });*/
+                    self.loadRelatedThings = result;
+                });
+        }
+
         self.onChangeExportType = function () {
             self.partialExportList = self.partialExportList.changeExportType();
             if (!self.isGroupExport) {
-                correspondenceService
-                    .loadRelatedThingsForCorrespondence(self.correspondence)
-                    .then(function (result) {
-                        self.loadRelatedThings = result;
-                    });
+                _loadRecordsForSelection();
             }
         };
 
@@ -617,5 +628,10 @@ module.exports = function (app) {
             self.subSearchSelected_DL = [];
             self.selectedDistributionList = null;
         };
+
+        // if selective export from global settings, change export type because in this popup, default is group export
+        if (!self.isGroupExport) {
+            self.onChangeExportType();
+        }
     });
 };

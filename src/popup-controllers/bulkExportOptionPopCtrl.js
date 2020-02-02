@@ -48,6 +48,7 @@ module.exports = function (app) {
             return label.toLowerCase();
         });
 
+        // if selective export from global settings then false, otherwise true
         self.isGroupExport = self.settings.defaultExportTypeGrouping;
 
         var canExportOptions = {

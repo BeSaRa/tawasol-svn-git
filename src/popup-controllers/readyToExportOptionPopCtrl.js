@@ -73,11 +73,12 @@ module.exports = function (app) {
             {key: 'export_by_selection', value: false}
         ];
 
+        // if selective export from global settings then false, otherwise true
         self.isGroupExport = self.settings.defaultExportTypeGrouping;
+
         // partial exported list
         self.partialExportList = new PartialExportCollection();
         self.exportOptions = self.partialExportList.getKeys();
-
         self.labels = _.map(self.partialExportList.getKeys(), function (label) {
             return label.toLowerCase();
         });
@@ -120,14 +121,24 @@ module.exports = function (app) {
             return self.settings.canExport(canExportOptions[type]);// && self.checkAnyLinkedDataAvailable(type);
         };
 
+        function _loadRecordsForSelection() {
+            correspondenceService
+                .loadRelatedThingsForCorrespondence(self.readyToExport)
+                .then(function (result) {
+                    _.map((result.ATTACHMENTS || result.attachments), function (attachment) {
+                        if (attachment.exportStatus) {
+                            _addItem(attachment, 'ATTACHMENTS');
+                        }
+                        return attachment;
+                    });
+                    self.loadRelatedThings = result;
+                });
+        }
+
         self.onChangeExportType = function () {
             self.partialExportList = self.partialExportList.changeExportType();
             if (!self.isGroupExport) {
-                correspondenceService
-                    .loadRelatedThingsForCorrespondence(self.readyToExport)
-                    .then(function (result) {
-                        self.loadRelatedThings = result;
-                    });
+                _loadRecordsForSelection();
             }
         };
 
@@ -273,6 +284,11 @@ module.exports = function (app) {
                     var currentModel = self.isGroupExport ? self.model : self.partialExportList;
                     currentModel.setAttachmentLinkedDocs(selectedCorrespondences);
                 })
+        }
+
+        // if selective export from global settings, change export type because in this popup, default is group export
+        if (!self.isGroupExport) {
+            self.onChangeExportType();
         }
 
     });
