@@ -26,7 +26,7 @@ module.exports = function (app) {
             self.updateActionStatus = null;
             self.isDeletable = null;
             self.sourceType = 1;
-            self.exportStatus = false;
+            self.exportStatus = true;
             self.refVSID = null;//This is for the linked Exported Documents
             // will removed when send to backend.
             self.file = null;

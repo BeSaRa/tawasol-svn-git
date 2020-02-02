@@ -34,8 +34,13 @@
                                 <div flex ng-repeat="option in ctrl.exportOptions" layout="column">
                                     <div>{{lang.get(ctrl.labels[$index])}}</div>
                                     <br/>
-                                    <div ng-repeat="item in ctrl.loadRelatedThings[option]">
-                                        <md-checkbox aria-label="item"
+                                    <div ng-repeat="item in ctrl.loadRelatedThings[option] track by $index">
+                                        <md-checkbox ng-if="option === 'ATTACHMENTS'" aria-label="item"
+                                                     ng-model="item.exportStatus"
+                                                     ng-change="ctrl.toggleSelectedItem(item , option)">
+                                            {{item.getTranslatedName()}}
+                                        </md-checkbox>
+                                        <md-checkbox ng-if="option !== 'ATTACHMENTS'" aria-label="item"
                                                      ng-click="ctrl.toggleSelectedItem(item , option)">
                                             {{item.getTranslatedName()}}
                                         </md-checkbox>

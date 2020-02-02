@@ -81,12 +81,12 @@ module.exports = function (app) {
             correspondenceService
                 .loadRelatedThingsForCorrespondence(self.correspondence)
                 .then(function (result) {
-                    /*_.map((result.ATTACHMENTS || result.attachments), function (attachment) {
+                    _.map((result.ATTACHMENTS || result.attachments), function (attachment) {
                         if (attachment.exportStatus) {
                             _addItem(attachment, 'ATTACHMENTS');
                         }
                         return attachment;
-                    });*/
+                    });
                     self.loadRelatedThings = result;
                 });
         }
