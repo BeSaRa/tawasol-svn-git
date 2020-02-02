@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                                      ApplicationUser,
                                                                      OUApplicationUser,
                                                                      Organization,
+                                                                     isViceManager,
                                                                      $timeout,
                                                                      langService,
                                                                      $q,
@@ -21,7 +22,7 @@ module.exports = function (app) {
             self.label = label;
             // all selected application Users
             self.ouApplicationUsers = ouApplicationUsers;
-
+            self.isViceManager = isViceManager;
             // current selected application user.
             self.ouApplicationUser = applicationUser;
             self.ouApplicationUserCopy = angular.copy(self.ouApplicationUser);

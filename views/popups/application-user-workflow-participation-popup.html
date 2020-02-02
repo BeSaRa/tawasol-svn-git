@@ -1,25 +1,19 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.workflow_participation}}">
-        <popup-toolbar-directive
-                header-text="{{lang.workflow_participation}} : {{ctrl.model.ouid.getTranslatedName()}}"></popup-toolbar-directive>
+    <popup-toolbar-directive
+            header-text="{{lang.workflow_participation}} : {{ctrl.model.ouid.getTranslatedName()}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="applicationUserWorkflowParticipationForm" autocomplete="off">
                 <div layout="column">
                     <div layout="row" flex>
-                        <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToPrivateUsers"
-                                     aria-label="{{lang.send_to_private_users}}"
-                                     ng-change="ctrl.sendToPrivateUsersChange()">
-                            {{lang.send_to_private_users}}
-                        </md-checkbox>
-                        <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToManagers"
-                                     aria-label="{{lang.send_to_managers}}"
-                                     ng-change="ctrl.sendToManagersChange()">
-                            {{lang.send_to_managers}}
-                        </md-checkbox>
-                    </div>
-                    <div layout="row" flex>
+                        <div flex class="cms-input-container">
+                            <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToPrivateUsers"
+                                         aria-label="{{lang.send_to_private_users}}"
+                                         ng-change="ctrl.sendToPrivateUsersChange()">{{lang.send_to_private_users}}
+                            </md-checkbox>
+                        </div>
                         <!-- Private Users -->
                         <md-input-container flex>
                             <label for="privateUsers">{{lang.private_users}}</label>
@@ -28,8 +22,7 @@
                                        ng-required="ctrl.ouApplicationUser.sendToPrivateUsers"
                                        ng-model="ctrl.ouApplicationUser.privateUsers"
                                        ng-disabled="!ctrl.ouApplicationUser.sendToPrivateUsers"
-                                       md-selected-text="ctrl.getSelectedPrivateUsersText()"
-                            >
+                                       md-selected-text="ctrl.getSelectedPrivateUsersText()">
                                 <md-optgroup label="{{ou.getTranslatedName()}}"
                                              ng-repeat="ou in ctrl.organizationsWithPrivateUsers">
                                     <md-option ng-value="privateUser"
@@ -42,6 +35,15 @@
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
+                    </div>
+                    <div layout="row" flex>
+                        <div flex class="cms-input-container">
+                            <md-checkbox ng-model="ctrl.ouApplicationUser.sendToManagers"
+                                         aria-label="{{lang.send_to_managers}}"
+                                         ng-change="ctrl.sendToManagersChange()">
+                                {{lang.send_to_managers}}
+                            </md-checkbox>
+                        </div>
                         <!-- Managers -->
                         <md-input-container flex>
                             <label for="managers">{{lang.managers}}</label>
@@ -56,6 +58,32 @@
                                 </md-option>
                             </md-select>
                             <div ng-messages="applicationUserWorkflowParticipationForm.managers.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" flex>
+                        <div flex class="cms-input-container">
+                            <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToViceManager"
+                                         aria-label="{{lang.send_to_vice_manager}}"
+                                         ng-change="ctrl.sendToViceManagerChange()">
+                                {{lang.send_to_vice_manager}}
+                            </md-checkbox>
+                        </div>
+                        <!-- Vice Managers -->
+                        <md-input-container flex>
+                            <label for="viceManagers">{{lang.vice_manager}}</label>
+                            <md-select multiple name="viceManagers" id="viceManagers"
+                                       ng-required="ctrl.ouApplicationUser.sendToViceManager"
+                                       ng-model="ctrl.ouApplicationUser.viceManagers"
+                                       ng-disabled="!ctrl.ouApplicationUser.sendToViceManager"
+                                       md-selected-text="ctrl.getSelectedViceManagersText()"
+                                       ng-model-options="{trackBy: '$value.organization.id'}">
+                                <md-option ng-value="ou" ng-repeat="ou in ctrl.organizationsWithViceManager">
+                                    {{ou.organization.getTranslatedName() + ' - '+ ou.viceManager.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="applicationUserWorkflowParticipationForm.viceManagers.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>

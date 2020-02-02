@@ -151,10 +151,11 @@ module.exports = function (app) {
              * @param organization
              * @param property
              * @param label to dialog. If not found, will be select user.
+             * @param isViceManager
              * @param $event to display popup from the current mouse click event.
              * @returns {Promise|ApplicationUser} return the selected application users.
              */
-            selectOUApplicationUserSingle: function (organization, property, label, $event) {
+            selectOUApplicationUserSingle: function (organization, property, label, isViceManager, $event) {
                 return dialog
                     .showDialog({
                         templateUrl: cmsTemplate.getPopup('select-ou-application-user-single'),
@@ -164,7 +165,8 @@ module.exports = function (app) {
                         locals: {
                             applicationUser: organization[property],
                             label: label,
-                            organization: organization
+                            organization: organization,
+                            isViceManager: isViceManager
                         },
                         resolve: {
                             ouApplicationUsers: function () {

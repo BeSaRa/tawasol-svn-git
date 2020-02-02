@@ -45,6 +45,10 @@ module.exports = function (app) {
                 return manager.organization.id;
             })) : "[]";
 
+            model.viceManagers = (model.sendToViceManager) ? JSON.stringify(_.map(model.viceManagers, function (viceManager) {
+                return viceManager.organization.id;
+            })) : "[]";
+
             if (model.proxyUser) {
                 getUnixTimeStamp(model, ["proxyStartDate", "proxyEndDate"]);
                 model.proxyOUId = model.proxyUser instanceof ProxyUser ? model.proxyUser.organization.id : model.proxyOUId;
@@ -127,6 +131,20 @@ module.exports = function (app) {
                         };
                     })
                 }
+
+                model.viceManagers = (model.viceManagers && !angular.isArray(model.viceManagers)) ? JSON.parse(model.viceManagers) : [];
+                if (model.sendToViceManager && model.viceManagers.length) {
+                    model.viceManagers = _.map(model.viceManagers, function (ouId) {
+                        var organization = _.find(organizations, {id: ouId});
+                        return {
+                            organization: organization,
+                            viceManager: _.find(applicationUsers, function (appUser) {
+                                return appUser.id === organization.viceManagerId
+                            })
+                        };
+                    })
+                }
+
 
                 var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
                 if (typeof model.securityLevels !== "object") {

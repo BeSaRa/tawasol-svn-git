@@ -138,6 +138,9 @@ module.exports = function (app) {
         // all managers users
         self.managerUsers = _mapWFUser(distributionWFService.managerUsers);
         self.managerUsersCopy = angular.copy(self.managerUsers);
+        // all vice manager users
+        self.viceManagerUsers = _mapWFUser(distributionWFService.viceManagerUsers);
+        self.viceManagerUsersCopy = angular.copy(self.viceManagerUsers);
         // all available workflow users related to securitySchema.
         self.workflowUsers = angular.copy(self.users);
         // all government entities heads
@@ -328,6 +331,29 @@ module.exports = function (app) {
                     self.managerUsers = gridService.searchGridData(self.grid.managerUsers, self.managerUsersCopy);
                 }
             },
+            viceManagerUsers: {
+                name: gridService.grids.launch.viceManagers,
+                limit: gridService.getGridPagingLimitByGridName(gridService.grids.launch.viceManagers) || 5, // default limit
+                page: 1, // first page
+                order: '', // default sorting order
+                selected: [],
+                limitOptions: gridService.getGridLimitOptions(gridService.grids.launch.viceManagers, self.viceManagerUsers.length),
+                pagingCallback: function (page, limit) {
+                    gridService.setGridPagingLimitByGridName(gridService.grids.launch.viceManagers, limit);
+                },
+                searchColumns: {
+                    name: function (record) {
+                        return record.getTranslatedKey();
+                    },
+                    ou: function (record) {
+                        return langService.current + 'OUName';
+                    }
+                },
+                searchText: '',
+                searchCallback: function (grid) {
+                    self.viceManagerUsers = gridService.searchGridData(self.grid.viceManagerUsers, self.viceManagerUsersCopy);
+                }
+            },
             governmentEntitiesHeads: {
                 name: gridService.grids.launch.presidentMinisters,
                 limit: 5, // default limit
@@ -425,6 +451,13 @@ module.exports = function (app) {
                 show: employeeService.getEmployee().canSendToManagers(), // _checkPermission('SEND_TO_MANAGERS') &&
                 disabled: false,
                 modelName: 'managerUsers'
+            },
+            vice_manager_users:{
+                lang: 'workflow_menu_item_vice_managers',
+                icon: 'account-child',
+                show: employeeService.getEmployee().canSendToManagers(),
+                disabled: false,
+                modelName: 'viceManagerUsers'
             },
             heads_of_government_entities: {
                 lang: 'workflow_menu_item_heads_of_governments',
@@ -962,6 +995,7 @@ module.exports = function (app) {
         self.tabMapper = {
             privateUsers: _mapWFUser,
             managerUsers: _mapWFUser,
+            viceManagerUsers: _mapWFUser,
             governmentEntitiesHeads: _mapWFUser,
             workflowGroups: _mapWFGroup,
             organizationGroups: _mapWFOrganization,

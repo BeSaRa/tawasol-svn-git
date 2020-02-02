@@ -158,6 +158,8 @@
                 .addToAllWithBase('distributionWFPrivate', '/cms-entity/admin/ou-application-user/dist/private-users')
                 // search managers distribution workflow
                 .addToAllWithBase('distributionWFManagers', '/cms-entity/admin/ou-application-user/dist/managers')
+                // search vice managers distribution workflow
+                .addToAllWithBase('distributionWFViceManagers', '/cms-entity/admin/ou-application-user/dist/vice-managers')
                 // workflow groups for distribution workflow.
                 // .addToAllWithBase('distributionWFGroups', 'cms-entity/admin/user-wf-group/user/active')
                 .addToAllWithBase('distributionWFGroups', '/cms-entity/admin/user-wf-group/user')

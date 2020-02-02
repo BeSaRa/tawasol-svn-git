@@ -529,12 +529,13 @@ module.exports = function (app) {
         /**
          * @description to select user for admin, manager and vice manager
          * @param property
+         * @param isViceManager
          * @param $event
          */
-        self.selectUser = function (property, $event) {
+        self.selectUser = function (property, isViceManager, $event) {
             ouApplicationUserService
                 .controllerMethod
-                .selectOUApplicationUserSingle(self.organization, property, self.selectUserLabels[property], $event)
+                .selectOUApplicationUserSingle(self.organization, property, self.selectUserLabels[property], isViceManager, $event)
                 .then(function (ouApplicationUser) {
                     self.organization[property] = ouApplicationUser.applicationUser;
                     self.isAddManagerToAllUsersEnabled = ouApplicationUser.isAddManagerToAllUsersEnabled;

@@ -23,6 +23,13 @@ module.exports = function (app) {
                 manager: ou.managerId
             }
         });
+        self.ouWithViceManagersList = _.filter(organizations, 'viceManagerId');
+        self.organizationsWithViceManager = _.map(self.ouWithViceManagersList, function (ou) {
+            return {
+                organization: ou,
+                viceManager: ou.viceManagerId
+            }
+        });
 
         self.organizationsWithPrivateUsers = [];
         _.map(privateUsers, function (privateUser) {
@@ -65,9 +72,19 @@ module.exports = function (app) {
             return langService.get('managers');
         };
 
+        self.getSelectedViceManagersText = function () {
+            if (self.ouApplicationUser.viceManagers && self.ouApplicationUser.viceManagers.length) {
+                var map = _.map(self.ouApplicationUser.viceManagers, function (viceManager) {
+                    return viceManager.organization.getTranslatedName();
+                });
+                return map.join(', ');
+            }
+            return langService.get('managers');
+        };
+
         self.getSelectedPrivateUsersText();
         self.getSelectedManagersText();
-
+        self.getSelectedViceManagersText();
 
         var requiredFields = [
             'sendToPrivateUsers',
@@ -109,7 +126,12 @@ module.exports = function (app) {
                 self.ouApplicationUser.managers = null;
             self.getSelectedManagersText();
         };
-
+        self.sendToViceManagerChange = function () {
+            if (!self.ouApplicationUser.sendToViceManager) {
+                self.ouApplicationUser.viceManagers = null;
+            }
+            self.getSelectedViceManagersText();
+        };
 
         /**
          * @description Add the workflow participation changes to grid

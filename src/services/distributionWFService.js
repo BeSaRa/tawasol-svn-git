@@ -27,7 +27,7 @@ module.exports = function (app) {
         self.governmentEntitiesHeads = [];
 
         self.managerUsers = [];
-
+        self.viceManagerUsers = [];
         self.registryOrganizations = [];
 
         self.organizationGroups = [];
@@ -70,6 +70,10 @@ module.exports = function (app) {
             managers: {
                 url: urlService.distributionWFManagers,
                 property: 'managerUsers'
+            },
+            viceManagers:{
+                url: urlService.distributionWFViceManagers,
+                property: 'viceManagerUsers'
             }
         };
 
@@ -366,6 +370,13 @@ module.exports = function (app) {
                 method: self.loadDistWorkflowUsers,
                 name: 'managers',
                 property: 'managerUsers'
+            },
+            vice_manager_users: {
+                defaultReturn: [],
+                onDemand: true,
+                method: self.loadDistWorkflowUsers,
+                name: 'viceManagers',
+                property: 'viceManagerUsers'
             },
             heads_of_government_entities: {
                 defaultReturn: [],
