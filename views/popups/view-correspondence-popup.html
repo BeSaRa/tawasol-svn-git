@@ -222,6 +222,11 @@
                        ng-disabled="ctrl.checkDisabled() || ctrl.document_properties.$invalid">{{lang.save_and_send}}
             </md-button>
         </div>
+        <div ng-if="ctrl.pageName ==='departmentReadyToExport'">
+            <md-button ng-disabled="!ctrl.document_properties.$dirty" class="md-raised md-primary"
+                       ng-click="ctrl.saveCorrespondenceChanges($event, false)">{{lang.save}}
+            </md-button>
+        </div>
         <div ng-if="ctrl.editContentFrom !== 'editContentFromGrid' && !ctrl.correspondence && !ctrl.g2gItemCopy">
             <md-button class="md-raised md-primary" ng-click="ctrl.returnBackCorrespondenceInformation()">{{lang.save}}
             </md-button>
