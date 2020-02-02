@@ -180,6 +180,10 @@
                                         <td md-cell class="td-data">
                                             <div layout="row">
                                                 <span flex>{{workItem.senderInfo.getTranslatedName()}}</span>
+                                                <grid-indicator-directive record="workItem"
+                                                                          indicator-type="comments"
+                                                                          class="p0p5"
+                                                                          record-type="WorkItem"></grid-indicator-directive>
                                             </div>
                                         </td>
                                         <td md-cell class="td-data">
