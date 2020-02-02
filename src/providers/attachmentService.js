@@ -428,10 +428,12 @@ module.exports = function (app) {
                             allowedExtensions = provider.getExtensionGroup(groupName);
                         else {
                             allowedExtensions = _.map(rootEntity.getGlobalSettings().fileType, function (allowed) {
-                                return _.find(allFileTypes, function (fileType) {
+                                var type = _.find(allFileTypes, function (fileType) {
                                     return fileType.id === allowed;
-                                }).extension;
+                                });
+                                return type ? type.extension : null;
                             });
+                            allowedExtensions = _.filter(allowedExtensions);
                         }
                         var extension = file.name.split('.').pop().toLowerCase();
                         var position = _.findIndex(allowedExtensions, function (ext) {
