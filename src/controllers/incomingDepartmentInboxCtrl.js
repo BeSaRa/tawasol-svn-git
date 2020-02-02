@@ -825,7 +825,7 @@ module.exports = function (app) {
             {
                 type: 'action',
                 icon: 'reply',
-                text: 'grid_action_reply',
+                text: 'grid_action_quick_reply',
                 callback: self.reply,
                 sticky: false,
                 class: "action-green",
