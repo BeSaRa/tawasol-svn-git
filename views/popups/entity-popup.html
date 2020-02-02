@@ -15,7 +15,7 @@
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.identifier}}</label>
-                                        <input name="identifier" id="identifier" required minlength="3" maxlength="10"
+                                        <input name="identifier" id="identifier" required minlength="3" maxlength="20"
                                                ng-readonly="ctrl.editMode" ng-model="ctrl.entity.identifier"
                                                custom-validate-directive="E" no-space-directive>
                                         <div ng-messages="entityForm.identifier.$error">
