@@ -4438,7 +4438,6 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.deleteCorrespondence = function (correspondence, $event) {
-            var vsId = correspondence.hasOwnProperty('vsId') ? correspondence.vsId : correspondence;
             var info = correspondence.getInfo();
             var urlServiceList = {
                 outgoing: urlService.outgoings,
@@ -4448,7 +4447,7 @@ module.exports = function (app) {
             return dialog.confirmMessage(langService.get('confirm_remove').change({name: correspondence.getNames()}), null, null, $event)
                 .then(function () {
                     return $http
-                        .put(urlServiceList[info.documentClass] + '/' + vsId + '/remove')
+                        .put(urlServiceList[info.documentClass] + '/' + info.vsId + '/remove')
                         .then(function (result) {
                             toast.success(langService.get("remove_specific_success").change({name: correspondence.getNames()}));
                             return true;
