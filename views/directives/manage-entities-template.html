@@ -45,7 +45,15 @@
                 <label for="{{field.label}}">{{lang[ctrl.labels[field.label]]}}</label>
                 <input name="{{field.label}}" custom-validate-directive="{{field.customValidation.type}}"
                        id="{{field.label}}" ng-model="ctrl.entity[field.label]"
-                       ng-required="field.required"/>
+                       ng-required="field.required" ng-keydown="ctrl.handleFieldKeyDown(field, $event)">
+                <md-button
+                        ng-if="ctrl.rootEntity.hrEnabled && ctrl.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user' && field.fieldIdentifier === 'qid'"
+                        tooltip="{{lang.search}}"
+                        ng-disabled="!ctrl.isValidValues(field)"
+                        ng-click="ctrl.searchRecordsByField(field, $event)"
+                        class="md-icon-button cms-input-overlay-button">
+                    <md-icon md-svg-icon="magnify"></md-icon>
+                </md-button>
                 <div ng-messages="entityForm[field.label].$error">
                     <div ng-message="required">{{lang.field_required}}</div>
                     <div ng-message="{{field.customValidation.type}}">
@@ -53,7 +61,33 @@
                     </div>
                 </div>
             </md-input-container>
-
+        </div>
+        <div layout="row" ng-if="ctrl.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user'">
+            <div flex class="cms-input-container">
+                <md-switch aria-label="{{lang.send_sms}}"
+                           tooltip="{{lang.send_sms}}"
+                           ng-change="ctrl.resetSMSTemplate(entity, $event)"
+                           ng-model="entity.sendSMS">
+                    <span>{{lang.send_sms}} : </span>
+                    {{entity.sendSMS ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
+            <md-input-container flex>
+                <label for="smsTemplateId">{{lang.sms_template}}</label>
+                <md-select id="smsTemplateId" name="smsTemplateId"
+                           ng-required="entity.sendSMS"
+                           ng-disabled="!entity.sendSMS"
+                           ng-model="entity.smsTemplateId">
+                    <md-option ng-value="null">{{lang.none}}</md-option>
+                    <md-option ng-repeat="smsTemplate in ctrl.smsTemplates track by $index"
+                               ng-value="smsTemplate.id">
+                        {{smsTemplate.getTranslatedName()}}
+                    </md-option>
+                </md-select>
+                <div ng-messages="entityForm.smsTemplateId.$error">
+                    <div ng-message="required">{{lang.field_required}}</div>
+                </div>
+            </md-input-container>
         </div>
         <div layout="row">
             <div>
@@ -89,7 +123,8 @@
                             <th ng-if="!ctrl.selectedEntities.length" md-column>
                                 <span>{{lang.entities_type}}</span>
                             </th>
-                            <th md-column ng-if="!ctrl.disableEverything && ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
+                            <th md-column
+                                ng-if="!ctrl.disableEverything && ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
                                 <span ng-if="!ctrl.selectedEntities.length">{{lang.actions}}</span>
                                 <md-button ng-if="ctrl.selectedEntities.length" class="md-icon-button"
                                            ng-click="ctrl.removeBulkDocumentEntities($event)">
@@ -109,7 +144,8 @@
                             <td md-cell>
                                 {{entity.typeId.getTranslatedName()}}
                             </td>
-                            <td md-cell ng-if="!ctrl.disableEverything && ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
+                            <td md-cell
+                                ng-if="!ctrl.disableEverything && ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
                                 <div flex layout="row" layout-align="start center">
                                     <div>
                                         <md-button class="md-icon-button" title="{{lang.delete}}"

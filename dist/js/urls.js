@@ -378,13 +378,15 @@
                 // correspondence common
                 .addToAllWithBase('correspondenceCommon', 'cms-entity/correspondence/common')
                 // download selected book options
-                .addToAllWithBase('downloadSelected','cms-entity/correspondence/common/merge-book')
+                .addToAllWithBase('downloadSelected', 'cms-entity/correspondence/common/merge-book')
                 // downlaod document content
                 .addToAllWithBase('downloadDocumentContent', 'cms-entity/correspondence/common/download-content/{vsId}')
                 // quick search overdue results
                 .addToAllWithBase('ouicksearchOverdueCounters', 'cms-entity/correspondence/search/quick/followup/{documentClass}')
                 // overdue Counters
                 .addToAllWithBase('overdueCounters', 'cms-entity/user/landing-page/followup-counter')
+                // linked person
+                .addToAllWithBase('linkedPerson', 'cms-entity/admin/linked-person')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

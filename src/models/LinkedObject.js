@@ -18,6 +18,10 @@ module.exports = function (app) {
             self.crNumber = null;
 
             self.typeId = null;
+            // will be used by backend but will not be returned
+            self.sendSMS = false;
+            self.smsTemplateId = null;
+
             // ['name', 'mobileNumber', 'description', 'email', 'address', 'typeId'];
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -25,179 +29,210 @@ module.exports = function (app) {
                 linkedTypes = {
                     EXTERNAL_USER: {
                         typeId: {
-                            required: true
-                        },
-                        fullNameAr: {
                             required: true,
-                            customValidation: {
-                                type: 'A1NS',
-                                message: 'one_arabic_number_space'
-                            }
-                        },
-                        fullNameEn: {
-                            required: true,
-                            customValidation: {
-                                type: 'E1NS',
-                                message: 'one_english_number_space'
-                            }
+                            fieldIdentifier: 'typeId'
                         },
                         qid: {
                             required: true,
                             customValidation: {
                                 type: 'number',
                                 message: 'numberonly'
-                            }
+                            },
+                            fieldIdentifier: 'qid'
+                        },
+                        fullNameAr: {
+                            required: true,
+                            customValidation: {
+                                type: 'A1NS',
+                                message: 'one_arabic_number_space'
+                            },
+                            fieldIdentifier: 'arabicName'
+                        },
+                        fullNameEn: {
+                            required: true,
+                            customValidation: {
+                                type: 'E1NS',
+                                message: 'one_english_number_space'
+                            },
+                            fieldIdentifier: 'englishName'
                         },
                         nationality: {
                             required: false,
                             customValidation : {
                                 type: 'AES',
                                 message : 'arabic_english_space'
-                            }
+                            },
+                            fieldIdentifier: 'nationality'
                         },
                         mobileNumber: {
                             required: true,
                             customValidation: {
                                 type: 'number',
                                 message: 'numberonly'
-                            }
+                            },
+                            fieldIdentifier: 'mobile'
                         },
                         description: {
-                            required: false
+                            required: false,
+                            fieldIdentifier: 'description'
                         },
                         email: {
                             required: false,
                             customValidation: {
                                 type: 'email',
                                 message: 'invalid_email'
-                            }
+                            },
+                            fieldIdentifier: 'email'
                         },
                         address: {
-                            required: false
+                            required: false,
+                            fieldIdentifier: 'address'
                         }
                     },
                     EMPLOYEE: {
                         typeId: {
-                            required: true
+                            required: true,
+                            fieldIdentifier: 'typeId'
                         },
                         fullNameAr: {
                             required: true,
                             customValidation: {
                                 type: 'A1NS',
                                 message: 'one_arabic_number_space'
-                            }
+                            },
+                            fieldIdentifier: 'arabicName'
                         },
                         fullNameEn: {
                             required: true,
                             customValidation: {
                                 type: 'E1NS',
                                 message: 'one_english_number_space'
-                            }
+                            },
+                            fieldIdentifier: 'englishName'
                         },
                         qid: {
                             required: true,
                             customValidation: {
                                 type: 'number',
                                 message: 'numberonly'
-                            }
+                            },
+                            fieldIdentifier: 'qid'
                         },
                         employeeNum: {
                             required: true,
                             customValidation: {
                                 type: 'number',
                                 message: 'numberonly'
-                            }
+                            },
+                            fieldIdentifier: 'employeeNumber'
                         },
                         mobileNumber: {
                             required: true,
                             customValidation: {
                                 type: 'number',
                                 message: 'numberonly'
-                            }
+                            },
+                            fieldIdentifier: 'mobile'
                         },
                         description: {
-                            required: false
+                            required: false,
+                            fieldIdentifier: 'description'
                         },
                         email: {
                             required: false,
                             customValidation: {
                                 type: 'email',
                                 message: 'invalid_email'
-                            }
+                            },
+                            fieldIdentifier: 'email'
                         },
                         address: {
-                            required: false
+                            required: false,
+                            fieldIdentifier: 'address'
                         }
                     },
                     COMPANY: {
                         typeId: {
-                            required: true
+                            required: true,
+                            fieldIdentifier: 'typeId'
                         },
                         name: {
                             required: true,
                             customValidation: {
                                 type: 'AE',
                                 message: 'arabic_english'
-                            }
+                            },
+                            fieldIdentifier: 'name'
                         },
                         crNumber: {
                             required: true,
                             customValidation: {
                                 type: 'number',
                                 message: 'numberonly'
-                            }
+                            },
+                            fieldIdentifier: 'crNumber'
                         },
                         mobileNumber: {
                             required: true,
                             customValidation: {
                                 type: 'number',
                                 message: 'numberonly'
-                            }
+                            },
+                            fieldIdentifier: 'mobile'
                         },
                         description: {
-                            required: false
+                            required: false,
+                            fieldIdentifier: 'description'
                         },
                         email: {
                             required: false,
                             customValidation: {
                                 type: 'email',
                                 message: 'invalid_email'
-                            }
+                            },
+                            fieldIdentifier: 'email'
                         },
                         address: {
-                            required: false
+                            required: false,
+                            fieldIdentifier: 'address'
                         }
                     },
                     OTHER: {
                         typeId: {
-                            required: true
+                            required: true,
+                            fieldIdentifier: 'typeId'
                         },
                         name: {
                             required: true,
                             customValidation: {
                                 type: 'AE',
                                 message: 'arabic_english'
-                            }
+                            },
+                            fieldIdentifier: 'name'
                         },
                         mobileNumber: {
                             required: true,
                             customValidation: {
                                 type: 'number',
                                 message: 'numberonly'
-                            }
+                            },
+                            fieldIdentifier: 'mobile'
                         },
                         description: {
-                            required: false
+                            required: false,
+                            fieldIdentifier: 'description'
                         },
                         email: {
                             required: false,
                             customValidation: {
                                 type: 'email',
                                 message: 'invalid_email'
-                            }
+                            },
+                            fieldIdentifier: 'email'
                         },
                         address: {
-                            required: false
+                            required: false,
+                            fieldIdentifier: 'address'
                         }
                     }
                 },

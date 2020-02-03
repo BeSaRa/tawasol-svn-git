@@ -549,6 +549,19 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Search Linked Person by Criteria
+         * @param criteria
+         * @returns {*}
+         */
+        self.searchLinkedPersonByCriteria = function(criteria) {
+            return $http.post((urlService.linkedPerson + '/criteria'),
+                (generator.interceptSendCollection('LinkedObject', criteria))
+            ).then(function (result) {
+                return generator.generateCollection(result.data.rs, LinkedObject);
+            });
+        };
+
+        /**
          * @description make an update for given correspondence.
          * @param correspondence
          * @param withoutCheck

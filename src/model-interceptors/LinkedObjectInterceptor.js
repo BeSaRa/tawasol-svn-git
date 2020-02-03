@@ -16,6 +16,10 @@ module.exports = function (app) {
             // fix the employeeNum to send it for backend team as String.
             if (model.hasOwnProperty('employeeNum') && model.employeeNum)
                 model.employeeNum = '' + model.employeeNum;
+
+            if (model.sendSMS && model.smsTemplateId) {
+                model.smsTemplateId = model.smsTemplateId.hasOwnProperty('id') ? model.smsTemplateId.id : model.smsTemplateId;
+            }
             return model;
         });
 
@@ -26,6 +30,8 @@ module.exports = function (app) {
             } else {
                 model.typeId = entityTypeService.getLinkedType(model.typeId);
             }
+            model.sendSMS = false;
+            model.smsTemplateId = null;
             delete model.documentClass;
             return model;
         });

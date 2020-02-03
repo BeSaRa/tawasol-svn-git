@@ -12,7 +12,10 @@ module.exports = function (app) {
                                                             rootEntity,
                                                             employeeService,
                                                             cmsTemplate,
-                                                            _) {
+                                                            _,
+                                                            customValidationService,
+                                                            applicationUserService,
+                                                            smsTemplateService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageEntitiesDirectiveCtrl';
@@ -23,7 +26,16 @@ module.exports = function (app) {
         $timeout(function () {
             self.defaultEntityTypes = correspondenceService.getDefaultEntityTypesForDocumentClass(self.documentClass);
             self.entityTypes = correspondenceService.getCustomEntityTypesForDocumentClass(self.documentClass);
+
+            applicationUserService.getApplicationUsers()
+                .then(function () {
+                    smsTemplateService.loadActiveSmsTemplates()
+                        .then(function (result) {
+                            self.smsTemplates = result;
+                        });
+                })
         });
+        self.rootEntity = rootEntity.returnRootEntity().rootEntity;
 
 
         self.showEntityFrom = false;
@@ -89,15 +101,80 @@ module.exports = function (app) {
 
         function _createEntity(entityType) {
             self.entity = (new LinkedObject({typeId: entityType})).preparedType();
+            self.selectedEntityType = angular.copy(entityType);
             _currentFields(entityType);
         }
 
 
         function _editEntity(entity) {
             self.entity = entity.preparedType();
+            self.selectedEntityType = angular.copy(entity.typeId);
             self.editMode = true;
             _currentFields(entity.typeId);
         }
+
+        /**
+         * @description Checks if field has valid value according to custom validation
+         * @param field
+         * @returns {boolean}
+         */
+        self.isValidValues = function (field) {
+            var isValid = true;
+            if (field.fieldIdentifier === 'qid') {
+                if (field.required) {
+                    isValid = typeof self.entity[field.label] !== 'undefined' && self.entity[field.label] !== null && self.entity[field.label] !== '';
+                }
+                if (isValid) {
+                    isValid = customValidationService.validateInput(self.entity[field.label], field.customValidation.type);
+                }
+            }
+            return isValid;
+        };
+
+        /**
+         * @description Search the linked person by field value
+         * @param field
+         * @param $event
+         * @returns {*[]}
+         */
+        self.searchRecordsByField = function (field, $event) {
+            if (self.isValidValues(field)) {
+                if (self.rootEntity.hrEnabled && self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user' && field.fieldIdentifier === 'qid') {
+                    correspondenceService.searchLinkedPersonByCriteria({qid: self.entity.qid})
+                        .then(function (result) {
+                            result[0].typeId = self.selectedEntityType;
+                            self.entity = angular.copy(result[0]);
+                        })
+                }
+                return [];
+            }
+        };
+
+        /**
+         * @description Handles the keydown event of the entity field
+         * @param field
+         * @param $event
+         */
+        self.handleFieldKeyDown = function (field, $event) {
+            if ($event) {
+                if (self.rootEntity.hrEnabled && self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user' && field.fieldIdentifier === 'qid') {
+                    var code = $event.which || $event.keyCode;
+                    // if enter key pressed, load from server with search text
+                    if (code === 13) {
+                        self.searchRecordsByField(field, $event)
+                    }
+                }
+            }
+        };
+
+        /**
+         * @description Reset the smsTemplateId if sendSMS = false
+         * @param entity
+         * @param $event
+         */
+        self.resetSMSTemplate = function (entity, $event) {
+            entity.smsTemplateId = null;
+        };
 
         /**
          * select entity type to add
@@ -105,8 +182,7 @@ module.exports = function (app) {
          */
         self.pushEntityType = function (entityType) {
             _createEntity(entityType);
-            if (entityType.lookupStrKey && entityType.lookupStrKey.toLowerCase() === 'employee' &&
-                rootEntity.returnRootEntity().rootEntity.hrEnabled) {
+            if (entityType.lookupStrKey && entityType.lookupStrKey.toLowerCase() === 'employee' && self.rootEntity.hrEnabled) {
                 self.openHREmployeeIntegrationDialog()
                     .then(function (employees) {
                         self.editMode = false; // rest editMode in case you edited existing employee and add new
@@ -130,6 +206,7 @@ module.exports = function (app) {
             self.showEntityFrom = false;
             self.currentFields = [];
             self.entity = null;
+            self.selectedEntityType = null;
         };
         /**
          * add entity document
@@ -181,7 +258,7 @@ module.exports = function (app) {
             }
             promise.then(function () {
                 // for multiple selection of search result hr employees
-                if (rootEntity.returnRootEntity().rootEntity.hrEnabled && self.entity.length) {
+                if (self.rootEntity.hrEnabled && self.entity.length) {
                     toast.success(langService.get('save_success'));
                 } else {
                     toast.success(langService.get(self.editMode ? 'save_success' : 'add_success').change({name: self.entity.getTranslatedName()}));
