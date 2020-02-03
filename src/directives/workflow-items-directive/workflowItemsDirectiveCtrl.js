@@ -109,12 +109,12 @@ module.exports = function (app) {
         };
 
         self.addWorkflowItem = function (workflowItem) {
-            if (!workflowItem.escalationStatus && workflowItem.isGroup()) {
+            /*   if (!workflowItem.escalationStatus && workflowItem.isGroup()) {
                 var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess;
                 workflowItem.escalationStatus = currentOUEscalationProcess;
             } else {
                 workflowItem.escalationStatus = null;
-            }
+            }*/
 
             self.selected.push(angular.copy(workflowItem));
         };

@@ -34,7 +34,7 @@
                         <md-datepicker id="dueDate" md-open-on-focus
                                        md-min-date="ctrl.minDate"
                                        ng-model="ctrl.distWorkflowItem.dueDate"
-                                       ng-required="ctrl.currentOUEmployee.enableEscalation && !ctrl.isEscalationHidden() && ctrl.isEscalationStatusSelected()"></md-datepicker>
+                                       ng-required="ctrl.currentOUEmployee.enableEscalation && ctrl.isEscalationStatusSelected()"></md-datepicker>
                         <div ng-messages="distWorkflowItem_form.dueDate.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
                         </div>
@@ -66,7 +66,7 @@
                         <div class="help-text-div mb10">{{lang.secure_comment_note}}</div>
                     </div>
                 </div>
-                <div layout="row" ng-if="ctrl.currentOUEmployee.enableEscalation && !ctrl.isEscalationHidden()">
+                <div layout="row" ng-if="ctrl.currentOUEmployee.enableEscalation">
                     <md-input-container flex>
                         <label for="escalationStatus">{{lang.choose_escalation_process}}</label>
                         <md-select ng-model-options="{trackBy: '$value.id'}"
@@ -87,7 +87,7 @@
                     </md-input-container>
                 </div>
                 <div layout="row" layout-align="start center"
-                     ng-if="!ctrl.isEscalationHidden() && ctrl.distWorkflowItem.escalationUserId">
+                     ng-if="ctrl.distWorkflowItem.escalationUserId">
                     <span>{{lang.escalation_user}}:</span>
                     <span class="user-tag" md-truncate>
                                     <span>{{ctrl.distWorkflowItem.escalationUserId.getTranslatedName()}} - {{ctrl.distWorkflowItem.escalationUserId.getTranslatedOrganizationName()}}</span>
@@ -138,7 +138,7 @@
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised md-primary" ng-disabled="distWorkflowItem_form.$invalid ||
-                            (!ctrl.isEscalationHidden() && ctrl.distWorkflowItem.isCustomEscalationStatusSelected() && !ctrl.distWorkflowItem.escalationUserId)"
+                            (ctrl.distWorkflowItem.isCustomEscalationStatusSelected() && !ctrl.distWorkflowItem.escalationUserId)"
                    ng-click="ctrl.setDistWorkflowItemProperties()">
             {{lang.set}}
         </md-button>
