@@ -83,9 +83,15 @@ md-input-container:not(.cms-default) {
     }
   }
 
-  button.cms-field-overlay-button {
+  button.cms-select-overlay-button {
     position: absolute;
     right: 20px;
+    top: 0;
+  }
+
+  button.cms-input-overlay-button {
+    position: absolute;
+    right: 0;
     top: 0;
   }
 
@@ -144,7 +150,7 @@ html.rtl {
       }
     }
 
-    button.cms-field-overlay-button {
+    button.cms-select-overlay-button {
       left: 20px;
       right: auto;
     }
