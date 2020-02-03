@@ -83,16 +83,19 @@ md-input-container:not(.cms-default) {
     }
   }
 
-  button.cms-select-overlay-button {
+  button.cms-select-overlay-button,
+  button.cms-input-overlay-button {
     position: absolute;
     right: 20px;
     top: 0;
+
+    &[disabled] md-icon {
+      color: rgba(0, 0, 0, 0.38) !important;
+    }
   }
 
   button.cms-input-overlay-button {
-    position: absolute;
     right: 0;
-    top: 0;
   }
 
   md-checkbox.cms-field-overlay-checkbox {
@@ -155,6 +158,11 @@ html.rtl {
       right: auto;
     }
 
+    button.cms-input-overlay-button {
+      left: 0;
+      right: auto;
+    }
+
     md-checkbox.cms-field-overlay-checkbox {
       left: 20px;
       right: auto;
@@ -178,7 +186,7 @@ html.rtl {
       .md-container.md-mode-indeterminate {
         top: 7px;
         left: auto;
-        right:7px;
+        right: 7px;
       }
     }
   }
