@@ -10,12 +10,14 @@ module.exports = function (app) {
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             model.attachmentType = model.attachmentType && model.attachmentType.hasOwnProperty('lookupKey') ? model.attachmentType.lookupKey : model.attachmentType;
             model.securityLevel = model.securityLevel && model.securityLevel.hasOwnProperty('lookupKey') ? model.securityLevel.lookupKey : model.securityLevel;
+            model.priorityLevel = model.priorityLevel && model.priorityLevel.hasOwnProperty('lookupKey') ? model.priorityLevel.lookupKey : model.priorityLevel;
             if (typeof model.updateActionStatus !== 'undefined' && model.updateActionStatus !== null && model.updateActionStatus !== '')
                 model.updateActionStatus = model.updateActionStatus.hasOwnProperty('lookupKey') ? model.updateActionStatus.lookupKey : model.updateActionStatus;
             delete model.file;
             delete model.source;
             delete model.progress;
             delete model.refVSID;
+            delete model.attachmentTypeInfo;
             return model;
         });
 
