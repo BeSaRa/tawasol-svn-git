@@ -499,10 +499,11 @@ module.exports = function (app) {
                 callback: self.g2gEditAfterReturn,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    if (!(model instanceof G2GMessagingHistory)) {
+                    /*if (!(model instanceof G2GMessagingHistory)) {
                         model = angular.copy(self.g2gItemCopy);
                     }
-                    return !model.isInternalG2G() && configurationService.G2G_QATAR_SOURCE;
+                    return !model.isInternalG2G() && configurationService.G2G_QATAR_SOURCE;*/
+                    return configurationService.G2G_QATAR_SOURCE;
                 }
             },
             // Manage
