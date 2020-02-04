@@ -28,6 +28,8 @@ module.exports = function (app) {
         self.readyToExport = readyToExport;
         self.resend = resend;
         self.model = new ReadyToExportOption();
+        // set linkedDocList from prepareExport to attachmentLinkedDocs in model to set them as selected by default
+        self.model.setAttachmentLinkedDocs(prepareExport.hasOwnProperty('linkedDocList') ? angular.copy(prepareExport.linkedDocList) : []);
 
         self.settings = rootEntity.getGlobalSettings();
         /*self.correspondenceSites = [].concat(sites.first, _.map(sites.second, function (item) {
@@ -38,6 +40,7 @@ module.exports = function (app) {
             item.ccVerion = true;
             return item;
         }));
+
         self.internalSites = [];
         self.externalSites = [];
         self.g2gSites = [];
@@ -284,7 +287,7 @@ module.exports = function (app) {
                     var currentModel = self.isGroupExport ? self.model : self.partialExportList;
                     currentModel.setAttachmentLinkedDocs(selectedCorrespondences);
                 })
-        }
+        };
 
         // if selective export from global settings, change export type because in this popup, default is group export
         if (!self.isGroupExport) {

@@ -2862,6 +2862,7 @@ module.exports = function (app) {
                     });
                     result.data.rs.sitesitesToList = generator.interceptReceivedCollection('Site', generator.generateCollection(result.data.rs.sitesitesToList, Site));
                     result.data.rs.sitesCCList = generator.interceptReceivedCollection('Site', generator.generateCollection(result.data.rs.sitesCCList, Site));
+                    result.data.rs.linkedDocList =  self.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs.linkedDocList);
                     return result.data.rs;
                 })
         };
