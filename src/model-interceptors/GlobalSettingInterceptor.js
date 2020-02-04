@@ -28,7 +28,7 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.fileType = angular.fromJson(model.fileType);
-            model.excludedConversionFileTypes = JSON.parse(model.excludedConversionFileTypes);
+            model.excludedConversionFileTypes = model.excludedConversionFileTypes ? JSON.parse(model.excludedConversionFileTypes) : model.excludedConversionFileTypes;
             model.theme = model.theme && model.theme.hasOwnProperty('id') ? model.theme.id : model.theme;
             var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
             model.securityLevels = generator.getSelectedCollectionFromResult(securityLevels, model.securityLevels, 'lookupKey');
