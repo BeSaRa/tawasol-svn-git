@@ -585,10 +585,11 @@ module.exports = function (app) {
              * @param actions
              * @param queueName
              * @param $event
+             * @param viewOnly
              * @return {*}
              */
-            Correspondence.prototype.viewFromQueue = function (actions, queueName, $event) {
-                return viewDocumentService.viewQueueDocument(this, actions, queueName, $event);
+            Correspondence.prototype.viewFromQueue = function (actions, queueName, $event, viewOnly) {
+                return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly);
             };
             /**
              * @description view from queue as full view by Id

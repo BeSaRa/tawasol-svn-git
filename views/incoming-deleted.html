@@ -1,0 +1,132 @@
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_incoming_deleted}}</span>
+            <md-button ng-click="ctrl.reloadDeletedIncomings()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <div class="p020">
+                <md-switch aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.grid.truncateSubject"
+                           ng-change="ctrl.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.selectedDeletedIncomings"
+                                       md-progress="ctrl.grid.progress">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                    <tr md-row>
+                                        <th colspan="{{ctrl.selectedDeletedIncomings.length > 1 ? 6 : 7}}"
+                                            ng-if="ctrl.selectedDeletedIncomings.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedDeletedIncomings.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+                                                <md-button class="md-icon-button"
+                                                           tooltip="{{lang.grid_action_archive}}"
+                                                           ng-click="ctrl.archiveBulk($event)">
+                                                    <md-icon md-svg-icon="archive" class="action-green"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDeletedIncomings.length" md-column
+                                            md-order-by="docSubject">
+                                            <span>{{lang.subject}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDeletedIncomings.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
+                                            <span>{{lang.priority_level}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDeletedIncomings.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
+                                            <span>{{lang.security_level}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDeletedIncomings.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
+                                            <span>{{lang.creator}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDeletedIncomings.length" md-column
+                                            md-order-by="createdOn">
+                                            <span>{{lang.created_on}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDeletedIncomings.length && ctrl.selectedDeletedIncomings.length < 2"
+                                            md-column>
+                                            <span></span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="deletedOIncoming" grid-right-click-directive
+                                        model="deletedIncoming"
+                                        selected-length="{{ctrl.selectedDeletedIncomings.length ? ctrl.selectedDeletedIncomings.length : 0}}"
+                                        ng-repeat="deletedIncoming in searchResults = (ctrl.deletedIncomings | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))  track by $index">
+                                        <td md-cell class="subject">
+
+                                            <a href="" ng-if="deletedIncoming.hasContent() && ctrl.grid.truncateSubject"
+                                               class="view-doc subject-internal" md-truncate
+                                               tooltip="{{deletedIncoming.docSubject}}"
+                                               ng-click="ctrl.viewDocument(deletedIncoming, $event)">{{deletedIncoming.docSubject}}</a>
+                                            <span ng-if="!deletedIncoming.hasContent() && ctrl.grid.truncateSubject"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{deletedIncoming.docSubject}}">{{deletedIncoming.docSubject}}</span>
+                                            <a href="" ng-if="deletedIncoming.hasContent() && !ctrl.grid.truncateSubject"
+                                               class="view-doc subject-internal"
+                                               tooltip="{{deletedIncoming.docSubject}}"
+                                               ng-click="ctrl.viewDocument(deletedIncoming, $event)">{{deletedIncoming.docSubject}}</a>
+                                            <span ng-if="!deletedIncoming.hasContent() && !ctrl.grid.truncateSubject"
+                                                  class="view-doc subject-internal"
+                                                  tooltip="{{deletedIncoming.docSubject}}">{{deletedIncoming.docSubject}}</span>
+                                        </td>
+                                        <td md-cell>{{deletedIncoming.priorityLevel.getTranslatedName()}}</td>
+                                        <td md-cell>{{deletedIncoming.securityLevel.getTranslatedName()}}</td>
+                                        <td md-cell>{{deletedIncoming.creatorInfo.getTranslatedName()}}</td>
+                                        <td md-cell>{{deletedIncoming.createdOn}}</td>
+                                        <td md-cell ng-if="ctrl.selectedDeletedIncomings.length < 2">
+                                            <div layout-align="start center" ng-if="!ctrl.selectedDeletedIncomings.length
+                                                  || ctrl.selectedDeletedIncomings.length===1 && ctrl.selectedDeletedIncomings[0].id === deletedIncoming.id">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="deletedIncoming">
+                                                </grid-actions-directive>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="!ctrl.deletedIncomings.length">
+                                        <td md-cell colspan="7" class="red-text text-center">{{lang.no_records_found}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.deletedIncomings.length && !searchResults.length">
+                                        <td md-cell colspan="7" class="red-text text-center">
+                                            {{lang.no_records_found_matching_search}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{(ctrl.deletedIncomings).length}}"
+                                    md-page-select
+                                    md-on-paginate="ctrl.grid.pagingCallback">
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>

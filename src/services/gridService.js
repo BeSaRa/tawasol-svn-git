@@ -31,13 +31,15 @@ module.exports = function (app) {
                 draft: 'draftOut',
                 review: 'reviewOut',
                 readyToSend: 'readyToSendOut',
-                rejected: 'rejectedOut'
+                rejected: 'rejectedOut',
+                deleted: 'deletedOut'
             },
             incoming: {
                 scan: 'scanInc',
                 review: 'reviewInc',
                 readyToSend: 'readyToSendInc',
-                rejected: 'rejectedInc'
+                rejected: 'rejectedInc',
+                deleted: 'deletedInc'
             },
             internal: {
                 prepare: 'prepareInt',
@@ -45,7 +47,8 @@ module.exports = function (app) {
                 review: 'reviewInt',
                 readyToSend: 'readyToSendInt',
                 rejected: 'rejectedInt',
-                approved: 'approvedInt'
+                approved: 'approvedInt',
+                deleted: 'deletedInt'
             },
             inbox: {
                 userInbox: 'userInbox',

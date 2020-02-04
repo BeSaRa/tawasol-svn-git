@@ -28,16 +28,19 @@ module.exports = function (app) {
             .addPageName('reviewOutgoing')
             .addPageName('readyToSendOutgoing')
             .addPageName('rejectedOutgoing')
+            .addPageName('deletedOutgoing')
             // Incoming
             .addPageName('reviewIncoming')
             .addPageName('readyToSendIncoming')
             .addPageName('rejectedIncoming')
+            .addPageName('deletedIncoming')
             // Internal
             .addPageName('draftInternal')
             .addPageName('reviewInternal')
             .addPageName('readyToSendInternal')
             .addPageName('rejectedInternal')
             .addPageName('approvedInternal')
+            .addPageName('deletedInternal')
             // Search
             .addPageName('searchOutgoing')
             .addPageName('searchIncoming')

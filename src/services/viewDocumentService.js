@@ -286,8 +286,9 @@ module.exports = function (app) {
              * @param actions
              * @param $event
              * @param pageName
+             * @param viewOnly - to hide edit content button in delete pages
              */
-            self.viewQueueDocument = function (correspondence, actions, pageName, $event) {
+            self.viewQueueDocument = function (correspondence, actions, pageName, $event, viewOnly) {
                 var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : new Outgoing(correspondence).getInfo(),
                     disabled;
                 var desktop = new EditInDesktopCallback({
@@ -301,6 +302,7 @@ module.exports = function (app) {
                         return result.data.rs;
                     })
                     .then(function (result) {
+                        result.metaData.viewVersion = viewOnly;
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
                             result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);

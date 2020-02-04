@@ -79,4 +79,7 @@ module.exports = function (app) {
     require('./g2gPendingCtrl')(app);
     require('./g2gReturnedAfterReturnCtrl')(app);
     require('./searchScreenCtrl')(app);
+    require('./deletedOutgoingCtrl')(app);
+    require('./deletedIncomingCtrl')(app);
+    require('./deletedInternalCtrl')(app);
 };

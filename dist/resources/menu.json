@@ -1210,5 +1210,41 @@
     "sort_order": 8,
     "active": true,
     "sort_value": 0
+  },
+  {
+    "ID": 115,
+    "lang_key": "menu_item_outgoing_deleted",
+    "icon": "delete",
+    "parent": 2,
+    "link": "#deleted",
+    "state": "app.outgoing.deleted",
+    "icon_type": "font",
+    "sort_order": 7,
+    "active": true,
+    "sort_value": 0
+  },
+  {
+    "ID": 116,
+    "lang_key": "menu_item_incoming_deleted",
+    "icon": "delete",
+    "parent": 59,
+    "link": "#deleted",
+    "state": "app.incoming.deleted",
+    "icon_type": "font",
+    "sort_order": 7,
+    "active": true,
+    "sort_value": 0
+  },
+  {
+    "ID": 117,
+    "lang_key": "menu_item_internal_deleted",
+    "icon": "delete",
+    "parent": 66,
+    "link": "#deleted",
+    "state": "app.internal.deleted",
+    "icon_type": "font",
+    "sort_order": 8,
+    "active": true,
+    "sort_value": 0
   }
 ]

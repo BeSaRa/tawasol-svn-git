@@ -930,6 +930,19 @@ module.exports = function (app) {
                     }
                 }
             })
+            //deleted outgoing documents
+            .state('app.outgoing.deleted', {
+                url: '/deleted',
+                templateUrl: templateProvider.getView('outgoing-deleted'),
+                controller: 'deletedOutgoingCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    deletedOutgoings: function (correspondenceService) {
+                        'ngInject';
+                        return correspondenceService.loadDeletedDocumentsByDocumentClass('outgoing');
+                    }
+                }
+            })
             //document templates
             .state('app.administration.document-templates', {
                 url: '/document-templates',
@@ -1223,6 +1236,19 @@ module.exports = function (app) {
                     }
                 }
             })
+            //deleted incoming documents
+            .state('app.incoming.deleted', {
+                url: '/deleted',
+                templateUrl: templateProvider.getView('incoming-deleted'),
+                controller: 'deletedIncomingCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    deletedIncomings: function (correspondenceService) {
+                        'ngInject';
+                        return correspondenceService.loadDeletedDocumentsByDocumentClass('incoming');
+                    }
+                }
+            })
             // internal
             .state('app.internal', {
                 abstract: true,
@@ -1343,6 +1369,19 @@ module.exports = function (app) {
                     userFolders: function (userFolderService) {
                         'ngInject';
                         return userFolderService.getUserFoldersForApplicationUser();
+                    }
+                }
+            })
+            //deleted internal documents
+            .state('app.internal.deleted', {
+                url: '/deleted',
+                templateUrl: templateProvider.getView('internal-deleted'),
+                controller: 'deletedInternalCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    deletedInternals: function (correspondenceService) {
+                        'ngInject';
+                        return correspondenceService.loadDeletedDocumentsByDocumentClass('internal');
                     }
                 }
             })

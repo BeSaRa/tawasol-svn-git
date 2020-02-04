@@ -388,6 +388,21 @@ module.exports = function (app) {
                 disableAll: function (model) {
                     return true;
                 }
+            })
+            .getPageNameOverride('deletedOutgoing', 'draftOutgoing', {
+                disableAll: function (model) {
+                    return true;
+                }
+            })
+            .getPageNameOverride('deletedIncoming', 'draftOutgoing', {
+                disableAll: function (model) {
+                    return true;
+                }
+            })
+            .getPageNameOverride('deletedInternal', 'draftOutgoing', {
+                disableAll: function (model) {
+                    return true;
+                }
             });
     })
 };

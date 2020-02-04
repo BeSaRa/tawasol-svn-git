@@ -123,6 +123,12 @@ module.exports = function (app) {
             desktop: 2
         };
 
+        self.urlServiceByDocumentClass = {
+            outgoing: urlService.outgoings,
+            incoming: urlService.incomings,
+            internal: urlService.internals
+        };
+
         var merge = {
                 classifications: {
                     model: OUClassification,
@@ -553,7 +559,7 @@ module.exports = function (app) {
          * @param criteria
          * @returns {*}
          */
-        self.searchLinkedPersonByCriteria = function(criteria) {
+        self.searchLinkedPersonByCriteria = function (criteria) {
             return $http.post((urlService.linkedPerson + '/criteria'),
                 (generator.interceptSendCollection('LinkedObject', criteria))
             ).then(function (result) {
@@ -4454,21 +4460,28 @@ module.exports = function (app) {
          */
         self.deleteCorrespondence = function (correspondence, $event) {
             var info = correspondence.getInfo();
-            var urlServiceList = {
-                outgoing: urlService.outgoings,
-                incoming: urlService.incomings,
-                internal: urlService.internals
-            };
             return dialog.confirmMessage(langService.get('confirm_remove').change({name: correspondence.getNames()}), null, null, $event)
                 .then(function () {
                     return $http
-                        .put(urlServiceList[info.documentClass] + '/' + info.vsId + '/remove')
+                        .put(self.urlServiceByDocumentClass[info.documentClass] + '/' + info.vsId + '/remove')
                         .then(function (result) {
                             toast.success(langService.get("remove_specific_success").change({name: correspondence.getNames()}));
                             return true;
                         });
                 });
+        };
 
+        /**
+         * @description get deleted documents
+         * @returns {*}
+         */
+        self.loadDeletedDocumentsByDocumentClass = function (documentClass) {
+            var employee = employeeService.getEmployee();
+            return $http.get(self.urlServiceByDocumentClass[documentClass] + '/ou/' + employee.getOUID() + '/removed')
+                .then(function (result) {
+                    self.deletedDocuments = self.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs);
+                    return self.deletedDocuments;
+                });
         };
 
         $timeout(function () {

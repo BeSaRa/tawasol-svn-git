@@ -40,7 +40,10 @@ module.exports = function (app) {
 
         self.excludedManagePopupsFromGrids = [
             // 'departmentIncoming',
-            'g2gIncoming'
+            'g2gIncoming',
+            'deletedOutgoing',
+            'deletedIncoming',
+            'deletedInternal'
         ];
 
         self.viewURL = '';
