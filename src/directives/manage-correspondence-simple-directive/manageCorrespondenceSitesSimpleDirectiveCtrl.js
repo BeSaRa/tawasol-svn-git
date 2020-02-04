@@ -11,6 +11,8 @@ module.exports = function (app) {
                                                                              LangWatcher,
                                                                              $timeout,
                                                                              $q,
+                                                                             $stateParams,
+                                                                             Information,
                                                                              _,
                                                                              correspondenceService,
                                                                              generator,
@@ -55,11 +57,22 @@ module.exports = function (app) {
                     self.selectedMainSite = _.find(self.mainSites, function (mainSite) {
                         return mainSite.id === oldSites[0].mainSiteId;
                     });
+                    if (!self.selectedMainSite) {
+                        var _mainSite = new Information(oldSites[0].mainSite);
+                        self.mainSites.push(_mainSite);
+                        self.selectedMainSite = _mainSite;
+                    }
+
                     subSitesDefer.promise.then(function () {
                         self.selectedSubSite = _.find(self.subSites, function (subSite) {
                             return subSite.subSiteId === oldSites[0].subSiteId;
                         });
                     });
+                    if (!self.selectedSubSite) {
+                        var _subSite = new Information(oldSites[0].subSite);
+                        self.subSites.push(_subSite);
+                        self.selectedSubSite = _subSite;
+                    }
                     self.correspondence.sitesToList = oldSites;
                 });
             }
@@ -171,7 +184,12 @@ module.exports = function (app) {
                     self.mainSitesCopy = angular.copy(self.mainSites);
                     self.subSites = [];
                     self.subSitesCopy = [];
-                    _selectDefaultMainSiteAndGetSubSites();
+                    //load sub sites if create reply
+                    if ($stateParams.action === 'reply') {
+                        self.getSubSites($event);
+                    } else {
+                        _selectDefaultMainSiteAndGetSubSites();
+                    }
                     return self.mainSites;
                 });
             } else {
