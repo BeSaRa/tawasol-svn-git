@@ -29,34 +29,34 @@ module.exports = function (app) {
                 this.overlay = false;
             };
 
-            EditInDesktopCallback.prototype.reloadContent = function () {
+            EditInDesktopCallback.prototype.reloadContent = function (fullCorrespondence) {
                 var self = this;
                 return $http.get(self.url).then(function (result) {
-                    return self.getContentUrl(result.data.rs);
+                    return self.getContentUrl(result.data.rs, fullCorrespondence);
                 });
             };
 
-            EditInDesktopCallback.prototype.getContentUrl = function (correspondence) {
-                return this.type === 'workItem' ? this.getWorkItemContent(correspondence) : this.getCorrespondenceContent(correspondence);
+            EditInDesktopCallback.prototype.getContentUrl = function (correspondence, fullCorrespondence) {
+                return this.type === 'workItem' ? this.getWorkItemContent(correspondence, fullCorrespondence) : this.getCorrespondenceContent(correspondence, fullCorrespondence);
             };
 
-            EditInDesktopCallback.prototype.getCorrespondenceContent = function (correspondence) {
+            EditInDesktopCallback.prototype.getCorrespondenceContent = function (correspondence, fullCorrespondence) {
                 if (correspondence.content.viewURL) {
                     correspondence.content.viewURL = $sce.trustAsResourceUrl(correspondence.content.viewURL);
                 }
                 if (correspondence.content.editURL) {
                     correspondence.content.editURL = $sce.trustAsResourceUrl(correspondence.content.editURL);
                 }
-                return correspondence.content;
+                return fullCorrespondence ? correspondence : correspondence.content;
             };
-            EditInDesktopCallback.prototype.getWorkItemContent = function (correspondence) {
+            EditInDesktopCallback.prototype.getWorkItemContent = function (correspondence, fullCorrespondence) {
                 if (correspondence.documentViewInfo.viewURL) {
                     correspondence.documentViewInfo.viewURL = $sce.trustAsResourceUrl(correspondence.documentViewInfo.viewURL);
                 }
                 if (correspondence.documentViewInfo.editURL) {
                     correspondence.documentViewInfo.editURL = $sce.trustAsResourceUrl(correspondence.documentViewInfo.editURL);
                 }
-                return correspondence.documentViewInfo;
+                return fullCorrespondence ? correspondence : correspondence.documentViewInfo;
             };
 
 

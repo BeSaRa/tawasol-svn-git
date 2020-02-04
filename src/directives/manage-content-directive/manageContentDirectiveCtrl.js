@@ -7,6 +7,8 @@ module.exports = function (app) {
                                                            lookupService,
                                                            generator,
                                                            outgoingService,
+                                                           EditInDesktopCallback,
+                                                           urlService,
                                                            langService,
                                                            scannerService,
                                                            errorCode,
@@ -28,9 +30,6 @@ module.exports = function (app) {
         self.documentInformation = null;
         self.lastTemplate = null;
 
-        self.defaultEditMode = employeeService.getEmployee().defaultEditMode;
-        self.isDefaultEditModeBoth = (self.defaultEditMode === correspondenceService.documentEditModes.desktopOfficeOnline);
-
         self.document = null;
         self.editContent = false;
         self.propertyConfigurations = [];
@@ -46,6 +45,26 @@ module.exports = function (app) {
             return self.required[propertyName.toLowerCase()];
         }
 
+        /**
+         * @description to create the url schema depend on document class and vsId if found.
+         * @param vsId
+         * @param documentClass
+         * @param extension
+         * @return {string}
+         * @private
+         */
+        function _createUrlSchema(vsId, documentClass, extension) {
+            var url = [urlService.correspondence];
+            vsId = (vsId ? vsId : null);
+            documentClass = documentClass ? documentClass.toLowerCase() : null;
+            if (documentClass)
+                url.push(documentClass);
+            if (vsId)
+                url.push(vsId);
+            if (extension)
+                url.push(extension);
+            return url.join('/');
+        }
 
         self.checkRequired = function ($event) {
             var method = 'resolve';
@@ -342,6 +361,79 @@ module.exports = function (app) {
             self.documentInformation.editURL = typeof self.documentInformation.editURL === 'object' ? self.documentInformation.editURL : $sce.trustAsResourceUrl(self.documentInformation.editURL);
             self.trusted = true;
 
+            if (employeeService.getEmployee().defaultEditMode === correspondenceService.documentEditModes.desktop) {
+                // edit in desktop
+                self.editInDesktopAfterApprove();
+            } else if (employeeService.getEmployee().defaultEditMode === correspondenceService.documentEditModes.officeOnline) {
+                // edit in office online
+                self.editInOfficeOnlineAfterApprove();
+            } else {
+                // confirmation to select which edit mode
+                _defaultBehavior();
+            }
+        };
+
+        function _defaultBehavior() {
+            var message = langService.getConcatenated(['short_edit_in_desktop_confirmation_1', 'short_edit_in_desktop_confirmation_2']);
+            dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('edit-in-desktop-confirm-template'),
+                    controller: function (dialog) {
+                        'ngInject';
+                        var ctrl = this;
+
+                        ctrl.editInDesktopCallback = function () {
+                            self.editInDesktopAfterApprove();
+                            dialog.hide();
+                        };
+
+                        ctrl.editInOfficeOnlineCallback = function () {
+                            self.editInOfficeOnlineAfterApprove();
+                            dialog.hide();
+                        };
+
+                        ctrl.cancelCallback = function () {
+                            dialog.cancel();
+                        }
+                    },
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    locals: {
+                        content: message
+                    }
+                });
+        }
+
+
+        self.editInDesktopAfterApprove = function () {
+            var info = self.document.getInfo();
+            var desktop = new EditInDesktopCallback({
+                url: _createUrlSchema(info.vsId, info.documentClass, 'with-content'),
+                type: 'correspondence'
+            });
+            self.document.editCorrespondenceInDesktop(self.editInOfficeOnlineAfterApprove)
+                .then(function () {
+                    dialog.showDialog({
+                        templateUrl: cmsTemplate.getPopup('reload-content-overlay'),
+                        controllerAs: 'ctrl',
+                        controller: function ($scope, LangWatcher) {
+                            'ngInject';
+                            var ctrl = this;
+                            LangWatcher($scope);
+                            ctrl.reloadCallback = function () {
+                                desktop.reloadContent(true).then(function (correspondence) {
+                                    self.document.minorVersionNumber = correspondence.metaData.minorVersionNumber;
+                                    self.document.majorVersionNumber = correspondence.metaData.majorVersionNumber;
+                                    self.documentInformation = angular.copy(correspondence.content);
+                                    dialog.hide();
+                                });
+                            }
+                        }
+                    })
+                });
+        };
+
+        self.editInOfficeOnlineAfterApprove = function () {
             return correspondenceService
                 .openCorrespondenceEditor(self.documentInformation)
                 .then(function (information) {
@@ -349,14 +441,15 @@ module.exports = function (app) {
                 });
         };
 
+
         /**
          * @description Opens the document in edit mode by checking the default edit mode.
          * @returns {undefined}
          */
         self.editContentInEditPopup = function ($event) {
-            if (self.defaultEditMode === correspondenceService.documentEditModes.desktop) {
+            if (employeeService.getEmployee().defaultEditMode === correspondenceService.documentEditModes.desktop) {
                 self.editInDesktop($event);
-            } else if (self.defaultEditMode === correspondenceService.documentEditModes.officeOnline) {
+            } else if (employeeService.getEmployee().defaultEditMode === correspondenceService.documentEditModes.officeOnline) {
                 self.editInOfficeOnline($event);
             }
 

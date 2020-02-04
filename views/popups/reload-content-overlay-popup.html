@@ -1,0 +1,10 @@
+<md-dialog layout="column" class="transparent-bg full-screen">
+    <md-dialog-content flex layout="column" class="transparent-bg full-screen">
+        <div flex layout="column" id="overlay-to-reload-document" layout-align="center center">
+            <p>{{lang.reload_document_after_edit_in_desktop}}</p>
+            <md-button class="md-icon-button md-raised md-primary" ng-click="ctrl.reloadCallback()">
+                <md-icon md-svg-icon="reload"></md-icon>
+            </md-button>
+        </div>
+    </md-dialog-content>
+</md-dialog>

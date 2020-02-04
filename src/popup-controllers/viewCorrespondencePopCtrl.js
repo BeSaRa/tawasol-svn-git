@@ -581,7 +581,7 @@ module.exports = function (app) {
             self.stickyActions = gridService.getStickyActions(self.actions);
             // show readonly manage destinations for outgoing only
             var record = self.workItem || self.correspondence;
-            if (record.getInfo().documentClass === 'outgoing') {
+            if (typeof record.getInfo !== 'undefined' && record.getInfo().documentClass === 'outgoing') {
                 self.stickyActions.push(
                     {
                         type: 'action',
