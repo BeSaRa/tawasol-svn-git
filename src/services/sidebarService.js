@@ -137,7 +137,11 @@ module.exports = function (app) {
          * load menus
          */
         self.loadMenuItems = function () {
-            return $http.get(urlService.menus).then(function (result) {
+            return $http.get(urlService.menus, {
+                params: {
+                    version: app.$_privateBuildNumber
+                }
+            }).then(function (result) {
                 self.menuItems = generator.generateCollection(result.data, MenuItem);
                 self.menuItems = generator.interceptReceivedCollection('MenuItem', self.menuItems);
                 return self.menuItems;
