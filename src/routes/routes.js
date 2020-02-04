@@ -936,7 +936,7 @@ module.exports = function (app) {
                 templateUrl: templateProvider.getView('outgoing-deleted'),
                 controller: 'deletedOutgoingCtrl',
                 controllerAs: 'ctrl',
-                permission: 'DELETE_OUTGOING',
+                permission: 'menu_item_outgoing_deleted',
                 resolve: {
                     deletedOutgoings: function (correspondenceService) {
                         'ngInject';
@@ -1243,7 +1243,7 @@ module.exports = function (app) {
                 templateUrl: templateProvider.getView('incoming-deleted'),
                 controller: 'deletedIncomingCtrl',
                 controllerAs: 'ctrl',
-                permission: 'DELETE_INCOMING',
+                permission: 'menu_item_incoming_deleted',
                 resolve: {
                     deletedIncomings: function (correspondenceService) {
                         'ngInject';
@@ -1380,7 +1380,7 @@ module.exports = function (app) {
                 templateUrl: templateProvider.getView('internal-deleted'),
                 controller: 'deletedInternalCtrl',
                 controllerAs: 'ctrl',
-                permission: 'DELETE_INTERNAL',
+                permission: 'menu_item_internal_deleted',
                 resolve: {
                     deletedInternals: function (correspondenceService) {
                         'ngInject';

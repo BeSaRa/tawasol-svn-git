@@ -61,6 +61,7 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_outgoing_review', 'REVIEW_OUTGOING_DOCUMENTS')
             .addMenuPermission('menu_item_outgoing_ready_to_send', 'OUTGOING_READY_TO_SEND')
             .addMenuPermission('menu_item_outgoing_rejected', 'OUTGOING_REJECTED')
+            .addMenuPermission('menu_item_outgoing_deleted', 'DELETE_OUTGOING')
             .end()
             // incoming mail
             .addMenuPermissionGroup('menu_item_incoming')
@@ -70,6 +71,7 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_incoming_review', 'REVIEW_INCOMING_DOCUMENT')
             .addMenuPermission('menu_item_incoming_ready_to_send', 'SEND_INCOMING_QUEUE')
             .addMenuPermission('menu_item_incoming_rejected', 'REJECTED_INCOMING_QUEUE')
+            .addMenuPermission('menu_item_incoming_deleted', 'DELETE_INCOMING')
             .end()
             // internal mail
             .addMenuPermissionGroup('menu_item_internal')
@@ -80,6 +82,7 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_internal_review', 'REVIEW_INTERNAL')
             .addMenuPermission('menu_item_internal_ready_to_send', 'READY_TO_SEND_INTERNAL')
             .addMenuPermission('menu_item_internal_rejected', 'REJECTED_INTERNAL')
+            .addMenuPermission('menu_item_internal_deleted', 'DELETE_INTERNAL')
             .addMenuPermission('menu_item_approved_internal_queue', 'APPROVED_INTERNAL_DOCUMENT')
             .end()
             // inbox mail

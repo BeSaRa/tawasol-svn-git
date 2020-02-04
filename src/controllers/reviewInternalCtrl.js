@@ -619,7 +619,7 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function (action, model) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
-                        }
+                }
             },
             // view
             {
@@ -637,7 +637,7 @@ module.exports = function (app) {
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
-                        },
+                },
                 subMenu: [
                     // Preview
                     {
@@ -705,8 +705,8 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Remove
@@ -719,8 +719,8 @@ module.exports = function (app) {
                 callback: self.removeReviewInternal,
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Print Barcode
             {
@@ -746,8 +746,8 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Archive
             {
@@ -771,8 +771,8 @@ module.exports = function (app) {
                 permissionKey: "REJECT_INTERNAL",
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Accept
             {
@@ -784,8 +784,8 @@ module.exports = function (app) {
                 permissionKey: "ACCEPT_INTERNAL",
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Subscribe
             {
@@ -869,8 +869,7 @@ module.exports = function (app) {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
                             } else if (info.documentClass === 'incoming') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
-                            }
-                            else if (info.documentClass === 'internal') {
+                            } else if (info.documentClass === 'internal') {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                             }
                             return !info.isPaper
@@ -889,8 +888,8 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
             },
             // Manage
@@ -902,7 +901,7 @@ module.exports = function (app) {
                 showInView: false,
                 checkShow: function (action, model) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
-                        },
+                },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
@@ -989,8 +988,8 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Broadcast
             {
@@ -1014,7 +1013,7 @@ module.exports = function (app) {
                 showInView: false,
                 checkShow: function (action, model) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
-                        },
+                },
                 permissionKey: [
                     "DUPLICATE_BOOK_CURRENT",
                     "DUPLICATE_BOOK_FROM_VERSION"
