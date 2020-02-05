@@ -17,7 +17,7 @@ module.exports = function (app) {
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             model.theme = themeService.getThemeById(model.theme);
             model.securityLevels = generator.getResultFromSelectedCollection(model.securityLevels, 'lookupKey');
-            model.excludedUsersFromAudit = JSON.stringify(_.map(model.excludedUsersFromAudit, 'id'));
+            model.excludedUsersFromAudit = (model.excludedUsersFromAudit && model.excludedUsersFromAudit.length) ? JSON.stringify(_.map(model.excludedUsersFromAudit, 'id')) : JSON.stringify([]);
             model.fileType = angular.toJson(model.fileType);
             model.barcodeElements = model.barcodeElements.mapSend();
             model.excludedConversionFileTypes = JSON.stringify(model.excludedConversionFileTypes);
