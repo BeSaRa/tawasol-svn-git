@@ -88,8 +88,8 @@ module.exports = function (app) {
                     'received_date',
                     'status',
                     'correspondence_sites',
-                    'comment',
-                    'returned_by'
+                    'comment'
+                    //'returned_by'
                 ];
             printService
                 .printData(self.g2gItems, headers, printTitle);
