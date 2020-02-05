@@ -17,7 +17,8 @@ module.exports = function (app) {
                                                   generator,
                                                   contextHelpService,
                                                   rootEntity,
-                                                  dialog) {
+                                                  dialog,
+                                                  _) {
         'ngInject';
         var self = this;
 
@@ -43,7 +44,7 @@ module.exports = function (app) {
         self.saveLogo = true;
         self.fileTypes = fileTypes;
 
-        var filterExcludedFileTypes = ["xlsx", "docx", "doc"];
+        var filterExcludedFileTypes = ["xlsx", "docx", "doc", "pptx"];
         self.excludedFileTypes = _.filter(self.fileTypes, function (fileType) {
             return filterExcludedFileTypes.indexOf(fileType.getExtension()) !== -1;
         });
