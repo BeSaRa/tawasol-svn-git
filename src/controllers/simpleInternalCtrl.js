@@ -431,8 +431,7 @@ module.exports = function (app) {
                 permissionKey: 'ELECTRONIC_SIGNATURE_MEMO',
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    return !info.isPaper &&
-                        model.isInternalPersonal()
+                    return !info.isPaper;
                 }
             },
             // Send To Review
