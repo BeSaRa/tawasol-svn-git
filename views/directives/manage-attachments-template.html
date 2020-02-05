@@ -101,7 +101,7 @@
             </md-input-container>
             <md-input-container flex>
                 <label for="priorityLevel">{{lang.priority_level}}</label>
-                <md-select ng-model-options="{trackBy: '$value.lookupKey'}"
+                <md-select ng-model-options="{trackBy: '$value.id'}"
                            id="priorityLevel"
                            name="priorityLevel"
                            ng-model="ctrl.attachment.priorityLevel">

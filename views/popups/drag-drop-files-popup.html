@@ -47,7 +47,7 @@
                     <!-- Priority Level -->
                     <md-input-container flex>
                         <label for="priorityLevel">{{lang.priority_level}}</label>
-                        <md-select ng-model-options="{trackBy: '$value.lookupKey'}"
+                        <md-select ng-model-options="{trackBy: '$value.id'}"
                                    id="priorityLevel"
                                    name="priorityLevel"
                                    ng-change="ctrl.changeValueOf('priorityLevel',ctrl.priorityLevel)"
@@ -140,7 +140,7 @@
                     <!-- Priority Level -->
                     <md-input-container flex>
                         <label for="priorityLevel">{{lang.priority_level}}</label>
-                        <md-select ng-model-options="{trackBy: '$value.lookupKey'}"
+                        <md-select ng-model-options="{trackBy: '$value.id'}"
                                    id="priorityLevel"
                                    name="priorityLevel"
                                    ng-change="ctrl.changeValueOf('priorityLevel',ctrl.priorityLevel)"

@@ -24,7 +24,7 @@ module.exports = function (app) {
             } else if (typeof model.securityLevel !== 'number' && model.securityLevel.hasOwnProperty('id')) {
                 model.securityLevel = model.securityLevel.id;
             }
-            model.priorityLevel = model.priorityLevel.lookupKey;
+            model.priorityLevel = model.priorityLevel && model.priorityLevel.hasOwnProperty('lookupKey') ? model.priorityLevel.lookupKey : model.priorityLevel;
 
             delete model.file;
             delete model.refVSID;
