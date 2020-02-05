@@ -102,6 +102,7 @@ module.exports = function (app) {
         // all escalation process
         self.escalationProcess = lookupService.returnLookups(lookupService.escalationProcess);
         self.escalationProcessCopy = angular.copy(self.escalationProcess);
+        self.currentUserOrg = employeeService.getEmployee().userOrganization;
 
         var noneLookup = new Lookup({
             id: -1,
@@ -112,7 +113,7 @@ module.exports = function (app) {
         self.escalationProcessCopy.unshift(noneLookup);
 
         var _setEscalationProcess = function () {
-            var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess || noneLookup;
+            var currentOUEscalationProcess = self.currentUserOrg.escalationProcess || noneLookup;
 
             // check if initial open WF dialog
             (self.distWorkflowItem.escalationStatus) ?

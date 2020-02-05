@@ -32,7 +32,7 @@ module.exports = function (app) {
         self.comment = _getMatchedComment(self.distWorkflowItem);
 
         self.globalSettings = rootEntity.getGlobalSettings();
-        self.currentOUEmployee = employeeService.getEmployee().userOrganization;
+        self.currentUserOrg = employeeService.getEmployee().userOrganization;
 
         self.actionSearchText = '';
         self.commentSearchText = '';
@@ -51,7 +51,7 @@ module.exports = function (app) {
 
 
         var _setEscalationProcess = function () {
-            var currentOUEscalationProcess = self.currentOUEmployee.escalationProcess || noneLookup;
+            var currentOUEscalationProcess = self.currentUserOrg.escalationProcess || noneLookup;
 
             // check if initial open WF dialog
             if (self.distWorkflowItem.escalationStatus) {

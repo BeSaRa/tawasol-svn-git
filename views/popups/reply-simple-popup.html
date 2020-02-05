@@ -109,7 +109,7 @@
                         <label for="dueDate">{{lang.due_date}}</label>
                         <md-datepicker id="dueDate" md-open-on-focus
                                        md-min-date="ctrl.minDate"
-                                       ng-required="ctrl.isEscalationStatusSelected()"
+                                       ng-required="ctrl.currentUserOrg.enableEscalation &&  ctrl.isEscalationStatusSelected()"
                                        ng-model="ctrl.distWorkflowItem.dueDate"></md-datepicker>
                     </md-input-container>
                 </div>
@@ -149,7 +149,7 @@
                         <div class="help-text-div">{{lang.secure_comment_note}}</div>
                     </div>
                 </div>
-                <div layout="row">
+                <div layout="row" ng-if="ctrl.currentUserOrg.enableEscalation">
                     <md-input-container flex>
                         <label for="escalationStatus">{{lang.choose_escalation_process}}</label>
                         <md-select ng-model-options="{trackBy: '$value.id'}"
