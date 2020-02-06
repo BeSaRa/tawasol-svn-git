@@ -1495,7 +1495,7 @@ module.exports = function (app) {
             // temporary route for reports
             .state('app.reports', {
                 url: '/reports/:menuId',
-                template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
+                template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}" style="z-index:100;"></iframe>',
                 controller: function ($sce, $stateParams, sidebarService, langService, contextHelpService) {
                     'ngInject';
                     contextHelpService.setHelpTo('reports');
