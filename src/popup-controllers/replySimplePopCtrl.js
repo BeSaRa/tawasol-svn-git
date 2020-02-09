@@ -201,7 +201,7 @@ module.exports = function (app) {
                     .setRelationId(replyOn.registeryOu.relationId)
                     .setSendSMS(self.distWorkflowItem.sendSMS)
                     .setSendEmail(self.distWorkflowItem.sendEmail)
-                    .setHasRegistry(self.registeryOu.hasRegistry);
+                    .setHasRegistry(replyOn.registeryOu.hasRegistry);
 
                 ou.sendRelatedDocs = sendRelatedDocs;
             }
