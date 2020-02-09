@@ -203,6 +203,16 @@ module.exports = function (app) {
                     event.title = event.taskTitle;
                     event.start = event.creator ? event.taskStartDate : event.participantStartDate;
                     event.end = event.creator ? event.taskDueDate : event.participantDueDate;
+
+                    if (event.allDay) {
+                        /*
+                        * if all day event, set the given end time to endOfDay and add 1ms to change date to next date
+                        * because calendar displays allDay event to previous date only with reference to event-parsing in full calendar
+                        * */
+                        event.end = generator.getDateObjectFromTimeStamp(event.end, false, true);
+                        event.end.setMilliseconds(event.end.getMilliseconds() + 1);
+                    }
+
                     event.editable = (event.creator && event.taskState !== 3);
                     event.classNames = event.creator ? self.classes[event.taskState] : self.classes[event.participantTaskState];
                     event.startEditable = false;

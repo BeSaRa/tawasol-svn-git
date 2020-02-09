@@ -130,6 +130,11 @@ module.exports = function (app) {
                                 successCallback(taskService.events);
                             });
                     },
+                    eventTimeFormat: {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                    },
                     eventRender: function (info) {
                         var element = angular.element(info.el), content = angular.element(element).find('.fc-content');
                         var scope = $rootScope.$new(true);
