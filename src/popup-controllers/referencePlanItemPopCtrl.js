@@ -10,7 +10,9 @@ module.exports = function (app) {
                                                          generator,
                                                          referencePlanItem,
                                                          lookupService,
-                                                         ReferencePlanItem) {
+                                                         ReferencePlanItem,
+                                                         siteTypes,
+                                                         CorrespondenceSiteType) {
         'ngInject';
         var self = this;
         self.controllerName = 'referencePlanItemPopCtrl';
@@ -28,6 +30,8 @@ module.exports = function (app) {
         self.securityLevels = angular.copy(lookupService.returnLookups(lookupService.securityLevel));
         // all document Types
         self.documentTypes = angular.copy(documentTypeService.documentTypes);
+        // all correspondence site types
+        self.correspondenceSiteTypes = angular.copy(siteTypes);
 
         self.referencePlanItemPerOU = self.model.perOu;
 
@@ -47,6 +51,13 @@ module.exports = function (app) {
 
         self.securityLevels.unshift(lookup);
         self.documentClasses.unshift(lookup);
+
+        self.correspondenceSiteTypes.unshift(
+            new CorrespondenceSiteType({
+                arName: langService.getKey('all', 'ar'),
+                enName: langService.getKey('all', 'en')
+            })
+        );
 
         self.documentClasses = _.map(self.documentClasses, function (item) {
             item.customLookupKey = generator.ucFirst(item.lookupStrKey.toLowerCase());

@@ -13,12 +13,12 @@
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row">
-                                    <md-switch ng-model="ctrl.referencePlanItemPerOU"
-                                               ng-change="ctrl.changePerEntityOu()">
-                                        {{lang.per + ' : ' +ctrl.referencePlanItem.getPerOUEntityTranslate()}}
-                                    </md-switch>
-                                </div>
-                                <div layout="row">
+                                    <div class="cms-input-container" flex>
+                                        <md-switch ng-model="ctrl.referencePlanItemPerOU"
+                                                   ng-change="ctrl.changePerEntityOu()">
+                                            {{lang.per + ' : ' +ctrl.referencePlanItem.getPerOUEntityTranslate()}}
+                                        </md-switch>
+                                    </div>
                                     <md-input-container flex>
                                         <label for="docClass">{{lang.label_document_class}}</label>
                                         <md-select id="docClass" aria-label="classDescription"
@@ -29,6 +29,8 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
+                                </div>
+                                <div layout="row">
                                     <md-input-container flex>
                                         <label for="securityLevel">{{lang.security_level}}</label>
                                         <md-select id="securityLevel" aria-label="securityLevel"
@@ -49,6 +51,8 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
+                                </div>
+                                <div layout="row">
                                     <md-input-container flex>
                                         <label for="itemOrder">{{lang.item_order}}</label>
                                         <input type="text" id="itemOrder" name="itemOrder"
@@ -57,6 +61,15 @@
                                         <div ng-messages="referencePlanNumberForm.itemOrder.$error">
                                             <div ng-message="number">{{lang.numberonly}}</div>
                                         </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="siteType">{{lang.correspondence_site_type}}</label>
+                                        <md-select id="siteType" name="siteType"
+                                                   ng-model="ctrl.referencePlanItem.expressionComponents.siteType">
+                                            <md-option ng-repeat="type in ctrl.correspondenceSiteTypes" ng-value="type.lookupKey" >
+                                                {{type.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
                                     </md-input-container>
                                 </div>
                             </div>

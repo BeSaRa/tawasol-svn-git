@@ -18,7 +18,8 @@ module.exports = function (app) {
             self.expressionComponents = {
                 classDescription: "",
                 securityLevel: null,
-                docType: null
+                docType: null,
+                siteType: null
             };
 
             self.referenceOptions = {};

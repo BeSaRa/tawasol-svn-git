@@ -174,6 +174,10 @@ module.exports = function (app) {
                         documentTypes: function (documentTypeService) {
                             'ngInject';
                             return documentTypeService.getDocumentTypes();
+                        },
+                        siteTypes: function (correspondenceSiteTypeService) {
+                            'ngInject';
+                            return correspondenceSiteTypeService.getCorrespondenceSiteTypes()
                         }
                     }
                 })
