@@ -2,7 +2,7 @@ module.exports = function (app) {
     app.factory('Task', function (CMSModelInterceptor, _, $timeout, configurationService, Indicator) {
         'ngInject';
         return function Task(model) {
-            var self = this, taskService;
+            var self = this, taskService, completedStateLookupKey = 3;
             self.id = null;
             self.taskTitle = null;
             self.taskDescription = null;
@@ -119,6 +119,17 @@ module.exports = function (app) {
                 return _.findIndex(this.taskParticipants, function (participant) {
                     return participant.participantId === taskParticipant.participantId;
                 });
+            };
+
+            Task.prototype.isCompletedTask = function () {
+                if (typeof this.taskState !== 'undefined' && this.taskState !== null) {
+                    if (this.taskState.hasOwnProperty('lookupKey')) {
+                        return this.taskState.lookupKey === completedStateLookupKey;
+                    } else {
+                        return this.taskState === completedStateLookupKey;
+                    }
+                }
+                return false;
             };
 
             // don't remove CMSModelInterceptor from last line

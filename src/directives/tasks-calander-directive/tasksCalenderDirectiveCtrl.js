@@ -73,7 +73,7 @@ module.exports = function (app) {
             });
         });
 
-        // get controller of review internal
+        // get controller of user inbox
         taskService.hasQueueController('userInbox', function () {
             return $controller('userInboxCtrl', {
                 $scope: $rootScope.$new(true),

@@ -63,7 +63,23 @@ module.exports = function (app) {
             self.viewDocument = function (correspondence, $event) {
                 var info = correspondence.getInfo();
                 var workItem = null;
-                var ctrl = !self.task.wobNum ? taskService.getQueueController(info.documentClass) : taskService.getQueueController('userInbox');
+                var ctrl;
+                if (self.task.isCompletedTask() || !self.task.wobNum) {
+                    ctrl = taskService.getQueueController(info.documentClass);
+                    ctrl.viewDocument(correspondence, $event);
+                } else {
+                    ctrl = taskService.getQueueController('userInbox');
+                    if (self.task.wobNum) {
+                        workItem = new WorkItem({
+                            generalStepElm: {
+                                workObjectNumber: self.task.wobNum,
+                                docType: info.docClassId
+                            }
+                        });
+                        ctrl.viewDocument(workItem, $event);
+                    }
+                }
+                /*var ctrl = !self.task.wobNum ? taskService.getQueueController(info.documentClass) : taskService.getQueueController('userInbox');
 
                 if (self.task.wobNum) {
                     workItem = new WorkItem({
@@ -76,7 +92,7 @@ module.exports = function (app) {
                     return;
                 }
 
-                ctrl.viewDocument(correspondence, $event);
+                ctrl.viewDocument(correspondence, $event);*/
             };
 
             self.truncateSubject = gridService.getGridSubjectTruncateByGridName(gridService.grids.others.viewTask);
@@ -88,7 +104,7 @@ module.exports = function (app) {
                 return propertyName + '.' + langService.current + 'Name';
             };
 
-            
+
             self.openTaskParticipantFromView = function (participant, $event) {
                 $event.preventDefault();
                 taskService
