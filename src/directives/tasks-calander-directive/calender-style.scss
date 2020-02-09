@@ -38,8 +38,13 @@
 }
 
 .fc-event {
-  .fc-time{
+  .fc-time {
     padding-right: 10px;
+  }
+
+  .fc-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
 }
@@ -84,6 +89,7 @@
     border-radius: 5px;
     margin: 5px;
     min-height: 24px !important;
+
     button {
       padding: 0 !important;
       margin: 0 !important;
@@ -91,6 +97,7 @@
       min-height: 0 !important;
       height: 24px !important;
       width: 24px !important;
+
       svg {
         color: white;
       }
