@@ -42,13 +42,10 @@ module.exports = function (app) {
             var h = hour.toString().length === 1 ? '0' + hour : "" + hour;
             var hh = h + ':30';
             var remainingHour = (hour === 0 || hour > 12) ? (12 - hour) : hour;
-            var AMPM = null;
+
             var hourValue = Math.abs(remainingHour);
-            if (remainingHour < 0) {
-                AMPM = ' PM';
-            } else {
-                AMPM = ' AM'
-            }
+            var AMPM = hour < 12 ? ' AM' : ' PM';
+
             self.calenderHours.push({
                 hour: hour,
                 min: 0,
