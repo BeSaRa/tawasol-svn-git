@@ -10,7 +10,8 @@
                         <!-- Title -->
                         <md-input-container flex>
                             <label for="documentTitle">{{lang.attachment_document_title}}</label>
-                            <input required ng-model="ctrl.attachment.documentTitle" name="documentTitle" id="documentTitle">
+                            <input required ng-model="ctrl.attachment.documentTitle" name="documentTitle"
+                                   id="documentTitle">
                             <div ng-messages="icnAttachmentOptionsForm.documentTitle.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
@@ -59,22 +60,6 @@
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
-                        <!-- Security Level -->
-                        <md-input-container ng-if="!ctrl.inheritSecurity" flex>
-                            <label for="securityLevel">{{lang.attachment_attachment_security_level}}</label>
-                            <md-select ng-model-options="{trackBy: '$value'}"
-                                       id="securityLevel"
-                                       name="securityLevel"
-                                       ng-required="true"
-                                       ng-model="ctrl.attachment.securityLevel">
-                                <md-option ng-value="level.lookupKey" ng-repeat="level in ctrl.securityLevel">
-                                    {{level.getTranslatedName()}}
-                                </md-option>
-                            </md-select>
-                            <div ng-messages="icnAttachmentOptionsForm.securityLevel.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
-                        </md-input-container>
                         <!-- Search Templates -->
                         <md-input-container flex>
                             <label for="searchTemplate">{{lang.templates}}</label>
@@ -92,6 +77,47 @@
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Priority Level -->
+                        <md-input-container flex>
+                            <label for="priorityLevel">{{lang.priority_level}}</label>
+                            <md-select ng-model-options="{trackBy: '$value.id'}"
+                                       id="priorityLevel"
+                                       name="priorityLevel"
+                                       ng-model="ctrl.attachment.priorityLevel">
+                                <md-option ng-value="priority" ng-repeat="priority in ctrl.priorityLevels">
+                                    {{priority.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <!-- Export Status -->
+                        <div flex class="cms-input-container">
+                            <md-switch flex ng-model="ctrl.attachment.exportStatus"
+                                       aria-label="{{lang.export_status}}">
+                                <label>{{lang.export_status}} :
+                                    {{ctrl.attachment.getTranslatedYesNo('exportStatus')}}</label>
+                            </md-switch>
+                        </div>
+                    </div>
+                    <div layout="row" ng-if="!ctrl.inheritSecurity">
+                        <!-- Security Level -->
+                        <md-input-container ng-if="!ctrl.inheritSecurity" flex>
+                            <label for="securityLevel">{{lang.attachment_attachment_security_level}}</label>
+                            <md-select ng-model-options="{trackBy: '$value'}"
+                                       id="securityLevel"
+                                       name="securityLevel"
+                                       ng-required="true"
+                                       ng-model="ctrl.attachment.securityLevel">
+                                <md-option ng-value="level.lookupKey" ng-repeat="level in ctrl.securityLevel">
+                                    {{level.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="icnAttachmentOptionsForm.securityLevel.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <span flex ng-if="!ctrl.inheritSecurity"></span>
                     </div>
                 </div>
             </form>

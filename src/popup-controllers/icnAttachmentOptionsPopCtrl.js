@@ -22,6 +22,7 @@ module.exports = function (app) {
         // all security level
         self.securityLevel = correspondenceService.getLookup(info.documentClass, 'securityLevels');
         self.attachmentUpdateActions = lookupService.returnLookups(lookupService.attachmentUpdateAction);
+        self.priorityLevels = lookupService.returnLookups(lookupService.attachmentPriority);
         self.icnSearchTemplates = icnSearchTemplates;
 
         self.attachment = new Attachment();
@@ -35,6 +36,8 @@ module.exports = function (app) {
         self.attachment.updateActionStatus = self.attachmentUpdateActions[0];
         self.attachment.attachmentType = self.attachmentTypes[0].lookupKey;
         self.attachment.searchTemplate = self.icnSearchTemplates[0];
+        self.attachment.priorityLevel = self.priorityLevels[0];
+
         /**
          * @description Gets the iframe for icn search template with attachment properties
          * @param $event

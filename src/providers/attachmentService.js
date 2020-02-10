@@ -668,23 +668,27 @@ module.exports = function (app) {
                  */
                 self.openICNAttachmentDialog = function (correspondence, attachment, $event) {
                     var securityLevel = attachment.securityLevel && attachment.securityLevel.hasOwnProperty('lookupKey') ? attachment.securityLevel.lookupKey : attachment.securityLevel,
+                        priorityLevel = attachment.priorityLevel && attachment.priorityLevel.hasOwnProperty('lookupKey') ? attachment.priorityLevel.lookupKey : attachment.priorityLevel,
                         attachmentType = attachment.attachmentType && attachment.attachmentType.hasOwnProperty('lookupKey') ? attachment.attachmentType.lookupKey : attachment.attachmentType,
                         searchTemplate = attachment.searchTemplate.menuItem,
                         searchTemplateUrl = searchTemplate.hasOwnProperty('menuItem') ? searchTemplate.menuItem : searchTemplate,
                         updateActionStatus = attachment.updateActionStatus && attachment.updateActionStatus.hasOwnProperty('lookupKey') ? attachment.updateActionStatus.lookupKey : attachment.updateActionStatus;
 
+                    // if securityLevel or priorityLevel are not Lookup objects or integers, use "id" which will represent lookup
                     securityLevel = securityLevel.hasOwnProperty('id') ? securityLevel.id : securityLevel;
+                    priorityLevel = priorityLevel.hasOwnProperty('id') ? priorityLevel.id : priorityLevel;
                     searchTemplateUrl = searchTemplateUrl && searchTemplateUrl.hasOwnProperty('url') ? searchTemplateUrl.url : searchTemplateUrl;
 
-                    //var variables = '%2C:token%2C:vsId%2C:attachmentType%2C:securityLevel%2C:attachmentName%2C:updateActionStatus%2C:locale'.change({
-                    var variables = ['', 'token', 'vsId', 'attachmentType', 'securityLevel', 'attachmentName', 'updateActionStatus', 'locale'].join('%2C:').change({
+                    var variables = ['', 'token', 'vsId', 'attachmentType', 'securityLevel', 'attachmentName', 'updateActionStatus', 'exportStatus', 'priorityLevel', 'locale'].join('%2C:').change({
                         token: tokenService.getToken(),
                         vsId: correspondence.getInfo().vsId,
                         attachmentType: attachmentType,
                         securityLevel: securityLevel,
                         attachmentName: attachment.documentTitle ? attachment.documentTitle : '',
                         locale: langService.current,
-                        updateActionStatus: updateActionStatus
+                        updateActionStatus: updateActionStatus,
+                        priorityLevel: priorityLevel,
+                        exportStatus: attachment.exportStatus
                     });
                     searchTemplateUrl = searchTemplateUrl.replace('&mimeType', variables + '&mimeType');
 
