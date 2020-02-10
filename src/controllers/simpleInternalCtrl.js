@@ -220,7 +220,7 @@ module.exports = function (app) {
                 }
 
 
-                if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist))) {
+                if (employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW') && _hasContent()) {
                     dialog.confirmMessage(langService.get('confirm_launch_distribution_workflow'))
                         .then(function () {
                             self.docActionLaunchDistributionWorkflow(self.internal);
@@ -418,20 +418,22 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
             },
-            // Approve and sent
+            // Approve and send
             {
                 text: langService.get('grid_action_electronic_approve_and_send'),
                 callback: self.signESignatureAndSend,
                 class: "action-green",
-                permissionKey: 'ELECTRONIC_SIGNATURE_MEMO',
+                permissionKey: ['ELECTRONIC_SIGNATURE_MEMO', 'LAUNCH_DISTRIBUTION_WORKFLOW'],
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    return !info.isPaper;
+                    isVisible = gridService.checkToShowAction(action) && !info.isPaper && _hasContent();
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
                 }
             },
             // Send To Review
@@ -441,7 +443,7 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model, index) {
-                    isVisible = gridService.checkToShowAction(action) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
