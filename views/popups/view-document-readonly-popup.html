@@ -1,4 +1,5 @@
 <md-dialog id="attachmentsOnly-dialog" ng-class="{'fullscreen':ctrl.fullScreen}"
+           class="document-dialog"
            ng-attr-aria-label="{{lang.view_document}}" layout="column">
     <div layout="row" layout-align="start center">
         <div flex layout-align="center center" layout="row">
@@ -27,36 +28,3 @@
         </md-button>
     </md-dialog-actions>
 </md-dialog>
-
-
-
-
-<!--<md-dialog id="attachmentsOnly-dialog" ng-class="{'fullscreen':ctrl.fullScreen}"
-           ng-attr-aria-label="{{lang.view_document}}">
-    <div flex layout="column">
-        <div>
-            <div flex layout="row" layout-align="start center">
-                <div flex layout-align="center center" layout="row" class="font-bold text-center">
-                    <span>{{::ctrl.document.getTranslatedName()}}</span>
-                </div>
-                <md-button ng-click="ctrl.toggleFullScreen()" class="md-icon-button">
-                    <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen'}}"></md-icon>
-                </md-button>
-                <md-button ng-click="ctrl.closeDocumentReadOnlyDialog()"
-                           class="md-icon-button">
-                    <md-icon md-svg-icon="close"></md-icon>
-                </md-button>
-            </div>
-        </div>
-        <div layout="row" flex ng-if="ctrl.viewURL">
-            <iframe ng-src="{{ctrl.viewURL}}" class="document-viewer-full-width-height"
-                    frameborder="0"></iframe>
-        </div>
-        <div layout="row">
-            <div ng-if="!ctrl.correspondence">
-                <md-button class="md-raised red-text" ng-click="ctrl.closeDocumentReadOnlyDialog()">{{lang.close}}
-                </md-button>
-            </div>
-        </div>
-    </div>
-</md-dialog>-->
