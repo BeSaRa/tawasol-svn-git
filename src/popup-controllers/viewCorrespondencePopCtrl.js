@@ -362,9 +362,19 @@ module.exports = function (app) {
             $event.stopPropagation();
             self.content
                 .desktop
-                .reloadContent()
-                .then(function (content) {
-                    angular.extend(self.content, content);
+                .reloadContent(true)
+                .then(function (result) {
+                    // if response contains stepElm property, its workitem, not normal document
+                    var isWorkItem = result.hasOwnProperty('stepElm'),
+                        updatedContent = isWorkItem ? result.documentViewInfo : result.content,
+                        updatedDocument = isWorkItem ? result.correspondence : result.metaData;
+
+                    angular.extend(self.content, updatedContent);
+
+                    // update the document version
+                    self.correspondence.setMajorVersionNumber(updatedDocument.majorVersionNumber);
+                    self.correspondence.setMinorVersionNumber(updatedDocument.minorVersionNumber);
+
                     self.content.desktop.overlay = false;
                     self.editMode = false;
                     _overrideViewUrl();
