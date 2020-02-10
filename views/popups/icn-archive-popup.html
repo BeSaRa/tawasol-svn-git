@@ -1,31 +1,32 @@
-<md-dialog id="correspondence-dialog" class="fullscreen" ng-class="{'fullscreen':ctrl.fullScreen}"
-           ng-attr-aria-label="{{lang.archive}}">
-    <div flex layout="column">
-        <div>
-            <div flex layout="row" layout-align="start center">
-                <div flex layout-align="center center" layout="row">
-                    <span flex></span>
-                    <span flex md-truncate>{{lang.archive}} - {{::ctrl.correspondence.getTranslatedName()}}</span>
-                    <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
-                                          md-diameter="30"></md-progress-circular>
-                </div>
-                <md-button ng-click="ctrl.toggleFullScreen()" class="md-icon-button">
-                    <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen'}}"></md-icon>
-                </md-button>
-                <md-button ng-click="ctrl.closeICNArchiveDialog()"
-                           class="md-icon-button">
-                    <md-icon md-svg-icon="close" class="red-text"></md-icon>
-                </md-button>
+<md-dialog id="icn-archive-dialog" ng-class="{'fullscreen':ctrl.fullScreen}"
+           class="document-dialog"
+           ng-attr-aria-label="{{lang.archive}}" layout="column">
+    <div layout="row" layout-align="start center">
+        <div flex layout-align="center center" layout="row">
+            <span flex md-truncate class="font-bold text-center">{{lang.archive}} - {{::ctrl.correspondence.getTranslatedName()}}</span>
+            <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
+                                  md-diameter="30"></md-progress-circular>
+        </div>
+        <md-button ng-click="ctrl.toggleFullScreen()" class="md-icon-button">
+            <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen'}}"></md-icon>
+        </md-button>
+        <md-button ng-click="ctrl.closeICNArchiveDialog()"
+                   class="md-icon-button">
+            <md-icon md-svg-icon="close" class="red-text"></md-icon>
+        </md-button>
+    </div>
+    <md-dialog-content layout="column" flex scroll-directive>
+        <div layout="row" layout-fill flex>
+            <div id="iframe-parent" layout="column" class="relative" flex>
+                <iframe id="icn-login" ng-hide="true" width="0" height="0" ng-src="{{ctrl.loginURL}}"></iframe>
+                <iframe id="iframe-icn-archive"
+                        ng-src="{{ctrl.url}}" flex
+                        frameborder="0"></iframe>
             </div>
         </div>
-        <div layout="row" flex>
-            <iframe id="icn-login" ng-hide="true" width="0" height="0" ng-src="{{ctrl.loginURL}}"></iframe>
-            <iframe id="iframe-icn-archive"
-                    ng-src="{{ctrl.url}}" flex
-                    frameborder="0"></iframe>
-        </div>
-        <div layout="row">
-                <md-button class="md-raised red-text" ng-click="ctrl.closeICNArchiveDialog()">{{lang.close}}</md-button>
-        </div>
-    </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeICNArchiveDialog()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
 </md-dialog>
