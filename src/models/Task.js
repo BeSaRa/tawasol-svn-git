@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('Task', function (CMSModelInterceptor, _, $timeout, configurationService, Indicator) {
+    app.factory('Task', function (CMSModelInterceptor, _, $timeout, configurationService, employeeService) {
         'ngInject';
         return function Task(model) {
             var self = this, taskService, completedStateLookupKey = 3;
@@ -130,6 +130,11 @@ module.exports = function (app) {
                     }
                 }
                 return false;
+            };
+
+            Task.prototype.isCurrentUserCreator = function () {
+                var userId = this.userId && this.userId.hasOwnProperty('id') ? this.userId.id : this.userId;
+                return userId === employeeService.getEmployee().id;
             };
 
             // don't remove CMSModelInterceptor from last line

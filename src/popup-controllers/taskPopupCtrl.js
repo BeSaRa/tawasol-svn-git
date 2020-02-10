@@ -290,7 +290,7 @@ module.exports = function (app) {
             var info = correspondence.getInfo();
             var workItem = null;
             var ctrl;
-            if (self.task.isCompletedTask() || !self.task.wobNum) {
+            if (self.task.isCurrentUserCreator() || self.task.isCompletedTask() || !self.task.wobNum) {
                 ctrl = taskService.getQueueController(info.documentClass);
                 ctrl.viewDocument(correspondence, $event);
             } else {
