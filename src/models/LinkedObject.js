@@ -87,6 +87,16 @@ module.exports = function (app) {
                         address: {
                             required: false,
                             fieldIdentifier: 'address'
+                        },
+                        sendSMS: {
+                            required: false,
+                            fieldIdentifier: 'sendSMS',
+                            manualDisplay: true
+                        },
+                        smsTemplateId: {
+                            required: false,
+                            fieldIdentifier: 'smsTemplateId',
+                            manualDisplay: true
                         }
                     },
                     EMPLOYEE: {

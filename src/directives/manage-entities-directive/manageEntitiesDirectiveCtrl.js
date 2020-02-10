@@ -142,8 +142,10 @@ module.exports = function (app) {
                 if (self.rootEntity.hrEnabled && self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user' && field.fieldIdentifier === 'qid') {
                     correspondenceService.searchLinkedPersonByCriteria({qid: self.entity.qid})
                         .then(function (result) {
-                            result[0].typeId = self.selectedEntityType;
-                            self.entity = angular.copy(result[0]);
+                            if (result && result.length) {
+                                result[0].typeId = self.selectedEntityType;
+                                self.entity = angular.copy(result[0]);
+                            }
                         })
                 }
                 return [];
@@ -212,6 +214,13 @@ module.exports = function (app) {
          * add entity document
          */
         self.addEntityToDocument = function () {
+            if (self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user'){
+                if (self.entity.sendSMS && !self.entity.smsTemplateId) {
+                    toast.error(langService.get('please_select_sms_template'));
+                    return;
+                }
+            }
+
             var promise = null;
 
             if (self.vsId) {

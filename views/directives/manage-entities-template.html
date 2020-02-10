@@ -41,7 +41,7 @@
     </div>
     <form ng-if="ctrl.showEntityFrom" layout="column" name="entityForm">
         <div ng-repeat="fields in ctrl.currentFields track by $index" layout="row">
-            <md-input-container flex ng-repeat="field in fields track by $index">
+            <md-input-container flex ng-repeat="field in fields track by $index" ng-if="!field.manualDisplay">
                 <label for="{{field.label}}">{{lang[ctrl.labels[field.label]]}}</label>
                 <input name="{{field.label}}" custom-validate-directive="{{field.customValidation.type}}"
                        id="{{field.label}}" ng-model="ctrl.entity[field.label]"
@@ -66,18 +66,18 @@
             <div flex class="cms-input-container">
                 <md-switch aria-label="{{lang.send_sms}}"
                            tooltip="{{lang.send_sms}}"
-                           ng-change="ctrl.resetSMSTemplate(entity, $event)"
-                           ng-model="entity.sendSMS">
+                           ng-change="ctrl.resetSMSTemplate(ctrl.entity, $event)"
+                           ng-model="ctrl.entity.sendSMS">
                     <span>{{lang.send_sms}} : </span>
-                    {{entity.sendSMS ? lang.yes : lang.no }}
+                    {{ctrl.entity.sendSMS ? lang.yes : lang.no }}
                 </md-switch>
             </div>
             <md-input-container flex>
                 <label for="smsTemplateId">{{lang.sms_template}}</label>
                 <md-select id="smsTemplateId" name="smsTemplateId"
-                           ng-required="entity.sendSMS"
-                           ng-disabled="!entity.sendSMS"
-                           ng-model="entity.smsTemplateId">
+                           ng-required="ctrl.entity.sendSMS"
+                           ng-disabled="!ctrl.entity.sendSMS"
+                           ng-model="ctrl.entity.smsTemplateId">
                     <md-option ng-value="null">{{lang.none}}</md-option>
                     <md-option ng-repeat="smsTemplate in ctrl.smsTemplates track by $index"
                                ng-value="smsTemplate.id">

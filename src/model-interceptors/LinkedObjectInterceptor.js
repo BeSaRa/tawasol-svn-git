@@ -19,6 +19,8 @@ module.exports = function (app) {
 
             if (model.sendSMS && model.smsTemplateId) {
                 model.smsTemplateId = model.smsTemplateId.hasOwnProperty('id') ? model.smsTemplateId.id : model.smsTemplateId;
+            } else {
+                model.smsTemplateId = null;
             }
             return model;
         });
