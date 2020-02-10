@@ -289,20 +289,22 @@ module.exports = function (app) {
         self.viewCorrespondence = function (correspondence, $event) {
             var info = correspondence.getInfo();
             var workItem = null;
-            var ctrl = !self.task.wobNum ? taskService.getQueueController(info.documentClass) : taskService.getQueueController('userInbox');
-
-            if (self.task.wobNum) {
-                workItem = new WorkItem({
-                    generalStepElm: {
-                        workObjectNumber: self.task.wobNum,
-                        docType: info.docClassId
-                    }
-                });
-                ctrl.viewDocument(workItem, $event);
-                return;
+            var ctrl;
+            if (self.task.isCompletedTask() || !self.task.wobNum) {
+                ctrl = taskService.getQueueController(info.documentClass);
+                ctrl.viewDocument(correspondence, $event);
+            } else {
+                ctrl = taskService.getQueueController('userInbox');
+                if (self.task.wobNum) {
+                    workItem = new WorkItem({
+                        generalStepElm: {
+                            workObjectNumber: self.task.wobNum,
+                            docType: info.docClassId
+                        }
+                    });
+                    ctrl.viewDocument(workItem, $event);
+                }
             }
-
-            ctrl.viewDocument(correspondence, $event);
         };
 
         self.linkDocumentTask = function ($event) {

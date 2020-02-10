@@ -79,20 +79,6 @@ module.exports = function (app) {
                         ctrl.viewDocument(workItem, $event);
                     }
                 }
-                /*var ctrl = !self.task.wobNum ? taskService.getQueueController(info.documentClass) : taskService.getQueueController('userInbox');
-
-                if (self.task.wobNum) {
-                    workItem = new WorkItem({
-                        generalStepElm: {
-                            workObjectNumber: self.task.wobNum,
-                            docType: info.docClassId
-                        }
-                    });
-                    ctrl.viewDocument(workItem, $event);
-                    return;
-                }
-
-                ctrl.viewDocument(correspondence, $event);*/
             };
 
             self.truncateSubject = gridService.getGridSubjectTruncateByGridName(gridService.grids.others.viewTask);
