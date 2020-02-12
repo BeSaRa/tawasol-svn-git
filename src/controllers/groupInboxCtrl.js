@@ -28,7 +28,8 @@ module.exports = function (app) {
                                                mailNotificationService,
                                                workItems,
                                                emailItem,
-                                               gridService) {
+                                               gridService,
+                                               $timeout) {
         'ngInject';
         var self = this;
         self.controllerName = 'groupInboxCtrl';
@@ -1674,5 +1675,18 @@ module.exports = function (app) {
         };
         // to open Email item if it exists.
         self.openEmailItem();
+
+        self.refreshGrid = function (time) {
+            $timeout(function () {
+                $state.is('app.inbox.group-inbox') && self.reloadGroupInbox(self.grid.page);
+            }, time)
+                .then(function () {
+                    $state.is('app.inbox.group-inbox') && self.refreshGrid(time);
+                });
+        };
+
+        if (employeeService.getEmployee().getIntervalMin()){
+            self.refreshGrid(employeeService.getEmployee().getIntervalMin());
+        }
     });
 };
