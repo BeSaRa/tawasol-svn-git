@@ -68,7 +68,7 @@
                                     </tr>
                                     </thead>
                                     <tbody md-body>
-                                    <tr md-row md-select="deletedOIncoming" grid-right-click-directive
+                                    <tr md-row md-select="deletedIncoming" grid-right-click-directive
                                         model="deletedIncoming"
                                         selected-length="{{ctrl.selectedDeletedIncomings.length ? ctrl.selectedDeletedIncomings.length : 0}}"
                                         ng-repeat="deletedIncoming in searchResults = (ctrl.deletedIncomings | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))  track by $index">
