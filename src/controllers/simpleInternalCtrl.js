@@ -326,7 +326,7 @@ module.exports = function (app) {
                 return;
             }
 
-            model.approveDocument($event, defer, false)
+            model.approveDocument($event, defer, false,true)
                 .then(function (result) {
                     model.launchWorkFlow($event, 'forward', 'favorites')
                         .then(function () {

@@ -633,13 +633,13 @@ module.exports = function (app) {
                     });
             };
 
-            WorkItem.prototype.approveDocument = function ($event, defer, ignoreMessage) {
+            WorkItem.prototype.approveDocument = function ($event, defer, ignoreMessage, ignoreLaunch) {
                 var workItem = this;
                 return correspondenceService
                     .showApprovedDialog(this, $event, ignoreMessage)
                     .then(function (result) {
                         new ResolveDefer(defer);
-                        if (result === 'PARIALLY_AUTHORIZED') {
+                        if (result === 'PARIALLY_AUTHORIZED' && !ignoreLaunch) {
                             return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: workItem.getTranslatedName()}))
                                 .then(function () {
                                     return workItem.launchWorkFlow($event, 'forward', 'favorites');

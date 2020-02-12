@@ -532,13 +532,13 @@ module.exports = function (app) {
             Correspondence.prototype.needApprove = function () {
                 return this.docStatus < 24 && !this.addMethod;
             };
-            Correspondence.prototype.approveDocument = function ($event, defer, ignoreMessage) {
+            Correspondence.prototype.approveDocument = function ($event, defer, ignoreMessage, ignoreLaunch) {
                 var correspondence = this;
                 return correspondenceService
                     .showApprovedDialog(this, $event, ignoreMessage)
                     .then(function (result) {
                         new ResolveDefer(defer);
-                        if (result === 'PARIALLY_AUTHORIZED') {
+                        if (result === 'PARIALLY_AUTHORIZED' && !ignoreLaunch) {
                             return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: correspondence.getTranslatedName()}))
                                 .then(function () {
                                     return correspondence.launchWorkFlow($event, 'forward', 'favorites');
