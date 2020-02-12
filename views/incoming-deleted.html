@@ -36,6 +36,7 @@
                                                 <span flex></span>
                                                 <md-button class="md-icon-button"
                                                            tooltip="{{lang.grid_action_archive}}"
+                                                           ng-if="ctrl.isSelectedHasContent()"
                                                            ng-click="ctrl.archiveBulk($event)">
                                                     <md-icon md-svg-icon="archive" class="action-green"></md-icon>
                                                 </md-button>
@@ -94,8 +95,8 @@
                                         <td md-cell>{{deletedIncoming.lastModifierInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{deletedIncoming.lastModified}}</td>
                                         <td md-cell ng-if="ctrl.selectedDeletedIncomings.length < 2">
-                                            <div layout-align="start center" ng-if="!ctrl.selectedDeletedIncomings.length
-                                                  || ctrl.selectedDeletedIncomings.length===1 && ctrl.selectedDeletedIncomings[0].id === deletedIncoming.id">
+                                            <div layout-align="start center" ng-if="deletedIncoming.hasContent() && (!ctrl.selectedDeletedIncomings.length
+                                                  || ctrl.selectedDeletedIncomings.length===1 && ctrl.selectedDeletedIncomings[0].id === deletedIncoming.id)">
                                                 <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
                                                                         model="deletedIncoming">
                                                 </grid-actions-directive>

@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                     langService,
                                                     dialog,
                                                     $q,
+                                                    _,
                                                     generator,
                                                     ResolveDefer,
                                                     correspondenceService) {
@@ -180,7 +181,7 @@ module.exports = function (app) {
                 callback: self.archive,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return true;
+                    return model.hasContent();
                 }
             }];
 
@@ -260,6 +261,13 @@ module.exports = function (app) {
                 self.deletedInternals = gridService.searchGridData(self.grid, self.deletedInternalsCopy);
             }
         };
+
+        self.isSelectedHasContent = function () {
+            return _.every(self.selectedDeletedInternals, function (deletedInternal) {
+                return deletedInternal.hasContent();
+            });
+        };
+
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);

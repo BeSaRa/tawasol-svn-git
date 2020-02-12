@@ -31,10 +31,11 @@
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedDeletedOutgoings.length > 1 ? 6 : 7}}"
                                             ng-if="ctrl.selectedDeletedOutgoings.length" md-column>
-                                            <div layout="row" layout-align="start center">
+                                            <div layout="row" layout-align="start center" >
                                                 <span>{{ctrl.selectedDeletedOutgoings.length}} {{lang.items_selected}} </span>
                                                 <span flex></span>
                                                 <md-button class="md-icon-button"
+                                                           ng-if="ctrl.isSelectedHasContent()"
                                                            tooltip="{{lang.grid_action_archive}}"
                                                            ng-click="ctrl.archiveBulk($event)">
                                                     <md-icon md-svg-icon="archive" class="action-green"></md-icon>
@@ -104,8 +105,8 @@
                                         <td md-cell>{{deletedOutgoing.lastModifierInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{deletedOutgoing.lastModified}}</td>
                                         <td md-cell ng-if="ctrl.selectedDeletedOutgoings.length < 2">
-                                            <div layout-align="start center" ng-if="!ctrl.selectedDeletedOutgoings.length
-                                                  || ctrl.selectedDeletedOutgoings.length===1 && ctrl.selectedDeletedOutgoings[0].id === deletedOutgoing.id">
+                                            <div layout-align="start center" ng-if="deletedOutgoing.hasContent() && (!ctrl.selectedDeletedOutgoings.length
+                                                  || ctrl.selectedDeletedOutgoings.length===1 && ctrl.selectedDeletedOutgoings[0].id === deletedOutgoing.id)">
                                                 <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
                                                                         model="deletedOutgoing">
                                                 </grid-actions-directive>
