@@ -170,8 +170,8 @@
             <table md-table md-row-select multiple ng-model="ctrl.selectedAttachments"
                    md-progress="ctrl.progress">
                 <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
-                <tr md-row>
-                    <th colspan="5" class="table-selector-header"
+                <tr md-row ng-class="{'text-transparent': ctrl.selectedAttachments.length}">
+                    <!--<th colspan="5" class="table-selector-header"
                         ng-if="ctrl.selectedAttachments.length && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')"
                         md-column>
                         <div layout="row" layout-align="start center">
@@ -183,27 +183,37 @@
                                 <md-icon md-svg-icon="delete"></md-icon>
                             </md-button>
                         </div>
-                    </th>
+                    </th>-->
                     <!--<th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="">
                         &lt;!&ndash; linked exported doc(attachment with refVSID) Indicators &ndash;&gt;
                     </th>-->
-                    <th ng-if="!ctrl.selectedAttachments.length" md-column md-order-by="docSubject">
-                        <span>{{lang.attachment_document_title}}</span>
+                    <th md-column md-order-by="docSubject">
+                        <span class="color-default" ng-if="ctrl.selectedAttachments.length">{{ctrl.selectedAttachments.length}} {{lang.items_selected}} </span>
+                        <span ng-if="!ctrl.selectedAttachments.length">{{lang.attachment_document_title}}</span>
                     </th>
-                    <th ng-if="!ctrl.selectedAttachments.length" md-column
+                    <th md-column
                         md-order-by="{{ctrl.getSortingKey('attachmentType','AttachmentType')}}">
                         <span>{{lang.attachment_attachment_type}}</span>
                     </th>
-                    <th ng-if="!ctrl.selectedAttachments.length" md-column
+                    <th md-column
                         md-order-by="{{ctrl.getSortingKey('securityLevel','Lookup')}}">
                         <span>{{lang.attachment_attachment_security_level}}</span>
                     </th>
-                    <th ng-if="!ctrl.selectedAttachments.length" md-column
+                    <th md-column
                         md-order-by="priorityLevel.lookupKey">
                         <span>{{lang.priority_level}}</span>
                     </th>
-                    <th ng-if="!ctrl.selectedAttachments.length" md-column>
-                        <span>{{lang.actions}}</span>
+                    <th md-column>
+                        <span ng-if="!ctrl.selectedAttachments.length">{{lang.actions}}</span>
+                        <div layout="row"
+                             ng-if="ctrl.selectedAttachments.length && ctrl.isEnabledDeleteBulkAttachments($event)">
+                            <span flex></span>
+                            <md-button class="md-icon-button"
+                                       ng-if="ctrl.isEnabledDeleteBulkAttachments($event)"
+                                       ng-click="ctrl.deleteBulkAttachments($event)">
+                                <md-icon md-svg-icon="delete" class="color-default"></md-icon>
+                            </md-button>
+                        </div>
                     </th>
                 </tr>
                 </thead>

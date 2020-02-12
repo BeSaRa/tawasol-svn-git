@@ -2480,3 +2480,12 @@ table.md-table td.md-cell {
     width: 70% !important;
   }
 }
+
+table.md-table {
+  tr.text-transparent {
+    span:not(.color-default), md-icon:not(.color-default) {
+      color: transparent;
+      visibility: hidden;
+    }
+  }
+}
