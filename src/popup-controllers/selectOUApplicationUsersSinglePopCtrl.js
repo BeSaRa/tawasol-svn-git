@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                                      $q,
                                                                      $filter,
                                                                      generator,
+                                                                     gridService,
                                                                      _) {
             'ngInject';
             var self = this;
@@ -22,10 +23,11 @@ module.exports = function (app) {
             self.label = label;
             // all selected application Users
             self.ouApplicationUsers = ouApplicationUsers;
+            self.ouApplicationUsersCopy = angular.copy(self.ouApplicationUsers);
+
             self.isViceManager = isViceManager;
             // current selected application user.
             self.ouApplicationUser = applicationUser;
-            self.ouApplicationUserCopy = angular.copy(self.ouApplicationUser);
 
             self.ouApplicationUserSelected = self.ouApplicationUser ? _.filter(self.ouApplicationUsers, function (ouAppUser) {
                 return ouAppUser.applicationUser.id === self.ouApplicationUser.id
@@ -60,7 +62,7 @@ module.exports = function (app) {
                 limit: 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order
-                limitOptions: [5, 10, 20, // limit options
+                limitOptions: [5, 10, 20,
                     {
                         label: langService.get('all'),
                         value: function () {
@@ -68,7 +70,18 @@ module.exports = function (app) {
                         }
                     }
                 ],
-                filter: {search: {}}
+                searchColumns: {
+                    applicationUser: function () {
+                        return self.getSortingKey('applicationUser', 'ApplicationUser');
+                    },
+                    loginName: 'applicationUser.loginName',
+                    domainName: 'applicationUser.domainName'
+                    //employeeNo: 'employeeNo'
+                },
+                searchText: '',
+                searchCallback: function (grid) {
+                    self.ouApplicationUsers = gridService.searchGridData(self.grid, self.ouApplicationUsersCopy);
+                }
             };
 
             /**

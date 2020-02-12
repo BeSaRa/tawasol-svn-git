@@ -10,7 +10,7 @@
         <div class="md-dialog-content cms-dialog-content">
             <div layout="row" class="p20-0">
                 <span flex></span>
-                <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+                <grid-search-directive grid="ctrl.grid"></grid-search-directive>
             </div>
             <md-card class="m0">
                 <md-table-container>
@@ -28,7 +28,7 @@
                         </thead>
                         <tbody md-body>
                         <tr ng-if="ctrl.ouApplicationUsers.length" md-row md-select="ouApplicationUser"
-                            ng-repeat="ouApplicationUser in ctrl.ouApplicationUsers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  | filter:ctrl.searchModel track by $index">
+                            ng-repeat="ouApplicationUser in searchResults = (ctrl.ouApplicationUsers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                             <td md-cell>
                                 <span tooltip="{{ouApplicationUser.applicationUser.getTranslatedName(true)}}">{{ouApplicationUser.applicationUser.getTranslatedName()}}</span>
                             </td>
@@ -47,11 +47,13 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr ng-if="!ctrl.ouApplicationUsers.length" md-row>
-                            <td colspan="3">
-                                <span layout="row" layout-align="center center">
-                                    {{lang.no_users_found_to_display}}
-                                </span>
+                        <tr md-row ng-if="!ctrl.ouApplicationUsers.length">
+                            <td md-cell colspan="4" class="red-text text-center">{{lang.no_records_found}}
+                            </td>
+                        </tr>
+                        <tr md-row ng-if="ctrl.ouApplicationUsers.length && !searchResults.length">
+                            <td md-cell colspan="4" class="red-text text-center">
+                                {{lang.no_records_found_matching_search}}
                             </td>
                         </tr>
                         </tbody>
