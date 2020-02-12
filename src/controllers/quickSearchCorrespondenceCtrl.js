@@ -68,7 +68,10 @@ module.exports = function (app) {
                     return self.getSortingKey('docType', 'DocumentType');
                 },
                 createdBy: 'createdBy',
-                createdOn: 'createdOn'
+                createdOn: 'createdOn',
+                correspondence_sites: function (record) {
+                    return self.getSortingKey('mainSiteSubSiteString', 'Information');
+                }
             },
             searchText: '',
             searchCallback: function (grid) {
