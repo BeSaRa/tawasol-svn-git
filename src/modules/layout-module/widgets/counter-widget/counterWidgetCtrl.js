@@ -391,7 +391,8 @@ module.exports = function (app) {
         };
 
         self.hasSourcePermission = function (source) {
-            if (!source.permission)
+            //if (!source.permission)
+            if (!self.dataSourcePermissions[source.value].permission)
                 return true;
             return employeeService.hasPermissionTo(self.dataSourcePermissions[source.value].permission);
         };
