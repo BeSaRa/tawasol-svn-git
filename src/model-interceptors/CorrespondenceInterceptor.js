@@ -205,6 +205,11 @@ module.exports = function (app) {
                 model.docDate = moment(model.docDate).format('YYYY-MM-DD');
                 model.createdOn = angular.copy(model.docDate);
             }
+
+            model.lastModifierInfo = model.lastModifierInfo ? new Information(model.lastModifierInfo) : new Information();
+            if (model.lastModified && !angular.isDate(model.lastModified)) {
+                model.lastModified = moment(model.lastModified).format('YYYY-MM-DD');
+            }
             //TODO: Commented and added in upper if condition according to change from Iyad as createdOn field is reflecting a field from filenet but we used docDate in place of createdOn to reflect our custom date.
             /*if (!angular.isDate(model.createdOn))
                 model.createdOn = moment(model.createdOn).format('YYYY-MM-DD');*/

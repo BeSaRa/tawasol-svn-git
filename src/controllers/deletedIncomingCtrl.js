@@ -250,10 +250,10 @@ module.exports = function (app) {
                 securityLevel: function (record) {
                     return self.getSortingKey('securityLevel', 'Lookup');
                 },
-                creator: function () {
-                    return self.getSortingKey('creatorInfo', 'Information');
+                lastModifierInfo: function () {
+                    return self.getSortingKey('lastModifierInfo', 'Information');
                 },
-                createdOn: 'createdOn'
+                lastModified: 'lastModified'
             },
             searchText: '',
             searchCallback: function (grid) {

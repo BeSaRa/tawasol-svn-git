@@ -58,12 +58,12 @@
                                             <span>{{lang.security_level}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedDeletedInternals.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
-                                            <span>{{lang.creator}}</span>
+                                            md-order-by="{{ctrl.getSortingKey('lastModifierInfo', 'Information')}}">
+                                            <span>{{lang.deleted_by}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedDeletedInternals.length" md-column
-                                            md-order-by="createdOn">
-                                            <span>{{lang.created_on}}</span>
+                                            md-order-by="lastModified">
+                                            <span>{{lang.deleted_on}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedDeletedInternals.length && ctrl.selectedDeletedInternals.length < 2"
                                             md-column>
@@ -101,8 +101,8 @@
                                         </td>
                                         <td md-cell>{{deletedInternal.priorityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{deletedInternal.securityLevel.getTranslatedName()}}</td>
-                                        <td md-cell>{{deletedInternal.creatorInfo.getTranslatedName()}}</td>
-                                        <td md-cell>{{deletedInternal.createdOn}}</td>
+                                        <td md-cell>{{deletedInternal.lastModifierInfo.getTranslatedName()}}</td>
+                                        <td md-cell>{{deletedInternal.lastModified}}</td>
                                         <td md-cell ng-if="ctrl.selectedDeletedInternals.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedDeletedInternals.length
                                                   || ctrl.selectedDeletedInternals.length===1 && ctrl.selectedDeletedInternals[0].id === deletedInternal.id">
