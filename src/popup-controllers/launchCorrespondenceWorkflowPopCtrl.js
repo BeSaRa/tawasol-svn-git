@@ -1408,7 +1408,7 @@ module.exports = function (app) {
                             toast.success(langService.get('launch_success_distribution_workflow'));
                             dialog.hide();
                         }).catch(function (error) {
-                            if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                            if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                                 var info = self.correspondence.getInfo();
                                 dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                                 return false;

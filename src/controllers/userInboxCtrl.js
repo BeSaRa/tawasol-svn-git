@@ -560,7 +560,7 @@ module.exports = function (app) {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 }).catch(function (error) {
-                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                     dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
                     return false;
                 }
@@ -579,7 +579,7 @@ module.exports = function (app) {
                 if (result)
                     self.reloadUserInboxes(self.grid.page);
             }).catch(function (error) {
-                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                     dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
                     return false;
                 }
@@ -595,7 +595,7 @@ module.exports = function (app) {
             userInbox.addToFavorite().then(function () {
                 self.reloadUserInboxes(self.grid.page)
             }).catch(function (error) {
-                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                     dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
                     return false;
                 }
@@ -614,7 +614,7 @@ module.exports = function (app) {
                     self.reloadUserInboxes(self.grid.page);
                     new ResolveDefer(defer);
                 }).catch(function (error) {
-                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                     dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
                     return false;
                 }
@@ -632,7 +632,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     new ResolveDefer(defer);
                 }).catch(function (error) {
-                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                     dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
                     return false;
                 }
@@ -688,7 +688,7 @@ module.exports = function (app) {
                             new ResolveDefer(defer);
                         });
                 }).catch(function (error) {
-                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                     dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
                     return false;
                 }
@@ -1039,7 +1039,7 @@ module.exports = function (app) {
                             self.reloadUserInboxes(self.grid.page);
                         });
                 }).catch(function (error) {
-                    if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                         dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
                         return $q.reject(false);
                     }
@@ -1103,7 +1103,7 @@ module.exports = function (app) {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 }).catch(function (error) {
-                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                     dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
                     return false;
                 }
@@ -1120,7 +1120,7 @@ module.exports = function (app) {
                 .then(function () {
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                 }).catch(function (error) {
-                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                     dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
                     return false;
                 }
@@ -1210,7 +1210,7 @@ module.exports = function (app) {
                             new ResolveDefer(defer);
                         })
                 }).catch(function (error) {
-                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                     dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
                     return false;
                 }
