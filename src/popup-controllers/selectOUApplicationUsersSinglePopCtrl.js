@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                                      ApplicationUser,
                                                                      OUApplicationUser,
                                                                      Organization,
+                                                                     organization,
                                                                      isViceManager,
                                                                      $timeout,
                                                                      langService,
@@ -24,6 +25,7 @@ module.exports = function (app) {
             // all selected application Users
             self.ouApplicationUsers = ouApplicationUsers;
             self.ouApplicationUsersCopy = angular.copy(self.ouApplicationUsers);
+            self.organization = organization;
 
             self.isViceManager = isViceManager;
             // current selected application user.
@@ -118,6 +120,19 @@ module.exports = function (app) {
                         .then(function () {
                             dialog.cancel();
                         });
+                }
+            }
+
+        /**
+         * @description disable selected manager on Vice Managers dialog list (vice versa)
+         * @param ouAppUser
+         * @returns {null|number|boolean}
+         */
+        self.disableSelectedManagerOrViceManager = function (ouAppUser) {
+                if (self.isViceManager) {
+                    return self.organization.managerId && ouAppUser.applicationUser.id === self.organization.managerId.id;
+                } else {
+                    return self.organization.viceManagerId && ouAppUser.applicationUser.id === self.organization.viceManagerId.id;
                 }
             }
 

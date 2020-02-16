@@ -28,7 +28,8 @@
                         </thead>
                         <tbody md-body>
                         <tr ng-if="ctrl.ouApplicationUsers.length" md-row md-select="ouApplicationUser"
-                            ng-repeat="ouApplicationUser in searchResults = (ctrl.ouApplicationUsers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                            ng-repeat="ouApplicationUser in searchResults = (ctrl.ouApplicationUsers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index"
+                            ng-disabled="ctrl.disableSelectedManagerOrViceManager(ouApplicationUser)" >
                             <td md-cell>
                                 <span tooltip="{{ouApplicationUser.applicationUser.getTranslatedName(true)}}">{{ouApplicationUser.applicationUser.getTranslatedName()}}</span>
                             </td>
