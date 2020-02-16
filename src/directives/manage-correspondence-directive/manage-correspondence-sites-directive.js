@@ -16,7 +16,8 @@ module.exports = function (app) {
                 disableCorrespondence: '=',
                 emptySiteSearch: '=',
                 isCompositeDocument: '=?',
-                distListId: '='
+                distListId: '=',
+                notifyAfterChanges : '=?'
             },
             link: function ($scope, element, attrs) {
                 $scope.$watch(function () {

@@ -302,6 +302,9 @@ module.exports = function (app) {
         function _addSite(to, site) {
             return $timeout(function () {
                 self['sitesInfo' + to].push(site);
+                if (self.notifyAfterChanges) {
+                    self.notifyAfterChanges('add');
+                }
                 return true;
             });
         }
@@ -716,7 +719,9 @@ module.exports = function (app) {
 
                     var method = 'reset' + type + 'StatusAndDate';
                     self[method]();
-
+                    if (self.notifyAfterChanges) {
+                        self.notifyAfterChanges('delete');
+                    }
 
                     _concatCorrespondenceSites(true).then(function () {
                         if (self.selectedMainSiteSimple) {

@@ -640,5 +640,10 @@ module.exports = function (app) {
             return true;
         };
 
+
+        self.correspondenceSitesChanged = function (event) {
+            self.document_properties.$dirty = true;
+        }
+
     });
 };
