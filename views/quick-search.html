@@ -63,8 +63,9 @@
                                             <span>{{lang.label_document_type}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
-                                            md-order-by="createdBy">
-                                            <span>{{lang.created_by}}</span></th>
+                                            md-order-by="{{ ctrl.isOverdueSearch() ? ctrl.getSortingKey('creatorInfo', 'Information') : 'createdBy' }}">
+                                            <span>{{lang.created_by}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
                                             md-order-by="createdOn">
                                             <span>{{lang.created_on}}</span></th>
@@ -120,7 +121,7 @@
                                         </td>
                                         <td md-cell>{{quickSearch.priorityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{quickSearch.docType.getTranslatedName()}}</td>
-                                        <td md-cell>{{quickSearch.createdBy}}</td>
+                                        <td md-cell>{{ctrl.isOverdueSearch() ? quickSearch.creatorInfo.getTranslatedName() : quickSearch.createdBy }}</td>
                                         <td md-cell>{{quickSearch.createdOn}}</td>
                                         <td ng-if="ctrl.isOverdueSearch()" md-cell class="td-data">
                                             <main-site-sub-site-directive item="quickSearch"></main-site-sub-site-directive>

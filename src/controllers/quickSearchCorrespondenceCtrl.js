@@ -67,7 +67,13 @@ module.exports = function (app) {
                 documentType: function (record) {
                     return self.getSortingKey('docType', 'DocumentType');
                 },
-                createdBy: 'createdBy',
+                createdBy: function () {
+                    if (self.isOverdueSearch()) {
+                        return self.getSortingKey('creatorInfo', 'Information');
+                    } else {
+                        return 'createdBy';
+                    }
+                },
                 createdOn: 'createdOn',
                 correspondence_sites: function (record) {
                     return self.getSortingKey('mainSiteSubSiteString', 'Information');
