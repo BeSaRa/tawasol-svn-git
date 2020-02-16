@@ -159,6 +159,7 @@ module.exports = function (app) {
             ou: self.organizationGroups.length ? _.find(self.organizationGroups, function (item) {
                 return item.toOUId === employeeService.getEmployee().getOUID()
             }) : employeeService.getEmployee().getOUID(),
+            // to hide organizations dropdown and add whole organization button
             hide: !self.organizationGroups.length
         });
 

@@ -13,6 +13,8 @@ module.exports = function (app) {
             } else if (model.ou && model.ou.hasOwnProperty('toOUId')) {
                 model.ou = model.ou.toOUId;
             }
+            // to hide organizations dropdown and add whole organization button in launch popup
+            delete model.hide;
             return model;
         });
 
