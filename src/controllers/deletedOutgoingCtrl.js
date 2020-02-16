@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                     _,
                                                     generator,
                                                     ResolveDefer,
+                                                    printService,
                                                     correspondenceService,
                                                     viewTrackingSheetService) {
         'ngInject';
@@ -310,6 +311,22 @@ module.exports = function (app) {
             });
         };
 
+
+        /**
+         * @description Prints the current tab result data
+         */
+        self.printResult = function ($event) {
+            var printTitle = langService.get('menu_item_outgoing_deleted'),
+                headers = [
+                    'subject',
+                    'priority_level',
+                    'security_level',
+                    'deleted_by',
+                    'deleted_on'
+                ];
+            printService
+                .printData(self.deletedOutgoings, headers, printTitle);
+        };
 
         self.shortcutActions = gridService.getShortcutActions(self.gridActions);
         self.contextMenuActions = gridService.getContextMenuActions(self.gridActions);

@@ -6,6 +6,10 @@
             <md-button ng-click="ctrl.reloadDeletedOutgoings()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
+            <md-button ng-if="ctrl.deletedOutgoings.length"
+                       ng-click="ctrl.printResult($event)" class="md-icon-button" tooltip="{{lang.print}}">
+                <md-icon md-svg-icon="printer"></md-icon>
+            </md-button>
             <span flex></span>
             <div class="p020">
                 <md-switch aria-label="{{lang.truncate_subject}}"

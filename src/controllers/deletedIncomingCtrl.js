@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                     _,
                                                     generator,
                                                     ResolveDefer,
+                                                    printService,
                                                     viewTrackingSheetService,
                                                     correspondenceService) {
         'ngInject';
@@ -307,6 +308,22 @@ module.exports = function (app) {
             return _.every(self.selectedDeletedOutgoings, function (deletedIncoming) {
                 return deletedIncoming.hasContent();
             });
+        };
+
+        /**
+         * @description Prints the current tab result data
+         */
+        self.printResult = function ($event) {
+            var printTitle = langService.get('menu_item_incoming_deleted'),
+                headers = [
+                    'subject',
+                    'priority_level',
+                    'security_level',
+                    'deleted_by',
+                    'deleted_on'
+                ];
+            printService
+                .printData(self.deletedIncomings, headers, printTitle);
         };
 
 
