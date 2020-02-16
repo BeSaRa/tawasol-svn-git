@@ -539,6 +539,7 @@ module.exports = function (app) {
                 .then(function (ouApplicationUser) {
                     self.organization[property] = ouApplicationUser.applicationUser;
                     self.isAddManagerToAllUsersEnabled = ouApplicationUser.isAddManagerToAllUsersEnabled;
+                    self.isAddViceManagerToAllUsersEnabled = ouApplicationUser.isAddViceManagerToAllUsersEnabled;
                 })
         };
         /**
@@ -702,6 +703,9 @@ module.exports = function (app) {
                             .then(function () {
                                 if (self.isAddManagerToAllUsersEnabled) {
                                     organizationService.addManagerToAllUsers(self.organization.id);
+                                }
+                                if (self.isAddViceManagerToAllUsersEnabled) {
+                                    organizationService.addManagerToAllUsers(self.organization.id, true);
                                 }
 
                                 self.model = angular.copy(self.organization);

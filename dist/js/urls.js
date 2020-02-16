@@ -342,7 +342,7 @@
                 //follow up ou
                 .addToAllWithBase('followupOu', 'cms-entity/admin/ou/dist/follow-up-ou')
                 // add manager to all
-                .addToAllWithBase('addManagerToAllUsers', "cms-entity/admin/ou/ou/{ouId}/add-manager-to-all")
+                .addToAllWithBase('addManagerToAllUsers', "cms-entity/admin/ou/ou/:ouId/add-:manager-to-all")
                 // task management
                 .addToAllWithBase('tasks', 'cms-entity/user/tasks')
                 // user admin list

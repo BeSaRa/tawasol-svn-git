@@ -167,12 +167,16 @@ module.exports = function (app) {
         /**
          * @description add manager to all users
          * @param ouId
+         * @param isViceManager
          * @returns {*}
          */
-        self.addManagerToAllUsers = function (ouId) {
+        self.addManagerToAllUsers = function (ouId, isViceManager) {
             ouId = ouId.hasOwnProperty('id') ? ouId.id : ouId;
             return $http
-                .put(urlService.addManagerToAllUsers.replace('{ouId}', ouId))
+                .put(urlService.addManagerToAllUsers.change({
+                    ouId: ouId,
+                    manager: isViceManager ? 'vice-manager' : 'manager'
+                }))
                 .then(function (result) {
                     return result.data.rs;
                 });

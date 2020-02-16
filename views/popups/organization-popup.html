@@ -144,17 +144,17 @@
                                     <div class="user-selector" layout="row" layout-align="start center">
                                         <md-icon md-svg-icon="account-star"></md-icon>
                                         <span class="user-selector-span" flex layout-align="start center" layout="row">
-                                <span>{{lang.manager}}</span>
-                                <span flex></span>
-                                <span class="user-selector-span">
+                                            <span>{{lang.manager}}</span>
+                                            <span flex></span>
+                                            <span class="user-selector-span">
 
-                                </span>
-                                <span class="user-tag" md-truncate ng-if="ctrl.organization.managerId">
-                                    <span tooltip="{{ctrl.organization.managerId.getNames()}}">{{ctrl.organization.managerId.loginName}}</span>
-                                    <md-icon ng-click="ctrl.deleteUserFrom('managerId')"
-                                             md-svg-icon="close-box"></md-icon>
-                                </span>
-                            </span>
+                                            </span>
+                                            <span class="user-tag" md-truncate ng-if="ctrl.organization.managerId">
+                                                <span tooltip="{{ctrl.organization.managerId.getNames()}}">{{ctrl.organization.managerId.loginName}}</span>
+                                                <md-icon ng-click="ctrl.deleteUserFrom('managerId')"
+                                                         md-svg-icon="close-box"></md-icon>
+                                            </span>
+                                        </span>
                                         <md-button tooltip="{{lang.select_manager}}" class="md-icon-button"
                                                    ng-click="ctrl.selectUser('managerId',false , $event)"
                                                    ng-disabled="!ctrl.organization.id">
@@ -164,14 +164,14 @@
                                     <div class="user-selector" layout="row" layout-align="start center">
                                         <md-icon md-svg-icon="account-check"></md-icon>
                                         <span class="user-selector-span" flex layout-align="start center" layout="row">
-                                <span>{{lang.vice_manager}}</span>
-                                <span flex></span>
-                                <span class="user-tag" md-truncate ng-if="ctrl.organization.viceManagerId">
-                                    <span tooltip="{{ctrl.organization.viceManagerId.getNames()}}">{{ctrl.organization.viceManagerId.loginName}}</span>
-                                    <md-icon ng-click="ctrl.deleteUserFrom('viceManagerId')"
-                                             md-svg-icon="close-box"></md-icon>
-                                </span>
-                            </span>
+                                            <span>{{lang.vice_manager}}</span>
+                                            <span flex></span>
+                                            <span class="user-tag" md-truncate ng-if="ctrl.organization.viceManagerId">
+                                                <span tooltip="{{ctrl.organization.viceManagerId.getNames()}}">{{ctrl.organization.viceManagerId.loginName}}</span>
+                                                <md-icon ng-click="ctrl.deleteUserFrom('viceManagerId')"
+                                                         md-svg-icon="close-box"></md-icon>
+                                            </span>
+                                        </span>
                                         <md-button tooltip="{{lang.select_vice_manager}}" class="md-icon-button"
                                                    ng-click="ctrl.selectUser('viceManagerId',true,$event)"
                                                    ng-disabled="!ctrl.organization.id">

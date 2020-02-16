@@ -33,6 +33,7 @@ module.exports = function (app) {
                 return ouAppUser.applicationUser.id === self.ouApplicationUser.id
             }) : [];
             self.isAddManagerToAllUsersEnabled = false;
+            self.isAddViceManagerToAllUsersEnabled = false;
 
             /**
              * @description Get the sorting key for information or lookup model
@@ -100,7 +101,8 @@ module.exports = function (app) {
 
                 var applicationUser = {
                     applicationUser: self.ouApplicationUserSelected[0].applicationUser,
-                    isAddManagerToAllUsersEnabled: self.isAddManagerToAllUsersEnabled
+                    isAddManagerToAllUsersEnabled: self.isAddManagerToAllUsersEnabled,
+                    isAddViceManagerToAllUsersEnabled: self.isAddViceManagerToAllUsersEnabled
                 };
 
                 dialog.hide(applicationUser);

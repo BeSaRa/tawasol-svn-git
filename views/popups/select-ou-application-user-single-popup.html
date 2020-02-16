@@ -22,7 +22,7 @@
                             <th md-column md-order-by="applicationUser.loginName"><span>{{lang.login_name}}</span></th>
                             <th md-column md-order-by="applicationUser.domainName"><span>{{lang.domain_name}}</span></th>
                             <th md-column ng-if="ctrl.ouApplicationUserSelected.length && !ctrl.isViceManager">
-                                {{lang.add_manager_to_all_users}}
+                                {{ctrl.isViceManager ? lang.add_vice_manager_to_all_users : lang.add_manager_to_all_users}}
                             </th>
                         </tr>
                         </thead>
@@ -38,11 +38,15 @@
                             <td md-cell>
                                 <span tooltip="{{ouApplicationUser.applicationUser.getDefaultOrganization().getNames()}}">{{ouApplicationUser.applicationUser.domainName}}</span>
                             </td>
-                            <td md-cell ng-if="!ctrl.isViceManager">
+                            <td md-cell>
                                 <div layout-align="center center" layout="row">
                                     <md-switch aria-label="{{lang.add_manager_to_all_users}}"
-                                               ng-if="ctrl.ouApplicationUserSelected.length && ctrl.ouApplicationUserSelected[0].applicationUser.id === ouApplicationUser.applicationUser.id"
+                                               ng-if="!ctrl.isViceManager && ctrl.ouApplicationUserSelected.length && ctrl.ouApplicationUserSelected[0].applicationUser.id === ouApplicationUser.applicationUser.id"
                                                ng-model="ctrl.isAddManagerToAllUsersEnabled">
+                                    </md-switch>
+                                    <md-switch aria-label="{{lang.add_vice_manager_to_all_users"
+                                               ng-if="ctrl.isViceManager && ctrl.ouApplicationUserSelected.length && ctrl.ouApplicationUserSelected[0].applicationUser.id === ouApplicationUser.applicationUser.id"
+                                               ng-model="ctrl.isAddViceManagerToAllUsersEnabled">
                                     </md-switch>
                                 </div>
                             </td>

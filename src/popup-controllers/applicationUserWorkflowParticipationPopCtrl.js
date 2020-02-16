@@ -79,7 +79,7 @@ module.exports = function (app) {
                 });
                 return map.join(', ');
             }
-            return langService.get('managers');
+            return langService.get('vice_manager');
         };
 
         self.getSelectedPrivateUsersText();
