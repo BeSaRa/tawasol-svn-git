@@ -168,7 +168,7 @@ module.exports = function (app) {
             delete model.isReceived;// temporary property added to correspondence when opening the G2G incoming
 
             delete model.defaultModeIfEditing;
-
+            delete model.numberOfDays;
             return model;
         });
 
@@ -244,6 +244,8 @@ module.exports = function (app) {
             model.siteFollowUpDueDateIndicator = model.getSiteFollowupDueDateIndicator();
             model.siteFollowUpEndedIndicator = model.getSiteFollowupEndedIndicator();
             model.setMainSiteSubSiteString();
+
+            model.numberOfDays = generator.getNumberOfDays(model.getSiteMaxFollowupDate(), null);
 
             return model;
         });
