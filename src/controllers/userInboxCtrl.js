@@ -559,7 +559,12 @@ module.exports = function (app) {
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
-                });
+                }).catch(function (error) {
+                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
+                    return false;
+                }
+            })
         };
 
         /**
@@ -573,6 +578,11 @@ module.exports = function (app) {
                 new ResolveDefer(defer);
                 if (result)
                     self.reloadUserInboxes(self.grid.page);
+            }).catch(function (error) {
+                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
+                    return false;
+                }
             });
         };
 
@@ -584,6 +594,11 @@ module.exports = function (app) {
         self.addToFavorite = function (userInbox, $event) {
             userInbox.addToFavorite().then(function () {
                 self.reloadUserInboxes(self.grid.page)
+            }).catch(function (error) {
+                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
+                    return false;
+                }
             });
         };
 
@@ -598,7 +613,12 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page);
                     new ResolveDefer(defer);
-                });
+                }).catch(function (error) {
+                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
+                    return false;
+                }
+            });
         };
 
         /**
@@ -611,7 +631,12 @@ module.exports = function (app) {
             userInbox.createReply($event)
                 .then(function (result) {
                     new ResolveDefer(defer);
-                });
+                }).catch(function (error) {
+                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
+                    return false;
+                }
+            });
         };
 
         /**
@@ -662,7 +687,12 @@ module.exports = function (app) {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
-                });
+                }).catch(function (error) {
+                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
+                    return false;
+                }
+            });
         };
 
         /**
@@ -1008,7 +1038,12 @@ module.exports = function (app) {
                         .catch(function () {
                             self.reloadUserInboxes(self.grid.page);
                         });
-                });
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                        dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
+                        return $q.reject(false);
+                    }
+                })
         };
         /**
          * @description approve and send the document
@@ -1067,7 +1102,12 @@ module.exports = function (app) {
                             counterService.loadCounters();
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
-                })
+                }).catch(function (error) {
+                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
+                    return false;
+                }
+            })
         };
 
         /**
@@ -1079,7 +1119,12 @@ module.exports = function (app) {
             userInbox.manageDocumentContent($event)
                 .then(function () {
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                });
+                }).catch(function (error) {
+                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
+                    return false;
+                }
+            });
         };
 
         /**
@@ -1164,7 +1209,12 @@ module.exports = function (app) {
                         .then(function () {
                             new ResolveDefer(defer);
                         })
-                })
+                }).catch(function (error) {
+                if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
+                    return false;
+                }
+            });
         };
 
         // view document

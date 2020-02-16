@@ -33,6 +33,7 @@ module.exports = function (app) {
                                                                     isDeptIncoming,
                                                                     Information,
                                                                     fromSimplePopup,
+                                                                    errorCode,
                                                                     gridService) {
         'ngInject';
         var self = this;
@@ -1406,8 +1407,14 @@ module.exports = function (app) {
                         .then(function () {
                             toast.success(langService.get('launch_success_distribution_workflow'));
                             dialog.hide();
-                        })
-                });
+                        }).catch(function (error) {
+                            if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                                var info = self.correspondence.getInfo();
+                                dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                                return false;
+                            }
+                        });
+                })
         };
 
         self.checkWorkflowItemsCompleteStatus = function () {

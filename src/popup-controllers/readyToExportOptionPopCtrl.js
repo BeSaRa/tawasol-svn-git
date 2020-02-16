@@ -185,7 +185,6 @@ module.exports = function (app) {
 
         function _removeLinkedAttachedDoc(item, option) {
             if (option === 'RELATED_BOOKS') {
-                debugger;
                 var docs = self.partialExportList.getAttachmentLinkedDocs(),
                     index = _.findIndex(docs, function (linkedAttachmentDoc) {
                         return linkedAttachmentDoc.getInfo().vsId === item.getInfo().vsId;
