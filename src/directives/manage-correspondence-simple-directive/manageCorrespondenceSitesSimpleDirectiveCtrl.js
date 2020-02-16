@@ -38,7 +38,9 @@ module.exports = function (app) {
         self.selectedMainSite = null;
         self.selectedSubSite = null;
 
-        var subSitesDefer = $q.defer();
+        self.withOutReply = _.find(self.followUpStatuses, function (item) {
+            return item.lookupStrKey === 'WITHOUT_REPLY'
+        });
 
         $timeout(function () {
             self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
@@ -53,26 +55,29 @@ module.exports = function (app) {
             if (self.correspondence.sitesToList && self.correspondence.sitesToList.length) {
                 var oldSites = angular.copy(self.correspondence.sitesToList);
                 self.selectedSiteType = self.correspondence.sitesToList[0].siteType;
-                self.onSiteTypeChange().then(function () {
+                self.onSiteTypeChange(null, true).then(function () {
                     self.selectedMainSite = _.find(self.mainSites, function (mainSite) {
                         return mainSite.id === oldSites[0].mainSiteId;
                     });
                     if (!self.selectedMainSite) {
-                        var _mainSite = new Information(oldSites[0].mainSite);
+                        var _mainSite = new SiteView(oldSites[0].mainSite);
                         self.mainSites.push(_mainSite);
                         self.selectedMainSite = _mainSite;
                     }
 
-                    subSitesDefer.promise.then(function () {
-                        self.selectedSubSite = _.find(self.subSites, function (subSite) {
-                            return subSite.subSiteId === oldSites[0].subSiteId;
+                    self.getSubSites().then(function () {
+                        var _subSite = new Site(oldSites[0]);
+                        _subSite.followupStatus = angular.copy(self.withOutReply);
+                        var selected = _.find(self.subSites, function (item) {
+                            return item.mainSiteId === _subSite.mainSiteId && item.subSiteId === _subSite.subSiteId;
                         });
-                    });
-                    if (!self.selectedSubSite) {
-                        var _subSite = new Information(oldSites[0].subSite);
-                        self.subSites.push(_subSite);
+                        if (!selected) {
+                            self.subSites.push(_subSite);
+                        }
                         self.selectedSubSite = _subSite;
-                    }
+                        self.changeSubCorrespondence(self.selectedSubSite);
+                    });
+
                     self.correspondence.sitesToList = oldSites;
                 });
             }
@@ -169,9 +174,12 @@ module.exports = function (app) {
         /**
          * @description Get main correspondence sites on change of correspondence site type.
          * @param $event
+         * @param ignoreEmptySelectedMain
          */
-        self.onSiteTypeChange = function ($event) {
-            self.selectedMainSite = null;
+        self.onSiteTypeChange = function ($event, ignoreEmptySelectedMain) {
+            if (!ignoreEmptySelectedMain) {
+                self.selectedMainSite = null;
+            }
             self.selectedSubSite = null;
 
             if (self.selectedSiteType) {
@@ -227,7 +235,6 @@ module.exports = function (app) {
                     self.selectedSubSite = self.subSites[0];
                     self.changeSubCorrespondence(self.selectedSubSite);
                 }
-                subSitesDefer.resolve(true);
                 return self.subSites;
             });
         };
@@ -403,6 +410,7 @@ module.exports = function (app) {
         };
 
         var _selectDefaultMainSiteAndGetSubSites = function () {
+            console.log('CALLED SITE DEFAULT');
             if (self.selectedSiteType && self.selectedSiteType.lookupKey === 1) {
                 self.selectedMainSite = _.find(self.mainSites, function (site) {
                     return site.id === 10000000;
