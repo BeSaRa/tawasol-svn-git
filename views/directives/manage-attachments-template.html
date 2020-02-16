@@ -133,7 +133,7 @@
                 </div>
             </md-input-container>
             <!-- Export Status -->
-            <div flex class="cms-input-container">
+            <div flex class="cms-input-container" ng-if="ctrl.documentClass === 'outgoing'">
                 <md-switch flex ng-model="ctrl.attachment.exportStatus"
                            aria-label="{{lang.export_status}}">
                     <label>{{lang.export_status}} :

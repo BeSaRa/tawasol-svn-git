@@ -95,7 +95,8 @@ module.exports = function (app) {
                     securityLevel: self.document ? securityLevel : null,
                     updateActionStatus: self.attachmentUpdateActions[0],
                     attachmentType: (activeAttachmentTypes.length) ? activeAttachmentTypes[0] : null,
-                    priorityLevel: self.priorityLevels[0]
+                    priorityLevel: self.priorityLevels[0],
+                    exportStatus: (self.document.getInfo().documentClass === 'outgoing')
                 });
             }
         }

@@ -59,7 +59,9 @@
                     </md-input-container>
                     <!-- Export Status -->
                     <div flex class="cms-input-container">
-                        <md-switch flex ng-model="ctrl.exportStatus"
+                        <md-switch flex ng-if="ctrl.documentClass === 'outgoing'"
+                                   ng-model="ctrl.exportStatus"
+                                   ng-change="ctrl.changeValueOf('exportStatus', ctrl.exportStatus)"
                                    aria-label="{{lang.export_status}}">
                             <label>{{lang.export_status}} : {{ctrl.exportStatus ? lang.yes : lang.no}}</label>
                         </md-switch>
@@ -80,6 +82,10 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
+                    <span flex></span>
+                </div>
+
+                <div layout="row">
                     <!-- Buttons -->
                     <div flex class="cms-input-container">
                         <!-- Add -->
@@ -154,7 +160,7 @@
 
                 <div layout="row">
                     <!-- Security Level -->
-                    <md-input-container ng-if="ctrl.inheritSecurity" flex>
+                    <md-input-container ng-if="!ctrl.inheritSecurity" flex>
                         <label for="securityLevel">{{lang.attachment_attachment_security_level}}</label>
                         <md-select ng-required="true"
                                    id="securityLevel"
@@ -168,29 +174,16 @@
                     </md-input-container>
                     <!-- Export Status -->
                     <div flex class="cms-input-container">
-                        <md-switch flex ng-model="ctrl.attachment.exportStatus"
+                        <md-switch flex ng-if="ctrl.documentClass === 'outgoing'"
+                                   ng-model="ctrl.attachment.exportStatus"
                                    aria-label="{{lang.export_status}}">
                             <label>{{lang.export_status}} :
                                 {{ctrl.attachment.getTranslatedYesNo('exportStatus')}}</label>
                         </md-switch>
                     </div>
-
-                    <div class="cms-input-container" flex ng-if="!ctrl.inheritSecurity">
-                        <!-- Save -->
-                        <md-button class="md-raised md-primary"
-                                   ng-click="ctrl.updateAttachment()"
-                                   ng-disabled="!ctrl.attachmentTypes.length">
-                            {{lang.save}}
-                        </md-button>
-                        <!-- Cancel -->
-                        <md-button class="md-raised red-text"
-                                   ng-click="ctrl.cancelUpdate()">
-                            {{lang.cancel}}
-                        </md-button>
-                    </div>
                 </div>
 
-                <div class="cms-input-container" flex ng-if="ctrl.inheritSecurity">
+                <div class="cms-input-container" flex>
                     <!-- Save -->
                     <md-button class="md-raised md-primary"
                                ng-click="ctrl.updateAttachment()"
@@ -292,6 +285,16 @@
                                         </md-menu-content>
                                     </md-menu>
                                 </md-menu-bar>
+                            </div>
+                            <div ng-if="ctrl.documentClass === 'outgoing'">
+                                <div flex class="cms-input-container">
+                                    <md-switch flex
+                                               ng-model="attachment.exportStatus"
+                                               aria-label="{{lang.export_status}}">
+                                        <label>{{lang.export_status}} :
+                                            {{attachment.getTranslatedYesNo('exportStatus')}}</label>
+                                    </md-switch>
+                                </div>
                             </div>
                             <div>
                                 <md-button ng-if="!ctrl.attachment"

@@ -30,6 +30,7 @@ module.exports = function (app) {
         self.validFiles = [];
 
         var info = correspondence.getInfo();
+        self.documentClass = info.documentClass;
         self.securityLevels = correspondenceService.getLookup(info.documentClass, 'securityLevels');
         // all attachment types
         self.attachmentTypes = attachmentTypeService.returnAttachmentTypes(info.documentClass);
@@ -58,7 +59,7 @@ module.exports = function (app) {
         // the selected updateActionStatus
         self.updateActionStatus = self.attachmentUpdateActions[0];
         self.priorityLevel = self.priorityLevels[0];
-        self.exportStatus = false;
+        self.exportStatus = (self.documentClass === 'outgoing');
 
         // the uploaded Files
         self.successFilesUploaded = [];
@@ -179,6 +180,7 @@ module.exports = function (app) {
                                         attachmentType: self.attachmentType,
                                         priorityLevel: self.priorityLevel,
                                         updateActionStatus: self.updateActionStatus,
+                                        exportStatus: self.exportStatus,
                                         documentTitle: files[i].name,
                                         docSubject: files[i].name,
                                         progress: 0
@@ -393,7 +395,7 @@ module.exports = function (app) {
         };
 
         self.checkValidAttachmentFields = function () {
-            return !!(self.attachmentType && self.updateActionStatus && self.securityLevel);
+            return !!(self.attachmentType && self.updateActionStatus && self.securityLevel && self.priorityLevel);
         };
     });
 };
