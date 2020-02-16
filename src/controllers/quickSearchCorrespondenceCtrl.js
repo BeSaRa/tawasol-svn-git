@@ -167,15 +167,27 @@ module.exports = function (app) {
 
         self.printResult = function ($event) {
             var printTitle = langService.get("search_module_search_results");
+            var headers = [];
 
-            var headers = [
-                'label_serial',
-                'subject',
-                'priority_level',
-                'label_document_type',
-                'created_by',
-                'created_on'
-            ];
+            if (self.isOverdueSearch()) {
+                headers = ['label_serial',
+                    'subject',
+                    'priority_level',
+                    'label_document_type',
+                    'creator',
+                    'created_on',
+                    'correspondence_sites',
+                    'number_of_days'
+                ];
+            } else {
+                headers = ['label_serial',
+                    'subject',
+                    'priority_level',
+                    'label_document_type',
+                    'created_by',
+                    'created_on'
+                ];
+            }
 
             printService
                 .printData(self.quickSearchCorrespondence, headers, printTitle);

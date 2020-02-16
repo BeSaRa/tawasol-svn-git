@@ -5,6 +5,7 @@ module.exports = function (app) {
                                       Correspondence,
                                       Site,
                                       Information,
+                                      generator,
                                       Indicator) {
         'ngInject';
         return function Incoming(model) {
@@ -39,7 +40,8 @@ module.exports = function (app) {
                 deleted_by:function () {
                     return this.lastModifierInfo.getTranslatedName();
                 },
-                deleted_on:'lastModified'
+                deleted_on:'lastModified',
+                number_of_days: 'numberOfDays'
             };
             Correspondence.call(this);
             self.docStatus = 2;
