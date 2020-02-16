@@ -10,7 +10,8 @@ module.exports = function (app) {
                                                     _,
                                                     generator,
                                                     ResolveDefer,
-                                                    correspondenceService) {
+                                                    correspondenceService,
+                                                    viewTrackingSheetService) {
         'ngInject';
         var self = this;
         self.controllerName = 'deletedOutgoingCtrl';
@@ -87,6 +88,21 @@ module.exports = function (app) {
                 .archiveBulkCorrespondences(self.selectedDeletedOutgoings, $event)
                 .then(function () {
                     self.reloadDeletedOutgoings(self.grid.page);
+                });
+        };
+
+        /**
+         * @description View Tracking Sheet
+         * @param correspondence
+         * @param params
+         * @param $event
+         */
+        self.viewTrackingSheet = function (correspondence, params, $event) {
+            viewTrackingSheetService
+                .controllerMethod
+                .viewTrackingSheetPopup(correspondence, params, $event)
+                .then(function (result) {
+
                 });
         };
 
@@ -171,6 +187,32 @@ module.exports = function (app) {
                     return true;
                 },
                 showInView: false
+            },
+            // View Tracking Sheet (with sub menu)
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'grid_action_view_tracking_sheet',
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: function (action, model) {
+                    return true;
+                },
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid', gridService.grids.outgoing.deleted)
+            },
+            // View Tracking Sheet (Shortcut Only)
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'grid_action_view_tracking_sheet',
+                shortcut: true,
+                onlyShortcut: true,
+                showInView: false,
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: function (action, model) {
+                    return true;
+                },
+                callback: self.viewTrackingSheet,
+                params: ['view_tracking_sheet', 'tabs', gridService.grids.outgoing.deleted]
             },
             // Archive
             {
