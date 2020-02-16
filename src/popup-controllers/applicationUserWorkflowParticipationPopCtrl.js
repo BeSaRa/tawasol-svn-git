@@ -170,6 +170,63 @@ module.exports = function (app) {
                 });
         };
 
+        var dropdownMapValue, dropdownsMap = {
+            manager: {
+                selectedProperty: 'managers',
+                compareWith: 'organizationsWithManager'
+            },
+            viceManager: {
+                selectedProperty: 'viceManagers',
+                compareWith: 'organizationsWithViceManager'
+            }
+        };
+
+        /**
+         * @description Check if option in dropdown is checked
+         * @returns {boolean}
+         */
+        self.isChecked = function (recordType) {
+            dropdownMapValue = dropdownsMap[recordType];
+            if (dropdownMapValue) {
+                return !!(self.ouApplicationUser[dropdownMapValue.selectedProperty]
+                    && self.ouApplicationUser[dropdownMapValue.selectedProperty].length === self[dropdownMapValue.compareWith].length);
+            }
+            return false;
+        };
+
+        /**
+         * @description Check if some of options in dropdown are selected
+         * @returns {boolean}
+         */
+        self.isIndeterminate = function (recordType) {
+            dropdownMapValue = dropdownsMap[recordType];
+            if (dropdownMapValue) {
+                return !!(self.ouApplicationUser[dropdownMapValue.selectedProperty]
+                    && self.ouApplicationUser[dropdownMapValue.selectedProperty].length < self[dropdownMapValue.compareWith].length);
+            }
+            return false;
+        };
+
+        /**
+         * @description Toggle the selection for options in dropdown
+         * @param recordType
+         * @param $event
+         */
+        self.toggleAll = function (recordType, $event) {
+            dropdownMapValue = dropdownsMap[recordType];
+            if (dropdownMapValue) {
+                if (self.ouApplicationUser[dropdownMapValue.selectedProperty]) {
+                    if (self.ouApplicationUser[dropdownMapValue.selectedProperty].length === self[dropdownMapValue.compareWith].length) {
+                        self.ouApplicationUser[dropdownMapValue.selectedProperty] = null;
+                    } else {
+                        self.ouApplicationUser[dropdownMapValue.selectedProperty] = angular.copy(self[dropdownMapValue.compareWith]);
+                    }
+                } else {
+                    self.ouApplicationUser[dropdownMapValue.selectedProperty] = angular.copy(self[dropdownMapValue.compareWith]);
+                }
+            }
+        };
+
         /**
          * @description Close the popup
          */

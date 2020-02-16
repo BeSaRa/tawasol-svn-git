@@ -7,6 +7,7 @@
         <div class="md-dialog-content cms-dialog-content">
             <form name="applicationUserWorkflowParticipationForm" autocomplete="off">
                 <div layout="column">
+                    <!-- Private Users -->
                     <div layout="row" flex>
                         <div flex class="cms-input-container">
                             <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToPrivateUsers"
@@ -14,7 +15,6 @@
                                          ng-change="ctrl.sendToPrivateUsersChange()">{{lang.send_to_private_users}}
                             </md-checkbox>
                         </div>
-                        <!-- Private Users -->
                         <md-input-container flex>
                             <label for="privateUsers">{{lang.private_users}}</label>
                             <md-select ng-model-options="{trackBy: '$value.id'}" multiple name="privateUsers"
@@ -36,6 +36,7 @@
                             </div>
                         </md-input-container>
                     </div>
+                    <!-- Managers -->
                     <div layout="row" flex>
                         <div flex class="cms-input-container">
                             <md-checkbox ng-model="ctrl.ouApplicationUser.sendToManagers"
@@ -44,7 +45,6 @@
                                 {{lang.send_to_managers}}
                             </md-checkbox>
                         </div>
-                        <!-- Managers -->
                         <md-input-container flex>
                             <label for="managers">{{lang.managers}}</label>
                             <md-select multiple name="managers" id="managers"
@@ -52,7 +52,18 @@
                                        ng-model="ctrl.ouApplicationUser.managers"
                                        ng-disabled="!ctrl.ouApplicationUser.sendToManagers"
                                        md-selected-text="ctrl.getSelectedManagersText()"
-                                       ng-model-options="{trackBy: '$value.organization.id'}">
+                                       ng-model-options="{trackBy: '$value.organization.id'}"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-select-header class="select-header">
+                                    <div class="cms-simple-checkbox-container">
+                                        <input type="checkbox" class="cms-simple-checkbox"
+                                               ng-class="{'checked': ctrl.isChecked('manager'), 'indeterminate': ctrl.isIndeterminate('manager')}"
+                                               ng-checked="ctrl.isChecked('manager')"
+                                               ng-model="ctrl.toggleAllManagersCheck">
+                                        <span class="cms-simple-checkbox-text"
+                                              ng-click="ctrl.toggleAll('manager', $event)">{{ctrl.isChecked('manager') ? lang.un_select_all : lang.select_all}}</span>
+                                    </div>
+                                </md-select-header>
                                 <md-option ng-value="ou" ng-repeat="ou in ctrl.organizationsWithManager">
                                     {{ou.organization.getTranslatedName() + ' - '+ ou.manager.getTranslatedName()}}
                                 </md-option>
@@ -62,6 +73,7 @@
                             </div>
                         </md-input-container>
                     </div>
+                    <!-- Vice Managers -->
                     <div layout="row" flex>
                         <div flex class="cms-input-container">
                             <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToViceManager"
@@ -70,7 +82,6 @@
                                 {{lang.send_to_vice_manager}}
                             </md-checkbox>
                         </div>
-                        <!-- Vice Managers -->
                         <md-input-container flex>
                             <label for="viceManagers">{{lang.vice_manager}}</label>
                             <md-select multiple name="viceManagers" id="viceManagers"
@@ -78,7 +89,18 @@
                                        ng-model="ctrl.ouApplicationUser.viceManagers"
                                        ng-disabled="!ctrl.ouApplicationUser.sendToViceManager"
                                        md-selected-text="ctrl.getSelectedViceManagersText()"
-                                       ng-model-options="{trackBy: '$value.organization.id'}">
+                                       ng-model-options="{trackBy: '$value.organization.id'}"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-select-header class="select-header">
+                                    <div class="cms-simple-checkbox-container">
+                                        <input type="checkbox" class="cms-simple-checkbox"
+                                               ng-class="{'checked': ctrl.isChecked('viceManager'), 'indeterminate': ctrl.isIndeterminate('viceManager')}"
+                                               ng-checked="ctrl.isChecked('viceManager')"
+                                               ng-model="ctrl.toggleAllViceManagersCheck">
+                                        <span class="cms-simple-checkbox-text"
+                                              ng-click="ctrl.toggleAll('viceManager', $event)">{{ctrl.isChecked('viceManager') ? lang.un_select_all : lang.select_all}}</span>
+                                    </div>
+                                </md-select-header>
                                 <md-option ng-value="ou" ng-repeat="ou in ctrl.organizationsWithViceManager">
                                     {{ou.organization.getTranslatedName() + ' - '+ ou.viceManager.getTranslatedName()}}
                                 </md-option>
