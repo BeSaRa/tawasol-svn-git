@@ -74,7 +74,7 @@ module.exports = function (app) {
             },
             {
                 id: 3,
-                key: 'sender_department',
+                key: 'sender_section',
                 show: !_getApprovedStatus(),
                 identifier: 'senderDepartment'
             }
