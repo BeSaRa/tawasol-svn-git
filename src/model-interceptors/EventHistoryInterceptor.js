@@ -27,6 +27,7 @@ module.exports = function (app) {
             delete model.securityLevelLookup;
             delete model.securityLevelIndicator;
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
+            delete model.actionType_vts;
             return model;
         });
 
@@ -54,6 +55,7 @@ module.exports = function (app) {
 
             model.docClassIndicator = model.docClassName ? model.getDocClassIndicator(model.docClassName) : null;
 
+            model.actionType_vts = model.mapActionType();
             model.setMainSiteSubSiteString();
 
             return model;

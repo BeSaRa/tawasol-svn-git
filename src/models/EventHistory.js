@@ -9,6 +9,23 @@ module.exports = function (app) {
         'ngInject';
         return function EventHistory(model) {
             var self = this, viewDocumentService,
+                actionTypes = {
+                    0: {
+                        key: 'user',
+                        langKey: 'user',
+                        icon: 'account'
+                    },
+                    1: {
+                        key: 'ou',
+                        langKey: 'group_mail',
+                        icon: 'bank-minus'
+                    },
+                    2: {
+                        key: 'regOu',
+                        langKey: 'organization',
+                        icon: 'bank'
+                    }
+                },
                 exportData = {
                     sent_items_serial_number: 'docFullSerial',
                     label_document_class: function () {
@@ -237,6 +254,13 @@ module.exports = function (app) {
 
             EventHistory.prototype.canSendByFax = function () {
                 return rootEntity.returnRootEntity().rootEntity.faxEnabled;
+            };
+
+            EventHistory.prototype.mapActionType = function () {
+                if (this.actionType !== null && typeof this.actionType !== 'undefined') {
+                    return actionTypes[this.actionType];
+                }
+                return null;
             };
 
             // don't remove CMSModelInterceptor from last line

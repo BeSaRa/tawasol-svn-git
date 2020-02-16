@@ -42,10 +42,18 @@
                                         ng-repeat="workflowHistoryRecord in ctrl.workflowHistoryRecords | filter:ctrl.searchModelWorkflowHistory | limitTo: ctrl.workflowHistoryGrid.limit: ((ctrl.workflowHistoryGrid.page - 1) * ctrl.workflowHistoryGrid.limit)  track by $index">
                                         <td md-cell>
                                             {{workflowHistoryRecord.userFromInfo.getTranslatedName()}}
-                                        </td><!--{{workflowHistoryRecord.getTranslatedUserFrom()}}-->
+                                        </td>
                                         <td md-cell>
+                                            <span class="action-type-icon-container">
+                                                    <md-icon
+                                                            ng-if="workflowHistoryRecord.actionType === 1 || workflowHistoryRecord.actionType === 2"
+                                                            md-svg-icon="{{workflowHistoryRecord.actionType_vts.icon}}"
+                                                            tooltip="{{lang[workflowHistoryRecord.actionType_vts.langKey]}}"
+                                                    ></md-icon>
+                                                </span>
                                             {{workflowHistoryRecord.userToInfo.getTranslatedName()}}
-                                        </td><!--{{workflowHistoryRecord.getTranslatedUserTo()}}-->
+                                        </td>
+                                        <!--{{workflowHistoryRecord.getTranslatedUserTo()}}-->
                                         <td md-cell>{{workflowHistoryRecord.getTranslatedAction()}}</td>
                                         <!--<td md-cell>{{workflowHistoryRecord.documentCreationDate_vts}}</td>-->
                                         <td md-cell>{{workflowHistoryRecord.actionDate_vts}}</td>
@@ -170,7 +178,8 @@
                                             md-order-by="{{ctrl.getSortingKey('actionByOUInfo', 'Information')}}">
                                             <span>{{lang.view_tracking_sheet_action_by_department}}</span>
                                         </th>
-                                        <th md-column md-order-by="{{ctrl.getSortingKey('actionToInfo', 'Information')}}">
+                                        <th md-column
+                                            md-order-by="{{ctrl.getSortingKey('actionToInfo', 'Information')}}">
                                             <span>{{lang.view_tracking_sheet_action_to}}</span></th>
                                         <th md-column
                                             md-order-by="{{ctrl.getSortingKey('actionTypeInfo', 'Information')}}">
