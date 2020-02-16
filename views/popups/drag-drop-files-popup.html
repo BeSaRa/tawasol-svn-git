@@ -63,7 +63,7 @@
                                    ng-model="ctrl.exportStatus"
                                    ng-change="ctrl.changeValueOf('exportStatus', ctrl.exportStatus)"
                                    aria-label="{{lang.export_status}}">
-                            <label>{{lang.export_status}} : {{ctrl.exportStatus ? lang.yes : lang.no}}</label>
+                            <label>{{lang.export_status}} : {{ctrl.exportStatus ? lang.save_and_export : lang.save_only}}</label>
                         </md-switch>
                     </div>
                 </div>
@@ -178,7 +178,7 @@
                                    ng-model="ctrl.attachment.exportStatus"
                                    aria-label="{{lang.export_status}}">
                             <label>{{lang.export_status}} :
-                                {{ctrl.attachment.getTranslatedYesNo('exportStatus')}}</label>
+                                {{ctrl.attachment.getTranslatedExportStatus()}}</label>
                         </md-switch>
                     </div>
                 </div>
@@ -292,7 +292,7 @@
                                                ng-model="attachment.exportStatus"
                                                aria-label="{{lang.export_status}}">
                                         <label>{{lang.export_status}} :
-                                            {{attachment.getTranslatedYesNo('exportStatus')}}</label>
+                                            {{attachment.getTranslatedExportStatus()}}</label>
                                     </md-switch>
                                 </div>
                             </div>

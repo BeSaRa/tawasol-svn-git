@@ -65,6 +65,10 @@ module.exports = function (app) {
                 return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
+            Attachment.prototype.getTranslatedExportStatus = function () {
+                return this.exportStatus ? langService.get('save_and_export') : langService.get('save_only');
+            };
+
             var indicator = new Indicator();
             Attachment.prototype.getIsLinkedExportedDocIndicator = function () {
                 return indicator.getIsLinkedExportedDocIndicator();
