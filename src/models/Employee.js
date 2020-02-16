@@ -211,6 +211,9 @@ module.exports = function (app) {
             Employee.prototype.canSendToManagers = function () {
                 return this.canSendTo('Managers');
             };
+            Employee.prototype.canSendToViceManagers = function () {
+                return this.canSendTo('ViceManager');
+            };
             /**
              * to check if the current user has permission
              * @param permissionKey

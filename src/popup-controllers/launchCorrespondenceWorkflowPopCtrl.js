@@ -455,7 +455,7 @@ module.exports = function (app) {
             vice_manager_users:{
                 lang: 'workflow_menu_item_vice_managers',
                 icon: 'account-child',
-                show: employeeService.getEmployee().canSendToManagers(),
+                show: employeeService.getEmployee().canSendToViceManagers(),
                 disabled: false,
                 modelName: 'viceManagerUsers'
             },
