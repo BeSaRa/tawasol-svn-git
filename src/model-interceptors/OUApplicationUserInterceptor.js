@@ -41,13 +41,17 @@ module.exports = function (app) {
             model.privateUsers = (model.sendToPrivateUsers && angular.isArray(model.privateUsers) && typeof model.privateUsers[0] !== 'undefined') ? JSON.stringify(getPrivateUsersToSend(model, privateUsersCopy)) : "{}";
 
 
-            model.managers = (model.sendToManagers) ? JSON.stringify(_.map(model.managers, function (manager) {
-                return manager.organization.id;
-            })) : "[]";
+            /* model.managers = (model.sendToManagers) ? JSON.stringify(_.map(model.managers, function (manager) {
+                 return manager.organization.id;
+             })) : "[]";
 
-            model.viceManagers = (model.sendToViceManager) ? JSON.stringify(_.map(model.viceManagers, function (viceManager) {
-                return viceManager.organization.id;
-            })) : "[]";
+             model.viceManagers = (model.sendToViceManager) ? JSON.stringify(_.map(model.viceManagers, function (viceManager) {
+                 return viceManager.organization.id;
+             })) : "[]";*/
+
+            model.managers = (model.sendToManagers) ? JSON.stringify(model.managers) : "[]";
+
+            model.viceManagers = (model.sendToViceManager) ? JSON.stringify(model.viceManagers) : "[]";
 
             if (model.proxyUser) {
                 getUnixTimeStamp(model, ["proxyStartDate", "proxyEndDate"]);
@@ -120,7 +124,7 @@ module.exports = function (app) {
                     });
                 }
                 model.managers = (model.managers && !angular.isArray(model.managers)) ? JSON.parse(model.managers) : [];
-                if (model.sendToManagers && model.managers.length) {
+                /*if (model.sendToManagers && model.managers.length) {
                     model.managers = _.map(model.managers, function (ouId) {
                         var organization = _.find(organizations, {id: ouId});
                         return {
@@ -130,10 +134,10 @@ module.exports = function (app) {
                             })
                         };
                     })
-                }
+                }*/
 
                 model.viceManagers = (model.viceManagers && !angular.isArray(model.viceManagers)) ? JSON.parse(model.viceManagers) : [];
-                if (model.sendToViceManager && model.viceManagers.length) {
+                /*if (model.sendToViceManager && model.viceManagers.length) {
                     model.viceManagers = _.map(model.viceManagers, function (ouId) {
                         var organization = _.find(organizations, {id: ouId});
                         return {
@@ -143,7 +147,7 @@ module.exports = function (app) {
                             })
                         };
                     })
-                }
+                }*/
 
 
                 var securityLevels = lookupService.returnLookups(lookupService.securityLevel);

@@ -1000,6 +1000,14 @@ module.exports = function (app) {
                         privateUsers: function (ouApplicationUserService) {
                             'ngInject';
                             return ouApplicationUserService.loadAllPrivateUsers();
+                        },
+                        managers: function (ouApplicationUserService) {
+                            'ngInject';
+                            return ouApplicationUserService.loadAllManagers();
+                        },
+                        viceManagers: function (ouApplicationUserService) {
+                            'ngInject';
+                            return ouApplicationUserService.loadAllViceManagers();
                         }
                     }
                 })

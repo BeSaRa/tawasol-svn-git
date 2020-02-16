@@ -199,6 +199,10 @@ module.exports = function (app) {
                 return justResult ? (angular.isArray(this.securityLevels) ? this.getSecurityAsNumber() : this.securityLevels) : this.getSecurityAsLookup();
             };
 
+            OUApplicationUser.prototype.getManagerAndOuTranslate =  function(){
+                return this.ouid.getTranslatedName() + ' - '+ this.getTranslatedApplicationUserName();
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('OUApplicationUser', 'init', this);

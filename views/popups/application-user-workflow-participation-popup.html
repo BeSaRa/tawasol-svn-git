@@ -52,7 +52,7 @@
                                        ng-model="ctrl.ouApplicationUser.managers"
                                        ng-disabled="!ctrl.ouApplicationUser.sendToManagers"
                                        md-selected-text="ctrl.getSelectedManagersText()"
-                                       ng-model-options="{trackBy: '$value.organization.id'}"
+                                       ng-model-options="{trackBy: '$value'}"
                                        md-on-close="ctrl.clearSearchText('managers')"
                                        data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
@@ -69,11 +69,11 @@
                                            placeholder="{{lang.search}}"
                                            class="select-header-input">
                                 </md-select-header>
-                                <md-option ng-value="ou"
-                                           ng-repeat="ou in ctrl.organizationsWithManager | translatedNameFilter:ctrl.managersSearchText:'getManagerAndOuTranslate':'organization'">
+                                <md-option ng-repeat="manager in ctrl.managersList | translatedNameFilter:ctrl.managersSearchText:'getManagerAndOuTranslate'"
+                                        ng-value="manager.ouid.id">
                                     <span md-highlight-text="ctrl.managersSearchText"
                                           md-highlight-flags="i">
-                                        {{ou.organization.getManagerAndOuTranslate()}}
+                                        {{manager.getManagerAndOuTranslate()}}
                                     </span>
                                 </md-option>
                             </md-select>
@@ -98,7 +98,7 @@
                                        ng-model="ctrl.ouApplicationUser.viceManagers"
                                        ng-disabled="!ctrl.ouApplicationUser.sendToViceManager"
                                        md-selected-text="ctrl.getSelectedViceManagersText()"
-                                       ng-model-options="{trackBy: '$value.organization.id'}"
+                                       ng-model-options="{trackBy: '$value'}"
                                        md-on-close="ctrl.clearSearchText('viceManagers')"
                                        data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
@@ -115,12 +115,12 @@
                                            placeholder="{{lang.search}}"
                                            class="select-header-input">
                                 </md-select-header>
-                                <md-option ng-value="ou"
-                                           ng-repeat="ou in ctrl.organizationsWithViceManager | translatedNameFilter:ctrl.viceManagersSearchText:'getViceManagerAndOuTranslate':'organization'">
-                                       <span md-highlight-text="ctrl.viceManagersSearchText"
-                                             md-highlight-flags="i">
-                                           {{ou.organization.getViceManagerAndOuTranslate()}}
-                                       </span>
+                                <md-option ng-repeat="viceManager in ctrl.viceManagersList | translatedNameFilter:ctrl.viceManagersSearchText:'getManagerAndOuTranslate'"
+                                           ng-value="viceManager.ouid.id">
+                                    <span md-highlight-text="ctrl.viceManagersSearchText"
+                                          md-highlight-flags="i">
+                                        {{viceManager.getManagerAndOuTranslate()}}
+                                    </span>
                                 </md-option>
                             </md-select>
                             <div ng-messages="applicationUserWorkflowParticipationForm.viceManagers.$error">

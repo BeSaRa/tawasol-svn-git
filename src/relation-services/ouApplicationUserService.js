@@ -114,6 +114,31 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Loads all the managers in all organizations
+         * @returns {*}
+         */
+        self.loadAllManagers = function () {
+            return $http.get(urlService.ouApplicationUsers + '/all-manager-users').then(function (result) {
+                var managers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
+                managers = generator.interceptReceivedCollection('OUApplicationUser', managers);
+                return managers;
+            });
+        };
+
+        /**
+         * @description Loads all the vice managers in all organizations
+         * @returns {*}
+         */
+        self.loadAllViceManagers = function () {
+            return $http.get(urlService.ouApplicationUsers + '/all-vice-manager-users').then(function (result) {
+                var viceManagers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
+                viceManagers = generator.interceptReceivedCollection('OUApplicationUser', viceManagers);
+                return viceManagers;
+            });
+        };
+
+
+        /**
          * @description Contains methods for CRUD operations for ou application users
          */
         self.controllerMethod = {

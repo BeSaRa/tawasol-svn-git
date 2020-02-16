@@ -68,11 +68,11 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel('Organization', function (model) {
-            var users = ['adminUserId', 'managerId', 'viceManagerId'];
+            /*var users = ['adminUserId', 'managerId', 'viceManagerId'];
             _.map(users, function (property) {
                 if (model[property])
                     model[property] = applicationUserService.getApplicationUserById(model[property]);
-            });
+            });*/
             model.outype = organizationTypeService.getOrganizationTypeByLookupKey(model.outype) || model.outype;
             model.referenceNumberPlanId = referencePlanNumberService.getReferencePlanNumberById(model.referenceNumberPlanId) || model.referenceNumberPlanId;
             model.securitySchema = lookupService.getLookupByLookupKey(lookupService.securitySchema, model.securitySchema);

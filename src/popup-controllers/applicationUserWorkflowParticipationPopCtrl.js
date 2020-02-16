@@ -8,7 +8,9 @@ module.exports = function (app) {
                                                                             lookupService,
                                                                             organizations,
                                                                             privateUsers,
-                                                                            langService) {
+                                                                            langService,
+                                                                            managers,
+                                                                            viceManagers) {
         'ngInject';
         var self = this;
         self.controllerName = 'applicationUserWorkflowParticipationPopCtrl';
@@ -18,6 +20,9 @@ module.exports = function (app) {
         self.managersSearchText = '';
         self.viceManagersSearchText = '';
 
+        self.managersList = managers;
+        self.viceManagersList = viceManagers;
+        console.log(self.managersList, self.viceManagersList);
         self.ouWithManagersList = _.filter(organizations, 'managerId');
         self.organizationsWithManager = _.map(self.ouWithManagersList, function (ou) {
             return {
@@ -66,20 +71,32 @@ module.exports = function (app) {
 
         self.getSelectedManagersText = function () {
             if (self.ouApplicationUser.managers && self.ouApplicationUser.managers.length) {
-                var map = _.map(self.ouApplicationUser.managers, function (manager) {
-                    return manager.organization.getTranslatedName();
+                // saved manager id is the id of ou, not user
+                var selectedManagers = _.filter(self.managersList, function (manager) {
+                    return (self.ouApplicationUser.managers.indexOf(manager.ouid.hasOwnProperty('id') ? manager.ouid.id : manager.ouid)) > -1;
                 });
-                return map.join(', ');
+                if (selectedManagers && selectedManagers.length) {
+                    return _.map(selectedManagers, function (m) {
+                        return m.ouid.getTranslatedName();
+                    }).join(', ');
+                }
+                return langService.get('managers');
             }
             return langService.get('managers');
         };
 
         self.getSelectedViceManagersText = function () {
             if (self.ouApplicationUser.viceManagers && self.ouApplicationUser.viceManagers.length) {
-                var map = _.map(self.ouApplicationUser.viceManagers, function (viceManager) {
-                    return viceManager.organization.getTranslatedName();
+                // saved viceManager id is the id of ou, not user
+                var selectedViceManagers = _.filter(self.viceManagersList, function (viceManager) {
+                    return (self.ouApplicationUser.viceManagers.indexOf(viceManager.ouid.hasOwnProperty('id') ? viceManager.ouid.id : viceManager.ouid)) > -1;
                 });
-                return map.join(', ');
+                if (selectedViceManagers && selectedViceManagers.length) {
+                    return _.map(selectedViceManagers, function (vm) {
+                        return vm.ouid.getTranslatedName();
+                    }).join(', ');
+                }
+                return langService.get('vice_manager');
             }
             return langService.get('vice_manager');
         };
