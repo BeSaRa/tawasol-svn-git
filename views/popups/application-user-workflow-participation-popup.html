@@ -53,19 +53,28 @@
                                        ng-disabled="!ctrl.ouApplicationUser.sendToManagers"
                                        md-selected-text="ctrl.getSelectedManagersText()"
                                        ng-model-options="{trackBy: '$value.organization.id'}"
+                                       md-on-close="ctrl.clearSearchText('managers')"
                                        data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
-                                    <div class="cms-simple-checkbox-container">
-                                        <input type="checkbox" class="cms-simple-checkbox"
-                                               ng-class="{'checked': ctrl.isChecked('manager'), 'indeterminate': ctrl.isIndeterminate('manager')}"
-                                               ng-checked="ctrl.isChecked('manager')"
-                                               ng-model="ctrl.toggleAllManagersCheck">
-                                        <span class="cms-simple-checkbox-text"
-                                              ng-click="ctrl.toggleAll('manager', $event)">{{ctrl.isChecked('manager') ? lang.un_select_all : lang.select_all}}</span>
-                                    </div>
+                                    <!--      <div class="cms-simple-checkbox-container">
+                                              <input type="checkbox" class="cms-simple-checkbox"
+                                                     ng-class="{'checked': ctrl.isChecked('manager'), 'indeterminate': ctrl.isIndeterminate('manager')}"
+                                                     ng-checked="ctrl.isChecked('manager')"
+                                                     ng-model="ctrl.toggleAllManagersCheck">
+                                              <span class="cms-simple-checkbox-text"
+                                                    ng-click="ctrl.toggleAll('manager', $event)">{{ctrl.isChecked('manager') ? lang.un_select_all : lang.select_all}}</span>
+                                          </div>-->
+                                    <input ng-model="ctrl.managersSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
                                 </md-select-header>
-                                <md-option ng-value="ou" ng-repeat="ou in ctrl.organizationsWithManager">
-                                    {{ou.organization.getTranslatedName() + ' - '+ ou.manager.getTranslatedName()}}
+                                <md-option ng-value="ou"
+                                           ng-repeat="ou in ctrl.organizationsWithManager | translatedNameFilter:ctrl.managersSearchText:'getManagerAndOuTranslate':'organization'">
+                                    <span md-highlight-text="ctrl.managersSearchText"
+                                          md-highlight-flags="i">
+                                        {{ou.organization.getManagerAndOuTranslate()}}
+                                    </span>
                                 </md-option>
                             </md-select>
                             <div ng-messages="applicationUserWorkflowParticipationForm.managers.$error">
@@ -90,19 +99,28 @@
                                        ng-disabled="!ctrl.ouApplicationUser.sendToViceManager"
                                        md-selected-text="ctrl.getSelectedViceManagersText()"
                                        ng-model-options="{trackBy: '$value.organization.id'}"
+                                       md-on-close="ctrl.clearSearchText('viceManagers')"
                                        data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
-                                    <div class="cms-simple-checkbox-container">
-                                        <input type="checkbox" class="cms-simple-checkbox"
-                                               ng-class="{'checked': ctrl.isChecked('viceManager'), 'indeterminate': ctrl.isIndeterminate('viceManager')}"
-                                               ng-checked="ctrl.isChecked('viceManager')"
-                                               ng-model="ctrl.toggleAllViceManagersCheck">
-                                        <span class="cms-simple-checkbox-text"
-                                              ng-click="ctrl.toggleAll('viceManager', $event)">{{ctrl.isChecked('viceManager') ? lang.un_select_all : lang.select_all}}</span>
-                                    </div>
+                                    <!--   <div class="cms-simple-checkbox-container">
+                                           <input type="checkbox" class="cms-simple-checkbox"
+                                                  ng-class="{'checked': ctrl.isChecked('viceManager'), 'indeterminate': ctrl.isIndeterminate('viceManager')}"
+                                                  ng-checked="ctrl.isChecked('viceManager')"
+                                                  ng-model="ctrl.toggleAllViceManagersCheck">
+                                           <span class="cms-simple-checkbox-text"
+                                                 ng-click="ctrl.toggleAll('viceManager', $event)">{{ctrl.isChecked('viceManager') ? lang.un_select_all : lang.select_all}}</span>
+                                       </div>-->
+                                    <input ng-model="ctrl.viceManagersSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
                                 </md-select-header>
-                                <md-option ng-value="ou" ng-repeat="ou in ctrl.organizationsWithViceManager">
-                                    {{ou.organization.getTranslatedName() + ' - '+ ou.viceManager.getTranslatedName()}}
+                                <md-option ng-value="ou"
+                                           ng-repeat="ou in ctrl.organizationsWithViceManager | translatedNameFilter:ctrl.viceManagersSearchText:'getViceManagerAndOuTranslate':'organization'">
+                                       <span md-highlight-text="ctrl.viceManagersSearchText"
+                                             md-highlight-flags="i">
+                                           {{ou.organization.getViceManagerAndOuTranslate()}}
+                                       </span>
                                 </md-option>
                             </md-select>
                             <div ng-messages="applicationUserWorkflowParticipationForm.viceManagers.$error">

@@ -291,6 +291,14 @@ module.exports = function (app) {
                 return this.hasRegistry ? this.id : (this.registryParentId.hasOwnProperty('id') ? this.registryParentId.id : this.registryParentId);
             };
 
+            Organization.prototype.getManagerAndOuTranslate =  function(){
+                return this.getTranslatedName() + ' - '+ this.managerId.getTranslatedName();
+            };
+
+            Organization.prototype.getViceManagerAndOuTranslate = function(){
+                return this.getTranslatedName() + ' - '+ this.viceManagerId.getTranslatedName();
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Organization', 'init', this);
