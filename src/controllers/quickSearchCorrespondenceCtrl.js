@@ -77,7 +77,8 @@ module.exports = function (app) {
                 createdOn: 'createdOn',
                 correspondence_sites: function (record) {
                     return self.getSortingKey('mainSiteSubSiteString', 'Information');
-                }
+                },
+                number_of_days: 'numberOfDays'
             },
             searchText: '',
             searchCallback: function (grid) {
