@@ -58,6 +58,10 @@ module.exports = function (app) {
                 this.ATTACHMENT_LINKED_DOCS = attachmentLinkedDocs;
             };
 
+            ReadyToExportOption.prototype.getAttachmentLinkedDocs = function () {
+                return this.ATTACHMENT_LINKED_DOCS;
+            };
+
             ReadyToExportOption.prototype.hasAttachedLinkedDocs = function () {
                 return this.ATTACHMENT_LINKED_DOCS.length;
             };

@@ -2,7 +2,8 @@
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.linked_document_manage}}">
         <popup-toolbar-directive
-                header-text="{{lang.linked_document_manage}} : {{ctrl.model.getTranslatedName()}}"></popup-toolbar-directive>
+                header-text="{{lang.linked_document_manage}} : {{ctrl.model.getTranslatedName()}}"
+                close-callback="ctrl.closeDialog"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <div layout="column">

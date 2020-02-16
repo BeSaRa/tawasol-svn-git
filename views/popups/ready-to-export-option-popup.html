@@ -98,6 +98,7 @@
                                         {{item.getTranslatedName()}}
                                     </md-checkbox>
                                     <md-checkbox ng-if="option !== 'ATTACHMENTS'" aria-label="item"
+                                                 ng-model="item.dummyDefaultSelected"
                                                  ng-click="ctrl.toggleSelectedItem(item , option)">
                                         {{item.getTranslatedName()}}
                                     </md-checkbox>
@@ -109,7 +110,7 @@
                              ng-if="ctrl.isGroupExport || (!ctrl.isGroupExport && ctrl.partialExportList.exportItems.RELATED_BOOKS.length)">
                             <span flex></span>
                             <md-button class="md-raised" ng-click="ctrl.openLinkedDocsAttachmentDialog($event)">
-                                {{lang.export_attachments_related_to_linked_documents}} ({{ctrl.model.ATTACHMENT_LINKED_DOCS.length}})
+                                {{lang.export_attachments_related_to_linked_documents}} ({{ctrl.getLinkedDocsCount()}})
                             </md-button>
                             <span flex></span>
                         </div>

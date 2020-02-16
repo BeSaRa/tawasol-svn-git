@@ -48,6 +48,9 @@ module.exports = function (app) {
             PartialExportCollection.prototype.setAttachmentLinkedDocs = function (attachmentLinkedDocs) {
                 this.exportOptions.ATTACHMENT_LINKED_DOCS = attachmentLinkedDocs;
             };
+            PartialExportCollection.prototype.getAttachmentLinkedDocs = function () {
+                return this.exportOptions.ATTACHMENT_LINKED_DOCS;
+            };
 
             PartialExportCollection.prototype.mapSend = function () {
                 this.exportOptions.ATTACHMENT_LINKED_DOCS = _.map(this.exportOptions.ATTACHMENT_LINKED_DOCS, function (item) {

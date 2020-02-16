@@ -2099,7 +2099,6 @@ module.exports = function (app) {
          * @param record
          * @param action
          * @param $event
-         * @param defaultReplyToIdentifier
          * @returns {promise|*}
          */
         self.replySimple = function (record, $event, action, defaultReplyToIdentifier) {

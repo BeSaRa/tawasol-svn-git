@@ -28,10 +28,12 @@ module.exports = function (app) {
         self.readyToExport = readyToExport;
         self.resend = resend;
         self.model = new ReadyToExportOption();
-        // set linkedDocList from prepareExport to attachmentLinkedDocs in model to set them as selected by default
-        self.model.setAttachmentLinkedDocs(prepareExport.hasOwnProperty('linkedDocList') ? angular.copy(prepareExport.linkedDocList) : []);
 
         self.settings = rootEntity.getGlobalSettings();
+        // if selective export from global settings then false, otherwise true
+        self.isGroupExport = self.settings.defaultExportTypeGrouping;
+
+
         /*self.correspondenceSites = [].concat(sites.first, _.map(sites.second, function (item) {
             item.ccVerion = true;
             return item;
@@ -76,8 +78,6 @@ module.exports = function (app) {
             {key: 'export_by_selection', value: false}
         ];
 
-        // if selective export from global settings then false, otherwise true
-        self.isGroupExport = self.settings.defaultExportTypeGrouping;
 
         // partial exported list
         self.partialExportList = new PartialExportCollection();
@@ -125,16 +125,36 @@ module.exports = function (app) {
         };
 
         function _loadRecordsForSelection() {
-            correspondenceService
+            return correspondenceService
                 .loadRelatedThingsForCorrespondence(self.readyToExport)
                 .then(function (result) {
+                    // set checkbox checked for attachments by default
                     _.map((result.ATTACHMENTS || result.attachments), function (attachment) {
                         if (attachment.exportStatus) {
                             _addItem(attachment, 'ATTACHMENTS');
                         }
                         return attachment;
                     });
+
+                    // set checkbox checked for linked docs by default
+                    if (prepareExport.hasOwnProperty('linkedDocList') && prepareExport.linkedDocList.length) {
+                        var index, linkedDocsVSIDs = _.map(prepareExport.linkedDocList, function (linkedDoc) {
+                            return linkedDoc.getInfo().vsId;
+                        });
+                        _.map(result.RELATED_BOOKS, function (relatedBook) {
+                            index = _.findIndex(linkedDocsVSIDs, function (linkedDocVsId) {
+                                return linkedDocVsId === relatedBook.getInfo().vsId;
+                            });
+                            if (index > -1) {
+                                relatedBook.dummyDefaultSelected = true;
+                                _addItem(relatedBook, 'RELATED_BOOKS');
+                            }
+                            return relatedBook;
+                        });
+                    }
+
                     self.loadRelatedThings = result;
+                    return self.loadRelatedThings;
                 });
         }
 
@@ -143,6 +163,7 @@ module.exports = function (app) {
             if (!self.isGroupExport) {
                 _loadRecordsForSelection();
             }
+            _setDefaultLinkedDocs();
         };
 
         function _selectedItemExists(item, option) {
@@ -159,7 +180,33 @@ module.exports = function (app) {
 
         function _removeItem(item, option) {
             self.partialExportList.exportItems[option].splice(_getItemPosition(item, option), 1);
+            _removeLinkedAttachedDoc(item, option);
         }
+
+        function _removeLinkedAttachedDoc(item, option) {
+            if (option === 'RELATED_BOOKS') {
+                debugger;
+                var docs = self.partialExportList.getAttachmentLinkedDocs(),
+                    index = _.findIndex(docs, function (linkedAttachmentDoc) {
+                        return linkedAttachmentDoc.getInfo().vsId === item.getInfo().vsId;
+                    });
+                if (index > -1) {
+                    docs.splice(index, 1);
+                }
+            }
+        }
+
+        function _setDefaultLinkedDocs() {
+            if (self.isGroupExport) {
+                self.model.setAttachmentLinkedDocs(prepareExport.hasOwnProperty('linkedDocList') ? angular.copy(prepareExport.linkedDocList) : []);
+            } else {
+                self.partialExportList.setAttachmentLinkedDocs(prepareExport.hasOwnProperty('linkedDocList') ? angular.copy(prepareExport.linkedDocList) : []);
+            }
+        }
+
+        self.getLinkedDocsCount = function () {
+            return self.isGroupExport ? self.model.ATTACHMENT_LINKED_DOCS.length : self.partialExportList.exportItems.ATTACHMENT_LINKED_DOCS.length;
+        };
 
         self.toggleSelectedItem = function (item, option) {
             if (_selectedItemExists(item, option)) {
@@ -294,5 +341,7 @@ module.exports = function (app) {
             self.onChangeExportType();
         }
 
+        // set linkedDocList from prepareExport to attachmentLinkedDocs in model to set them as selected by default
+        _setDefaultLinkedDocs();
     });
 };

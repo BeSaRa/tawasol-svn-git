@@ -80,6 +80,9 @@ module.exports = function (app) {
             PartialExportSelective.prototype.setAttachmentLinkedDocs = function (attachmentLinkedDocs) {
                 this.exportItems.ATTACHMENT_LINKED_DOCS = attachmentLinkedDocs;
             };
+            PartialExportSelective.prototype.getAttachmentLinkedDocs = function () {
+                return this.exportItems.ATTACHMENT_LINKED_DOCS;
+            };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('PartialExportSelective', 'init', this);

@@ -501,7 +501,13 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-            readyToExport.manageDocumentAttachments($event);
+            readyToExport.manageDocumentAttachments($event)
+                .then(function () {
+                    self.reloadReadyToExports(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadReadyToExports(self.grid.page);
+                });
         };
 
         /**
@@ -515,7 +521,13 @@ module.exports = function (app) {
                 return;
             }
             var info = readyToExport.getInfo();
-            managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass, "welcome");
+            managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass, "welcome")
+                .then(function () {
+                    self.reloadReadyToExports(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadReadyToExports(self.grid.page);
+                });
         };
 
         /**

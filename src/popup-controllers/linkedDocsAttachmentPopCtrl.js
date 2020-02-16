@@ -14,11 +14,23 @@ module.exports = function (app) {
 
         self.selectedCorrespondences = [];
 
+        function _getAttachmentLinkedDocs() {
+            var docs;
+            if (self.exportOptions.hasOwnProperty('exportItems')) {
+                docs = self.exportOptions.exportItems;
+            } else if (self.exportOptions.hasOwnProperty('exportOptions')) {
+                docs = self.exportOptions.exportOptions;
+            } else {
+                docs = self.exportOptions;
+            }
+            return docs.ATTACHMENT_LINKED_DOCS;
+        }
 
         function _selectCorrespondences() {
-            var ids = _.map(self.exportOptions.ATTACHMENT_LINKED_DOCS, function (item) {
+            var ids = _.map(_getAttachmentLinkedDocs(), function (item) {
                 return item.getInfo().vsId;
             });
+
             _.map(self.linkedDocs, function (item, index) {
                 if (ids.indexOf(self.linkedDocs[index].getInfo().vsId) !== -1) {
                     self.selectedCorrespondences.push(self.linkedDocs[index]);
@@ -57,7 +69,7 @@ module.exports = function (app) {
         };
 
         self.closeDialog = function () {
-            dialog.cancel(self.exportOptions.ATTACHMENT_LINKED_DOCS);
+            dialog.cancel(_getAttachmentLinkedDocs());
         }
 
 
