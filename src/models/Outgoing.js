@@ -35,7 +35,14 @@ module.exports = function (app) {
                     created_on: 'createdOn',
                     correspondence_sites: function () {
                         return this.getTranslatedCorrespondenceSiteInfo();
-                    }
+                    },
+                    security_level:function () {
+                        return this.securityLevel.getTranslatedName();
+                    },
+                    deleted_by:function () {
+                        return this.lastModifierInfo.getTranslatedName();
+                    },
+                    deleted_on:'lastModified'
                 };
             Correspondence.call(this);
             self.docClassName = 'Outgoing';

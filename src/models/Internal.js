@@ -31,8 +31,17 @@ module.exports = function (app) {
                         }
                         return this.createdBy.getTranslatedName();
                     },
-                    created_on: 'createdOn'
+                    created_on: 'createdOn',
+                    security_level:function () {
+                        return this.securityLevel.getTranslatedName();
+                    },
+                    deleted_by:function () {
+                        return this.lastModifierInfo.getTranslatedName();
+                    },
+                    deleted_on:'lastModified'
                 };
+
+
                 Correspondence.call(this);
                 self.docClassName = 'Internal';
                 self.classDescription = 'Internal';
