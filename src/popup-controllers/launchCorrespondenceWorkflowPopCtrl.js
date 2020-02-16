@@ -154,6 +154,7 @@ module.exports = function (app) {
         self.registryOrganizations = _mapWFOrganization(distributionWFService.registryOrganizations, 'OUReg');
         // all organizations for users tab -> organization mail unit dropdown
         self.organizationGroups = _mapOrganizationByType(distributionWFService.organizationGroups, true, true);
+        self.organizationGroupsCopy = angular.copy(self.organizationGroups);
         // users search criteria
         self.usersCriteria = new UserSearchCriteria({
             ou: self.organizationGroups.length ? _.find(self.organizationGroups, function (item) {
@@ -454,7 +455,7 @@ module.exports = function (app) {
                 disabled: false,
                 modelName: 'managerUsers'
             },
-            vice_manager_users:{
+            vice_manager_users: {
                 lang: 'workflow_menu_item_vice_managers',
                 icon: 'account-child',
                 show: employeeService.getEmployee().canSendToViceManagers(),
@@ -1169,7 +1170,8 @@ module.exports = function (app) {
                     workflowActions: self.workflowActions,
                     dialogTitle: dialogTitle,
                     distWorkflowItem: distWorkflowItem,
-                    gridName: currentGridName || false
+                    gridName: currentGridName || false,
+                    organizationGroups: self.organizationGroupsCopy
                 }
             })
         };
@@ -1205,7 +1207,7 @@ module.exports = function (app) {
          */
         self.setSettingsToDistWorkflowItem = function (distWorkflowItem, $event, currentGridName) {
             return self
-                .workflowItemSettingDialog((langService.get('workflow_properties') + ' ' + distWorkflowItem.getTranslatedName()), distWorkflowItem, $event, currentGridName)
+                .workflowItemSettingDialog((langService.get('workflow_properties') + ' ' + distWorkflowItem.getTranslatedName()), distWorkflowItem, $event, currentGridName, self.organizationGroupsCopy)
                 .then(function (result) {
                     _setDistWorkflowItem(distWorkflowItem, result);
                     //self.addSelectedUsersToGrid(distWorkflowItem, $event);
@@ -1409,12 +1411,12 @@ module.exports = function (app) {
                             toast.success(langService.get('launch_success_distribution_workflow'));
                             dialog.hide();
                         }).catch(function (error) {
-                            if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
-                                var info = self.correspondence.getInfo();
-                                dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
-                                return false;
-                            }
-                        });
+                        if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                            var info = self.correspondence.getInfo();
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return false;
+                        }
+                    });
                 })
         };
 

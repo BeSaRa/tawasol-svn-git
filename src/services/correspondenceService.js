@@ -2142,6 +2142,25 @@ module.exports = function (app) {
                             }).catch(function (e) {
                                 return [];
                             });
+                        },
+                        organizationGroups: function (distributionWFService) {
+                            'ngInject';
+                            return distributionWFService
+                                .loadDistWorkflowOrganizations('organizations')
+                        },
+                        centralArchiveOUs: function (distributionWFService) {
+                            'ngInject';
+                            if (employeeService.hasPermissionTo('SEND_TO_CENTRAL_ARCHIVE')) {
+                                return distributionWFService
+                                    .loadDistWorkflowOrganizations('centralArchivesForUser')
+                                    .then(function (result) {
+                                        return result;
+                                    })
+                                    .catch(function (error) {
+                                        return [];
+                                    })
+                            }
+                            return [];
                         }
                     }
                 });

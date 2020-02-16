@@ -15,6 +15,9 @@ module.exports = function (app) {
                                                    DistributionUserWFItem,
                                                    DistributionWF,
                                                    distributionWFService,
+                                                   Information,
+                                                   centralArchiveOUs,
+                                                   organizationGroups,
                                                    Lookup,
                                                    lookupService,
                                                    userCommentService,
@@ -39,6 +42,7 @@ module.exports = function (app) {
         self.minDate = new Date();
 
         self.record = record;
+        self.organizationGroups = _mapOrganizationByType(distributionWFService.organizationGroups, true, true);
 
         // selected comment
         self.comment = _getMatchedComment(self.distWorkflowItem);
@@ -74,7 +78,7 @@ module.exports = function (app) {
             },
             {
                 id: 3,
-                key:  'sender_department',
+                key: 'sender_department',
                 show: !_getApprovedStatus() && employeeService.hasPermissionTo('SEND_TO_ELECTRONIC_INCOMING_QUEUES'),
                 identifier: 'senderDepartment'
             }
@@ -388,7 +392,7 @@ module.exports = function (app) {
          * @returns {promise}
          */
         self.openEscalationUserDialog = function ($event) {
-            distributionWFService.openEscalationUserDialog(self.distWorkflowItem, $event)
+            distributionWFService.openEscalationUserDialog(self.distWorkflowItem, $event, self.organizationGroups)
                 .then(function (result) {
                     self.distWorkflowItem.escalationUserId = result;
                     self.distWorkflowItem.escalationUserOUId = result;
@@ -420,6 +424,75 @@ module.exports = function (app) {
         self.isCustomEscalationStatusSelected = function () {
             return self.distWorkflowItem.escalationStatus && self.distWorkflowItem.escalationStatus.hasOwnProperty('lookupKey') && self.distWorkflowItem.escalationStatus.lookupKey === 3;
         };
+
+        function _mapOrganizationByType(organizations, includeCentralArchive, allOuGroup) {
+            // filter all regOU (has registry)
+            var regOus = _.filter(organizations, function (ou) {
+                    return ou.hasRegistry;
+                }),
+                // filter all sections (no registry)
+                sections = _.filter(organizations, function (ou) {
+                    return !ou.hasRegistry;
+                }),
+                // registry parent organization
+                parentRegistryOu;
+
+            // To show (regou - section), append the dummy property "tempRegOUSection"
+            regOus = _.map(regOus, function (regOu) {
+                regOu.tempRegOUSection = new Information({
+                    arName: regOu.arName,
+                    enName: regOu.enName
+                });
+                return regOu;
+            });
+            sections = _.map(sections, function (section) {
+                parentRegistryOu = (section.regouId || section.regOuId);
+                if (typeof parentRegistryOu === 'number') {
+                    parentRegistryOu = _.find(organizations, function (ou) {
+                        return ou.id === parentRegistryOu;
+                    });
+                }
+
+                section.tempRegOUSection = new Information({
+                    arName: ((parentRegistryOu) ? parentRegistryOu.arName + ' - ' : '') + section.arName,
+                    enName: ((parentRegistryOu) ? parentRegistryOu.enName + ' - ' : '') + section.enName
+                });
+                return section;
+            });
+
+            sections = _mapWFOrganization(sections, 'OUGroup');
+            regOus = _mapWFOrganization(regOus, allOuGroup ? 'OUGroup' : 'OUReg');
+            if (includeCentralArchive) {
+                centralArchiveOUs = _.map(centralArchiveOUs, function (ou) {
+                    ou.tempRegOUSection = new Information({
+                        arName: ou.arName,
+                        enName: ou.enName
+                    });
+                    return ou;
+                });
+                centralArchiveOUs = _mapWFOrganization(centralArchiveOUs, 'OUGroup');
+                sections = sections.concat(centralArchiveOUs);
+            }
+
+            // sort regOu-section
+            return _.sortBy([].concat(regOus, sections), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]);
+        }
+
+        /**
+         * @description map workflow item to WFOrganization
+         * @param collection
+         * @param gridName
+         * @returns {Array}
+         * @private
+         */
+        function _mapWFOrganization(collection, gridName) {
+            return _.map(collection, function (workflowOrganization) {
+                return (new DistributionOUWFItem()).mapFromWFOrganization(workflowOrganization).setGridName(gridName || null);
+            });
+        }
+
 
         /**
          * @description close the dialog.

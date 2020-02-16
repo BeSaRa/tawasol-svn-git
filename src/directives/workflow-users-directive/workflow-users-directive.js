@@ -30,7 +30,8 @@ module.exports = function (app) {
                 callbackDeleteFromSelected: '=',
                 workflowActions: '=',
                 workflowComments: '=',
-                applyNotificationSettings: '='
+                applyNotificationSettings: '=',
+                organizationGroups : '='
             }
         }
     });

@@ -3,7 +3,10 @@ module.exports = function (app) {
                                                             organizationService,
                                                             $q,
                                                             dialog,
-                                                            escalationUsers,
+                                                            DistributionUserWFItem,
+                                                            //  escalationUsers,
+                                                            UserSearchCriteria,
+                                                            distributionWFService,
                                                             gridService,
                                                             employeeService,
                                                             $timeout,
@@ -15,18 +18,37 @@ module.exports = function (app) {
         self.controllerName = 'selectEscalationUserPopCtrl';
         self.currentEmployee = employeeService.getEmployee();
         self.escalationUserSearchText = '';
+        self.ouSearchText = '';
+        self.usersCriteria = null;
 
-        self.escalationUsers = _.filter(escalationUsers, function (user) {
+        if (!self.escalationUserId) {
+            self.usersCriteria = new UserSearchCriteria({
+                ou: (self.organizationGroups.length ? _.find(self.organizationGroups, function (item) {
+                    return item.toOUId === self.currentEmployee.getOUID()
+                }) : self.currentEmployee.getOUID())
+            });
+        }
+
+        // self.escalationUsers = [];
+        /*self.escalationUsers = _.filter(escalationUsers, function (user) {
             return self.currentEmployee.id !== user.id;
-        });
+        });*/
 
-        self.selectedEscalationUser = null;
 
         $timeout(function () {
             if (self.escalationUserId) {
-                self.selectedEscalationUser = _.filter(self.escalationUsers, function (wfUser) {
-                    return wfUser.ouUSerId === self.escalationUserId.ouUSerId;
-                })[0];
+                self.usersCriteria = new UserSearchCriteria({
+                    ou: _.find(self.organizationGroups, function (item) {
+                        return item.toOUId === self.escalationUserId.ouId
+                    })
+                });
+
+                self.onOrganizationChanged()
+                    .then(function () {
+                        self.selectedEscalationUser = _.find(self.escalationUsers, function (wfUser) {
+                            return wfUser.ouUSerId === self.escalationUserId.ouUSerId;
+                        });
+                    });
             }
         });
 
@@ -54,6 +76,18 @@ module.exports = function (app) {
                     $event.stopPropagation();
             }
         };
+
+        self.onOrganizationChanged = function () {
+            if (!self.usersCriteria)
+                return;
+            return distributionWFService
+                .searchUsersByCriteria(self.usersCriteria)
+                .then(function (result) {
+                    return self.escalationUsers = result;
+                });
+        };
+
+        self.onOrganizationChanged();
 
         /**
          * close dialog

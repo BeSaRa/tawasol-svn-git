@@ -150,7 +150,7 @@ module.exports = function (app) {
          * @returns {promise}
          */
         self.openEscalationUserDialog = function ($event) {
-            distributionWFService.openEscalationUserDialog(self.distWorkflowItem, $event)
+            distributionWFService.openEscalationUserDialog(self.distWorkflowItem, $event,self.organizationGroups)
                 .then(function (result) {
                     self.distWorkflowItem.escalationUserId = result;
                     self.distWorkflowItem.escalationUserOUId = result;

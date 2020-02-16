@@ -14,7 +14,8 @@ module.exports = function (app) {
                 workflowActions: '=',
                 workflowComments: '=',
                 deleteCallback: '=',
-                deleteBulkCallback: '='
+                deleteBulkCallback: '=',
+                organizationGroups : '='
             }
         }
     })

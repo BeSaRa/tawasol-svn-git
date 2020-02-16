@@ -4,7 +4,33 @@
     <popup-toolbar-directive header-text="{{lang.select_user}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
-            <form name="escalationUser_form" autocomplete="off" layout="row" flex>
+            <form name="escalationUser_form" autocomplete="off" layout="column" flex>
+                <md-input-container flex>
+                    <label for="organization">{{lang.select_organization}}</label>
+                    <md-select aria-label="{{lang.select_organization}}"
+                               ng-model="ctrl.usersCriteria.ou"
+                               md-on-close="ctrl.clearSearchText('ou')"
+                               id="organization"
+                               ng-change="ctrl.onOrganizationChanged()"
+                               data-md-container-class="select-header-container sticky-search-bar">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.ouSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
+                        <md-option
+                                ng-repeat="organization in ctrl.organizationGroups | translatedNameFilter:ctrl.ouSearchText"
+                                tooltip="{{organization.getTranslatedName(true)}}"
+                                ng-value="organization">
+                                                <span md-highlight-text="ctrl.ouSearchText"
+                                                      md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="escalationUser_form.organization.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
                 <md-input-container flex>
                     <label for="escalationUser">{{lang.escalation_user}}</label>
                     <md-select ng-required="true" id="escalationUser"
@@ -23,7 +49,7 @@
                                    ng-repeat="escalationUser in ctrl.escalationUsers | translatedNameFilter: ctrl.escalationUserSearchText">
                                     <span
                                             md-highlight-text="ctrl.escalationUserSearchText"
-                                            md-highlight-flags="i">{{escalationUser.getTranslatedNameAndOU()}}</span>
+                                            md-highlight-flags="i">{{escalationUser.getTranslatedName()}}</span>
                         </md-option>
                     </md-select>
                     <div ng-messages="escalationUser_form.escalationUser.$error">

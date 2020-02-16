@@ -87,7 +87,8 @@
                                                     grid="ctrl.grid"
                                                     multi-select="true"
                                                     grid-name="favoriteUsers"
-                                                    grid-items="ctrl.favoriteUsers"></workflow-users-directive>
+                                                    grid-items="ctrl.favoriteUsers"
+                                                    organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
                                                 <!--multi-select="!ctrl.getApprovedStatus()"-->
                                         </div>
                                     </md-tab>
@@ -110,7 +111,8 @@
                                                     selected="ctrl.selectedWorkflowItems"
                                                     workflow-items="ctrl.favoriteOrganizations"
                                                     grid-name="favoriteOUs"
-                                                    grid="ctrl.grid.favoriteOus"></workflow-items-directive>
+                                                    grid="ctrl.grid.favoriteOus"
+                                                    organization-groups="ctrl.organizationGroupsCopy"></workflow-items-directive>
                                         </div>
                                     </md-tab>
                                 </md-tabs>
@@ -128,7 +130,8 @@
                             <selected-workflow-items-directive
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    workflow-items="ctrl.selectedWorkflowItems"></selected-workflow-items-directive>
+                                    workflow-items="ctrl.selectedWorkflowItems"
+                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
                         </div>
                         <!-- Users -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('users')">
@@ -210,7 +213,8 @@
                                     workflow-actions="ctrl.workflowActions"
                                     multi-select="true"
                                     grid-name="users"
-                                    grid-items="ctrl.users"></workflow-users-directive>
+                                    grid-items="ctrl.users"
+                                    organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
                             <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
@@ -225,7 +229,8 @@
                             <selected-workflow-items-directive
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    workflow-items="ctrl.selectedWorkflowItems"></selected-workflow-items-directive>
+                                    workflow-items="ctrl.selectedWorkflowItems"
+                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
                         </div>
                         <!-- Private Users -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('private_users')">
@@ -259,7 +264,8 @@
                                     workflow-actions="ctrl.workflowActions"
                                     multi-select="true"
                                     grid-name="privateUsers"
-                                    grid-items="ctrl.privateUsers"></workflow-users-directive>
+                                    grid-items="ctrl.privateUsers"
+                                    organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
                             <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
@@ -274,7 +280,8 @@
                             <selected-workflow-items-directive
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    workflow-items="ctrl.selectedWorkflowItems"></selected-workflow-items-directive>
+                                    workflow-items="ctrl.selectedWorkflowItems"
+                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
                         </div>
                         <!-- Managers -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('manager_users')">
@@ -308,7 +315,8 @@
                                     workflow-actions="ctrl.workflowActions"
                                     multi-select="true"
                                     grid-name="managerUsers"
-                                    grid-items="ctrl.managerUsers"></workflow-users-directive>
+                                    grid-items="ctrl.managerUsers"
+                                    organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
                             <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
@@ -323,7 +331,8 @@
                             <selected-workflow-items-directive
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    workflow-items="ctrl.selectedWorkflowItems"></selected-workflow-items-directive>
+                                    workflow-items="ctrl.selectedWorkflowItems"
+                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
                         </div>
                         <!-- Vice Managers -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('vice_manager_users')">
@@ -357,7 +366,8 @@
                                     workflow-actions="ctrl.workflowActions"
                                     multi-select="true"
                                     grid-name="viceManagerUsers"
-                                    grid-items="ctrl.viceManagerUsers"></workflow-users-directive>
+                                    grid-items="ctrl.viceManagerUsers"
+                                    organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
                             <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
@@ -372,7 +382,8 @@
                             <selected-workflow-items-directive
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    workflow-items="ctrl.selectedWorkflowItems"></selected-workflow-items-directive>
+                                    workflow-items="ctrl.selectedWorkflowItems"
+                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
                         </div>
                         <!-- Head of government entities -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('heads_of_government_entities')">
@@ -406,7 +417,8 @@
                                     workflow-actions="ctrl.workflowActions"
                                     multi-select="true"
                                     grid-name="governmentEntitiesHeads"
-                                    grid-items="ctrl.governmentEntitiesHeads"></workflow-users-directive>
+                                    grid-items="ctrl.governmentEntitiesHeads"
+                                    organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
                             <!--multi-select="!ctrl.getApprovedStatus()"-->
                             <div>
                                 <br/>
@@ -421,7 +433,8 @@
                             <selected-workflow-items-directive
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    workflow-items="ctrl.selectedWorkflowItems"></selected-workflow-items-directive>
+                                    workflow-items="ctrl.selectedWorkflowItems"
+                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
                         </div>
                         <!-- Workflow Groups -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('workflow_groups')">
@@ -448,7 +461,8 @@
                                     workflow-items="ctrl.workflowGroups"
                                     grid-name="workflowGroups"
                                     grid="ctrl.grid.workflowGroups"
-                                    wf-group-member-add-callback="ctrl.addSelectedUsersToGrid"></workflow-items-directive>
+                                    wf-group-member-add-callback="ctrl.addSelectedUsersToGrid"
+                                    organization-groups="ctrl.organizationGroupsCopy"></workflow-items-directive>
                             <div>
                                 <br/>
                             </div>
@@ -462,7 +476,8 @@
                             <selected-workflow-items-directive
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    workflow-items="ctrl.selectedWorkflowItems"></selected-workflow-items-directive>
+                                    workflow-items="ctrl.selectedWorkflowItems"
+                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
                         </div>
                         <!-- Organization Units -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('registry_organizations')">
@@ -489,7 +504,8 @@
                                     selected="ctrl.selectedWorkflowItems"
                                     workflow-items="ctrl.registryOrganizations"
                                     grid-name="Ous"
-                                    grid="ctrl.grid.ous"></workflow-items-directive>
+                                    grid="ctrl.grid.ous"
+                                    organization-groups="ctrl.organizationGroupsCopy"></workflow-items-directive>
                             <div>
                                 <br/>
                             </div>
@@ -503,7 +519,8 @@
                             <selected-workflow-items-directive
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
-                                    workflow-items="ctrl.selectedWorkflowItems"></selected-workflow-items-directive>
+                                    workflow-items="ctrl.selectedWorkflowItems"
+                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
                         </div>
                     </div>
                 </md-content>

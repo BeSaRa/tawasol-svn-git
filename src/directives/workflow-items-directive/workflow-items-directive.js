@@ -23,7 +23,8 @@ module.exports = function (app) {
                 toggleFav: '=',
                 gridName: '@',
                 grid: '=',
-                wfGroupMemberAddCallback: '=?'
+                wfGroupMemberAddCallback: '=?',
+                organizationGroups: '='
             }
         }
     })

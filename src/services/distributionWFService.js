@@ -71,7 +71,7 @@ module.exports = function (app) {
                 url: urlService.distributionWFManagers,
                 property: 'managerUsers'
             },
-            viceManagers:{
+            viceManagers: {
                 url: urlService.distributionWFViceManagers,
                 property: 'viceManagerUsers'
             }
@@ -433,7 +433,7 @@ module.exports = function (app) {
         };
 
 
-        self.openEscalationUserDialog = function (distWorkflowItem, $event) {
+        self.openEscalationUserDialog = function (distWorkflowItem, $event,organizationGroups) {
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('select-escalation-user'),
                 controller: 'selectEscalationUserPopCtrl',
@@ -441,17 +441,8 @@ module.exports = function (app) {
                 bindToController: true,
                 targetEvent: $event,
                 locals: {
-                    escalationUserId: distWorkflowItem.escalationUserId
-                },
-                resolve: {
-                    escalationUsers: function (employeeService) {
-                        'ngInject';
-                        // users search criteria
-                        var usersCriteria = new UserSearchCriteria({
-                            regOU: employeeService.getEmployee().getRegistryOUID()
-                        });
-                        return self.searchUsersByCriteria(usersCriteria);
-                    }
+                    escalationUserId: distWorkflowItem.escalationUserId,
+                    organizationGroups : organizationGroups
                 }
             })
         };

@@ -180,7 +180,8 @@ module.exports = function (app) {
                     workflowActions: self.workflowActions,
                     dialogTitle: dialogTitle,
                     distWorkflowItem: distWorkflowItem,
-                    gridName: self.gridName
+                    gridName: self.gridName,
+                    organizationGroups: self.organizationGroups
                 }
             })
         };

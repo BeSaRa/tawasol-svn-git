@@ -44,8 +44,8 @@ module.exports = function (app) {
             return self.callbackOpenWorkflowUserOutOfOffice(item, $event);
         };
 
-        self.runSetDefaultWorkflowItemsSettings = function (selected, gridName, $event , currentGridName) {
-            return self.callbackSetDefaultWorkflowItemsSettings(selected, gridName, $event , currentGridName);
+        self.runSetDefaultWorkflowItemsSettings = function (selected, gridName, $event, currentGridName) {
+            return self.callbackSetDefaultWorkflowItemsSettings(selected, gridName, $event, currentGridName);
         };
 
         self.runAddSelectedUsersToGrid = function (items, $event) {
@@ -56,8 +56,8 @@ module.exports = function (app) {
             return self.callbackAddSelectedUsersWithIgnoreToGrid(items, $event);
         };
 
-        self.runSetSettingsToDistWorkflowItem = function (item, $event , currentGridName) {
-            return self.callbackSetSettingsToDistWorkflowItem(item, $event , currentGridName);
+        self.runSetSettingsToDistWorkflowItem = function (item, $event, currentGridName) {
+            return self.callbackSetSettingsToDistWorkflowItem(item, $event, currentGridName, self.organizationGroups);
         };
 
         self.runUserNotExists = function (item) {
