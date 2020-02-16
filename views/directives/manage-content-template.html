@@ -1,6 +1,7 @@
 <div layout="row" layout-align="start center">
     <div>
-        <md-button ng-if="ctrl.displayPrepare && !ctrl.receiveDocument" class="md-raised" ng-click="ctrl.openPrepareTemplateDialog($event)">
+        <md-button ng-if="ctrl.displayPrepare && !ctrl.receiveDocument" class="md-raised"
+                   ng-click="ctrl.openPrepareTemplateDialog($event)">
             <md-icon md-svg-icon="content-paste"></md-icon>
             {{lang.prepare_document_content}}
         </md-button>
@@ -30,13 +31,13 @@
     <div>
         <md-button ng-if="ctrl.showEditContentInEditPopup() && !ctrl.isDefaultEditModeBoth"
                    class="md-raised" ng-click="ctrl.editContentInEditPopup($event)">
-             {{lang.edit_content}}
+            {{lang.edit_content}}
         </md-button>
 
         <md-menu-bar ng-if="ctrl.showEditContentInEditPopup() && ctrl.isDefaultEditModeBoth" class="p0">
             <md-menu>
                 <md-button class="md-raised" ng-click="$mdMenu.open()">
-                <!-- <md-icon md-svg-icon="attachment"></md-icon>-->
+                    <!-- <md-icon md-svg-icon="attachment"></md-icon>-->
                     <span>{{lang.edit_content}}</span>
                 </md-button>
                 <md-menu-content width="3">
@@ -76,10 +77,13 @@
     </div>
     <div>
         <!-- edit content in add page/ edit after approved -->
-        <md-button ng-if="ctrl.editContent && !ctrl.receiveDocument && ctrl.documentInformation" class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
-           {{lang.edit_content}}
+        <md-button
+                ng-if="ctrl.editContent && !ctrl.receiveDocument && ctrl.documentInformation && !ctrl.document.addMethod"
+                class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
+            {{lang.edit_content}}
         </md-button>
-        <md-button ng-if="ctrl.receiveDocument" class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
+        <md-button ng-if="ctrl.receiveDocument" class="md-raised"
+                   ng-click="ctrl.openCorrespondenceToEdit(true)">
             {{lang.view}}
         </md-button>
     </div>

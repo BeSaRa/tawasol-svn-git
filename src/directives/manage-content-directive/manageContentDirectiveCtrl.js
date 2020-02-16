@@ -353,13 +353,17 @@ module.exports = function (app) {
         /**
          * @description open edit correspondence when editAfterApproved = true.
          */
-        self.openCorrespondenceToEdit = function () {
+        self.openCorrespondenceToEdit = function (justView) {
             if (!self.documentInformation.editURL) {
                 self.documentInformation.editURL = angular.copy(self.documentInformation.viewURL);
             }
             self.documentInformation.viewURL = typeof self.documentInformation.viewURL === 'object' ? self.documentInformation.viewURL : $sce.trustAsResourceUrl(self.documentInformation.viewURL);
             self.documentInformation.editURL = typeof self.documentInformation.editURL === 'object' ? self.documentInformation.editURL : $sce.trustAsResourceUrl(self.documentInformation.editURL);
             self.trusted = true;
+
+            if (justView) {
+                return self.editInOfficeOnlineAfterApprove();
+            }
 
             if (employeeService.getEmployee().defaultEditMode === correspondenceService.documentEditModes.desktop) {
                 // edit in desktop
