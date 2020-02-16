@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, _, Outgoing, Incoming, TaskParticipant ,  Internal, generator, moment, Information, taskService) {
+    app.run(function (CMSModelInterceptor, _, Outgoing, Incoming, TaskParticipant, Internal, generator, moment, Information, taskService) {
         'ngInject';
         var modelName = 'Task';
         var classesMap = {
@@ -40,6 +40,9 @@ module.exports = function (app) {
 
                 model.startDate = moment(model.startDate).toDate();
                 model.dueDate = moment(model.dueDate).toDate();
+            } else {
+                model.startDate = moment(model.startDate).startOf('day');
+                model.dueDate = moment(moment(model.dueDate).endOf('day')).subtract(1, 'hours');
             }
             model.userId = model.userId.hasOwnProperty('id') ? model.userId.id : model.userId;
             model.ouId = model.ouId.hasOwnProperty('id') ? model.ouId.id : model.ouId;
