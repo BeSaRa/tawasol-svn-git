@@ -153,7 +153,9 @@ module.exports = function (app) {
 
             DistributionWFItem.prototype.getWorkflowItemIcon = function () {
                 var icon = 'account';
-                if (this.isDepartment()) {
+                if (this.gridName === 'OUGroup') {
+                    icon = 'bank-minus';
+                } else if (this.isDepartment()) {
                     icon = 'bank';
                 } else if (this.isGroup()) {
                     icon = 'account-group'
@@ -163,7 +165,9 @@ module.exports = function (app) {
 
             DistributionWFItem.prototype.getWorkflowItemType = function () {
                 var title = 'BulkSettings';
-                if (this.isDepartment()) {
+                if (this.gridName === 'OUGroup') {
+                    title = 'group_mail';
+                } else if (this.isDepartment()) {
                     title = 'organization';
                 } else if (this.isGroup()) {
                     title = 'workflow_group'
