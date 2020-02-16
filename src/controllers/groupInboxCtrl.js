@@ -1477,6 +1477,7 @@ module.exports = function (app) {
                 icon: 'pencil-lock',
                 text: 'grid_action_approve',//signature
                 shortcut: false,
+                hide: true,
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
