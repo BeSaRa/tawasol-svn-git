@@ -186,7 +186,7 @@ module.exports = function (app) {
         self.viewTrackingSheet = function (record, $event) {
             viewTrackingSheetService
                 .controllerMethod
-                .viewTrackingSheetPopup(record, ['view_tracking_sheet', 'tabs', gridService.grids.administration.viewersLog], $event)
+                .viewTrackingSheetPopup(record, ['view_tracking_sheet', 'tabs', gridService.grids.administration.viewersLog], $event , true)
                 .then(function (result) {
 
                 });

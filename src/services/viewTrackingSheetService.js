@@ -229,7 +229,7 @@ module.exports = function (app) {
                  * @param $event
                  * @returns {promise}
                  */
-                viewTrackingSheetPopup: function (document, params, $event) {
+                viewTrackingSheetPopup: function (document, params, $event, forceViewAll) {
                     var heading = params ? params[0].toLowerCase() : 'view_tracking_sheet';
                     var gridType = params ? params[1].toLowerCase() : 'grid';
                     var parentGridName = params ? params[2] : '';
@@ -248,7 +248,7 @@ module.exports = function (app) {
                             workflowHistoryRecords: function () {
                                 'ngInject';
                                 return (heading === 'view_tracking_sheet_work_flow_history' || gridType === 'tabs')
-                                    ? self.loadWorkflowHistory(document)
+                                    ? self.loadWorkflowHistory(document, forceViewAll)
                                         .then(function (result) {
                                             return result;
                                         }) : [];
@@ -299,7 +299,7 @@ module.exports = function (app) {
                                     ? (employeeService.hasPermissionTo('VIEW_CONTENT_LOG') ? self.loadContentViewHistory(document)
                                         .then(function (result) {
                                             return result;
-                                        }) : [] ) : [];
+                                        }) : []) : [];
                             },
                             smsLogRecords: function (organizationService, applicationUserService) {
                                 'ngInject';
@@ -331,7 +331,7 @@ module.exports = function (app) {
                             fullHistoryRecords: function () {
                                 'ngInject';
                                 return (heading === 'view_tracking_sheet_full_history' || gridType === 'tabs')
-                                    ? self.loadFullHistory(document)
+                                    ? self.loadFullHistory(document, forceViewAll)
                                         .then(function (result) {
                                             return result;
                                         }).catch(function (error) {
@@ -430,10 +430,15 @@ module.exports = function (app) {
             /**
              * @description load workflow history by vsId
              * @param document
+             * @param forceViewAll
              */
-            self.loadWorkflowHistory = function (document) {
+            self.loadWorkflowHistory = function (document, forceViewAll) {
                 var vsId = getVsId(document);
-                return $http.get(urlService.vts_userEventLog + '/vsid/' + vsId).then(function (result) {
+                return $http.get(urlService.vts_userEventLog + '/vsid/' + vsId, {
+                    params: {
+                        forceViewAll: forceViewAll
+                    }
+                }).then(function (result) {
                     self.eventHistory = generator.generateCollection(result.data.rs, EventHistory, self._sharedMethods);
                     self.eventHistory = generator.interceptReceivedCollection('EventHistory', self.eventHistory);
                     return self.eventHistory;
@@ -603,9 +608,13 @@ module.exports = function (app) {
             /**
              * @description load full history logs by vsId
              */
-            self.loadFullHistory = function (document) {
+            self.loadFullHistory = function (document, forceViewAll) {
                 var vsId = getVsId(document);
-                return $http.get(urlService.vts_fullHistory + '/' + vsId + '/desc').then(function (result) {
+                return $http.get(urlService.vts_fullHistory + '/' + vsId + '/desc', {
+                    params: {
+                        forceViewAll: forceViewAll
+                    }
+                }).then(function (result) {
                     self.fullHistory = generator.generateCollection(result.data.rs, FullHistory, self._sharedMethods);
                     self.fullHistory = generator.interceptReceivedCollection('FullHistory', self.fullHistory);
                     return self.fullHistory;
@@ -975,7 +984,7 @@ module.exports = function (app) {
                     toast.info(langService.get('no_data_to_export'));
                 } else {
                     $http.post(urlService.exportToExcel, exportData)
-                    //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
+                        //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
                         .then(function (result) {
                             if (!result.data.rs)
                                 toast.error(langService.get('error_export_to_excel'));
@@ -1000,7 +1009,7 @@ module.exports = function (app) {
                     toast.info(langService.get('no_data_to_print'));
                 } else {
                     return $http.post(urlService.exportToPdf, exportData)
-                    //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
+                        //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
                         .then(function (result) {
                             if (!result.data.rs)
                                 toast.error(langService.get('error_print'));
