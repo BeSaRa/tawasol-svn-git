@@ -75,7 +75,7 @@ module.exports = function (app) {
             {
                 id: 3,
                 key:  'sender_department',
-                show: !_getApprovedStatus(),
+                show: !_getApprovedStatus() && employeeService.hasPermissionTo('SEND_TO_ELECTRONIC_INCOMING_QUEUES'),
                 identifier: 'senderDepartment'
             }
         ];
