@@ -40,17 +40,7 @@ module.exports = function (app) {
             var privateUsersCopy = angular.copy(model.privateUsers);
             model.privateUsers = (model.sendToPrivateUsers && angular.isArray(model.privateUsers) && typeof model.privateUsers[0] !== 'undefined') ? JSON.stringify(getPrivateUsersToSend(model, privateUsersCopy)) : "{}";
 
-
-            /* model.managers = (model.sendToManagers) ? JSON.stringify(_.map(model.managers, function (manager) {
-                 return manager.organization.id;
-             })) : "[]";
-
-             model.viceManagers = (model.sendToViceManager) ? JSON.stringify(_.map(model.viceManagers, function (viceManager) {
-                 return viceManager.organization.id;
-             })) : "[]";*/
-
             model.managers = (model.sendToManagers) ? JSON.stringify(model.managers) : "[]";
-
             model.viceManagers = (model.sendToViceManager) ? JSON.stringify(model.viceManagers) : "[]";
 
             if (model.proxyUser) {
@@ -123,32 +113,9 @@ module.exports = function (app) {
                         return typeof item !== 'undefined';
                     });
                 }
+
                 model.managers = (model.managers && !angular.isArray(model.managers)) ? JSON.parse(model.managers) : [];
-                /*if (model.sendToManagers && model.managers.length) {
-                    model.managers = _.map(model.managers, function (ouId) {
-                        var organization = _.find(organizations, {id: ouId});
-                        return {
-                            organization: organization,
-                            manager: _.find(applicationUsers, function (appUser) {
-                                return appUser.id === organization.managerId
-                            })
-                        };
-                    })
-                }*/
-
                 model.viceManagers = (model.viceManagers && !angular.isArray(model.viceManagers)) ? JSON.parse(model.viceManagers) : [];
-                /*if (model.sendToViceManager && model.viceManagers.length) {
-                    model.viceManagers = _.map(model.viceManagers, function (ouId) {
-                        var organization = _.find(organizations, {id: ouId});
-                        return {
-                            organization: organization,
-                            viceManager: _.find(applicationUsers, function (appUser) {
-                                return appUser.id === organization.viceManagerId
-                            })
-                        };
-                    })
-                }*/
-
 
                 var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
                 if (typeof model.securityLevels !== "object") {

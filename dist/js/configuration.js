@@ -9,7 +9,8 @@
                 .setBaseUrl('trunk', 'http://100.100.3.220:9080/CMSServices/service')
                 .setBaseUrl('stage', 'http://MDPS-FNWEB01/CMSServices/service')
                 .setBaseUrl('testFixpack', 'http://eblaepm.no-ip.org:9081/CMSServices/service')
-                .setBaseUrl('testFeatures', 'https://cmscloud.eblacorp.com/CMSServices/service');
+                .setBaseUrl('testFeatures', 'http://100.100.3.229:9080/CMSServices/service')
+                .setBaseUrl('cloudFeatures', 'https://cmscloud.eblacorp.com/CMSServices/service');
 
 
             urlServiceProvider
