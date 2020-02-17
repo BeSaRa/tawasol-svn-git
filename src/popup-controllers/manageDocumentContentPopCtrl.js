@@ -48,13 +48,13 @@ module.exports = function (app) {
         };
 
         var saveCorrespondenceFinished = function () {
-
             if (self.documentInformation)
                 self.correspondence.contentSize = 1;
             else if (self.correspondence.contentFile && self.correspondence.contentFile.size)
                 self.correspondence.contentSize = self.correspondence.contentFile.size;
 
             self.requestCompleted = true;
+            self.correspondence.updateDocumentVersion();
             counterService.loadCounters();
             toast.success(langService.get('content_updated_successfully'));
             dialog.hide();
