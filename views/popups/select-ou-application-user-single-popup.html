@@ -21,7 +21,7 @@
                             </th>
                             <th md-column md-order-by="applicationUser.loginName"><span>{{lang.login_name}}</span></th>
                             <th md-column md-order-by="applicationUser.domainName"><span>{{lang.domain_name}}</span></th>
-                            <th md-column ng-if="ctrl.ouApplicationUserSelected.length && !ctrl.isViceManager">
+                            <th md-column ng-if="ctrl.ouApplicationUserSelected.length">
                                 {{ctrl.isViceManager ? lang.add_vice_manager_to_all_users : lang.add_manager_to_all_users}}
                             </th>
                         </tr>
