@@ -193,6 +193,10 @@ module.exports = function (app) {
                     });
             };
 
+            Employee.prototype.getDefaultEditMode = function(){
+                return this.defaultEditMode;
+            };
+
             Employee.prototype.canSendTo = function (property) {
                 return this.organization['sendTo' + property];
             };

@@ -36,6 +36,7 @@ module.exports = function (app) {
 
         self.required = {};
 
+        self.isDefaultEditModeBoth = (employeeService.getEmployee().getDefaultEditMode() === correspondenceService.documentEditModes.desktopOfficeOnline);
 
         self.simpleViewUrl = null;
 
