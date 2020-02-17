@@ -21,7 +21,6 @@
                         </md-select-header>
                         <md-option
                                 ng-repeat="organization in ctrl.organizationGroups | translatedNameFilter:ctrl.ouSearchText : 'getTranslatedNameRegOUSection'"
-                                tooltip="{{organization.getTranslatedName(true)}}"
                                 ng-value="organization">
                                                 <span md-highlight-text="ctrl.ouSearchText"
                                                       md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
