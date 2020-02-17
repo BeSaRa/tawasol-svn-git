@@ -21,35 +21,28 @@ module.exports = function (app) {
         self.ouSearchText = '';
         self.usersCriteria = null;
 
-        if (!self.escalationUserId) {
-            self.usersCriteria = new UserSearchCriteria({
-                ou: (self.organizationGroups.length ? _.find(self.organizationGroups, function (item) {
-                    return item.toOUId === ('g' + self.currentEmployee.getOUID())
-                }) : self.currentEmployee.getOUID())
-            });
-        }
-
-        // self.escalationUsers = [];
-        /*self.escalationUsers = _.filter(escalationUsers, function (user) {
-            return self.currentEmployee.id !== user.id;
-        });*/
-
-
         $timeout(function () {
-            if (self.escalationUserId) {
+            if (!self.escalationUserId) {
+                self.usersCriteria = new UserSearchCriteria({
+                    ou: (self.organizationGroups.length ? _.find(self.organizationGroups, function (item) {
+                        return item.toOUId === ('g' + self.currentEmployee.getOUID())
+                    }) : self.currentEmployee.getOUID())
+                });
+            } else {
                 self.usersCriteria = new UserSearchCriteria({
                     ou: _.find(self.organizationGroups, function (item) {
                         return item.toOUId === ('g' + self.escalationUserId.ouId)
                     })
                 });
-
-                self.onOrganizationChanged()
-                    .then(function () {
+            }
+            self.onOrganizationChanged()
+                .then(function () {
+                    if (self.escalationUserId) {
                         self.selectedEscalationUser = _.find(self.escalationUsers, function (wfUser) {
                             return wfUser.ouUSerId === self.escalationUserId.ouUSerId;
                         });
-                    });
-            }
+                    }
+                });
         });
 
         self.selectEscalationUser = function ($event) {
@@ -86,8 +79,6 @@ module.exports = function (app) {
                     return self.escalationUsers = result;
                 });
         };
-
-        self.onOrganizationChanged();
 
         /**
          * close dialog
