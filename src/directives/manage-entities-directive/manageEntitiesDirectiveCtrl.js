@@ -109,6 +109,7 @@ module.exports = function (app) {
         function _editEntity(entity) {
             self.entity = entity.preparedType();
             self.selectedEntityType = angular.copy(entity.typeId);
+            self.selectedLinkedEntityCopy = angular.copy(entity);
             self.editMode = true;
             _currentFields(entity.typeId);
         }
@@ -197,6 +198,7 @@ module.exports = function (app) {
                     });
             } else {
                 self.showEntityFrom = true;
+                self.editMode = false;
             }
         };
 
@@ -210,11 +212,29 @@ module.exports = function (app) {
             self.entity = null;
             self.selectedEntityType = null;
         };
+
+        var _checkDuplicateExternalUser = function () {
+            return _.some(self.linkedEntities, function (linkedEntity) {
+                if (self.editMode) {
+                    if (linkedEntity.typeId.lookupStrKey.toLowerCase() !== 'external_user')
+                        return false;
+
+                    return (self.entity.qid === self.selectedLinkedEntityCopy.qid) ? false : linkedEntity.qid === self.entity.qid;
+                }
+
+                return linkedEntity.typeId.lookupStrKey.toLowerCase() === 'external_user' && linkedEntity.qid === self.entity.qid;
+            })
+        };
+
         /**
          * add entity document
          */
         self.addEntityToDocument = function () {
-            if (self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user'){
+            if (self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user') {
+                if (_checkDuplicateExternalUser()) {
+                    toast.error(langService.get('record_already_exists').change({entity: 'entities_qid'}));
+                    return;
+                }
                 if (self.entity.sendSMS && !self.entity.smsTemplateId) {
                     toast.error(langService.get('please_select_sms_template'));
                     return;
@@ -340,7 +360,7 @@ module.exports = function (app) {
          * edit document entity
          */
         self.editDocumentEntity = function (entity, $index, $event) {
-            _editEntity(entity);
+            _editEntity(angular.copy(entity));
             self.showEntityFrom = true;
             self.editIndex = $index;
         };
