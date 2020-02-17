@@ -7,7 +7,7 @@
         <div class="md-dialog-content cms-dialog-content">
             <form name="linkedEntityForm" autocomplete="off" layout="column">
                 <div ng-repeat="fields in ctrl.currentFields track by $index" layout="row">
-                    <md-input-container flex ng-repeat="field in fields track by $index">
+                    <md-input-container flex ng-repeat="field in fields track by $index" ng-if="!field.manualDisplay">
                         <label for="{{field.label}}">{{lang[ctrl.labels[field.label]]}}</label>
                         <input name="{{field.label}}" ng-disabled="true" ng-readonly="true"
                                id="{{field.label}}" ng-model="ctrl.linkedEntity[field.label]"/>
