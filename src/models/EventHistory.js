@@ -18,7 +18,7 @@ module.exports = function (app) {
                     1: {
                         key: 'ou',
                         langKey: 'group_mail',
-                        icon: 'bank-minus'
+                        icon: 'bank-outline'
                     },
                     2: {
                         key: 'regOu',

@@ -154,7 +154,7 @@ module.exports = function (app) {
             DistributionWFItem.prototype.getWorkflowItemIcon = function () {
                 var icon = 'account';
                 if (this.gridName === 'OUGroup') {
-                    icon = 'bank-minus';
+                    icon = 'bank-outline';
                 } else if (this.isDepartment()) {
                     icon = 'bank';
                 } else if (this.isGroup()) {
