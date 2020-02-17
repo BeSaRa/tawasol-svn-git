@@ -22,21 +22,6 @@ module.exports = function (app) {
 
         self.managersList = managers;
         self.viceManagersList = viceManagers;
-        console.log(self.managersList, self.viceManagersList);
-        self.ouWithManagersList = _.filter(organizations, 'managerId');
-        self.organizationsWithManager = _.map(self.ouWithManagersList, function (ou) {
-            return {
-                organization: ou,
-                manager: ou.managerId
-            }
-        });
-        self.ouWithViceManagersList = _.filter(organizations, 'viceManagerId');
-        self.organizationsWithViceManager = _.map(self.ouWithViceManagersList, function (ou) {
-            return {
-                organization: ou,
-                viceManager: ou.viceManagerId
-            }
-        });
 
         self.organizationsWithPrivateUsers = [];
         _.map(privateUsers, function (privateUser) {
@@ -192,11 +177,11 @@ module.exports = function (app) {
         var dropdownMapValue, dropdownsMap = {
             manager: {
                 selectedProperty: 'managers',
-                compareWith: 'organizationsWithManager'
+                compareWith: 'managersList'
             },
             viceManager: {
                 selectedProperty: 'viceManagers',
-                compareWith: 'organizationsWithViceManager'
+                compareWith: 'viceManagersList'
             }
         };
 
@@ -238,10 +223,10 @@ module.exports = function (app) {
                     if (self.ouApplicationUser[dropdownMapValue.selectedProperty].length === self[dropdownMapValue.compareWith].length) {
                         self.ouApplicationUser[dropdownMapValue.selectedProperty] = null;
                     } else {
-                        self.ouApplicationUser[dropdownMapValue.selectedProperty] = angular.copy(self[dropdownMapValue.compareWith]);
+                        self.ouApplicationUser[dropdownMapValue.selectedProperty] = angular.copy(_.map(self[dropdownMapValue.compareWith], 'ouid.id'));
                     }
                 } else {
-                    self.ouApplicationUser[dropdownMapValue.selectedProperty] = angular.copy(self[dropdownMapValue.compareWith]);
+                    self.ouApplicationUser[dropdownMapValue.selectedProperty] = angular.copy(_.map(self[dropdownMapValue.compareWith], 'ouid.id'));
                 }
             }
         };
