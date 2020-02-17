@@ -24,7 +24,7 @@ module.exports = function (app) {
         if (!self.escalationUserId) {
             self.usersCriteria = new UserSearchCriteria({
                 ou: (self.organizationGroups.length ? _.find(self.organizationGroups, function (item) {
-                    return item.toOUId === self.currentEmployee.getOUID()
+                    return item.toOUId === ('g' + self.currentEmployee.getOUID())
                 }) : self.currentEmployee.getOUID())
             });
         }
@@ -39,7 +39,7 @@ module.exports = function (app) {
             if (self.escalationUserId) {
                 self.usersCriteria = new UserSearchCriteria({
                     ou: _.find(self.organizationGroups, function (item) {
-                        return item.toOUId === self.escalationUserId.ouId
+                        return item.toOUId === ('g' + self.escalationUserId.ouId)
                     })
                 });
 
