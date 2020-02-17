@@ -24,7 +24,7 @@ module.exports = function (app) {
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.actionDate_vts = model.actionDate ? generator.getDateFromTimeStamp(model.actionDate, true) : '';
             if (model.ouId) {
-                model.organization = organizationService.getOrganizationById(model.ouId);
+                model.organization = organizationService.getOrganizationById(model.ouId, true);
             }
             if (model.actionBy) {
                 model.user = applicationUserService.getApplicationUserById(model.actionBy);
