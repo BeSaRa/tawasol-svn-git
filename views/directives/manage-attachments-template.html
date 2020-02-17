@@ -203,6 +203,10 @@
                         md-order-by="priorityLevel.lookupKey">
                         <span>{{lang.priority_level}}</span>
                     </th>
+                    <th md-column
+                        md-order-by="exportStatus">
+                        <span>{{lang.export_status}}</span>
+                    </th>
                     <th md-column>
                         <span ng-if="!ctrl.selectedAttachments.length">{{lang.actions}}</span>
                         <div layout="row"
@@ -237,6 +241,7 @@
                     <td md-cell>{{attachment.attachmentType.getTranslatedName()}}</td>
                     <td md-cell>{{attachment.getSecurityLevels()}}</td>
                     <td md-cell>{{attachment.priorityLevel.getTranslatedName()}}</td>
+                    <td md-cell>{{attachment.getTranslatedExportStatus()}}</td>
                     <td md-cell>
                         <div flex layout="row" layout-align="start center">
                             <md-button class="md-icon-button" title="{{lang.attachment_view}}"

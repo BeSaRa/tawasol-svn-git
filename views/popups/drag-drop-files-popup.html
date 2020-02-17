@@ -349,6 +349,11 @@
                                     {{attachment.priorityLevel.getTranslatedName()}}
                                 </md-button>
                             </div>
+                            <div>
+                                <md-button>
+                                    {{attachment.getTranslatedExportStatus()}}
+                                </md-button>
+                            </div>
                             <div ng-if="!ctrl.attachment">
                                 <md-button ng-if="ctrl.isAttachmentDeletable(attachment)"
                                            ng-click="ctrl.editDragAttachment(attachment)" class="md-icon">
