@@ -158,7 +158,8 @@ module.exports = function (app) {
         // users search criteria
         self.usersCriteria = new UserSearchCriteria({
             ou: self.organizationGroups.length ? _.find(self.organizationGroups, function (item) {
-                return item.toOUId === employeeService.getEmployee().getOUID()
+                console.log('item.toOUId',item.toOUId , ('g' + employeeService.getEmployee().getOUID()));
+                return item.toOUId === ('g' + employeeService.getEmployee().getOUID())
             }) : employeeService.getEmployee().getOUID(),
             // to hide organizations dropdown and add whole organization button
             hide: !self.organizationGroups.length
@@ -589,9 +590,12 @@ module.exports = function (app) {
             }
 
             // sort regOu-section
-            return _.sortBy([].concat(regOus, sections), [function (ou) {
+            return _.map(_.sortBy([].concat(regOus, sections), [function (ou) {
                 return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
-            }]);
+            }]), function (item) {
+                item.toOUId = 'g' + item.toOUId;
+                return item;
+            });
         }
 
         function _checkFavoritesError() {

@@ -91,6 +91,7 @@ module.exports = function (app) {
                 this.escalationUserId = (this.escalationUserId && this.escalationUserId.hasOwnProperty('id')) ? this.escalationUserId.id : this.escalationUserId;
 
                 this.action = this.action.hasOwnProperty('id') ? this.action.id : this.action;
+                this.toOUId = typeof this.toOUId === 'string' ? Number(this.toOUId.substr(1)) : this.toOUId;
                 return this;
             };
             /**
