@@ -15,11 +15,11 @@
                                     <md-input-container flex>
                                         <label>{{lang.task_title}}</label>
                                         <input required name="taskTitle" minlength="3" id="taskTitle"
-                                               ng-model="ctrl.task.taskTitle"/>
-                                        <div ng-messages="task_form.arName.$error">
+                                               ng-model="ctrl.task.taskTitle" maxlength="1000" md-maxlength="1000"/>
+                                        <div ng-messages="task_form.taskTitle.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <!--<div ng-message="maxlength">{{lang.max_length.change({length:3})}}</div>-->
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:1000})}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
@@ -227,7 +227,10 @@
                                     <md-input-container flex>
                                         <label>{{lang.task_description}}</label>
                                         <textarea rows="3" name="taskDescription" id="taskDescription"
-                                                  ng-model="ctrl.task.taskDescription"></textarea>
+                                                  ng-model="ctrl.task.taskDescription" maxlength="1000" md-maxlength="1000"></textarea>
+                                        <div ng-messages="task_form.taskDescription.$error">
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:1000})}}</div>
+                                        </div>
                                     </md-input-container>
                                 </div>
                             </div>
