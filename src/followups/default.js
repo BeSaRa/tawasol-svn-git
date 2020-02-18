@@ -61,7 +61,9 @@ module.exports = function (app) {
             if (url === urlService.login) {
                 errorCode.showErrorDialog(xhr);
             } else {
-                if (!errorCode.hasErrorCode(xhr) && (xhr.config.method !== 'DELETE')) {
+                if (errorCode.hasErrorCode(xhr)) {
+                    errorCode.showErrorDialog(xhr);
+                } else if ((xhr.config.method !== 'DELETE')) {
                     dialog
                         .errorMessage(langService.get('internal_server_error'));
                 }

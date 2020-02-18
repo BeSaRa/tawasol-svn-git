@@ -60,7 +60,8 @@ module.exports = function (app) {
                 ERROR_MISSING_REQUIRED_TEMPLATE_FIELDS: 2023,
                 OPERATION_NOT_SUPPORTED: 3002,
                 USER_NOT_EXIST: 9006,
-                USER_NOT_LINKED_WITH_DEPARTMENT: 9007
+                USER_NOT_LINKED_WITH_DEPARTMENT: 9007,
+                DOCUMENT_HAS_BEEN_DELETED: 3045
             },
             errorLangKeys = {
                 1001: 'no_records_found',
@@ -86,7 +87,8 @@ module.exports = function (app) {
                 9006: 'user_not_exist',
                 9017: 'password_not_correct',
                 9016: 'user_not_active',
-                9007: 'user_not_linked_with_department'
+                9007: 'user_not_linked_with_department',
+                3045: 'document_has_been_deleted'
             };
 
         return {
