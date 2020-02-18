@@ -22,7 +22,10 @@ module.exports = function (app) {
                     'menu_item_internal_rejected',
                     'menu_item_internal_review',
                     'menu_item_internal_ready_to_send',
-                    'menu_item_user_favorite_documents'
+                    'menu_item_user_favorite_documents',
+                    'menu_item_outgoing_deleted',
+                    'menu_item_incoming_deleted',
+                    'menu_item_internal_deleted'
                 ],
                 maps = {
                     menu_item_outgoing: [
@@ -30,7 +33,11 @@ module.exports = function (app) {
                         'outgoingAccepted',
                         'outgoingReview',
                         'outgoingPrepare',
-                        'outgoingDraft'
+                        'outgoingDraft',
+                        function (currentValue, counter, employee, property) {
+                            // outgoingDeleted
+                            return employee.hasThesePermissions('DELETE_OUTGOING') ? (currentValue + counter.outgoingDeleted[property]) : currentValue;
+                        }
                     ],
                     menu_item_outgoing_prepare: [
                         'outgoingPrepare'
@@ -51,7 +58,11 @@ module.exports = function (app) {
                         'incomingPrepare',
                         'incomingReview',
                         'incomingReadyToSent',
-                        'incomingRejected'
+                        'incomingRejected',
+                        function (currentValue, counter, employee, property) {
+                            // incomingDeleted
+                            return employee.hasThesePermissions('DELETE_INCOMING') ? (currentValue + counter.incomingDeleted[property]) : currentValue;
+                        }
                     ],
                     menu_item_incoming_scan: [
                         'incomingPrepare'
@@ -71,7 +82,11 @@ module.exports = function (app) {
                         'internalReview',
                         'internalRejected',
                         'internalReadyToSent',
-                        'internalApproved'
+                        'internalApproved',
+                        function (currentValue, counter, employee, property) {
+                            // internalDeleted
+                            return employee.hasThesePermissions('DELETE_INTERNAL') ? (currentValue + counter.internalDeleted[property]) : currentValue;
+                        }
                     ],
                     menu_item_internal_prepare: [
                         'internalPrepare'
@@ -145,6 +160,15 @@ module.exports = function (app) {
                     ],
                     menu_item_government_returned_mail: [
                         'g2gDeptReturned'
+                    ],
+                    menu_item_outgoing_deleted: [
+                        'outgoingDeleted'
+                    ],
+                    menu_item_incoming_deleted: [
+                        'incomingDeleted'
+                    ],
+                    menu_item_internal_deleted: [
+                        'internalDeleted'
                     ]
                 };
             /*User Inbox*/
@@ -187,6 +211,10 @@ module.exports = function (app) {
             /*G2G*/
             self.g2gDeptInbox = null;
             self.g2gDeptReturned = null;
+            /* deleted queues*/
+            self.outgoingDeleted = null;
+            self.incomingDeleted = null;
+            self.internalDeleted = null;
 
             // this property not related to the actual model
             self.foldersCount = null;
