@@ -126,7 +126,7 @@
                     <md-input-container flex>
                         <label for="comments"> {{lang.type_your_comment}}</label>
                         <textarea rows="5" id="comments" name="comments" class="cms-comment"
-                                  maxlength="1024" md-maxlength="1024"
+                                  maxlength="1000" md-maxlength="1000"
                                   ng-model="ctrl.distWorkflowItem.comments"
                                   ng-required="ctrl.distWorkflowItem.isSecureAction"></textarea>
                         <div ng-messages="distWorkflowItem_form.comments.$error">
