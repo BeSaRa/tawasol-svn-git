@@ -33,7 +33,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondence.viewFromQueue(self.gridActions, 'deletedOutgoing', $event, true)
+            correspondence.viewFromDeletedQueue(self.gridActions, 'deletedOutgoing', $event, true)
                 .then(function () {
                     return self.reloadDeletedOutgoings(self.grid.page);
                 })

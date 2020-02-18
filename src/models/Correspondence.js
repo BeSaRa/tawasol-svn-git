@@ -592,6 +592,17 @@ module.exports = function (app) {
                 return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly);
             };
             /**
+             * @description view from queue as full view.
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @param viewOnly
+             * @return {*}
+             */
+            Correspondence.prototype.viewFromDeletedQueue = function (actions, queueName, $event, viewOnly) {
+                return viewDocumentService.viewDeletedDocument(this, actions, queueName, $event, viewOnly);
+            };
+            /**
              * @description view from queue as full view by Id
              * @param actions
              * @param queueName

@@ -353,6 +353,79 @@ module.exports = function (app) {
                     });
             };
 
+            /**
+             * @description Open the view popup for queues
+             * @param correspondence
+             * @param actions
+             * @param $event
+             * @param pageName
+             * @param viewOnly - to hide edit content button in delete pages
+             */
+            self.viewDeletedDocument = function (correspondence, actions, pageName, $event, viewOnly) {
+                var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : new Outgoing(correspondence).getInfo(),
+                    disabled;
+                var desktop = new EditInDesktopCallback({
+                    url: _createUrlSchema(info.vsId, info.documentClass, 'removed/with-content'),
+                    type: 'correspondence'
+                });
+                return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'removed/with-content'))
+                    .then(function (result) {
+                        var documentClass = result.data.rs.metaData.classDescription;
+                        result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                        return result.data.rs;
+                    })
+                    .then(function (result) {
+                        result.metaData.viewVersion = viewOnly;
+                        result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                            result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                        }
+                        result.content.desktop = desktop;
+                        disabled = _checkDisabled(pageName, result.metaData);
+
+                        if (disabled.disableAll) {
+                            disabled.disableSites = true;
+                            disabled.disableProperties = true;
+                        }
+
+                        generator.addPopupNumber();
+                        return dialog.showDialog({
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: result.metaData,
+                                content: result.content,
+                                actions: actions,
+                                workItem: false,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                popupNumber: generator.getPopupNumber(),
+                                disableEverything: disabled.disableAll,
+                                pageName: pageName
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.loadOrganizations(true);
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        }).then(function () {
+                            generator.removePopupNumber();
+                            return true;
+                        }).catch(function () {
+                            generator.removePopupNumber();
+                            return false;
+                        });
+                    });
+            };
+
 
             /**
              * @description Open the new view popup for favorite documents
