@@ -142,7 +142,7 @@ module.exports = function (app) {
                 self.replyToText = replyOn['ou' + self.currentLangUCFirst + 'Name'] + ' - ' + replyOn.getTranslatedName();
             } else if (self.selectedReplyTo === 3) {
                 self.distWorkflowItem.isSecureAction = false;
-                self.replyToText = replyOn['ou' + self.currentLangUCFirst + 'Name'];
+                self.replyToText = replyOn.registeryOu[langService.current + 'Name'];
 
                 self.distWorkflowItem.sendSMS = angular.copy(replyOn.registeryOu.sendSMS);
                 self.distWorkflowItem.sendEmail = angular.copy(replyOn.registeryOu.sendEmail);
