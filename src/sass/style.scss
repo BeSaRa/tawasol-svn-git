@@ -1871,6 +1871,12 @@ tr.unread-row, tr.current-version {
   line-height: 1.3em !important;
 }
 
+table td.cms-comment {
+  max-width: 300px !important;
+  width: 300px !important;
+  word-break: break-all;
+}
+
 .viewer-actions {
   margin-bottom: 10px;
 
