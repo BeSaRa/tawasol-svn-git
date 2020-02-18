@@ -1617,6 +1617,7 @@ module.exports = function (app) {
                 text: 'grid_action_end_follow_up',
                 callback: self.endFollowup,
                 class: "action-green",
+                hide: true, // as discussed with issawi as followupStatus is not updated after end followup
                 //showInViewOnly: true,
                 permissionKey: "MANAGE_DESTINATIONS",
                 checkShow: function (action, model) {
