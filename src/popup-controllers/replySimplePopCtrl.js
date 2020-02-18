@@ -79,7 +79,7 @@ module.exports = function (app) {
             {
                 id: 3,
                 key: 'sender_department',
-                show: !_getApprovedStatus() && employeeService.hasPermissionTo('SEND_TO_ELECTRONIC_INCOMING_QUEUES'),
+                show: !_getApprovedStatus() && employeeService.hasPermissionTo('SEND_TO_ELECTRONIC_INCOMING_QUEUES') && !isInternal(),
                 identifier: 'senderDepartment'
             }
         ];
@@ -361,6 +361,10 @@ module.exports = function (app) {
                 })
         };
 
+        function isInternal() {
+            var info = self.record.getInfo();
+            return info.documentClass === 'internal';
+        }
 
         function _getApprovedStatus() {
             return approvedStatus;
