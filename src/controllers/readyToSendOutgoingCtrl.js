@@ -489,6 +489,23 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Approve the document
+         * @param correspondence
+         * @param $event
+         * @param defer
+         * @returns {*}
+         */
+        self.docActionApprove = function (correspondence, $event, defer) {
+            correspondence.approveDocument($event, defer, false)
+                .then(function (result) {
+                    self.reloadReadyToSendOutgoings(self.grid.page).then(function () {
+                        counterService.loadCounters();
+                        mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    });
+                });
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -733,6 +750,19 @@ module.exports = function (app) {
                         }
                     },
                 ]
+            },
+            // e-Signature
+            {
+                type: 'action',
+                icon: 'check-decagram',
+                text: 'grid_action_electronic_approve',
+                callback: self.docActionApprove,
+                class: "action-green",
+                permissionKey: 'ELECTRONIC_SIGNATURE',
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return !info.isPaper;
+                }
             },
             // View Tracking Sheet
             {
