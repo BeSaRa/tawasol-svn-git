@@ -232,7 +232,7 @@ module.exports = function (app) {
         self.addEntityToDocument = function () {
             if (self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user') {
                 if (_checkDuplicateExternalUser()) {
-                    toast.error(langService.get('record_already_exists').change({entity: 'entities_qid'}));
+                    toast.error(langService.get('record_already_exists').change({entity: langService.get('entities_qid')}));
                     return;
                 }
                 if (self.entity.sendSMS && !self.entity.smsTemplateId) {
