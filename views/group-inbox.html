@@ -83,10 +83,10 @@
                                         <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="{{ctrl.getSortingKey('senderInfo', 'SenderInfo')}}">
                                             <span>{{lang.sender}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedWorkItems.length" md-column
+                                       <!-- <th ng-if="!ctrl.selectedWorkItems.length" md-column
                                             md-order-by="generalStepElm.dueDate">
                                             <span>{{lang.due_date}}</span>
-                                        </th>
+                                        </th>-->
                                         <!--<th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="">
                                             <span>{{lang.correspondence_sites}}</span>
                                         </th>
@@ -190,14 +190,14 @@
                                                                           record-type="WorkItem"></grid-indicator-directive>
                                             </div>
                                         </td>
-                                        <td md-cell class="td-data">
+                                        <!--<td md-cell class="td-data">
                                             <grid-indicator-directive record="workItem"
                                                                       indicator-type="dueDate"
                                                                       record-type="workItem"></grid-indicator-directive>
-                                            <!--<span class="{{workItem.dueDateStatusIndicator.class}}"
+                                            &lt;!&ndash;<span class="{{workItem.dueDateStatusIndicator.class}}"
                                                   tooltip="{{lang[workItem.dueDateStatusIndicator.tooltip].change({due_date_status:lang[workItem.dueDateStatusIndicator.text] })}}">
-                                                {{workItem.generalStepElm.dueDate}}</span>-->
-                                        </td>
+                                                {{workItem.generalStepElm.dueDate}}</span>&ndash;&gt;
+                                        </td>-->
                                         <!--<td md-cell></td>
                                         <td md-cell>{{workItem.generalStepElm.docType}}</td>
                                         <td md-cell>{{workItem.generalStepElm.numberOfDays}}</td>-->
