@@ -31,7 +31,7 @@
                                        md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
-                                        <th colspan="{{ctrl.selectedIncomingDepartmentInboxes.length > 1 ? 8 : 9}}"
+                                        <th colspan="{{ctrl.selectedIncomingDepartmentInboxes.length > 1 ? 9 : 10}}"
                                             ng-if="ctrl.selectedIncomingDepartmentInboxes.length" md-column>
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedIncomingDepartmentInboxes.length}} {{lang.items_selected}} </span>
@@ -94,6 +94,10 @@
                                             md-order-by="{{ctrl.getSortingKey('sender', 'Information')}}">
                                             <span>{{lang.sender}}</span>
                                         </th>
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="generalStepElm.dueDate">
+                                            <span>{{lang.due_date}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column>
                                             <span></span>
                                         </th>
@@ -126,10 +130,6 @@
                                                                       record="incomingDepartmentInbox"
                                                                       indicator-type="priorityLevel">
                                             </grid-indicator-directive>
-                                            <!-- Follow up Status -->
-                                         <!--   <grid-indicator-directive record="incomingDepartmentInbox"
-                                                                      indicator-type="followupStatus"
-                                                                      record-type="WorkItem"></grid-indicator-directive>-->
                                         </td>
                                         <td md-cell>
                                             <span class="serial-td">{{incomingDepartmentInbox.generalStepElm.docFullSerial}}</span>
@@ -164,6 +164,11 @@
                                         <td md-cell>{{incomingDepartmentInbox.fromOU.getTranslatedName()}}</td>
                                         <td md-cell>{{incomingDepartmentInbox.generalStepElm.numberOfDays}}</td>
                                         <td md-cell>{{incomingDepartmentInbox.sender.getTranslatedName()}}</td>
+                                        <td md-cell class="td-data">
+                                             <span class="{{incomingDepartmentInbox.dueDateStatusIndicator.class}}"
+                                                   tooltip="{{lang[incomingDepartmentInbox.dueDateStatusIndicator.tooltip].change({due_date_status:lang[incomingDepartmentInbox.dueDateStatusIndicator.text] })}}">
+                                            {{incomingDepartmentInbox.generalStepElm.dueDate}}</span>
+                                        </td>
                                         <td md-cell ng-if="ctrl.selectedIncomingDepartmentInboxes.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedIncomingDepartmentInboxes.length
                                                       || ctrl.selectedIncomingDepartmentInboxes.length===1 && ctrl.selectedIncomingDepartmentInboxes[0].generalStepElm.workObjectNumber === incomingDepartmentInbox.generalStepElm.workObjectNumber">

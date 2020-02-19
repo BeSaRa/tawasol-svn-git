@@ -86,7 +86,8 @@ module.exports = function (app) {
                 numberOfDays: 'generalStepElm.numberOfDays',
                 sender: function (record) {
                     return self.getSortingKey('sender', 'Information');
-                }
+                },
+                dueDate: 'generalStepElm.dueDate'
             },
             searchText: '',
             searchCallback: function (grid) {
