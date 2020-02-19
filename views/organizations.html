@@ -37,6 +37,7 @@
                                     ng-disabled="ctrl.isDisabled"
                                     md-no-cache="ctrl.noCache"
                                     md-selected-item="ctrl.selectedItem"
+                                    md-selected-item-change="ctrl.selectedItemChange(ctrl.selectedItem)"
                                     md-search-text="ctrl.searchText"
                                     md-items="item in ctrl.querySearch(ctrl.searchText)"
                                     md-item-text="item[lang.current + 'Name']"

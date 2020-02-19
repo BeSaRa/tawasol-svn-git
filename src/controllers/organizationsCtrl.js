@@ -17,7 +17,7 @@ module.exports = function (app) {
         organizationChartService.createHierarchy(organizations);
         self.organizationChartService = organizationChartService;
         self.selectedFilter = self.organizationChartService.rootOrganizations;
-
+        self.selectedItem = null;
         contextHelpService.setHelpTo('organizations');
 
         self.needSync = _checkOrganizationsNeedSync(organizations);
@@ -108,13 +108,6 @@ module.exports = function (app) {
         self.resetView = function () {
             $element.find('.orgchart').css('transform', '');
         };
-
-        $scope.$watch(function () {
-            return self.selectedItem;
-        }, function (newVal) {
-            self.selectedItemChange(newVal);
-        })
-
 
     });
 };
