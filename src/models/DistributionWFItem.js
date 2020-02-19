@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('DistributionWFItem', function (CMSModelInterceptor, langService, distributionWFService) {
+    app.factory('DistributionWFItem', function (CMSModelInterceptor, langService, distributionWFService, gridService) {
         'ngInject';
         return function DistributionWFItem(model) {
             var self = this;
@@ -152,13 +152,13 @@ module.exports = function (app) {
             };
 
             DistributionWFItem.prototype.getWorkflowItemIcon = function () {
-                var icon = 'account';
+                var icon = gridService.gridIcons.indicators.user;
                 if (this.gridName === 'OUGroup') {
-                    icon = 'bank-outline';
+                    icon = gridService.gridIcons.indicators.groupMail;
                 } else if (this.isDepartment()) {
-                    icon = 'bank';
+                    icon = gridService.gridIcons.indicators.regOu;
                 } else if (this.isGroup()) {
-                    icon = 'account-group'
+                    icon = gridService.gridIcons.indicators.workflowGroup;
                 }
                 return icon;
             };

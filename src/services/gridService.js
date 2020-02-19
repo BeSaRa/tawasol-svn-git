@@ -918,8 +918,9 @@ module.exports = function (app) {
                 siteFollowupDueDate: 'calendar',
                 siteFollowupEnded: 'calendar-remove',
                 regOu: 'bank',
-                groupMail: 'bank-outline',
-                user: 'account'
+                groupMail: 'home-floor-g',
+                user: 'account',
+                workflowGroup: 'account-group'
             }
         };
     });
