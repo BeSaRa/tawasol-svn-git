@@ -195,16 +195,21 @@ module.exports = function (app) {
                         return true;
                     }
                     return attachment.isDeletable;
-                    /*var updateActionStatus = attachment.updateActionStatus;
-                    if (attachment.updateActionStatus.hasOwnProperty('lookupKey')) {
-                        updateActionStatus = updateActionStatus.lookupKey;
+                };
+
+                self.checkAttachmentIsEditable = function (documentInfo, attachment, receiveOrReceiveG2G) {
+                    // if create reply as attachment
+                    if (attachment.createReplyDisableDelete) {
+                        return false;
                     }
-                    // if attachment is free to edit or edit by author of attachment, allow delete and edit
-                    if (updateActionStatus === 0 || (updateActionStatus === 2 && attachment.createdBy === _getEmployeeDomainName())) {
+                    // if no vsId for document, means, document is not added yet. so user can edit/delete
+                    else if (!documentInfo.vsId) {
                         return true;
                     }
-                    var isApproved = !!(documentInfo.isPaper || documentInfo.docStatus >= 24);
-                    return (updateActionStatus === 1 && !isApproved);*/
+                    else if (receiveOrReceiveG2G){
+                        return true;
+                    }
+                    return attachment.isDeletable;
                 };
 
                 /**

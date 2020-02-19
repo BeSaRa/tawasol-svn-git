@@ -235,6 +235,7 @@ module.exports = function (app) {
                         self.getSortedData();
                         self.attachment = null;
                     }
+                    self.attachmentCopyBeforeEdit = null;
                 })
                 .catch(function (error) {
                     errorCode.checkIf(error, 'MAIP_PROTECTED_TEMPLATE', function () {
@@ -280,12 +281,16 @@ module.exports = function (app) {
         };
 
         self.isAttachmentDeletable = function (attachment, editAttachment) {
-            var isDeletable = !self.disableEverything && !attachment.refVSID && !_checkReceiveG2G()
+            var isDeletable, isEditable;
+
+            isDeletable = !self.disableEverything && !attachment.refVSID && !_checkReceiveG2G()
                 && attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment);
-            if (editAttachment) {
-                isDeletable = isDeletable && !self.isLinkedExportedDocAttachment;
-            }
-            return isDeletable;
+
+            isEditable = !self.disableEverything && !attachment.refVSID
+                && attachmentService.checkAttachmentIsEditable(self.document.getInfo(), attachment, (self.receive || self.receiveG2G))
+                && !self.isLinkedExportedDocAttachment;
+
+            return (editAttachment ? isEditable : isDeletable);
         };
 
         self.isEnabledDeleteBulkAttachments = function ($event) {
@@ -363,6 +368,7 @@ module.exports = function (app) {
                 .confirmMessage(langService.get('attachment_remove_confirm'))
                 .then(function () {
                     self.attachment = null;
+                    self.attachmentCopyBeforeEdit = null;
                 })
         };
 
@@ -402,6 +408,7 @@ module.exports = function (app) {
 
         self.cancelEditAttachment = function () {
             self.attachment = null;
+            self.attachmentCopyBeforeEdit = null;
         };
 
         self.updateAttachment = function () {
@@ -433,6 +440,7 @@ module.exports = function (app) {
                         self.getSortedData();
                         self.attachment = null;
                     }
+                    self.attachmentCopyBeforeEdit = null;
                 })
                 .catch(function (error) {
                     errorCode.checkIf(error, 'MAIP_PROTECTED_TEMPLATE', function () {

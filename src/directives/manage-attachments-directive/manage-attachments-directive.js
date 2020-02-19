@@ -20,7 +20,8 @@ module.exports = function (app) {
                 displayGrid: '=?',
                 disableEverything: '=?',
                 linkedExportedAttachments: '=?',
-                receiveG2g: '=?'
+                receiveG2g: '=?',
+                receive: '=?'
             }
         }
     });

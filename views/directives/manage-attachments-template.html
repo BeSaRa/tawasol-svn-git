@@ -1,9 +1,10 @@
 <div layout="column">
     <div layout="row"
-         ng-if="(ctrl.allowUpload || ctrl.allowScanner) && !ctrl.disableEverything && !ctrl.receiveG2g && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">
+         ng-if="(ctrl.allowUpload || ctrl.allowScanner) && !ctrl.disableEverything && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">
         <md-menu-bar ng-if="ctrl.allowUpload" class="p0">
             <md-menu>
-                <md-button class="md-raised" ng-click="$mdMenu.open()">
+                <md-button ng-disabled="(ctrl.receive || ctrl.receiveG2G) && ctrl.attachmentCopyBeforeEdit"
+                           class="md-raised" ng-click="$mdMenu.open()">
                     <md-icon md-svg-icon="attachment"></md-icon>
                     <span>{{lang.attachment_attachments}}</span>
                 </md-button>
@@ -39,7 +40,7 @@
                 </md-menu-content>
             </md-menu>
         </md-menu-bar>
-        <md-button ng-disabled="!ctrl.scanner"
+        <md-button ng-disabled="!ctrl.scanner || ((ctrl.receive || ctrl.receiveG2G) && ctrl.attachmentCopyBeforeEdit)"
                    ng-if="ctrl.allowScanner"
                    ng-click="ctrl.openScannerDialog('scanner',$event)"
                    class="md-raised">
