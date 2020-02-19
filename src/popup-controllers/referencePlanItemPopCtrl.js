@@ -11,6 +11,7 @@ module.exports = function (app) {
                                                          referencePlanItem,
                                                          lookupService,
                                                          ReferencePlanItem,
+                                                         referencePlanItems,
                                                          siteTypes,
                                                          CorrespondenceSiteType) {
         'ngInject';
@@ -18,8 +19,10 @@ module.exports = function (app) {
         self.controllerName = 'referencePlanItemPopCtrl';
         // current reference plan Number.
         self.referencePlanNumber = referencePlanNumber;
+        // list of reference plan number items
+        self.referencePlanItems = referencePlanItems;
         // the current model for reference plan Item
-        self.model = referencePlanItem ? referencePlanItem : new ReferencePlanItem();
+        self.model = referencePlanItem;
         // reference plan Item
         self.referencePlanItem = angular.copy(self.model);
         // check edit mode

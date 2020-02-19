@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                            generator,
                                                            dialog,
                                                            langService,
+                                                           ReferencePlanItem,
                                                            referencePlanNumber) {
         'ngInject';
         var self = this;
@@ -168,7 +169,8 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     locals: {
                         referencePlanNumber: self.referencePlanNumber,
-                        referencePlanItem: referenceItem
+                        referencePlanItem: referenceItem,
+                        referencePlanItems: self.referencePlanNumber.referencePlanItems
                     },
                     resolve: {
                         documentTypes: function (documentTypeService) {
@@ -194,7 +196,10 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     locals: {
                         referencePlanNumber: self.referencePlanNumber,
-                        referencePlanItem: false
+                        referencePlanItem: new ReferencePlanItem({
+                            itemOrder: generator.createNewID(self.referencePlanNumber.referencePlanItems, 'itemOrder')
+                        }),
+                        referencePlanItems: self.referencePlanNumber.referencePlanItems
                     },
                     resolve: {
                         documentTypes: function (documentTypeService) {

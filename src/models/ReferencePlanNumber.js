@@ -115,7 +115,14 @@ module.exports = function (app) {
              */
             ReferencePlanNumber.prototype.hasDuplicatedItem = function (referencePlanItem, editMode) {
                 return _.find(this.referencePlanItems, function (item) {
-                    return editMode ? (item.refernceExpression === referencePlanItem.refernceExpression && item.id !== referencePlanItem.id) : (item.refernceExpression === referencePlanItem.refernceExpression);
+                    if (editMode) {
+                        return item.id !== referencePlanItem.id &&
+                            (item.refernceExpression === referencePlanItem.refernceExpression ||
+                                (referencePlanItem.itemOrder && item.itemOrder === Number(referencePlanItem.itemOrder)));
+                    } else {
+                        return item.refernceExpression === referencePlanItem.refernceExpression ||
+                            (referencePlanItem.itemOrder && item.itemOrder === Number(referencePlanItem.itemOrder))
+                    }
                 });
             };
             /**
