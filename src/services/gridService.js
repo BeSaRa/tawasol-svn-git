@@ -916,7 +916,10 @@ module.exports = function (app) {
                 transferredDocument: 'bank-transfer-in',
                 broadcast: 'bullhorn',
                 siteFollowupDueDate: 'calendar',
-                siteFollowupEnded: 'calendar-remove'
+                siteFollowupEnded: 'calendar-remove',
+                regOu: 'bank',
+                groupMail: 'bank-outline',
+                user: 'account'
             }
         };
     });

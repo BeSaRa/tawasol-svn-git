@@ -5,7 +5,8 @@ module.exports = function (app) {
                                           correspondenceService,
                                           Information,
                                           managerService,
-                                          rootEntity) {
+                                          rootEntity,
+                                          gridService) {
         'ngInject';
         return function EventHistory(model) {
             var self = this, viewDocumentService,
@@ -13,17 +14,17 @@ module.exports = function (app) {
                     0: {
                         key: 'user',
                         langKey: 'user',
-                        icon: 'account'
+                        icon: gridService.gridIcons.indicators.user
                     },
                     1: {
                         key: 'ou',
                         langKey: 'group_mail',
-                        icon: 'bank-outline'
+                        icon: gridService.gridIcons.indicators.groupMail
                     },
                     2: {
                         key: 'regOu',
                         langKey: 'organization',
-                        icon: 'bank'
+                        icon: gridService.gridIcons.indicators.regOu
                     }
                 },
                 exportData = {
