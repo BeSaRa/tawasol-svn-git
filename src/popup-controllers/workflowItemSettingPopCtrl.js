@@ -133,16 +133,17 @@ module.exports = function (app) {
         };
 
         /**
-         * @description escalation will be only available in case of Users, Group Mail, Workflow Groups but not organization unit
+         * @description escalation will be only available in case of Users, Workflow Groups and organization unit but not group mail
          * @returns {*|boolean}
          */
-       /* self.isEscalationHidden = function () {
-            return self.gridName && (
-                (self.gridName.toLowerCase() === 'ous' && self.distWorkflowItem.getWorkflowItemType().toLowerCase() === 'organization' && self.distWorkflowItem.gridName.toLowerCase() === 'oureg') ||
-                (self.gridName.toLowerCase() === 'selectedgrid' && self.distWorkflowItem.getWorkflowItemType().toLowerCase() === 'organization' && self.distWorkflowItem.gridName.toLowerCase() === 'oureg') ||
-                (self.gridName.toLowerCase() === 'ous' && distWorkflowItem.getWorkflowItemType().toLowerCase() === 'bulksettings') ||
-                self.gridName.toLowerCase() === 'favoriteous');
-        };*/
+        self.isEscalationHidden = function () {
+            return self.gridName &&
+                distWorkflowItem.getWorkflowItemType().toLowerCase() === 'group_mail';
+            /*                (self.gridName.toLowerCase() === 'ous' && self.distWorkflowItem.getWorkflowItemType().toLowerCase() === 'organization' && self.distWorkflowItem.gridName.toLowerCase() === 'oureg') ||
+                            (self.gridName.toLowerCase() === 'selectedgrid' && self.distWorkflowItem.getWorkflowItemType().toLowerCase() === 'organization' && self.distWorkflowItem.gridName.toLowerCase() === 'oureg') ||
+                            (self.gridName.toLowerCase() === 'ous' && distWorkflowItem.getWorkflowItemType().toLowerCase() === 'bulksettings') ||
+                            self.gridName.toLowerCase() === 'favoriteous');*/
+        };
 
         /**
          * @desc open dialog to select escalation user
@@ -150,7 +151,7 @@ module.exports = function (app) {
          * @returns {promise}
          */
         self.openEscalationUserDialog = function ($event) {
-            distributionWFService.openEscalationUserDialog(self.distWorkflowItem, $event,self.organizationGroups)
+            distributionWFService.openEscalationUserDialog(self.distWorkflowItem, $event, self.organizationGroups)
                 .then(function (result) {
                     self.distWorkflowItem.escalationUserId = result;
                     self.distWorkflowItem.escalationUserOUId = result;

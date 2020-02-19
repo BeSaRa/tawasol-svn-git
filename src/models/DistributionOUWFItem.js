@@ -73,7 +73,7 @@ module.exports = function (app) {
             DistributionOUWFItem.prototype.isSameDepartment = function (workflowItem) {
                 return this.toOUId === workflowItem.toOUId;
             };
-            DistributionOUWFItem.prototype.mapSend = function () {
+            DistributionOUWFItem.prototype.mapSend = function (emptyEscalation) {
                 // delete it when send to service.
                 delete this.arName;
                 delete this.enName;
@@ -86,6 +86,12 @@ module.exports = function (app) {
                 delete this.tempRegOUSection;
                 delete this.showCommentDropdown;
 
+                if (emptyEscalation) {
+                    this.escalationUserId = null;
+                    this.escalationUserOUId = null;
+                    this.escalationStatus = null;
+                    this.dueDate = null;
+                }
                 this.escalationStatus = (this.escalationStatus && this.escalationStatus.hasOwnProperty('id')) ? this.escalationStatus.lookupKey : this.escalationStatus;
                 this.escalationUserOUId = (this.escalationUserId && this.escalationUserId.hasOwnProperty('ouId')) ? this.escalationUserId.ouId : this.escalationUserOUId;
                 this.escalationUserId = (this.escalationUserId && this.escalationUserId.hasOwnProperty('id')) ? this.escalationUserId.id : this.escalationUserId;

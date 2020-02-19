@@ -61,7 +61,7 @@ module.exports = function (app) {
             };
 
             DistributionWFItem.prototype.setDueDate = function (dueDate) {
-                this.dueDate = dueDate;
+                this.dueDate = (this.getWorkflowItemType().toLowerCase() === 'group_mail') ? null : dueDate;
                 return this;
             };
             DistributionWFItem.prototype.setAction = function (action) {

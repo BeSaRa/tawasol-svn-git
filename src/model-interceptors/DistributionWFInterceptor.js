@@ -15,7 +15,7 @@ module.exports = function (app) {
                 return group.mapSend();
             });
             model.receivedOUs = _.map(model.receivedOUs, function (organization) {
-                return organization.mapSend();
+                return organization.mapSend(true);
             });
             model.receivedRegOUs = _.map(model.receivedRegOUs, function (organization) {
                 return organization.mapSend();
