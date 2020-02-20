@@ -141,7 +141,7 @@ module.exports = function (app) {
             };
             ReferencePlanNumber.prototype.getStartSerialByCriteria = function (regOUId, itemId) {
                 return _.find(this.referencePlanItemStartSerialList, function (itemStartSerial) {
-                    return itemStartSerial.regOUID === regOUId && itemId === itemStartSerial.referencePlanItemId
+                    return itemStartSerial.regOUID === regOUId && itemId === (itemStartSerial.referencePlanItemId.hasOwnProperty('id') ? itemStartSerial.referencePlanItemId.id : itemStartSerial.referencePlanItemId)
                 });
             };
             ReferencePlanNumber.prototype.findReferenceItemStartSerial = function (organizationId, itemId) {
@@ -155,7 +155,6 @@ module.exports = function (app) {
 
             ReferencePlanNumber.prototype.getStartSerialByCriteriaORNull = function (regOUId, itemId) {
                 var startSerial = this.getStartSerialByCriteria(regOUId, itemId);
-                console.log('startSerial ', startSerial);
                 return startSerial ? startSerial.id : null;
             };
 
