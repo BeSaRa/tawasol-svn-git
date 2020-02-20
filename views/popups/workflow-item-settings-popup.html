@@ -34,7 +34,7 @@
                         <md-datepicker id="dueDate" md-open-on-focus
                                        md-min-date="ctrl.minDate"
                                        ng-model="ctrl.distWorkflowItem.dueDate"
-                                       ng-disabled="ctrl.isEscalationStatusSelected() && ctrl.isEscalationHidden()"
+                                       ng-disabled="ctrl.isEscalationHidden()"
                                        ng-required="ctrl.currentUserOrg.enableEscalation && !ctrl.isEscalationHidden() &&  ctrl.isEscalationStatusSelected()"></md-datepicker>
                         <div ng-messages="distWorkflowItem_form.dueDate.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
