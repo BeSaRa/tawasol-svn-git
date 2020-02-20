@@ -201,9 +201,6 @@
                                         <tbody md-body>
                                         <tr md-select="fullHistoryRecord" md-row
                                             ng-repeat="fullHistoryRecord in ctrl.fullHistoryRecords | filter:ctrl.searchModelFullHistory | limitTo: ctrl.fullHistoryGrid.limit: ((ctrl.fullHistoryGrid.page - 1) * ctrl.fullHistoryGrid.limit) track by $index">
-                                            <td md-cell>{{fullHistoryRecord.actionByInfo.getTranslatedName()}}</td>
-                                            <td md-cell>{{fullHistoryRecord.actionDate}}</td>
-                                            <td md-cell>{{fullHistoryRecord.actionByOUInfo.getTranslatedName()}}</td>
                                             <td md-cell>
                                                 <span class="action-type-icon-container">
                                                     <md-icon
@@ -212,7 +209,11 @@
                                                             tooltip="{{lang[fullHistoryRecord.actionType_vts.langKey]}}"
                                                     ></md-icon>
                                                 </span>
-                                                {{fullHistoryRecord.actionToInfo.getTranslatedName()}}</td>
+                                                {{fullHistoryRecord.actionByInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>{{fullHistoryRecord.actionDate}}</td>
+                                            <td md-cell>{{fullHistoryRecord.actionByOUInfo.getTranslatedName()}}</td>
+                                            <td md-cell>{{fullHistoryRecord.actionToInfo.getTranslatedName()}}</td>
                                             <td md-cell>{{fullHistoryRecord.actionTypeInfo.getTranslatedName()}}</td>
                                             <td md-cell class="cms-comment">{{fullHistoryRecord.comments}}</td>
                                         </tr>
