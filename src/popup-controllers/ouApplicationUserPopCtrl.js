@@ -127,7 +127,7 @@ module.exports = function (app) {
         }
 
         self.isSaveEnabled = function (form) {
-            return !form.$invalid && self.ouApplicationUser.ouid && self.ouApplicationUser.customRoleId && (_isAnyAddSecurityLevel() || _isAnyViewSecurityLevel());
+            return !form.$invalid && self.ouApplicationUser.ouid && self.ouApplicationUser.customRoleId// && (_isAnyAddSecurityLevel() || _isAnyViewSecurityLevel());
         };
 
         var _setSecurityLevelsBeforeSave = function () {

@@ -298,8 +298,9 @@
                                     <!-- Security Levels for view -->
                                     <md-input-container flex>
                                         <label for="ouSecurityLevel">{{lang.security_level_view}}</label>
+<!--                                        ng-required="!ctrl.ouApplicationUser.archiveSecurityLevels || !ctrl.ouApplicationUser.archiveSecurityLevels.length"-->
                                         <md-select id="ouSecurityLevel" name="ouSecurityLevel" multiple
-                                                   ng-required="!ctrl.ouApplicationUser.archiveSecurityLevels || !ctrl.ouApplicationUser.archiveSecurityLevels.length"
+
                                                    ng-model-options="{trackBy:'$value.lookupKey'}"
                                                    ng-model="ctrl.ouApplicationUser.securityLevels">
                                             <md-option ng-value="securityLevel"
@@ -314,8 +315,9 @@
                                     <!-- Security Levels for add -->
                                     <md-input-container flex>
                                         <label for="ouArchiveSecurityLevel">{{lang.security_level_add}}</label>
+<!--                                        ng-required="!ctrl.ouApplicationUser.securityLevels || !ctrl.ouApplicationUser.securityLevels.length"-->
                                         <md-select id="ouArchiveSecurityLevel" name="ouArchiveSecurityLevel" multiple
-                                                   ng-required="!ctrl.ouApplicationUser.securityLevels || !ctrl.ouApplicationUser.securityLevels.length"
+
                                                    ng-model-options="{trackBy:'$value.lookupKey'}"
                                                    ng-model="ctrl.ouApplicationUser.archiveSecurityLevels">
                                             <md-option ng-value="securityLevel"
