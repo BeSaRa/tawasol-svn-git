@@ -170,20 +170,20 @@
                                     <table md-table>
                                         <thead md-head>
                                         <tr md-row>
-                                            <th md-column><span>{{lang.login_name}}</span></th>
-                                            <th md-column><span>{{lang.domain_name}}</span></th>
+                                            <th md-column><span>{{lang.arabic_name}}</span></th>
+                                            <th md-column><span>{{lang.english_name}}</span></th>
+                                            <!--<th md-column><span>{{lang.domain_name}}</span></th>-->
                                             <th md-column><span>{{lang.actions}}</span></th>
                                         </tr>
                                         </thead>
                                         <tbody md-body>
                                         <tr ng-if="ctrl.workflowAction.relatedUsers.length" md-row
                                             ng-repeat="applicationUser in ctrl.workflowAction.relatedUsers track by $index">
-                                            <td md-cell>
-                                                <span tooltip="{{applicationUser.getNames()}}">{{applicationUser.loginName}}</span>
-                                            </td>
-                                            <td md-cell>
+                                            <td md-cell>{{applicationUser.getNameByLanguage('ar')}}</td>
+                                            <td md-cell>{{applicationUser.getNameByLanguage('en')}}</td>
+                                            <!--<td md-cell>
                                                 <span tooltip="{{applicationUser.getDefaultOrganization().getNames()}}">{{applicationUser.domainName}}</span>
-                                            </td>
+                                            </td>-->
                                             <td md-cell layout="row">
                                                 <md-button tooltip="{{lang.delete}}" class="md-icon-button"
                                                            ng-click="ctrl.removeUser(applicationUser)">
