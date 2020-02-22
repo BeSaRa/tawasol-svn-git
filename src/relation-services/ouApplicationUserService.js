@@ -109,7 +109,7 @@ module.exports = function (app) {
          * @description get all private users as ouApplicationUsers from self.allPrivatesUsers if found and if not load it from server again.
          * @returns {Promise|allPrivateUsers}
          */
-        self.getOUApplicationUsers = function () {
+        self.getAllPrivateUsers = function () {
             return self.allPrivateUsers.length ? $q.when(self.allPrivateUsers) : self.loadAllPrivateUsers();
         };
 

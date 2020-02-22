@@ -24,21 +24,55 @@ module.exports = function (app) {
         self.viceManagersList = viceManagers;
 
         self.organizationsWithPrivateUsers = [];
-        _.map(privateUsers, function (privateUser) {
-            var index = _.findIndex(self.organizationsWithPrivateUsers, {id: privateUser.ouid.id});
-            if (index < 0)
-                self.organizationsWithPrivateUsers.push(angular.copy(privateUser.ouid));
-            if (index === -1)
-                index = _.findIndex(self.organizationsWithPrivateUsers, {id: privateUser.ouid.id});
-            if (!self.organizationsWithPrivateUsers[index].hasOwnProperty('privateUsers'))
-                self.organizationsWithPrivateUsers[index].privateUsers = [];
-            self.organizationsWithPrivateUsers[index].privateUsers.push(privateUser);
-        });
-        self.workFlowSecurities = angular.copy(lookupService.returnLookups(lookupService.workflowSecurity));
 
-        self.ouApplicationUser.privateUsers = _.filter(self.ouApplicationUser.privateUsers, function (privateUser) {
-            return _.map(privateUsers, 'id').indexOf(privateUser.id) > -1;
-        });
+        var _getPrivateUserOuIndex = function (privateUser) {
+            return _.findIndex(self.organizationsWithPrivateUsers, {id: (privateUser.ouid.hasOwnProperty('id') ? privateUser.ouid.id : privateUser.ouid)});
+        };
+
+        var _generatePrivateUserList = function () {
+            _.map(privateUsers, function (privateUser) {
+                // if list doesn't contain ou, push ou to the list and then find index again
+                var index = _getPrivateUserOuIndex(privateUser);
+                if (index < 0) {
+                    self.organizationsWithPrivateUsers.push(angular.copy(privateUser.ouid));
+                    index = _getPrivateUserOuIndex(privateUser);
+                }
+                // if ou doesn't have privateUsers property, add empty property and then push value
+                if (!self.organizationsWithPrivateUsers[index].hasOwnProperty('privateUsers'))
+                    self.organizationsWithPrivateUsers[index].privateUsers = [];
+                self.organizationsWithPrivateUsers[index].privateUsers.push(privateUser);
+            });
+        };
+
+        var _mapPrivateUsersToList = function () {
+            // if no private users exists, reset saved private users
+            if (!privateUsers.length) {
+                self.ouApplicationUser.privateUsers = [];
+                return;
+            }
+            // if data is same as service returned(string format), parse it.
+            if (self.ouApplicationUser.privateUsers && angular.isString(self.ouApplicationUser.privateUsers)) {
+                self.ouApplicationUser.privateUsers = JSON.parse(self.ouApplicationUser.privateUsers);
+            }
+
+            if (self.ouApplicationUser.privateUsers.hasOwnProperty('ouAppUserIds')) {
+                self.ouApplicationUser.privateUsers = _.map(self.ouApplicationUser.privateUsers.ouAppUserIds, function (savedPrivateUser) {
+                    return _.find(privateUsers, function (privateUser) {
+                        return privateUser.applicationUser.id === savedPrivateUser.id && privateUser.ouid.id === savedPrivateUser.ouId;
+                    });
+                });
+                // remove null/undefined privateUsers (if privateUser list doesn't contain saved private user, filter it)
+                self.ouApplicationUser.privateUsers = _.filter(self.ouApplicationUser.privateUsers, function (savedPrivateUser) {
+                    return !!savedPrivateUser;
+                })
+            }
+        };
+
+        _generatePrivateUserList();
+        _mapPrivateUsersToList();
+
+
+        self.workFlowSecurities = angular.copy(lookupService.returnLookups(lookupService.workflowSecurity));
 
         self.getSelectedPrivateUsersText = function () {
             if (self.ouApplicationUser.privateUsers && self.ouApplicationUser.privateUsers.length) {

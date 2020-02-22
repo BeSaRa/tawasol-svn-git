@@ -37,8 +37,17 @@ module.exports = function (app) {
             model.archiveSecurityLevels = generator.filterSecurityLevels(model.archiveSecurityLevels);
             model.archiveSecurityLevels = generator.getResultFromSelectedCollection(model.archiveSecurityLevels, 'lookupKey');
 
-            var privateUsersCopy = angular.copy(model.privateUsers);
-            model.privateUsers = (model.sendToPrivateUsers && angular.isArray(model.privateUsers) && typeof model.privateUsers[0] !== 'undefined') ? JSON.stringify(getPrivateUsersToSend(model, privateUsersCopy)) : "{}";
+            if (!model.sendToPrivateUsers) {
+                model.privateUsers = "{}";
+            } else {
+                if (angular.isArray(model.privateUsers) && model.privateUsers.length && typeof model.privateUsers[0] !== 'undefined') {
+                    model.privateUsers = getPrivateUsersToSend(model, angular.copy(model.privateUsers));
+                } else if (angular.isString(model.privateUsers)) {
+                    // nothing to do because it is untouched and same as returned from service
+                } else {
+                    model.privateUsers = "{}";
+                }
+            }
 
             model.managers = (model.sendToManagers) ? JSON.stringify(model.managers) : "[]";
             model.viceManagers = (model.sendToViceManager) ? JSON.stringify(model.viceManagers) : "[]";
@@ -70,7 +79,24 @@ module.exports = function (app) {
                     return {id: privateUser.applicationUser.id, ouId: privateUser.ouid.id};
                 return false;
             });
-            return privateUsersToSendObject;
+            return JSON.stringify(privateUsersToSendObject);
+        };
+
+        var getPrivateUsersToReceive = function (model) {
+            var privateUsers = [];
+            if (model.sendToPrivateUsers && model.privateUsers.hasOwnProperty('appUserIds') && model.privateUsers.appUserIds.length) {
+                var ouApplicationUsers = ouApplicationUserService.ouApplicationUsers;
+                privateUsers = _.filter(_.map(model.privateUsers.ouAppUserIds, function (privateUser) {
+                    return _.find(ouApplicationUsers, function (ouApplicationUser) {
+                        var ouId = ouApplicationUser.ouid.hasOwnProperty('id') ? ouApplicationUser.ouid.id : ouApplicationUser.ouid;
+                        return ouId === privateUser.ouId && ouApplicationUser.applicationUser.id === privateUser.id;
+                    })
+                }), function (item) {
+                    return typeof item !== 'undefined';
+                });
+            }
+
+            return privateUsers;
         };
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
@@ -101,18 +127,8 @@ module.exports = function (app) {
 
                 var applicationUsers = applicationUserService.applicationUsers;
 
-                model.privateUsers = (model.privateUsers && angular.isString(model.privateUsers)) ? JSON.parse(model.privateUsers) : {};
-                if (model.sendToPrivateUsers && model.privateUsers.hasOwnProperty('appUserIds') && model.privateUsers.appUserIds.length) {
-                    var ouApplicationUsers = ouApplicationUserService.ouApplicationUsers;
-                    model.privateUsers = _.filter(_.map(model.privateUsers.ouAppUserIds, function (privateUser) {
-                        return _.find(ouApplicationUsers, function (ouApplicationUser) {
-                            var ouId = ouApplicationUser.ouid.hasOwnProperty('id') ? ouApplicationUser.ouid.id : ouApplicationUser.ouid;
-                            return ouId === privateUser.ouId && ouApplicationUser.applicationUser.id === privateUser.id;
-                        })
-                    }), function (item) {
-                        return typeof item !== 'undefined';
-                    });
-                }
+                //model.privateUsers = (model.privateUsers && angular.isString(model.privateUsers)) ? JSON.parse(model.privateUsers) : {};
+                //model.privateUsers = getPrivateUsersToReceive(model);
 
                 model.managers = (model.managers && !angular.isArray(model.managers)) ? JSON.parse(model.managers) : [];
                 model.viceManagers = (model.viceManagers && !angular.isArray(model.viceManagers)) ? JSON.parse(model.viceManagers) : [];
