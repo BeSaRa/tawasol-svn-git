@@ -27,14 +27,13 @@ module.exports = function (app) {
         _.map(privateUsers, function (privateUser) {
             var index = _.findIndex(self.organizationsWithPrivateUsers, {id: privateUser.ouid.id});
             if (index < 0)
-                self.organizationsWithPrivateUsers.push(privateUser.ouid);
+                self.organizationsWithPrivateUsers.push(angular.copy(privateUser.ouid));
             if (index === -1)
                 index = _.findIndex(self.organizationsWithPrivateUsers, {id: privateUser.ouid.id});
             if (!self.organizationsWithPrivateUsers[index].hasOwnProperty('privateUsers'))
                 self.organizationsWithPrivateUsers[index].privateUsers = [];
             self.organizationsWithPrivateUsers[index].privateUsers.push(privateUser);
         });
-
         self.workFlowSecurities = angular.copy(lookupService.returnLookups(lookupService.workflowSecurity));
 
         self.ouApplicationUser.privateUsers = _.filter(self.ouApplicationUser.privateUsers, function (privateUser) {
