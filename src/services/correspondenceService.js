@@ -1439,6 +1439,9 @@ module.exports = function (app) {
                     if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
                         dialog.infoMessage(generator.getBookLockMessage(null, error));
                         return $q.reject('itemLocked');
+                    } else if (errorCode.checkIf(error, 'DOCUMENT_HAS_BEEN_DELETED') === true) {
+                        dialog.errorMessage(langService.get('document_has_been_deleted'));
+                        return $q.reject('documentDeleted');
                     }
                     return $q.reject(error);
 

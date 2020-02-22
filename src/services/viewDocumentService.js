@@ -423,6 +423,13 @@ module.exports = function (app) {
                             generator.removePopupNumber();
                             return false;
                         });
+                    })
+                    .catch(function (error) {
+                        if (errorCode.checkIf(error, 'DOCUMENT_HAS_BEEN_DELETED') === true) {
+                            dialog.errorMessage(langService.get('document_has_been_deleted'));
+                            return $q.reject('documentDeleted');
+                        }
+                        return $q.reject(false);
                     });
             };
 
