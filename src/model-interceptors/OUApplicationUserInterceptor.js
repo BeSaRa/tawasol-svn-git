@@ -44,6 +44,8 @@ module.exports = function (app) {
                     model.privateUsers = getPrivateUsersToSend(model, angular.copy(model.privateUsers));
                 } else if (angular.isString(model.privateUsers)) {
                     // nothing to do because it is untouched and same as returned from service
+                    // if empty array comes from service, change to empty object to keep all empty records in db same
+                    model.privateUsers = (model.privateUsers === '[]') ? '{}' : model.privateUsers;
                 } else {
                     model.privateUsers = "{}";
                 }
