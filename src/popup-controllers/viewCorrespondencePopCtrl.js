@@ -254,16 +254,17 @@ module.exports = function (app) {
          * @param $event
          * @param ignoreMessage
          * @param saveBeforeApprove
+         * @param skipCheck
          * @returns {*}
          */
-        self.saveCorrespondenceChanges = function ($event, ignoreMessage, saveBeforeApprove) {
+        self.saveCorrespondenceChanges = function ($event, ignoreMessage, saveBeforeApprove, skipCheck) {
             var info = self.correspondence.getInfo();
             var method = info.needToApprove() && self.editMode ? 'saveDocumentWithContent' : 'saveDocument';
             if (method === 'saveDocumentWithContent') {
                 angular.element('iframe#iframe-main-document').remove();
                 self.disableSaveTimeout = true;
                 return $timeout(function () {
-                    return self.correspondence[method](method === 'saveDocument' ? false : self.content)
+                    return self.correspondence[method](self.content)
                         .then(function () {
                             if (!ignoreMessage)
                                 toast.success(langService.get('save_success'));
@@ -294,12 +295,22 @@ module.exports = function (app) {
                         });
                 }, configurationService.OFFICE_ONLINE_DELAY);
             } else {
-                return self.correspondence[method](method === 'saveDocument' ? false : self.content)
+                return self.correspondence[method](false, skipCheck)
                     .then(function () {
                         if (!ignoreMessage)
                             toast.success(langService.get('save_success'));
                         dialog.hide(true);
                         return true;
+                    })
+                    .catch(function (error) {
+                        if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
+                            dialog.confirmMessage(langService.get('incoming_book_exists_same_number_site_year') + "<br/>" + langService.get('confirm_continue_message'))
+                                .then(function () {
+                                    return self.saveCorrespondenceChanges($event, ignoreMessage, saveBeforeApprove, true);
+                                }).catch(function () {
+                                return $q.reject(error);
+                            });
+                        }
                     });
             }
         };
