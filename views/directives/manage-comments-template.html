@@ -236,7 +236,7 @@
                                     md-min-length="0"
                                     ng-if="!ctrl.documentComment.isPerOU"
                                     placeholder="{{lang.comments_search_in_organizations}}">
-                                <span>{{ item.display.getTranslatedName() }}</span>
+                                <span tooltip="{{ item.display.getTranslatedName() }}">{{ item.display.getTranslatedName() }}</span>
                             </md-autocomplete>
                             &nbsp;&nbsp;
                             <!-- User/OU DDL (disabled if type = ou and no ou selected) -->
@@ -251,7 +251,7 @@
                                     md-item-text="item.display.getTranslatedName()"
                                     md-min-length="0"
                                     placeholder="{{lang[ctrl.currentSearchKey()]}}">
-                                <span>{{ item.display.getTranslatedName() }}</span>
+                                <span>{{item.display.getTranslatedName()}}</span>
                             </md-autocomplete>
                         </div>
                         <!-- Excluded Table -->

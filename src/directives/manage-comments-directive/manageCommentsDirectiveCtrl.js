@@ -91,11 +91,15 @@ module.exports = function (app) {
                 });
                 return regOu;
             });
+
             sections = _.map(sections, function (item) {
-                if (typeof item.registryParentId === 'number') {
-                    parentRegistryOu = _.find(regOus, {'id': item.registryParentId});
-                } else {
+                if (item.hasOwnProperty('registryParentId') && item.registryParentId) {
                     parentRegistryOu = item.registryParentId;
+                } else if (item.hasOwnProperty('regouId') && item.regouId) {
+                    parentRegistryOu = item.regouId;
+                }
+                if (typeof parentRegistryOu === 'number') {
+                    parentRegistryOu = _.find(regOus, {'id': parentRegistryOu});
                 }
                 item.display = new Information({
                     arName: (parentRegistryOu ? parentRegistryOu.arName : '') + ' - ' + item.arName,
@@ -179,9 +183,10 @@ module.exports = function (app) {
             },
             organizations: {
                 service: organizationService,
-                //method: 'getOrganizations',
-                method: 'getOrganizationsByRegOU',
-                param: employeeService.getEmployee().getRegistryOUID(),
+                method: 'loadOrganizations',
+                param: [true, true],
+                //method: 'getOrganizationsByRegOU',
+                //param: employeeService.getEmployee().getRegistryOUID(),
                 mapResult: function (item) {
                     //return angular.extend(item, {display: item.display[langService.current + 'Name']});
                     return angular.extend(item, {display: item.display});
@@ -459,7 +464,12 @@ module.exports = function (app) {
             var searchType = currentType();
             var current = self.services[searchType];
             var param = selectedOu ? selectedOu : self.services[searchType].param;
-            var method = (param) ? current.service[current.method](param) : current.service[current.method](param);
+
+            // var method = (param) ? current.service[current.method](param) : current.service[current.method](param);
+            if (param && !angular.isArray(param)) {
+                param = [param];
+            }
+            var method = (param.length) ? current.service[current.method].apply(current.service, param) : current.service[current.method]();
 
             return method.then(function (result) {
                 if (searchType === 'organizations') {
@@ -488,7 +498,8 @@ module.exports = function (app) {
 
         self.querySearchOrganization = function (searchText) {
             searchText = searchText ? searchText.toLowerCase() : '';
-            return self.services.organizations.service[self.services.organizations.method](self.services.organizations.param)
+            //return self.services.organizations.service[self.services.organizations.method](self.services.organizations.param)
+            return self.services.organizations.service[self.services.organizations.method].apply(self.services.organizations.service, (self.services.organizations.param))
                 .then(function (organizations) {
                     organizations = _sortRegOusSections(organizations);
                     return searchText ? _.filter(organizations, function (item) {

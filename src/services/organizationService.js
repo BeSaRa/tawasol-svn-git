@@ -28,12 +28,16 @@ module.exports = function (app) {
          * @description load organizations from server.
          * @returns {Promise|organizations}
          */
-        self.loadOrganizations = function (skipUserRole) {
+        self.loadOrganizations = function (skipUserRole, skipSetValue) {
             var url = urlService.organizations;
             if (skipUserRole) {
                 url = url + '/lookup';
             }
             return $http.get(url).then(function (result) {
+                if (skipSetValue){
+                    var ous = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
+                    return generator.interceptReceivedCollection('Organization', ous);
+                }
                 self.organizations = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
                 self.organizations = generator.interceptReceivedCollection('Organization', self.organizations);
                 return self.organizations;
@@ -44,8 +48,8 @@ module.exports = function (app) {
          * @description get organizations from self.organizations if found and if not load it from server again.
          * @returns {Promise|organizations}
          */
-        self.getOrganizations = function (skipUserRoleWhenLoad) {
-            return self.organizations.length ? $q.when(self.organizations) : self.loadOrganizations(skipUserRoleWhenLoad);
+        self.getOrganizations = function (skipUserRoleWhenLoad, skipSetValue) {
+            return self.organizations.length ? $q.when(self.organizations) : self.loadOrganizations(skipUserRoleWhenLoad, skipSetValue);
         };
 
         /**
