@@ -9,7 +9,7 @@ module.exports = function (app) {
         });
 
         self.saveProperties = function (skipCheck) {
-            self.document.saveDocument(false, skipCheck)
+            self.document.saveDocument(false, true)
                 .then(function (result) {
                     self.document = result;
                     toast.success(langService.get('outgoing_metadata_saved_success'));
