@@ -1067,7 +1067,7 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return model.allInternalSites;
+                    return employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW');
                 }
             },
             // Print Barcode
@@ -1497,7 +1497,7 @@ module.exports = function (app) {
                     $state.is('app.department-inbox.ready-to-export') && self.refreshGrid(time);
                 });
         };
-        if (employeeService.getEmployee().getIntervalMin()){
+        if (employeeService.getEmployee().getIntervalMin()) {
             self.refreshGrid(employeeService.getEmployee().getIntervalMin());
         }
     });
