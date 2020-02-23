@@ -447,10 +447,11 @@ module.exports = function (app) {
          * @description search in classifications .
          * @param searchText
          * @param parent
+         * @param global
          * @return {*}
          */
-        self.classificationSearch = function (searchText, parent) {
-            return $http.get(urlService.classifications + '/criteria', {
+        self.classificationSearch = function (searchText, parent, global) {
+            return $http.get(urlService.classifications + (global ? '/global' : '') + '/criteria', {
                 params: {
                     criteria: searchText,
                     parent: typeof parent !== 'undefined' ? (parent.hasOwnProperty('id') ? parent.id : parent) : null

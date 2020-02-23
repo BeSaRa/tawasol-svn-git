@@ -167,7 +167,7 @@ module.exports = function (app) {
                         },
                         mainClassifications: function (classificationService) {
                             'ngInject';
-                            return classificationService.classificationSearch('');
+                            return classificationService.classificationSearch('', undefined, true);
                         }
                     },
                     locals: {
@@ -216,7 +216,7 @@ module.exports = function (app) {
                         },
                         mainClassifications: function (classificationService) {
                             'ngInject';
-                            return classificationService.classificationSearch('');
+                            return classificationService.classificationSearch('', undefined, true);
                         }
                     },
                     locals: {

@@ -461,7 +461,7 @@ module.exports = function (app) {
             if (self.mainClassifications.length)
                 self.previousMainClassifications = angular.copy(self.mainClassifications);
 
-            classificationService.classificationSearch(self.mainClassificationSearchText)
+            classificationService.classificationSearch(self.mainClassificationSearchText , undefined , true)
                 .then(function (classifications) {
                     self.mainClassifications = classifications;
                 });
@@ -481,7 +481,7 @@ module.exports = function (app) {
                 self.previousSubClassifications = angular.copy(self.subClassifications);
 
             // self.filter.ui.key_23.value parent classification value.
-            classificationService.classificationSearch(self.subClassificationSearchText, self.filter.ui.key_23.value)
+            classificationService.classificationSearch(self.subClassificationSearchText, self.filter.ui.key_23.value , true)
                 .then(function (classifications) {
                     self.subClassifications = classifications;
                 });
