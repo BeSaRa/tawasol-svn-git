@@ -294,9 +294,10 @@ module.exports = function (app) {
          */
         self.createNewID = function (collection, key) {
             var id = 0;
-            if (collection.length > 0)
-                id = _(collection).map(key).max() + 1;
-            else
+            if (collection.length > 0) {
+                var maxResult = _(collection).map(key).max();
+                id = (maxResult ? Number(maxResult) : 0) + 1;
+            } else
                 id += 1;
 
             return id;

@@ -94,8 +94,8 @@ module.exports = function (app) {
                     dialog.errorMessage(langService.get('serial_required_to_save_reference_item'));
                 })
                 .addStep('CHECK_ITEM_ORDER', true, self.referencePlanItem, function (item) {
-                    return item.itemOrder !== null && !_.some(self.referencePlanNumber.referencePlanItems, function (refItem) {
-                        return refItem.itemOrder === item.itemOrder && refItem.id !== item.id;
+                    return !_.some(self.referencePlanNumber.referencePlanItems, function (refItem) {
+                        return refItem.itemOrder && refItem.itemOrder === item.itemOrder && refItem.id !== item.id;
                     });
                 })
                 .notifyFailure(function () {
