@@ -55,7 +55,7 @@ module.exports = function (app) {
                 self.ouApplicationUser.privateUsers = JSON.parse(self.ouApplicationUser.privateUsers);
             }
 
-            if (self.ouApplicationUser.privateUsers.hasOwnProperty('ouAppUserIds')) {
+            if (self.ouApplicationUser.privateUsers && self.ouApplicationUser.privateUsers.hasOwnProperty('ouAppUserIds')) {
                 self.ouApplicationUser.privateUsers = _.map(self.ouApplicationUser.privateUsers.ouAppUserIds, function (savedPrivateUser) {
                     return _.find(privateUsers, function (privateUser) {
                         return privateUser.applicationUser.id === savedPrivateUser.id && privateUser.ouid.id === savedPrivateUser.ouId;
