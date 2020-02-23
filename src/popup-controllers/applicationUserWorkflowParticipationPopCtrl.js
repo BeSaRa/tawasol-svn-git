@@ -65,6 +65,8 @@ module.exports = function (app) {
                 self.ouApplicationUser.privateUsers = _.filter(self.ouApplicationUser.privateUsers, function (savedPrivateUser) {
                     return !!savedPrivateUser;
                 })
+            } else {
+                self.ouApplicationUser.privateUsers = [];
             }
         };
 
