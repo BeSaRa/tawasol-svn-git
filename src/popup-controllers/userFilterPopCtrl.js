@@ -16,8 +16,10 @@ module.exports = function (app) {
                                                   userFilterService,
                                                   _,
                                                   Information,
+                                                  mainClassifications,
                                                   $timeout,
                                                   correspondenceSiteTypes,
+                                                  classificationService,
                                                   correspondenceViewService) {
         'ngInject';
         var self = this;
@@ -39,8 +41,15 @@ module.exports = function (app) {
         self.selectedMainSite = null;
         self.selectedSubSite = null;
 
+        self.previousMainClassifications = [];
+        self.previousSubClassifications = [];
 
-        //console.log(lookupService.returnLookups(lookupService.inboxFilterKey));
+        self.mainClassifications = mainClassifications;
+
+        self.subClassifications = [];
+        self.mainClassificationSearchText = '';
+        self.subClassificationSearchText = '';
+
 
         self.lookupNames = {};
         _.map(lookupService.returnLookups(lookupService.inboxFilterKey), function (lookup) {
@@ -367,7 +376,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.loadSubSitesRecords = function ($event) {
-           var mainSite = self.filter.ui.key_mainSite.value && self.filter.ui.key_mainSite.value.hasOwnProperty('id') ? self.filter.ui.key_mainSite.value.id : self.filter.ui.key_mainSite.value;
+            var mainSite = self.filter.ui.key_mainSite.value && self.filter.ui.key_mainSite.value.hasOwnProperty('id') ? self.filter.ui.key_mainSite.value.id : self.filter.ui.key_mainSite.value;
             correspondenceViewService.correspondenceSiteSearch('sub', {
                 type: self.filter.ui.key_siteType.value.hasOwnProperty('lookupKey') ? self.filter.ui.key_siteType.value.lookupKey : self.filter.ui.key_siteType.value,
                 parent: mainSite,
@@ -391,5 +400,101 @@ module.exports = function (app) {
                 return self.subSites = angular.copy(self.subSitesCopy);
             });
         };
+
+
+        /**
+         * @description fir the callback if the provider  text length equal = 0
+         * @param $event
+         * @param text
+         * @param callback
+         */
+        self.setPropertiesSpaceBackIfNoLength = function ($event, text, callback) {
+            var key = $event.keyCode || $event.which;
+            if (!text.length && key === 8) {
+                callback();
+            }
+        };
+
+        /**
+         * capture any event except arrows UP/DOWN allow those.
+         * @param $event
+         * @param enterCallback
+         */
+        self.allowPropagationUpDownArrows = function ($event, enterCallback) {
+            var key = $event.keyCode || $event.which;
+            if (key === 13 && enterCallback) {
+                enterCallback($event);
+                $event.stopPropagation();
+            }
+            var allowedKeys = [38 /* UP */, 40 /* DOWN */];
+            allowedKeys.indexOf(key) === -1 ? $event.stopPropagation() : null;
+        };
+
+
+        /**
+         * @description set previousMainClassifications in case if it has length
+         */
+        self.setOldMainClassification = function () {
+            self.previousMainClassifications.length && !self.mainClassifications.length ? self.mainClassifications = self.previousMainClassifications : null;
+            self.previousMainClassifications = [];
+        };
+
+        /**
+         * @description set previousSubClassifications in case if it has length
+         */
+        self.setOldSubClassification = function () {
+            self.previousSubClassifications.length && !self.subClassifications.length ? self.subClassifications = self.previousSubClassifications : null;
+            self.previousSubClassifications = [];
+        };
+
+        /**
+         * @description load Main depend on criteria ... used to load more if the current mainClassifications dose not have what the user searched for.
+         * @param $event
+         */
+        self.loadMainClassificationByCriteria = function ($event) {
+            if ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+            }
+
+            // to reserve old sub sites
+            if (self.mainClassifications.length)
+                self.previousMainClassifications = angular.copy(self.mainClassifications);
+
+            classificationService.classificationSearch(self.mainClassificationSearchText)
+                .then(function (classifications) {
+                    self.mainClassifications = classifications;
+                });
+        };
+        /**
+         * @description load Main depend on criteria ... used to load more if the current mainClassifications dose not have what the user searched for.
+         * @param $event
+         */
+        self.loadSubClassificationByCriteria = function ($event) {
+            if ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+            }
+
+            // to reserve old sub sites
+            if (self.subClassifications.length)
+                self.previousSubClassifications = angular.copy(self.subClassifications);
+
+            // self.filter.ui.key_23.value parent classification value.
+            classificationService.classificationSearch(self.subClassificationSearchText, self.filter.ui.key_23.value)
+                .then(function (classifications) {
+                    self.subClassifications = classifications;
+                });
+        };
+
+        self.onMainClassificationChanged = function () {
+            self.loadSubClassificationByCriteria();
+        };
+
+        self.$onInit = function () {
+            if (self.filter.ui.key_23.value) {
+                self.onMainClassificationChanged();
+            }
+        }
     });
 };

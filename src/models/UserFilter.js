@@ -103,6 +103,14 @@ module.exports = function (app) {
                 key_22: {
                     value: null
                 },
+                // Main Classification
+                key_23: {
+                    value: null
+                },
+                // Sub Classification
+                key_24: {
+                    value: null
+                },
                 // anonymous properties - to be removed when sending
                 key_linkedAttachments: {
                     value: null
@@ -124,7 +132,7 @@ module.exports = function (app) {
                 }
             };
             // this is available keys for the current ui model
-            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -364,7 +372,7 @@ module.exports = function (app) {
                     self.ui.key_linkedEntities.value = 22;
 
                 // correspondence sites (key 5 - use it from extraCriteria because parsed expression will not have full information for siteInfo)
-                if (extraCriteria && extraCriteria.hasOwnProperty('5')){
+                if (extraCriteria && extraCriteria.hasOwnProperty('5')) {
                     var siteInfo = extraCriteria[5];
                     //self.ui.key_5.value = JSON.parse(self.ui.key_5.value);
                     if (siteInfo.siteType) {
@@ -377,19 +385,6 @@ module.exports = function (app) {
                         self.ui.key_subSite.value = siteInfo.subSiteId;
                     }
                 }
-                /*if (self.ui.key_5.value != null) {
-                    self.ui.key_5.value = JSON.parse(self.ui.key_5.value);
-                    if (self.ui.key_5.value.siteType) {
-                        self.ui.key_siteType.value = self.ui.key_5.value.siteType;
-                    }
-                    if (self.ui.key_5.value.mainSiteId) {
-                        self.ui.key_mainSite.value = self.ui.key_5.value.mainSiteId;
-                    }
-                    if (self.ui.key_5.value.subSiteId) {
-                        self.ui.key_subSite.value = self.ui.key_5.value.subSiteId;
-                    }
-                }*/
-
                 return this;
             };
 

@@ -164,6 +164,10 @@ module.exports = function (app) {
                         correspondenceSiteTypes: function (correspondenceSiteTypeService) {
                             'ngInject';
                             return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
+                        },
+                        mainClassifications: function (classificationService) {
+                            'ngInject';
+                            return classificationService.classificationSearch('');
                         }
                     },
                     locals: {
@@ -209,6 +213,10 @@ module.exports = function (app) {
                         correspondenceSiteTypes: function (correspondenceSiteTypeService) {
                             'ngInject';
                             return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
+                        },
+                        mainClassifications: function (classificationService) {
+                            'ngInject';
+                            return classificationService.classificationSearch('');
                         }
                     },
                     locals: {
@@ -241,11 +249,9 @@ module.exports = function (app) {
                 if (userFilter.arName && userFilter.enName) {
                     return existingUserFilter.arName === userFilter.arName
                         || existingUserFilter.enName.toLowerCase() === userFilter.enName.toLowerCase();
-                }
-                else if (!userFilter.arName && userFilter.enName) {
+                } else if (!userFilter.arName && userFilter.enName) {
                     return existingUserFilter.enName.toLowerCase() === userFilter.enName.toLowerCase();
-                }
-                else if (userFilter.arName && !userFilter.enName)
+                } else if (userFilter.arName && !userFilter.enName)
                     return existingUserFilter.arName === userFilter.arName;
 
             }), function (matchingResult) {

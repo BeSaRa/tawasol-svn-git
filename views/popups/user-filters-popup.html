@@ -110,6 +110,86 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
+                                    <!-- main Classification -->
+                                    <md-input-container flex>
+                                        <label for="mainClassification">{{ctrl.lookupNames['key_23'].getTranslatedName()}}</label>
+                                        <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                                   id="mainClassification"
+                                                   name="mainClassification"
+                                                   ng-change="ctrl.onMainClassificationChanged()"
+                                                   md-on-close="ctrl.mainClassificationSearchText = ''"
+                                                   ng-model="ctrl.filter.ui.key_23.value">
+                                            <md-select-header class="select-header" layout="column">
+                                                <div layout="row" flex class="size-100">
+                                                    <input ng-model="ctrl.mainClassificationSearchText"
+                                                           type="text"
+                                                           ng-keyup="ctrl.setPropertiesSpaceBackIfNoLength($event , ctrl.mainClassificationSearchText ,ctrl.setOldMainClassification)"
+                                                           ng-keydown="ctrl.allowPropagationUpDownArrows($event)"
+                                                           placeholder="{{lang.search}}"
+                                                           class="select-header-input">
+                                                    <md-button
+                                                            ng-click="ctrl.loadMainClassificationByCriteria($event)"
+                                                            tooltip="{{lang.load_more_records}}" class="md-icon-button">
+                                                        <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                    </md-button>
+                                                </div>
+                                            </md-select-header>
+                                            <md-option ng-if="!ctrl.mainClassificationSearchText.length"
+                                                       ng-value="null">{{lang.none}}
+                                            </md-option>
+                                            <md-option md-highlight-text="ctrl.mainClassificationSearchText"
+                                                       md-highlight-flags="i"
+                                                       ng-value="item.id"
+                                                       ng-repeat="item in ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText">
+                                                {{item.getTranslatedName()}}
+                                            </md-option>
+                                            <md-option ng-click="ctrl.loadMainClassificationByCriteria( $event)"
+                                                       ng-if="!(ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText).length && ctrl.mainClassificationSearchText.length">
+                                                <span class="red-text">{{lang.press_enter_to_load_more_records}}</span>
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <!-- sub Classifiactions -->
+                                    <md-input-container flex="">
+                                        <label for="subClassification">{{ctrl.lookupNames['key_24'].getTranslatedName()}}</label>
+                                        <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                                   id="subClassification"
+                                                   name="subClassification"
+                                                   ng-disabled="!ctrl.filter.ui.key_23.value"
+                                                   md-on-close="ctrl.subClassificationSearchText = ''"
+                                                   ng-model="ctrl.filter.ui.key_24.value">
+                                            <md-select-header class="select-header" layout="column">
+                                                <div layout="row" flex class="size-100">
+                                                    <input ng-model="ctrl.subClassificationSearchText"
+                                                           type="text"
+                                                           ng-keyup="ctrl.setPropertiesSpaceBackIfNoLength($event , ctrl.subClassificationSearchText ,ctrl.setOldSubClassification)"
+                                                           ng-keydown="ctrl.allowPropagationUpDownArrows($event)"
+                                                           placeholder="{{lang.search}}"
+                                                           class="select-header-input">
+                                                    <md-button
+                                                            ng-click="ctrl.loadSubClassificationByCriteria($event)"
+                                                            tooltip="{{lang.load_more_records}}" class="md-icon-button">
+                                                        <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                    </md-button>
+                                                </div>
+                                            </md-select-header>
+                                            <md-option ng-if="!ctrl.subClassificationSearchText.length" ng-value="null">
+                                                {{lang.none}}
+                                            </md-option>
+                                            <md-option md-highlight-text="ctrl.subClassificationSearchText"
+                                                       md-highlight-flags="i"
+                                                       ng-value="subClassification.id"
+                                                       ng-repeat="subClassification in ctrl.subClassifications|translatedNameFilter:ctrl.subClassificationSearchText">
+                                                {{subClassification.getTranslatedName()}}
+                                            </md-option>
+                                            <md-option ng-click="ctrl.loadSubClassificationByCriteria($event)"
+                                                       ng-if="!(ctrl.subClassifications|translatedNameFilter:ctrl.subClassificationSearchText).length && ctrl.subClassificationSearchText.length">
+                                                <span class="red-text">{{lang.press_enter_to_load_more_records}}</span>
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
                                     <!-- Sender -->
                                     <md-input-container flex>
                                         <label for="sender">{{ctrl.lookupNames['key_9'].getTranslatedName()}}</label>
@@ -168,13 +248,15 @@
                                         </md-select>
                                     </md-input-container>
                                     <!-- Received Date Greater Than -->
-                                    <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 4" flex class="cms-datepicker">
+                                    <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 4" flex
+                                                        class="cms-datepicker">
                                         <label for="key_4">{{lang.date}}</label>
                                         <md-datepicker id="key_4" ng-model="ctrl.filter.ui.key_4.value"
                                                        md-open-on-focus></md-datepicker>
                                     </md-input-container>
                                     <!-- Received Date Less Than -->
-                                    <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 6" flex class="cms-datepicker">
+                                    <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 6" flex
+                                                        class="cms-datepicker">
                                         <label for="key_6">{{lang.date}}</label>
                                         <md-datepicker id="key_6" ng-model="ctrl.filter.ui.key_6.value"
                                                        md-open-on-focus></md-datepicker>
