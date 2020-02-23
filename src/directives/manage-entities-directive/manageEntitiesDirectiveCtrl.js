@@ -146,6 +146,8 @@ module.exports = function (app) {
                             if (result && result.length) {
                                 result[0].typeId = self.selectedEntityType;
                                 self.entity = angular.copy(result[0]);
+                            } else {
+                                self.pushEntityType(self.selectedEntityType);
                             }
                         })
                 }
