@@ -1491,6 +1491,7 @@
                                                                            ng-if="ctrl.employeeService.getEmployee().id != ouApplicationUser.applicationUser.id"
                                                                            ng-change="ctrl.changeOUApplicationUserStatus(ouApplicationUser, $event)"
                                                                            title="{{ouApplicationUser.getTranslatedStatus()}}"></md-switch>
+                                                                <!-- ng-disabled="ouApplicationUser.applicationUser.getDefaultOrganization(true) === ctrl.organization.id" -->
                                                             </td>
                                                             <td md-cell>
                                                                 <div flex layout="row" layout-align="start center">
@@ -1498,6 +1499,7 @@
                                                                                title="{{lang.delete}}"
                                                                                ng-if="ctrl.employeeService.getEmployee().id != ouApplicationUser.applicationUser.id"
                                                                                ng-click="ctrl.removeOUApplicationUser(ouApplicationUser, $event)">
+                                                                        <!-- ng-disabled="ouApplicationUser.applicationUser.getDefaultOrganization(true) === ctrl.organization.id" -->
                                                                         <md-icon md-svg-icon="delete"></md-icon>
                                                                     </md-button>
                                                                     <md-button
@@ -1627,6 +1629,7 @@
                                                                            ng-if="ctrl.employeeService.getEmployee().id != ouApplicationUser.applicationUser.id"
                                                                            ng-change="ctrl.changeOUApplicationUserStatus(ouApplicationUser, $event)"
                                                                            title="{{ouApplicationUser.getTranslatedStatus()}}"></md-switch>
+                                                                <!-- ng-disabled="ouApplicationUser.applicationUser.getDefaultOrganization(true) === ctrl.organization.id" -->
                                                             </td>
                                                             <td md-cell>
                                                                 <div flex layout="row" layout-align="start center">
@@ -1634,6 +1637,7 @@
                                                                                title="{{lang.delete}}"
                                                                                ng-if="ctrl.employeeService.getEmployee().id != ouApplicationUser.applicationUser.id"
                                                                                ng-click="ctrl.removeOUApplicationUser(ouApplicationUser, $event)">
+                                                                        <!-- ng-disabled="ouApplicationUser.applicationUser.getDefaultOrganization(true) === ctrl.organization.id" -->
                                                                         <md-icon md-svg-icon="delete"></md-icon>
                                                                     </md-button>
                                                                     <md-button

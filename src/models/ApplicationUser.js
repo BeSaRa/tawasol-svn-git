@@ -146,7 +146,10 @@ module.exports = function (app) {
                 organizationService = orgService;
                 return this;
             };
-            ApplicationUser.prototype.getDefaultOrganization = function () {
+            ApplicationUser.prototype.getDefaultOrganization = function (returnIdOnly) {
+                if (returnIdOnly){
+                   return this.defaultOUID;
+                }
                 return organizationService.getOrganizationById(this.defaultOUID);
             };
 
