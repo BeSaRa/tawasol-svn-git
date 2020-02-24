@@ -66,15 +66,16 @@
                                     </md-button>
                                     <md-button
                                             ng-disabled="ctrl.document_properties.$invalid || !ctrl.incoming.site || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.incoming.contentFile))"
-                                            ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised" >
+                                            ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised">
                                         {{lang.incoming_save_print_barcode}}
                                     </md-button>
                                 </div>
-                                <div layout="row">
+                                <div class="mb10" layout="row">
                                     <md-button ng-click="ctrl.confirmResetAddCorrespondence($event)" class="md-raised">
                                         {{lang.incoming_new}}
                                     </md-button>
-                                    <md-button ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}" ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
+                                    <md-button ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}"
+                                               ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
                                         {{lang.incoming_cancel}}
                                     </md-button>
                                 </div>
@@ -127,7 +128,8 @@
                                                     is-simple-add="ctrl.simpleAdd"></manage-content-directive>
                                             <span flex></span>
                                             <!-- Attachments -->
-                                            <div class="icon-relative" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">
+                                            <div class="icon-relative"
+                                                 ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')">
                                                 <md-button tooltip="{{lang.attachments}}"
                                                            class="md-raised md-icon-button"
                                                            ng-click="ctrl.manageAttachments($event)">
@@ -136,7 +138,8 @@
                                                 <span class="counter blue">{{ctrl.incoming.attachments.length}}</span>
                                             </div>
                                             <!-- Linked Docs -->
-                                            <div class="icon-relative" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
+                                            <div class="icon-relative"
+                                                 ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
                                                 <md-button tooltip="{{lang.linked_documents}}"
                                                            class="md-raised md-icon-button"
                                                            ng-click="ctrl.manageLinkedDocuments($event)">
@@ -145,7 +148,8 @@
                                                 <span class="counter blue">{{ctrl.incoming.linkedDocs.length}}</span>
                                             </div>
                                             <!-- Linked Entities -->
-                                            <div class="icon-relative" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
+                                            <div class="icon-relative"
+                                                 ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_ENTITIES')">
                                                 <md-button tooltip="{{lang.linked_entities}}"
                                                            class="md-raised md-icon-button"
                                                            ng-click="ctrl.manageLinkedEntities($event)">
