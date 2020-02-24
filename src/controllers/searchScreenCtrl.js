@@ -12,6 +12,12 @@ module.exports = function (app) {
         // all available navigation tabs for search screens
         self.searchTabs = [
             {
+                langKey: 'menu_item_search_module_general',
+                tabKey: 'general',
+                show: employeeService.hasPermissionTo('GENERAL_SEARCH'),
+                resultKey: 'searchedGeneralDocuments'
+            },
+            {
                 langKey: 'menu_item_search_module_outgoing',
                 tabKey: 'outgoing',
                 show: employeeService.hasPermissionTo('SEARCH_OUTGOING'),
@@ -28,12 +34,6 @@ module.exports = function (app) {
                 tabKey: 'internal',
                 show: employeeService.hasPermissionTo('SEARCH_INTERNAL_DOCUMENT'),
                 resultKey: 'searchedInternalDocuments'
-            },
-            {
-                langKey: 'menu_item_search_module_general',
-                tabKey: 'general',
-                show: employeeService.hasPermissionTo('GENERAL_SEARCH'),
-                resultKey: 'searchedGeneralDocuments'
             },
             {
                 langKey: 'menu_item_search_module_outgoing_incoming',
