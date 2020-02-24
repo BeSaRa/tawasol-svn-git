@@ -67,7 +67,8 @@ module.exports = function (app) {
                     defaultDisplayLang: 1,
                     isCloudAdmin: result.isCloudAdmin,
                     isSuperAdmin: result.isSuperAdmin,
-                    isSubAdmin: result.isSubAdmin
+                    isSubAdmin: result.isSubAdmin,
+                    mappedToCentralArchive: result.mappedToCentralArchive
                 });
                 if (result.isAdminUser) {
                     employee.setPermissions(result.permissions); // set permissions
@@ -79,6 +80,7 @@ module.exports = function (app) {
                 employee.isSuperAdmin = result.isSuperAdmin;
                 employee.isSubAdmin = result.isSubAdmin;
                 employee.isAdmin = result.isAdminUser;
+                employee.mappedToCentralArchive = result.mappedToCentralArchive;
             }
             // set globalSetting for root entity
             if (result.hasOwnProperty('globalSetting') && result.globalSetting)
@@ -259,6 +261,10 @@ module.exports = function (app) {
         };
         self.isCentralArchiveHasRegistry = function () {
             return employee && employee.inCentralArchiveAndHasRegistry();
+        };
+
+        self.isCurrentOuLinkedToArchive = function () {
+            return employee && employee.mappedToCentralArchive;
         };
 
         self.setSignatureService = function (service) {

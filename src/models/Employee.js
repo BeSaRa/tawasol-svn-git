@@ -46,6 +46,7 @@ module.exports = function (app) {
             self.viewInboxAsGrid = true;
             // extra fields
             self.permissions = [];
+            self.mappedToCentralArchive = false;
             // ouApplicationUser
             self.organization = null;
             self.proxyUsers = [];
@@ -193,7 +194,7 @@ module.exports = function (app) {
                     });
             };
 
-            Employee.prototype.getDefaultEditMode = function(){
+            Employee.prototype.getDefaultEditMode = function () {
                 return this.defaultEditMode;
             };
 
