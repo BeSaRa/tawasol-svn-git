@@ -42,7 +42,7 @@ module.exports = function (app) {
         self.disabledFields = [];
 
         self.docTemplateFile = null;
-        self.allowedDocTemplateFormats = "application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        self.allowedDocTemplateFormats = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";//application/msword,
 
         /**
          * @description Opens the browser file window
