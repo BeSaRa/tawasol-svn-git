@@ -18,6 +18,18 @@
             <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
                                   md-diameter="30"></md-progress-circular>
         </div>
+
+        <div layout="row" layout-align="center center">
+            <span>{{lang.connection_mode}} :&nbsp;</span>
+            <span>{{lang.current === 'en' ? lang.normal : lang.slow}}</span>
+            <span>&nbsp;&nbsp;</span>
+            <md-switch aria-label="Toggle Slow Connection"
+                       ng-if="!ctrl.employeeService.getEmployee().isSlowConnectionMode() && !ctrl.correspondence.viewVersion"
+                       ng-model="ctrl.slowConnectionEnabled"
+                       ng-change="ctrl.toggleSlowConnectionMode($event)">
+            </md-switch>
+            <span>{{lang.current === 'en' ? lang.slow : lang.normal}}</span>
+        </div>
         <md-button ng-disabled="ctrl.editMode" class="md-raised md-primary"
                    ng-if="ctrl.info.needToApprove() && ctrl.employeeCanEditContent() && !ctrl.correspondence.viewVersion"
                    ng-click="ctrl.toggleCorrespondenceEditMode()">

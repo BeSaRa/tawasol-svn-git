@@ -20,7 +20,9 @@ module.exports = function (app) {
                                                           errorCode,
                                                           $compile,
                                                           _,
-                                                          G2GMessagingHistory) {
+                                                          G2GMessagingHistory,
+                                                          downloadService,
+                                                          $sce) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondencePopCtrl';
@@ -33,6 +35,8 @@ module.exports = function (app) {
         self.loadingIndicatorService = loadingIndicatorService;
 
         self.stickyActions = [];
+
+        self.slowConnectionEnabled = !!employeeService.getEmployee().isSlowConnectionMode();
 
         self.editMode = false;
         self.info = null;
@@ -238,6 +242,21 @@ module.exports = function (app) {
             self.fullScreen = !self.fullScreen;
         };
 
+        /**
+         * @description Shows the document in slow connection mode
+         */
+        self.toggleSlowConnectionMode = function ($event) {
+            if (self.slowConnectionEnabled) {
+                downloadService.getMainDocumentContentAsPDF(self.info.vsId)
+                    .then(function (result) {
+                        var urlObj = window.URL.createObjectURL(result);
+                        self.viewURL = $sce.trustAsResourceUrl(urlObj);
+                    });
+            } else {
+                self.reloadMainDocument($event);
+            }
+        };
+
         self.closeCorrespondenceDialog = function () {
             if (self.workItem) {
                 correspondenceService.unlockWorkItem(self.workItem, true)
@@ -323,7 +342,7 @@ module.exports = function (app) {
                 })
         };
 
-        function _rebuildIframe() {
+        function _rebuildEditIframe() {
             var iframe = '<iframe ng-if="ctrl.mainDocument && ctrl.editMode" id="iframe-main-document"\n' +
                 '                        class="iframe-main-document"\n' +
                 '                        ng-src="{{ctrl.content.editURL}}" flex\n' +
@@ -369,8 +388,10 @@ module.exports = function (app) {
         };
 
         self.reloadMainDocument = function ($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
+            if ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+            }
             self.content
                 .desktop
                 .reloadContent(true)

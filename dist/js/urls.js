@@ -381,6 +381,10 @@
                 .addToAllWithBase('downloadSelected', 'cms-entity/correspondence/common/merge-book')
                 // downlaod document content
                 .addToAllWithBase('downloadDocumentContent', 'cms-entity/correspondence/common/download-content/{vsId}')
+                // downlaod document content as PDF
+                .addToAllWithBase('downloadDocumentContentPDF', 'cms-entity/correspondence/common/mobility/vsid/{vsId}')
+                // downlaod attachment content as PDF
+                .addToAllWithBase('downloadAttachmentContentPDF', 'cms-entity/correspondence/common/mobility/attachment/vsid/{vsId}')
                 // quick search overdue results
                 .addToAllWithBase('ouicksearchOverdueCounters', 'cms-entity/correspondence/search/quick/followup/{documentClass}')
                 // overdue Counters
