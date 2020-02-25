@@ -16,7 +16,7 @@
                      md-selected="ctrl.searchScreens[ctrl.selectedTabName].controller.selectedTab">
                 <md-tab label="{{lang.search}}">
                     <md-content scroll-directive class="white-bg page-padding">
-                        <div layout="column">
+                        <div id="search-container" layout="column">
                             <div class="navigation-row" layout="row">
                                 <md-card class="m0" flex>
                                     <ul id="search-navigation-list">
@@ -29,51 +29,6 @@
                                     </ul>
                                 </md-card>
                             </div>
-                            <search-outgoing-screen-directive
-                                    controller="ctrl.searchScreens.outgoing"
-                                    ous="ctrl.organizations"
-                                    available-registry-organizations="ctrl.availableRegistryOrganizations"
-                                    approvers="ctrl.approvers"
-                                    ng-show="ctrl.selectedTabName === 'outgoing'"
-                                    registry-organizations="ctrl.registryOrganizations"
-                                    property-configurations="ctrl.propertyConfigurations.Outgoing"
-                                    label-collapse="ctrl.labelCollapse">
-                            </search-outgoing-screen-directive>
-                            <search-internal-screen-directive
-                                    controller="ctrl.searchScreens.internal"
-                                    ous="ctrl.organizations"
-                                    approvers="ctrl.approvers"
-                                    ng-show="ctrl.selectedTabName === 'internal'"
-                                    registry-organizations="ctrl.registryOrganizations"
-                                    property-configurations="ctrl.propertyConfigurations.Internal"
-                                    label-collapse="ctrl.labelCollapse">
-                            </search-internal-screen-directive>
-                            <search-incoming-screen-directive
-                                    controller="ctrl.searchScreens.incoming"
-                                    ous="ctrl.organizations"
-                                    available-registry-organizations="ctrl.availableRegistryOrganizations"
-                                    ng-show="ctrl.selectedTabName === 'incoming'"
-                                    registry-organizations="ctrl.registryOrganizations"
-                                    property-configurations="ctrl.propertyConfigurations.Incoming"
-                                    label-collapse="ctrl.labelCollapse">
-                            </search-incoming-screen-directive>
-                            <search-outgoing-incoming-screen-directive
-                                    controller="ctrl.searchScreens.outgoingIncoming"
-                                    ous="ctrl.organizations"
-                                    available-registry-organizations="ctrl.availableRegistryOrganizations"
-                                    ng-show="ctrl.selectedTabName === 'outgoingIncoming'"
-                                    registry-organizations="ctrl.registryOrganizations"
-                                    property-configurations="ctrl.propertyConfigurations.OutgoingIncoming"
-                                    label-collapse="ctrl.labelCollapse">
-                            </search-outgoing-incoming-screen-directive>
-                            <search-general-screen-directive
-                                    controller="ctrl.searchScreens.general"
-                                    ous="ctrl.organizations"
-                                    ng-show="ctrl.selectedTabName === 'general'"
-                                    registry-organizations="ctrl.registryOrganizations"
-                                    property-configurations="ctrl.propertyConfigurations.Correspondence"
-                                    label-collapse="ctrl.labelCollapse">
-                            </search-general-screen-directive>
                         </div>
                     </md-content>
                 </md-tab>

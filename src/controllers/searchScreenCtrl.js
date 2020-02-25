@@ -4,6 +4,10 @@ module.exports = function (app) {
                                                  approvers,
                                                  availableRegistryOrganizations,
                                                  organizationService,
+                                                 $scope,
+                                                 $compile,
+                                                 $q,
+                                                 $timeout,
                                                  employeeService) {
         var self = this;
         self.controllerName = 'searchScreenCtrl';
@@ -44,9 +48,17 @@ module.exports = function (app) {
         ];
         // current selected tab to display correct form search.
         self.selectedTabName = '';
+
+        self.searchForms = {
+            general: '',
+            outgoing: '',
+            incoming: '',
+            internal: '',
+            outgoingIncoming: ''
+        };
+        self.renderdTabs = {};
         // selected
         self.selectedTabResultKey = '';
-        _setSelectedTabName();
         // registry organizations
         self.registryOrganizations = registryOrganizations;
         // all property configurations
@@ -128,6 +140,7 @@ module.exports = function (app) {
             }
             self.selectedTabResultKey = tab.resultKey;
             self.selectedTabName = tab.tabKey;
+            self.renderSelectedTab(self.selectedTabName);
         }
 
         /**
@@ -135,7 +148,7 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.isShowPrintButton = function () {
-            return self.searchScreens[self.selectedTabName].controller[self.selectedTabResultKey].length > 0;
+            return self.selectedTabName && self.searchScreens[self.selectedTabName].controller[self.selectedTabResultKey].length > 0;
         };
         /**
          * @description Prints the current tab result data
@@ -146,7 +159,7 @@ module.exports = function (app) {
 
         self.loadSubOrganizationsToAllScreens = function () {
             // load children organizations by selected regOUId
-            organizationService
+            return organizationService
                 .loadChildrenOrganizations(self.employee.getRegistryOUID())
                 .then(function (organizations) {
                     var organizationsIdList = _.map(organizations, 'id');
@@ -157,10 +170,74 @@ module.exports = function (app) {
                         organizationsIdList.indexOf(self.employee.getRegistryOUID()) === -1 && organizations.unshift(organizationService.getOrganizationById(self.employee.getRegistryOUID(), true));
                     }
                     self.organizations = organizations;
+                    return self.organizations;
                 });
         };
         self.$onInit = function () {
-            self.loadSubOrganizationsToAllScreens();
+            self.loadSubOrganizationsToAllScreens().then(function () {
+                self.compileSearchScreenDirectives();
+                _setSelectedTabName();
+            });
+        };
+
+        self.compileSearchScreenDirectives = function () {
+            self.searchForms.outgoing = '<search-outgoing-screen-directive\n' +
+                '                                    controller="ctrl.searchScreens.outgoing"\n' +
+                '                                    ous="ctrl.organizations"\n' +
+                '                                    available-registry-organizations="ctrl.availableRegistryOrganizations"\n' +
+                '                                    approvers="ctrl.approvers"\n' +
+                '                                    ng-show="ctrl.selectedTabName === \'outgoing\'"\n' +
+                '                                    registry-organizations="ctrl.registryOrganizations"\n' +
+                '                                    property-configurations="ctrl.propertyConfigurations.Outgoing"\n' +
+                '                                    label-collapse="ctrl.labelCollapse">\n' +
+                '                            </search-outgoing-screen-directive>';
+
+            self.searchForms.internal = '<search-internal-screen-directive\n' +
+                '                                    controller="ctrl.searchScreens.internal"\n' +
+                '                                    ous="ctrl.organizations"\n' +
+                '                                    approvers="ctrl.approvers"\n' +
+                '                                    ng-show="ctrl.selectedTabName === \'internal\'"\n' +
+                '                                    registry-organizations="ctrl.registryOrganizations"\n' +
+                '                                    property-configurations="ctrl.propertyConfigurations.Internal"\n' +
+                '                                    label-collapse="ctrl.labelCollapse">\n' +
+                '                            </search-internal-screen-directive>';
+
+            self.searchForms.incoming = '<search-incoming-screen-directive\n' +
+                '                                    controller="ctrl.searchScreens.incoming"\n' +
+                '                                    ous="ctrl.organizations"\n' +
+                '                                    available-registry-organizations="ctrl.availableRegistryOrganizations"\n' +
+                '                                    ng-show="ctrl.selectedTabName === \'incoming\'"\n' +
+                '                                    registry-organizations="ctrl.registryOrganizations"\n' +
+                '                                    property-configurations="ctrl.propertyConfigurations.Incoming"\n' +
+                '                                    label-collapse="ctrl.labelCollapse">\n' +
+                '                            </search-incoming-screen-directive>';
+
+            self.searchForms.outgoingIncoming = '<search-outgoing-incoming-screen-directive\n' +
+                '                                    controller="ctrl.searchScreens.outgoingIncoming"\n' +
+                '                                    ous="ctrl.organizations"\n' +
+                '                                    available-registry-organizations="ctrl.availableRegistryOrganizations"\n' +
+                '                                    ng-show="ctrl.selectedTabName === \'outgoingIncoming\'"\n' +
+                '                                    registry-organizations="ctrl.registryOrganizations"\n' +
+                '                                    property-configurations="ctrl.propertyConfigurations.OutgoingIncoming"\n' +
+                '                                    label-collapse="ctrl.labelCollapse">\n' +
+                '                            </search-outgoing-incoming-screen-directive>';
+
+            self.searchForms.general = '<search-general-screen-directive\n' +
+                '                                    controller="ctrl.searchScreens.general"\n' +
+                '                                    ous="ctrl.organizations"\n' +
+                '                                    ng-show="ctrl.selectedTabName === \'general\'"\n' +
+                '                                    registry-organizations="ctrl.registryOrganizations"\n' +
+                '                                    property-configurations="ctrl.propertyConfigurations.Correspondence"\n' +
+                '                                    label-collapse="ctrl.labelCollapse">\n' +
+                '                            </search-general-screen-directive>';
+            return $q.resolve(true);
+        };
+
+        self.renderSelectedTab = function (tab) {
+            if (!self.renderdTabs.hasOwnProperty(tab)) {
+                self.renderdTabs[tab] = true;
+                angular.element('#search-container').append($compile(self.searchForms[tab])($scope));
+            }
         }
     });
 };
