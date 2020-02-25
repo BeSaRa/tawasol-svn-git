@@ -8,7 +8,9 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'gridSearchDirectiveCtrl';
         LangWatcher($scope);
-        self.searchBoxId = 'search_header_query_' + moment().valueOf();
+        var identifier = moment().valueOf();
+        self.searchBoxId = 'search_header_query_' + identifier;
+        self.searchButtonId = 'btn_searchGrid' + identifier;
 
         self.search = function () {
             if (!!self.serverSide) {

@@ -4,7 +4,7 @@
     color: #FFF;
   }
 }
-#search_header {
+.search_header {
   z-index: 3;
   background-color: white;
   overflow: hidden;
@@ -35,7 +35,7 @@
 }
 
 html.rtl {
-  #search_header {
+  .search_header {
     padding: 0 0 0 8px;
   }
 }

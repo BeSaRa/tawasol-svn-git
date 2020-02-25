@@ -1,6 +1,6 @@
 <div layout="row" layout-align="start center">
-    <div md-whiteframe="3" layout="row" id="search_header">
-        <md-button class="md-icon-button" id="btn_searchGrid">
+    <div md-whiteframe="3" layout="row" class="search_header">
+        <md-button class="md-icon-button" id="{{ctrl.searchButtonId}}">
             <md-icon md-svg-icon="magnify"></md-icon>
         </md-button>
         <input flex ng-model="ctrl.grid.searchText"
