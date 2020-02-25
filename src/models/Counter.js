@@ -8,7 +8,7 @@ module.exports = function (app) {
                 ignoreUnreadCounts = [
                     'menu_item_outgoing',
                     'menu_item_outgoing_prepare',
-                    'menu_item_outgoing_draft',
+                    // 'menu_item_outgoing_draft',
                     'menu_item_outgoing_review',
                     'menu_item_outgoing_ready_to_send',
                     'menu_item_outgoing_rejected',
@@ -18,7 +18,7 @@ module.exports = function (app) {
                     'menu_item_incoming_ready_to_send',
                     'menu_item_incoming_rejected',
                     'menu_item_internal_prepare',
-                    'menu_item_internal_draft',
+                    // 'menu_item_internal_draft',
                     'menu_item_internal_rejected',
                     'menu_item_internal_review',
                     'menu_item_internal_ready_to_send',
@@ -33,7 +33,7 @@ module.exports = function (app) {
                         'outgoingAccepted',
                         'outgoingReview',
                         'outgoingPrepare',
-                        'outgoingDraft',
+                        // 'outgoingDraft',
                         function (currentValue, counter, employee, property) {
                             // outgoingDeleted
                             return employee.hasThesePermissions('DELETE_OUTGOING') ? (currentValue + counter.outgoingDeleted[property]) : currentValue;
@@ -42,9 +42,9 @@ module.exports = function (app) {
                     menu_item_outgoing_prepare: [
                         'outgoingPrepare'
                     ],
-                    menu_item_outgoing_draft: [
+                    /*menu_item_outgoing_draft: [
                         'outgoingDraft'
-                    ],
+                    ],*/
                     menu_item_outgoing_review: [
                         'outgoingReview'
                     ],
@@ -78,7 +78,7 @@ module.exports = function (app) {
                     ],
                     menu_item_internal: [
                         'internalPrepare',
-                        'internalDraft',
+                        // 'internalDraft',
                         'internalReview',
                         'internalRejected',
                         'internalReadyToSent',
@@ -91,9 +91,9 @@ module.exports = function (app) {
                     menu_item_internal_prepare: [
                         'internalPrepare'
                     ],
-                    menu_item_internal_draft: [
+                    /*menu_item_internal_draft: [
                         'internalDraft'
-                    ],
+                    ],*/
                     menu_item_internal_review: [
                         'internalReview'
                     ],
