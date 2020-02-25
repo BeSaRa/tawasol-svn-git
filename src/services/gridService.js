@@ -161,6 +161,14 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Get the unique class to be added a row class to highlight row while opening shortcut or context actions menu
+         * @returns {string}
+         */
+        self.getUniqueIdentifier = function(){
+            return (new Date().valueOf()).toString();
+        };
+
+        /**
          * @description Gets the sorting key
          * @param gridName
          * If passed, return sorting key by gridName.

@@ -13,7 +13,7 @@ module.exports = function (app) {
                 actionsDirection: '@?',
                 model: '=',
                 shortcutActions: '=?',
-                contextRowClass: '@?'
+                gridActionRowClass: '@?'
             },
             link: function (scope, elem, attrs, controller) {
                 controller.actionsDirection = controller.actionsDirection || 'horizontal';

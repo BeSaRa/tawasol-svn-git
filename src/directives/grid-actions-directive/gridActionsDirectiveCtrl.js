@@ -16,14 +16,13 @@ module.exports = function (app) {
                                                          G2G,
                                                          G2GMessagingHistory,
                                                          SentItemDepartmentInbox,
-                                                         Information) {
+                                                         Information,
+                                                         gridService) {
         'ngInject';
-        var self = this;
+        var self = this, actionParentRow;
         self.controllerName = 'gridActionsDirectiveCtrl';
         self.langService = langService;
         LangWatcher($scope);
-
-        var parentRow;
 
         /**
          * @description Checks if actions will be shown or not
@@ -205,11 +204,50 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Process the callback for the action button
+         * @param action
+         * @param $event
+         */
+        self.processMenu = function (action, $event) {
+            if (action.hasOwnProperty('params') && action.params && action.params.length) {
+                action.callback(self.model, action.params, $event);
+            } else {
+                action.callback(self.model, $event);
+            }
+            _removeHighlightParentRow();
+        };
+
+
+        /**
          * @description Opens the grid shortcut menu
          * @param $mdMenu
+         * @param $event
          */
-        self.openShortcutMenu = function ($mdMenu) {
+        self.openShortcutMenu = function ($mdMenu, $event) {
+            var parentRow = $($event.target).parents('tr')[0];
+            // gridActionRowClass is the unique number
+            // It is set as class of parent row and passed to gridActionsDirective.
+            // When menu opens, we will find the row by class=contextRowUniqueClass and highlight it.
+            // When menu with main-context-menu or main-shortcut-menu class is closed, the (contextRowUniqueClass, background-grid-action) classes will be removed.
+            self.gridActionRowClass = gridService.getUniqueIdentifier();
+            if (parentRow) {
+                parentRow.classList.add(self.gridActionRowClass);
+            }
+
+            _setAndHighlightParentRow();
             $mdMenu.open();
+            _handleCloseGridActionsMenu();
+        };
+
+        /**
+         * @description Opens the grid context menu
+         * @param $mdMenu
+         * @param $event
+         */
+        self.openContextMenu = function ($mdMenu, $event) {
+            _setAndHighlightParentRow();
+            $mdMenu.open();
+            _handleCloseGridActionsMenu();
         };
 
         /**
@@ -223,36 +261,39 @@ module.exports = function (app) {
             $mdMenu.open();
         };
 
-        var _setAndHighlightParentRow = function(){
-            parentRow = document.getElementsByClassName(self.contextRowClass);
-            if (parentRow && parentRow.length){
-                parentRow = parentRow[0];
-                // highlight the record when context menu opens
-                parentRow.classList.add('background-context');
+        var _setAndHighlightParentRow = function () {
+            actionParentRow = document.getElementsByClassName(self.gridActionRowClass);
+            if (actionParentRow && actionParentRow.length) {
+                actionParentRow = actionParentRow[0];
+                // highlight the record when action menu opens
+                actionParentRow.classList.add('background-grid-action');
             }
-        };
-
-        var _removeHighlightParentRow = function(){
-            parentRow.classList.remove('background-context', self.contextRowClass);
-        };
-
-        self.openContextMenu = function ($mdMenu, $event) {
-            _setAndHighlightParentRow();
-            $mdMenu.open();
         };
 
         /**
-         * @description Process the callback for the action button
-         * @param action
-         * @param $event
+         * @description Removes the classes(gridActionRowClass and background-grid-action) when grid action menu with class (main-context-menu or main-shortcut-menu) closes
+         * @private
          */
-        self.processMenu = function (action, $event) {
-            if (action.hasOwnProperty('params') && action.params && action.params.length) {
-                action.callback(self.model, action.params, $event);
-            } else {
-                action.callback(self.model, $event);
+        var _removeHighlightParentRow = function () {
+            actionParentRow = document.getElementsByClassName(self.gridActionRowClass);
+            if (actionParentRow && actionParentRow.length && $(actionParentRow).hasClass('background-grid-action') && $(actionParentRow).hasClass(self.gridActionRowClass)) {
+                actionParentRow[0].classList.remove('background-grid-action', self.gridActionRowClass);
+                self.gridActionRowClass = '';
+                actionParentRow = null;
             }
-            _removeHighlightParentRow();
+        };
+
+        /**
+         * @description Handles the close of grid action menu
+         * @private
+         */
+        var _handleCloseGridActionsMenu = function () {
+            $scope.$on("$mdMenuClose", function (event, el) {
+                // if closed main context menu or shortcut menu, remove highlight from parent row
+                if ((el[0].classList.contains('main-context-menu')) || (el[0].classList.contains('main-shortcut-menu'))) {
+                    _removeHighlightParentRow();
+                }
+            });
         };
     });
 };

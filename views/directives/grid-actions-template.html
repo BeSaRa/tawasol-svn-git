@@ -1,8 +1,9 @@
 <!-- Horizontal Actions -->
-<md-menu ng-if="ctrl.actionsDirection==='horizontal' && ctrl.shortcutActions.length">
+<md-menu ng-if="ctrl.actionsDirection==='horizontal' && ctrl.shortcutActions.length"
+         class="main-shortcut-menu">
     <md-button aria-label="Grid Horizontal Actions"
                class="md-icon-button"
-               ng-click="ctrl.openShortcutMenu($mdMenu)">
+               ng-click="ctrl.openShortcutMenu($mdMenu, $event)">
         <md-icon md-menu-origin md-svg-icon="dots-vertical"></md-icon>
     </md-button>
     <md-menu-content width="2" layout="row">
@@ -28,7 +29,7 @@
 
 <!-- Vertical Actions -->
 <md-menu-bar ng-if="ctrl.actionsDirection === 'vertical' && ctrl.shortcutActions.length">
-    <md-menu>
+    <md-menu class="main-shortcut-menu">
         <md-button aria-label="Grid Vertical Actions"
                    class="md-icon-button"
                    ng-click="$mdMenu.open()">
@@ -53,7 +54,7 @@
                 <!-- Main Menu Divider -->
                 <md-menu-divider ng-if="gridAction.type==='separator'" class="p0 m4_0"></md-menu-divider>
                 <!-- Cascade(Sub) Menu -->
-                <md-menu class="nested-menu"
+                <md-menu class="nested-menu sub-vertical-menu"
                          ng-if="gridAction.type==='action' && gridAction.subMenu && gridAction.subMenu.length">
                     <md-button ng-click="ctrl.openCascadeMenu($mdMenu, gridAction)"
                                aria-label="{{ctrl.getActionText(gridAction)}}"
@@ -144,7 +145,8 @@
 <!-- Context Actions -->
 <md-menu-bar ng-if="ctrl.actionsDirection === 'context'">
     <md-menu class="main-context-menu">
-        <button class="menu-handler" ng-click="ctrl.openContextMenu($mdMenu, $event)" ng-hide="true"></button><!--$mdMenu.open()-->
+        <button class="menu-handler" ng-click="ctrl.openContextMenu($mdMenu, $event)" ng-hide="true"></button>
+        <!--$mdMenu.open()-->
         <md-menu-content class="context-menu md-dense" width="4">
             <md-menu-item ng-repeat="gridAction in ctrl.contextActions track by $index"
                           ng-if="ctrl.isShowAction(gridAction)"
