@@ -66,7 +66,8 @@ module.exports = function (app) {
                                                    userFolderService,
                                                    $stateParams,
                                                    DocumentLink,
-                                                   SmsLog) {
+                                                   SmsLog,
+                                                   rootEntity) {
         'ngInject';
         var self = this, managerService, correspondenceStorageService;
         self.serviceName = 'correspondenceService';
@@ -3433,7 +3434,9 @@ module.exports = function (app) {
                 .replace('{vsId}', info.vsId)
                 .replace('{subject}', encodeURIComponent(info.title))
                 .replace('{token}', tokenService.getToken())
-                .replace('{documentClass}', info.documentClass);
+                .replace('{documentClass}', info.documentClass)
+                .replace('{entityIdentifier}', rootEntity.getRootEntityIdentifier())
+                .replace('{currentOuId}', employeeService.getEmployee().getOUID());
             return $http.get(url, {
                 excludeLoading: true
             }).catch(function (error) {
@@ -3460,7 +3463,9 @@ module.exports = function (app) {
                 .replace('{vsId}', info.vsId)
                 .replace('{subject}', encodeURIComponent(info.title))
                 .replace('{token}', tokenService.getToken())
-                .replace('{documentClass}', info.documentClass);
+                .replace('{documentClass}', info.documentClass)
+                .replace('{entityIdentifier}', rootEntity.getRootEntityIdentifier())
+                .replace('{currentOuId}', employeeService.getEmployee().getOUID());
             return $http.get(url, {
                 excludeLoading: true
             });

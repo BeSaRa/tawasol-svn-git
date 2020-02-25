@@ -4,7 +4,7 @@
         .config(function (urlServiceProvider) {
             'ngInject';
             urlServiceProvider
-                .addToAllWithSegment('desktopEdit', '/goedit?mimtype={type}&vsid={vsId}&docsubject={subject}&docclassname={documentClass}&token={token}&view-only={mode}&base-url={base_url}', 'desktopWord')
+                .addToAllWithSegment('desktopEdit', '/goedit?mimtype={type}&vsid={vsId}&docsubject={subject}&docclassname={documentClass}&token={token}&view-only={mode}&entity={entityIdentifier}&ouid={currentOuId}&base-url={base_url}', 'desktopWord')
                 // to load languages
                 .addToAll('language', 'dist/resources/lang.json')
                 // to load sidebar menus
