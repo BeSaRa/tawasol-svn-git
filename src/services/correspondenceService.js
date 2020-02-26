@@ -4429,13 +4429,15 @@ module.exports = function (app) {
          * Otherwise returns null
          * @returns {*}
          */
-        self.getSecurityLevelEnabledAction = function () {
+        self.getSecurityLevelEnabledActionByScreenName = function () {
             var currentStateName = $state.current.name,
                 action = null;
             if (currentStateName.indexOf('review') !== -1) {
                 action = "review";
             } else if (currentStateName.indexOf('user-inbox') !== -1) {
                 action = "user-inbox";
+            } else if (currentStateName.indexOf('search-screen') !== -1) {
+                action = "search-screen";
             }
             return action;
         };

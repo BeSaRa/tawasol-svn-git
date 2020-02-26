@@ -170,8 +170,8 @@ module.exports = function (app) {
         $timeout(function () {
             self.detailsReady = true;
             self.model = angular.copy(self.correspondence);
-            // set action to review/user-inbox will enable edit of security level
-            self.action = correspondenceService.getSecurityLevelEnabledAction();
+            // set action to review/user-inbox/search will enable edit of security level
+            self.action = correspondenceService.getSecurityLevelEnabledActionByScreenName();
 
             if (self.correspondence) {
                 self.info = self.correspondence.getInfo();

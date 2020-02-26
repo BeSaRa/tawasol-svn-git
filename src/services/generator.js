@@ -302,6 +302,20 @@ module.exports = function (app) {
 
             return id;
         };
+
+        /**
+         * @description Returns the value of property by checking hasOwnProperty value
+         * @param value
+         * @param hasOwnPropertyName
+         * @returns {*}
+         */
+        self.getNormalizedValue = function (value, hasOwnPropertyName) {
+            if (typeof value === 'undefined' || value === null || !hasOwnPropertyName) {
+                return value;
+            }
+            return value.hasOwnProperty(hasOwnPropertyName) ? value[hasOwnPropertyName] : value;
+        };
+
         /**
          * get some value from given collection and return object each key will have the selected value
          * @param collection

@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                               $timeout,
                                                               toast,
                                                               _,
+                                                              generator,
                                                               correspondenceService,
                                                               LangWatcher,
                                                               gridService,
@@ -799,58 +800,19 @@ module.exports = function (app) {
         };
 
         self.isShowSecurityLevelCheckbox = function () {
-            var actions = ["editafterexport", "editafterapproved", "duplicateversion", "receive", "review", "editafterreturng2g", "user-inbox"];
-            return self.action && actions.indexOf(self.action.toLowerCase()) !== -1
-                && employeeService.hasPermissionTo('CHANGE_BOOK_SECURITY_LEVEL') && !self.disableProperties;
-        };
-
-        /**
-         * @description Returns the number of fields visible in first row
-         * @returns {number}
-         */
-        self.checkFieldCountFirstRow = function () {
-            var fieldCount = 0;
-            if (self.showRegistryUnit() && self.checkStatus('registryOU')) {
-                fieldCount++;
+            var hasPermission = employeeService.hasPermissionTo('CHANGE_BOOK_SECURITY_LEVEL') && !self.disableProperties;
+            if (!hasPermission) {
+                return false;
             }
-            if (self.showRegistryUnit() && self.checkStatus('ou')) {
-                fieldCount++;
+            var allowedActionsList = ["editafterexport", "editafterapproved", "duplicateversion", "receive", "review", "editafterreturng2g", "user-inbox"];
+            if (self.action && self.action.toLowerCase() === 'search-screen') {
+                // allowed to edit security level (if not exported and docRegOuId === currentLoggedInUserRegOuId)
+                hasPermission = self.document.getInfo().docStatus !== 25
+                    && (generator.getNormalizedValue(self.document.registryOU, 'id') === employeeService.getEmployee().getRegistryOUID());
+            } else {
+                hasPermission = self.action && allowedActionsList.indexOf(self.action.toLowerCase()) !== -1;
             }
-            if (!self.showRegistryUnit() && self.checkStatus('ou')) {
-                fieldCount++;
-            }
-            if (self.checkStatus('securityLevel')) {
-                fieldCount++;
-            }
-            if (self.checkStatus('docDate')) {
-                fieldCount++;
-            }
-
-            return fieldCount;
-        };
-
-        /**
-         * @description Returns the number of fields visible in second row
-         * @returns {number}
-         */
-        self.checkFieldCountSecondRow = function () {
-            var fieldCount = 0;
-            // Document Full Serial
-            if (self.isShowDocFullSerial()) {
-                fieldCount++;
-            }
-            // Document Number
-            if (self.document.docClassName.toLowerCase() === "incoming" && self.checkStatus("refDocNumber")) {
-                fieldCount++;
-            }
-            // Type (Personal/Departmental)
-            if (self.document.docClassName.toLowerCase() === "internal" && self.checkStatus("internalDocType")) {
-                fieldCount++;
-            }
-            if (self.checkStatus('refDocDate') && self.document.hasDocumentClass('incoming')) {
-                fieldCount++;
-            }
-            return fieldCount;
+            return hasPermission;
         };
 
         /**
