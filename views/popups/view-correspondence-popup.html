@@ -19,6 +19,17 @@
             <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
                                   md-diameter="30"></md-progress-circular>
         </div>
+        <div layout="row" layout-align="center center">
+            <span>{{lang.viewing_mode}} :&nbsp;</span>
+            <span>{{lang.current === 'en' ? lang.office_online : lang.pdf_viewer}}</span>
+            <span>&nbsp;&nbsp;</span>
+            <md-switch aria-label="Toggle Slow Connection"
+                       ng-if="!ctrl.employeeService.getEmployee().isSlowConnectionMode() && !ctrl.correspondence.viewVersion"
+                       ng-model="ctrl.slowConnectionEnabled"
+                       ng-change="ctrl.toggleSlowConnectionMode($event)">
+            </md-switch>
+            <span>{{lang.current === 'en' ? lang.pdf_viewer : lang.office_online}}</span>
+        </div>
         <md-button ng-click="ctrl.toggleFullScreen()" class="md-icon-button">
             <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen'}}"></md-icon>
         </md-button>
