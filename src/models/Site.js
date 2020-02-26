@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('Site', function (CMSModelInterceptor,
                                   langService,
+                                  generator,
                                   _) {
         'ngInject';
         return function Site(model) {
@@ -143,6 +144,9 @@ module.exports = function (app) {
 
             Site.prototype.getVersionType = function () {
                 return this.ccVerion ? langService.get('sites_copy') : langService.get('sites_original');
+            };
+            Site.prototype.getNameByLanguage = function (language) {
+                return this['sub' + generator.ucFirst(language) + 'SiteText'];
             };
 
             // don't remove CMSModelInterceptor from last line

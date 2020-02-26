@@ -38,9 +38,14 @@ module.exports = function (app) {
         self.selectedMainSite = null;
         self.selectedSubSite = null;
 
+        self.previousMainSites = [];
+        self.previousSubSites = [];
+
         self.withOutReply = _.find(self.followUpStatuses, function (item) {
             return item.lookupStrKey === 'WITHOUT_REPLY'
         });
+        // to check if simple search
+        self.simpleSearch = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
 
         $timeout(function () {
             self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
@@ -164,9 +169,9 @@ module.exports = function (app) {
             } else {
                 _addSite('To', site)
                     .then(function () {
-                        _concatCorrespondenceSites(true).then(function () {
-                            self.subSites = _.filter(self.subSitesCopy, _filterSubSites);
-                        });
+                        // _concatCorrespondenceSites(true).then(function () {
+                        //     self.subSites = _.filter(self.subSitesCopy, _filterSubSites);
+                        // });
                     })
             }
         };
@@ -231,6 +236,13 @@ module.exports = function (app) {
                 self.subSitesCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSites = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                 self.selectedSubSite = null;
+                // if there is no selected site type >>> select it depend on correspondenceSiteTypeId from selected main Site
+                if (!self.selectedSiteType) {
+                    self.selectedSiteType = _.find(self.correspondenceSiteTypes, function (type) {
+                        return type.lookupKey === self.selectedMainSite.correspondenceSiteTypeId;
+                    });
+                }
+
                 if (self.subSites.length === 1) {
                     self.selectedSubSite = self.subSites[0];
                     self.changeSubCorrespondence(self.selectedSubSite);
@@ -289,14 +301,9 @@ module.exports = function (app) {
         self.changeSubCorrespondence = function (item) {
             if (item) {
                 _concatCorrespondenceSites(false);
-                if (_filterSubSites(item)) {
-                    self.addSiteTo(item);
-                }
+                self.addSiteTo(item);
             } else {
                 self['sitesInfoTo'] = [];
-                _concatCorrespondenceSites(true).then(function () {
-                    self.subSites = _.filter(self.subSitesCopy, _filterSubSites);
-                });
             }
         };
 
@@ -425,6 +432,102 @@ module.exports = function (app) {
          */
         self.isSubSiteSearchEnabled = function () {
             return self.subSiteSearchText && (!(!self.selectedMainSite || self.selectedSubSite));
+        };
+
+        /**
+         * @description fir the callback if the provider  text length equal = 0
+         * @param $event
+         * @param text
+         * @param callback
+         */
+        self.setPropertiesSpaceBackIfNoLength = function ($event, text, callback) {
+            var key = $event.keyCode || $event.which;
+            if (!text.length && key === 8) {
+                callback();
+            }
+        };
+
+        /**
+         * capture any event except arrows UP/DOWN allow those.
+         * @param $event
+         * @param enterCallback
+         */
+        self.allowPropagationUpDownArrows = function ($event, enterCallback) {
+            var key = $event.keyCode || $event.which;
+            if (key === 13 && enterCallback) {
+                enterCallback($event);
+                $event.stopPropagation();
+            }
+            var allowedKeys = [38 /* UP */, 40 /* DOWN */];
+            allowedKeys.indexOf(key) === -1 ? $event.stopPropagation() : null;
+        };
+
+        /**
+         * @description set previous main sites to the active list
+         */
+        self.setOldMainSites = function () {
+            self.previousMainSites.length && !self.mainSites.length ? self.mainSites = self.previousMainSites : null;
+            self.previousMainSites = [];
+        };
+        /**
+         * @description set previous sub sites to the active list
+         */
+        self.setOldSubSites = function () {
+            self.previousSubSites.length && !self.subSites.length ? self.subSites = self.previousSubSites : null;
+            self.previousSubSites = [];
+        };
+
+        self.loadMainSitesByCriteria = function ($event) {
+            if ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+            }
+            // to reserve old main sites
+            if (self.mainSites.length)
+                self.previousMainSites = angular.copy(self.mainSites);
+
+            self.loadSitesByCriteria('main', self.mainSiteSearchText)
+                .then(function (sites) {
+                    self.mainSites = sites;
+                })
+        };
+        /**
+         * @description load sub sites depend on criteria ... used to load more if the current su sites dose not have what the user searched for.
+         * @param $event
+         */
+        self.loadSubSitesByCriteria = function ($event) {
+            if ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+            }
+            // to reserve old sub sites
+            if (self.subSites.length)
+                self.previousSubSites = angular.copy(self.subSites);
+
+            self.loadSitesByCriteria('sub', self.subSiteSearchText)
+                .then(function (sites) {
+                    self.subSites = _.map(sites, _mapSubSites);
+                });
+        };
+        /**
+         * @description load sites by criteria
+         * @param type
+         * @param criteria
+         * @returns {*}
+         */
+        self.loadSitesByCriteria = function (type, criteria) {
+            return correspondenceViewService
+                .correspondenceSiteSearch(type, {
+                    type: null,
+                    criteria: criteria ? criteria : null,
+                    parent: type === 'main' ? null : (self.selectedMainSite ? self.selectedSubSite.id : null),
+                    excludeOuSites: false,
+                    includeDisabled: false
+                });
+        };
+
+        self.subSiteChanged = function () {
+            self.changeSubCorrespondence(self.selectedSubSite);
         };
 
         $scope.$watch(function () {
