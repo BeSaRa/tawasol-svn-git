@@ -227,6 +227,7 @@ module.exports = function (app) {
                  * Second parameter is type of popup representation(grid/tabs)
                  * third parameter is for parent grid name
                  * @param $event
+                 * @param forceViewAll
                  * @returns {promise}
                  */
                 viewTrackingSheetPopup: function (document, params, $event, forceViewAll) {

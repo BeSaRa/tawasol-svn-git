@@ -1116,6 +1116,19 @@ module.exports = function (app) {
                 },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
             },
+            // View Tracking Sheet (Sticky Only)
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'grid_action_view_tracking_sheet',
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: gridService.checkToShowAction,
+                sticky: true,
+                showInView: false,
+                showInViewOnly: true,
+                callback: self.viewTrackingSheet,
+                params: ['view_tracking_sheet', 'tabs', gridService.grids.department.readyToExport]
+            },
             // Manage
             {
                 type: 'action',
