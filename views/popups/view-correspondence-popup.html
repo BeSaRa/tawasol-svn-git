@@ -19,12 +19,13 @@
             <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
                                   md-diameter="30"></md-progress-circular>
         </div>
-        <div layout="row" layout-align="center center">
+        <div layout="row" layout-align="center center"
+             ng-if="!ctrl.employeeService.getEmployee().isSlowConnectionMode() && !ctrl.correspondence.viewVersion">
             <span>{{lang.viewing_mode}} :&nbsp;</span>
             <span>{{lang.current === 'en' ? lang.office_online : lang.pdf_viewer}}</span>
             <span>&nbsp;&nbsp;</span>
             <md-switch aria-label="Toggle Slow Connection"
-                       ng-if="!ctrl.employeeService.getEmployee().isSlowConnectionMode() && !ctrl.correspondence.viewVersion"
+                       ng-disabled="ctrl.editMode"
                        ng-model="ctrl.slowConnectionEnabled"
                        ng-change="ctrl.toggleSlowConnectionMode($event)">
             </md-switch>
@@ -219,7 +220,8 @@
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <div ng-if="ctrl.editContentFrom === 'editContentFromGrid'">
-            <md-button class="md-raised md-primary" ng-click="ctrl.saveCorrespondenceChanges($event, false)">{{lang.save}}
+            <md-button class="md-raised md-primary" ng-click="ctrl.saveCorrespondenceChanges($event, false)">
+                {{lang.save}}
             </md-button>
         </div>
         <div ng-if="ctrl.editContentFrom !== 'editContentFromGrid' && ctrl.correspondence && !ctrl.correspondence.viewVersion && !ctrl.g2gItemCopy &&  !ctrl.disableEverything
