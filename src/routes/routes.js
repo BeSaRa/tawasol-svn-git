@@ -1696,7 +1696,8 @@ module.exports = function (app) {
                 url: '/search-screen',
                 templateUrl: templateProvider.getView('search-screen'),
                 controller: 'searchScreenCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_search_module'
             })
 
     });
