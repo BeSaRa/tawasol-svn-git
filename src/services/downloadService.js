@@ -219,13 +219,13 @@ module.exports = function (app) {
          */
         self.getMainDocumentContentAsPDF = function (vsId, labelId) {
             var queryString = _generateQueryString({
-                //'tawasol-auth-header': tokenService.getToken(),
-                'labelId': labelId
-            }),
-            url = urlService.downloadDocumentContentPDF.replace('{vsId}', vsId) + queryString;
+                    //'tawasol-auth-header': tokenService.getToken(),
+                    'labelId': labelId
+                }),
+                url = urlService.downloadDocumentContentPDF.replace('{vsId}', vsId) + queryString;
             return $http.get(url, {
-                    responseType: 'blob'
-                })
+                responseType: 'blob'
+            })
                 .then(function (result) {
                     return result.data;
                 })
@@ -427,9 +427,29 @@ module.exports = function (app) {
         self.downloadSelectedOptions = function (downloadOptions, correspondence) {
             var info = correspondence.getInfo();
             return $http.put(urlService.downloadSelected + "/" + info.vsId, downloadOptions).then(function (result) {
-                        window.open(result.data.rs, '_blank');
+                    window.open(result.data.rs, '_blank');
                 }
             );
         };
+        /**
+         * @description download all document with linked/attachment in one PDF
+         * @param correspondence
+         * @returns {*}
+         */
+        self.mergeAndDownload = function (correspondence) {
+            var info = correspondence.getInfo();
+            return $http.put(urlService.downloadSelected + "/" + info.vsId, {
+                BOOK: true,
+                ATTACHMENTS: [],
+                RELATED_BOOKS: []
+            }, {
+                params: {
+                    includeAll: true
+                }
+            }).then(function (result) {
+                    window.open(result.data.rs, '_blank');
+                }
+            );
+        }
     });
 };
