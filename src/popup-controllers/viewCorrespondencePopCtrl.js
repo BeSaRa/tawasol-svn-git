@@ -22,7 +22,8 @@ module.exports = function (app) {
                                                           _,
                                                           G2GMessagingHistory,
                                                           downloadService,
-                                                          $sce) {
+                                                          $sce,
+                                                          generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondencePopCtrl';
@@ -35,8 +36,6 @@ module.exports = function (app) {
         self.loadingIndicatorService = loadingIndicatorService;
 
         self.stickyActions = [];
-
-        self.slowConnectionEnabled = !!employeeService.getEmployee().isSlowConnectionMode();
 
         self.editMode = false;
         self.info = null;
@@ -51,13 +50,77 @@ module.exports = function (app) {
         ];
 
         self.viewURL = '';
-        var _overrideViewUrl = function () {
-            correspondenceService.overrideViewUrl(self.content.viewURL, true)
+
+        var _getMainDocContentByVsId = function (vsId) {
+            vsId = vsId || self.info.vsId;
+            downloadService.getMainDocumentContentAsPDF(vsId)
+                .then(function (result) {
+                    self.viewURL = generator.changeBlobToTrustedUrl(result);
+                });
+        };
+
+        var _getMainDocContentByViewUrl = function () {
+            correspondenceService.getBlobFromUrl(self.content.viewURL, true)
                 .then(function (result) {
                     self.viewURL = result;
                 })
         };
-        _overrideViewUrl();
+
+        var _getOriginalMainDocContent = function () {
+            self.viewURL = angular.copy(self.content.viewURL);
+        };
+
+        var _getAttachmentContentByVsId = function (vsId) {
+            return downloadService.getAttachmentContentAsPDF(vsId)
+                .then(function (result) {
+                    return generator.changeBlobToTrustedUrl(result);
+                });
+        };
+
+        var _getLinkedDocContentByVsId = function (vsId) {
+            return downloadService.getMainDocumentContentAsPDF(vsId)
+                .then(function (result) {
+                    return generator.changeBlobToTrustedUrl(result);
+                });
+        };
+
+        /**
+         * @description Set/Reset the slowConnectionMode
+         * @param firstLoadOrReloadMainDoc
+         * if true, check if slow connection enabled by user as default setting and set Url accordingly
+         * @private
+         */
+        function _resetViewModeToggle(firstLoadOrReloadMainDoc) {
+            self.slowConnectionEnabled = !!employeeService.getEmployee().isSlowConnectionMode();
+
+            if (firstLoadOrReloadMainDoc) {
+                if (self.slowConnectionEnabled) {
+                    _getMainDocContentByViewUrl();
+                } else {
+                    _getOriginalMainDocContent();
+                }
+            }
+        }
+
+        // set the slowConnectionMode when popup opens
+        _resetViewModeToggle(true);
+
+        /**
+         * @description Toggles the view mode for the document/attachment/linked doc
+         */
+        self.toggleSlowConnectionMode = function ($event) {
+            if (self.selectedList === 'attachments') {
+                self.showAttachment(self.correspondence[self.selectedList][self.listIndex], self.listIndex, $event, true);
+            } else if (self.selectedList === 'linkedDocs') {
+                self.showLinkedDocument(self.correspondence[self.selectedList][self.listIndex], self.listIndex, $event, false, true);
+            } else {
+                if (self.slowConnectionEnabled) {
+                    _getMainDocContentByVsId(self.info.vsId);
+                } else {
+                    _getOriginalMainDocContent();
+                }
+            }
+        };
 
         self.documentClassPermissionMap = {
             outgoing: function (isPaper) {
@@ -242,21 +305,6 @@ module.exports = function (app) {
             self.fullScreen = !self.fullScreen;
         };
 
-        /**
-         * @description Shows the document in slow connection mode
-         */
-        self.toggleSlowConnectionMode = function ($event) {
-            if (self.slowConnectionEnabled) {
-                downloadService.getMainDocumentContentAsPDF(self.info.vsId)
-                    .then(function (result) {
-                        var urlObj = window.URL.createObjectURL(result);
-                        self.viewURL = $sce.trustAsResourceUrl(urlObj);
-                    });
-            } else {
-                self.reloadMainDocument($event);
-            }
-        };
-
         self.closeCorrespondenceDialog = function () {
             if (self.workItem) {
                 correspondenceService.unlockWorkItem(self.workItem, true)
@@ -385,6 +433,8 @@ module.exports = function (app) {
             self.mainDocument = true;
             self.secondURL = null;
             self.listIndex = null;
+            self.selectedList = null;
+            _resetViewModeToggle(true);
         };
 
         self.reloadMainDocument = function ($event) {
@@ -409,36 +459,59 @@ module.exports = function (app) {
 
                     self.content.desktop.overlay = false;
                     self.editMode = false;
-                    _overrideViewUrl();
-                    //self.viewURL = self.content.viewURL;
                     self.backToCorrespondence();
                 })
         };
 
         function _changeSecondURL(url, listName, index) {
-            correspondenceService.overrideViewUrl(url, true).then(function (url) {
-                self.secondURL = url;
+            var defer = $q.defer();
+            if (self.slowConnectionEnabled) {
+                defer.resolve(url);
+            } else {
+                correspondenceService.overrideViewUrl(url, true).then(function (result) {
+                    defer.resolve(result)
+                });
+            }
+            defer.promise.then(function (resultUrl) {
+                debugger;
+                self.secondURL = resultUrl;
                 self.mainDocument = false;
                 self.selectedList = listName;
                 self.listIndex = index;
-            })
+            });
         }
 
-        self.showAttachment = function (attachment, $index, $event) {
+        self.showAttachment = function (attachment, $index, $event, slowConnectionToggledByUser) {
+            if (!slowConnectionToggledByUser) {
+                _resetViewModeToggle();
+            }
+
             $event && $event.preventDefault();
             self.listIndex = $index;
-            attachmentService
-                .viewAttachment(attachment, self.correspondence.classDescription, true)
-                .then(function (result) {
-                    _changeSecondURL(result, 'attachments', $index);
-                });
+            if (self.slowConnectionEnabled) {
+                _getAttachmentContentByVsId(attachment.vsId)
+                    .then(function (result) {
+                        _changeSecondURL(result, 'attachments', $index);
+                    });
+            } else {
+                attachmentService
+                    .viewAttachment(attachment, self.correspondence.classDescription, true)
+                    .then(function (result) {
+                        _changeSecondURL(result, 'attachments', $index);
+                    });
+            }
         };
+
         // to check if the current page exists in excluded grids to remove the manage attachment/linked document from view.
         self.showManagePopups = function () {
             return self.excludedManagePopupsFromGrids.indexOf(self.pageName) === -1;
         };
 
-        self.showLinkedDocument = function (linkedDoc, $index, $event, popup) {
+        self.showLinkedDocument = function (linkedDoc, $index, $event, popup, slowConnectionToggledByUser) {
+            if (!slowConnectionToggledByUser) {
+                _resetViewModeToggle();
+            }
+
             $event && $event.preventDefault();
             self.listIndex = $index;
 
@@ -447,12 +520,18 @@ module.exports = function (app) {
                 return linkedDoc.viewFromQueue([], 'g2gReturned', $event);
             }
 
-            return correspondenceService
-                .getLinkedDocumentViewURL(linkedDoc)
-                .then(function (result) {
-                    _changeSecondURL(result, 'linkedDocs', $index);
-                });
-
+            if (self.slowConnectionEnabled) {
+                _getLinkedDocContentByVsId(linkedDoc.getInfo().vsId)
+                    .then(function (result) {
+                        _changeSecondURL(result, 'linkedDocs', $index);
+                    });
+            } else {
+                return correspondenceService
+                    .getLinkedDocumentViewURL(linkedDoc)
+                    .then(function (result) {
+                        _changeSecondURL(result, 'linkedDocs', $index);
+                    });
+            }
         };
 
         /**

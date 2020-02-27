@@ -272,7 +272,7 @@
                                 <li ng-class="{'selected':ctrl.checkSelected($index , 'linkedDocs')}"
                                     layout-align="start center" layout="row"
                                     ng-repeat="doc in ctrl.correspondence.linkedDocs track by $index">
-                                    <a flex href="#" ng-click="ctrl.showLinkedDocument(doc , $index ,  $event)">{{doc.getTranslatedName()}}</a>
+                                    <a flex href="#" ng-click="ctrl.showLinkedDocument(doc , $index ,  $event, false)">{{doc.getTranslatedName()}}</a>
                                     <md-button class="md-icon-button view-icon-button"
                                                tooltip="{{lang.open_in_new_popup}}" tooltip-direction="right"
                                                ng-click="ctrl.showLinkedDocument(doc, $index ,  $event , true)">

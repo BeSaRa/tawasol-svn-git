@@ -236,11 +236,13 @@ module.exports = function (app) {
          */
         self.getAttachmentContentAsPDF = function (vsId, labelId) {
             var queryString = _generateQueryString({
-                //'tawasol-auth-header': tokenService.getToken(),
-                'labelId': labelId
-            });
-            return $http
-                .get(urlService.downloadAttachmentContentPDF.replace('{vsId}', vsId) + queryString)
+                    //'tawasol-auth-header': tokenService.getToken(),
+                    'labelId': labelId
+                }),
+                url = urlService.downloadAttachmentContentPDF.replace('{vsId}', vsId) + queryString;
+            return $http.get(url, {
+                responseType: 'blob'
+            })
                 .then(function (result) {
                     return result.data;
                 })
@@ -384,7 +386,8 @@ module.exports = function (app) {
                         locals: {
                             escapeEmployeeCheck: true,
                             document: new Information({arName: fileName, enName: fileName}),
-                            content: {viewURL: $sce.trustAsResourceUrl(urlObj)}
+                            content: {viewURL: $sce.trustAsResourceUrl(urlObj)},
+                            typeOfDoc: 'otp-doc'
                         }
                     });
                 }

@@ -10,7 +10,8 @@ module.exports = function (app) {
                                                              employeeService,
                                                              correspondenceService,
                                                              G2GMessagingHistory,
-                                                             G2G) {
+                                                             downloadService,
+                                                             generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondenceG2GPopCtrl';
@@ -19,6 +20,7 @@ module.exports = function (app) {
         self.detailsReady = false;
         self.employeeService = employeeService;
         self.loadingIndicatorService = loadingIndicatorService;
+
         $timeout(function () {
             self.detailsReady = true;
             self.model = angular.copy(self.correspondence);
@@ -32,13 +34,53 @@ module.exports = function (app) {
         self.sideNavId = "correspondence-details_" + popupNumber;
 
         self.viewURL = '';
-        var _overrideViewUrl = function () {
-            correspondenceService.overrideViewUrl(self.content.viewURL, true)
+
+        var _getMainDocContentByVsId = function (vsId) {
+            vsId = vsId || self.model.getInfo().vsId;
+            downloadService.getMainDocumentContentAsPDF(vsId)
+                .then(function (result) {
+                    self.viewURL = generator.changeBlobToTrustedUrl(result);
+                });
+        };
+
+        var _getMainDocContentByViewUrl = function () {
+            correspondenceService.getBlobFromUrl(self.content.viewURL, true)
                 .then(function (result) {
                     self.viewURL = result;
                 })
         };
-        _overrideViewUrl();
+
+        var _getOriginalMainDocContent = function () {
+            self.viewURL = angular.copy(self.content.viewURL);
+        };
+
+        /**
+         * @description Set/Reset the slowConnectionMode
+         * @param firstLoadOrReloadMainDoc
+         * if true, check if slow connection enabled by user as default setting and set Url accordingly
+         * @private
+         */
+        function _resetViewModeToggle(firstLoadOrReloadMainDoc) {
+            self.slowConnectionEnabled = !!employeeService.getEmployee().isSlowConnectionMode();
+            if (self.slowConnectionEnabled) {
+                _getMainDocContentByViewUrl();
+            } else {
+                _getOriginalMainDocContent();
+            }
+        }
+        // set the slowConnectionMode when popup opens
+        _resetViewModeToggle(true);
+
+        /**
+         * @description Toggles the view mode for the document/attachment/linked doc
+         */
+        self.toggleSlowConnectionMode = function ($event) {
+            if (self.slowConnectionEnabled) {
+                _getMainDocContentByVsId(self.model.getInfo().vsId);
+            } else {
+                _getOriginalMainDocContent();
+            }
+        };
 
         /**
          * @description toggle correspondence details sidebar

@@ -1672,7 +1672,8 @@ module.exports = function (app) {
                         escapeToCancel: false,
                         locals: {
                             document: result.metaData,
-                            content: result.content
+                            content: result.content,
+                            typeOfDoc: 'linked-doc'
                         }
                     }).then(function () {
                         generator.removePopupNumber();
@@ -4384,16 +4385,11 @@ module.exports = function (app) {
                 });
         };
 
-
         self.getBlobFromUrl = function(url, returnPromise){
             return $http.get(url, {
                 responseType: 'blob'
             }).then(function (result) {
-                var urlObj = window.URL.createObjectURL(result.data);
-                if (returnPromise) {
-                    return $q.resolve($sce.trustAsResourceUrl(urlObj));
-                }
-                return $sce.trustAsResourceUrl(urlObj);
+                return generator.changeBlobToTrustedUrl(result.data, returnPromise);
             });
         };
 
@@ -4406,15 +4402,6 @@ module.exports = function (app) {
          */
         self.overrideViewUrl = function (viewURL, returnPromise, escapeEmployeeCheck) {
             if (!escapeEmployeeCheck && employeeService.getEmployee().isSlowConnectionMode()) {
-                /*return $http.get(viewURL, {
-                    responseType: 'blob'
-                }).then(function (result) {
-                    var urlObj = window.URL.createObjectURL(result.data);
-                    if (returnPromise) {
-                        return $q.resolve($sce.trustAsResourceUrl(urlObj));
-                    }
-                    return $sce.trustAsResourceUrl(urlObj);
-                });*/
                 return self.getBlobFromUrl(viewURL, returnPromise);
             } else {
                 if (returnPromise) {

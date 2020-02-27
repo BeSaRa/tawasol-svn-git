@@ -20,7 +20,7 @@
                                   md-diameter="30"></md-progress-circular>
         </div>
         <div layout="row" layout-align="center center"
-             ng-if="!ctrl.employeeService.getEmployee().isSlowConnectionMode() && !ctrl.correspondence.viewVersion">
+             ng-if="!ctrl.employeeService.getEmployee().isSlowConnectionMode()">
             <span>{{lang.viewing_mode}} :&nbsp;</span>
             <span>{{lang.current === 'en' ? lang.office_online : lang.pdf_viewer}}</span>
             <span>&nbsp;&nbsp;</span>

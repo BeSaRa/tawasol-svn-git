@@ -575,11 +575,6 @@ module.exports = function (app) {
                  */
                 self.viewAttachment = function (attachmentVsId, documentClass, justUrl) {
                     var vsId = attachmentVsId instanceof Attachment ? attachmentVsId.vsId : attachmentVsId;
-                    /*return $http.get(_createUrlSchema(vsId, documentClass, 'attachment/with-content'))
-                        .then(function (result) {
-                            result.data.rs.metaData = generator.generateInstance(result.data.rs.metaData, Attachment);
-                            return result.data.rs;
-                        })*/
                     return self.loadAttachment(vsId, documentClass)
                         .then(function (attachment) {
                             return justUrl ? attachment.content.viewURL :
@@ -591,7 +586,8 @@ module.exports = function (app) {
                                     escapeToCancel: false,
                                     locals: {
                                         document: attachment.metaData,
-                                        content: attachment.content
+                                        content: attachment.content,
+                                        typeOfDoc: 'attachment'
                                     }
                                 });
                         });

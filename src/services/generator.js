@@ -4,7 +4,8 @@ module.exports = function (app) {
                                        tableGeneratorService,
                                        listGeneratorService,
                                        moment,
-                                       $location) {
+                                       $location,
+                                       $sce) {
         'ngInject';
         var self = this, dialog, langService, toast, rootEntity;
         //TODO: This property is just added to show/hide feature according for demo build. It will be removed soon.
@@ -314,6 +315,14 @@ module.exports = function (app) {
                 return value;
             }
             return value.hasOwnProperty(hasOwnPropertyName) ? value[hasOwnPropertyName] : value;
+        };
+
+        self.changeBlobToTrustedUrl = function(blob, returnPromise){
+            var urlObj = window.URL.createObjectURL(blob);
+            if (returnPromise) {
+                return $q.resolve($sce.trustAsResourceUrl(urlObj));
+            }
+            return $sce.trustAsResourceUrl(urlObj);
         };
 
         /**
