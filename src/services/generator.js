@@ -5,6 +5,7 @@ module.exports = function (app) {
                                        listGeneratorService,
                                        moment,
                                        $location,
+                                       $q,
                                        $sce) {
         'ngInject';
         var self = this, dialog, langService, toast, rootEntity;
