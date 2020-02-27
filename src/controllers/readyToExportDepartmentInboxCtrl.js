@@ -266,6 +266,7 @@ module.exports = function (app) {
             }
             var info = readyToExport.getInfo(),
                 correspondenceToLaunch = new Outgoing({
+                    docStatus: info.docStatus,
                     docSubject: info.title,
                     documentTitle: info.title,
                     vsId: info.vsId,
