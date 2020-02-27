@@ -517,6 +517,14 @@ module.exports = function (app) {
         };
 
         /**
+         * @description merge and download
+         * @param searchedInternalDocument
+         */
+        self.mergeAndDownloadFullDocument = function (searchedInternalDocument) {
+            downloadService.mergeAndDownload(searchedInternalDocument);
+        };
+
+        /**
          * @description send link to document for searched internal document
          * @param searchedInternalDocument
          * @param $event
@@ -1093,6 +1101,18 @@ module.exports = function (app) {
                         text:'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // merge and download
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'merge_and_download',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                        callback: self.mergeAndDownloadFullDocument,
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;

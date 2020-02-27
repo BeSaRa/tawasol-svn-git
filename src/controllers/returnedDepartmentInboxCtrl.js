@@ -431,6 +431,14 @@ module.exports = function (app) {
         };
 
         /**
+         * @description merge and download
+         * @param returnedDepartmentInbox
+         */
+        self.mergeAndDownloadFullDocument = function (returnedDepartmentInbox) {
+            downloadService.mergeAndDownload(returnedDepartmentInbox);
+        };
+
+        /**
          * @description Send Link To Document By Email
          * @param returnedDepartmentInbox
          * @param $event
@@ -1146,6 +1154,18 @@ module.exports = function (app) {
                         text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // merge and download
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'merge_and_download',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                        callback: self.mergeAndDownloadFullDocument,
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;

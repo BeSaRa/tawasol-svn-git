@@ -940,7 +940,7 @@ module.exports = function (app) {
          * @description merge and download
          * @param correspondence
          */
-        self.mergeAndDocumentFullDocument = function (correspondence) {
+        self.mergeAndDownloadFullDocument = function (correspondence) {
             downloadService.mergeAndDownload(correspondence);
         };
 
@@ -1876,13 +1876,13 @@ module.exports = function (app) {
                             return true;
                         }
                     },
-                    // download selected
+                    // merge and download
                     {
                         type: 'action',
                         icon: 'message',
                         text: 'merge_and_download',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
-                        callback: self.mergeAndDocumentFullDocument,
+                        callback: self.mergeAndDownloadFullDocument,
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;
