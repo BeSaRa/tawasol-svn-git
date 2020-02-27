@@ -936,6 +936,13 @@ module.exports = function (app) {
         self.downloadSelected = function (userInbox, $event) {
             downloadService.openSelectedDownloadDialog(userInbox, $event);
         };
+        /**
+         * @description merge and download
+         * @param correspondence
+         */
+        self.mergeAndDocumentFullDocument = function (correspondence) {
+            downloadService.mergeAndDownload(correspondence);
+        };
 
         /**
          * @description Send Link To Document By Email
@@ -1864,6 +1871,18 @@ module.exports = function (app) {
                         text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // download selected
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'merge_and_download',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
+                        callback: self.mergeAndDocumentFullDocument,
                         class: "action-green",
                         checkShow: function (action, model) {
                             return true;
