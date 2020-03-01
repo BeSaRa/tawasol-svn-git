@@ -107,7 +107,7 @@ module.exports = function (app) {
                         fullNameAr: {
                             required: true,
                             customValidation: {
-                                type: 'A1NS',
+                                type: 'AN_DOT_DASH',
                                 message: 'one_arabic_number_space'
                             },
                             fieldIdentifier: 'arabicName'
@@ -115,7 +115,7 @@ module.exports = function (app) {
                         fullNameEn: {
                             required: true,
                             customValidation: {
-                                type: 'E1NS',
+                                type: 'EN_DOT_DASH',
                                 message: 'one_english_number_space'
                             },
                             fieldIdentifier: 'englishName'
@@ -169,7 +169,7 @@ module.exports = function (app) {
                         name: {
                             required: true,
                             customValidation: {
-                                type: 'AE',
+                                type: 'AE_DOT_DASH',
                                 message: 'arabic_english'
                             },
                             fieldIdentifier: 'name'
@@ -215,7 +215,7 @@ module.exports = function (app) {
                         name: {
                             required: true,
                             customValidation: {
-                                type: 'AE',
+                                type: 'AE_DOT_DASH',
                                 message: 'arabic_english'
                             },
                             fieldIdentifier: 'name'

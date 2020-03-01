@@ -120,6 +120,7 @@ module.exports = function (app) {
             EN_DOT: /^[a-zA-Z0-9_.]+$/,
             EN_DOT_DASH: /^[a-zA-Z0-9_.\-]+$/,
             AN_DOT_DASH:  /[0-9ء-ي_.\-]+$/,
+            AE_DOT_DASH: /^[A-Za-zء-ي_.\-]?( ?[A-Za-zء-ي_.\-]+)+$/,
             FILE_NET_USER: /^[\w]+[@.\-\w]*[\w.]+$/
         };
 
