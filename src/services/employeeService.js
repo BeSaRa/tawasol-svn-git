@@ -159,6 +159,9 @@ module.exports = function (app) {
          * @param applicationUser
          */
         self.isCurrentEmployee = function (applicationUser) {
+            if (!employee){
+                return false;
+            }
             var id = applicationUser.hasOwnProperty('id') ? applicationUser.id : applicationUser;
             return employee.id === id;
         };
@@ -231,6 +234,9 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.isClAdmin = function () {
+            if (!employee){
+                return false;
+            }
             return !employee.organization || !employee.organization.hasOwnProperty('ouid') || employee.organization.ouid === -1;
         };
 
