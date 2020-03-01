@@ -147,7 +147,7 @@ module.exports = function (app) {
          * @description check if print button for current tab should display or not.
          * @returns {boolean}
          */
-        self.isShowPrintButton = function () {
+        self.isShowButton = function () {
             return self.selectedTabName && self.searchScreens[self.selectedTabName].controller[self.selectedTabResultKey].length > 0;
         };
         /**

@@ -417,7 +417,6 @@ module.exports = function (app) {
         };
 
         var _selectDefaultMainSiteAndGetSubSites = function () {
-            console.log('CALLED SITE DEFAULT');
             if (self.selectedSiteType && self.selectedSiteType.lookupKey === 1) {
                 self.selectedMainSite = _.find(self.mainSites, function (site) {
                     return site.id === 10000000;

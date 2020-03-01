@@ -6,10 +6,20 @@
             <md-button ng-click="ctrl.reloadCurrentSearch()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
-            <md-button ng-if="ctrl.isShowPrintButton()" ng-click="ctrl.print($event)" class="md-icon-button"
+            <md-button ng-if="ctrl.isShowButton()" ng-click="ctrl.print($event)" class="md-icon-button"
                        tooltip="{{lang.print}}">
                 <md-icon md-svg-icon="printer"></md-icon>
             </md-button>
+            <span flex></span>
+            <div class="p020">
+                <md-switch aria-label="{{lang.truncate_subject}}"
+                           ng-if="ctrl.isShowButton()"
+                           ng-model="ctrl.searchScreens[ctrl.selectedTabName].controller.grid.truncateSubject"
+                           ng-change="ctrl.searchScreens[ctrl.selectedTabName].controller.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.searchScreens[ctrl.selectedTabName].controller.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
         </div><!-- page-header -->
         <div class="search-forms">
             <md-tabs class="content white-bg"
