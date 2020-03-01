@@ -10,7 +10,8 @@ module.exports = function (app) {
                                                                             privateUsers,
                                                                             langService,
                                                                             managers,
-                                                                            viceManagers) {
+                                                                            viceManagers,
+                                                                            OUApplicationUser) {
         'ngInject';
         var self = this;
         self.controllerName = 'applicationUserWorkflowParticipationPopCtrl';
@@ -50,6 +51,7 @@ module.exports = function (app) {
                 self.ouApplicationUser.privateUsers = [];
                 return;
             }
+
             // if data is same as service returned(string format), parse it.
             if (self.ouApplicationUser.privateUsers && angular.isString(self.ouApplicationUser.privateUsers)) {
                 self.ouApplicationUser.privateUsers = JSON.parse(self.ouApplicationUser.privateUsers);
@@ -65,7 +67,9 @@ module.exports = function (app) {
                 self.ouApplicationUser.privateUsers = _.filter(self.ouApplicationUser.privateUsers, function (savedPrivateUser) {
                     return !!savedPrivateUser;
                 })
-            } else {
+            } else if (self.ouApplicationUser.privateUsers.length && self.ouApplicationUser.privateUsers[0] instanceof OUApplicationUser){
+                // do nothing as its already ouApplicationUsers list
+            }  else {
                 self.ouApplicationUser.privateUsers = [];
             }
         };
