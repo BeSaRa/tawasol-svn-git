@@ -520,7 +520,7 @@ module.exports = function (app) {
                 .correspondenceSiteSearch(type, {
                     type: null,
                     criteria: criteria ? criteria : null,
-                    parent: type === 'main' ? null : (self.selectedMainSite ? self.selectedSubSite.id : null),
+                    parent: type === 'main' ? null : (self.selectedMainSite ? self.selectedMainSite.id : null),
                     excludeOuSites: false,
                     includeDisabled: false
                 });
