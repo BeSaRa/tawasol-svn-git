@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.run(function (viewDocumentService, employeeService) {
+    app.run(function (viewDocumentService, employeeService, generator) {
         'ngInject';
 
         viewDocumentService
@@ -36,7 +36,14 @@ module.exports = function (app) {
             .getPageNameOverride('searchOutgoing', 'draftOutgoing', {
                 disableProperties: function (model) {
                     var info = model.getInfo(), hasPermission = false;
-                    if (info.docStatus >= 24 && !info.isPaper)
+
+                    // allowed to edit security level (if not exported and docRegOuId === currentLoggedInUserRegOuId). If condition satisfied, check permission
+                    if (info.docStatus !== 25
+                        && (generator.getNormalizedValue(model.registryOU, 'id') === employeeService.getEmployee().getRegistryOUID())) {
+                        hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                    }
+                    //If approved outgoing electronic, don't allow to edit
+                    else if (info.docStatus >= 24 && !info.isPaper)
                         hasPermission = false;
                     else
                         hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
@@ -82,11 +89,16 @@ module.exports = function (app) {
                             hasPermission = false;
                         else
                             hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-                    } else if (info.documentClass === "incoming")
+                    } else if (info.documentClass === "incoming") {
                         hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
-                    else if (info.documentClass === "outgoing") {
+                    } else if (info.documentClass === "outgoing") {
+                        // allowed to edit security level (if not exported and docRegOuId === currentLoggedInUserRegOuId). If condition satisfied, check permission
+                        if (info.docStatus !== 25
+                            && (generator.getNormalizedValue(model.registryOU, 'id') === employeeService.getEmployee().getRegistryOUID())) {
+                            hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                        }
                         //If approved outgoing electronic, don't allow to edit
-                        if (info.docStatus >= 24 && !info.isPaper)
+                        else if (info.docStatus >= 24 && !info.isPaper)
                             hasPermission = false;
                         else
                             hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
@@ -109,8 +121,13 @@ module.exports = function (app) {
                     if (info.documentClass === "incoming")
                         hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
                     else if (info.documentClass === "outgoing") {
+                        // allowed to edit security level (if not exported and docRegOuId === currentLoggedInUserRegOuId). If condition satisfied, check permission
+                        if (info.docStatus !== 25
+                            && (generator.getNormalizedValue(model.registryOU, 'id') === employeeService.getEmployee().getRegistryOUID())) {
+                            hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                        }
                         //If approved outgoing electronic, don't allow to edit
-                        if (info.docStatus >= 24 && !info.isPaper)
+                        else if (info.docStatus >= 24 && !info.isPaper)
                             hasPermission = false;
                         else
                             hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");

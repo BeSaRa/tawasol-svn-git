@@ -1254,11 +1254,17 @@ module.exports = function (app) {
             var info = model.getInfo();
             var hasPermission = false;
 
-            //If approved outgoing electronic, don't allow to edit
-            if (info.docStatus >= 24 && !info.isPaper)
-                hasPermission = false;
-            else
+            // allowed to edit security level (if not exported and docRegOuId === currentLoggedInUserRegOuId). If condition satisfied, check permission
+            if (info.docStatus !== 25
+                && (generator.getNormalizedValue(model.registryOU, 'id') === employeeService.getEmployee().getRegistryOUID())) {
                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+            }
+            //If approved outgoing electronic, don't allow to edit
+            else if (info.docStatus >= 24 && !info.isPaper) {
+                hasPermission = false;
+            } else {
+                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+            }
 
             if (checkForViewPopup)
                 return !hasPermission || model.isBroadcasted();
