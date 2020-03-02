@@ -163,7 +163,15 @@
                                         <td md-cell>{{incomingDepartmentInbox.type}}</td>
                                         <td md-cell>{{incomingDepartmentInbox.fromOU.getTranslatedName()}}</td>
                                         <td md-cell>{{incomingDepartmentInbox.generalStepElm.numberOfDays}}</td>
-                                        <td md-cell>{{incomingDepartmentInbox.sender.getTranslatedName()}}</td>
+                                        <td md-cell>
+                                            <div layout="row">
+                                                {{incomingDepartmentInbox.sender.getTranslatedName()}}
+                                                <grid-indicator-directive record="incomingDepartmentInbox"
+                                                                          indicator-type="comments"
+                                                                          class="p0p5"
+                                                                          record-type="WorkItem"></grid-indicator-directive>
+                                            </div>
+                                        </td>
                                         <td md-cell class="td-data">
                                              <span class="{{incomingDepartmentInbox.dueDateStatusIndicator.class}}"
                                                    tooltip="{{lang[incomingDepartmentInbox.dueDateStatusIndicator.tooltip].change({due_date_status:lang[incomingDepartmentInbox.dueDateStatusIndicator.text] })}}">

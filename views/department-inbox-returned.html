@@ -167,7 +167,14 @@
                                         </td>
                                         <td md-cell>{{returnedDepartmentInbox.generalStepElm.receivedDate}}</td>
                                         <td md-cell>{{returnedDepartmentInbox.toOU.getTranslatedName()}}</td>
-                                        <td md-cell>{{returnedDepartmentInbox.senderInfo.getTranslatedName()}}</td>
+                                        <td md-cell>
+                                            <div layout="row">{{returnedDepartmentInbox.senderInfo.getTranslatedName()}}
+                                                <grid-indicator-directive record="returnedDepartmentInbox"
+                                                                          indicator-type="comments"
+                                                                          class="p0p5"
+                                                                          record-type="WorkItem"></grid-indicator-directive>
+                                            </div>
+                                        </td>
                                         <td md-cell>
                                             {{returnedDepartmentInbox.fromOU.getTranslatedName()}}
                                             <!--<main-site-sub-site-directive item="returnedDepartmentInbox">
