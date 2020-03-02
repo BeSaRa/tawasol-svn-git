@@ -23,11 +23,16 @@
             </div>
             <div layout="row">
                 <md-input-container flex>
-                    <input type="password" name="password" required ng-model="login.credentials.password"
+                    <input type="password" name="password" caps-lock-detection-directive required
+                           ng-model="login.credentials.password"
                            placeholder="{{lang.password}}">
                     <div ng-messages="login_form.password.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
+                    <md-button class="md-icon-button cms-select-overlay-button"
+                               tooltip="CapsLock is On"
+                               ng-if="capsLockOn">
+                        <md-icon md-svg-icon="alert"></md-icon>
                 </md-input-container>
             </div>
             <div layout="column">
@@ -46,7 +51,7 @@
             </div>
         </form>
 
-        <br />
+        <br/>
         <div layout="row" layout-align="center center">
             <span flex></span>
             <a target="_blank" href="https://www.veracode.com/verified/directory/ebla-computer-consultancy">

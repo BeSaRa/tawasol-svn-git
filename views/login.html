@@ -69,12 +69,17 @@
                 </md-input-container>
             </div>
             <div layout="row">
-                <md-input-container flex>
-                    <input type="password" name="password" required ng-model="login.credentials.password"
+                <md-input-container class="md-block" flex>
+                    <input type="password" caps-lock-detection-directive name="password" required
+                           ng-model="login.credentials.password"
                            placeholder="{{lang.password}}">
                     <div ng-messages="login_form.password.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
+                    <md-button class="md-icon-button cms-select-overlay-button"
+                               tooltip="CapsLock is On"
+                               ng-if="capsLockOn">
+                        <md-icon md-svg-icon="alert"></md-icon>
                 </md-input-container>
             </div>
             <div layout="column">
