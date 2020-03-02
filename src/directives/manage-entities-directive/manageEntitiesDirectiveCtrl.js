@@ -140,7 +140,7 @@ module.exports = function (app) {
          */
         self.searchRecordsByField = function (field, $event) {
             if (self.isValidValues(field)) {
-                if (self.rootEntity.hrEnabled && self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user' && field.fieldIdentifier === 'qid') {
+                if (self.rootEntity.hrEnabled && self.selectedEntityType.lookupStrKey && self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user' && field.fieldIdentifier === 'qid') {
                     correspondenceService.searchLinkedPersonByCriteria({qid: self.entity.qid})
                         .then(function (result) {
                             if (result && result.length) {
