@@ -237,11 +237,10 @@ module.exports = function (app) {
                 self.subSites = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                 self.selectedSubSite = null;
                 // if there is no selected site type >>> select it depend on correspondenceSiteTypeId from selected main Site
-                if (!self.selectedSiteType) {
-                    self.selectedSiteType = _.find(self.correspondenceSiteTypes, function (type) {
-                        return type.lookupKey === self.selectedMainSite.correspondenceSiteTypeId;
-                    });
-                }
+                self.selectedSiteType = _.find(self.correspondenceSiteTypes, function (type) {
+                    return type.lookupKey === self.selectedMainSite.correspondenceSiteTypeId;
+                });
+
 
                 if (self.subSites.length === 1) {
                     self.selectedSubSite = self.subSites[0];
@@ -517,7 +516,7 @@ module.exports = function (app) {
         self.loadSitesByCriteria = function (type, criteria) {
             return correspondenceViewService
                 .correspondenceSiteSearch(type, {
-                    type: null,
+                    type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                     criteria: criteria ? criteria : null,
                     parent: type === 'main' ? null : (self.selectedMainSite ? self.selectedMainSite.id : null),
                     excludeOuSites: false,
@@ -526,7 +525,23 @@ module.exports = function (app) {
         };
 
         self.subSiteChanged = function () {
+            if (self.selectedSubSite) {
+                self.selectedMainSite = new SiteView({
+                    arName: self.selectedSubSite.mainArSiteText,
+                    enName: self.selectedSubSite.mainEnSiteText,
+                    id: self.selectedSubSite.mainSiteId
+                });
+                self.selectedSiteType = self.selectedSubSite.siteType;
+                self.pushSelectedMainIfNotExists(self.selectedMainSite);
+            }
             self.changeSubCorrespondence(self.selectedSubSite);
+        };
+
+        self.pushSelectedMainIfNotExists = function (siteView) {
+            var exists = self.mainSites.length ? (_.find(self.mainSites, function (item) {
+                return item.id === siteView.id;
+            })) : false;
+            exists ? (self.selectedMainSite = siteView) : self.mainSites.push(siteView);
         };
 
         $scope.$watch(function () {

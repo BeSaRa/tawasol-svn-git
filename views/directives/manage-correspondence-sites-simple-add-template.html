@@ -114,6 +114,7 @@
             <md-select data-md-container-class="select-header-container sticky-search-bar"
                        id="mainSiteAdvanced"
                        name="mainSiteAdvanced"
+                       ng-model-options="{trackBy:'$value.id'}"
                        ng-change="ctrl.getSubSites($event)"
                        md-on-close="ctrl.mainSiteSearchText = ''"
                        ng-model="ctrl.selectedMainSite">

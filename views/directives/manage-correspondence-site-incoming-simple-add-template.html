@@ -113,6 +113,7 @@
                        id="mainSiteAdvanced"
                        name="mainSiteAdvanced"
                        ng-change="ctrl.getSubSites($event)"
+                       ng-model-options="{trackBy:'$value.id'}"
                        md-on-close="ctrl.mainSiteSearchText = ''"
                        ng-model="ctrl.selectedMainSite">
                 <md-select-header class="select-header" layout="column">
