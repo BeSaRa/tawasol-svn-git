@@ -142,7 +142,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.getSubSites = function ($event) {
-            if (!self.selectedMainSite) {
+            if (!self.selectedMainSite || typeof self.selectedMainSite === 'string') {
                 self.subSites = [];
                 self.subSitesCopy = [];
                 self.selectedSubSite = null;
