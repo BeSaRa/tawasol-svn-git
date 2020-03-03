@@ -494,8 +494,14 @@ module.exports = function (app) {
          * @param index
          */
         self.changeSiteTo = function (type, site, index) {
-            self['sitesInfo' + type] = self['sitesInfo' + type].concat(self['sitesInfo' + self.reversedMap[type]].splice(index, 1));
+            self['sitesInfo' + type] = self['sitesInfo' + type].concat(self['sitesInfo' + self.reversedMap[type]].splice(_findSiteIndex(self['sitesInfo' + self.reversedMap[type]], site), 1));
         };
+
+        function _findSiteIndex(list, site) {
+            return _.findIndex(list, function (item) {
+                return item.subSiteId === site.subSiteId;
+            });
+        }
 
         /**
          * @description Get main correspondence sites on change of correspondence site type in simple search.
