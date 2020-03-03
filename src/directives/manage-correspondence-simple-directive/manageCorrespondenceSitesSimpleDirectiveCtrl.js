@@ -242,15 +242,10 @@ module.exports = function (app) {
                 self.subSitesCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSites = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                 self.selectedSubSite = null;
-                // if there is no selected site type >>> select it depend on correspondenceSiteTypeId from selected main Site
-                self.selectedSiteType = _.find(self.correspondenceSiteTypes, function (type) {
-                    return type.lookupKey === self.selectedMainSite.correspondenceSiteTypeId;
-                });
-
 
                 if (self.subSites.length === 1) {
                     self.selectedSubSite = self.subSites[0];
-                    self.changeSubCorrespondence(self.selectedSubSite);
+                    self.subSiteChanged();
                 }
                 return self.subSites;
             });

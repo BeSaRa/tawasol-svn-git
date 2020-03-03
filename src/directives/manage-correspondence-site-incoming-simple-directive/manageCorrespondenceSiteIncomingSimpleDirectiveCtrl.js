@@ -165,7 +165,7 @@ module.exports = function (app) {
 
                 if (self.subSites.length === 1) {
                     self.selectedSubSite = self.subSites[0];
-                    self.changeSubCorrespondence(self.selectedSubSite);
+                    self.subSiteChanged();
                 }
                 return self.subSites;
             });
@@ -432,7 +432,7 @@ module.exports = function (app) {
         };
 
         self.subSiteChanged = function () {
-            if (self.selectedSubSite) {
+            if (self.selectedSubSite && typeof self.selectedSubSite !== 'string') {
                 self.selectedMainSite = new SiteView({
                     arName: self.selectedSubSite.mainArSiteText,
                     enName: self.selectedSubSite.mainEnSiteText,
