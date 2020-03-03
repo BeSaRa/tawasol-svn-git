@@ -115,7 +115,7 @@
                        id="mainSiteAdvanced"
                        name="mainSiteAdvanced"
                        ng-model-options="{trackBy:'$value.id'}"
-                       ng-change="ctrl.getSubSites($event)"
+                       ng-change="ctrl.getSubSites(true)"
                        md-on-close="ctrl.mainSiteSearchText = ''"
                        ng-model="ctrl.selectedMainSite">
                 <md-select-header class="select-header" layout="column">
@@ -150,8 +150,9 @@
             <label for="subSite">{{lang.sub_site}}</label>
             <md-select data-md-container-class="select-header-container sticky-search-bar"
                        id="subSite"
-                       ng-change="ctrl.subSiteChanged()"
+                       ng-change="ctrl.subSiteChanged(true)"
                        name="subSite"
+                       ng-model-options="{trackBy:'$value.subSiteId'}"
                        md-on-close="ctrl.subSiteSearchText = ''"
                        ng-model="ctrl.selectedSubSite">
                 <md-select-header class="select-header" layout="column">

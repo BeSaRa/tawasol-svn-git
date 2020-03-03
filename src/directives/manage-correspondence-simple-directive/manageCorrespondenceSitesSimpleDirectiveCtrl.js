@@ -70,7 +70,7 @@ module.exports = function (app) {
                         self.selectedMainSite = _mainSite;
                     }
 
-                    self.getSubSites().then(function () {
+                    self.getSubSites(true).then(function () {
                         var _subSite = new Site(oldSites[0]);
                         _subSite.followupStatus = angular.copy(self.withOutReply);
                         var selected = _.find(self.subSites, function (item) {
@@ -153,7 +153,11 @@ module.exports = function (app) {
          * @private
          */
         function _addSite(to, site) {
-            self['sitesInfo' + to].push(site);
+            if (self['sitesInfo' + to].length) {
+                self['sitesInfo' + to].splice(0, 1, site);
+            } else {
+                self['sitesInfo' + to].push(site);
+            }
             return $timeout(function () {
                 return true;
             });
@@ -220,6 +224,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.getSubSites = function ($event) {
+            if (!$event)
+                return;
             if (!self.selectedMainSite) {
                 self.subSites = [];
                 self.subSitesCopy = [];
@@ -287,12 +293,11 @@ module.exports = function (app) {
                     }));
 
             return defer.promise.then(function (correspondence) {
-                if (self.correspondence.hasDocumentClass('outgoing')) {
-                    self.correspondence.sitesInfoTo = correspondence.sitesInfoTo;
-                    self.correspondence.sitesInfoCC = correspondence.sitesInfoCC;
-                } else {
-                    self.correspondence = correspondence;
-                }
+                self.correspondence.sitesInfoTo = correspondence.sitesInfoTo;
+                self.correspondence.sitesInfoCC = correspondence.sitesInfoCC;
+                self.selectedSubSite = angular.copy(self.correspondence.sitesInfoTo[0]);
+                self.subSiteChanged();
+                self.pushSelectedSubIfNotExists(self.selectedSubSite);
                 self.sitesInfoLength = self.correspondence.sitesInfoTo.length + self.correspondence.sitesInfoCC.length - 1;
             })
         };
@@ -420,7 +425,7 @@ module.exports = function (app) {
                 self.selectedMainSite = _.find(self.mainSites, function (site) {
                     return site.id === 10000000;
                 });
-                self.selectedMainSite ? self.getSubSites() : null;
+                self.selectedMainSite ? self.getSubSites(true) : null;
             }
         };
 
@@ -525,7 +530,7 @@ module.exports = function (app) {
         };
 
         self.subSiteChanged = function () {
-            if (self.selectedSubSite) {
+            if (self.selectedSubSite && typeof self.selectedSubSite !== 'string') {
                 self.selectedMainSite = new SiteView({
                     arName: self.selectedSubSite.mainArSiteText,
                     enName: self.selectedSubSite.mainEnSiteText,
@@ -542,6 +547,13 @@ module.exports = function (app) {
                 return item.id === siteView.id;
             })) : false;
             exists ? (self.selectedMainSite = siteView) : self.mainSites.push(siteView);
+        };
+
+        self.pushSelectedSubIfNotExists = function (selectedSub) {
+            var exists = self.subSites.length ? (_.find(self.subSites, function (item) {
+                return item.subSiteId === selectedSub.subSiteId;
+            })) : false;
+            exists ? (self.selectedSubSite = selectedSub) : self.subSites.push(selectedSub);
         };
 
         $scope.$watch(function () {
