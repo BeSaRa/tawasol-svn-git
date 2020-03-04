@@ -40,6 +40,7 @@ module.exports = function (app) {
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
         self.inlineUserOUSearchText = '';
         var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess;
+        self.disableSend = false;
 
         /**
          * get multi info in case the correspondence array.
@@ -1402,6 +1403,7 @@ module.exports = function (app) {
         };
 
         self.launchDistributionCorrespondenceWorkFlow = function () {
+            self.disableSend = true;
             return self.checkWorkflowItemsCompleteStatus()
                 .then(function (collection) {
                     self.distributionWF.setNormalUsers(_.filter(collection, _filterWFUsers));
@@ -1414,12 +1416,15 @@ module.exports = function (app) {
                             toast.success(langService.get('launch_success_distribution_workflow'));
                             dialog.hide();
                         }).catch(function (error) {
+                        self.disableSend = false;
                         if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                             var info = self.correspondence.getInfo();
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return false;
                         }
                     });
+                }).catch(function () {
+                    self.disableSend = false;
                 })
         };
 
