@@ -34,7 +34,7 @@ module.exports = function (app) {
                 url = url + '/lookup';
             }
             return $http.get(url).then(function (result) {
-                if (skipSetValue){
+                if (skipSetValue) {
                     var ous = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
                     return generator.interceptReceivedCollection('Organization', ous);
                 }
@@ -581,6 +581,7 @@ module.exports = function (app) {
                             'ngInject';
                             return organizationService.loadOrganizationById(organization.id)
                                 .then(function (item) {
+                                    item.referencePlanItemStartSerialList = _.filter(item.referencePlanItemStartSerialList, 'referencePlanItemId');
                                     item.referenceNumberPlanId.referencePlanItemStartSerialList = angular.copy(item.referencePlanItemStartSerialList);
                                     return item;
                                 });
