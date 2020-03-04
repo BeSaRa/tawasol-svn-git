@@ -84,8 +84,11 @@ module.exports = function (app) {
         function _sortRegOusSections(organizations, appendRegOUSection) {
             // filter all regOU
             var regOus = _.filter(organizations, function (item) {
-                return item.hasRegistry;
-            });
+                    return item.hasRegistry;
+                }),
+                // registry parent organization
+                parentRegistryOu;
+
             regOus = _.map(regOus, function (regOu) {
                 regOu.tempRegOUSection = new Information({
                     arName: regOu.arName,
@@ -101,10 +104,16 @@ module.exports = function (app) {
 
             // if needed to show regou - section, append the dummy property "tempRegOUSection"
             groups = _.map(groups, function (item) {
+                if (typeof item.registryParentId === 'number') {
+                    parentRegistryOu = _.find(regOus, {'id': item.registryParentId});
+                } else {
+                    parentRegistryOu = item.registryParentId;
+                }
+
                 // if ou is section(has no registry and has regOuId, add temporary field for regOu)
                 item.tempRegOUSection = new Information({
-                    arName: (item.registryParentId ? item.registryParentId.arName : '') + ' - ' + item.arName,
-                    enName: (item.registryParentId ? item.registryParentId.enName : '') + ' - ' + item.enName
+                    arName: (parentRegistryOu ? parentRegistryOu.arName : '') + ' - ' + item.arName,
+                    enName: (parentRegistryOu ? parentRegistryOu.enName : '') + ' - ' + item.enName
                 });
                 return item;
             });
