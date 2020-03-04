@@ -5,7 +5,7 @@ module.exports = function (app) {
                                                      administrator,
                                                      generator,
                                                      dialog,
-                                                     applicationUsers,
+                                                     applicationUserService,
                                                      ouApplicationUserService,
                                                      editMode,
                                                      administratorService,
@@ -19,7 +19,7 @@ module.exports = function (app) {
         self.administrator = angular.copy(administrator);
         self.model = angular.copy(self.administrator);
 
-        self.applicationUsers = applicationUsers;
+        self.applicationUsers = applicationUserService.applicationUsers;
         self.applicationUsersCopy = angular.copy(self.applicationUsers);
         self.applicationUserSearchText = '';
 

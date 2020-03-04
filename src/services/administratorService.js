@@ -102,12 +102,6 @@ module.exports = function (app) {
                         locals: {
                             editMode: false,
                             administrator: new Administrator()
-                        },
-                        resolve: {
-                            applicationUsers: function (applicationUserService) {
-                                'ngInject';
-                                return applicationUserService.loadApplicationUsers();
-                            }
                         }
                     });
             },
@@ -122,12 +116,6 @@ module.exports = function (app) {
                         locals: {
                             editMode: true,
                             administrator: angular.copy(record)
-                        },
-                        resolve: {
-                            applicationUsers: function (applicationUserService) {
-                                'ngInject';
-                                return applicationUserService.loadApplicationUsers();
-                            }
                         }
                     });
             },

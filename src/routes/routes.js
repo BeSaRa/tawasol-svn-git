@@ -1670,7 +1670,7 @@ module.exports = function (app) {
                     },
                     applicationUsers: function (applicationUserService) {
                         'ngInject';
-                        return applicationUserService.getApplicationUsers();
+                        return applicationUserService.loadApplicationUsers();
                     },
                     // organizations are loaded to get allRegOus from organizations list
                     organizations: function (organizationService) {
