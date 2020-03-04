@@ -52,7 +52,7 @@ module.exports = function (app) {
         self.selectedReceivedRegOu = [];
 
         self.globalSettings = rootEntity.getGlobalSettings();
-
+        self.disableReply = false;
         var approvedStatus = self.record.getInfo().needToApprove();
         if (_getApprovedStatus()) {
             // -1 is value of none option in manager ddl
@@ -188,6 +188,7 @@ module.exports = function (app) {
          * @description save properties for distWorkItem
          */
         self.launch = function ($event) {
+            self.disableReply = true;
             var sendRelatedDocs = self.distWorkflowItem.sendRelatedDocs,
                 selectedManagers = angular.copy(self.selectedManagers),
                 allUsers = [], regOus = [],
@@ -238,7 +239,9 @@ module.exports = function (app) {
                 .then(function () {
                     toast.success(langService.get('launch_success_distribution_workflow'));
                     dialog.hide();
-                })
+                }).catch(function () {
+                self.disableReply = false;
+            });
         };
 
         function _setDistWorkflowItem(distWorkflowItem, result) {
