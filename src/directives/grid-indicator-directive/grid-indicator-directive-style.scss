@@ -60,11 +60,13 @@
     color: #FF0000;
   }
   &.date-today {
-    color: #308DFC;
-
+    color: #FDCD00;
   }
   &.date-future {
     color: #32CD32;
+  }
+  &.date-followup-end{
+    color: grey;
   }
   &.reassigned {
     color: #32CD32;

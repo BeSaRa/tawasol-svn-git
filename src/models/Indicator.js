@@ -469,7 +469,7 @@ module.exports = function (app) {
                 }
 
                 return new Indicator({
-                    class: 'indicator date-past',
+                    class: 'indicator date-followup-end',
                     text: 'indicator_followup_ended',
                     icon: self.getIndicatorIcons('siteFollowupEnded'),
                     tooltip: 'indicator_followup_ended',
