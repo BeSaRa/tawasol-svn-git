@@ -116,7 +116,7 @@
                                         ng-repeat="incomingDepartmentInbox in searchResults = (ctrl.incomingDepartmentInboxes | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td md-cell class="indicator-td">
                                             <!-- Sent To RegOU -->
-                                            <grid-indicator-directive record-type="WorkItem"
+                                            <grid-indicator-directive ngif="incomingDepartmentInbox.generalStepElm.isReassigned" record-type="WorkItem"
                                                                       record="incomingDepartmentInbox"
                                                                       indicator-type="isTransferredDocumentIndicator">
                                             </grid-indicator-directive>
