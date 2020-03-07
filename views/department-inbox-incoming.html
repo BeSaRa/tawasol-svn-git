@@ -166,7 +166,7 @@
                                         <td md-cell>
                                             <div layout="row">
                                                 {{incomingDepartmentInbox.sender.getTranslatedName()}}
-                                                <grid-indicator-directive ngif="incomingDepartmentInbox.generalStepElm.isReassigned" record="incomingDepartmentInbox"
+                                                <grid-indicator-directive ng-if="incomingDepartmentInbox.generalStepElm.isReassigned" record="incomingDepartmentInbox"
                                                                           indicator-type="comments"
                                                                           class="p0p5"
                                                                           record-type="WorkItem"></grid-indicator-directive>
