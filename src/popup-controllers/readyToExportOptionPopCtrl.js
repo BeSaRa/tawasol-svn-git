@@ -28,7 +28,7 @@ module.exports = function (app) {
         self.readyToExport = readyToExport;
         self.resend = resend;
         self.model = new ReadyToExportOption();
-
+        self.disableExport = false;
         self.settings = rootEntity.getGlobalSettings();
         // if selective export from global settings then false, otherwise true
         self.isGroupExport = self.settings.defaultExportTypeGrouping;
@@ -218,6 +218,7 @@ module.exports = function (app) {
          * @description export workItem
          */
         self.exportCorrespondenceWorkItem = function () {
+            self.disableExport = true;
             if (self.resend) {
                 return correspondenceService
                     .resendCorrespondenceWorkItem(self.readyToExport, self.isGroupExport ? self.validateExportOption(self.model) : self.partialExportList, g2gData)
@@ -225,6 +226,7 @@ module.exports = function (app) {
                         dialog.hide(result);
                     })
                     .catch(function (error) {
+                        self.disableExport = false;
                         errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
                             dialog
                                 .errorMessage(langService.get('already_exported_please_refresh'))
@@ -243,6 +245,7 @@ module.exports = function (app) {
                         dialog.hide(result);
                     })
                     .catch(function (error) {
+                        self.disableExport = false;
                         errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
                             dialog
                                 .errorMessage(langService.get('already_exported_please_refresh'))
@@ -259,6 +262,7 @@ module.exports = function (app) {
                         dialog.hide(result);
                     })
                     .catch(function (error) {
+                        self.disableExport = false;
                         errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
                             dialog
                                 .errorMessage(langService.get('already_exported_please_refresh'))

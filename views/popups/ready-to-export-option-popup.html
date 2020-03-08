@@ -122,17 +122,17 @@
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised md-primary" ng-click="ctrl.exportCorrespondenceWorkItem()"
                    ng-if="ctrl.resend"
-                   ng-disabled="!ctrl.correspondenceSites.length">
+                   ng-disabled="!ctrl.correspondenceSites.length || ctrl.disableExport">
             {{lang.resend}}
         </md-button>
         <md-button class="md-raised md-primary" ng-click="ctrl.exportCorrespondenceWorkItem()"
                    ng-if="!ctrl.resend && ctrl.isElectronicExport()"
-                   ng-disabled="!ctrl.correspondenceSites.length">
+                   ng-disabled="!ctrl.correspondenceSites.length || ctrl.disableExport">
             {{lang.export}}
         </md-button>
         <md-button class="md-raised md-primary" ng-click="ctrl.exportCorrespondenceWorkItem()"
                    ng-if="!ctrl.resend && ctrl.isFaxExport()"
-                   ng-disabled="!ctrl.correspondenceSites.length">
+                   ng-disabled="!ctrl.correspondenceSites.length || ctrl.disableExport">
             {{ctrl.fax_export}}
         </md-button>
         <md-button ng-if="!ctrl.resend && ctrl.isManualExport()" class="md-raised md-primary"

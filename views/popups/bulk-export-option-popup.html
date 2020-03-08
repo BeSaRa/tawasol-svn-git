@@ -52,7 +52,8 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised md-primary" ng-click="ctrl.exportCorrespondenceWorkItem()">
+        <md-button class="md-raised md-primary" ng-click="ctrl.exportCorrespondenceWorkItem()"
+                    ng-disabled="ctrl.disableExport">
             {{ctrl.resend ? lang.resend : lang.export}}
         </md-button>
         <md-button ng-if="!ctrl.resend" class="md-raised md-primary"

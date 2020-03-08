@@ -35,7 +35,7 @@ module.exports = function (app) {
         self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
 
         self.isSimpleCorrespondenceSiteSearchType = true;
-
+        self.disableExport = false;
         self.tabsToShow = [
             // 'exportOptions',
             'correspondenceSites',
@@ -551,6 +551,7 @@ module.exports = function (app) {
         };
 
         self.partialExportDocument = function () {
+            self.disableExport = true;
             if (!self.partialExportList.hasSites()) {
                 dialog.errorMessage(langService.get('please_select_at_least_on_correspondence_site_to_export'));
                 return;
@@ -559,6 +560,8 @@ module.exports = function (app) {
                 .partialExportCorrespondence(self.correspondence, self.partialExportList, ignoreMessage)
                 .then(function () {
                     return dialog.hide(self.correspondence);
+                }).catch(function () {
+                    self.disableExport = false;
                 });
         };
 

@@ -35,7 +35,7 @@ module.exports = function (app) {
         });
 
         self.resend = resend;
-
+        self.disableExport = false;
         self.exportTypeList = [
             {key: 'export_by_group', value: true},
             {key: 'export_by_selection', value: false}
@@ -136,6 +136,7 @@ module.exports = function (app) {
          * @description export workItem
          */
         self.exportCorrespondenceWorkItem = function () {
+            self.disableExport = true;
             self.validateAllWorkItemsExportOption();
             return correspondenceService
                 .resendBulkCorrespondenceWorkItems(self.workItems)
@@ -143,6 +144,7 @@ module.exports = function (app) {
                     dialog.hide(result);
                 })
                 .catch(function (error) {
+                    self.disableExport = false;
                     /*errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
                         dialog
                             .errorMessage(langService.get('already_exported_please_refresh'))

@@ -1103,7 +1103,7 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised md-primary" ng-disabled="!ctrl.partialExportList.hasSites()"
+        <md-button class="md-raised md-primary" ng-disabled="!ctrl.partialExportList.hasSites() || ctrl.disableExport"
                    ng-click="ctrl.partialExportDocument()">
             {{lang.grid_action_send_to_ready_to_export}}
         </md-button>
