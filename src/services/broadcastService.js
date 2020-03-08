@@ -71,11 +71,11 @@ module.exports = function (app) {
          */
         self.loadWorkflowGroups = function () {
             return $http.get(urlService.distributionWFGroups).then(function (result) {
-                var workflowGroups = _.map(result.data.rs, function (workflowGroup) {
+                /*var workflowGroups = _.map(result.data.rs, function (workflowGroup) {
                     return workflowGroup.wfgroup;
-                });
+                });*/
 
-                self.workflowGroups = generator.generateCollection(workflowGroups, WorkflowGroup, self._sharedMethods);
+                self.workflowGroups = generator.generateCollection(result.data.rs, WorkflowGroup, self._sharedMethods);
                 return self.workflowGroups;
             })
                 .catch(function () {
