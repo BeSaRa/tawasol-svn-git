@@ -12,6 +12,8 @@ module.exports = function (app) {
         //TODO: This property is just added to show/hide feature according for demo build. It will be removed soon.
         self.isDemoBuild = false;
 
+        self.selectedSearchCtrl = null;
+
         var popupNumber = 0;
 
         self.addPopupNumber = function () {
@@ -318,7 +320,7 @@ module.exports = function (app) {
             return value.hasOwnProperty(hasOwnPropertyName) ? value[hasOwnPropertyName] : value;
         };
 
-        self.changeBlobToTrustedUrl = function(blob, returnPromise){
+        self.changeBlobToTrustedUrl = function (blob, returnPromise) {
             var urlObj = window.URL.createObjectURL(blob);
             if (returnPromise) {
                 return $q.resolve($sce.trustAsResourceUrl(urlObj));

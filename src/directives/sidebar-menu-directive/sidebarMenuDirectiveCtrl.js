@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                          employeeService,
                                                          LangWatcher,
                                                          permissionService,
+                                                         generator,
                                                          sidebarService,
                                                          rootEntity,
                                                          quickSearchCorrespondenceService,
@@ -31,6 +32,9 @@ module.exports = function (app) {
                     //     reportName: report.reportName
                     // });
                 } else {
+                    if (item.state === 'app.search-screen' && self.isCurrentState(item)) {
+                        generator.selectedSearchCtrl.controller.selectedTab = 0;
+                    }
                     $state.go(item.state, {identifier: rootEntity.getRootEntityIdentifier()});
                 }
                 quickSearchCorrespondenceService.hideSearchForm().emptySearchInput();
@@ -63,7 +67,7 @@ module.exports = function (app) {
          */
         self.getTooltip = function (item) {
             var text = langService.get(item.lang_key);
-            if (typeof (self.counters.counter.hasCounter) === 'undefined'){
+            if (typeof (self.counters.counter.hasCounter) === 'undefined') {
                 return '';
             }
             return self.counters.counter.hasCounter(item.lang_key)

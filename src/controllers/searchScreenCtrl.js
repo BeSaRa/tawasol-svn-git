@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                  organizationService,
                                                  $scope,
                                                  $compile,
+                                                 generator,
                                                  $q,
                                                  $timeout,
                                                  employeeService) {
@@ -140,6 +141,7 @@ module.exports = function (app) {
             }
             self.selectedTabResultKey = tab.resultKey;
             self.selectedTabName = tab.tabKey;
+            generator.selectedSearchCtrl = self.searchScreens[tab.tabKey];
             self.renderSelectedTab(self.selectedTabName);
         }
 
