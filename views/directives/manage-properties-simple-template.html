@@ -7,7 +7,7 @@
                     <label for="registryOU">{{lang.corr_registry}}</label>
                     <md-select name="registryOU"
                                id="registryOU"
-                               ng-change="ctrl.onRegistryChange(ctrl.document.registryOU)"
+                               ng-change="ctrl.onRegistryChange(ctrl.document.registryOU , outgoing_properties.registryOU )"
                                ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.registryOU"
@@ -42,6 +42,7 @@
                                ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.ou"
+                               ng-change="ctrl.checkNullValues(outgoing_properties.ou)"
                                ng-required="ctrl.checkMandatory('ou')"
                                md-on-close="ctrl.clearSearchText('registrySection')"
                                data-md-container-class="select-header-container sticky-search-bar">
@@ -71,6 +72,7 @@
                                ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.ou"
+                               ng-change="ctrl.checkNullValues(outgoing_properties.ou)"
                                ng-required="ctrl.checkMandatory('ou')"
                                md-on-close="ctrl.clearSearchText('ou')"
                                data-md-container-class="select-header-container sticky-search-bar">
@@ -252,7 +254,7 @@
                                ng-model="ctrl.document.mainClassification"
                                ng-model-options="{trackBy: '$value.id'}"
                                ng-required="ctrl.checkMandatory('mainClassification')"
-                               ng-change="ctrl.onChangeMainClassification($event)"
+                               ng-change="ctrl.onChangeMainClassification($event , false ,outgoing_properties.mainClassification)"
                                md-on-close="ctrl.clearSearchText('mainClassification')"
                                data-md-container-class="select-header-container sticky-search-bar">
                         <md-select-header class="select-header" layout="column">
@@ -293,6 +295,7 @@
                             id="subClassification"
                             ng-model-options="{trackBy: '$value.id'}"
                             ng-model="ctrl.document.subClassification"
+                            ng-change="ctrl.checkNullValues(outgoing_properties.subClassification)"
                             ng-required="ctrl.checkMandatory('subClassification')"
                             md-on-close="ctrl.clearSearchText('subClassification')"
                             data-md-container-class="select-header-container sticky-search-bar">
@@ -354,6 +357,7 @@
                                id="docType"
                                ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.docType"
+                               ng-change="ctrl.checkNullValues(outgoing_properties.docType)"
                                ng-model-options="{trackBy: '$value.id'}"
                                ng-required="ctrl.checkMandatory('docType')">
                         <md-option ng-value="null">{{lang.none}}</md-option>

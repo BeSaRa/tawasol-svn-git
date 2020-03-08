@@ -435,7 +435,8 @@ module.exports = function (app) {
         };
 
 
-        self.onFileChange = function (file) {
+        self.onFileChange = function (file, field) {
+            self.checkNullValues(field);
             var ouDocumentFile = _.find(self.documentFiles, function (ouDocumentFile) {
                 return file && ouDocumentFile.file.id === file.id;
             });
@@ -541,8 +542,10 @@ module.exports = function (app) {
         /**
          * @description on registry change.
          * @param organizationId
+         * @param field
          */
-        self.onRegistryChange = function (organizationId) {
+        self.onRegistryChange = function (organizationId, field) {
+            self.checkNullValues(field);
             self.subOrganizations = [];
             organizationService
                 .loadChildrenOrganizations(organizationId)
@@ -645,8 +648,10 @@ module.exports = function (app) {
          * @description Set the sub classification on change of main classification
          * @param $event
          * @param skipResetSub
+         * @param field
          */
-        self.onChangeMainClassification = function ($event, skipResetSub) {
+        self.onChangeMainClassification = function ($event, skipResetSub, field) {
+            self.checkNullValues(field);
             if (self.document && self.document.mainClassification) {
                 self.loadSubClassificationRecords(true, self.checkMandatory('subClassification'));
                 if (!skipResetSub) {
@@ -828,5 +833,14 @@ module.exports = function (app) {
                 return self.employee.isBacklogMode() && self.document.isMigrated;
             }
         };
+
+        self.checkNullValues = function (field) {
+            if (!field)
+                return;
+
+            if (!field.$modelValue && self.checkMandatory(field.$name)) {
+                field.$setValidity('required', false);
+            }
+        }
     });
 };
