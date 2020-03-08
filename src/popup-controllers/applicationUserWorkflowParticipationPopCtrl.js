@@ -67,7 +67,7 @@ module.exports = function (app) {
                 self.ouApplicationUser.privateUsers = _.filter(self.ouApplicationUser.privateUsers, function (savedPrivateUser) {
                     return !!savedPrivateUser;
                 })
-            } else if (self.ouApplicationUser.privateUsers.length && self.ouApplicationUser.privateUsers[0] instanceof OUApplicationUser){
+            } else if (self.ouApplicationUser.privateUsers && self.ouApplicationUser.privateUsers.length && self.ouApplicationUser.privateUsers[0] instanceof OUApplicationUser){
                 // do nothing as its already ouApplicationUsers list
             }  else {
                 self.ouApplicationUser.privateUsers = [];
