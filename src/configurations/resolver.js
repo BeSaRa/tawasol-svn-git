@@ -310,6 +310,7 @@ module.exports = function (app) {
                                 outgoing.addMethod = 0;
                                 outgoing.sitesInfoTo = angular.copy(outgoing.sitesToList); //[result.site];
                                 outgoing.classDescription = 'Outgoing';
+                                outgoing.isComposite = false;
                                 return outgoing;
                             });
                     } else if (workItem) {
@@ -328,6 +329,7 @@ module.exports = function (app) {
                                 outgoing.addMethod = 0;
                                 outgoing.sitesInfoTo = angular.copy(outgoing.sitesToList); //[result.site];
                                 outgoing.classDescription = 'Outgoing';
+                                outgoing.isComposite = false;
                                 return outgoing
                             });
                     } else {
