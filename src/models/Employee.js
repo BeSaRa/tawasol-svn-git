@@ -319,7 +319,7 @@ module.exports = function (app) {
             };
 
             Employee.prototype.getOUID = function () {
-                return this.organization.ouid ? (this.organization.ouid.hasOwnProperty('id') ? this.organization.ouid.id : this.organization.ouid) : false;
+                return this.organization && this.organization.ouid ? (this.organization.ouid.hasOwnProperty('id') ? this.organization.ouid.id : this.organization.ouid) : false;
             };
             Employee.prototype.getNormalizeID = function (organization) {
                 return organization.hasOwnProperty('id') ? organization.id : organization;
