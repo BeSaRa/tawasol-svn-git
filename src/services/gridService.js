@@ -928,7 +928,8 @@ module.exports = function (app) {
                 regOu: 'bank',
                 groupMail: 'home-floor-g',
                 user: 'account',
-                workflowGroup: 'account-group'
+                workflowGroup: 'account-group',
+                userInDifferentDepartment: 'account-outline'
             }
         };
     });

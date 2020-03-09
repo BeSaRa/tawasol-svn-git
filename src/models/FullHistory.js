@@ -20,6 +20,16 @@ module.exports = function (app) {
                         key: 'regOu',
                         langKey: 'organization',
                         icon: gridService.gridIcons.indicators.regOu
+                    },
+                    3: {
+                        key: 'broadcast',
+                        langKey: 'broadcast',
+                        icon: gridService.gridIcons.indicators.broadcast
+                    },
+                    8: {
+                        key: 'userInDifferentDepartment',
+                        langKey: 'user_in_different_dept',
+                        icon: gridService.gridIcons.indicators.userInDifferentDepartment
                     }
                 };
             self.id = null;
