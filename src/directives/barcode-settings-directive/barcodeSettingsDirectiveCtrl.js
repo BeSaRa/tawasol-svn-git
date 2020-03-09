@@ -158,7 +158,7 @@ module.exports = function (app) {
                     class: 'barcode-item',
                     flex: ''
                 })
-                .append(self.createDeleteButton('item', idx))
+                .append(self.createDeleteButton('item', item.lookupStrKey !== 'BARCODE_LABEL' ? undefined : idx))
                 .append(angular.element('<span />', {'md-truncate': ''}).html('{{item.getTranslatedName()}}'))
                 .data('item', item)
                 .data('rowIndex', idx);
