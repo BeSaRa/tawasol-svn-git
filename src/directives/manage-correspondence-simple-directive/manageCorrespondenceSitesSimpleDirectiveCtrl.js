@@ -239,6 +239,7 @@ module.exports = function (app) {
                 criteria: null,
                 excludeOuSites: false
             }).then(function (result) {
+
                 self.subSitesCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSites = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                 self.selectedSubSite = null;
@@ -299,7 +300,6 @@ module.exports = function (app) {
 
         self.changeSubCorrespondence = function (item) {
             if (item) {
-                _concatCorrespondenceSites(false);
                 self.addSiteTo(item);
             } else {
                 self['sitesInfoTo'] = [];
