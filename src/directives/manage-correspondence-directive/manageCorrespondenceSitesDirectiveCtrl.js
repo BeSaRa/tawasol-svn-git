@@ -402,7 +402,7 @@ module.exports = function (app) {
                 }
             } else {
                 _.map(sites, function (site) {
-                    self.addSiteTo(site);
+                    self.addSiteTo(site, isDistributionListRecord);
                 });
                 _resetSelectedData(isDistributionListRecord);
             }
@@ -425,7 +425,7 @@ module.exports = function (app) {
             _.map(sites, function (site) {
                 site.followupStatus = followupStatusWithoutReply;
                 site.followupDate = null;
-                self.addSiteTo(site);
+                self.addSiteTo(site, isDistributionListRecord);
             });
             _resetSelectedData(isDistributionListRecord);
         };
@@ -459,7 +459,7 @@ module.exports = function (app) {
                 }
             } else {
                 _.map(sites, function (site) {
-                    self.addSiteCC(site);
+                    self.addSiteCC(site, isDistributionListRecord);
                 });
                 _resetSelectedData(isDistributionListRecord);
             }
@@ -482,7 +482,7 @@ module.exports = function (app) {
             _.map(sites, function (site) {
                 site.followupStatus = followupStatusWithoutReply;
                 site.followupDate = null;
-                self.addSiteCC(site);
+                self.addSiteCC(site, isDistributionListRecord);
             });
             _resetSelectedData(isDistributionListRecord);
         };
