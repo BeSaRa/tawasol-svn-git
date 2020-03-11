@@ -393,10 +393,15 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.doActionExportAndSend = function (model, $event, defer) {
+        self.docActionExportAndSend = function (model, $event, defer) {
             model.exportDocument($event, false)
                 .then(function () {
                     model.launchWorkFlow($event, 'forward', 'favorites').then(function () {
+                        new ResolveDefer(defer);
+                        counterService.loadCounters();
+                        mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        self.resetAddCorrespondence();
+                    }).catch(function () {
                         new ResolveDefer(defer);
                         counterService.loadCounters();
                         mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
@@ -609,7 +614,7 @@ module.exports = function (app) {
             }, // export and send
             {
                 text: langService.get('grid_action_export_and_send'),
-                callback: self.doActionExportAndSend,
+                callback: self.docActionExportAndSend,
                 class: "action-green",
                 permissionKey: ['LAUNCH_DISTRIBUTION_WORKFLOW', 'OPEN_DEPARTMENT’S_READY_TO_EXPORT_QUEUE'],
                 checkShow: function (action, model, index) {
