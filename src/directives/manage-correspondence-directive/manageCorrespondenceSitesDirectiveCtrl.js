@@ -319,7 +319,7 @@ module.exports = function (app) {
                 return toast.error(langService.get('sites_please_select_followup_date'));
             }
             //TODO: add distListId to outgoing document in case of add document only but need refactor later
-            if (isDistributionListRecord && !self.vsId) {
+            if (isDistributionListRecord) {// && !self.vsId
                 self.distListId = (self.selectedDistributionList && self.selectedDistributionList.hasOwnProperty('id')) ? self.selectedDistributionList.id : null;
             }
 
@@ -345,7 +345,7 @@ module.exports = function (app) {
                 return toast.error(langService.get('sites_please_select_followup_date'));
             }
             //TODO: add distListId to outgoing document in case of add document only but need refactor later
-            if (isDistributionListRecord && !self.vsId) {
+            if (isDistributionListRecord) {// && !self.vsId
                 self.distListId = (self.selectedDistributionList && self.selectedDistributionList.hasOwnProperty('id')) ? self.selectedDistributionList.id : null;
             }
             _addSite('CC', site)
