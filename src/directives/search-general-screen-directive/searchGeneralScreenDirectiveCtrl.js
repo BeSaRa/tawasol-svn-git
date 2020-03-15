@@ -1908,6 +1908,7 @@ module.exports = function (app) {
                 callback: self.endFollowup,
                 class: "action-green",
                 permissionKey: "MANAGE_DESTINATIONS",
+                hide: true,
                 checkShow: function (action, model) {
                     // only for outgoing/incoming
                     var info = model.getInfo();
