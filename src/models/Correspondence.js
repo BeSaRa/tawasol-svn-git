@@ -526,6 +526,19 @@ module.exports = function (app) {
                 });
                 return this;
             };
+
+            Correspondence.prototype.filterLinkedDocuments = function (attachments) {
+                var attach = _.filter(attachments, function (item) {
+                    return item.classDescription !== 'TawasolLinkedAttachment';
+                });
+
+                var linked = _.map(this.linkedExportedDocsList, function (item) {
+                    return generator.interceptReceivedInstance('Attachment', new Attachment(item))
+                });
+
+                return [].concat(attach, linked);
+            };
+
             Correspondence.prototype.correspondenceBroadcast = function ($event) {
                 return correspondenceService.broadcastCorrespondence(this, $event);
             };

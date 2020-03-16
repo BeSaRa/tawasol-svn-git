@@ -196,7 +196,7 @@ module.exports = function (app) {
         self.reloadAttachments = function () {
             return attachmentService.loadDocumentAttachments(self.vsId, self.documentClass)
                 .then(function (result) {
-                    self.attachments = result;
+                    self.attachments = (self.receive || self.receiveG2g) ? self.document.filterLinkedDocuments(result) : result;
                     self.model = managerService.deepCopyAttachments(self.attachments);
                     self.getSortedData();
                     self.selectedAttachments = [];
