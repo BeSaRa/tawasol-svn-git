@@ -327,14 +327,20 @@ module.exports = function (app) {
                         //'tawasol-auth-header' : tokenService.getToken(),
                         'labelId': labelId
                     });
-                    $http
-                        .get(urlService.getDocumentCompositeEmailContent + '/' + vsId + queryString)
+
+                    dialog.confirmThreeButtonMessage(langService.get('select_attachment_type_to_email'), '', langService.get('send_as_pdf_file'), langService.get('send_as_zip_file'))
                         .then(function (result) {
-                            if (helper.browser.isFirefox()) {
-                                window.open(result.data.rs);
-                            } else {
-                                _download(result.data.rs, 'Tawasol.msg');
-                            }
+                            var pdfServiceUrl = urlService.getDocumentCompositeEmailContent.replace('email/', 'email/pdf/') + '/' + vsId;
+                            var zipServiceUrl = urlService.getDocumentCompositeEmailContent + '/' + vsId + queryString;
+                            $http
+                                .get(result.button === 1 ? pdfServiceUrl : zipServiceUrl)
+                                .then(function (result) {
+                                    if (helper.browser.isFirefox()) {
+                                        window.open(result.data.rs);
+                                    } else {
+                                        _download(result.data.rs, 'Tawasol.msg');
+                                    }
+                                })
                         })
                 });
         };
