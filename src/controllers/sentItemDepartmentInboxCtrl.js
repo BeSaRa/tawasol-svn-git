@@ -1023,7 +1023,7 @@ module.exports = function (app) {
                         icon: 'message',
                         text: 'grid_action_send_sms',
                         shortcut: false,
-                        hide: true,
+                        hide: false,
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
                         class: "action-red",
