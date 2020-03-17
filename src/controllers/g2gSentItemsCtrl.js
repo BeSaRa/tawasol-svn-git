@@ -71,7 +71,8 @@ module.exports = function (app) {
                 },
                 mainSiteSubSiteString: function (record) {
                     return self.getSortingKey('mainSiteSubSiteString', 'Information');
-                }
+                },
+                exportedBy: 'exportedBy'
             },
             searchText: '',
             searchCallback: function (grid) {
