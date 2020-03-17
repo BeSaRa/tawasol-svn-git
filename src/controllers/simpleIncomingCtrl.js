@@ -31,7 +31,8 @@ module.exports = function (app) {
                                                    receiveG2G, // available when g2g receive
                                                    mailNotificationService,
                                                    gridService,
-                                                   errorCode) {
+                                                   errorCode,
+                                                   downloadService) {
         'ngInject';
         var self = this;
         self.controllerName = 'simpleIncomingCtrl';
@@ -301,6 +302,16 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Send Link To Document By Email
+         * @param model
+         * @param $event
+         * @param defer
+         */
+        self.docActionSendLinkToDocumentByEmail = function(model, $event, defer){
+            downloadService.getMainDocumentEmailContent(model.getInfo().vsId);
+        };
+
         self.docActionManageTasks = function (document, $event) {
             console.log('manage tasks', document);
         };
@@ -359,6 +370,20 @@ module.exports = function (app) {
                 checkShow: function (action, model, index) {
                     //Show if content is uploaded
                     isVisible = gridService.checkToShowAction(action) && _hasContent();
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // Link To Document By Email
+            {
+                text: langService.get('grid_action_link_to_document_by_email'),
+                callback: self.docActionSendLinkToDocumentByEmail,
+                class: "action-green",
+                permissionKey: 'SEND_COMPOSITE_DOCUMENT_BY_EMAIL',
+                checkShow: function (action, model, index) {
+                    // paper, not private security level, has content
+                    var info = model.getInfo();
+                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && info.isPaper && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }

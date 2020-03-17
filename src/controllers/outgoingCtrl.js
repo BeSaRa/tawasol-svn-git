@@ -37,7 +37,8 @@ module.exports = function (app) {
                                              ResolveDefer,
                                              editAfterReturnG2G,
                                              gridService,
-                                             _) {
+                                             _,
+                                             downloadService) {
         'ngInject';
         var self = this;
         self.controllerName = 'outgoingCtrl';
@@ -405,6 +406,16 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Send Link To Document By Email
+         * @param model
+         * @param $event
+         * @param defer
+         */
+        self.docActionSendLinkToDocumentByEmail = function(model, $event, defer){
+            downloadService.getMainDocumentEmailContent(model.getInfo().vsId);
+        };
+
+        /**
          * @description export and send action
          * @param model
          * @param $event
@@ -629,6 +640,21 @@ module.exports = function (app) {
                     return isVisible;
                 }
             },
+            // Link To Document By Email
+            {
+                text: langService.get('grid_action_link_to_document_by_email'),
+                callback: self.docActionSendLinkToDocumentByEmail,
+                class: "action-green",
+                permissionKey: 'SEND_COMPOSITE_DOCUMENT_BY_EMAIL',
+                checkShow: function (action, model, index) {
+                    // paper, not private security level, has content
+                    var info = model.getInfo();
+                    isVisible = gridService.checkToShowAction(action) && !model.isPrivateSecurityLevel() && info.isPaper && _hasContent();
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // Export and send
             {
                 text: langService.get('grid_action_export_and_send'),
                 callback: self.docActionExportAndSend,
