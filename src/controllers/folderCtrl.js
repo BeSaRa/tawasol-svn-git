@@ -545,15 +545,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Send Composite Document As Attachment
-         * @param workItem
-         * @param $event
-         */
-        self.sendCompositeDocumentAsAttachment = function (workItem, $event) {
-            console.log('sendCompositeDocumentAsAttachment : ', workItem);
-        };
-
-        /**
          * @description Send Composite Document As Attachment By Email
          * @param workItem
          * @param $event
@@ -564,38 +555,33 @@ module.exports = function (app) {
 
         /**
          * @description Send Main Document Fax
-         * @param workItem
+         * @param userInbox
          * @param $event
          */
-        self.sendMainDocumentFax = function (workItem, $event) {
-            console.log('sendMainDocumentFax : ', workItem);
+        self.sendMainDocumentFax = function (userInbox, $event) {
+            userInbox.openSendFaxDialog($event);
         };
 
         /**
          * @description Send SMS
-         * @param workItem
+         * @param userInbox
          * @param $event
+         * @param defer
          */
-        self.sendSMS = function (workItem, $event) {
-            console.log('sendSMS : ', workItem);
+        self.sendSMS = function (userInbox, $event, defer) {
+            userInbox.openSendSMSDialog($event)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
         };
 
         /**
-         * @description Send Main Document As Attachment
-         * @param workItem
+         * @description Send Document Link
+         * @param userInbox
          * @param $event
          */
-        self.sendMainDocumentAsAttachment = function (workItem, $event) {
-            console.log('sendMainDocumentAsAttachment : ', workItem);
-        };
-
-        /**
-         * @description Send Link
-         * @param workItem
-         * @param $event
-         */
-        self.sendLink = function (workItem, $event) {
-            console.log('sendLink : ', workItem);
+        self.sendDocumentLink = function (userInbox, $event) {
+            userInbox.openSendDocumentURLDialog($event);
         };
 
         /**
@@ -1398,15 +1384,14 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'send',
                 text: 'grid_action_send',
-                shortcut: false,
                 checkShow: function (action, model) {
-                    return !model.isBroadcasted() &&  gridService.checkToShowMainMenuBySubMenu(action, model);
+                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !model.isBroadcasted();
                 },
                 permissionKey: [
-                    "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
                     "SEND_DOCUMENT_BY_FAX",
-                    "SEND_SMS"
+                    "SEND_SMS",
+                    "SHARE_BOOK_LINK"
                 ],
                 checkAnyPermission: true,
                 subMenu: [
@@ -1415,8 +1400,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'link-variant',
                         text: 'grid_action_link_to_document_by_email',
-                        shortcut: false,
-                        permissionKey: 'SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL',
+                        permissionKey: 'SEND_COMPOSITE_DOCUMENT_BY_EMAIL',
                         callback: self.sendLinkToDocumentByEmail,
                         class: "action-green",
                         checkShow: function (action, model) {
@@ -1428,7 +1412,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'attachment',
                         text: 'grid_action_composite_document_as_attachment_by_email',
-                        shortcut: false,
                         permissionKey: 'SEND_COMPOSITE_DOCUMENT_BY_EMAIL',
                         callback: self.sendCompositeDocumentAsAttachmentByEmail,
                         class: "action-green",
@@ -1436,16 +1419,14 @@ module.exports = function (app) {
                             return true;
                         }
                     },
-                    // Main Document by Fax
+                    // Send Document by Fax
                     {
                         type: 'action',
                         icon: 'attachment',
                         text: 'grid_action_send_document_by_fax',
-                        shortcut: false,
-                        hide: true,
                         permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: function (action, model) {
                             return model.canSendByFax();
                         }
@@ -1455,11 +1436,21 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'message',
                         text: 'grid_action_send_sms',
-                        shortcut: false,
-                        hide: true,
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
-                        class: "action-red",
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // send document link
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'send_document_link',
+                        permissionKey: "SHARE_BOOK_LINK",
+                        callback: self.sendDocumentLink,
+                        class: "action-green",
                         checkShow: function (action, model) {
                             return true;
                         }

@@ -943,6 +943,46 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Send Link To Document By Email
+         * @param userInbox
+         * @param $event
+         */
+        self.sendLinkToDocumentByEmail = function (userInbox, $event) {
+            downloadService.getMainDocumentEmailContent(userInbox.getInfo().vsId);
+        };
+
+        /**
+         * @description Send Composite Document As Attachment By Email
+         * @param userInbox
+         * @param $event
+         */
+        self.sendCompositeDocumentAsAttachmentByEmail = function (userInbox, $event) {
+            downloadService.getCompositeDocumentEmailContent(userInbox.getInfo().vsId);
+        };
+
+        /**
+         * @description Send SMS
+         * @param userInbox
+         * @param $event
+         * @param defer
+         */
+        self.sendSMS = function (userInbox, $event, defer) {
+            userInbox.openSendSMSDialog($event)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
+        };
+
+        /**
+         * @description Send Document Link
+         * @param userInbox
+         * @param $event
+         */
+        self.sendDocumentLink = function (userInbox, $event) {
+            userInbox.openSendDocumentURLDialog($event);
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -1316,10 +1356,37 @@ module.exports = function (app) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
-                    "SEND_DOCUMENT_BY_FAX"
+                    "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
+                    "SEND_DOCUMENT_BY_FAX",
+                    "SEND_SMS",
+                    "SHARE_BOOK_LINK"
                 ],
                 checkAnyPermission: true,
                 subMenu: [
+                    // Link To Document By Email
+                    {
+                        type: 'action',
+                        icon: 'link-variant',
+                        text: 'grid_action_link_to_document_by_email',
+                        permissionKey: 'SEND_COMPOSITE_DOCUMENT_BY_EMAIL',
+                        callback: self.sendLinkToDocumentByEmail,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Composite Document As Attachment By Email
+                    {
+                        type: 'action',
+                        icon: 'attachment',
+                        text: 'grid_action_composite_document_as_attachment_by_email',
+                        permissionKey: 'SEND_COMPOSITE_DOCUMENT_BY_EMAIL',
+                        callback: self.sendCompositeDocumentAsAttachmentByEmail,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
                     // Send Document by Fax
                     {
                         type: 'action',
@@ -1330,6 +1397,30 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             return model.canSendByFax();
+                        }
+                    },
+                    // SMS
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'grid_action_send_sms',
+                        permissionKey: "SEND_SMS",
+                        callback: self.sendSMS,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // send document link
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'send_document_link',
+                        permissionKey: "SHARE_BOOK_LINK",
+                        callback: self.sendDocumentLink,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
                         }
                     }
                 ]

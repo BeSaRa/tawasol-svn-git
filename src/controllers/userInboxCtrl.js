@@ -1003,24 +1003,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Send Main Document As Attachment
-         * @param userInbox
-         * @param $event
-         */
-        self.sendMainDocumentAsAttachment = function (userInbox, $event) {
-            console.log('sendUserInboxMainDocumentAsAttachment : ', userInbox);
-        };
-
-        /**
-         * @description Send Link
-         * @param userInbox
-         * @param $event
-         */
-        self.sendLink = function (userInbox, $event) {
-            console.log('sendUserInboxLink : ', userInbox);
-        };
-
-        /**
          * @description Sign e-Signature
          * @param userInbox
          * @param $event
@@ -1899,7 +1881,6 @@ module.exports = function (app) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model) && !model.isBroadcasted();
                 },
                 permissionKey: [
-                    "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
                     "SEND_DOCUMENT_BY_FAX",
                     "SEND_SMS",

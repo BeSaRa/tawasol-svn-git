@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                       $q,
                                                       $filter,
                                                       langService,
+                                                      downloadService,
                                                       toast,
                                                       $state,
                                                       dialog,
@@ -431,6 +432,14 @@ module.exports = function (app) {
                     new ResolveDefer(defer);
                 });
         };
+        /**
+         * @description Send Document Link
+         * @param userInbox
+         * @param $event
+         */
+        self.sendDocumentLink = function (userInbox, $event) {
+            userInbox.openSendDocumentURLDialog($event);
+        };
 
         /**
          * @description Send Main Document Fax
@@ -443,6 +452,23 @@ module.exports = function (app) {
 
         self.viewInDeskTop = function (workItem) {
             return correspondenceService.viewWordInDesktop(workItem);
+        };
+
+        /**
+         * @description Send Composite Document As Attachment By Email
+         * @param workItem
+         * @param $event
+         */
+        self.sendCompositeDocumentAsAttachmentByEmail = function (workItem, $event) {
+            downloadService.getCompositeDocumentEmailContent(workItem.getInfo().vsId);
+        };
+        /**
+         * @description Send Link To Document By Email
+         * @param userInbox
+         * @param $event
+         */
+        self.sendLinkToDocumentByEmail = function (userInbox, $event) {
+            downloadService.getMainDocumentEmailContent(userInbox.getInfo().vsId);
         };
 
         /**
@@ -887,30 +913,70 @@ module.exports = function (app) {
                 ],
                 checkAnyPermission: true,
                 subMenu: [
+                    // Link To Document By Email
+                    {
+                        type: 'action',
+                        icon: 'link-variant',
+                        text: 'grid_action_link_to_document_by_email',
+                        shortcut: false,
+                        permissionKey: 'SEND_COMPOSITE_DOCUMENT_BY_EMAIL',
+                        callback: self.sendLinkToDocumentByEmail,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Composite Document As Attachment By Email
+                    {
+                        type: 'action',
+                        icon: 'attachment',
+                        text: 'grid_action_composite_document_as_attachment_by_email',
+                        shortcut: false,
+                        permissionKey: 'SEND_COMPOSITE_DOCUMENT_BY_EMAIL',
+                        callback: self.sendCompositeDocumentAsAttachmentByEmail,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // Main Document by Fax
+                    {
+                        type: 'action',
+                        icon: 'attachment',
+                        text: 'grid_action_send_document_by_fax',
+                        shortcut: false,
+                        hide: true,
+                        permissionKey: "SEND_DOCUMENT_BY_FAX",
+                        callback: self.sendMainDocumentFax,
+                        class: "action-red",
+                        checkShow: function (action, model) {
+                            return model.canSendByFax();
+                        }
+                    },
                     // SMS
                     {
                         type: 'action',
                         icon: 'message',
                         text: 'grid_action_send_sms',
                         shortcut: false,
+                        hide: true,
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
-                        class: "action-green",
+                        class: "action-red",
                         checkShow: function (action, model) {
                             return true;
                         }
                     },
-                    // Main Document Fax
+                    // send document link
                     {
                         type: 'action',
-                        icon: 'attachment',
-                        text: 'grid_action_send_document_by_fax',
-                        shortcut: false,
-                        permissionKey: "SEND_DOCUMENT_BY_FAX",
-                        callback: self.sendMainDocumentFax,
+                        icon: 'message',
+                        text: 'send_document_link',
+                        permissionKey: "SHARE_BOOK_LINK",
+                        callback: self.sendDocumentLink,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            return model.canSendByFax();
+                            return true;
                         }
                     }
                 ]

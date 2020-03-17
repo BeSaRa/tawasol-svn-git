@@ -972,10 +972,10 @@ module.exports = function (app) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
-                    "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
                     "SEND_DOCUMENT_BY_FAX",
-                    "SEND_SMS"
+                    "SEND_SMS",
+                    "SHARE_BOOK_LINK"
                 ],
                 checkAnyPermission: true,
                 subMenu: [
