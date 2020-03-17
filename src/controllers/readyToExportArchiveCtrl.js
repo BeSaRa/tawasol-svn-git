@@ -879,6 +879,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Send Link To Document By Email
+         * @param workItem
+         * @param $event
+         */
+        self.sendLinkToDocumentByEmail = function (workItem, $event) {
+            downloadService.getMainDocumentEmailContent(workItem.getInfo().vsId);
+        };
+
+        /**
          * @description Send Main Document Fax
          * @param workItem
          * @param $event
@@ -1260,10 +1269,23 @@ module.exports = function (app) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model) && !model.isBroadcasted();
                 },
                 permissionKey: [
+                    "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
                     "SEND_DOCUMENT_BY_FAX"
                 ],
                 checkAnyPermission: true,
                 subMenu: [
+                    // Link To Document By Email
+                    {
+                        type: 'action',
+                        icon: 'link-variant',
+                        text: 'grid_action_link_to_document_by_email',
+                        permissionKey: 'SEND_COMPOSITE_DOCUMENT_BY_EMAIL',
+                        callback: self.sendLinkToDocumentByEmail,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
                     // Send Document by Fax
                     {
                         type: 'action',
