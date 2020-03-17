@@ -87,6 +87,10 @@
                                             md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString','Information')}}">
                                             <span>{{lang.correspondence_sites}}</span>
                                         </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
+                                            md-order-by="exportedBy">
+                                            <span>{{lang.exported_by}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column>
                                             <!-- Grid Actions -->
                                         </th>
@@ -129,6 +133,7 @@
                                             <main-site-sub-site-directive item="g2gItem"
                                                                           type="G2GMessagingHistory"></main-site-sub-site-directive>
                                         </td>
+                                        <td md-cell>{{g2gItem.exportedBy}}</td>
                                         <td md-cell class="p-r0"
                                             ng-if="ctrl.selectedG2gItems.length < 2">
                                             <div layout-align="start center" flex ng-if="!ctrl.selectedG2gItems.length

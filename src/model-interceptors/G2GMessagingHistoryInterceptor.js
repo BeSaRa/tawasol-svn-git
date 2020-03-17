@@ -72,6 +72,7 @@ module.exports = function (app) {
             //delete model.lockedBy;
             //delete model.lockedDate;
             delete model.senderForTrackingSheet;
+            delete model.exportedBy;
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
             delete model.isInternalG2GIndicator;
             delete model.internal;
@@ -107,8 +108,10 @@ module.exports = function (app) {
             if (model.sentByOrg) {
                 if (generator.isJsonString(model.sentByOrg)) {
                     model.senderForTrackingSheet = JSON.parse(model.sentByOrg).name;
+                    model.exportedBy = JSON.parse(model.sentByOrg).name;
                 } else {
                     model.senderForTrackingSheet = model.sentByOrg;
+                    model.exportedBy = model.sentByOrg;
                 }
             }
 
