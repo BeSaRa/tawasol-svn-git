@@ -377,7 +377,7 @@ module.exports = function (app) {
                 .then(function () {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                    self.resetAddCorrespondence();
+                    //self.resetAddCorrespondence();
                 });
         };
 
