@@ -600,6 +600,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Print Barcode
+         * @param workItem
+         * @param $event
+         */
+        self.printBarcode = function (workItem, $event) {
+            workItem.barcodePrint($event);
+        };
+
+        /**
          * @description Transfer to another employee
          * @param workItem
          * @param $event
@@ -1095,6 +1104,19 @@ module.exports = function (app) {
                             return true;
                         }
              },*/
+            // Print Barcode
+            {
+                type: 'action',
+                icon: 'barcode-scan',
+                text: 'grid_action_print_barcode',
+                callback: self.printBarcode,
+                class: "action-green",
+                permissionKey: 'PRINT_BARCODE',
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return info.isPaper;
+                }
+            },
             // Transfer To Another Employee
             {
                 type: 'action',
