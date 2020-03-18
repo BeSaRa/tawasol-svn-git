@@ -8,7 +8,7 @@ module.exports = function (app) {
                 ignoreUnreadCounts = [
                     'menu_item_outgoing',
                     'menu_item_outgoing_prepare',
-                    // 'menu_item_outgoing_draft',
+                    'menu_item_outgoing_draft',
                     'menu_item_outgoing_review',
                     'menu_item_outgoing_ready_to_send',
                     'menu_item_outgoing_rejected',
@@ -18,7 +18,7 @@ module.exports = function (app) {
                     'menu_item_incoming_ready_to_send',
                     'menu_item_incoming_rejected',
                     'menu_item_internal_prepare',
-                    // 'menu_item_internal_draft',
+                    'menu_item_internal_draft',
                     'menu_item_internal_rejected',
                     'menu_item_internal_review',
                     'menu_item_internal_ready_to_send',
@@ -36,7 +36,7 @@ module.exports = function (app) {
                         // 'outgoingDraft',
                         function (currentValue, counter, employee, property) {
                             // outgoingDeleted
-                            return employee.hasThesePermissions('DELETE_OUTGOING') ? (currentValue + counter.outgoingDeleted[property]) : currentValue;
+                            return employee.hasThesePermissions('DELETE_OUTGOING') ? (currentValue + (counter.outgoingDeleted[property] < 0 ? 0 : counter.outgoingDeleted[property])) : currentValue;
                         }
                     ],
                     menu_item_outgoing_prepare: [
@@ -61,7 +61,7 @@ module.exports = function (app) {
                         'incomingRejected',
                         function (currentValue, counter, employee, property) {
                             // incomingDeleted
-                            return employee.hasThesePermissions('DELETE_INCOMING') ? (currentValue + counter.incomingDeleted[property]) : currentValue;
+                            return employee.hasThesePermissions('DELETE_INCOMING') ? (currentValue + (counter.incomingDeleted[property] < 0 ? 0 : counter.incomingDeleted[property])) : currentValue;
                         }
                     ],
                     menu_item_incoming_scan: [
@@ -85,7 +85,7 @@ module.exports = function (app) {
                         'internalApproved',
                         function (currentValue, counter, employee, property) {
                             // internalDeleted
-                            return employee.hasThesePermissions('DELETE_INTERNAL') ? (currentValue + counter.internalDeleted[property]) : currentValue;
+                            return employee.hasThesePermissions('DELETE_INTERNAL') ? (currentValue + (counter.internalDeleted[property] < 0 ? 0 : counter.internalDeleted[property])) : currentValue;
                         }
                     ],
                     menu_item_internal_prepare: [
@@ -271,7 +271,7 @@ module.exports = function (app) {
                         var hasPermission = reversedMap.hasOwnProperty(currentValue) ? employeeService.employeeHasPermissionTo(reversedMap[currentValue]) : true;
                         return typeof currentValue === 'function' ? currentValue(oldValue, self, employeeService.getEmployee(), 'first') : (hasPermission ? oldValue + self[currentValue].first : oldValue);
                     }, 0)) : 0;
-
+                    console.log('welcome');
                     self.maped[property].second = employeeService.employeeHasPermissionTo(property) ? (_.reduce(items, function (oldValue, currentValue) {
                         var hasPermission = reversedMap.hasOwnProperty(currentValue) ? employeeService.employeeHasPermissionTo(reversedMap[currentValue]) : true;
                         return typeof currentValue === 'function' ? currentValue(oldValue, self, employeeService.getEmployee(), 'second') : (hasPermission ? oldValue + (self[currentValue].second === -1 ? 0 : self[currentValue].second) : oldValue);
