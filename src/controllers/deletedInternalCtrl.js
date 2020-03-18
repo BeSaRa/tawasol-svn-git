@@ -56,7 +56,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(deletedInternal, self.gridActions, true, true, null, null, null, true)
+            correspondenceService.viewDeletedCorrespondence(deletedInternal, self.gridActions, true)
                 .then(function () {
                     return self.reloadDeletedInternals(self.grid.page);
                 })

@@ -1448,6 +1448,76 @@ module.exports = function (app) {
 
                 });
         };
+
+        /**
+         * @description view deleted correspondence
+         * @param correspondence
+         * @param actions
+         * @param viewOnly
+         * @returns {*}
+         */
+        self.viewDeletedCorrespondence = function (correspondence, actions, viewOnly) {
+            var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
+
+
+            return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'removed/with-content'))
+                .then(function (result) {
+                    var documentClass = result.data.rs.metaData.classDescription;
+                    result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                    return result.data.rs;
+                })
+                .then(function (result) {
+                    result.metaData.viewVersion = viewOnly;
+                    result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                    if (result.content.hasOwnProperty('editURL') && result.content.editURL) {
+                        result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
+                    }
+                    generator.addPopupNumber();
+                    return dialog.showDialog({
+                        templateUrl: cmsTemplate.getPopup('view-correspondence'),
+                        controller: 'viewCorrespondencePopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        escapeToCancel: false,
+                        locals: {
+                            correspondence: result.metaData,
+                            content: result.content,
+                            actions: actions,
+                            workItem: false,
+                            disableProperties: true,
+                            disableCorrespondence: true,
+                            popupNumber: generator.getPopupNumber(),
+                            disableEverything: true,
+                            pageName: 'none'
+                        },
+                        resolve: {
+                            organizations: function (organizationService) {
+                                'ngInject';
+                                return organizationService.loadOrganizations(true);
+                            },
+                            lookups: function (correspondenceService) {
+                                'ngInject';
+                                return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                            }
+                        }
+                    }).then(function () {
+                        generator.removePopupNumber();
+                        return true;
+                    }).catch(function () {
+                        generator.removePopupNumber();
+                        return false;
+                    });
+                })
+                .catch(function (error) {
+                    if (errorCode.checkIf(error, 'DOCUMENT_HAS_BEEN_DELETED') === true) {
+                        dialog.errorMessage(langService.get('document_has_been_deleted'));
+                        return $q.reject('documentDeleted');
+                    }
+                    return $q.reject(error);
+
+                });
+        };
+
         /**
          * get view link for documents.
          * @param correspondence
