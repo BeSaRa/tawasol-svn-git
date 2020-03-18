@@ -19,6 +19,9 @@ module.exports = function (app) {
         self.searchText = '';
 
         self.normalizeTag = function (tag) {
+            if (!tag) {
+                return '';
+            }
             return tag.substr(1, tag.length - 2);
         };
 
@@ -27,7 +30,7 @@ module.exports = function (app) {
         };
 
         self.checkTagExists = function (tag) {
-            return self.searchResult.indexOf(self.normalizeTag(tag)) !== -1;
+            return self.searchResult && self.searchResult.length && self.searchResult.indexOf(self.normalizeTag(tag)) !== -1;
         };
 
         // search for tag -- calling the search service if tags more than 100, unless filter the current tags on client side
