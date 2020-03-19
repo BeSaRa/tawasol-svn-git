@@ -47,7 +47,30 @@ module.exports = function (app) {
         // required fields for the current document class
         self.required = {};
 
+        /**
+         * @description Set the required and active properties for each field from property configuration
+         * @private
+         */
+        function _setRequiredFieldsFromConfiguration() {
+            properties = angular.copy(lookupService.getPropertyConfigurations(self.document.docClassName));
+
+            _.map(properties, function (item) {
+                // if subClassification is required, force require the mainClassification as well
+                if (item.symbolicName.toLowerCase() === 'subclassification') {
+                    if (item.status) {
+                        _forceSetActive('MainClassification');
+                    }
+                    if (item.isMandatory) {
+                        _forceSetMandatory('MainClassification');
+                    }
+                }
+                self.required[item.symbolicName.toLowerCase()] = {isMandatory: item.isMandatory, status: item.status};
+            });
+        }
+
         $timeout(function () {
+            self.sourceForm = $scope.outgoing_properties;
+
             // all system organizations
             self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
             // sort organizations
@@ -69,22 +92,8 @@ module.exports = function (app) {
             if (documentSecurityLevelLookupKey.hasOwnProperty('lookupKey')) {
                 documentSecurityLevelLookupKey = documentSecurityLevelLookupKey.lookupKey;
             }
-            properties = angular.copy(lookupService.getPropertyConfigurations(self.document.docClassName));
 
-            _.map(properties, function (item) {
-                // self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
-
-                // if subClassification is required, force require the mainClassification as well
-                if (item.symbolicName.toLowerCase() === 'subclassification') {
-                    if (item.status) {
-                        _forceSetActive('MainClassification');
-                    }
-                    if (item.isMandatory) {
-                        _forceSetMandatory('MainClassification');
-                    }
-                }
-                self.required[item.symbolicName.toLowerCase()] = {isMandatory: item.isMandatory, status: item.status};
-            });
+            _setRequiredFieldsFromConfiguration();
 
             if (self.document.hasVsId() && self.document.mainClassificationInfo.id !== -1) {
                 mainClassificationOptionFromInfo = new OUClassification({
@@ -127,6 +136,8 @@ module.exports = function (app) {
 
             _getClassifications(false);
             _getDocumentFiles(false);
+
+            _selectFirstOptionForRequired();
         });
 
 
@@ -230,18 +241,21 @@ module.exports = function (app) {
          * @private
          */
         function _getClassifications(timeout) {
+            var mainClassificationControl;
             if (timeout) {
                 return $timeout(function () {
                     self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
                     self.classifications = _displayCorrectClassifications(self.classifications);
                     appendMissingMainClassification();
-                    self.onChangeMainClassification(null, true);
+                    mainClassificationControl = _getFormControlByName('mainClassification');
+                    self.onChangeMainClassification(null, true, mainClassificationControl);
                 });
             } else {
                 self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
                 self.classifications = _displayCorrectClassifications(self.classifications);
                 appendMissingMainClassification();
-                self.onChangeMainClassification(null, true);
+                mainClassificationControl = _getFormControlByName('mainClassification');
+                self.onChangeMainClassification(null, true, mainClassificationControl);
             }
         }
 
@@ -357,6 +371,15 @@ module.exports = function (app) {
             });
         }
 
+        function _getFormControlByName(fieldName) {
+            if (!fieldName || !self.sourceForm) {
+                return null;
+            }
+            return _.find(self.sourceForm.$$controls, function (control) {
+                return control.$name.toLowerCase() === fieldName.toLowerCase();
+            });
+        }
+
         /**
          * @description on security level changed
          */
@@ -466,11 +489,7 @@ module.exports = function (app) {
                 toast.error(error);
             });
         };
-        // if we have source form
-        $timeout(function () {
-            self.sourceForm = $scope.outgoing_properties;
-            //self.disableProperties = self.checkIfEditDisabled(self.document)
-        });
+
 
         $scope.$watch(function () {
             return self.model;
@@ -634,15 +653,17 @@ module.exports = function (app) {
                         if (field.name === 'registryOU') {
                             self.onRegistryChange(self.document.registryOU);
                         }
+
+                        if (field.name === 'mainClassification') {
+                            var mainClassificationField = _getFormControlByName('mainClassification');
+                            self.onChangeMainClassification(null, false, mainClassificationField);
+                        }
                     }
                 }
             }
             self.isNewDocument = false;
         }
 
-        $timeout(function () {
-            _selectFirstOptionForRequired();
-        });
 
         /**
          * @description Set the sub classification on change of main classification

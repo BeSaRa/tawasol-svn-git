@@ -271,7 +271,7 @@ module.exports = function (app) {
                         var hasPermission = reversedMap.hasOwnProperty(currentValue) ? employeeService.employeeHasPermissionTo(reversedMap[currentValue]) : true;
                         return typeof currentValue === 'function' ? currentValue(oldValue, self, employeeService.getEmployee(), 'first') : (hasPermission ? oldValue + self[currentValue].first : oldValue);
                     }, 0)) : 0;
-                    console.log('welcome');
+
                     self.maped[property].second = employeeService.employeeHasPermissionTo(property) ? (_.reduce(items, function (oldValue, currentValue) {
                         var hasPermission = reversedMap.hasOwnProperty(currentValue) ? employeeService.employeeHasPermissionTo(reversedMap[currentValue]) : true;
                         return typeof currentValue === 'function' ? currentValue(oldValue, self, employeeService.getEmployee(), 'second') : (hasPermission ? oldValue + (self[currentValue].second === -1 ? 0 : self[currentValue].second) : oldValue);
