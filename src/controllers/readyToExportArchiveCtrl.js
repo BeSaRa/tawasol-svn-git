@@ -1101,6 +1101,21 @@ module.exports = function (app) {
                     return true;
                 }
             },
+            // Export and add to icn archive
+            {
+                type: 'action',
+                icon: 'file-export-outline',
+                text: 'grid_action_export_and_add_to_icn_archive',
+                shortcut: true,
+                callback: self.exportAndAddToIcnArchive,
+                class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
+                checkShow: function (action, model) {
+                    return employeeService.hasPermissionTo('ICN_ENTRY_TEMPLATE');
+                }
+            },
             // Print Barcode
             {
                 type: 'action',
