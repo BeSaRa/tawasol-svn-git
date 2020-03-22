@@ -59,14 +59,12 @@
                             <md-input-container flex>
                                 <label for="proxyAuthorityLevels">{{lang.authority_level}}</label>
                                 <md-select multiple name="proxyAuthorityLevels"
-                                           ng-required="ctrl.isOutOfOffice"
-                                           ng-disabled="!ctrl.isOutOfOffice"
+                                           ng-required="ctrl.isOutOfOffice && ctrl.filteredSecurityLevels.length"
+                                           ng-disabled="!ctrl.isOutOfOffice || !ctrl.filteredSecurityLevels.length"
                                            id="proxyAuthorityLevels"
                                            ng-model="ctrl.ouApplicationUser.proxyAuthorityLevels"
                                            ng-model-options="{trackBy: '$value.id'}">
-                                    <md-option
-                                            ng-if="ctrl.isSecurityLevelInclude(securityLevel)"
-                                            ng-repeat="securityLevel in ctrl.securityLevels track by $index"
+                                    <md-option ng-repeat="securityLevel in ctrl.filteredSecurityLevels track by $index"
                                             ng-value="securityLevel">
                                         {{securityLevel.getTranslatedName()}}
                                     </md-option>

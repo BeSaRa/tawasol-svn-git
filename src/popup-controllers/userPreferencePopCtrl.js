@@ -123,6 +123,7 @@ module.exports = function (app) {
         self.ouApplicationUser = generator.interceptReceivedInstance('OUApplicationUser', angular.copy(employeeService.getCurrentOUApplicationUser()));
         // security levels for current OUApplicationUser
         self.securityLevels = self.ouApplicationUser.getSecurityLevels();
+        self.filteredSecurityLevels = [];
         self.availableProxies = availableProxies;
         self.selectedProxyUser = self.ouApplicationUser.getSelectedProxyId() ? _.find(availableProxies, function (item) {
             return item.id === self.ouApplicationUser.getSelectedProxyId();
@@ -618,6 +619,7 @@ module.exports = function (app) {
             self.ouApplicationUser.proxyAuthorityLevels = null;
             self.ouApplicationUser.proxyStartDate = null;
             self.ouApplicationUser.proxyEndDate = null;
+            self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
         };
 
 
@@ -648,6 +650,12 @@ module.exports = function (app) {
                     })
                 }
             }
+
+            if (self.selectedProxyUser && !self.filteredSecurityLevels.length) {
+                required = _.filter(required, function (property) {
+                    return property !== 'proxyAuthorityLevels';
+                });
+            }
             _.map(required, function (property) {
                 if (!generator.validRequired(model[property]))
                     result.push(property);
@@ -666,9 +674,8 @@ module.exports = function (app) {
          * @description Save the Application User out of office settings in the ouApplicationUser model
          */
         self.saveOutOfOfficeSettingsFromCtrl = function () {
-            if (self.selectedProxyUser) {
-                self.ouApplicationUser.proxyUser = self.selectedProxyUser;
-            }
+            self.ouApplicationUser.proxyUser = self.selectedProxyUser;
+
             validationService
                 .createValidation('EDIT_OUT_OF_OFFICE_SETTINGS')
                 .addStep('check_required', true, self.checkRequiredFieldsOutOfOffice, self.ouApplicationUser, function (result) {
@@ -1314,6 +1321,10 @@ module.exports = function (app) {
                     $event.stopPropagation();
             }
         };
+
+        self.$onInit = function () {
+            self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
+        }
 
     });
 };

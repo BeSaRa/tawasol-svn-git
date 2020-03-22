@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       generator,
+                      rootEntity,
                       organizationService,
                       roleService,
                       _,
@@ -63,6 +64,10 @@ module.exports = function (app) {
             model.ouRegistryID = model.ouRegistryID.hasOwnProperty('id') ? model.ouRegistryID.id : model.ouRegistryID;
             model.proxyAuthorityLevels = generator.getResultFromSelectedCollection(model.proxyAuthorityLevels, 'lookupKey');
             model.applicationUser = generator.interceptSendInstance('ApplicationUser', model.applicationUser);
+
+            if (model.proxyUser && !model.proxyAuthorityLevels) {
+                model.proxyAuthorityLevels = generator.getResultFromSelectedCollection(rootEntity.getGlobalSettings().getSecurityLevels(), 'lookupKey');
+            }
 
             delete model.ouInfo;
             delete model.securityLevelsString;

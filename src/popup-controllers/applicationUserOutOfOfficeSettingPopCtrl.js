@@ -35,7 +35,7 @@ module.exports = function (app) {
         self.authorityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
         //proxy security levels for current ouApplication Users
         self.securityLevels = self.ouApplicationUser.getSecurityLevels();
-
+        self.filteredSecurityLevels = [];
         self.availableProxies = availableProxies;
 
         self.selectedProxyUser = ouApplicationUser.getSelectedProxyId() ? _.find(availableProxies, function (item) {
@@ -131,6 +131,13 @@ module.exports = function (app) {
                     })
                 }
             }
+
+            if (self.selectedProxyUser && !self.filteredSecurityLevels.length) {
+                required = _.filter(required, function (property) {
+                    return property !== 'proxyAuthorityLevels';
+                });
+            }
+
             _.map(required, function (property) {
                 if (!generator.validRequired(model[property]))
                     result.push(property);
@@ -156,8 +163,7 @@ module.exports = function (app) {
                     }
                 }
                 return langService.get('user_on_behalf');
-            }
-            else {
+            } else {
                 if (langService.current === 'en')
                     return self.selectedProxyUser.applicationUser.getTranslatedName() + ' - ' + self.selectedProxyUser.organization.getTranslatedName();
                 return self.selectedProxyUser.organization.getTranslatedName() + ' - ' + self.selectedProxyUser.applicationUser.getTranslatedName();
@@ -185,6 +191,7 @@ module.exports = function (app) {
             self.ouApplicationUser.proxyAuthorityLevels = null;
             self.ouApplicationUser.proxyStartDate = null;
             self.ouApplicationUser.proxyEndDate = null;
+            self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
         };
 
 
@@ -194,7 +201,7 @@ module.exports = function (app) {
          */
         self.getTranslatedError = function (error) {
             var errorObj = error.data.eo;
-            if (typeof errorObj === 'string'){
+            if (typeof errorObj === 'string') {
                 return errorObj;
             }
             return langService.current === 'ar' ? errorObj.arName : errorObj.enName;
@@ -222,12 +229,12 @@ module.exports = function (app) {
                         templateUrl = cmsTemplate.getPopup('delegated-by-users-message'),
                         html = $templateCache.get(templateUrl);
 
-                    if (!html){
+                    if (!html) {
                         $templateRequest(templateUrl).then(function (template) {
                             html = template;
                             templateDefer.resolve(html);
                         });
-                    }else {
+                    } else {
                         $timeout(function () {
                             templateDefer.resolve(html);
                         })
@@ -270,8 +277,7 @@ module.exports = function (app) {
                         })
                     });
 
-                }
-                else
+                } else
                     form.$setUntouched();
             }
             if (!self.isOutOfOffice)
@@ -282,9 +288,8 @@ module.exports = function (app) {
          * @description Add the Application User out of office settings in the ouApplicationUser model
          */
         self.saveOutOfOfficeSettings = function () {
-            if (self.selectedProxyUser) {
-                self.ouApplicationUser.proxyUser = self.selectedProxyUser;
-            }
+            self.ouApplicationUser.proxyUser = self.selectedProxyUser;
+
             if (!self.isOutOfOffice) {
                 dialog.hide(self.ouApplicationUser);
             } else {
@@ -333,6 +338,10 @@ module.exports = function (app) {
          */
         self.currentUser = function (proxyUser) {
             return proxyUser.applicationUser.id === ouApplicationUser.applicationUser.id;
+        };
+        
+        self.$onInit = function () {
+            self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
         }
     });
 };
