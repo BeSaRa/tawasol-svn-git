@@ -1521,7 +1521,7 @@ module.exports = function (app) {
                 url: '/icn/:menuId',
                 abstract: false,
                 template: '<iframe id="icn-login" ng-hide="true" width="0" height="0" ng-src="{{ctrl.loginURL}}"></iframe>' +
-                    '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}" style="z-index:100;"></iframe>',
+                    '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}" style="z-index:3;"></iframe>',
                 controller: function ($scope, langService, credentials, $stateParams, urlService, sidebarService, $timeout, $sce) {
                     'ngInject';
                     var self = this, menuId = $stateParams.menuId,
@@ -1637,7 +1637,7 @@ module.exports = function (app) {
             })
             .state('app.others', {
                 url: '/others/:menuId',
-                template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}" style="z-index:100;"></iframe>',
+                template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}" style="z-index:3;"></iframe>',
                 controller: function ($sce, $stateParams, sidebarService, contextHelpService) {
                     'ngInject';
                     contextHelpService.setHelpTo('others');
