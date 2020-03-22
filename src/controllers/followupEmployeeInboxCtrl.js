@@ -433,7 +433,7 @@ module.exports = function (app) {
          * @param followupEmployeeInbox
          * @param $event
          */
-        self.downloadSelected = function(followupEmployeeInbox,$event){
+        self.downloadSelected = function (followupEmployeeInbox, $event) {
             downloadService.openSelectedDownloadDialog(followupEmployeeInbox, $event);
         };
 
@@ -995,7 +995,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",
@@ -1114,7 +1114,7 @@ module.exports = function (app) {
                 permissionKey: 'PRINT_BARCODE',
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return info.isPaper;
+                    return (info.documentClass === "incoming" || ((info.documentClass === "outgoing" || info.documentClass === 'internal') && (!model.needApprove() || info.isPaper)));
                 }
             },
             // Transfer To Another Employee
