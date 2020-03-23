@@ -1151,7 +1151,7 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW');
+                    return !model.exportViaArchive() && employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW');
                 }
             },
             // Export and add to icn archive
@@ -1166,7 +1166,7 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    return employeeService.hasPermissionTo('ICN_ENTRY_TEMPLATE');
+                    return !model.exportViaArchive() && employeeService.hasPermissionTo('ICN_ENTRY_TEMPLATE');
                 }
             },
             // Print Barcode
