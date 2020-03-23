@@ -68,78 +68,6 @@ module.exports = function (app) {
             });
         }
 
-        $timeout(function () {
-            self.sourceForm = $scope.outgoing_properties;
-
-            // all system organizations
-            self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
-            // sort organizations
-            if (self.organizations && self.organizations.length) {
-                self.organizations = _.sortBy(self.organizations, [function (ou) {
-                    return ou[langService.current + 'Name'].toLowerCase();
-                }]);
-            }
-            // sort regOus
-            if (self.registryOrganizations && self.registryOrganizations.length) {
-                self.registryOrganizations = _.sortBy(self.registryOrganizations, [function (ou) {
-                    return ou[langService.current + 'Name'].toLowerCase();
-                }]);
-            }
-            // all document types
-            self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
-            self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
-            documentSecurityLevelLookupKey = angular.copy(self.document.securityLevel);
-            if (documentSecurityLevelLookupKey.hasOwnProperty('lookupKey')) {
-                documentSecurityLevelLookupKey = documentSecurityLevelLookupKey.lookupKey;
-            }
-
-            _setRequiredFieldsFromConfiguration();
-
-            if (self.document.hasVsId() && self.document.mainClassificationInfo.id !== -1) {
-                mainClassificationOptionFromInfo = new OUClassification({
-                    classification: new Classification({
-                        id: self.document.mainClassificationInfo.id,
-                        arName: self.document.mainClassificationInfo.arName,
-                        enName: self.document.mainClassificationInfo.enName,
-                        securityLevels: documentSecurityLevelLookupKey
-                    })
-                });
-            }
-            if (self.document.hasVsId() && self.document.subClassificationInfo.id !== -1) {
-                subClassificationOptionFromInfo = new Classification({
-                    id: self.document.subClassificationInfo.id,
-                    arName: self.document.subClassificationInfo.arName,
-                    enName: self.document.subClassificationInfo.enName,
-                    securityLevels: documentSecurityLevelLookupKey,
-                    parent: mainClassificationOptionFromInfo.classification.id
-                });
-            }
-            if (self.document.hasVsId() && self.document.documentFileInfo.id !== -1) {
-                documentFileOptionFromInfo = new OUDocumentFile({
-                    file: new DocumentFile({
-                        id: self.document.documentFileInfo.id,
-                        arName: self.document.documentFileInfo.arName,
-                        enName: self.document.documentFileInfo.enName,
-                        securityLevels: documentSecurityLevelLookupKey
-                    })
-                });
-            }
-            if (typeof self.document.mainClassification === 'number' && mainClassificationOptionFromInfo) {
-                self.document.mainClassification = mainClassificationOptionFromInfo.classification;
-            }
-            if (typeof self.document.subClassification === 'number' && subClassificationOptionFromInfo) {
-                self.document.subClassification = subClassificationOptionFromInfo;
-            }
-            if (typeof self.document.fileId === 'number' && documentFileOptionFromInfo) {
-                self.document.fileId = documentFileOptionFromInfo.file;
-            }
-
-            _getClassifications(false);
-            _getDocumentFiles(false);
-
-            _selectFirstOptionForRequired();
-        });
-
 
         /**
          * @description Finds the property configuration by symbolic name
@@ -862,6 +790,78 @@ module.exports = function (app) {
             if (!field.$modelValue && self.checkMandatory(field.$name)) {
                 field.$setValidity('required', false);
             }
-        }
+        };
+
+        self.$onInit = function () {
+            // all system organizations
+            self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
+            // sort organizations
+            if (self.organizations && self.organizations.length) {
+                self.organizations = _.sortBy(self.organizations, [function (ou) {
+                    return ou[langService.current + 'Name'].toLowerCase();
+                }]);
+            }
+            // sort regOus
+            if (self.registryOrganizations && self.registryOrganizations.length) {
+                self.registryOrganizations = _.sortBy(self.registryOrganizations, [function (ou) {
+                    return ou[langService.current + 'Name'].toLowerCase();
+                }]);
+            }
+            // all document types
+            self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
+            self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
+            documentSecurityLevelLookupKey = angular.copy(self.document.securityLevel);
+            if (documentSecurityLevelLookupKey.hasOwnProperty('lookupKey')) {
+                documentSecurityLevelLookupKey = documentSecurityLevelLookupKey.lookupKey;
+            }
+
+            _setRequiredFieldsFromConfiguration();
+
+            if (self.document.hasVsId() && self.document.mainClassificationInfo.id !== -1) {
+                mainClassificationOptionFromInfo = new OUClassification({
+                    classification: new Classification({
+                        id: self.document.mainClassificationInfo.id,
+                        arName: self.document.mainClassificationInfo.arName,
+                        enName: self.document.mainClassificationInfo.enName,
+                        securityLevels: documentSecurityLevelLookupKey
+                    })
+                });
+            }
+            if (self.document.hasVsId() && self.document.subClassificationInfo.id !== -1) {
+                subClassificationOptionFromInfo = new Classification({
+                    id: self.document.subClassificationInfo.id,
+                    arName: self.document.subClassificationInfo.arName,
+                    enName: self.document.subClassificationInfo.enName,
+                    securityLevels: documentSecurityLevelLookupKey,
+                    parent: mainClassificationOptionFromInfo.classification.id
+                });
+            }
+            if (self.document.hasVsId() && self.document.documentFileInfo.id !== -1) {
+                documentFileOptionFromInfo = new OUDocumentFile({
+                    file: new DocumentFile({
+                        id: self.document.documentFileInfo.id,
+                        arName: self.document.documentFileInfo.arName,
+                        enName: self.document.documentFileInfo.enName,
+                        securityLevels: documentSecurityLevelLookupKey
+                    })
+                });
+            }
+            if (typeof self.document.mainClassification === 'number' && mainClassificationOptionFromInfo) {
+                self.document.mainClassification = mainClassificationOptionFromInfo.classification;
+            }
+            if (typeof self.document.subClassification === 'number' && subClassificationOptionFromInfo) {
+                self.document.subClassification = subClassificationOptionFromInfo;
+            }
+            if (typeof self.document.fileId === 'number' && documentFileOptionFromInfo) {
+                self.document.fileId = documentFileOptionFromInfo.file;
+            }
+
+            _getClassifications(false);
+            _getDocumentFiles(false);
+
+            self.sourceForm = $scope.outgoing_properties;
+
+            _selectFirstOptionForRequired();
+        };
     });
 };

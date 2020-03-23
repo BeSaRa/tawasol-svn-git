@@ -37,38 +37,29 @@ module.exports = function (app) {
         self.registrySectionSearchText = '';
         self.ouSearchText = '';
 
-        $timeout(function () {
-            // all system organizations
-            self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
-            // sort organizations
-            if (self.organizations && self.organizations.length) {
-                self.organizations = _.sortBy(self.organizations, [function (ou) {
-                    return ou[langService.current + 'Name'].toLowerCase();
-                }]);
-            }
-            // sort regOus
-            if (self.registryOrganizations && self.registryOrganizations.length) {
-                self.registryOrganizations = _.sortBy(self.registryOrganizations, [function (ou) {
-                    return ou[langService.current + 'Name'].toLowerCase();
-                }]);
-            }
-            // all document types
-            self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
-            self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
-            properties = angular.copy(lookupService.getPropertyConfigurations(self.document.docClassName));
-            _getClassifications(false);
-            _getDocumentFiles(false);
-
-            if (self.document && self.document.getInfo().documentClass.toLowerCase() === 'incoming' && !self.document.refDocDate) {
-                self.document.refDocDate = self.document.docDate;
-            }
-        });
         // current employee
         self.employee = employeeService.getEmployee();
         // for sub organizations
         self.subOrganizations = [];
+
         // required fields for the current document class
         self.required = {};
+
+        /**
+         * @description Set the required for each field from property configuration
+         * @private
+         */
+        function _setRequiredFieldsFromConfiguration() {
+            properties = angular.copy(lookupService.getPropertyConfigurations(self.document.docClassName));
+
+            _.map(properties, function (item) {
+                // if subClassification is required, force require the mainClassification as well
+                if (item.symbolicName.toLowerCase() === 'subclassification' && item.isMandatory) {
+                    _forceSetMandatory('MainClassification');
+                }
+                self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
+            });
+        }
 
         /**
          * @description Finds the property configuration by symbolic name
@@ -97,17 +88,6 @@ module.exports = function (app) {
                 self.required[forceMandatorySymbolicName.toLowerCase()] = true;
             }
         };
-
-        // need  timeout here to start init each property mandatory.
-        $timeout(function () {
-            _.map(properties, function (item) {
-                // if subClassification is required, force require the mainClassification as well
-                if (item.symbolicName.toLowerCase() === 'subclassification' && item.isMandatory) {
-                    _forceSetMandatory('MainClassification');
-                }
-                self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
-            });
-        });
 
         self.checkMandatory = function (fieldName) {
             return self.required[fieldName.toLowerCase()];
@@ -204,6 +184,15 @@ module.exports = function (app) {
             });
         }
 
+        function _getFormControlByName(fieldName) {
+            if (!fieldName || !self.sourceForm) {
+                return null;
+            }
+            return _.find(self.sourceForm.$$controls, function (control) {
+                return control.$name.toLowerCase() === fieldName.toLowerCase();
+            });
+        }
+
         /**
          * @description on security level changed
          */
@@ -233,7 +222,7 @@ module.exports = function (app) {
          * @param skipResetSub
          * @param field
          */
-        self.onChangeMainClassification = function ($event, skipResetSub , field) {
+        self.onChangeMainClassification = function ($event, skipResetSub, field) {
             self.checkNullValues(field);
             if (self.document.mainClassification) {
                 self.loadSubClassificationRecords(true, self.checkMandatory('subClassification'));
@@ -276,11 +265,6 @@ module.exports = function (app) {
                 toast.error(error);
             });
         };
-        // if we have source form
-        $timeout(function () {
-            self.sourceForm = $scope.outgoing_properties;
-            //self.disableProperties = self.checkIfEditDisabled(self.document)
-        });
 
         $scope.$watch(function () {
             return self.model;
@@ -427,11 +411,16 @@ module.exports = function (app) {
                     var field = fields[f], options = _.get(self, field.options);
                     if (self.checkMandatory(field.name) && options && options.length) {
                         // if there is no value selected by default
-                        if (typeof self.document[field.name] === 'undefined' || self.document[field.name] === null || self.document[field.name] === '')
+                        if (typeof self.document[field.name] === 'undefined' || self.document[field.name] === null || self.document[field.name] === '') {
                             self.document[field.name] = (field.value) ? options[0][field.value] : options[0];
-
+                        }
                         if (field.name === 'registryOU') {
                             self.onRegistryChange(self.document.registryOU);
+                        }
+
+                        if (field.name === 'mainClassification') {
+                            var mainClassificationField = _getFormControlByName('mainClassification');
+                            self.onChangeMainClassification(null, false, mainClassificationField);
                         }
                     }
                 }
@@ -439,10 +428,6 @@ module.exports = function (app) {
 
             self.isNewDocument = false;
         }
-
-        $timeout(function () {
-            _selectFirstOptionForRequired();
-        });
 
         /**
          * @description Check if the document is approved. If yes, don't allow to change properties and correspondence sites
@@ -594,6 +579,38 @@ module.exports = function (app) {
             if (!field.$modelValue && self.checkMandatory(field.$name)) {
                 field.$setValidity('required', false);
             }
-        }
+        };
+
+        self.$onInit = function () {
+            // all system organizations
+            self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
+            // sort organizations
+            if (self.organizations && self.organizations.length) {
+                self.organizations = _.sortBy(self.organizations, [function (ou) {
+                    return ou[langService.current + 'Name'].toLowerCase();
+                }]);
+            }
+            // sort regOus
+            if (self.registryOrganizations && self.registryOrganizations.length) {
+                self.registryOrganizations = _.sortBy(self.registryOrganizations, [function (ou) {
+                    return ou[langService.current + 'Name'].toLowerCase();
+                }]);
+            }
+            // all document types
+            self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
+            self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
+
+            _setRequiredFieldsFromConfiguration();
+
+            _getClassifications(false);
+            _getDocumentFiles(false);
+
+
+            if (self.document && self.document.getInfo().documentClass.toLowerCase() === 'incoming' && !self.document.refDocDate) {
+                self.document.refDocDate = self.document.docDate;
+            }
+            self.sourceForm = $scope.outgoing_properties;
+            _selectFirstOptionForRequired();
+        };
     });
 };
