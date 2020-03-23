@@ -302,7 +302,7 @@ module.exports = function (app) {
             }
 
             workItem
-                .exportWorkItem($event, true)
+                .exportWorkItem($event)
                 .then(function () {
                     return workItem.addToIcnArchiveDialog($event)
                         .then(function () {
