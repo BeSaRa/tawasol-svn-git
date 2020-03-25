@@ -581,6 +581,9 @@ module.exports = function (app) {
             }
         };
 
+        $timeout(function () {
+            self.sourceForm = $scope.outgoing_properties;
+        });
         self.$onInit = function () {
             // all system organizations
             self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
@@ -609,7 +612,7 @@ module.exports = function (app) {
             if (self.document && self.document.getInfo().documentClass.toLowerCase() === 'incoming' && !self.document.refDocDate) {
                 self.document.refDocDate = self.document.docDate;
             }
-            self.sourceForm = $scope.outgoing_properties;
+
             _selectFirstOptionForRequired();
         };
     });

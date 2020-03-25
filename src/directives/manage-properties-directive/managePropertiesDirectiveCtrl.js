@@ -792,6 +792,10 @@ module.exports = function (app) {
             }
         };
 
+        $timeout(function () {
+            self.sourceForm = $scope.outgoing_properties;
+        });
+
         self.$onInit = function () {
             // all system organizations
             self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
@@ -859,7 +863,7 @@ module.exports = function (app) {
             _getClassifications(false);
             _getDocumentFiles(false);
 
-            self.sourceForm = $scope.outgoing_properties;
+
 
             _selectFirstOptionForRequired();
         };
