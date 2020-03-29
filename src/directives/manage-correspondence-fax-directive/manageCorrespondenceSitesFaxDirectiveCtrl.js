@@ -370,8 +370,7 @@ module.exports = function (app) {
             var siteType = self.selectedSiteTypeAdvanced && self.selectedSiteTypeAdvanced.hasOwnProperty('lookupKey')
                 ? self.selectedSiteTypeAdvanced.lookupKey
                 : self.selectedSiteTypeAdvanced;
-            // if internal site type or g2g site type, load main sites
-            if (typeof siteType !== 'undefined' && siteType !== null && (configurationService.CORRESPONDENCE_SITES_TYPES_LOOKUPS.indexOf(siteType) !== -1)) {
+            if (siteType) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: siteType,
                     criteria: null,
@@ -615,7 +614,7 @@ module.exports = function (app) {
                 if (code === 13) {
                     if (fieldType === 'mainSiteSimple' || fieldType === 'mainSiteAdvanced') {
                         self.loadMainSitesRecords($event);
-                    } else if (fieldType === 'subSiteSimple'){
+                    } else if (fieldType === 'subSiteSimple') {
                         self.loadSubSitesRecords($event).then(function () {
                             angular.element($event.target).focus();
                         });
