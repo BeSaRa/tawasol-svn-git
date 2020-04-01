@@ -20,12 +20,13 @@
                             <div layout="row">
                                 <md-input-container flex>
                                     <label for="shortDescription">{{lang.comments_short_description}}</label>
-                                    <input id="shortDescription" minlength="3" name="shortDescription"
+                                    <input id="shortDescription" maxlength="80" minlength="3" name="shortDescription"
                                            required
                                            ng-model="ctrl.documentComment.shortDescription">
                                     <div ng-messages="ctrl.documentCommentForm.shortDescription.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
                                         <div ng-message="minlength">{{lang.short}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
                                     </div>
                                 </md-input-container>
                                 <md-input-container flex="20">
@@ -43,12 +44,13 @@
                             <div layout="row">
                                 <md-input-container flex>
                                     <label for="description">{{lang.comments_description}}</label>
-                                    <textarea required minlength="5" rows="3" name="description"
+                                    <textarea required maxlength="500" minlength="5" rows="3" name="description"
                                               id="description"
                                               ng-model="ctrl.documentComment.description"></textarea>
                                     <div ng-messages="ctrl.documentCommentForm.description.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
                                         <div ng-message="minlength">{{lang.short}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length:500})}}</div>
                                     </div>
                                 </md-input-container>
                             </div>
