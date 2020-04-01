@@ -192,10 +192,12 @@ module.exports = function (app) {
             if (code !== 13)
                 return;
             item.status = false;
+            _updateStructure();
         };
 
         self.stopEditStaticText = function (item) {
             item.status = false;
+            _updateStructure();
         };
 
         self.editStaticText = function (item) {
