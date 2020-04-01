@@ -18,7 +18,7 @@ module.exports = function (app) {
                         cancel: '.sort-cancel',
                         receive: function (e, ui) {
                             var idx = element.data('rowIndex');
-                            var item = ui.helper.data('item');
+                            var item = angular.copy(ui.helper.data('item'));
 
                             if (element.hasClass('barcode-row')) {
                                 ui.helper.replaceWith(self.compileItem(self.createItem(item, idx), item));
