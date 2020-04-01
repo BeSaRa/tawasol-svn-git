@@ -1,7 +1,8 @@
 <div id="barcode-settings" flex layout="row">
     <div class="barcode-column" flex id="barcode-generator" layout="row">
         <div class="barcode-generator block-display" layout="column">
-            <div ng-class="{'disabled':ctrl.elementExists(item)}" bc-draggable="item" flex class="barcode-item"
+            <div ng-class="{'disabled':ctrl.elementExists(item),'static-text-element':ctrl.isElementStaticWord(item)}"
+                 bc-draggable="item" flex class="barcode-item"
                  ng-repeat="item in ctrl.barcodeElements track by $index">
                 <span md-truncate>{{item.getTranslatedName()}}</span>
             </div>
@@ -69,18 +70,18 @@
                 </div>
                 <div layout="row">
                     <md-input-container flex>
-                    <label for="fontName">{{lang.font_name}}</label>
-                    <md-select name="fontName" id="fontName" flex
-                               ng-model="ctrl.globalSetting.barcodeElements.fontName">
-                        <md-option ng-value="fontName.value"
-                                   ng-repeat="fontName in ctrl.fontNames">
-                            {{fontName.text}}
-                        </md-option>
-                    </md-select>
+                        <label for="fontName">{{lang.font_name}}</label>
+                        <md-select name="fontName" id="fontName" flex
+                                   ng-model="ctrl.globalSetting.barcodeElements.fontName">
+                            <md-option ng-value="fontName.value"
+                                       ng-repeat="fontName in ctrl.fontNames">
+                                {{fontName.text}}
+                            </md-option>
+                        </md-select>
                     </md-input-container>
                 </div>
                 <div layout="column">
-                    <div  flex="20" flex-gt-md="15"  layout layout-align="start center">
+                    <div flex="20" flex-gt-md="15" layout layout-align="start center">
                         <label for="resolution-slider">{{lang.resolution}}</label>
                     </div>
                     <md-slider-container flex>
@@ -94,7 +95,8 @@
         </div>
         <div layout="column" layout-align="center center">
             <div>
-                <md-button ng-disabled="barcodeForm.$invalid" class="md-raised md-primary" ng-click="ctrl.getBarcodeTest($event)">
+                <md-button ng-disabled="barcodeForm.$invalid" class="md-raised md-primary"
+                           ng-click="ctrl.getBarcodeTest($event)">
                     {{lang.generate_barcode}}
                 </md-button>
             </div>

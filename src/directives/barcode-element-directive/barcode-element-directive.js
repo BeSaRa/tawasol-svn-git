@@ -18,8 +18,11 @@ module.exports = function (app) {
                         cancel: '.sort-cancel',
                         receive: function (e, ui) {
                             var idx = element.data('rowIndex');
+                            var item = ui.helper.data('item');
+
                             if (element.hasClass('barcode-row')) {
-                                ui.helper.data('rowIndex', idx);
+                                ui.helper.replaceWith(self.compileItem(self.createItem(item, idx), item));
+                                ui.helper.data('item', item);
                                 scope.$apply(function () {
                                     self.updateRows(ui.helper);
                                 });
@@ -51,13 +54,12 @@ module.exports = function (app) {
                         helper: 'clone',
                         tolerance: "pointer",
                         start: function (e, ui) {
-                            ui.helper.prepend($compile(self.createDeleteButton('item'))(scope));
                             if (scope.item) {
+                                ui.helper.prepend($compile(self.createDeleteButton('item'))(scope));
                                 ui.helper.data('item', item);
                             }
                         }
-                    })
-                    .disableSelection();
+                    });
             }
         }
     });

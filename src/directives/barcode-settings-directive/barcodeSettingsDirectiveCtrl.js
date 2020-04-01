@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                              globalSettingService,
                                                              BarcodeSetting,
                                                              lookupService,
+                                                             langService,
                                                              dialog,
                                                              cmsTemplate) {
         'ngInject';
@@ -20,6 +21,14 @@ module.exports = function (app) {
         self.barcodeElements = _.sortBy(self.barcodeElements, function (element) {
             return element.itemOrder ? element.itemOrder : '';
         });
+
+        self.barcodeElements.unshift(new Lookup({
+            lookupStrKey: '',
+            defaultArName: langService.getKey('static_text', 'ar'),
+            defaultEnName: langService.getKey('static_text', 'en'),
+            lookupKey: 'STATIC_WORD'
+        }));
+
         self.elements = [];
 
         self.selectedRowIndex = null;
@@ -79,6 +88,10 @@ module.exports = function (app) {
             return item.lookupKey === 'STATIC_WORD';
         }
 
+        self.isElementStaticWord = function (item) {
+            return _isStaticWord(item);
+        };
+
         self.elementExists = function (element) {
             return self.getElementPosition(element) !== -1;
         };
@@ -109,8 +122,8 @@ module.exports = function (app) {
         };
 
         self.createDeleteButton = function (type, idx) {
-            if (self.hasBarcodeLabel(idx)){
-                return ;
+            if (self.hasBarcodeLabel(idx)) {
+                return;
             }
             return angular
                 .element('<div />', {
@@ -153,15 +166,40 @@ module.exports = function (app) {
 
         self.createItem = function (item, idx) {
             self.elements.push(item);
-            return angular
+            var title = angular.element('<span />', {'md-truncate': ''}).html('{{ ctrl.isElementStaticWord(item) ? (item.lookupStrKey ? item.lookupStrKey : item.getTranslatedName() )  :  item.getTranslatedName() }}');
+            var element = angular
                 .element('<div />', {
                     class: 'barcode-item',
                     flex: ''
                 })
                 .append(self.createDeleteButton('item', item.lookupStrKey !== 'BARCODE_LABEL' ? undefined : idx))
-                .append(angular.element('<span />', {'md-truncate': ''}).html('{{item.getTranslatedName()}}'))
+                .append()
                 .data('item', item)
-                .data('rowIndex', idx);
+                .data('rowIndex', idx)
+                .attr('ng-class', "{'static-text-element':ctrl.isElementStaticWord(item),'sort-cancel':item.status}");
+            if (self.isElementStaticWord(item)) {
+                title.attr('ng-if', '!item.status');
+                title.attr('ng-dblclick', 'ctrl.editStaticText(item)');
+                var input = angular.element('<input ng-blur="ctrl.stopEditStaticText(item)" ng-trim="false" ng-keypress="ctrl.editStaticTextOffWhenEnter(item,$event)" ng-if="item.status"  class="static-text-element-input" type="text" ng-model="item.lookupStrKey" />')
+                element.append(input);
+            }
+            element.append(title);
+            return element;
+        };
+
+        self.editStaticTextOffWhenEnter = function (item, $event) {
+            var code = $event.keyCode || $event.which;
+            if (code !== 13)
+                return;
+            item.status = false;
+        };
+
+        self.stopEditStaticText = function (item) {
+            item.status = false;
+        };
+
+        self.editStaticText = function (item) {
+            item.status = true;
         };
 
         self.compileBarcode = function (rows) {

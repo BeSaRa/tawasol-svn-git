@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('BarcodeSetting', function (CMSModelInterceptor, Lookup, lookupService, _) {
+    app.factory('BarcodeSetting', function (CMSModelInterceptor, Lookup, lookupService, langService, _) {
         'ngInject';
         return function BarcodeSetting(model) {
             var self = this;
@@ -62,15 +62,17 @@ module.exports = function (app) {
                 if (typeof self.rows === 'string')
                     self.rows = angular.fromJson(self.rows);
 
-                self.rows = _.map(self.rows, function (row ,idx) {
+                self.rows = _.map(self.rows, function (row, idx) {
                     var rowItems = row.split('|');
                     return _.map(rowItems, function (item) {
                         if (item.split(':')[0] === 'id') {
                             return getLookup(lookupService.barcodeElement, item.split(':')[1])
                         }
                         return new Lookup({
-                            lookupKey: 'STATIC_WORD',
-                            lookupStrKey: item.split(':')[1]
+                            lookupStrKey: item.split(':')[1],
+                            defaultArName: langService.getKey('static_text', 'ar'),
+                            defaultEnName: langService.getKey('static_text', 'en'),
+                            lookupKey: 'STATIC_WORD'
                         });
                     })
                 });
