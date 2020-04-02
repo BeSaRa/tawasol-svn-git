@@ -43,6 +43,44 @@ module.exports = function (app) {
         self.simpleSubSiteResultSearchText = '';
 
         self.documentClass = null;
+        // followup statuses
+        self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
+        // selected followup Status.
+        self.followupStatus = null;
+        self.isFollowupStatusMandatory = false;
+
+        var followupStatusWithoutReply = _.find(self.followUpStatuses, function (status) {
+                return status.lookupStrKey === 'WITHOUT_REPLY';
+            }),
+            followupStatusNeedReply = _.find(self.followUpStatuses, function (status) {
+                return status.lookupStrKey === 'NEED_REPLY';
+            }),
+            properties = angular.copy(lookupService.getPropertyConfigurations('outgoing'));
+
+        /**
+         * @description Finds the property configuration by symbolic name
+         * @param symbolicName
+         * @returns {*|null}
+         * @private
+         */
+        function _findPropertyConfiguration(symbolicName) {
+            if (!symbolicName) {
+                return null;
+            }
+            return _.find(properties, function (item) {
+                return item.symbolicName.toLowerCase() === symbolicName.toLowerCase();
+            }) || null;
+        }
+
+        function _checkFollowupStatusMandatory() {
+            var property = _findPropertyConfiguration('FollowupStatus');
+            self.isFollowupStatusMandatory = property.isMandatory;
+            if (property.isMandatory) {
+                self.followupStatus = followupStatusNeedReply;
+                self.followupStatus_DL = followupStatusNeedReply;
+            }
+        }
+
         $timeout(function () {
             self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
             self.correspondenceSiteTypesCopy = angular.copy(self.correspondenceSiteTypes);
@@ -51,6 +89,7 @@ module.exports = function (app) {
 
             self.mainSites = [];
             self.mainSitesCopy = angular.copy(self.mainSites);
+            _checkFollowupStatusMandatory();
         });
 
         self.selectedSiteTypeSimple = null;
@@ -72,10 +111,6 @@ module.exports = function (app) {
         self.sitesInfoTo = [];
         // book vsId
         self.vsId = null;
-        // followup statuses
-        self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
-        // selected followup Status.
-        self.followupStatus = null;
         // current for need reply
         self.minDate = _createCurrentDate(1);
         // all sub correspondence sites
@@ -265,7 +300,7 @@ module.exports = function (app) {
         function _mapSubSites(siteView) {
             return (new Site())
                 .mapFromSiteView(siteView)
-                .setFollowupStatus(self.followUpStatuses[1])
+                .setFollowupStatus(self.isFollowupStatusMandatory ? followupStatusNeedReply : followupStatusWithoutReply)
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
         }
 
@@ -380,32 +415,56 @@ module.exports = function (app) {
          * @param isDistributionListRecord
          */
         self.addSitesTo = function (sites, $event, isDistributionListRecord) {
-            var sitesWithoutNeedReply = _.filter(sites, function (site) {
-                return !self.needReply(site.followupStatus);
-            });
-            /*sitesWithoutNeedReply = [] means all sites need reply
-            * if followupStatus is needReply and no date selected and all sites need reply, show alert
-            * otherwise add sites without need reply
-            * */
-            if (self.needReply(self.followupStatus) && !self.followUpStatusDate) {
-                if (sitesWithoutNeedReply.length === 0) {
-                    dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
-                    return;
-                } else {
-                    dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
-                        .then(function () {
-                            _.map(sitesWithoutNeedReply, function (site) {
-                                self.addSiteTo(site);
-                            });
-                            _resetSelectedData(isDistributionListRecord);
+            var sitesWithNeedReplyAndNoDate = _.filter(sites, function (site) {
+                    return self.needReply(site.followupStatus) && !site.followupDate;
+                }),
+                sitesWithoutNeedReply = _.filter(sites, function (site) {
+                    return !self.needReply(site.followupStatus);
+                });
+
+            if (sitesWithNeedReplyAndNoDate.length === sites.length) {
+                dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
+            } else if (sitesWithNeedReplyAndNoDate.length && (sitesWithNeedReplyAndNoDate.length < sites.length) && sitesWithoutNeedReply.length) {
+                dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
+                    .then(function () {
+                        _.map(sitesWithoutNeedReply, function (site) {
+                            self.addSiteTo(site);
                         });
-                }
+                        _resetSelectedData(isDistributionListRecord);
+                    });
             } else {
                 _.map(sites, function (site) {
-                    self.addSiteTo(site, isDistributionListRecord);
+                    self.addSiteTo(site);
                 });
                 _resetSelectedData(isDistributionListRecord);
             }
+
+
+            /*sitesWithoutNeedReply = _.filter(sites, function (site) {
+                return !self.needReply(site.followupStatus);
+            });
+             /!*sitesWithoutNeedReply = [] means all sites need reply
+             * if followupStatus is needReply and no date selected and all sites need reply, show alert
+             * otherwise add sites without need reply
+             * *!/
+             if (self.needReply(self.followupStatus) && !self.followUpStatusDate) {
+                 if (sitesWithoutNeedReply.length === 0) {
+                     dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
+                 } else {
+                     dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
+                         .then(function () {
+                             _.map(sitesWithoutNeedReply, function (site) {
+                                 self.addSiteTo(site);
+                             });
+                             _resetSelectedData(isDistributionListRecord);
+                         });
+                 }
+             } else {
+                 _.map(sites, function (site) {
+                     self.addSiteTo(site);
+                 });
+                 _resetSelectedData(isDistributionListRecord);
+             }*/
         };
 
         /**
@@ -414,20 +473,30 @@ module.exports = function (app) {
          * @param isDistributionListRecord
          */
         self.addAllSitesTo = function ($event, isDistributionListRecord) {
-            var sites = angular.copy(self.subSearchResult);
-            if (isDistributionListRecord) {
-                sites = angular.copy(self.subSearchResult_DL);
+            var sites = isDistributionListRecord ? angular.copy(self.subSearchResult_DL) : angular.copy(self.subSearchResult);
+            var sitesWithNeedReplyAndNoDate = _.filter(sites, function (site) {
+                    return self.needReply(site.followupStatus) && !site.followupDate;
+                }),
+                sitesWithoutNeedReply = _.filter(sites, function (site) {
+                    return !self.needReply(site.followupStatus);
+                });
+
+            if (sitesWithNeedReplyAndNoDate.length === sites.length) {
+                dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
+            } else if (sitesWithNeedReplyAndNoDate.length && (sitesWithNeedReplyAndNoDate.length < sites.length) && sitesWithoutNeedReply.length) {
+                dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
+                    .then(function () {
+                        _.map(sitesWithoutNeedReply, function (site) {
+                            self.addSiteTo(site);
+                        });
+                        _resetSelectedData(isDistributionListRecord);
+                    });
+            } else {
+                _.map(sites, function (site) {
+                    self.addSiteTo(site);
+                });
+                _resetSelectedData(isDistributionListRecord);
             }
-            /*Override all sites to use without reply*/
-            var followupStatusWithoutReply = _.find(self.followUpStatuses, function (status) {
-                return status.lookupStrKey === 'WITHOUT_REPLY';
-            });
-            _.map(sites, function (site) {
-                site.followupStatus = followupStatusWithoutReply;
-                site.followupDate = null;
-                self.addSiteTo(site, isDistributionListRecord);
-            });
-            _resetSelectedData(isDistributionListRecord);
         };
 
         /**
@@ -437,13 +506,37 @@ module.exports = function (app) {
          * @param isDistributionListRecord
          */
         self.addSitesCC = function (sites, $event, isDistributionListRecord) {
-            var sitesWithoutNeedReply = _.filter(sites, function (site) {
+            var sitesWithNeedReplyAndNoDate = _.filter(sites, function (site) {
+                    return self.needReply(site.followupStatus) && !site.followupDate;
+                }),
+                sitesWithoutNeedReply = _.filter(sites, function (site) {
+                    return !self.needReply(site.followupStatus);
+                });
+
+            if (sitesWithNeedReplyAndNoDate.length === sites.length) {
+                dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
+            } else if (sitesWithNeedReplyAndNoDate.length && (sitesWithNeedReplyAndNoDate.length < sites.length) && sitesWithoutNeedReply.length) {
+                dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
+                    .then(function () {
+                        _.map(sitesWithoutNeedReply, function (site) {
+                            self.addSiteCC(site);
+                        });
+                        _resetSelectedData(isDistributionListRecord);
+                    });
+            } else {
+                _.map(sites, function (site) {
+                    self.addSiteCC(site);
+                });
+                _resetSelectedData(isDistributionListRecord);
+            }
+
+            /*var sitesWithoutNeedReply = _.filter(sites, function (site) {
                 return !self.needReply(site.followupStatus);
             });
-            /*sitesWithoutNeedReply = [] means all sites need reply
+            /!*sitesWithoutNeedReply = [] means all sites need reply
             * if followupStatus is needReply and no date selected and all sites need reply, show alert
             * otherwise add sites without need reply
-            * */
+            * *!/
             if (self.needReply(self.followupStatus) && !self.followUpStatusDate) {
                 if (sitesWithoutNeedReply.length === 0) {
                     dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
@@ -459,10 +552,10 @@ module.exports = function (app) {
                 }
             } else {
                 _.map(sites, function (site) {
-                    self.addSiteCC(site, isDistributionListRecord);
+                    self.addSiteCC(site);
                 });
                 _resetSelectedData(isDistributionListRecord);
-            }
+            }*/
         };
 
         /**
@@ -471,20 +564,30 @@ module.exports = function (app) {
          * @param isDistributionListRecord
          */
         self.addAllSitesCC = function ($event, isDistributionListRecord) {
-            var sites = angular.copy(self.subSearchResult);
-            if (isDistributionListRecord) {
-                sites = angular.copy(self.subSearchResult_DL);
+            var sites = isDistributionListRecord ? angular.copy(self.subSearchResult_DL) : angular.copy(self.subSearchResult);
+            var sitesWithNeedReplyAndNoDate = _.filter(sites, function (site) {
+                    return self.needReply(site.followupStatus) && !site.followupDate;
+                }),
+                sitesWithoutNeedReply = _.filter(sites, function (site) {
+                    return !self.needReply(site.followupStatus);
+                });
+
+            if (sitesWithNeedReplyAndNoDate.length === sites.length) {
+                dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
+            } else if (sitesWithNeedReplyAndNoDate.length && (sitesWithNeedReplyAndNoDate.length < sites.length) && sitesWithoutNeedReply.length) {
+                dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
+                    .then(function () {
+                        _.map(sitesWithoutNeedReply, function (site) {
+                            self.addSiteCC(site);
+                        });
+                        _resetSelectedData(isDistributionListRecord);
+                    });
+            } else {
+                _.map(sites, function (site) {
+                    self.addSiteCC(site);
+                });
+                _resetSelectedData(isDistributionListRecord);
             }
-            /*Override all sites to use without reply*/
-            var followupStatusWithoutReply = _.find(self.followUpStatuses, function (status) {
-                return status.lookupStrKey === 'WITHOUT_REPLY';
-            });
-            _.map(sites, function (site) {
-                site.followupStatus = followupStatusWithoutReply;
-                site.followupDate = null;
-                self.addSiteCC(site, isDistributionListRecord);
-            });
-            _resetSelectedData(isDistributionListRecord);
         };
 
         /**
@@ -537,7 +640,7 @@ module.exports = function (app) {
             var siteType = self.selectedSiteTypeAdvanced && self.selectedSiteTypeAdvanced.hasOwnProperty('lookupKey')
                 ? self.selectedSiteTypeAdvanced.lookupKey
                 : self.selectedSiteTypeAdvanced;
-            if (siteType){
+            if (siteType) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: siteType,
                     criteria: null,
@@ -639,15 +742,22 @@ module.exports = function (app) {
         /**
          * @description set all followupStatus for all subSearchResult.
          */
-        self.onFollowupStatusChange = function (status) {
+        self.onFollowupStatusChange = function (status, isAddAllStatusChange) {
             self.followupStatus = status;
-            _setSitesProperty(self.subSearchSelected, 'followupStatus', status);
+            var sitesToSetFollowupStatus = [];
+            if (isAddAllStatusChange) {
+                sitesToSetFollowupStatus = self.subSearchResult;
+            } else {
+                sitesToSetFollowupStatus = self.subSearchSelected;
+            }
+            _setSitesProperty(sitesToSetFollowupStatus, 'followupStatus', status);
         };
         /**
          * @description set all followupDate for all subSearchResult.
          */
-        self.onFollowupDateChange = function () {
-            var sitesToSetFollowupDate = _.filter(self.subSearchSelected, function (site) {
+        self.onFollowupDateChange = function (isAddAllDateChange) {
+            var sitesToSetFollowupDate = isAddAllDateChange ? self.subSearchResult : self.subSearchSelected;
+            sitesToSetFollowupDate = _.filter(sitesToSetFollowupDate, function (site) {
                 return self.needReply(site.followupStatus);
             });
             _setSitesProperty(sitesToSetFollowupDate, 'followupDate', self.followUpStatusDate);
@@ -656,15 +766,22 @@ module.exports = function (app) {
         /**
          * @description set all followupStatus for all subSearchResult.
          */
-        self.onFollowupStatusChange_DL = function (status) {
+        self.onFollowupStatusChange_DL = function (status, isAddAllStatusChange) {
             self.followupStatus_DL = status;
-            _setSitesProperty(self.subSearchSelected_DL, 'followupStatus', status);
+            var sitesToSetFollowupStatus = [];
+            if (isAddAllStatusChange) {
+                sitesToSetFollowupStatus = self.subSearchResult_DL;
+            } else {
+                sitesToSetFollowupStatus = self.subSearchSelected_DL;
+            }
+            _setSitesProperty(sitesToSetFollowupStatus, 'followupStatus', status);
         };
         /**
          * @description set all followupDate for all subSearchResult.
          */
-        self.onFollowupDateChange_DL = function () {
-            var sitesToSetFollowupDate = _.filter(self.subSearchSelected_DL, function (site) {
+        self.onFollowupDateChange_DL = function (isAddAllDateChange) {
+            var sitesToSetFollowupDate = isAddAllDateChange ? self.subSearchResult_DL : self.subSearchSelected_DL;
+            sitesToSetFollowupDate = _.filter(sitesToSetFollowupDate, function (site) {
                 return self.needReply(site.followupStatus);
             });
             _setSitesProperty(sitesToSetFollowupDate, 'followupDate', self.followUpStatusDate_DL);

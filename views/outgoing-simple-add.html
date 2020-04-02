@@ -58,18 +58,12 @@
                             </accordion-directive>
                             <div layout="column">
                                 <div layout="row">
-                                    <md-button ng-disabled="ctrl.document_properties.$invalid
-                                                            || !ctrl.outgoing.sitesInfoTo.length
-                                                            || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist))
-                                                                && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
+                                    <md-button ng-disabled="ctrl.isInValidForm(ctrl.document_properties)"
                                                ng-click="ctrl.saveCorrespondence()" class="md-raised"
                                                ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                         {{lang.outgoing_save}}
                                     </md-button>
-                                    <md-button ng-disabled="ctrl.document_properties.$invalid
-                                                            || !ctrl.outgoing.sitesInfoTo.length
-                                                            || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist))
-                                                                && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
+                                    <md-button ng-disabled="ctrl.isInValidForm(ctrl.document_properties)"
                                                ng-click="ctrl.saveCorrespondenceAndPrintBarcode()" class="md-raised"
                                                ng-if="ctrl.outgoing.addMethod">
                                         {{lang.outgoing_save_print_barcode}}

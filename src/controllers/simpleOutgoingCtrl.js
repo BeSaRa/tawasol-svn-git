@@ -109,6 +109,26 @@ module.exports = function (app) {
             self.action = 'editAfterExport';
         }
 
+        self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
+
+        /**
+         * @description Finds the property configuration by symbolic name
+         * @param symbolicName
+         * @returns {*|null}
+         * @private
+         */
+        var _findPropertyConfiguration = function (symbolicName) {
+            if (!symbolicName) {
+                return null;
+            }
+            return _.find(properties, function (item) {
+                return item.symbolicName.toLowerCase() === symbolicName.toLowerCase();
+            }) || null;
+        };
+
+        var properties = angular.copy(lookupService.getPropertyConfigurations('outgoing'));
+        var isNeedReplyFromConfiguration = _findPropertyConfiguration('FollowupStatus').isMandatory;
+
         self.isDocumentTypeSwitchDisabled = function () {
             return !!self.outgoing.vsId || !employeeService.hasPermissionTo('OUTGOING_PAPER') || self.employee.isBacklogMode();
         };
@@ -822,6 +842,34 @@ module.exports = function (app) {
                 }).catch(function (result) {
                 self.outgoing.linkedEntities = result;
             })
+        };
+
+        self.needReply = function (status) {
+            return (status && status.lookupStrKey === 'NEED_REPLY');
+        };
+
+        var _isValidFirstSubSite = function () {
+            if (!isNeedReplyFromConfiguration) {
+                return true;
+            }
+
+            return self.needReply(self.outgoing.sitesInfoTo[0].followupStatus) && self.outgoing.sitesInfoTo[0].followupDate;
+        };
+
+        /**
+         * @description Checks if form is invalid
+         * @param form
+         * @returns {boolean|boolean}
+         */
+        self.isInValidForm = function (form) {
+            if (!form) {
+                return true;
+            }
+
+            return form.$invalid
+                || !self.outgoing.sitesInfoTo.length || !_isValidFirstSubSite()
+                || ((self.documentInformationExist || (self.contentFileExist && self.contentFileSizeExist))
+                    && !(self.documentInformation || self.outgoing.contentFile));
         };
 
     });

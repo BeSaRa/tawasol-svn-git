@@ -144,7 +144,7 @@
                                      layout-align="start center">
                                     <div flex>{{lang.sites_search_results}}</div>
                                     <!-- Add all as original/copy -->
-                                    <div ng-if="!ctrl.subSearchSelected.length && ctrl.subSearchResult.length">
+                                    <div ng-if="!ctrl.subSearchSelected.length && ctrl.subSearchResult.length" layout="row">
                                         <md-button class="md-raised"
                                                    ng-click="ctrl.addAllSitesTo($event)"
                                                    ng-disabled="!!ctrl.disableCorrespondence">
@@ -155,10 +155,37 @@
                                                    ng-disabled="!!ctrl.disableCorrespondence">
                                             {{lang.add_all_sites_as_copy}}
                                         </md-button>
+                                        <div>
+                                            <md-menu-bar class="follow-up-menu-bar">
+                                                <md-menu>
+                                                    <md-button ng-click="$mdMenu.open()"
+                                                               ng-disabled="!!ctrl.disableCorrespondence">
+                                                        {{ctrl.followupStatus.getTranslatedName() ||
+                                                        lang.sites_follow_up_status}}
+                                                    </md-button>
+                                                    <md-menu-content width="3">
+                                                        <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
+                                                            <md-button ng-click="ctrl.onFollowupStatusChange(status, true)">
+                                                                {{status.getTranslatedName()}}
+                                                            </md-button>
+                                                        </md-menu-item>
+                                                    </md-menu-content>
+                                                </md-menu>
+                                            </md-menu-bar>
+                                        </div>
+                                        <div>
+                                            <md-datepicker ng-if="ctrl.needReply(ctrl.followupStatus)"
+                                                           name="followUpStatusDate"
+                                                           ng-model="ctrl.followUpStatusDate"
+                                                           md-placeholder="{{lang.sites_follow_up_status_date}}"
+                                                           md-min-date="ctrl.minDate"
+                                                           ng-disabled="!!ctrl.disableCorrespondence"
+                                                           ng-change="ctrl.onFollowupDateChange(true)"
+                                                           md-open-on-focus></md-datepicker>
+                                        </div>
                                     </div>
-                                    <div ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence"
-                                         flex>
-                                        <!-- sub site result search -->
+                                    <!-- sub site result search -->
+                                    <div ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence" flex>
                                         <div class="cms-autocomplete-wrapper" flex>
                                             <span class="button-container">
                                                 <md-button ng-if="ctrl.isSubSiteSearchEnabled()"
@@ -191,24 +218,6 @@
                                                 </md-item-template>
                                             </md-autocomplete>
                                         </div>
-
-                                        <!--<md-autocomplete
-                                                flex
-                                                md-no-cache="true"
-                                                md-clear-button="true"
-                                                md-select-on-match="true"
-                                                md-selected-item="ctrl.selectedSimpleSub"
-                                                md-search-text="ctrl.simpleSubSiteResultSearchText"
-                                                md-selected-item-change="ctrl.onSimpleSubSiteSelectedChange(item)"
-                                                md-items="item in ctrl.getSimpleSubSearchOptions(ctrl.simpleSubSiteResultSearchText)"
-                                                md-item-text="item.getTranslatedName()"
-                                                md-min-length="0"
-                                                placeholder="{{lang.search}}">
-                                            <md-item-template>
-                                                <span md-highlight-text="ctrl.simpleSubSiteResultSearchText"
-                                                      md-highlight-flags="i">{{item.getTranslatedName()}}</span>
-                                            </md-item-template>
-                                        </md-autocomplete>-->
                                     </div>
                                     <!-- Close search results -->
                                     <div>
@@ -225,9 +234,9 @@
                                      layout-align="start center">
                                     <div>{{ctrl.subSearchSelected.length}} {{lang.items_selected}}</div>
                                     <span flex></span>
+                                    <!-- sub site result search -->
                                     <div ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence"
                                          flex>
-                                        <!-- sub site result search -->
                                         <md-autocomplete
                                                 flex
                                                 md-no-cache="true"
@@ -256,7 +265,7 @@
                                                     </md-button>
                                                     <md-menu-content width="3">
                                                         <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
-                                                            <md-button ng-click="ctrl.onFollowupStatusChange(status)">
+                                                            <md-button ng-click="ctrl.onFollowupStatusChange(status, false)">
                                                                 {{status.getTranslatedName()}}
                                                             </md-button>
                                                         </md-menu-item>
@@ -271,7 +280,7 @@
                                                            md-placeholder="{{lang.sites_follow_up_status_date}}"
                                                            md-min-date="ctrl.minDate"
                                                            ng-disabled="!!ctrl.disableCorrespondence"
-                                                           ng-change="ctrl.onFollowupDateChange()"
+                                                           ng-change="ctrl.onFollowupDateChange(false)"
                                                            md-open-on-focus></md-datepicker>
                                         </div>
                                         <div layout="row" layout-align="start center">
@@ -766,7 +775,7 @@
                                 <div layout="row" ng-if="!ctrl.subSearchSelected_DL.length" flex>
                                     <div flex>{{lang.sites_search_results}}</div>
                                     <!-- Add all as original/copy -->
-                                    <div>
+                                    <div layout="row">
                                         <md-button class="md-raised"
                                                    ng-click="ctrl.addAllSitesTo($event, true)"
                                                    ng-disabled="!!ctrl.disableCorrespondence">
@@ -777,6 +786,35 @@
                                                    ng-disabled="!!ctrl.disableCorrespondence">
                                             {{lang.add_all_sites_as_copy}}
                                         </md-button>
+                                        <div>
+                                            <md-menu-bar class="follow-up-menu-bar">
+                                                <md-menu>
+                                                    <md-button ng-click="$mdMenu.open()"
+                                                               ng-disabled="!!ctrl.disableCorrespondence">
+                                                        {{ctrl.followupStatus_DL.getTranslatedName() ||
+                                                        lang.sites_follow_up_status}}
+                                                    </md-button>
+                                                    <md-menu-content width="3">
+                                                        <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
+                                                            <md-button
+                                                                    ng-click="ctrl.onFollowupStatusChange_DL(status, true)">
+                                                                {{status.getTranslatedName()}}
+                                                            </md-button>
+                                                        </md-menu-item>
+                                                    </md-menu-content>
+                                                </md-menu>
+                                            </md-menu-bar>
+                                        </div>
+                                        <div>
+                                            <md-datepicker ng-if="ctrl.needReply(ctrl.followupStatus_DL)"
+                                                           name="followUpStatusDate_DL"
+                                                           ng-model="ctrl.followUpStatusDate_DL"
+                                                           md-placeholder="{{lang.sites_follow_up_status_date}}"
+                                                           md-min-date="ctrl.minDate"
+                                                           ng-disabled="!!ctrl.disableCorrespondence"
+                                                           ng-change="ctrl.onFollowupDateChange_DL(true)"
+                                                           md-open-on-focus></md-datepicker>
+                                        </div>
                                     </div>
                                     <div>
                                         <md-button tooltip="{{lang.sites_hide_search}}"
@@ -804,7 +842,7 @@
                                                     <md-menu-content width="3">
                                                         <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
                                                             <md-button
-                                                                    ng-click="ctrl.onFollowupStatusChange_DL(status)">
+                                                                    ng-click="ctrl.onFollowupStatusChange_DL(status, false)">
                                                                 {{status.getTranslatedName()}}
                                                             </md-button>
                                                         </md-menu-item>
@@ -819,7 +857,7 @@
                                                            md-placeholder="{{lang.sites_follow_up_status_date}}"
                                                            md-min-date="ctrl.minDate"
                                                            ng-disabled="!!ctrl.disableCorrespondence"
-                                                           ng-change="ctrl.onFollowupDateChange_DL()"
+                                                           ng-change="ctrl.onFollowupDateChange_DL(false)"
                                                            md-open-on-focus></md-datepicker>
                                         </div>
                                         <div layout="row" layout-align="start center">

@@ -210,7 +210,7 @@
                     <div ng-messages="outgoing_properties.docDate.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="Date">{{lang.dateonly}}</div>
-                        <div ng-message="maxDate">{{lang.date_should_be_less_than_equal.change({date:
+                        <div ng-message="maxDate">{{lang.date_should_be_less_than_equal.change({datevalue:
                             ctrl.maxCreateDate})}}
                         </div>
                     </div>
@@ -237,7 +237,7 @@
                     <div ng-messages="outgoing_properties.refDocDate.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="Date">{{lang.dateonly}}</div>
-                        <div ng-message="maxDate">{{lang.date_should_be_less_than_equal.change({date:
+                        <div ng-message="maxDate">{{lang.date_should_be_less_than_equal.change({datevalue:
                             ctrl.getMaxRefDocDateErrorMsg()})}}
                         </div>
                     </div>

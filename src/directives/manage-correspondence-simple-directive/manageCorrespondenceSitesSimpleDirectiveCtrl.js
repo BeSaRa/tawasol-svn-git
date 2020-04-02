@@ -18,7 +18,8 @@ module.exports = function (app) {
                                                                              generator,
                                                                              SiteView,
                                                                              rootEntity,
-                                                                             toast) {
+                                                                             toast,
+                                                                             customValidationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSitesSimpleDirectiveCtrl';
@@ -41,9 +42,44 @@ module.exports = function (app) {
         self.previousMainSites = [];
         self.previousSubSites = [];
 
+        self.defaultDateFormat = generator.defaultDateFormat;
+        self.minFollowupDate = moment().add(1, 'days').format(generator.defaultDateFormat);
+
+        var properties = [];
+
         self.withOutReply = _.find(self.followUpStatuses, function (item) {
             return item.lookupStrKey === 'WITHOUT_REPLY'
         });
+        var needReplyFollowupStatus = _.find(self.followUpStatuses, function (item) {
+            return item.lookupStrKey === 'NEED_REPLY'
+        });
+        self.selectedSubSiteFollowUpStatus = angular.copy(self.withOutReply);
+        self.selectedSubSiteFollowupDate = null;
+        self.isFollowupStatusMandatory = false;
+
+        /**
+         * @description Finds the property configuration by symbolic name
+         * @param symbolicName
+         * @returns {*|null}
+         * @private
+         */
+        var _findPropertyConfiguration = function (symbolicName) {
+            if (!symbolicName) {
+                return null;
+            }
+            return _.find(properties, function (item) {
+                return item.symbolicName.toLowerCase() === symbolicName.toLowerCase();
+            }) || null;
+        };
+
+        function _checkFollowupStatusRequired() {
+            var property = _findPropertyConfiguration('FollowupStatus');
+            self.isFollowupStatusMandatory = property.isMandatory;
+            if (property.isMandatory) {
+                self.followupStatus = needReplyFollowupStatus;
+                self.selectedSubSiteFollowUpStatus = needReplyFollowupStatus;
+            }
+        }
         // to check if simple search
         self.simpleSearch = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
 
@@ -56,6 +92,9 @@ module.exports = function (app) {
 
             self.subSites = [];
             self.subSitesCopy = angular.copy(self.subSites);
+
+            properties = angular.copy(lookupService.getPropertyConfigurations(self.documentClass));
+            _checkFollowupStatusRequired();
 
             if (self.correspondence.sitesToList && self.correspondence.sitesToList.length) {
                 var oldSites = angular.copy(self.correspondence.sitesToList);
@@ -131,7 +170,7 @@ module.exports = function (app) {
         function _mapSubSites(siteView) {
             return (new Site())
                 .mapFromSiteView(siteView)
-                .setFollowupStatus(self.followUpStatuses[1])
+                .setFollowupStatus(self.isFollowupStatusMandatory ? needReplyFollowupStatus : self.followUpStatuses[1])
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
         }
 
@@ -168,16 +207,12 @@ module.exports = function (app) {
          * @param site
          */
         self.addSiteTo = function (site) {
-            if (self.needReply(site.followupStatus) && !(site.followupDate)) {
-                toast.error(langService.get('sites_please_select_followup_date'));
-            } else {
-                _addSite('To', site)
-                    .then(function () {
-                        // _concatCorrespondenceSites(true).then(function () {
-                        //     self.subSites = _.filter(self.subSitesCopy, _filterSubSites);
-                        // });
-                    })
-            }
+            _addSite('To', site)
+                .then(function () {
+                    // _concatCorrespondenceSites(true).then(function () {
+                    //     self.subSites = _.filter(self.subSitesCopy, _filterSubSites);
+                    // });
+                })
         };
 
         /**
@@ -275,7 +310,7 @@ module.exports = function (app) {
             }
         };
 
-        self.showMore = function ($event) {
+        self.showMore = function (form, $event) {
             var info = self.correspondence.getInfo(),
                 defer = $q.defer();
             self.correspondence.hasVsId()
@@ -295,6 +330,30 @@ module.exports = function (app) {
                 self.subSiteChanged();
                 self.pushSelectedSubIfNotExists(self.selectedSubSite);
                 self.sitesInfoLength = self.correspondence.sitesInfoTo.length + self.correspondence.sitesInfoCC.length - 1;
+
+                if (self.correspondence.sitesInfoTo && self.correspondence.sitesInfoTo.length) {
+                    self.selectedSubSiteFollowUpStatus = self.correspondence.sitesInfoTo[0].followupStatus;
+
+                    var dateValue = (self.correspondence.sitesInfoTo[0].followupDate);
+                    self.selectedSubSiteFollowupDate = dateValue ? generator.getDateFromTimeStamp(dateValue.valueOf()) : null;
+                    $timeout(function () {
+                        var followupStatusField = _findControlInForm(form, 'followupDate');
+                        if (followupStatusField) {
+                            if (self.selectedSubSiteFollowupDate) {
+                                var isValid = _isValidFollowupDate();
+                                followupStatusField.$setValidity('required', true);
+                                followupStatusField.$setValidity('minDate', isValid);
+                            } else {
+                                if (!self.needReply(self.correspondence.sitesInfoTo[0])) {
+                                    followupStatusField.$setValidity('required', true);
+                                    followupStatusField.$setValidity('minDate', true);
+                                } else {
+                                    followupStatusField.$setValidity('required', false);
+                                }
+                            }
+                        }
+                    })
+                }
             })
         };
 
@@ -303,6 +362,8 @@ module.exports = function (app) {
                 self.addSiteTo(item);
             } else {
                 self['sitesInfoTo'] = [];
+                self.selectedSubSiteFollowUpStatus = null;
+                self.selectedSubSiteFollowupDate = null;
             }
         };
 
@@ -584,5 +645,58 @@ module.exports = function (app) {
                 self.selectedSubSite = null;
             }
         });
+
+        var _findControlInForm = function (form, controlName) {
+            var fields = form.$$controls, field;
+            for (var i = 0; i < fields.length; i++) {
+                if (fields[i].$name === controlName) {
+                    field = fields[i];
+                    break;
+                }
+            }
+            return field;
+        };
+
+        function _isValidFollowupDate (){
+            return ((new Date(self.selectedSubSiteFollowupDate)).valueOf() >= (new Date(self.minFollowupDate)).valueOf());
+        }
+
+        self.checkFollowupDateValid = function (form) {
+            if (self.correspondence.hasDocumentClass('outgoing')) {
+                if (!form || !self.selectedSubSite) {
+                    return true;
+                }
+
+                var isValid = true, followupStatusField = _findControlInForm(form, 'followupDate');
+                if (!self.selectedSubSiteFollowupDate) {
+                    if (self.needReply(self.selectedSubSite.followupStatus)) {
+                        isValid = false;
+                        followupStatusField.$setValidity('required', false);
+                    } else {
+                        isValid = true;
+                        followupStatusField.$setValidity('required', true);
+                        followupStatusField.$setValidity('minDate', true);
+                    }
+                } else {
+                    followupStatusField.$setValidity('required', true);
+                    isValid = _isValidFollowupDate();
+                    followupStatusField.$setValidity('minDate', isValid);
+                }
+
+                if (isValid){
+                    self.selectedSubSite.followupDate = new Date(self.selectedSubSiteFollowupDate);
+                } else {
+                    self.selectedSubSite.followupDate = null;
+                }
+                return isValid;
+            }
+        };
+
+        self.onSelectedSubSiteFollowupStatusChange = function (form, $event) {
+            if (form && self.selectedSubSite) {
+                self.selectedSubSiteFollowupDate = null;
+                self.checkFollowupDateValid(form);
+            }
+        }
     });
 };

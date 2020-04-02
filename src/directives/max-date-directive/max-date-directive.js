@@ -1,6 +1,6 @@
 module.exports = function (app) {
     /**
-     * @description
+     * @description Check if current value is less than or equal to given date
      */
 
     app.directive('maxDateDirective', function (generator, moment, $q) {
