@@ -225,10 +225,10 @@
                         </md-select-header>
                         <md-option ng-value="null">{{lang.all}}</md-option>
                         <md-option ng-value="classification.classification"
-                                   ng-repeat="classification in ctrl.classifications | translatedNameFilter: ctrl.mainClassificationSearchText:'getIdNameByLanguage':'classification'">
+                                   ng-repeat="classification in ctrl.classifications | translatedNameFilter: ctrl.mainClassificationSearchText:'getCodeOrIdAndNameByLanguage'">
                         <span
                                 md-highlight-text="ctrl.mainClassificationSearchText"
-                                md-highlight-flags="i">{{classification.classification.getIdNameByLanguage()}}</span>
+                                md-highlight-flags="i">{{classification.getCodeOrIdAndNameByLanguage()}}</span>
                         </md-option>
 
                     </md-select>

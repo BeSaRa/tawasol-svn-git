@@ -403,12 +403,12 @@
                                     <md-option md-highlight-text="ctrl.mainClassificationSearchText"
                                                md-highlight-flags="i"
                                                ng-value="mainClassification.classification"
-                                               ng-repeat="mainClassification in ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText:'getIdNameByLanguage':'classification'">
-                                        {{mainClassification.classification.getIdNameByLanguage()}}
+                                               ng-repeat="mainClassification in ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText:'getCodeOrIdAndNameByLanguage'">
+                                        {{mainClassification.getCodeOrIdAndNameByLanguage()}}
                                     </md-option>
                                     <md-option
                                             ng-click="ctrl.loadMainClassificationByCriteria(ctrl.mainClassificationSearchText , $event)"
-                                            ng-if="!(ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText:'getIdNameByLanguage':'classification').length && ctrl.mainClassificationSearchText.length">
+                                            ng-if="!(ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText:'getCodeOrIdAndNameByLanguage').length && ctrl.mainClassificationSearchText.length">
                                         <span class="red-text">{{lang.press_enter_to_load_more_records}}</span>
                                     </md-option>
                                 </md-select>

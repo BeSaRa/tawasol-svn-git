@@ -51,6 +51,15 @@ module.exports = function (app) {
             OUClassification.prototype.getTranslatedStatus = function () {
                 return this.status ? langService.get('active') : langService.get('inactive');
             };
+            /**
+             * @description Get the code of ouClassification or id of classification concatenated with name of classification with passed language name
+             * @param language
+             * @returns {string}
+             */
+            OUClassification.prototype.getCodeOrIdAndNameByLanguage = function (language) {
+                language = language || langService.current;
+                return ((this.code ? this.code : this.classification.id)+ ' - ') + this.classification[language + 'Name'];
+            };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('OUClassification', 'init', this);
