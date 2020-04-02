@@ -47,13 +47,13 @@ module.exports = function (app) {
 
         var properties = [];
 
-        self.withOutReply = _.find(self.followUpStatuses, function (item) {
-            return item.lookupStrKey === 'WITHOUT_REPLY'
-        });
-        var needReplyFollowupStatus = _.find(self.followUpStatuses, function (item) {
-            return item.lookupStrKey === 'NEED_REPLY'
-        });
-        self.selectedSubSiteFollowUpStatus = angular.copy(self.withOutReply);
+        var followupStatusWithoutReply = _.find(self.followUpStatuses, function (status) {
+                return status.lookupStrKey === 'WITHOUT_REPLY';
+            }),
+            followupStatusNeedReply = _.find(self.followUpStatuses, function (item) {
+                return item.lookupStrKey === 'NEED_REPLY'
+            });
+        self.selectedSubSiteFollowUpStatus = angular.copy(followupStatusWithoutReply);
         self.selectedSubSiteFollowupDate = null;
         self.isFollowupStatusMandatory = false;
 
@@ -76,8 +76,8 @@ module.exports = function (app) {
             var property = _findPropertyConfiguration('FollowupStatus');
             self.isFollowupStatusMandatory = property.isMandatory;
             if (property.isMandatory) {
-                self.followupStatus = needReplyFollowupStatus;
-                self.selectedSubSiteFollowUpStatus = needReplyFollowupStatus;
+                self.followupStatus = followupStatusNeedReply;
+                self.selectedSubSiteFollowUpStatus = followupStatusNeedReply;
             }
         }
         // to check if simple search
@@ -111,7 +111,7 @@ module.exports = function (app) {
 
                     self.getSubSites(true).then(function () {
                         var _subSite = new Site(oldSites[0]);
-                        _subSite.followupStatus = angular.copy(self.withOutReply);
+                        _subSite.followupStatus = angular.copy(followupStatusWithoutReply);
                         var selected = _.find(self.subSites, function (item) {
                             return item.mainSiteId === _subSite.mainSiteId && item.subSiteId === _subSite.subSiteId;
                         });
@@ -170,7 +170,7 @@ module.exports = function (app) {
         function _mapSubSites(siteView) {
             return (new Site())
                 .mapFromSiteView(siteView)
-                .setFollowupStatus(self.isFollowupStatusMandatory ? needReplyFollowupStatus : self.followUpStatuses[1])
+                .setFollowupStatus(self.isFollowupStatusMandatory ? followupStatusNeedReply : followupStatusWithoutReply)
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
         }
 
@@ -362,7 +362,7 @@ module.exports = function (app) {
                 self.addSiteTo(item);
             } else {
                 self['sitesInfoTo'] = [];
-                self.selectedSubSiteFollowUpStatus = null;
+                self.selectedSubSiteFollowUpStatus = followupStatusWithoutReply;
                 self.selectedSubSiteFollowupDate = null;
             }
         };
@@ -662,12 +662,12 @@ module.exports = function (app) {
         }
 
         self.checkFollowupDateValid = function (form) {
-            if (self.correspondence.hasDocumentClass('outgoing')) {
-                if (!form || !self.selectedSubSite) {
-                    return true;
-                }
+            if (!form || !self.selectedSubSite) {
+                return true;
+            }
 
-                var isValid = true, followupStatusField = _findControlInForm(form, 'followupDate');
+            var isValid = true, followupStatusField = _findControlInForm(form, 'followupDate');
+            if (followupStatusField){
                 if (!self.selectedSubSiteFollowupDate) {
                     if (self.needReply(self.selectedSubSite.followupStatus)) {
                         isValid = false;
@@ -682,18 +682,24 @@ module.exports = function (app) {
                     isValid = _isValidFollowupDate();
                     followupStatusField.$setValidity('minDate', isValid);
                 }
-
-                if (isValid){
-                    self.selectedSubSite.followupDate = new Date(self.selectedSubSiteFollowupDate);
-                } else {
-                    self.selectedSubSite.followupDate = null;
-                }
-                return isValid;
             }
+
+            if (isValid){
+                self.selectedSubSite.followupDate = self.selectedSubSiteFollowupDate ? new Date(self.selectedSubSiteFollowupDate) : null;
+                self.correspondence.sitesInfoTo[0].followupDate = self.selectedSubSiteFollowupDate ? new Date(self.selectedSubSiteFollowupDate) : null;
+            } else {
+                self.selectedSubSite.followupDate = null;
+                self.correspondence.sitesInfoTo[0].followupDate = null;
+            }
+            return isValid;
         };
 
         self.onSelectedSubSiteFollowupStatusChange = function (form, $event) {
             if (form && self.selectedSubSite) {
+                if (self.correspondence.sitesInfoTo.length){
+                    self.correspondence.sitesInfoTo[0].followupStatus = self.selectedSubSiteFollowUpStatus;
+                    self.correspondence.sitesInfoTo[0].followupDate = null;
+                }
                 self.selectedSubSiteFollowupDate = null;
                 self.checkFollowupDateValid(form);
             }

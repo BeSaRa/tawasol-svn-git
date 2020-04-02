@@ -17,8 +17,7 @@ module.exports = function (app) {
                                                                        generator,
                                                                        SiteView,
                                                                        rootEntity,
-                                                                       toast,
-                                                                       gridService) {
+                                                                       toast) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSitesDirectiveCtrl';

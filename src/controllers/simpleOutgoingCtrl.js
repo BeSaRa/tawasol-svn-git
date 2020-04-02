@@ -853,7 +853,12 @@ module.exports = function (app) {
                 return true;
             }
 
-            return self.needReply(self.outgoing.sitesInfoTo[0].followupStatus) && self.outgoing.sitesInfoTo[0].followupDate;
+            var isValid = true;
+            if (self.needReply(self.outgoing.sitesInfoTo[0].followupStatus)) {
+                isValid = !!self.outgoing.sitesInfoTo[0].followupDate;
+            }
+
+            return isValid;
         };
 
         /**
