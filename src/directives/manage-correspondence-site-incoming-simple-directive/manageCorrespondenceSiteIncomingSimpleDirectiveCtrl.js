@@ -15,8 +15,7 @@ module.exports = function (app) {
                                                                                     toast,
                                                                                     generator,
                                                                                     SiteView,
-                                                                                    rootEntity,
-                                                                                    managerService) {
+                                                                                    rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSiteIncomingSimpleDirectiveCtrl';
@@ -59,7 +58,7 @@ module.exports = function (app) {
             }),
             properties = angular.copy(lookupService.getPropertyConfigurations('incoming'));
 
-        self.selectedSubSiteFollowUpStatus = angular.copy(self.withOutReply);
+        self.selectedSubSiteFollowUpStatus = angular.copy(followupStatusWithoutReply);
         self.selectedSubSiteFollowupDate = null;
         self.isFollowupStatusMandatory = false;
 
@@ -549,8 +548,10 @@ module.exports = function (app) {
 
             if (isValid){
                 self.selectedSubSite.followupDate = self.selectedSubSiteFollowupDate ? new Date(self.selectedSubSiteFollowupDate) : null;
+                self.site.followupDate = self.selectedSubSiteFollowupDate ? new Date(self.selectedSubSiteFollowupDate) : null;
             } else {
                 self.selectedSubSite.followupDate = null;
+                self.site.followupDate = null;
             }
             return isValid;
         };
@@ -559,6 +560,7 @@ module.exports = function (app) {
             if (form && self.selectedSubSite) {
                 self.site.followupStatus = self.selectedSubSiteFollowUpStatus;
                 self.selectedSubSiteFollowupDate = null;
+                self.site.followupDate = null;
                 self.checkFollowupDateValid(form);
             }
         }
