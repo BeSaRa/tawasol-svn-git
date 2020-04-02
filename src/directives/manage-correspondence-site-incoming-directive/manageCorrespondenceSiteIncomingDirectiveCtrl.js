@@ -80,6 +80,40 @@ module.exports = function (app) {
 
         self.selectedMainSiteSimple = null;
 
+        self.isFollowupStatusMandatory = false;
+
+        var followupStatusWithoutReply = _.find(self.followUpStatuses, function (status) {
+                return status.lookupStrKey === 'WITHOUT_REPLY';
+            }),
+            followupStatusNeedReply = _.find(self.followUpStatuses, function (status) {
+                return status.lookupStrKey === 'NEED_REPLY';
+            }),
+            properties = angular.copy(lookupService.getPropertyConfigurations('incoming'));
+
+        /**
+         * @description Finds the property configuration by symbolic name
+         * @param symbolicName
+         * @returns {*|null}
+         * @private
+         */
+        function _findPropertyConfiguration(symbolicName) {
+            if (!symbolicName) {
+                return null;
+            }
+            return _.find(properties, function (item) {
+                return item.symbolicName.toLowerCase() === symbolicName.toLowerCase();
+            }) || null;
+        }
+
+        function _checkFollowupStatusMandatory() {
+            var property = _findPropertyConfiguration('FollowupStatus');
+            self.isFollowupStatusMandatory = property.isMandatory;
+            if (property.isMandatory) {
+                self.followupStatus = followupStatusNeedReply;
+            }
+        }
+        _checkFollowupStatusMandatory();
+
         /**
          * create current date + given days if provided.
          * @param days
@@ -196,7 +230,7 @@ module.exports = function (app) {
         function _mapSubSites(siteView) {
             return (new Site())
                 .mapFromSiteView(siteView)
-                .setFollowupStatus(self.followUpStatuses[1])
+                .setFollowupStatus(self.isFollowupStatusMandatory ? followupStatusNeedReply : followupStatusWithoutReply)
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
         }
 

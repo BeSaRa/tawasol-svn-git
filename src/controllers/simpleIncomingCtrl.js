@@ -32,7 +32,8 @@ module.exports = function (app) {
                                                    mailNotificationService,
                                                    gridService,
                                                    errorCode,
-                                                   downloadService) {
+                                                   downloadService,
+                                                   _) {
         'ngInject';
         var self = this;
         self.controllerName = 'simpleIncomingCtrl';
@@ -93,6 +94,26 @@ module.exports = function (app) {
             self.documentInformation = receiveG2G.content;
         }
 
+        self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
+
+        /**
+         * @description Finds the property configuration by symbolic name
+         * @param symbolicName
+         * @returns {*|null}
+         * @private
+         */
+        var _findPropertyConfiguration = function (symbolicName) {
+            if (!symbolicName) {
+                return null;
+            }
+            return _.find(properties, function (item) {
+                return item.symbolicName.toLowerCase() === symbolicName.toLowerCase();
+            }) || null;
+        };
+
+        var properties = angular.copy(lookupService.getPropertyConfigurations('outgoing'));
+        var isNeedReplyFromConfiguration = _findPropertyConfiguration('FollowupStatus').isMandatory;
+
 
         self.preventPropagation = function ($event) {
             $event.stopPropagation();
@@ -141,7 +162,7 @@ module.exports = function (app) {
                 }
 
             }).catch(function (error) {
-                if(isSaveAndPrintBarcode){
+                if (isSaveAndPrintBarcode) {
                     return $q.reject(error);
                 }
                 if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
@@ -151,7 +172,7 @@ module.exports = function (app) {
                         }).catch(function () {
                         return $q.reject(error);
                     });
-                }  else {
+                } else {
                     if (error)
                         toast.error(error);
 
@@ -533,6 +554,38 @@ module.exports = function (app) {
                 }).catch(function (result) {
                 self.incoming.linkedEntities = result;
             })
+        };
+
+        self.needReply = function (status) {
+            return (status && status.lookupStrKey === 'NEED_REPLY');
+        };
+
+        var _isValidSubSite = function () {
+            if (!isNeedReplyFromConfiguration) {
+                return true;
+            }
+            var isValid = true;
+            if (self.needReply(self.incoming.site.followupStatus)) {
+                isValid = !!self.incoming.site.followupDate;
+            }
+
+            return isValid;
+        };
+
+        /**
+         * @description Checks if form is invalid
+         * @param form
+         * @returns {boolean|boolean}
+         */
+        self.isInValidForm = function (form) {
+            if (!form) {
+                return true;
+            }
+
+            return form.$invalid
+                || !self.incoming.site || !_isValidSubSite()
+                || ((self.documentInformationExist || (self.contentFileExist && self.contentFileSizeExist))
+                    && !(self.documentInformation || self.incoming.contentFile))
         };
 
     });
