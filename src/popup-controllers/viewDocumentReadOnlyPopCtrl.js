@@ -13,13 +13,16 @@ module.exports = function (app) {
         self.fullScreen = false;
         self.loadingIndicatorService = loadingIndicatorService;
         self.employeeService = employeeService;
-        self.slowConnectionEnabled = !!employeeService.getEmployee().isSlowConnectionMode();
-        if (self.typeOfDoc === 'otp-doc') {
-            // set it to false so that it will open normally.
-            self.slowConnectionEnabled = false;
+        self.slowConnectionEnabled = false; // set it to false so that it will open normally.
+        if (self.typeOfDoc !== 'otp-doc') {
+            self.slowConnectionEnabled = !!employeeService.getEmployee().isSlowConnectionMode();
         }
 
         self.viewURL = '';
+
+        self.isShowSlowConnection = function () {
+            return !(self.typeOfDoc === 'otp-doc' || self.employeeService.getEmployee().isSlowConnectionMode());
+        };
 
         var _getOriginalMainDocContent = function () {
             self.viewURL = angular.copy(self.content.viewURL);
@@ -46,7 +49,7 @@ module.exports = function (app) {
             if (self.slowConnectionEnabled) {
                 if (self.typeOfDoc === 'attachment') {
                     _getAttachmentContentByVsId(self.document.vsId)
-                } else if (self.typeOfDoc === 'linked-doc'){
+                } else if (self.typeOfDoc === 'linked-doc') {
                     _getLinkedDocContentByVsId(self.document.vsId);
                 }
             } else {

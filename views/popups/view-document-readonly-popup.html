@@ -7,8 +7,7 @@
             <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
                                   md-diameter="30"></md-progress-circular>
         </div>
-        <div layout="row" layout-align="center center"
-             ng-if="!ctrl.employeeService.getEmployee().isSlowConnectionMode() && (ctrl.typeOfDoc.toLowerCase() === 'attachment' || ctrl.typeOfDoc.toLowerCase() === 'linked-doc')">
+        <div layout="row" layout-align="center center" ng-if="ctrl.isShowSlowConnection()">
             <span>{{lang.viewing_mode}} :&nbsp;</span>
             <span>{{lang.current === 'en' ? lang.office_online : lang.pdf_viewer}}</span>
             <span>&nbsp;&nbsp;</span>
