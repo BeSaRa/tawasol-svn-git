@@ -79,9 +79,11 @@ module.exports = function (app) {
 
         function _checkFollowupStatusRequired() {
             var property = _findPropertyConfiguration('FollowupStatus');
-            self.isFollowupStatusMandatory = property.isMandatory;
-            if (property.isMandatory) {
-                self.selectedSubSiteFollowUpStatus = followupStatusNeedReply;
+            if (property) {
+                self.isFollowupStatusMandatory = property.isMandatory;
+                if (property.isMandatory) {
+                    self.selectedSubSiteFollowUpStatus = followupStatusNeedReply;
+                }
             }
         }
 
@@ -506,7 +508,7 @@ module.exports = function (app) {
 
 
         var _findControlInForm = function (form, controlName) {
-            if (!form || !controlName){
+            if (!form || !controlName) {
                 return null;
             }
             var fields = form.$$controls, field;
@@ -519,7 +521,7 @@ module.exports = function (app) {
             return field;
         };
 
-        function _isValidFollowupDate (){
+        function _isValidFollowupDate() {
             return ((new Date(self.selectedSubSiteFollowupDate)).valueOf() >= (new Date(self.minFollowupDate)).valueOf());
         }
 
@@ -529,7 +531,7 @@ module.exports = function (app) {
             }
 
             var isValid = true, followupStatusField = _findControlInForm(form, 'followupDate');
-            if (followupStatusField){
+            if (followupStatusField) {
                 if (!self.selectedSubSiteFollowupDate) {
                     if (self.needReply(self.selectedSubSite.followupStatus)) {
                         isValid = false;
@@ -546,7 +548,7 @@ module.exports = function (app) {
                 }
             }
 
-            if (isValid){
+            if (isValid) {
                 self.selectedSubSite.followupDate = self.selectedSubSiteFollowupDate ? new Date(self.selectedSubSiteFollowupDate) : null;
                 self.site.followupDate = self.selectedSubSiteFollowupDate ? new Date(self.selectedSubSiteFollowupDate) : null;
             } else {

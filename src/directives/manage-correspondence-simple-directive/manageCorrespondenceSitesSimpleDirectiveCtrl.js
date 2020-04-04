@@ -74,12 +74,15 @@ module.exports = function (app) {
 
         function _checkFollowupStatusRequired() {
             var property = _findPropertyConfiguration('FollowupStatus');
-            self.isFollowupStatusMandatory = property.isMandatory;
-            if (property.isMandatory) {
-                self.followupStatus = followupStatusNeedReply;
-                self.selectedSubSiteFollowUpStatus = followupStatusNeedReply;
+            if (property) {
+                self.isFollowupStatusMandatory = property.isMandatory;
+                if (property.isMandatory) {
+                    self.followupStatus = followupStatusNeedReply;
+                    self.selectedSubSiteFollowUpStatus = followupStatusNeedReply;
+                }
             }
         }
+
         // to check if simple search
         self.simpleSearch = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
 
@@ -657,7 +660,7 @@ module.exports = function (app) {
             return field;
         };
 
-        function _isValidFollowupDate (){
+        function _isValidFollowupDate() {
             return ((new Date(self.selectedSubSiteFollowupDate)).valueOf() >= (new Date(self.minFollowupDate)).valueOf());
         }
 
@@ -667,7 +670,7 @@ module.exports = function (app) {
             }
 
             var isValid = true, followupStatusField = _findControlInForm(form, 'followupDate');
-            if (followupStatusField){
+            if (followupStatusField) {
                 if (!self.selectedSubSiteFollowupDate) {
                     if (self.needReply(self.selectedSubSite.followupStatus)) {
                         isValid = false;
@@ -684,7 +687,7 @@ module.exports = function (app) {
                 }
             }
 
-            if (isValid){
+            if (isValid) {
                 self.selectedSubSite.followupDate = self.selectedSubSiteFollowupDate ? new Date(self.selectedSubSiteFollowupDate) : null;
                 self.correspondence.sitesInfoTo[0].followupDate = self.selectedSubSiteFollowupDate ? new Date(self.selectedSubSiteFollowupDate) : null;
             } else {
@@ -696,7 +699,7 @@ module.exports = function (app) {
 
         self.onSelectedSubSiteFollowupStatusChange = function (form, $event) {
             if (form && self.selectedSubSite) {
-                if (self.correspondence.sitesInfoTo.length){
+                if (self.correspondence.sitesInfoTo.length) {
                     self.correspondence.sitesInfoTo[0].followupStatus = self.selectedSubSiteFollowUpStatus;
                     self.correspondence.sitesInfoTo[0].followupDate = null;
                 }

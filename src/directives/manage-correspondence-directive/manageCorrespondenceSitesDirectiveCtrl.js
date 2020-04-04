@@ -73,10 +73,12 @@ module.exports = function (app) {
 
         function _checkFollowupStatusMandatory() {
             var property = _findPropertyConfiguration('FollowupStatus');
-            self.isFollowupStatusMandatory = property.isMandatory;
-            if (property.isMandatory) {
-                self.followupStatus = followupStatusNeedReply;
-                self.followupStatus_DL = followupStatusNeedReply;
+            if (property) {
+                self.isFollowupStatusMandatory = property.isMandatory;
+                if (property.isMandatory) {
+                    self.followupStatus = followupStatusNeedReply;
+                    self.followupStatus_DL = followupStatusNeedReply;
+                }
             }
         }
 
