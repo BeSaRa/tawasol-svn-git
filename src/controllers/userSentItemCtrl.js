@@ -261,6 +261,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Print Barcode
+         * @param record
+         * @param $event
+         */
+        self.printBarcode = function (record, $event) {
+            record.barcodePrint($event);
+        };
+
+        /**
          * @description Reassign Single User Sent Items
          * @param userSentItem
          * @param $event
@@ -740,6 +749,19 @@ module.exports = function (app) {
                         model = angular.copy(self.userSentItemCopy);
                     }
                     return (model.workflowActionId !== 9 && model.actionType !== 3 && model.wfId !== null && model.wobNum !== null);
+                }
+            },
+            // Print Barcode
+            {
+                type: 'action',
+                icon: 'barcode-scan',
+                text: 'grid_action_print_barcode',
+                callback: self.printBarcode,
+                class: "action-green",
+                permissionKey: 'PRINT_BARCODE',
+                checkShow: function (action, model) {
+                    // if doc has full serial, means its paper or already approved
+                    return (model.docFullSerial);
                 }
             },
             // Reassign
