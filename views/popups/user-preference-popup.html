@@ -63,12 +63,12 @@
                                         <label for="domainName">{{lang.domain_name}}</label>
                                         <input name="domainName" id="domainName" required minlength="2"
                                                ng-disabled="true" ng-readonly="true"
-                                               ng-model="ctrl.applicationUser.domainName" maxlength="20"
+                                               ng-model="ctrl.applicationUser.domainName" maxlength="50"
                                                no-space-directive custom-validate-directive="FILE_NET_USER">
                                         <div ng-messages="userPreferencesForm.domainName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="maxlength">{{lang.max_length.change({length:20})}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:50})}}</div>
                                             <div ng-message="FILE_NET_USER">{{lang.english_number}}</div>
                                         </div>
                                     </md-input-container>
