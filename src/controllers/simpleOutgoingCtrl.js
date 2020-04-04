@@ -127,7 +127,8 @@ module.exports = function (app) {
         };
 
         var properties = angular.copy(lookupService.getPropertyConfigurations('outgoing'));
-        var isNeedReplyFromConfiguration = _findPropertyConfiguration('FollowupStatus').isMandatory;
+        var followupStatusConfiguration = _findPropertyConfiguration('FollowupStatus');
+        var isNeedReplyFromConfiguration = followupStatusConfiguration ? followupStatusConfiguration.isMandatory : false;
 
         self.isDocumentTypeSwitchDisabled = function () {
             return !!self.outgoing.vsId || !employeeService.hasPermissionTo('OUTGOING_PAPER') || self.employee.isBacklogMode();
