@@ -129,9 +129,11 @@
                         <textarea rows="5" id="comments" name="comments" class="cms-comment"
                                   maxlength="1000" md-maxlength="1000"
                                   ng-model="ctrl.distWorkflowItem.comments"
+                                  maxlength="1024" md-maxlength="1024"
                                   ng-required="ctrl.distWorkflowItem.isSecureAction"></textarea>
                         <div ng-messages="distWorkflowItem_form.comments.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="maxlength">{{lang.max_length.change({length:1024})}}</div>
                         </div>
                     </md-input-container>
                 </div>
