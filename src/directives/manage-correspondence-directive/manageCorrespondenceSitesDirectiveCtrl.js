@@ -837,17 +837,14 @@ module.exports = function (app) {
                     });
                     self['sitesInfo' + type + 'Selected'] = [];
 
-                    /*                    self['sitesInfo' + type + 'FollowupStatus'] = null;
-                                        self['sitesInfo' + type + 'FollowupStatusDate'] = null;*/
-
-                    var method = 'reset' + type + 'StatusAndDate';
+                    var method = type.toLowerCase() === 'to' ? 'resetToStatusAndDate' : 'resetCCStatusAndDate';
                     self[method]();
                     if (self.notifyAfterChanges) {
                         self.notifyAfterChanges('delete');
                     }
 
                     _concatCorrespondenceSites(true).then(function () {
-                        if (self.selectedMainSiteSimple) {
+                        if (self.selectedMainSiteSimple || self.selectedMainSiteAdvanced) {
                             self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                         }
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);

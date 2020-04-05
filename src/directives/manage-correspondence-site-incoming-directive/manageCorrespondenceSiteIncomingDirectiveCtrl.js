@@ -627,8 +627,6 @@ module.exports = function (app) {
             dialog
                 .confirmMessage(langService.get('confirm_delete_correspondence_site').change({name: self.site.getTranslatedName()}))
                 .then(function () {
-                    self.onMainSiteChangeSimple($event);
-
                     self.site = null;
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.defaultSubSearch, _filterSubSites);
