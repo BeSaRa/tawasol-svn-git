@@ -288,7 +288,7 @@ module.exports = function (app) {
         self.checkRequiredFieldsAppUser = function (model) {
             var required = new ApplicationUser().getRequiredFields(), result = [];
 
-            if (!self.applicationUser.id) {
+            if (!self.applicationUser.id || !self.organizationsForAppUser.length) {
                 required.splice(required.indexOf('defaultOUID'), 1);
             }
 
@@ -458,6 +458,10 @@ module.exports = function (app) {
         self.editApplicationUserFromCtrl = function () {
             if (self.disabledFields.length)
                 generator.replaceWithOriginalValues(self.applicationUser, self.model, self.disabledFields);
+            // if there is no OUApplicationUser, means no OU is assigned to user, so no default ouid as well
+            if (!self.organizationsForAppUser.length) {
+                self.applicationUser.defaultOUID = null;
+            }
             validationService
                 .createValidation('EDIT_APPLICATION_USER')
                 .addStep('check_required', true, self.checkRequiredFieldsAppUser, self.applicationUser, function (result) {
