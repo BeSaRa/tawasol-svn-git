@@ -244,7 +244,7 @@
                                                    ng-keydown="ctrl.allowPropagationUpDownArrows($event,ctrl.loadMainClassificationByCriteria)"
                                                    placeholder="{{lang.search}}"
                                                    class="select-header-input">
-                                            <md-button
+                                            <md-button ng-if="ctrl.mainClassificationSearchText"
                                                     ng-click="ctrl.loadMainClassificationByCriteria($event)"
                                                     tooltip="{{lang.load_more_records}}" class="md-icon-button">
                                                 <md-icon md-svg-icon="magnify-plus"></md-icon>
@@ -257,12 +257,12 @@
                                     <md-option md-highlight-text="ctrl.mainClassificationSearchText"
                                                md-highlight-flags="i"
                                                ng-value="mainClassification.classification"
-                                               ng-repeat="mainClassification in ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText:'getCodeOrIdAndNameByLanguage'">
-                                        {{mainClassification.getCodeOrIdAndNameByLanguage()}}
+                                               ng-repeat="mainClassification in ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText:'getCodeOrIdAndNameByLanguage':'classification'">
+                                        {{mainClassification.classification.getCodeOrIdAndNameByLanguage()}}
                                     </md-option>
                                     <md-option
                                             ng-click="ctrl.loadMainClassificationByCriteria(ctrl.mainClassificationSearchText , $event)"
-                                            ng-if="!(ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText:'getCodeOrIdAndNameByLanguage').length && ctrl.mainClassificationSearchText.length">
+                                            ng-if="!(ctrl.mainClassifications|translatedNameFilter:ctrl.mainClassificationSearchText:'getCodeOrIdAndNameByLanguage':'classification').length && ctrl.mainClassificationSearchText.length">
                                         <span class="red-text">{{lang.press_enter_to_load_more_records}}</span>
                                     </md-option>
                                 </md-select>
@@ -285,7 +285,7 @@
                                                    ng-keydown="ctrl.allowPropagationUpDownArrows($event,ctrl.loadSubClassificationByCriteria)"
                                                    placeholder="{{lang.search}}"
                                                    class="select-header-input">
-                                            <md-button
+                                            <md-button ng-if="ctrl.subClassificationSearchText"
                                                     ng-click="ctrl.loadSubClassificationByCriteria($event)"
                                                     tooltip="{{lang.load_more_records}}" class="md-icon-button">
                                                 <md-icon md-svg-icon="magnify-plus"></md-icon>
@@ -298,12 +298,12 @@
                                     <md-option md-highlight-text="ctrl.subClassificationSearchText"
                                                md-highlight-flags="i"
                                                ng-value="subClassification"
-                                               ng-repeat="subClassification in ctrl.subClassifications|translatedNameFilter:ctrl.subClassificationSearchText">
-                                        {{subClassification.getIdNameByLanguage()}}
+                                               ng-repeat="subClassification in ctrl.subClassifications|translatedNameFilter:ctrl.subClassificationSearchText:'getCodeOrIdAndNameByLanguage'">
+                                        {{subClassification.getCodeOrIdAndNameByLanguage()}}
                                     </md-option>
                                     <md-option
                                             ng-click="ctrl.loadSubClassificationByCriteria(ctrl.subClassificationSearchText , $event)"
-                                            ng-if="!(ctrl.subClassifications|translatedNameFilter:ctrl.subClassificationSearchText).length && ctrl.subClassificationSearchText.length">
+                                            ng-if="!(ctrl.subClassifications|translatedNameFilter:ctrl.subClassificationSearchText:'getCodeOrIdAndNameByLanguage').length && ctrl.subClassificationSearchText.length">
                                         <span class="red-text">{{lang.press_enter_to_load_more_records}}</span>
                                     </md-option>
                                 </md-select>

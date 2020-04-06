@@ -79,17 +79,29 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
+                                    <!-- Code -->
+                                    <md-input-container flex>
+                                        <label for="code">{{lang.code}}</label>
+                                        <input name="code" id="code" maxlength="150"
+                                               ng-model="ctrl.classification.code">
+                                        <div ng-messages="classificationForm.code.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:150})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
                                     <!-- Status -->
-                                    <div flex>
-                                        <md-switch ng-model="ctrl.classification.status"
+                                    <div flex class="cms-input-container">
+                                        <md-switch flex ng-model="ctrl.classification.status"
                                                    aria-label="{{lang.status}}">
                                             <label>{{lang.status}} :
                                                 {{ctrl.classification.getTranslatedStatus()}}</label>
                                         </md-switch>
                                     </div>
                                     <!-- Global -->
-                                    <div flex>
-                                        <md-switch ng-change="ctrl.onChangeGlobal($event)"
+                                    <div flex class="cms-input-container">
+                                        <md-switch flex ng-change="ctrl.onChangeGlobal($event)"
                                                    ng-disabled="ctrl.defaultOU || ctrl.classification.parent || !ctrl.employeeService.isSuperAdminUser()"
                                                    ng-readonly="ctrl.defaultOU || ctrl.classification.parent || !ctrl.employeeService.isSuperAdminUser()"
                                                    ng-model="ctrl.classification.isGlobal"

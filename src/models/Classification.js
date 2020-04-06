@@ -17,6 +17,7 @@ module.exports = function (app) {
             self.relatedOus = []; // null
             self.securityLevels = null;
             self.status = true;
+            self.code = null;
             self.children = [];
 
 
@@ -83,6 +84,15 @@ module.exports = function (app) {
             Classification.prototype.getIdNameByLanguage = function (language) {
                 language = language || langService.current;
                 return (this.id + ' - ') + this[language + 'Name'];
+            };
+            /**
+             * @description Get the id concatenated with name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            Classification.prototype.getCodeOrIdAndNameByLanguage = function (language) {
+                language = language || langService.current;
+                return ((this.code ? this.code : this.id) + ' - ') + this[language + 'Name'];
             };
             Classification.prototype.appendChild = function (classification) {
                 this.children.push(classification);
