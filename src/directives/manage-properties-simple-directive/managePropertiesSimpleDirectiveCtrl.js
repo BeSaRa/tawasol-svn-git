@@ -184,15 +184,6 @@ module.exports = function (app) {
             });
         }
 
-        function _getFormControlByName(fieldName) {
-            if (!fieldName || !self.sourceForm) {
-                return null;
-            }
-            return _.find(self.sourceForm.$$controls, function (control) {
-                return control.$name.toLowerCase() === fieldName.toLowerCase();
-            });
-        }
-
         /**
          * @description on security level changed
          */
@@ -419,8 +410,8 @@ module.exports = function (app) {
                         }
 
                         if (field.name === 'mainClassification') {
-                            var mainClassificationField = _getFormControlByName('mainClassification');
-                            self.onChangeMainClassification(null, false, mainClassificationField);
+                            var mainClassificationControl = generator.getFormControlByName(self.sourceForm, 'mainClassification');
+                            self.onChangeMainClassification(null, false, mainClassificationControl);
                         }
                     }
                 }

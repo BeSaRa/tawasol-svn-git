@@ -175,14 +175,14 @@ module.exports = function (app) {
                     self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
                     self.classifications = _displayCorrectClassifications(self.classifications);
                     appendMissingMainClassification();
-                    mainClassificationControl = _getFormControlByName('mainClassification');
+                    mainClassificationControl = generator.getFormControlByName(self.sourceForm,'mainClassification');
                     self.onChangeMainClassification(null, true, mainClassificationControl);
                 });
             } else {
                 self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
                 self.classifications = _displayCorrectClassifications(self.classifications);
                 appendMissingMainClassification();
-                mainClassificationControl = _getFormControlByName('mainClassification');
+                mainClassificationControl = generator.getFormControlByName(self.sourceForm, 'mainClassification');
                 self.onChangeMainClassification(null, true, mainClassificationControl);
             }
         }
@@ -296,15 +296,6 @@ module.exports = function (app) {
         function _displayCorrectDocumentFiles(documentFiles) {
             return _.filter(documentFiles, function (ouDocumentFile) {
                 return _securityLevelExist(self.document.securityLevel, ouDocumentFile.file.securityLevels)
-            });
-        }
-
-        function _getFormControlByName(fieldName) {
-            if (!fieldName || !self.sourceForm) {
-                return null;
-            }
-            return _.find(self.sourceForm.$$controls, function (control) {
-                return control.$name.toLowerCase() === fieldName.toLowerCase();
             });
         }
 
@@ -583,8 +574,8 @@ module.exports = function (app) {
                         }
 
                         if (field.name === 'mainClassification') {
-                            var mainClassificationField = _getFormControlByName('mainClassification');
-                            self.onChangeMainClassification(null, false, mainClassificationField);
+                            var mainClassificationControl = generator.getFormControlByName(self.sourceForm,'mainClassification');
+                            self.onChangeMainClassification(null, false, mainClassificationControl);
                         }
                     }
                 }

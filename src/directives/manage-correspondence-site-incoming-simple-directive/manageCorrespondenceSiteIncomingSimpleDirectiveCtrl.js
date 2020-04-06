@@ -509,21 +509,6 @@ module.exports = function (app) {
             }
         });
 
-
-        var _findControlInForm = function (form, controlName) {
-            if (!form || !controlName) {
-                return null;
-            }
-            var fields = form.$$controls, field;
-            for (var i = 0; i < fields.length; i++) {
-                if (fields[i].$name === controlName) {
-                    field = fields[i];
-                    break;
-                }
-            }
-            return field;
-        };
-
         function _isValidFollowupDate() {
             return ((new Date(self.selectedSubSiteFollowupDate)).valueOf() >= (new Date(self.minFollowupDate)).valueOf());
         }
@@ -533,21 +518,21 @@ module.exports = function (app) {
                 return true;
             }
 
-            var isValid = true, followupStatusField = _findControlInForm(form, 'followupDate');
-            if (followupStatusField) {
+            var isValid = true, followupDateControl = generator.getFormControlByName(form, 'followupDate');
+            if (followupDateControl) {
                 if (!self.selectedSubSiteFollowupDate) {
                     if (self.needReply(self.selectedSubSite.followupStatus)) {
                         isValid = false;
-                        followupStatusField.$setValidity('required', false);
+                        followupDateControl.$setValidity('required', false);
                     } else {
                         isValid = true;
-                        followupStatusField.$setValidity('required', true);
-                        followupStatusField.$setValidity('minDate', true);
+                        followupDateControl.$setValidity('required', true);
+                        followupDateControl.$setValidity('minDate', true);
                     }
                 } else {
-                    followupStatusField.$setValidity('required', true);
+                    followupDateControl.$setValidity('required', true);
                     isValid = _isValidFollowupDate();
-                    followupStatusField.$setValidity('minDate', isValid);
+                    followupDateControl.$setValidity('minDate', isValid);
                 }
             }
 

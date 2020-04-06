@@ -308,6 +308,21 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Find the control by name in given form
+         * @param form
+         * @param controlName
+         * @returns {null|*}
+         */
+        self.getFormControlByName = function (form, controlName) {
+            if (!form || !controlName) {
+                return null;
+            }
+            return _.find(form.$$controls, function (control) {
+                return control.$name && control.$name.toLowerCase() === controlName.toLowerCase();
+            });
+        };
+
+        /**
          * @description Returns the value of property by checking hasOwnProperty value
          * @param value
          * @param hasOwnPropertyName
