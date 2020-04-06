@@ -54,7 +54,8 @@ module.exports = function (app) {
             followupStatusNeedReply = _.find(self.followUpStatuses, function (status) {
                 return status.lookupStrKey === 'NEED_REPLY';
             }),
-            properties = angular.copy(lookupService.getPropertyConfigurations('outgoing'));
+            properties = angular.copy(lookupService.getPropertyConfigurations('outgoing')),
+            defaultNeedReplyFollowupDate = _createCurrentDate(3);
 
         /**
          * @description Finds the property configuration by symbolic name
@@ -77,7 +78,9 @@ module.exports = function (app) {
                 self.isFollowupStatusMandatory = property.isMandatory;
                 if (property.isMandatory) {
                     self.followupStatus = followupStatusNeedReply;
+                    self.followUpStatusDate = defaultNeedReplyFollowupDate;
                     self.followupStatus_DL = followupStatusNeedReply;
+                    self.followUpStatusDate_DL = defaultNeedReplyFollowupDate;
                 }
             }
         }
@@ -302,6 +305,7 @@ module.exports = function (app) {
             return (new Site())
                 .mapFromSiteView(siteView)
                 .setFollowupStatus(self.isFollowupStatusMandatory ? followupStatusNeedReply : followupStatusWithoutReply)
+                .setFollowupDate(self.isFollowupStatusMandatory ? defaultNeedReplyFollowupDate : null)
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
         }
 
@@ -740,8 +744,12 @@ module.exports = function (app) {
             self.selectedMainSiteSimple = null;
             self.resetSearchStatusAndDate();
         };
+
         /**
          * @description set all followupStatus for all subSearchResult.
+         * @param status
+         * @param isAddAllStatusChange
+         * True, if status is changed for all records, not selected records
          */
         self.onFollowupStatusChange = function (status, isAddAllStatusChange) {
             self.followupStatus = status;
@@ -752,6 +760,13 @@ module.exports = function (app) {
                 sitesToSetFollowupStatus = self.subSearchSelected;
             }
             _setSitesProperty(sitesToSetFollowupStatus, 'followupStatus', status);
+
+            if (self.needReply(status)) {
+                self.followUpStatusDate = defaultNeedReplyFollowupDate;
+                _setSitesProperty(sitesToSetFollowupStatus, 'followupDate', defaultNeedReplyFollowupDate);
+            } else {
+                _setSitesProperty(sitesToSetFollowupStatus, 'followupDate', null);
+            }
         };
         /**
          * @description set all followupDate for all subSearchResult.
@@ -766,6 +781,9 @@ module.exports = function (app) {
 
         /**
          * @description set all followupStatus for all subSearchResult.
+         * @param status
+         * @param isAddAllStatusChange
+         * True, if status is changed for all records, not selected records
          */
         self.onFollowupStatusChange_DL = function (status, isAddAllStatusChange) {
             self.followupStatus_DL = status;
@@ -776,6 +794,15 @@ module.exports = function (app) {
                 sitesToSetFollowupStatus = self.subSearchSelected_DL;
             }
             _setSitesProperty(sitesToSetFollowupStatus, 'followupStatus', status);
+
+            if (self.needReply(status)) {
+                if (isAddAllStatusChange) {
+                    self.followUpStatusDate_DL = defaultNeedReplyFollowupDate;
+                }
+                _setSitesProperty(sitesToSetFollowupStatus, 'followupDate', defaultNeedReplyFollowupDate);
+            } else {
+                _setSitesProperty(sitesToSetFollowupStatus, 'followupDate', null);
+            }
         };
         /**
          * @description set all followupDate for all subSearchResult.
@@ -798,6 +825,8 @@ module.exports = function (app) {
             site.followupStatus = status;
             if (!self.needReply(site.followupStatus)) {
                 site.followupDate = null;
+            } else {
+                site.followupDate = defaultNeedReplyFollowupDate;
             }
         };
 
@@ -819,6 +848,9 @@ module.exports = function (app) {
                 _setSitesProperty(self['sitesInfo' + type + 'Selected'], 'followupDate', null);
                 self['sitesInfo' + type + 'Selected'] = [];
                 self['sitesInfo' + type + 'FollowupStatus'] = null;
+            } else {
+                self['sitesInfo' + type + 'FollowupStatusDate'] = defaultNeedReplyFollowupDate;
+                _setSitesProperty(self['sitesInfo' + type + 'Selected'], 'followupDate', defaultNeedReplyFollowupDate);
             }
 
         };

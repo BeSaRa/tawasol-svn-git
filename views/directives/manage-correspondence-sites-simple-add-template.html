@@ -228,7 +228,7 @@
             </div>
         </md-input-container>
         <br/>
-        <md-button ng-disabled="!ctrl.selectedSubSite" ng-click="ctrl.showMore($event)" class="md-raised">
+        <md-button ng-disabled="!ctrl.selectedSubSite || (ctrl.needReply(ctrl.selectedSubSiteFollowUpStatus) && !ctrl.selectedSubSiteFollowupDate)" ng-click="ctrl.showMore(corrSiteForm, $event)" class="md-raised">
             {{lang.extra_sites}} ({{ctrl.sitesInfoLength}})
         </md-button>
     </form>

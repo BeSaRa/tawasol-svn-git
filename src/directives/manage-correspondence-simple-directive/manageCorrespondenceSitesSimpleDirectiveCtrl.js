@@ -52,7 +52,8 @@ module.exports = function (app) {
             }),
             followupStatusNeedReply = _.find(self.followUpStatuses, function (item) {
                 return item.lookupStrKey === 'NEED_REPLY'
-            });
+            }),
+            defaultNeedReplyFollowupDate = moment().add(3, 'days').format(generator.defaultDateFormat);
         self.selectedSubSiteFollowUpStatus = angular.copy(followupStatusWithoutReply);
         self.selectedSubSiteFollowupDate = null;
         self.isFollowupStatusMandatory = false;
@@ -77,8 +78,9 @@ module.exports = function (app) {
             if (property) {
                 self.isFollowupStatusMandatory = property.isMandatory;
                 if (property.isMandatory) {
-                    self.followupStatus = followupStatusNeedReply;
+                    //self.followupStatus = followupStatusNeedReply;
                     self.selectedSubSiteFollowUpStatus = followupStatusNeedReply;
+                    self.selectedSubSiteFollowupDate = defaultNeedReplyFollowupDate;
                 }
             }
         }
@@ -174,6 +176,7 @@ module.exports = function (app) {
             return (new Site())
                 .mapFromSiteView(siteView)
                 .setFollowupStatus(self.isFollowupStatusMandatory ? followupStatusNeedReply : followupStatusWithoutReply)
+                .setFollowupDate(self.isFollowupStatusMandatory ? defaultNeedReplyFollowupDate : null)
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
         }
 
@@ -650,6 +653,9 @@ module.exports = function (app) {
         });
 
         var _findControlInForm = function (form, controlName) {
+            if (!form || !controlName) {
+                return null;
+            }
             var fields = form.$$controls, field;
             for (var i = 0; i < fields.length; i++) {
                 if (fields[i].$name === controlName) {
@@ -701,7 +707,13 @@ module.exports = function (app) {
             if (form && self.selectedSubSite) {
                 if (self.correspondence.sitesInfoTo.length) {
                     self.correspondence.sitesInfoTo[0].followupStatus = self.selectedSubSiteFollowUpStatus;
-                    self.correspondence.sitesInfoTo[0].followupDate = null;
+                    if (self.needReply(self.selectedSubSiteFollowUpStatus)) {
+                        self.correspondence.sitesInfoTo[0].followupDate = defaultNeedReplyFollowupDate;
+                        self.selectedSubSiteFollowupDate = defaultNeedReplyFollowupDate;
+                    } else {
+                        self.correspondence.sitesInfoTo[0].followupDate = null;
+                        self.selectedSubSiteFollowupDate = null;
+                    }
                 }
                 self.selectedSubSiteFollowupDate = null;
                 self.checkFollowupDateValid(form);

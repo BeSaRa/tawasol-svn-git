@@ -56,7 +56,8 @@ module.exports = function (app) {
             followupStatusNeedReply = _.find(self.followUpStatuses, function (status) {
                 return status.lookupStrKey === 'NEED_REPLY';
             }),
-            properties = angular.copy(lookupService.getPropertyConfigurations('incoming'));
+            properties = angular.copy(lookupService.getPropertyConfigurations('incoming')),
+            defaultNeedReplyFollowupDate = moment().add(3, 'days').format(generator.defaultDateFormat);
 
         self.selectedSubSiteFollowUpStatus = angular.copy(followupStatusWithoutReply);
         self.selectedSubSiteFollowupDate = null;
@@ -83,6 +84,7 @@ module.exports = function (app) {
                 self.isFollowupStatusMandatory = property.isMandatory;
                 if (property.isMandatory) {
                     self.selectedSubSiteFollowUpStatus = followupStatusNeedReply;
+                    self.selectedSubSiteFollowupDate = defaultNeedReplyFollowupDate;
                 }
             }
         }
@@ -135,6 +137,7 @@ module.exports = function (app) {
             return (new Site())
                 .mapFromSiteView(siteView)
                 .setFollowupStatus(self.isFollowupStatusMandatory ? followupStatusNeedReply : followupStatusWithoutReply)
+                .setFollowupDate(self.isFollowupStatusMandatory ? defaultNeedReplyFollowupDate : null)
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
         }
 
@@ -561,8 +564,13 @@ module.exports = function (app) {
         self.onSelectedSubSiteFollowupStatusChange = function (form, $event) {
             if (form && self.selectedSubSite) {
                 self.site.followupStatus = self.selectedSubSiteFollowUpStatus;
-                self.selectedSubSiteFollowupDate = null;
-                self.site.followupDate = null;
+                if (self.needReply(self.selectedSubSiteFollowUpStatus)) {
+                    self.site.followupDate = defaultNeedReplyFollowupDate;
+                    self.selectedSubSiteFollowupDate = defaultNeedReplyFollowupDate;
+                } else {
+                    self.site.followupDate = null;
+                    self.selectedSubSiteFollowupDate = null;
+                }
                 self.checkFollowupDateValid(form);
             }
         }

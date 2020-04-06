@@ -83,6 +83,14 @@ module.exports = function (app) {
                 this.followupStatus = followupStatus;
                 return this;
             };
+            /**
+             * @description set followup date
+             * @param date
+             */
+            Site.prototype.setFollowupDate = function (date) {
+                this.followupDate = date;
+                return this;
+            };
 
             /**
              * @description set faxNumber

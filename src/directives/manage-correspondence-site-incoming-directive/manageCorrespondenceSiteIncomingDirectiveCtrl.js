@@ -88,7 +88,8 @@ module.exports = function (app) {
             followupStatusNeedReply = _.find(self.followUpStatuses, function (status) {
                 return status.lookupStrKey === 'NEED_REPLY';
             }),
-            properties = angular.copy(lookupService.getPropertyConfigurations('incoming'));
+            properties = angular.copy(lookupService.getPropertyConfigurations('incoming')),
+            defaultNeedReplyFollowupDate = _createCurrentDate(3);
 
         /**
          * @description Finds the property configuration by symbolic name
@@ -234,6 +235,7 @@ module.exports = function (app) {
             return (new Site())
                 .mapFromSiteView(siteView)
                 .setFollowupStatus(self.isFollowupStatusMandatory ? followupStatusNeedReply : followupStatusWithoutReply)
+                .setFollowupDate(self.isFollowupStatusMandatory ? defaultNeedReplyFollowupDate : null)
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
         }
 
@@ -483,6 +485,8 @@ module.exports = function (app) {
             site.followupStatus = status;
             if (!self.needReply(site.followupStatus)) {
                 site.followupDate = null;
+            } else {
+                site.followupDate = defaultNeedReplyFollowupDate;
             }
         };
         /**
@@ -515,6 +519,9 @@ module.exports = function (app) {
                     self.site.followupStatus = null;
             }
             self.site.followupStatus = status;
+            if (self.needReply(status)) {
+                self.site.followupDate = defaultNeedReplyFollowupDate;
+            }
         };
 
         /**
