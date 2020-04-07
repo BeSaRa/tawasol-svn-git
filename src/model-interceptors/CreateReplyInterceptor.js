@@ -6,7 +6,8 @@ module.exports = function (app) {
                       Incoming,
                       Internal,
                       Site,
-                      _) {
+                      _,
+                      lookupService) {
         'ngInject';
 
         var modelName = 'CreateReply',
@@ -14,7 +15,15 @@ module.exports = function (app) {
                 outgoing: Outgoing,
                 internal: Internal,
                 incoming: Incoming
-            };
+            },
+            docClassName,
+            followupStatusConfiguration,
+            isNeedReplyFromConfiguration,
+            followupStatuses,
+            followupStatusWithoutReply,
+            followupStatusNeedReply,
+            // timestamp is used because SiteInterceptor is setting followupDate from timestamp
+            defaultNeedReplyFollowupDate = _createCurrentDate(3).valueOf();
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
             return model;
@@ -26,9 +35,27 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             if (model.sitesToList && model.sitesToList.length) {
+                docClassName = model.getInfo().documentClass.toLowerCase();
+                followupStatusConfiguration = lookupService.getPropertyConfigurationBySymbolicName(docClassName, 'FollowupStatus');
+                isNeedReplyFromConfiguration = followupStatusConfiguration ? followupStatusConfiguration.isMandatory : false;
+                followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
+                followupStatusWithoutReply = _.find(followupStatuses, function (status) {
+                    return status.lookupStrKey === 'WITHOUT_REPLY';
+                });
+                followupStatusNeedReply = _.find(followupStatuses, function (status) {
+                    return status.lookupStrKey === 'NEED_REPLY';
+                });
+
                 model.sitesToList = generator.generateCollection(model.sitesToList, Site);
                 model.sitesToList = generator.interceptReceivedCollection('Site', _.map(model.sitesToList, function (item) {
                     item.docClassName = model.getInfo().documentClass.toLowerCase();
+                    if (isNeedReplyFromConfiguration) {
+                        item.followupStatus = followupStatusNeedReply;
+                        item.followupDate = defaultNeedReplyFollowupDate;
+                    } else {
+                        item.followupStatus = followupStatusWithoutReply;
+                        item.followupDate = null;
+                    }
                     return item;
                 }));
             }
@@ -68,6 +95,12 @@ module.exports = function (app) {
         function _prepareSites(item) {
             item.docClassName = 'outgoing';
             return new Site(item);
+        }
+
+        function _createCurrentDate(days) {
+            var date = new Date();
+            date.setDate(date.getDate() + (days || 0));
+            return date;
         }
     })
 };

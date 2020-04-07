@@ -229,5 +229,19 @@ module.exports = function (app) {
             });
             return allPropertyConfigs;
         };
+
+        /**
+         * @description Get property configuration by document class and symbolicName
+         * @returns {Array}
+         */
+        self.getPropertyConfigurationBySymbolicName = function (documentClassName, symbolicName) {
+            if (!documentClassName || !symbolicName) {
+                return null;
+            }
+            var propConfigs = self.getPropertyConfigurations(documentClassName);
+            return _.find(propConfigs, function (item) {
+                return item.symbolicName.toLowerCase() === symbolicName.toLowerCase();
+            }) || null;
+        };
     });
 };

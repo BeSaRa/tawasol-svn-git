@@ -33,7 +33,8 @@ module.exports = function (app) {
                                              mailNotificationService,
                                              gridService,
                                              errorCode,
-                                             downloadService) {
+                                             downloadService,
+                                             _) {
         'ngInject';
         var self = this;
         self.controllerName = 'incomingCtrl';
@@ -76,7 +77,16 @@ module.exports = function (app) {
             securityLevel: lookups.securityLevels[0]
         });
 
-        //self.isReceiveG2G = false;
+        var followupStatuses = lookupService.returnLookups(lookupService.followupStatus),
+            followupStatusWithoutReply = _.find(followupStatuses, function (status) {
+                return status.lookupStrKey === 'WITHOUT_REPLY';
+            }),
+            followupStatusNeedReply = _.find(followupStatuses, function (status) {
+                return status.lookupStrKey === 'NEED_REPLY';
+            }),
+            followupStatusConfiguration = lookupService.getPropertyConfigurationBySymbolicName('incoming', 'FollowupStatus'),
+            isNeedReplyFromConfiguration = followupStatusConfiguration ? followupStatusConfiguration.isMandatory : false,
+            defaultNeedReplyFollowupDate = _createCurrentDate(3);
 
         if (receive) {
             self.receive = true;
@@ -85,13 +95,28 @@ module.exports = function (app) {
             self.incoming = receive.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = receive.content;
-            //self.isReceiveG2G = false;
+
+            if (isNeedReplyFromConfiguration) {
+                self.incoming.site.followupStatus = followupStatusNeedReply;
+                self.incoming.site.followupDate = defaultNeedReplyFollowupDate;
+            } else {
+                if (!self.incoming.site.followupStatus) {
+                    self.incoming.site.followupStatus = followupStatusWithoutReply;
+                    self.incoming.site.followupDate = null;
+                }
+            }
         }
         if (receiveG2G) {
             self.receiveG2G = true;
             self.receive = false;
             self.action = 'receiveG2G';
             self.incoming = receiveG2G.metaData;
+
+            if (isNeedReplyFromConfiguration) {
+                self.incoming.site.followupStatus = followupStatusNeedReply;
+                self.incoming.site.followupDate = defaultNeedReplyFollowupDate;
+            }
+
             // depend on our discussion with Ahmed Abu Al Nasser.
             if (centralArchives) {
                 self.incoming.registryOU = null;
@@ -99,7 +124,6 @@ module.exports = function (app) {
             }
             self.model = angular.copy(self.incoming);
             self.documentInformation = receiveG2G.content;
-            //self.isReceiveG2G = true;
         }
 
         if (duplicateVersion) {
@@ -109,7 +133,6 @@ module.exports = function (app) {
             self.incoming = duplicateVersion.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = self.incoming.hasContent() ? duplicateVersion.content : null;
-            //self.isReceiveG2G = false;
         }
 
 
@@ -181,7 +204,7 @@ module.exports = function (app) {
             })
                 .catch(function (error) {
                     self.saveInProgress = false;
-                    if(isSaveAndPrintBarcode){
+                    if (isSaveAndPrintBarcode) {
                         return $q.reject(error);
                     }
                     if (errorCode.checkIf(error, 'ALREADY_EXISTS_INCOMING_BOOK_WITH_SAME_REFERENCE_NUMBER') === true) {
@@ -355,7 +378,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.docActionSendLinkToDocumentByEmail = function(model, $event, defer){
+        self.docActionSendLinkToDocumentByEmail = function (model, $event, defer) {
             downloadService.getMainDocumentEmailContent(model.getInfo().vsId);
         };
 
@@ -521,7 +544,6 @@ module.exports = function (app) {
             self.contentFileExist = false;
             self.contentFileSizeExist = false;
             self.document_properties.$setUntouched();
-            //self.isReceiveG2G = false;
             self.receiveG2G = false;
             self.receive = false;
 
@@ -540,6 +562,12 @@ module.exports = function (app) {
                     $state.go('app.inbox.user-inbox');
             })
         };
+
+        function _createCurrentDate(days) {
+            var date = new Date();
+            date.setDate(date.getDate() + (days || 0));
+            return date;
+        }
 
     });
 };

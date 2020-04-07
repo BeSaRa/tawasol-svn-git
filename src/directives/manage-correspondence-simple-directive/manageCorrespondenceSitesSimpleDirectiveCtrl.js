@@ -78,7 +78,6 @@ module.exports = function (app) {
             if (property) {
                 self.isFollowupStatusMandatory = property.isMandatory;
                 if (property.isMandatory) {
-                    //self.followupStatus = followupStatusNeedReply;
                     self.selectedSubSiteFollowUpStatus = followupStatusNeedReply;
                     self.selectedSubSiteFollowupDate = defaultNeedReplyFollowupDate;
                 }
@@ -116,7 +115,7 @@ module.exports = function (app) {
 
                     self.getSubSites(true).then(function () {
                         var _subSite = new Site(oldSites[0]);
-                        _subSite.followupStatus = angular.copy(followupStatusWithoutReply);
+                        _subSite.followupStatus = self.isFollowupStatusMandatory ? angular.copy(followupStatusNeedReply) : angular.copy(followupStatusWithoutReply);
                         var selected = _.find(self.subSites, function (item) {
                             return item.mainSiteId === _subSite.mainSiteId && item.subSiteId === _subSite.subSiteId;
                         });
@@ -366,6 +365,9 @@ module.exports = function (app) {
         self.changeSubCorrespondence = function (item) {
             if (item) {
                 self.addSiteTo(item);
+                self.selectedSubSiteFollowUpStatus = item.followupStatus;
+                self.selectedSubSiteFollowupDate = item.followupDate;
+
             } else {
                 self['sitesInfoTo'] = [];
                 self.selectedSubSiteFollowUpStatus = followupStatusWithoutReply;
