@@ -67,15 +67,21 @@ module.exports = function (app) {
                 display: function (config) {
                     return config.dataType === 'Integer' || config.dataType === 'Date';
                 }
-            }/*,
+            },
             {
                 text: "Between",
                 value: "Between",
                 display: function (config) {
-                    return config.dataType === 'Date' ||
-                        (config.dataType === 'Integer' && self.propertyConfiguration.symbolicName === 'DocSerialBetween')
+                    return true;
                 }
-            }*/
+            },
+            {
+                text: "In",
+                value: "In",
+                display: function (config) {
+                    return true;
+                }
+            }
         ];
 
         self.onMandatoryChange = function ($event) {
@@ -172,7 +178,7 @@ module.exports = function (app) {
         };
 
         self.checkDataTypeDisabled = function () {
-            return false;
+            return !!self.editMode;
         };
 
         self.checkDefaultOperatorDisabled = function () {
