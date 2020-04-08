@@ -78,7 +78,7 @@ module.exports = function (app) {
             }*/
         ];
 
-        self.onMandatoryChange = function($event){
+        self.onMandatoryChange = function ($event) {
             if (self.propertyConfiguration.isMandatory) {
                 self.propertyConfiguration.status = true;
             }
@@ -169,6 +169,38 @@ module.exports = function (app) {
         self.onDefaultValueDatePickerChange = function () {
             self.defaultValueDatePicker = self.defaultValueDatePicker ? moment(self.defaultValueDatePicker).format('YYYY-MM-DD') : null;
             self.propertyConfiguration.defaultValue = self.defaultValueDatePicker;
+        };
+
+        self.checkDataTypeDisabled = function () {
+            return false;
+        };
+
+        self.checkDefaultOperatorDisabled = function () {
+            var isDisabled = self.isDefaultOperatorDisabled && !self.editMode;
+            if (self.propertyConfiguration.symbolicName === 'FollowupStatus' && self.editMode) {
+                isDisabled = true;
+            }
+            return isDisabled;
+        };
+
+        self.checkDefaultValueDisabled = function () {
+            return self.isDefaultValueDisabled && !self.editMode;
+        };
+
+        self.checkDefaultValueDateDisabled = function () {
+            return false;
+        };
+
+        self.checkSpNameDisabled = function () {
+            return false;
+        };
+
+        self.checkSpParametersDisabled = function () {
+            return false;
+        };
+
+        self.checkSymbolicNameDisabled = function () {
+            return !!self.editMode;
         };
 
     });

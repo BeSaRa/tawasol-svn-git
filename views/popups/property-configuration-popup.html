@@ -16,6 +16,7 @@
                             <md-select name="dataType" id="dataType"
                                        ng-change="ctrl.onDataTypeChange()"
                                        ng-required="true"
+                                       ng-disabled="ctrl.checkDataTypeDisabled()"
                                        ng-model="ctrl.propertyConfiguration.dataType">
                                 <md-option ng-value="dt.value"
                                            ng-repeat="dt in ctrl.dataTypes track by $index">
@@ -31,7 +32,7 @@
                             <label for="defaultOperator">{{lang.default_operator}}</label>
                             <md-select name="defaultOperator" id="defaultOperator"
                                        required
-                                       ng-required="true" ng-disabled="ctrl.isDefaultOperatorDisabled && !ctrl.editMode"
+                                       ng-required="true" ng-disabled="ctrl.checkDefaultOperatorDisabled()"
                                        ng-model="ctrl.propertyConfiguration.defaultOperator">
                                 <md-option ng-repeat="do in ctrl.defaultOperators track by $index"
                                            ng-if="do.display(ctrl.propertyConfiguration)" ng-value="do.value">
@@ -42,13 +43,13 @@
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
-                        <!-- Defaut Value (Not Date) -->
+                        <!-- Default Value (Not Date) -->
                         <md-input-container flex ng-show="ctrl.propertyConfiguration.dataType!=='Date'">
                             <label for="defaultValue">{{lang.default_value}}</label>
                             <input id="defaultValue" name="defaultValue"
                                    ng-show="ctrl.propertyConfiguration.dataType!=='Date'"
                                    ng-minlength="1"
-                                   ng-disabled="ctrl.isDefaultValueDisabled && !ctrl.editMode"
+                                   ng-disabled="ctrl.checkDefaultValueDisabled()"
                                    ng-maxlength="150"
                                    ng-model="ctrl.propertyConfiguration.defaultValue"
                                    ng-pattern="ctrl.stringORNumber">
@@ -69,6 +70,7 @@
                                            ng-show="ctrl.propertyConfiguration.dataType==='Date'"
                                            ng-model="ctrl.defaultValueDatePicker"
                                            name="defaultValueDatePicker"
+                                           ng-disabled="ctrl.checkDefaultValueDateDisabled()"
                             ></md-datepicker>
                             <!--ng-required="ctrl.propertyConfiguration.dataType==='Date'"-->
                             <div ng-messages="property_configuration_form.defaultValueDatePicker.$error">
@@ -83,6 +85,7 @@
                             <input id="spName" name="spName"
                                    ng-minlength="1"
                                    ng-maxlength="150"
+                                   ng-disabled="ctrl.checkSpNameDisabled()"
                                    ng-model="ctrl.propertyConfiguration.spName">
                             <div ng-messages="property_configuration_form.spName.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
@@ -93,6 +96,7 @@
                             <input id="spParameters" name="spParameters"
                                    ng-minlength="1"
                                    ng-maxlength="150"
+                                   ng-disabled="ctrl.checkSpParametersDisabled()"
                                    ng-model="ctrl.propertyConfiguration.spParameters">
                             <div ng-messages="property_configuration_form.spParameters.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
@@ -103,6 +107,7 @@
                             <input id="symbolicName" name="symbolicName"
                                    ng-minlength="1"
                                    ng-maxlength="150"
+                                   ng-disabled="ctrl.checkSymbolicNameDisabled()"
                                    ng-model="ctrl.propertyConfiguration.symbolicName"
                                    ng-required="true">
                             <div ng-messages="property_configuration_form.symbolicName.$error">
