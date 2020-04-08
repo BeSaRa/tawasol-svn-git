@@ -340,7 +340,7 @@ module.exports = function (app) {
                     self.selectedSubSiteFollowUpStatus = self.correspondence.sitesInfoTo[0].followupStatus;
 
                     var dateValue = (self.correspondence.sitesInfoTo[0].followupDate);
-                    self.selectedSubSiteFollowupDate = dateValue ? generator.getDateFromTimeStamp(dateValue.valueOf()) : null;
+                    self.selectedSubSiteFollowupDate = dateValue ? generator.getDateFromTimeStamp(new Date(dateValue).valueOf()) : null;
                     $timeout(function () {
                         var followupDateControl = generator.getFormControlByName(form, 'followupDate');
                         if (followupDateControl) {
