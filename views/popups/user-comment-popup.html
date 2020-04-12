@@ -62,12 +62,12 @@
                         <md-input-container flex>
                             <label for="comment">{{lang.comment}}</label>
                             <textarea rows="5" name="comment" id="comment" minlength="4"
-                                      required maxlength="2048" md-maxlength="2048"
+                                      required maxlength="2000" md-maxlength="2000"
                                       ng-model="ctrl.userComment.comment"></textarea>
                             <div ng-messages="userCommentsForm.comment.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <div ng-message="minlength">{{lang.short}}</div>
-                                <div ng-message="maxlength">{{lang.max_length.change({length:2048})}}
+                                <div ng-message="maxlength">{{lang.max_length.change({length:2000})}}
                                 </div>
                             </div>
                         </md-input-container>
