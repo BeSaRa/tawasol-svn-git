@@ -16,7 +16,7 @@ module.exports = function (app) {
 
 
         versionServiceProvider
-            .setVersionNumber('2.2.2.1')
+            .setVersionNumber('2.2.3')
             .setBuildNumber('T#5819')
             .setPrivateBuildNumber('T#5819');
 
