@@ -41,10 +41,10 @@
                                    maxlength="40"
                                    minlength="4"
                                    ng-model="ctrl.correspondenceSiteType.lookupStrKey"
-                                   custom-validate-directive="EN"
+                                   custom-validate-directive="EN_"
                                    ng-disabled="!ctrl.correspondenceSiteType.canDelete()">
                             <div ng-messages="doc.lookupStrKey.$error">
-                                <div ng-message="EN">{{lang.english_number}}</div>
+                                <div ng-message="EN_">{{lang.english_number_under_score}}</div>
                                 <div ng-message="minlength">{{lang.short}}</div>
                                 <div ng-message="maxlength">{{lang.max_length.change({length:40})}}</div>
                             </div>
