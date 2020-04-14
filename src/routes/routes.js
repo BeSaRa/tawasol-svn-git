@@ -1649,6 +1649,7 @@ module.exports = function (app) {
                         var url = dynamicMenuItem.getMenuUrlAfterReplacement();
                         self.url = $sce.trustAsResourceUrl(url);
                     };
+                    self.prepareUrl();
 
                     // to change the report language
                     langService.listeningToChange(function () {
