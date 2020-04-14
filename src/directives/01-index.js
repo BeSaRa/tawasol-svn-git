@@ -116,4 +116,5 @@ module.exports = function (app) {
     require('./generate-remaining-search-div-directive/generate-remaining-search-div-directive')(app);
     require('./water-mark-security-a4-barcode-directive/01-index')(app);
     require('./caps-lock-detection-directive/caps-lock-detection-directive')(app);
+    require('./organizations-list-directive/01-index')(app);
 };

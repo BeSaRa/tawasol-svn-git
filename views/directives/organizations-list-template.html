@@ -1,0 +1,222 @@
+<div >
+    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+        <!-- Search Box Row -->
+        <div layout="row">
+            <md-input-container flex>
+                <input name="ouName"
+                       ng-model="ctrl.grid.columnSearchCriteria.ouName"
+                       placeholder="{{lang.current === 'ar' ? lang.arabic_name : lang.english_name}}"
+                       ng-change="ctrl.grid.columnSearchCallback()">
+            </md-input-container>
+            <md-input-container flex>
+                <input name="parent"
+                       ng-model="ctrl.grid.columnSearchCriteria.parent"
+                       placeholder="{{lang.parent}}"
+                       ng-change="ctrl.grid.columnSearchCallback()">
+            </md-input-container>
+            <md-input-container flex>
+                <label>{{lang.has_registry}}</label>
+                <md-select name="hasRegistry"
+                           ng-model-options="{trackBy: '$value'}"
+                           ng-model="ctrl.grid.columnSearchCriteria.hasRegistry"
+                           ng-change="ctrl.grid.columnSearchCallback()">
+                    <md-option
+                            ng-repeat="option in ctrl.hasRegistryOptions"
+                            ng-value="option.value">
+                        {{lang[option.key]}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container flex>
+                <label>{{lang.private_registry}}</label>
+                <md-select name="hasPrivateRegistry"
+                           ng-model-options="{trackBy: '$value'}"
+                           ng-model="ctrl.grid.columnSearchCriteria.isPrivateRegistry"
+                           ng-change="ctrl.grid.columnSearchCallback()">
+                    <md-option
+                            ng-repeat="option in ctrl.hasPrivateRegistryOptions"
+                            ng-value="option.value">
+                        {{lang[option.key]}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container flex>
+                <label>{{lang.has_central_archive}}</label>
+                <md-select name="centralArchive"
+                           ng-model-options="{trackBy: '$value'}"
+                           ng-model="ctrl.grid.columnSearchCriteria.centralArchive"
+                           ng-change="ctrl.grid.columnSearchCallback()">
+                    <md-option
+                            ng-repeat="option in ctrl.centralArchiveOptions"
+                            ng-value="option.value">
+                        {{lang[option.key]}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container flex>
+                <label>{{lang.status}}</label>
+                <md-select name="status"
+                           ng-model-options="{trackBy: '$value'}"
+                           ng-model="ctrl.grid.columnSearchCriteria.status"
+                           ng-change="ctrl.grid.columnSearchCallback()">
+                    <md-option
+                            ng-repeat="option in ctrl.statusOptions"
+                            ng-value="option.value">
+                        {{lang[option.key]}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+
+        <!-- Grid -->
+        <md-table-container>
+            <div table-height-directive overlay-scroll-bar-directive>
+                <table md-table
+                       ng-model="ctrl.selectedOrganizations"
+                       md-progress="ctrl.grid.progress">
+                    <thead fix-head md-head md-order="ctrl.grid.order"
+                           md-on-reorder="ctrl.getSortedData">
+                    <tr md-row>
+                        <th colspan="6" class="table-selector-header"
+                            ng-if="ctrl.selectedOrganizations.length" md-column>
+                            <div layout="row" layout-align="start center">
+                                <span>{{ctrl.selectedOrganizations.length}} {{lang.items_selected}} </span>
+                                <span flex></span>
+
+                            </div>
+                        </th>
+                        <th ng-if="!ctrl.selectedOrganizations.length" md-column>
+                            <!-- Registry Ou, Central Archive, Private Registry Ou Indicators -->
+                        </th>
+                        <th ng-if="!ctrl.selectedOrganizations.length" md-column
+                            md-order-by="arName"><span>{{lang.arabic_name}}</span>
+                        </th>
+                        <th ng-if="!ctrl.selectedOrganizations.length" md-column
+                            md-order-by="enName"><span>{{lang.english_name}}</span>
+                        </th>
+                        <th ng-if="!ctrl.selectedOrganizations.length" md-column>
+                        </th>
+                        <th ng-if="!ctrl.selectedOrganizations.length" md-column
+                            md-order-by="{{ctrl.getSortingKey('parentOrReportingToInfo', 'Organization')}}">
+                            <span>{{lang.parent}}</span>
+                        </th>
+                        <th ng-if="!ctrl.selectedOrganizations.length" md-column
+                            md-order-by="status"><span>{{lang.status}}</span>
+                        </th>
+                        <th ng-if="!ctrl.selectedOrganizations.length" md-column
+                            md-order-by=""><span>{{lang.actions}}</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+                    <!-- Root Entity Row -->
+                    <tr md-row class="background-warning"
+                        ng-if="!ctrl.grid.searchText">
+                        <td md-cell></td>
+                        <td md-cell>{{ctrl.rootEntity.getNameByLanguage('ar')}}</td>
+                        <td md-cell>{{ctrl.rootEntity.getNameByLanguage('en')}}</td>
+                        <td md-cell></td>
+                        <td md-cell></td>
+                        <td md-cell></td>
+                        <td md-cell>
+                            <div flex layout="row" layout-align="start center">
+                                <md-button class="md-icon-button"
+                                           ng-click="ctrl.openAddOrganizationDialog(ctrl.rootEntity, $event)"
+                                           title="{{lang.add}}">
+                                    <md-icon md-svg-icon="plus"></md-icon>
+                                </md-button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Data Rows -->
+                    <tr md-select="organization" md-row
+                        ng-disabled="!organization.id"
+                        ng-repeat="organization in ctrl.organizationsList | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                        <td md-cell class="indicator-td">
+                            <!-- Registry Ou / Private Registry Ou -->
+                            <span ng-class="{'indicator-content': (organization.registryOuIndicator || organization.privateRegOuIndicator)}">
+                                                                    <md-icon
+                                                                            ng-if="organization.registryOuIndicator && !organization.privateRegOuIndicator"
+                                                                            class="{{organization.registryOuIndicator.class}}"
+                                                                            md-svg-icon="{{organization.registryOuIndicator.icon}}"
+                                                                            tooltip="{{lang[organization.registryOuIndicator.tooltip]}}"
+                                                                    ></md-icon>
+                                                                    <md-icon
+                                                                            ng-if="organization.registryOuIndicator && organization.privateRegOuIndicator"
+                                                                            class="{{organization.privateRegOuIndicator.class}}"
+                                                                            md-svg-icon="{{organization.privateRegOuIndicator.icon}}"
+                                                                            tooltip="{{lang[organization.privateRegOuIndicator.tooltip]}}"
+                                                                    ></md-icon>
+                                                                </span>
+                            <!-- Central Archive Ou -->
+                            <span ng-class="{'indicator-content': organization.centralArchiveIndicator}">
+                                                                    <md-icon
+                                                                            ng-if="organization.centralArchiveIndicator"
+                                                                            class="{{organization.centralArchiveIndicator.class}}"
+                                                                            md-svg-icon="{{organization.centralArchiveIndicator.icon}}"
+                                                                            tooltip="{{lang[organization.centralArchiveIndicator.tooltip]}}"
+                                                                    ></md-icon>
+                                                                </span>
+                            <!-- Not Sync Ou -->
+                            <span ng-class="{'indicator-content': organization.notSyncOuIndicator}">
+                                                                    <md-icon ng-if="organization.notSyncOuIndicator"
+                                                                             class="{{organization.notSyncOuIndicator.class}}"
+                                                                             md-svg-icon="{{organization.notSyncOuIndicator.icon}}"
+                                                                             tooltip="{{lang[organization.notSyncOuIndicator.tooltip]}}"
+                                                                    ></md-icon>
+                                                                </span>
+
+                        </td>
+                        <td md-cell>{{organization.arName}}</td>
+                        <td md-cell>{{organization.enName}}</td>
+                        <td md-cell>
+                            <md-button class="md-icon-button md-raised"
+                                       tooltip="{{lang.childs}}"
+                                       ng-click="ctrl.openChildrenDialog(organization, $event)">
+                                <md-icon md-svg-icon="coins"></md-icon>
+                            </md-button>
+                        </td>
+                        <td md-cell>{{organization.parent ?
+                            organization.parentOrReportingToInfo.getTranslatedName()
+                            : ''}}
+                        </td>
+                        <td md-cell>
+                            <div class="cms-input-container">
+                                <md-switch aria-label="{{lang.status}}" flex
+                                           ng-if="organization.id && organization.manageable"
+                                           ng-disabled="ctrl.employeeService.getEmployee().organization.ouid === organization.id"
+                                           ng-model="organization.status"
+                                           ng-change="ctrl.changeOrganizationStatus(organization)"
+                                           title="{{organization.getTranslatedStatus()}}"></md-switch>
+                            </div>
+                        </td>
+                        <td md-cell>
+                            <div flex layout="row" layout-align="start center">
+                                <md-button class="md-icon-button"
+                                           ng-if="organization.id && organization.manageable"
+                                           ng-click="ctrl.openAddOrganizationDialog(organization, $event)"
+                                           title="{{lang.add}}">
+                                    <md-icon md-svg-icon="plus"></md-icon>
+                                </md-button>
+                                <md-button class="md-icon-button"
+                                           ng-if="organization.id && organization.manageable"
+                                           ng-click="ctrl.openEditOrganizationDialog(organization, $event)"
+                                           title="{{lang.edit}}">
+                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                </md-button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </md-table-container>
+        <md-table-pagination
+                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                md-limit-options="ctrl.grid.limitOptions"
+                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                md-total="{{(ctrl.organizationsList).length}}" md-page-select
+                md-on-paginate="ctrl.grid.pagingCallback">
+        </md-table-pagination>
+    </md-card>
+</div>

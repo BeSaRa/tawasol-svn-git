@@ -64,6 +64,12 @@ module.exports = function (app) {
 
             delete model.parentOrReportingToInfo;
             delete model.organizationTypeInfo;
+
+            delete model.registryOuIndicator;
+            delete model.centralArchiveIndicator;
+            delete model.privateRegOuIndicator;
+            delete model.notSyncOuIndicator;
+
             return model;
         });
 
@@ -88,9 +94,14 @@ module.exports = function (app) {
                 });
             }
 
-            if (model.parent)
-                model.parentOrReportingToInfo = model.getParent();
+            model.parentOrReportingToInfo = model.parent ? model.getParent() : null;
+
             model.organizationTypeInfo = model.getType();
+
+            model.registryOuIndicator = model.getRegistryOuIndicator();
+            model.privateRegOuIndicator = model.getPrivateRegOuIndicator();
+            model.centralArchiveIndicator = model.getCentralArchiveIndicator();
+            model.notSyncOuIndicator = model.getNotSyncOuIndicator();
 
             return model;
         });

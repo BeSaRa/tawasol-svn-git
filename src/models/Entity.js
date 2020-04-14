@@ -107,6 +107,10 @@ module.exports = function (app) {
             Entity.prototype.getNameByKey = function (langKey) {
                 return this[langKey + 'Name'];
             };
+
+            Entity.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
+            };
             Entity.prototype.getTranslatedIsSSL = function (isSSL) {
                 return isSSL ? langService.get('yes') : langService.get('no');
             };

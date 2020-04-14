@@ -4,7 +4,8 @@ module.exports = function (app) {
                                           OUClassification,
                                           OUCorrespondenceSite,
                                           langService,
-                                          _) {
+                                          _,
+                                          Indicator) {
         'ngInject';
         return function Organization(model) {
             var self = this,
@@ -185,7 +186,7 @@ module.exports = function (app) {
             };
 
             Organization.prototype.getParent = function () {
-                return organizationService.getOrganizationById(this.parent);
+                return this.parent ? organizationService.getOrganizationById(this.parent) : null;
             };
 
             Organization.prototype.getType = function () {
@@ -291,12 +292,29 @@ module.exports = function (app) {
                 return this.hasRegistry ? this.id : (this.registryParentId.hasOwnProperty('id') ? this.registryParentId.id : this.registryParentId);
             };
 
-            Organization.prototype.getManagerAndOuTranslate =  function(){
-                return this.getTranslatedName() + ' - '+ this.managerId.getTranslatedName();
+            Organization.prototype.getManagerAndOuTranslate = function () {
+                return this.getTranslatedName() + ' - ' + this.managerId.getTranslatedName();
             };
 
-            Organization.prototype.getViceManagerAndOuTranslate = function(){
-                return this.getTranslatedName() + ' - '+ this.viceManagerId.getTranslatedName();
+            Organization.prototype.getViceManagerAndOuTranslate = function () {
+                return this.getTranslatedName() + ' - ' + this.viceManagerId.getTranslatedName();
+            };
+
+            var indicator = new Indicator();
+            Organization.prototype.getRegistryOuIndicator = function () {
+                return this.hasRegistry ? indicator.getRegistryOuIndicator(true) : null;
+            };
+
+            Organization.prototype.getCentralArchiveIndicator = function () {
+                return this.centralArchive ? indicator.getCentralArchiveIndicator(true) : null;
+            };
+
+            Organization.prototype.getPrivateRegOuIndicator = function () {
+                return this.hasRegistry && this.isPrivateRegistry ? indicator.getPrivateRegOuIndicator(true) : null;
+            };
+
+            Organization.prototype.getNotSyncOuIndicator = function () {
+                return !this.isFnSynched ? indicator.getNotSyncOuIndicator(true) : null;
             };
 
             // don't remove CMSModelInterceptor from last line

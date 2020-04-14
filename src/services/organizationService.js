@@ -520,7 +520,8 @@ module.exports = function (app) {
                         allPropertyConfigurations: [],
                         unAssignedUsers: [],
                         ouAssignedUsers: [],
-                        organizations: self.allOrganizationsStructure
+                        organizations: self.allOrganizationsStructure,
+                        defaultTab: 'basic'
                     },
                     resolve: {
                         classifications: function (classificationService) {
@@ -561,9 +562,10 @@ module.exports = function (app) {
              *
              * @param organization
              * @param $event
+             * @param defaultTab
              * @return {promise}
              */
-            organizationEdit: function (organization, $event) {
+            organizationEdit: function (organization, $event, defaultTab) {
                 return dialog.showDialog({
                     templateUrl: cmsTemplate.getPopup('organization'),
                     targetEvent: $event,
@@ -574,7 +576,8 @@ module.exports = function (app) {
                         rootMode: !organization.parent,
                         editMode: true,
                         // organization: organization,
-                        organizations: self.allOrganizationsStructure
+                        organizations: self.allOrganizationsStructure,
+                        defaultTab: defaultTab || 'basic'
                     },
                     resolve: {
                         organization: function (organizationService) {
@@ -941,7 +944,33 @@ module.exports = function (app) {
                 .then(function (result) {
                     return result.data.rs;
                 });
-        }
+        };
+
+        /**
+         * @description activate organization
+         * @param organizationId
+         */
+        self.activateOrganization = function (organizationId) {
+            organizationId = organizationId.hasOwnProperty('id') ? organizationId.id : organizationId;
+            return $http
+                .put((urlService.organizations + '/activate/' + organizationId))
+                .then(function () {
+                    return true;
+                });
+        };
+
+        /**
+         * @description Deactivate organization
+         * @param organizationId
+         */
+        self.deactivateOrganization = function (organizationId) {
+            organizationId = organizationId.hasOwnProperty('id') ? organizationId.id : organizationId;
+            return $http
+                .put((urlService.organizations + '/deactivate/' + organizationId))
+                .then(function () {
+                    return true;
+                });
+        };
 
     });
 };

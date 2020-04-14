@@ -2,7 +2,6 @@ module.exports = function (app) {
     app.controller('organizationsCtrl', function (organizationService,
                                                   _,
                                                   cmsTemplate,
-                                                  $scope,
                                                   dialog,
                                                   $element,
                                                   toast,
@@ -10,7 +9,8 @@ module.exports = function (app) {
                                                   organizationChartService,
                                                   langService,
                                                   referencePlanNumberService,
-                                                  contextHelpService) {
+                                                  contextHelpService,
+                                                  $timeout) {
         'ngInject';
         var self = this;
         self.controllerName = 'organizationsCtrl';
@@ -22,6 +22,27 @@ module.exports = function (app) {
 
         self.needSync = _checkOrganizationsNeedSync(organizations);
 
+        self.organizationsList = angular.copy(organizations);
+
+        self.resetView = false; // set to true when reset view button is clicked.
+
+        self.selectedTabIndex = 0;
+        self.selectedTabName = "chart";
+        self.tabsToShow = [
+            'chart',
+            'grid'
+        ];
+        self.showTab = function (tabName) {
+            return self.tabsToShow.indexOf(tabName) > -1;
+        };
+
+        /**
+         * @description Set the current tab name
+         * @param tabName
+         */
+        self.setCurrentTab = function (tabName) {
+            self.selectedTabName = tabName;
+        };
 
         function _checkOrganizationsNeedSync(organizations) {
             return _.some(organizations, function (org) {
@@ -36,12 +57,16 @@ module.exports = function (app) {
                 .then(function () {
                     if (ignoreLoadOrganizations)
                         return;
-                    organizationService
+                   return organizationService
                         .loadAllOrganizationsStructure()
                         .then(function (result) {
                             self.needSync = _checkOrganizationsNeedSync(result);
                             organizationChartService.createHierarchy(result);
                             self.selectedFilter = self.organizationChartService.rootOrganizations;
+
+                            self.organizationsList = angular.copy(result);
+
+                            return result;
                         });
                 })
         };
@@ -77,12 +102,12 @@ module.exports = function (app) {
             if (selected) {
                 self.reloadOrganizations(true).then(function () {
                     organizationService.loadHierarchy(selected).then(function (result) {
-                        organizationChartService.createHierarchy(result , selected);
+                        organizationChartService.createHierarchy(result, selected);
                         self.selectedFilter = self.organizationChartService.rootOrganizations;
                     });
                 });
             } else {
-                self.reloadOrganizations();
+                self.reloadOrganizations(false);
             }
         };
 
@@ -97,7 +122,7 @@ module.exports = function (app) {
 
         self.syncOrganizations = function () {
             organizationService.syncFNOrganizations().then(function () {
-                self.reloadOrganizations().then(function () {
+                self.reloadOrganizations(false).then(function () {
                     toast.success(langService.get('organizations_synced_done'));
                 });
             }).catch(function (error) {
@@ -105,8 +130,15 @@ module.exports = function (app) {
             })
         };
 
-        self.resetView = function () {
+        self.resetViewCallback = function () {
             $element.find('.orgchart').css('transform', '');
+
+            // set reset view = true to inform internal directive to take action
+            self.resetView = true;
+
+            $timeout(function () {
+                self.resetView = false;
+            });
         };
 
     });

@@ -74,7 +74,7 @@ module.exports = function (app) {
                         var inbox = angular.element('<div  tooltip="{{lang.has_registry}}" />', {class: 'node-has-inbox'});
                         inbox.append(angular.element('<md-icon md-svg-icon="inbox"></md-icon>'));
 
-                        var inboxWithPrivateRegistry = angular.element('<div  tooltip="{{lang.has_registry}} - {{lang.private}}" />', {class: 'node-has-inbox'});
+                        var inboxWithPrivateRegistry = angular.element('<div  tooltip="{{lang.private_registry}}" />', {class: 'node-has-inbox'});
                         inboxWithPrivateRegistry.append(angular.element('<md-icon md-svg-icon="inbox" class="red-text"></md-icon>'));
 
                         var iconsWrapper = angular.element('<div layout="row" layout-align="center center"  />', {class: 'node-icon-wrapper'});

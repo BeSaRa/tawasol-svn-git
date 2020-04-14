@@ -479,6 +479,90 @@ module.exports = function (app) {
                 });
             };
 
+            /**
+             * @description Returns the has registry ou indicator and description
+             * @param hasRegistry
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getRegistryOuIndicator = function (hasRegistry) {
+                if (!hasRegistry) {
+                    return false;
+                }
+
+                return new Indicator({
+                    class: 'indicator',
+                    text: 'has_registry',
+                    icon: self.getIndicatorIcons('registryOU'),
+                    tooltip: 'has_registry',
+                    legendText: function (indicator) {
+                        return langService.get('has_registry');
+                    }
+                });
+            };
+
+            /**
+             * @description Returns the has central archive ou indicator and description
+             * @param hasCentralArchive
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getCentralArchiveIndicator = function (hasCentralArchive) {
+                if (!hasCentralArchive) {
+                    return false;
+                }
+
+                return new Indicator({
+                    class: 'indicator',
+                    text: 'has_archive',
+                    icon: self.getIndicatorIcons('centralArchiveOu'),
+                    tooltip: 'has_archive',
+                    legendText: function (indicator) {
+                        return langService.get('has_archive');
+                    }
+                });
+            };
+
+            /**
+             * @description Returns the isPrivate registry ou indicator and description
+             * @param isPrivateRegistry
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getPrivateRegOuIndicator = function (isPrivateRegistry) {
+                if (!isPrivateRegistry) {
+                    return false;
+                }
+
+                return new Indicator({
+                    class: 'indicator private-reg-ou',
+                    text: 'private_registry',
+                    icon: self.getIndicatorIcons('registryOU'),
+                    tooltip: 'private_registry',
+                    legendText: function (indicator) {
+                        return langService.get('private_registry');
+                    }
+                });
+            };
+
+            /**
+             * @description Returns the not sync ou indicator and description
+             * @param notSync
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getNotSyncOuIndicator = function (notSync) {
+                if (!notSync) {
+                    return false;
+                }
+
+                return new Indicator({
+                    class: 'indicator',
+                    text: 'organization_not_synced',
+                    icon: self.getIndicatorIcons('notSyncOu'),
+                    tooltip: 'organization_not_synced',
+                    legendText: function (indicator) {
+                        return langService.get('organization_not_synced');
+                    }
+                });
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

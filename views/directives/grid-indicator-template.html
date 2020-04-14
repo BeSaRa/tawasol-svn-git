@@ -211,4 +211,40 @@
              tooltip="{{ctrl.record.generalStepElm.comments}}"
     ></md-icon>
 </span>
+<!-- Registry Ou -->
+<span ng-if="ctrl.indicatorType === 'regOU'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.registryOuIndicator}">
+    <md-icon ng-if="ctrl.record.registryOuIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.registryOuIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.registryOuIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.registryOuIndicator.tooltip)}}"
+    ></md-icon>
+</span>
+<!-- Central Archive Ou -->
+<span ng-if="ctrl.indicatorType === 'centralArchiveOU'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.centralArchiveIndicator}">
+    <md-icon ng-if="ctrl.record.centralArchiveIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.centralArchiveIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.centralArchiveIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.centralArchiveIndicator.tooltip)}}"
+    ></md-icon>
+</span>
+<!-- Private Registry Ou -->
+<span ng-if="ctrl.indicatorType === 'privateRegOu'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.privateRegOuIndicator}">
+    <md-icon ng-if="ctrl.record.privateRegOuIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.privateRegOuIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.privateRegOuIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.privateRegOuIndicator.tooltip)}}"
+    ></md-icon>
+</span>
+<!-- Not Sync Ou -->
+<span ng-if="ctrl.indicatorType === 'notSyncOu'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.notSyncOuIndicator}">
+    <md-icon ng-if="ctrl.record.notSyncOuIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.notSyncOuIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.notSyncOuIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.notSyncOuIndicator.tooltip)}}"
+    ></md-icon>
+</span>
 

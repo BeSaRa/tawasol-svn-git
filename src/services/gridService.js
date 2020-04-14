@@ -114,7 +114,8 @@ module.exports = function (app) {
                 documentFile: 'docFile',
                 documentTemplate: 'docTemplate',
                 attachmentType: 'attachType',
-                dynamicMenuItem: 'dynamicMenu'
+                dynamicMenuItem: 'dynamicMenu',
+                organization: 'organization'
             },
             others: {
                 linkedDoc: 'linkedDoc',
@@ -929,7 +930,10 @@ module.exports = function (app) {
                 groupMail: 'home-floor-g',
                 user: 'account',
                 workflowGroup: 'account-group',
-                userInDifferentDepartment: 'account-outline'
+                userInDifferentDepartment: 'account-outline',
+                registryOU: 'inbox',
+                centralArchiveOu: 'archive',
+                notSyncOu: 'sync-alert'
             }
         };
     });

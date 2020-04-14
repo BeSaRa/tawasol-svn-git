@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                     OUCorrespondenceSite,
                                                     Organization,
                                                     children,
+                                                    defaultTab,
                                                     organizationService,
                                                     organizationTypeService,
                                                     referencePlanNumberService,
@@ -210,22 +211,6 @@ module.exports = function (app) {
             }
         };
 
-        self.selectedTab = "basic";
-        self.tabsToShow = [
-            'basic',
-            'security_settings',
-            'workflow_settings',
-            'document_templates',
-            'distribution_lists',
-            'children',
-            'classifications',
-            'correspondence_sites',
-            'private_registry_ou',
-            'property_config',
-            'users',
-            'departmentUsers'
-        ];
-
         self.selectedOUClassifications = [];
 
         self.classifications = classifications;
@@ -349,34 +334,6 @@ module.exports = function (app) {
 
         self.userAdded = false;
 
-        self.setCurrentTab = function (tabName) {
-            var defer = $q.defer();
-            if (tabName === 'private_registry_ou') {
-                self.reloadPrivateRegOU(self.privateRegOUGrid.page)
-                    .then(function () {
-                        defer.resolve(tabName);
-                    });
-            } else if (tabName === 'distribution_lists') {
-                self.reloadOUDistributionList(self.ouDistributionListGrid.page)
-                    .then(function () {
-                        defer.resolve(tabName);
-                    });
-            } else {
-                defer.resolve(tabName);
-            }
-            return defer.promise.then(function (tab) {
-                self.selectedTab = tab;
-            });
-
-            // self.selectedTab = tabName;
-        };
-
-        self.showTab = function (tabName) {
-            if (tabName === 'departmentUsers') {
-                return self.tabsToShow.indexOf(tabName) > -1 && self.organization.hasRegistry;
-            }
-            return self.tabsToShow.indexOf(tabName) > -1;
-        };
 
         self.showSaveButton = function () {
             return !(self.selectedTab === 'property_config'
@@ -754,12 +711,12 @@ module.exports = function (app) {
                 depNameAr: 'arName',
                 depNameEn: 'enName',
                 parentOrReportingToAr: function (record) {
-                    if (record.hasOwnProperty('parentOrReportingToInfo'))
+                    if (record.hasOwnProperty('parentOrReportingToInfo') && record.parentOrReportingToInfo)
                         return 'parentOrReportingToInfo.arName';
                     return '';
                 },
                 parentOrReportingToEn: function (record) {
-                    if (record.hasOwnProperty('parentOrReportingToInfo'))
+                    if (record.hasOwnProperty('parentOrReportingToInfo') && record.parentOrReportingToInfo)
                         return 'parentOrReportingToInfo.enName';
                     return '';
                 },
@@ -2062,5 +2019,67 @@ module.exports = function (app) {
                 self.reloadDepartmentUsers(self.departmentUsersGrid.page);
             });
         };
+
+
+
+        self.tabsToShow = [
+            'basic',
+            'security_settings',
+            'workflow_settings',
+            'document_templates',
+            'children',
+            'classifications',
+            'correspondence_sites',
+            'private_registry_ou',
+            'property_config',
+            'users',
+            'departmentUsers'
+        ];
+
+        self.setCurrentTab = function (tabName) {
+            var defer = $q.defer();
+            if (tabName === 'private_registry_ou') {
+                self.reloadPrivateRegOU(self.privateRegOUGrid.page)
+                    .then(function () {
+                        defer.resolve(tabName);
+                    });
+            } else if (tabName === 'distribution_lists') {
+                self.reloadOUDistributionList(self.ouDistributionListGrid.page)
+                    .then(function () {
+                        defer.resolve(tabName);
+                    });
+            } else {
+                defer.resolve(tabName);
+            }
+            return defer.promise.then(function (tab) {
+                self.selectedTab = tab;
+            });
+        };
+
+        self.showTab = function (tabName) {
+            if (tabName === 'departmentUsers') {
+                return self.tabsToShow.indexOf(tabName) > -1 && self.organization.hasRegistry;
+            }
+            return self.tabsToShow.indexOf(tabName) > -1;
+        };
+
+        function _setDefaultSelectedTab() {
+            if (defaultTab) {
+                if (self.showTab(defaultTab)) {
+                    self.selectedTab = defaultTab;
+                } else {
+                    self.selectedTab = 'basic';
+                }
+            } else {
+                self.selectedTab = 'basic';
+            }
+            self.selectedTabIndex = _.findIndex(self.tabsToShow, function (tab) {
+                return tab === self.selectedTab;
+            })
+        }
+
+        self.selectedTab = '';
+        self.selectedTabIndex = 0;
+        _setDefaultSelectedTab();
     });
 };

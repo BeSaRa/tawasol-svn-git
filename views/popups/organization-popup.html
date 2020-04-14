@@ -9,7 +9,7 @@
     <md-dialog-content scroll-directive flex>
         <div>
             <form name="org_form" novalidate autocomplete="off">
-                <md-tabs md-dynamic-height>
+                <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
                     <!-- Basic Info-->
                     <md-tab label="{{lang.basic_info}}" ng-if="ctrl.showTab('basic')"
                             ng-click="ctrl.setCurrentTab('basic')">
