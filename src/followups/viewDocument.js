@@ -180,7 +180,7 @@ module.exports = function (app) {
                 },
                 disableAll: function (model) {
                     var info = model.getInfo();
-                    return (info.docStatus >= 24 && !info.isPaper);
+                    return (info.documentClass !== 'internal' && info.docStatus >= 24 && !info.isPaper);
                 }
             })
             .getPageNameOverride('proxyMail', 'draftOutgoing', {
