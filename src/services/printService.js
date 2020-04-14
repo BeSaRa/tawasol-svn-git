@@ -64,16 +64,39 @@ module.exports = function (app) {
             return data;
         };
 
-        self.printData = function (records, table, title, criteria) {
-            var headers = table.hasOwnProperty('headers') ? table.headers : table,
-                urlPdf = (table.hasOwnProperty('columns')) ?
-                    //to check whether department/central or user sent items otherwise its normal print from existing records
-                    ((criteria && criteria instanceof EventHistoryCriteria) ? urlService.userInboxSentItems : urlService.departmentSentItems) + "/print"
-                    : urlService.exportToPdf,
-                urlExel = (table.hasOwnProperty('columns')) ?
-                    //to check whether department/central or user sent items otherwise its normal print from existing records
-                    ((criteria && criteria instanceof EventHistoryCriteria) ? urlService.userInboxSentItems : urlService.departmentSentItems) + "/print"
-                    : urlService.exportToExcel;
+        /**
+         *
+         * @param records
+         * @param table
+         * @param title
+         * @param criteria
+         * @param selectedEmployee used in followup sent items
+         * @param selectedOrganization used in followup sent items
+         * @returns {*}
+         */
+        self.printData = function (records, table, title, criteria, selectedEmployee, selectedOrganization) {
+            var headers = table.hasOwnProperty('headers') ? table.headers : table;
+            var urlPdf, urlExel;
+
+            if (table.hasOwnProperty('columns')) {
+                //to check whether department/central or user sent items otherwise its normal print from existing records
+                if (criteria && criteria instanceof EventHistoryCriteria) {
+                    // used in followup sent items
+                    if (selectedEmployee && selectedOrganization) {
+                        var userId = selectedEmployee.hasOwnProperty('id') ? selectedEmployee.id : selectedEmployee;
+                        var ouId = selectedOrganization.hasOwnProperty('id') ? selectedOrganization.id : selectedOrganization;
+
+                        urlPdf = urlExel = urlService.userInboxSentItems + "/print/user-id/" + userId + "/ou/" + ouId
+                    } else {
+                        urlPdf = urlExel = urlService.userInboxSentItems + "/print";
+                    }
+                } else {
+                    urlPdf = urlExel = urlService.departmentSentItems + "/print";
+                }
+            } else {
+                urlPdf = urlService.exportToPdf;
+                urlExel = urlService.exportToExcel;
+            }
 
             var defer = $q.defer(),
                 urlTypeMap = {

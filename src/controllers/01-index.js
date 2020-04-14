@@ -82,4 +82,5 @@ module.exports = function (app) {
     require('./deletedOutgoingCtrl')(app);
     require('./deletedIncomingCtrl')(app);
     require('./deletedInternalCtrl')(app);
+    require('./followupEmployeeSentItemsCtrl')(app);
 };

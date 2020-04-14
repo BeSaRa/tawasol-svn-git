@@ -54,6 +54,7 @@ module.exports = function (app) {
                 userInbox: 'userInbox',
                 sentItem: 'userSentItem',
                 followupEmp: 'userFollowupEmp',
+                followupSentItem: 'userFollowupSentItem',
                 favorite: 'userFavorite',
                 folder: 'userFolder',
                 proxy: 'userProxy',

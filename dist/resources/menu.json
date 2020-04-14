@@ -1246,5 +1246,17 @@
     "sort_order": 8,
     "active": true,
     "sort_value": 0
+  },
+  {
+    "ID": 118,
+    "lang_key": "menu_item_followup_employee_sent_items",
+    "icon": "inbox",
+    "parent": 53,
+    "link": "#sent-items",
+    "state": "app.inbox.followup-employee-sent-items",
+    "icon_type": "font",
+    "sort_order": 3,
+    "active": true,
+    "sort_value": 0
   }
 ]

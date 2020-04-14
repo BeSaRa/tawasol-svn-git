@@ -1397,6 +1397,14 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_followup_employee_inbox'
             })
+            // followup employee sent items
+            .state('app.inbox.followup-employee-sent-items', {
+                url: '/followup-employee-sent-items',
+                templateUrl: templateProvider.getView('followup-employee-sent-items'),
+                controller: 'followupEmployeeSentItemsCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_followup_employee_sent_items'
+            })
             // proxy mail inbox
             .state('app.inbox.proxy-mail-inbox', {
                 url: '/proxy-mail-inbox',

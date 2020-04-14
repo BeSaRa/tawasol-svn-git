@@ -93,6 +93,9 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_followup_employee_inbox', function (employee) {
                 return employee.hasAnyPermissions(['FOLLOW-UP_EMPLOYEES’_INBOXES', 'FOLLOW_UP_OU_INBOX']);
             })
+            .addMenuPermission('menu_item_followup_employee_sent_items', function (employee) {
+                return employee.hasAnyPermissions(['FOLLOW-UP_EMPLOYEES’_INBOXES', 'FOLLOW_UP_OU_INBOX']);
+            })
             .addMenuPermission('menu_item_group_inbox', function (employee) {
                 return /*!employee.inRegistry() &&*/ employee.hasThesePermissions('GROUP_MAIL');
             })

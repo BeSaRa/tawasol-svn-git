@@ -1,0 +1,186 @@
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_followup_employee_sent_items}}</span>
+            <md-button ng-click="ctrl.reloadFollowupEmployeeSentItems()" class="md-icon-button"
+                       tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <div class="p020">
+                <md-switch aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.grid.truncateSubject"
+                           ng-change="ctrl.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
+                <div>{{ctrl.currentSelectedUser.getTranslatedName()}}</div>
+                <md-button ng-click="ctrl.getEmployeeForFollowupEmployeeSentItems($event)" class="md-icon-button"
+                           tooltip="{{lang.select_organization_and_user}}">
+                    <md-icon md-svg-icon="account-multiple"></md-icon>
+                </md-button>
+                            <md-button ng-if="ctrl.followupEmployeeSentItems.length"
+                                       ng-click="ctrl.printResult($event)" class="md-icon-button" tooltip="{{lang.print}}">
+                                <md-icon md-svg-icon="printer"></md-icon>
+                            </md-button>
+                <md-button ng-click="ctrl.resetFilter($event)"
+                           ng-if="ctrl.searchCriteriaUsed"
+                           aria-label="{{lang.reset}}"
+                           class="md-icon-button" tooltip="{{lang.reset}}">
+                    <md-icon md-svg-icon="filter-remove"></md-icon>
+                </md-button>
+                <md-button ng-click="ctrl.openFilterDialog($event)"
+                           aria-label="{{lang.filter}}"
+                           class="md-icon-button" tooltip="{{lang.filter}}">
+                    <md-icon md-svg-icon="filter"></md-icon>
+                </md-button>
+        </div>
+            <!-- end page-header -->
+            <!-- page-content -->
+            <div layout="column" flex>
+                <div layout="column" class="page-padding no-tb-padding">
+                    <md-card md-whiteframe="3" layout="column" flex class="card-overlay">
+                        <md-virtual-repeat-container class="cms-virtual-repeater"
+                                                     ng-class="{'no-length':!ctrl.followupEmployeeSentItems.length}"
+                                                     md-auto-shrink="true">
+                            <md-table-container>
+                                <div flex overlay-scroll-bar-directive>
+                                    <table md-table ng-model="ctrl.selectedFollowupEmployeeSentItems"
+                                           md-progress="ctrl.grid.progress"><!-- md-row-select multiple-->
+                                        <thead md-head md-order="ctrl.grid.order"
+                                               md-on-reorder="ctrl.getSortedData">
+                                        <tr md-row>
+                                            <th colspan="{{ctrl.selectedFollowupEmployeeSentItems.length > 1 ? 7 : 8}}"
+                                                ng-if="ctrl.selectedFollowupEmployeeSentItems.length" md-column>
+                                                <div layout="row" layout-align="start center">
+                                                    <span>{{ctrl.selectedFollowupEmployeeSentItems.length}} {{lang.items_selected}} </span>
+                                                    <span flex></span>
+                                                </div>
+                                            </th>
+                                            <th ng-if="!ctrl.selectedFollowupEmployeeSentItems.length" md-column
+                                                md-order-by="{{ctrl.getSortingKey('securityLevelIndicator.value', 'Lookup')}}">
+                                                <!-- Indicators -->
+                                            </th>
+                                            <th ng-if="!ctrl.selectedFollowupEmployeeSentItems.length" md-column
+                                                md-order-by="docFullSerial">
+                                                <span>{{lang.sent_items_serial_number}}</span>
+                                            </th>
+                                            <th ng-if="!ctrl.selectedFollowupEmployeeSentItems.length" md-column
+                                                md-order-by="">
+                                                <!-- Priority Level and Has Attachment Indicators -->
+                                            </th>
+                                            <th ng-if="!ctrl.selectedFollowupEmployeeSentItems.length" md-column
+                                                md-order-by="docSubject">
+                                                <span>{{lang.sent_items_document_subject}}</span>
+                                            </th>
+                                            <th ng-if="!ctrl.selectedFollowupEmployeeSentItems.length" md-column
+                                                md-order-by="actionDate">
+                                                <span>{{lang.action_date}}</span>
+                                            </th>
+                                            <th ng-if="!ctrl.selectedFollowupEmployeeSentItems.length" md-column
+                                                md-order-by="{{ctrl.getSortingKey('action', 'WorkflowAction')}}">
+                                                <span>{{lang.sent_items_action}}</span>
+                                            </th>
+                                            <th ng-if="!ctrl.selectedFollowupEmployeeSentItems.length" md-column
+                                                md-order-by="{{ctrl.getSortingKey('receiverInfo', 'Information')}}">
+                                                <span>{{lang.sent_items_receiver}}</span>
+                                            </th>
+                                            <th ng-if="!ctrl.selectedFollowupEmployeeSentItems.length" md-column
+                                                md-order-by="comments">
+                                                <span>{{lang.comment}}</span>
+                                            </th>
+                                            <th ng-if="!ctrl.selectedFollowupEmployeeSentItems.length" md-column>
+
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-row md-select="followupSentItems" model="followupSentItems"
+                                            grid-right-click-directive="followupSentItems"
+                                            selected-length="{{ctrl.selectedFollowupEmployeeSentItems.length ? ctrl.selectedFollowupEmployeeSentItems.length : 0}}"
+                                            md-virtual-repeat="followupSentItems in ctrl.followupEmployeeSentItems">
+                                            <td md-cell class="indicator-td">
+                                                <!-- Security Level -->
+                                                <grid-indicator-directive record="followupSentItems"
+                                                                          indicator-type="securityLevel"
+                                                                          record-type="EventHistory"></grid-indicator-directive>
+                                                <!-- Doc Type -->
+                                                <grid-indicator-directive record="followupSentItems"
+                                                                          indicator-type="docClass"
+                                                                          record-type="EventHistory"></grid-indicator-directive>
+                                            </td>
+                                            <td md-cell><span
+                                                    class="serial-td">{{followupSentItems.docFullSerial}}</span>
+                                            </td>
+                                            <td md-cell class="indicator-td text-right"
+                                                style="padding-right:0 !important; padding-left:0 !important;">
+                                                <!-- Priority Level -->
+                                                <grid-indicator-directive record="followupSentItems"
+                                                                          indicator-type="priorityLevel"
+                                                                          record-type="EventHistory"></grid-indicator-directive>
+                                            </td>
+                                            <td md-cell class="subject">
+                                                <a href=""
+                                                   ng-if="followupSentItems.hasContent() && ctrl.grid.truncateSubject"
+                                                   class="view-doc subject-internal" md-truncate
+                                                   tooltip="{{followupSentItems.docSubject}}"
+                                                   ng-click="ctrl.viewDocument(followupSentItems, $event)">{{followupSentItems.docSubject}}</a>
+                                                <span ng-if="!followupSentItems.hasContent() && ctrl.grid.truncateSubject"
+                                                      class="view-doc subject-internal" md-truncate
+                                                      tooltip="{{followupSentItems.docSubject}}">{{followupSentItems.docSubject}}</span>
+                                                <a href=""
+                                                   ng-if="followupSentItems.hasContent() && !ctrl.grid.truncateSubject"
+                                                   class="view-doc subject-internal"
+                                                   tooltip="{{followupSentItems.docSubject}}"
+                                                   ng-click="ctrl.viewDocument(followupSentItems, $event)">{{followupSentItems.docSubject}}</a>
+                                                <span ng-if="!followupSentItems.hasContent() && !ctrl.grid.truncateSubject"
+                                                      class="view-doc subject-internal"
+                                                      tooltip="{{followupSentItems.docSubject}}">{{followupSentItems.docSubject}}</span>
+                                            </td>
+                                            <td md-cell>{{followupSentItems.actionDate}}</td>
+                                            <td md-cell>{{followupSentItems.action.getTranslatedName()}}</td>
+                                            <td md-cell>{{followupSentItems.receiverInfo.getTranslatedName()}}</td>
+                                            <td tooltip="{{followupSentItems.comments}}" md-cell>
+                                                <div class="td-comments">{{followupSentItems.comments}}</div>
+                                            </td>
+                                            <td md-cell ng-if="ctrl.selectedFollowupEmployeeSentItems.length < 2">
+                                                <div layout-align="start center" ng-if="!ctrl.selectedFollowupEmployeeSentItems.length
+                                                  || ctrl.selectedFollowupEmployeeSentItems.length===1 && ctrl.selectedFollowupEmployeeSentItems[0].id === followupSentItems.id">
+                                                    <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                            model="followupSentItems">
+                                                    </grid-actions-directive>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr md-row ng-if="!ctrl.followupEmployeeSentItemsCopy.length">
+                                            <td md-cell colspan="8" class="red-text text-center">
+                                                {{lang.no_records_found}}
+                                            </td>
+                                        </tr>
+                                        <tr md-row
+                                            ng-if="ctrl.followupEmployeeSentItemsCopy.length && !ctrl.followupEmployeeSentItems.length">
+                                            <td md-cell colspan="8" class="red-text text-center">
+                                                {{lang.no_records_found_matching_search}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </md-table-container>
+                        </md-virtual-repeat-container>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                md-total="{{ctrl.totalRecords}}"
+                                md-page-select
+                                md-on-paginate="ctrl.grid.pagingCallback">
+                        </md-table-pagination>
+                    </md-card>
+                </div>
+            </div>
+            <!-- end page content -->
+        </div>
+    </div>

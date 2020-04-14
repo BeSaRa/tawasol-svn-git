@@ -51,9 +51,11 @@ module.exports = function (app) {
              * @param searchText
              * @param searchCriteria
              * @param page
+             * @param selectedEmployee for followup sent items
+             * @param selectedOrganization for followup sent items
              * @returns {*}
              */
-            self.filterUserSentItems = function (searchText, searchCriteria, page) {
+            self.filterUserSentItems = function (searchText, searchCriteria, page, selectedEmployee, selectedOrganization) {
                 var gridLimit = gridService.getGridPagingLimitByGridName(gridService.grids.inbox.sentItem) || 5;
                 page = page ? page : 1;
                 var offset = ((page - 1) * gridLimit);
@@ -63,7 +65,16 @@ module.exports = function (app) {
                         docSubject: searchText
                     });
                 }
-                return $http.post(urlService.userInboxSentItems + "?limit=" + gridLimit + "&offset=" + offset, generator.interceptSendInstance('EventHistoryCriteria', searchCriteria))
+                //userId and ouId used when followup sent items
+                var userId = (selectedEmployee && selectedEmployee.hasOwnProperty('id')) ? selectedEmployee.id : selectedEmployee;
+                var ouId = (selectedOrganization && selectedOrganization.hasOwnProperty('id')) ? selectedOrganization.id : selectedOrganization;
+
+                return $http.post(((userId && ouId) ?
+                    urlService.followupEmployeeSentItems.change({
+                        userId: userId,
+                        ouId: ouId
+                    }) : urlService.userInboxSentItems) + "?limit=" + gridLimit + "&offset=" + offset,
+                    generator.interceptSendInstance('EventHistoryCriteria', searchCriteria))
                     .then(function (result) {
                         // don't update the original records or total count when searching as it is used in controller
                         var userSentItems = generator.generateCollection(result.data.rs, EventHistory, self._sharedMethods);
@@ -80,7 +91,7 @@ module.exports = function (app) {
             };
 
             self.controllerMethod = {
-                openFilterDialog: function (grid, searchCriteria) {
+                openFilterDialog: function (grid, searchCriteria, selectedEmployee, selectedOrganization) {
                     return dialog
                         .showDialog({
                             templateUrl: cmsTemplate.getPopup('user-sent-items-filter'),
@@ -88,7 +99,9 @@ module.exports = function (app) {
                             controllerAs: 'ctrl',
                             locals: {
                                 searchCriteria: searchCriteria,
-                                grid: grid
+                                grid: grid,
+                                selectedEmployee: selectedEmployee ? selectedEmployee : null,
+                                selectedOrganization: selectedOrganization ? selectedOrganization : null
                             },
                             resolve: {
                                 workflowActions: function (workflowActionService) {

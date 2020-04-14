@@ -12,12 +12,15 @@ module.exports = function (app) {
                                                           langService,
                                                           toast,
                                                           cmsTemplate,
+                                                          EventHistory,
                                                           employeeService) {
         'ngInject';
         var self = this;
         self.serviceName = 'followupEmployeeInboxService';
 
         self.followupEmployeeInboxes = [];
+        self.followupEmployeeSentItems = [];
+        self.followupSentItemsTotalCount = 0;
 
         self.currentUser = employeeService.getEmployee();
 
@@ -62,9 +65,10 @@ module.exports = function (app) {
              * @param selectedOrganization
              * @param selectedUser
              * @param availableUsers
+             * @param isFollowupSentItems
              * @param $event
              */
-            openOrganizationAndUserDialog: function (selectedOrganization, selectedUser, availableUsers, $event) {
+            openOrganizationAndUserDialog: function (selectedOrganization, selectedUser, availableUsers, isFollowupSentItems, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -73,7 +77,8 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         locals: {
                             selectedOrganization: selectedOrganization,
-                            selectedUser: selectedUser
+                            selectedUser: selectedUser,
+                            isFollowupSentItems: isFollowupSentItems
                         },
                         resolve: {
                             followUpOrganizations: function (organizationService) {
@@ -504,6 +509,45 @@ module.exports = function (app) {
                     return true;
                 });
         };
+
+        /**
+         * @description Load the followup employee sent items from server.
+         * @returns {Promise|followupEmployeeSentItems}
+         */
+        self.loadFollowupEmployeeSentItems = function (employee, organization, page, limit) {
+            if (!employee) {
+                return $timeout(function () {
+                    return [];
+                });
+            }
+
+            var offset = ((page - 1) * limit);
+            var userId = employee.hasOwnProperty('id') ? employee.id : employee;
+            var ouId = organization.hasOwnProperty('id') ? organization.id : organization;
+            return $http.get(urlService.followupEmployeeSentItems.change({
+                userId: userId,
+                ouId: ouId
+            }), {
+                params: {
+                    offset: offset,
+                    limit: limit
+                }
+            }).then(function (result) {
+                self.followupSentItemsTotalCount = result.data.count;
+                self.followupEmployeeSentItems = generator.generateCollection(result.data.rs, EventHistory, self._sharedMethods);
+                self.followupEmployeeSentItems = generator.interceptReceivedCollection('EventHistory', self.followupEmployeeSentItems);
+                return self.followupEmployeeSentItems;
+            });
+        };
+
+        /**
+         * @description Get followup employee sent items from self.followupEmployeeSentItems if found and if not load it from server again.
+         * @returns {Promise|followupEmployeeSentItems}
+         */
+        self.getFollowupEmployeeSentItems = function (page, limit) {
+            return self.followupEmployeeSentItems.length ? $q.when(self.followupEmployeeSentItems) : self.loadUserSentItems(page, limit);
+        };
+
         /**
          * @description Create the shared method to the model.
          * @type {{delete: generator.delete, update: generator.update}}

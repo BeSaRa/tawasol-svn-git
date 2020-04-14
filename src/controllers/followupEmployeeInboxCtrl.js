@@ -161,7 +161,7 @@ module.exports = function (app) {
         self.getEmployeeForFollowupEmployeeInbox = function ($event) {
             followupEmployeeInboxService
                 .controllerMethod
-                .openOrganizationAndUserDialog(self.selectedOrganizationForFollowUpEmployeeInbox, self.selectedUserForFollowUpEmployeeInbox, self.availableUsers, $event)
+                .openOrganizationAndUserDialog(self.selectedOrganizationForFollowUpEmployeeInbox, self.selectedUserForFollowUpEmployeeInbox, self.availableUsers,false ,$event)
                 .then(function (result) {
                     self.selectedOrganizationForFollowUpEmployeeInbox = result.organization;
                     self.selectedUserForFollowUpEmployeeInbox = result.applicationUser.domainName;

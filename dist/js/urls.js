@@ -271,6 +271,8 @@
                 .addToAllWithBase('correspondence', 'cms-entity/correspondence')
                 // follow up employee inbox
                 .addToAllWithBase('followupEmployeeInbox', 'cms-entity/user/inbox/followup-emp-inbox/user/:domainName/ou/:ouId')
+                // follow up employee sent items
+                .addToAllWithBase('followupEmployeeSentItems', 'cms-entity/user/inbox/user-sent-items/user-id/:userId/ou/:ouId')
                 // view workitem
                 .addToAllWithBase('viewWorkItem', 'cms-entity/user/inbox/wob-num/')
                 // follow up employee inbox actions

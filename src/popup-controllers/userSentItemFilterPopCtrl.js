@@ -12,6 +12,8 @@ module.exports = function (app) {
                                                           documentStatuses,
                                                           correspondenceSiteTypes,
                                                           usersTo,
+                                                          selectedEmployee,
+                                                          selectedOrganization,
                                                           moment) {
         'ngInject';
         var self = this;
@@ -24,6 +26,9 @@ module.exports = function (app) {
         self.documentStatuses = documentStatuses;
         self.correspondenceSiteTypes = correspondenceSiteTypes;
         self.usersTo = usersTo;
+        // this is the selected employee and organization when open from followup sent items
+        self.selectedEmployee = selectedEmployee;
+        self.selectedOrganization = selectedOrganization;
 
         self.siteTypeSearchText = '';
         self.mainSiteSearchText = '';
@@ -115,7 +120,7 @@ module.exports = function (app) {
          */
         self.filterUserSentItems = function ($event) {
             if (!self.isFilterDisabled()) {
-                return userSentItemService.filterUserSentItems(null, self.searchCriteria)
+                return userSentItemService.filterUserSentItems(null, self.searchCriteria, null, self.selectedEmployee, self.selectedOrganization)
                     .then(function (result) {
                         dialog.hide({
                             result: result,

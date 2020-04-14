@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                              ApplicationUser,
                                                              selectedOrganization,
                                                              selectedUser,
+                                                             isFollowupSentItems,
                                                              followUpOrganizations,
                                                              ouApplicationUsers,
                                                              employeeService,
@@ -19,8 +20,9 @@ module.exports = function (app) {
 
         self.inlineOUSearchText = '';
         self.inlineAppUserSearchText = '';
+        self.isFollowupSentItems = isFollowupSentItems;
 
-        var _mapRegOUSections = function(){
+        var _mapRegOUSections = function () {
             // filter all regOU (has registry)
             var regOus = _.filter(followUpOrganizations, function (item) {
                     return item.hasRegistry;
