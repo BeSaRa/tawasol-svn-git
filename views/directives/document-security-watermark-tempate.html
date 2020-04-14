@@ -4,12 +4,18 @@
                  ng-if="ctrl.documentSecurity">
             <div>
                 <!-- Show Watermark -->
-                <md-switch ng-model="ctrl.documentSecurity.status"
+                <div layout="column" layout-gt-md="row">
+                <md-switch flex ng-model="ctrl.documentSecurity.status"
                            aria-label="{{lang.apply_document_protection}}">
                     <span>{{lang.apply_document_protection}} : </span>
                     {{ctrl.documentSecurity.getTranslatedYesNo('status')}}
                 </md-switch>
-
+                <md-switch flex ng-model="ctrl.documentSecurity.isMicro"
+                           aria-label="{{lang.apply_micro_watermark}}">
+                    <span>{{lang.apply_micro_watermark}} : </span>
+                    {{ctrl.documentSecurity.getTranslatedYesNo('isMicro')}}
+                </md-switch>
+                </div>
                 <div flex layout="column" layout-gt-md="row">
 
                     <div layout="row">

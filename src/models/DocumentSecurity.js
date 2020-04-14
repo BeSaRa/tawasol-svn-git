@@ -12,6 +12,7 @@ module.exports = function (app) {
             self.locationX2D = 950;// 816 px is A4 page width and 100 px is barcode width(816-100=716)
             self.locationY2D = 1390;// 0 is bottom of page
             self.settingDetails = [];
+            self.isMicro = false;
 
 
             // every model has required fields
