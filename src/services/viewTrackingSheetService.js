@@ -40,6 +40,18 @@ module.exports = function (app) {
             self.fullHistory = [];
             self.documentLinkViewerRecords = [];
 
+            var splitNumber = 7;
+
+            function _splitToNumberOfWords(string, number) {
+                var newString = [];
+                var array = string.split(" ").filter(Boolean);
+                var count = Math.ceil(array.length / number);
+                for (var i = 0; i < count; i++) {
+                    newString.push(array.splice(0, number).join(" "));
+                }
+                return newString.join('\n\r');
+            }
+
             /**
              * @description Returns the view tracking sheet options for grid actions
              * @param gridOrTabs
@@ -694,7 +706,7 @@ module.exports = function (app) {
                                 record.getTranslatedAction(),
                                 //record.documentCreationDate_vts,
                                 record.actionDate_vts,
-                                record.comments
+                                _splitToNumberOfWords(record.comments || '', splitNumber)
                             ]);
                         }
                     }
@@ -782,7 +794,7 @@ module.exports = function (app) {
                                 record.getTranslatedAction(),
                                 record.documentCreationDate_vts,
                                 record.actionDate_vts,
-                                record.comments
+                                _splitToNumberOfWords(record.comments || '', splitNumber)
                             ]);
                         }
                     }
@@ -914,7 +926,7 @@ module.exports = function (app) {
                                 record.actionDate_vts,
                                 record.deliveryDate_vts,
                                 record.messageStatus.getTranslatedName(),
-                                record.comment
+                                _splitToNumberOfWords(record.comment || '', splitNumber)
                             ]);
                         }
                     }
@@ -940,7 +952,7 @@ module.exports = function (app) {
                                 record.actionByOUInfo.getTranslatedName(),
                                 record.actionToInfo.getTranslatedName(),
                                 record.actionTypeInfo.getTranslatedName(),
-                                record.comments
+                                _splitToNumberOfWords(record.comments || '', splitNumber)
                             ]);
                         }
                     }
