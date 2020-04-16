@@ -232,7 +232,11 @@ module.exports = function (app) {
                     this.docStatus = queueStatusService.getDocumentStatus(status);
                 return this.hasVsId() ? this.updateDocument(skipCheck) : this.createDocument(skipCheck);
             };
-
+            Correspondence.prototype.saveDocumentWithContent = function (information, sendToReview) {
+                if (sendToReview)
+                    this.docStatus = 4;
+                return correspondenceService.addCorrespondenceWithTemplate(this, information);
+            };
 
             Correspondence.prototype.saveDocumentTags = function () {
                 if (this.hasVsId()) {
@@ -367,13 +371,6 @@ module.exports = function (app) {
                     self.linkedEntities = selfVersion.linkedEntities;
                     return self;
                 });
-            };
-
-
-            Correspondence.prototype.saveDocumentWithContent = function (information, sendToReview) {
-                if (sendToReview)
-                    this.docStatus = 4;
-                return correspondenceService.addCorrespondenceWithTemplate(this, information);
             };
 
             Correspondence.prototype.addDocumentContentFile = function () {
@@ -838,7 +835,8 @@ module.exports = function (app) {
             };
 
             Correspondence.prototype.createReply = function ($event) {
-                if (this.getInfo().documentClass === 'incoming') {
+                var docClass = this.getInfo().documentClass;
+                if (docClass === 'incoming' || docClass === 'internal') {
                     return dialog.showDialog({
                         $event: $event || null,
                         templateUrl: cmsTemplate.getPopup('create-reply-confirm'),

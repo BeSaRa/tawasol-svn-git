@@ -166,6 +166,7 @@ module.exports = function (app) {
 
         self.requestCompleted = false;
         self.saveInProgress = false;
+
         self.saveCorrespondence = function (status) {
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
@@ -174,7 +175,7 @@ module.exports = function (app) {
             self.saveInProgress = true;
             var promise = null;
             var defer = $q.defer();
-            if (replyTo && $stateParams.workItem) {
+            if (replyTo && $stateParams.wobNum) {
                 dialog.confirmMessage(langService.get('prompt_terminate').change({name: self.replyToOriginalName}), langService.get('yes'), langService.get('no'))
                     .then(function () {
                         self.terminateAfterCreateReply = true;
@@ -191,30 +192,31 @@ module.exports = function (app) {
             return defer.promise.then(function () {
                 var methods = {
                     createReply: {
+                        key: 'createReplySave',
                         withContent: 'saveCreateReplyDocumentWithContent',
                         metaData: 'saveCreateReplyDocument'
                     },
                     normal: {
+                        key: 'normalSave',
                         withContent: 'saveDocumentWithContent',
                         metaData: 'saveDocument'
                     }
                 };
+
+                // replyTo gets false after save for first time
                 var method = (replyTo && !self.outgoing.vsId) ? methods.createReply : methods.normal,
-                    vsId = false;
+                    vsId = replyTo ? $stateParams.vsId : false;
+
                 /*No document information(No prepare document selected)*/
                 if (self.documentInformation && !self.outgoing.addMethod) {
+                    // Save Document With Content
                     if (status) {
                         self.outgoing.docStatus = queueStatusService.getDocumentStatus(status);
-                    }
-                    if (replyTo) {
-                        vsId = $stateParams.vsId;
                     }
                     promise = self.outgoing[method.withContent](self.documentInformation, vsId);
 
                 } else {
-                    if (replyTo) {
-                        vsId = $stateParams.vsId;
-                    }
+                    // Save Document
                     promise = self.outgoing[method.metaData](status, vsId);
                 }
                 return promise.then(function (result) {
@@ -272,7 +274,7 @@ module.exports = function (app) {
             self.outgoing.updateDocumentVersion();
 
             if (self.terminateAfterCreateReply) {
-                correspondenceService.terminateWorkItemBehindScene($stateParams.workItem, 'incoming', langService.get('terminated_after_create_reply'))
+                correspondenceService.terminateWorkItemBehindScene($stateParams.wobNum, 'incoming', langService.get('terminated_after_create_reply'))
             }
             if (status) {// || (self.outgoing.contentFile)
                 toast.success(langService.get('save_success'));

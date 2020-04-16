@@ -45,10 +45,11 @@ module.exports = function (app) {
             }
             dialog.hide();
             $state.go(page, {
-                workItem: info.wobNumber,
+                wobNum: info.wobNumber,
                 vsId: info.vsId,
                 action: 'reply',
-                createAsAttachment: self.createAsAttachment
+                createAsAttachment: self.createAsAttachment,
+                sourceDocClass: info.documentClass
             });
         };
 

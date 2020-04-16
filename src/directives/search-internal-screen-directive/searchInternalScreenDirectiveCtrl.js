@@ -834,6 +834,20 @@ module.exports = function (app) {
                     new ResolveDefer(defer);
                 });
         };
+
+        /**
+         * @description Create Reply
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.createReply = function (correspondence, $event, defer) {
+            correspondence.createReply($event, defer)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
+        };
+
         /**
          * @description Launch distribution workflow for internal item
          * @param searchedInternalDocument
@@ -1418,6 +1432,19 @@ module.exports = function (app) {
                             return true;
                         }
              },*/
+            // Create Reply
+            {
+                type: 'action',
+                icon: 'pen',
+                text: 'grid_action_create_reply',
+                shortcut: false,
+                permissionKey: 'CREATE_REPLY',
+                callback: self.createReply,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return !model.needApprove();
+                }
+            },
             // Launch Distribution Workflow
             {
                 type: 'action',

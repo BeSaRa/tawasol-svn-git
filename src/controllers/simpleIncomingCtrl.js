@@ -129,7 +129,7 @@ module.exports = function (app) {
             var promise = null;
             //var isDocHasVsId = angular.copy(self.incoming).hasVsId();
             if (self.receive) {
-                promise = self.incoming.receiveDocument($stateParams.workItem);
+                promise = self.incoming.receiveDocument($stateParams.wobNum);
             } else if (self.receiveG2G) {
                 promise = self.incoming.receiveG2GDocument($stateParams.vsId);
             } else {

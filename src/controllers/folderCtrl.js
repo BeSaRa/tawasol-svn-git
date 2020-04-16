@@ -294,11 +294,16 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.createReplyIncoming = function (workItem, $event, defer) {
+        self.createReply = function (workItem, $event, defer) {
             workItem.createReply($event)
                 .then(function (result) {
                     new ResolveDefer(defer);
-                });
+                }).catch(function (error) {
+                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: workItem.getInfo().wobNumber}));
+                    return false;
+                }
+            });
         };
 
         /**
@@ -523,7 +528,7 @@ module.exports = function (app) {
          * @param workItem
          * @param $event
          */
-        self.downloadSelected = function(workItem,$event){
+        self.downloadSelected = function (workItem, $event) {
             downloadService.openSelectedDownloadDialog(workItem, $event);
         };
 
@@ -1036,12 +1041,15 @@ module.exports = function (app) {
                 icon: 'pen',
                 text: 'grid_action_create_reply',
                 shortcut: false,
-                callback: self.createReplyIncoming,
+                callback: self.createReply,
                 class: "action-green",
                 permissionKey: 'CREATE_REPLY',
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return info.documentClass === "incoming" && !model.isBroadcasted();
+                    // if docFullSerial exists, its either paper or electronic approved document
+                    return (info.documentClass === 'incoming' || info.documentClass === 'internal')
+                        && !!info.docFullSerial && !model.isBroadcasted();
+                    //return info.documentClass === "incoming" && !model.isBroadcasted();
                 }
             },
             // Forward
@@ -1357,7 +1365,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'message',
-                        text:'selective_document',
+                        text: 'selective_document',
                         permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadSelected,
                         class: "action-green",
@@ -1522,7 +1530,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: function (action, model) {
-                        return  gridService.checkToShowMainMenuBySubMenu(action, model) && !model.isBroadcasted();
+                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !model.isBroadcasted();
                 },
                 subMenu: [
                     // Content

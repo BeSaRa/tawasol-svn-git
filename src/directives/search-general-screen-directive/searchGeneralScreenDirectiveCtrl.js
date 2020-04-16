@@ -852,7 +852,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.createReplyIncoming = function (correspondence, $event, defer) {
+        self.createReply = function (correspondence, $event, defer) {
             correspondence.createReply($event)
                 .then(function (result) {
                     new ResolveDefer(defer);
@@ -1511,11 +1511,11 @@ module.exports = function (app) {
                 text: 'grid_action_create_reply',
                 shortcut: false,
                 permissionKey: 'CREATE_REPLY',
-                callback: self.createReplyIncoming,
+                callback: self.createReply,
                 class: "action-green",
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return info.documentClass === 'incoming';
+                    return (info.documentClass === 'incoming' || info.documentClass === 'internal') && !model.needApprove();
                 }
             },
             // Launch Distribution Workflow

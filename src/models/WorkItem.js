@@ -829,7 +829,8 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.createReply = function ($event) {
-                if (this.getInfo().documentClass === 'incoming') {
+                var docClass = this.getInfo().documentClass;
+                if (docClass === 'incoming' || docClass === 'internal') {
                     return dialog.showDialog({
                         $event: $event || null,
                         templateUrl: cmsTemplate.getPopup('create-reply-confirm'),

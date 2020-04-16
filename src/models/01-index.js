@@ -178,4 +178,5 @@ module.exports = function (app) {
     require('./LDAPProvider')(app);
     require('./OUPrivateRegistry')(app);
     require('./SelectedDownload')(app);
+    require('./FollowupAction')(app);
 };

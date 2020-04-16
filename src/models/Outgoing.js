@@ -16,9 +16,9 @@ module.exports = function (app) {
                         return this.priorityLevel.getTranslatedName();
                     },
                     label_document_type: function () {
-                        if (this.docTypeInfo && this.docTypeInfo.hasOwnProperty('id') && this.docTypeInfo.id){
+                        if (this.docTypeInfo && this.docTypeInfo.hasOwnProperty('id') && this.docTypeInfo.id) {
                             return this.docTypeInfo.getTranslatedName();
-                        } else if (this.docType && this.docType.hasOwnProperty('id') && this.docType.id){
+                        } else if (this.docType && this.docType.hasOwnProperty('id') && this.docType.id) {
                             return this.docType.getTranslatedName();
                         }
                         return '';
@@ -36,10 +36,10 @@ module.exports = function (app) {
                     correspondence_sites: function () {
                         return this.getTranslatedCorrespondenceSiteInfo();
                     },
-                    security_level:function () {
+                    security_level: function () {
                         return this.securityLevel.getTranslatedName();
                     },
-                    deleted_by:function () {
+                    deleted_by: function () {
                         return this.lastModifierInfo.getTranslatedName();
                     },
                     deleted_on: 'lastModified',
@@ -114,18 +114,18 @@ module.exports = function (app) {
                 return correspondenceService.showPartialExportDialog(this, $event, ignoreMessage);
             };
 
-            Outgoing.prototype.saveCreateReplyDocument = function (status, workItemNum) {
+            Outgoing.prototype.saveCreateReplyDocument = function (status, vsId) {
                 correspondenceService = this.getCorrespondenceService();
                 if (status)
                     this.docStatus = queueStatusService.getDocumentStatus(status);
-                return correspondenceService.addCreateReplyCorrespondence(this, workItemNum);
+                return correspondenceService.addCreateReplyCorrespondence(this, vsId);
             };
 
-            Outgoing.prototype.saveCreateReplyDocumentWithContent = function (information, workItemNum, sendToReview) {
+            Outgoing.prototype.saveCreateReplyDocumentWithContent = function (information, vsId, sendToReview) {
                 correspondenceService = this.getCorrespondenceService();
                 if (sendToReview)
                     this.docStatus = 4;
-                return correspondenceService.addCreateReplyCorrespondenceWithContent(this, information, workItemNum);
+                return correspondenceService.addCreateReplyCorrespondenceWithContent(this, information, vsId);
             };
 
             Outgoing.prototype.isCompositeSites = function () {

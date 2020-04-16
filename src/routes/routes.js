@@ -846,7 +846,7 @@ module.exports = function (app) {
             })
             // add-outgoing
             .state('app.outgoing.add', {
-                url: '/add?vsId?workItem?action?createAsAttachment',
+                url: '/add?vsId?wobNum?action?createAsAttachment?sourceDocClass',
                 templateUrl: templateProvider.getView('outgoing-add'),
                 controller: 'outgoingCtrl',
                 controllerAs: 'ctrl',
@@ -854,7 +854,7 @@ module.exports = function (app) {
             })
             // add simple outgoing
             .state('app.outgoing.simple-add', {
-                url: '/simpleAdd?vsId?workItem?action?createAsAttachment',
+                url: '/simpleAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass',
                 templateUrl: templateProvider.getView('outgoing-simple-add'),
                 controller: 'simpleOutgoingCtrl',
                 controllerAs: 'ctrl',
@@ -1167,7 +1167,7 @@ module.exports = function (app) {
             })
             // add incoming
             .state('app.incoming.add', {
-                url: '/add?action?workItem?vsId?internalg2g',
+                url: '/add?action?wobNum?vsId?internalg2g',
                 templateUrl: templateProvider.getView('incoming-add'),
                 controller: 'incomingCtrl',
                 controllerAs: 'ctrl',
@@ -1175,7 +1175,7 @@ module.exports = function (app) {
             })
             // add simple incoming
             .state('app.incoming.simple-add', {
-                url: '/simpleAdd?action?workItem?vsId',
+                url: '/simpleAdd?action?wobNum?vsId',
                 templateUrl: templateProvider.getView('incoming-simple-add'),
                 controller: 'simpleIncomingCtrl',
                 controllerAs: 'ctrl',
@@ -1270,7 +1270,7 @@ module.exports = function (app) {
             })
             // add-internal
             .state('app.internal.add', {
-                url: '/add?vsId?workItem?action?createAsAttachment',
+                url: '/add?vsId?wobNum?action?createAsAttachment?sourceDocClass',
                 templateUrl: templateProvider.getView('internal-add'),
                 controller: 'internalCtrl',
                 controllerAs: 'ctrl',
@@ -1279,7 +1279,7 @@ module.exports = function (app) {
 
             // add simple internal
             .state('app.internal.simple-add', {
-                url: '/simpleAdd?vsId?workItem?action?createAsAttachment',
+                url: '/simpleAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass',
                 templateUrl: templateProvider.getView('internal-simple-add'),
                 controller: 'simpleInternalCtrl',
                 controllerAs: 'ctrl',

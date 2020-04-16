@@ -15,9 +15,9 @@ module.exports = function (app) {
                         return this.priorityLevel.getTranslatedName();
                     },
                     label_document_type: function () {
-                        if (this.docTypeInfo && this.docTypeInfo.hasOwnProperty('id') && this.docTypeInfo.id){
+                        if (this.docTypeInfo && this.docTypeInfo.hasOwnProperty('id') && this.docTypeInfo.id) {
                             return this.docTypeInfo.getTranslatedName();
-                        } else if (this.docType && this.docType.hasOwnProperty('id') && this.docType.id){
+                        } else if (this.docType && this.docType.hasOwnProperty('id') && this.docType.id) {
                             return this.docType.getTranslatedName();
                         }
                         return '';
@@ -32,13 +32,13 @@ module.exports = function (app) {
                         return this.createdBy.getTranslatedName();
                     },
                     created_on: 'createdOn',
-                    security_level:function () {
+                    security_level: function () {
                         return this.securityLevel.getTranslatedName();
                     },
-                    deleted_by:function () {
+                    deleted_by: function () {
                         return this.lastModifierInfo.getTranslatedName();
                     },
-                    deleted_on:'lastModified'
+                    deleted_on: 'lastModified'
                 };
 
 
@@ -105,17 +105,17 @@ module.exports = function (app) {
                         return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
                     }
                 };
-                Internal.prototype.saveCreateReplyDocument = function (status, workItemNum) {
+                Internal.prototype.saveCreateReplyDocument = function (status, vsId) {
                     correspondenceService = this.getCorrespondenceService();
                     if (status)
                         this.docStatus = queueStatusService.getDocumentStatus(status);
-                    return correspondenceService.addCreateReplyCorrespondence(this, workItemNum);
+                    return correspondenceService.addCreateReplyCorrespondence(this, vsId);
                 };
-                Internal.prototype.saveCreateReplyDocumentWithContent = function (information, workItemNum, sendToReview) {
+                Internal.prototype.saveCreateReplyDocumentWithContent = function (information, vsId, sendToReview) {
                     correspondenceService = this.getCorrespondenceService();
                     if (sendToReview)
                         this.docStatus = 4;
-                    return correspondenceService.addCreateReplyCorrespondenceWithContent(this, information, workItemNum);
+                    return correspondenceService.addCreateReplyCorrespondenceWithContent(this, information, vsId);
                 };
                 Internal.prototype.openSendFaxDialog = function ($event) {
                     correspondenceService = this.getCorrespondenceService();
@@ -129,5 +129,4 @@ module.exports = function (app) {
             }
         }
     )
-}
-;
+};

@@ -67,7 +67,8 @@ module.exports = function (app) {
                                                    $stateParams,
                                                    DocumentLink,
                                                    SmsLog,
-                                                   rootEntity) {
+                                                   rootEntity,
+                                                   FollowupAction) {
         'ngInject';
         var self = this, managerService, correspondenceStorageService;
         self.serviceName = 'correspondenceService';
@@ -599,26 +600,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description create to replay given correspondence.
-         * @param correspondence
-         * @param workItemNum
-         * @return {Promise|Correspondence}
-         */
-        self.addCreateReplyCorrespondence = function (correspondence, workItemNum) {
-            return $http
-                .post(
-                    _createUrlSchema('create-reply-metadata/incoming/' + workItemNum, correspondence.docClassName, null),
-                    generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence)
-                ).then(function (result) {
-                    correspondence.vsId = result.data.rs;
-                    return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
-                }).catch(function (error) {
-                    return $q.reject(self.getTranslatedError(error));
-                });
-        };
-
-
-        /**
          * @description  add correspondence
          * @param correspondence
          * @param skipCheck
@@ -708,15 +689,38 @@ module.exports = function (app) {
         };
 
         /**
-         *  create to reply Correspondence with content .
+         * @description create to replay given correspondence.
+         * @param correspondence
+         * @param vsId
+         * @return {Promise|Correspondence}
+         */
+        self.addCreateReplyCorrespondence = function (correspondence, vsId) {
+            var sourceDocClass = $stateParams.sourceDocClass,
+                url = urlService.correspondence + '/' + correspondence.docClassName.toLowerCase() + '/create-reply-metadata/' + sourceDocClass + '/' + vsId;
+            var urlOld = _createUrlSchema('create-reply-metadata/incoming/' + vsId, correspondence.docClassName, null);
+
+            return $http.post(url, generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence))
+                .then(function (result) {
+                    correspondence.vsId = result.data.rs;
+                    return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                }).catch(function (error) {
+                    return $q.reject(self.getTranslatedError(error));
+                });
+        };
+
+        /**
+         * @description create to reply Correspondence with content .
          * @param correspondence
          * @param information
-         * @param workItemNum
+         * @param vsId
          */
-        self.addCreateReplyCorrespondenceWithContent = function (correspondence, information, workItemNum) {
-            var book = _createCorrespondenceStructure(correspondence, information);
+        self.addCreateReplyCorrespondenceWithContent = function (correspondence, information, vsId) {
+            var book = _createCorrespondenceStructure(correspondence, information),
+                sourceDocClass = $stateParams.sourceDocClass,
+                url = urlService.correspondence + '/' + correspondence.docClassName.toLowerCase() + '/create-reply-full/' + sourceDocClass + '/' + vsId;
+            var urlOld = _createUrlSchema('create-reply-full/incoming/' + vsId, correspondence.docClassName, null);
 
-            return $http.post(_createUrlSchema('create-reply-full/incoming/' + workItemNum, correspondence.docClassName, null), book)
+            return $http.post(url, book)
                 .then(function (result) {
                     correspondence.vsId = result.data.rs;
                     return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
@@ -1271,6 +1275,31 @@ module.exports = function (app) {
             }
             return _sendToCentralArchiveReadyToExport(correspondence, ignoreMessage);
         };
+
+        /**
+         * @description Loads the correspondence for create reply.
+         * @param sourceDocClass
+         * @param targetDocClass
+         * @param wobNumber
+         * @param vsId
+         * @param createAsAttachment
+         */
+        self.createReplyForDocument = function (sourceDocClass, targetDocClass, wobNumber, vsId, createAsAttachment) {
+            var data = new FollowupAction({
+                createAsAttachment: createAsAttachment,
+                sourceClassId: self.docClassIds[sourceDocClass.toLowerCase()],
+                destClassId: self.docClassIds[targetDocClass.toLowerCase()],
+                wobNum: wobNumber || '', // wobNum will be sent if create reply from inbox
+                vsId: vsId  // vsId will be sent always
+            });
+
+            return $http
+                .put(urlService.correspondence + '/incoming/create-replay', data)
+                .then(function (result) {
+                    return generator.interceptReceivedInstance(['Correspondence', _getModelName(targetDocClass), 'CreateReply'], generator.generateInstance(result.data.rs, _getModel(targetDocClass)));
+                });
+        };
+
         /**
          * create reply from workItem.
          * @param documentClass
@@ -2962,7 +2991,7 @@ module.exports = function (app) {
                     });
                     result.data.rs.sitesitesToList = generator.interceptReceivedCollection('Site', generator.generateCollection(result.data.rs.sitesitesToList, Site));
                     result.data.rs.sitesCCList = generator.interceptReceivedCollection('Site', generator.generateCollection(result.data.rs.sitesCCList, Site));
-                    result.data.rs.linkedDocList =  self.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs.linkedDocList);
+                    result.data.rs.linkedDocList = self.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs.linkedDocList);
                     return result.data.rs;
                 })
         };
@@ -4455,7 +4484,7 @@ module.exports = function (app) {
                 });
         };
 
-        self.getBlobFromUrl = function(url, returnPromise){
+        self.getBlobFromUrl = function (url, returnPromise) {
             return $http.get(url, {
                 responseType: 'blob'
             }).then(function (result) {

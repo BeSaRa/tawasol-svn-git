@@ -623,17 +623,17 @@ module.exports = function (app) {
 
         /**
          * @description Create Reply
-         * @param userInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.createReplyIncoming = function (userInbox, $event, defer) {
-            userInbox.createReply($event)
+        self.createReply = function (workItem, $event, defer) {
+            workItem.createReply($event)
                 .then(function (result) {
                     new ResolveDefer(defer);
                 }).catch(function (error) {
                 if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
-                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: userInbox.getInfo().wobNumber}));
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: workItem.getInfo().wobNumber}));
                     return false;
                 }
             });
@@ -1470,12 +1470,15 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'pen',
                 text: 'grid_action_create_reply',
-                callback: self.createReplyIncoming,
+                callback: self.createReply,
                 class: "action-green",
                 permissionKey: 'CREATE_REPLY',
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return info.documentClass === "incoming" && !model.isBroadcasted();
+                    // if docFullSerial exists, its either paper or electronic approved document
+                    return (info.documentClass === 'incoming' || info.documentClass === 'internal')
+                        && !!info.docFullSerial && !model.isBroadcasted();
+                    //return info.documentClass === "incoming" && !model.isBroadcasted();
                 }
             },
             // Forward
