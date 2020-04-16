@@ -1297,37 +1297,19 @@ module.exports = function (app) {
                 .put(urlService.correspondence + '/incoming/create-replay', data)
                 .then(function (result) {
                     return generator.interceptReceivedInstance(['Correspondence', _getModelName(targetDocClass), 'CreateReply'], generator.generateInstance(result.data.rs, _getModel(targetDocClass)));
+                }).catch(function (error) {
+                    if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                        if (wobNumber) {
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: wobNumber}));
+                        } else {
+                            dialog.errorMessage(langService.get('no_records_found'));
+                        }
+                        return $q.reject(false);
+                    }
+                    return $q.reject(error);
                 });
         };
 
-        /**
-         * create reply from workItem.
-         * @param documentClass
-         * @param wobNumber
-         * @param fromDocumentClass
-         * @param followUpStatus
-         */
-        self.createReplyFromWorkItem = function (documentClass, wobNumber, fromDocumentClass, followUpStatus) {
-            return $http
-                .put(_createUrlSchema(null, documentClass, wobNumber + '/create-replay/' + fromDocumentClass.toLowerCase()), followUpStatus)
-                .then(function (result) {
-                    return generator.interceptReceivedInstance(['Correspondence', _getModelName(fromDocumentClass), 'CreateReply'], generator.generateInstance(result.data.rs, _getModel(fromDocumentClass)));
-                });
-        };
-        /**
-         * @description create reply from vsId
-         * @param documentClass
-         * @param vsId
-         * @param fromDocumentClass
-         * @param followUpStatus
-         */
-        self.createReplyFromCorrespondence = function (documentClass, vsId, fromDocumentClass, followUpStatus) {
-            return $http
-                .put(_createUrlSchema(null, documentClass, vsId + '/create-replay-from-search/' + fromDocumentClass.toLowerCase()), followUpStatus)
-                .then(function (result) {
-                    return generator.interceptReceivedInstance(['Correspondence', _getModelName(fromDocumentClass), 'CreateReply'], generator.generateInstance(result.data.rs, _getModel(fromDocumentClass)));
-                });
-        };
         /**
          * @description edit Correspondence after approved from readyTo Export
          * @param documentClass
