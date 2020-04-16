@@ -1054,15 +1054,16 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.createReply,
                 class: "action-green",
-                permissionKey: 'CREATE_REPLY',
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
+                    var info = model.getInfo(),
+                        employee = employeeService.getEmployee();
                     // if docFullSerial exists, its either paper or electronic approved document
-                    return (info.documentClass === 'incoming' || info.documentClass === 'internal')
-                        && !!info.docFullSerial;
+                    return ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
+                        || (info.documentClass === 'internal') && employee.hasPermissionTo('CREATE_REPLY_INTERNAL')
+                    ) && !!info.docFullSerial;
                 }
             },
             // Forward
@@ -1712,7 +1713,7 @@ module.exports = function (app) {
                 });
         };
 
-        if (employeeService.getEmployee().getIntervalMin()){
+        if (employeeService.getEmployee().getIntervalMin()) {
             self.refreshGrid(employeeService.getEmployee().getIntervalMin());
         }
     });

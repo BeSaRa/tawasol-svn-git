@@ -1116,14 +1116,11 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.createReplyIncoming = function (correspondence, $event, defer) {
+        self.createReply = function (correspondence, $event, defer) {
             correspondence.createReply($event, defer)
                 .then(function (result) {
                     new ResolveDefer(defer);
                 });
-            /*var info = correspondence.getInfo();
-            dialog.hide();
-            $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});*/
         };
 
         var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
@@ -1433,11 +1430,12 @@ module.exports = function (app) {
                 icon: 'pen',
                 text: 'grid_action_create_reply',
                 shortcut: false,
-                permissionKey: 'CREATE_REPLY',
-                callback: self.createReplyIncoming,
+                callback: self.createReply,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return true;
+                    var info = model.getInfo(),
+                        employee = employeeService.getEmployee();
+                    return (info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'));
                 }
             },
             // Launch Distribution Workflow

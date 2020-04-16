@@ -1045,10 +1045,12 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'CREATE_REPLY',
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
+                    var info = model.getInfo(),
+                        employee = employeeService.getEmployee();
                     // if docFullSerial exists, its either paper or electronic approved document
-                    return (info.documentClass === 'incoming' || info.documentClass === 'internal')
-                        && !!info.docFullSerial && !model.isBroadcasted();
+                    return ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
+                        || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL'))
+                    ) && !!info.docFullSerial && !model.isBroadcasted();
                     //return info.documentClass === "incoming" && !model.isBroadcasted();
                 }
             },

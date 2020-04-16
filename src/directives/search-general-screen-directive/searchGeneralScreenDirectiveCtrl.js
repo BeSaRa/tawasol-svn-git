@@ -1510,12 +1510,14 @@ module.exports = function (app) {
                 icon: 'pen',
                 text: 'grid_action_create_reply',
                 shortcut: false,
-                permissionKey: 'CREATE_REPLY',
                 callback: self.createReply,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return (info.documentClass === 'incoming' || info.documentClass === 'internal') && !model.needApprove();
+                    var info = model.getInfo(),
+                        employee = employeeService.getEmployee();
+                    return ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
+                        || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL'))
+                    ) && !model.needApprove();
                 }
             },
             // Launch Distribution Workflow

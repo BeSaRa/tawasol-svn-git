@@ -806,10 +806,12 @@ module.exports = function (app) {
                 text: 'grid_action_create_reply',
                 callback: self.createReply,
                 class: "action-green",
-                permissionKey: 'CREATE_REPLY',
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return (info.documentClass === 'incoming' || info.documentClass === 'internal') && !model.needApprove() && !model.isBroadcasted();
+                    var info = model.getInfo(),
+                        employee = employeeService.getEmployee();
+                    return ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
+                        || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL'))
+                    ) && !model.needApprove() && !model.isBroadcasted();
                 }
             },
             // Broadcast
