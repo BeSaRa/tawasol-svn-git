@@ -676,6 +676,10 @@ module.exports = function (app) {
                 return correspondenceService.archiveCorrespondence(this, $event, ignoreMessage);
             };
 
+            Correspondence.prototype.removePermanentlyDocument= function($event){
+                return correspondenceService.removePermanentlyCorrespondence(this, $event);
+            };
+
             Correspondence.prototype.emptyOrganizations = function () {
                 this.registryOU = null;
                 this.ou = null;

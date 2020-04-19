@@ -4595,10 +4595,72 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Remove Permanently Correspondence
+         * @param correspondence
+         * @param $event
+         */
+        self.removePermanentlyCorrespondence = function (correspondence, $event) {
+            return dialog.confirmMessage(langService.get('confirm_remove_permanently').change({name: correspondence.getNames()}), null, null, $event)
+                .then(function () {
+                    var info = correspondence.getInfo(),
+                        url = urlService.outgoings;
+                    if (info.documentClass === 'incoming')
+                        url = urlService.incomings;
+                    else if (info.documentClass === 'internal')
+                        url = urlService.internals;
+                    return $http
+                        .delete(url + '/' + info.vsId + '/delete-permanent')
+                        .then(function () {
+                            toast.success(langService.get("remove_specific_success").change({name: correspondence.getTranslatedName()}));
+                            return correspondence;
+                        });
+                });
+        };
+
+        /**
+         * @description Remove Bulk Permanently Correspondences
+         * @param correspondences
+         * @param $event
+         * @param ignoreMessage
+         */
+        self.removePermanentlyBulkCorrespondences = function (correspondences, $event, ignoreMessage) {
+            // if the selected correspondences has just one record.
+            if (correspondences.length === 1) {
+                return self.removePermanentlyCorrespondence(correspondences[0], $event);
+            }
+            else {
+                return dialog
+                    .confirmMessage(langService.get('confirm_remove_permanently_selected_multiple'), null, null, $event || null)
+                    .then(function () {
+                        var info = correspondences[0].getInfo(),
+                            url = urlService.outgoings;
+                        if (info.documentClass === 'incoming')
+                            url = urlService.incomings;
+                        else if (info.documentClass === 'internal')
+                            url = urlService.internals;
+
+                        var bulkIds = _.map(correspondences, function (correspondence) {
+                            return correspondence.getInfo().vsId;
+                        });
+                        return $http({
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            url: url + '/delete-permanent/bulk',
+                            data: bulkIds
+                        }).then(function (result) {
+                            return _bulkMessages(result, correspondences, ignoreMessage, 'failed_remove_selected', 'remove_success', 'remove_success_except_following');
+                        });
+                    });
+            }
+
+        };
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);
     })
     ;
-}
-;
+};

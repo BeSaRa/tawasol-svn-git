@@ -4595,6 +4595,10 @@
     "ar": "إزالة",
     "en": "Remove"
   },
+  "grid_action_remove_permanent": {
+    "ar": "إزالة نهائيا",
+    "en": "Remove Permanently"
+  },
   "grid_action_edit_outgoing_properties": {
     "ar": "تعديل بيانات الكتاب",
     "en": "Edit Outgoing Properties"
@@ -5866,6 +5870,10 @@
   "menu_item_followup_employee_inbox": {
     "ar": "متابعة بريد الموظفين",
     "en": "Followup Employee Inbox"
+  },
+  "menu_item_followup_employee_sent_items": {
+    "ar": "متابعة البريد المرسل",
+    "en": "Followup Sent Items"
   },
   "menu_item_proxy_mail_inbox": {
     "ar": "بريد الموكل",

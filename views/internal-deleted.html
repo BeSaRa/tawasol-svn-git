@@ -44,6 +44,12 @@
                                                            ng-click="ctrl.archiveBulk($event)">
                                                     <md-icon md-svg-icon="archive" class="action-green"></md-icon>
                                                 </md-button>
+                                                <md-button class="md-icon-button"
+                                                           tooltip="{{lang.grid_action_remove_permanent}}"
+                                                           ng-if="ctrl.isSelectedHasContent()"
+                                                           ng-click="ctrl.removePermanentlyBulk($event)">
+                                                    <md-icon md-svg-icon="delete-forever" class="action-green"></md-icon>
+                                                </md-button>
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedDeletedInternals.length" md-column

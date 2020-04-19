@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                     dialog,
                                                     $q,
                                                     _,
+                                                    counterService,
                                                     generator,
                                                     ResolveDefer,
                                                     printService,
@@ -64,6 +65,36 @@ module.exports = function (app) {
                     return self.reloadDeletedInternals(self.grid.page);
                 });
         };
+
+        /***
+         * @ description remove document permanently
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.removePermanently = function(correspondence, $event, defer){
+            correspondence.removePermanentlyDocument($event)
+                .then(function () {
+                    self.reloadDeletedInternals(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
+        /**
+         * @ description remove selected documents permanently
+         * @param $event
+         */
+        self.removePermanentlyBulk = function ($event) {
+            correspondenceService
+                .removePermanentlyBulkCorrespondences(self.selectedDeletedInternals, $event)
+                .then(function () {
+                    self.reloadDeletedInternals(self.grid.page);
+                });
+        };
+
+
         /**
          * @description Archive the deleted internal item
          * @param correspondence
@@ -214,6 +245,18 @@ module.exports = function (app) {
                 callback: self.viewTrackingSheet,
                 params: ['view_tracking_sheet', 'tabs', gridService.grids.internal.deleted]
             },
+            // Remove Permanently
+            {
+                type: 'action',
+                icon: 'delete-forever',
+                text: 'grid_action_remove_permanent',
+                shortcut: true,
+                callback: self.removePermanently,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
             // Archive
             {
                 type: 'action',
@@ -256,6 +299,7 @@ module.exports = function (app) {
             return correspondenceService
                 .loadDeletedDocumentsByDocumentClass('internal')
                 .then(function (result) {
+                    counterService.loadCounters();
                     self.deletedInternals = result;
                     self.deletedInternalsCopy = angular.copy(self.deletedInternals);
                     self.selectedDeletedInternals = [];
