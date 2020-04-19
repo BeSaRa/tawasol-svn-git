@@ -25,8 +25,10 @@ module.exports = function (app) {
         self.controllerName = 'taskPopupCtrl';
 
         self.task = task;
+        self.task.taskParticipants = _prepareTaskParticipants(self.task.taskParticipants);
         self.model = angular.copy(task);
         self.editMode = editMode;
+
         self.priorityLevels = lookupService.returnLookups('priorityLevel');
         self.taskStates = lookupService.returnLookups('taskState');
 
@@ -105,6 +107,12 @@ module.exports = function (app) {
          * @private
          */
         function _prepareAvailableUsers(users) {
+            return _.map(users, function (user) {
+                user.display = user.userId.getTranslatedName() + ' - ' + user.ouId.getTranslatedName();
+                return user;
+            });
+        }
+        function _prepareTaskParticipants(users) {
             return _.map(users, function (user) {
                 user.display = user.userId.getTranslatedName() + ' - ' + user.ouId.getTranslatedName();
                 return user;
@@ -222,66 +230,6 @@ module.exports = function (app) {
             return (self.startDate && self.endDate && self.startDate === self.endDate) && hour.compareValue <= self.selectedStartTime.compareValue;
         };
 
-        self.personQuerySearch = function (query) {
-            _getParticipantIds();
-            return _excludeSelect().filter(function (item) {
-                return item.display.toLowerCase().trim().indexOf(query) !== -1;
-            });
-        };
-
-
-        self.selectedItemChange = function (autoCompleteId) {
-            if (self.selectedParticipant) {
-                taskService
-                    .openSettingForParticipant(self.selectedParticipant, self.task)
-                    .then(function (participant) {
-                        self.task
-                            .addParticipant(participant)
-                            .then(function () {
-                                _getParticipantIds();
-                                if (self.task.hasId()) {
-                                    toast.success(langService.get('task_participant_added_successfully'));
-                                }
-                                self.selectedParticipant = null;
-                            });
-                    })
-            }
-
-        };
-
-        self.editTaskParticipantFromCtrl = function (participant) {
-            taskService
-                .openSettingForParticipant(participant, self.task, true)
-                .then(function (participant) {
-                    self.task
-                        .editTaskParticipant(participant)
-                        .then(function () {
-                            _getParticipantIds();
-                            if (self.task.hasId()) {
-                                toast.success(langService.get('task_participant_updated_successfully'));
-                            }
-                        });
-
-                });
-        };
-
-        self.canDeleteTaskParticipant = function () {
-            return self.task.taskParticipants && self.task.taskParticipants.length > 1;
-        };
-
-        self.removeTaskParticipant = function (participant) {
-            self.task
-                .deleteParticipant(participant)
-                .then(function () {
-                    _getParticipantIds();
-                    toast.success(langService.get('delete_success'));
-                });
-        };
-
-        self.closeTaskPopupFromCtrl = function () {
-            dialog.hide(self.task);
-        };
-
         self.getAvailableDate = function () {
             return self.task.startDate.valueOf() > Date.now() ? self.task.startDate : new Date();
         };
@@ -350,12 +298,137 @@ module.exports = function (app) {
         };
 
         self.canSaveTask = function () {
-            return self.hasMinimumValues() && (self.task.withoutParticipant || (!self.task.withoutParticipant && self.task.taskParticipants.length))
+            return self.hasMinimumValues() && (self.task.withoutParticipant || (!self.task.withoutParticipant && self.task.taskParticipants && self.task.taskParticipants.length))
         };
 
         self.hasMinimumValues = function () {
             return !!(self.task.taskTitle && self.task.taskTitle.length > 3 && self.task.startDate && self.task.dueDate);
+        };
+
+        /**
+         * @description Search participant for autocomplete
+         * @param query
+         * @returns {*}
+         */
+        self.personQuerySearch = function (query) {
+            _getParticipantIds();
+            return _excludeSelect().filter(function (item) {
+                return item.display.toLowerCase().trim().indexOf(query) !== -1;
+            });
+        };
+
+        /**
+         * @description Checks if delete participant is allowed
+         * @returns {boolean}
+         */
+        self.canDeleteTaskParticipant = function () {
+            return self.task.taskParticipants && self.task.taskParticipants.length > 1;
+        };
+
+        /**
+         * @description Checks if select participant is disabled
+         * @returns {boolean}
+         */
+        self.isSelectParticipantDisabled = function () {
+            return !self.task.taskTitle || !self.task.startDate || !self.task.dueDate || self.task.withoutParticipant;
+        };
+
+        /**
+         * @description Handles the participant chip after chip is added
+         * @param selectedParticipant
+         * @param $index
+         */
+        self.onAddTaskParticipant = function (selectedParticipant, $index) {
+            taskService
+                .openSettingForParticipant(selectedParticipant, self.task)
+                .then(function (participant) {
+                    // remove the automatically added chip and add it by code with all changes
+                    _removeChipByIndex($index);
+
+                    self.task
+                        .addParticipant(participant, $index)
+                        .then(function () {
+                            _getParticipantIds();
+                            if (self.task.hasId()) {
+                                toast.success(langService.get('task_participant_added_successfully'));
+                            }
+                            self.selectedParticipant = null;
+                        });
+                })
+                .catch(function (error) {
+                    _removeChipByIndex($index);
+                })
+        };
+
+        /**
+         * @description Handles edit of participant chip
+         * @param $event
+         */
+        self.editTaskParticipant = function ($event) {
+            var participant = _getSelectedChip($event);
+            if (!participant) {
+                return;
+            }
+            participant = participant.chip;
+
+            taskService
+                .openSettingForParticipant(participant, self.task, true)
+                .then(function (participant) {
+                    self.task
+                        .editTaskParticipant(participant)
+                        .then(function () {
+                            _getParticipantIds();
+                            if (self.task.hasId()) {
+                                toast.success(langService.get('task_participant_updated_successfully'));
+                            }
+                        });
+                });
+        };
+
+        /**
+         * @description Handles the remove of participant chip
+         * @param participant
+         * @param $index
+         * @param $event
+         */
+        self.onRemoveTaskParticipant = function (participant, $index, $event) {
+            self.task
+                .removeParticipant(participant, $index)
+                .then(function () {
+                    _getParticipantIds();
+                    if (self.task.hasId()) {
+                        toast.success(langService.get('delete_success'));
+                    }
+                })
+                .catch(function (error) {
+                    self.task.taskParticipants.splice($index, 0, participant);
+                });
+        };
+
+        function _getSelectedChip(event) {
+            var chipCtrl = angular.element(event.currentTarget).controller('mdChips');
+            if (!chipCtrl || chipCtrl.selectedChip === -1) {
+                return null;
+            }
+            return {
+                chip: chipCtrl.items[chipCtrl.selectedChip],
+                index: chipCtrl.selectedChip
+            };
         }
+
+        function _removeChipByIndex(index){
+            if (index === -1){
+                return;
+            }
+            if (self.task.taskParticipants && self.task.taskParticipants.length) {
+                self.task.taskParticipants.splice(index, 1);
+            }
+        }
+
+
+        self.closeTaskPopupFromCtrl = function () {
+            dialog.hide(self.task);
+        };
 
     });
 };

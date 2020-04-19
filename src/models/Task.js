@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('Task', function (CMSModelInterceptor, _, $timeout, configurationService, employeeService) {
+    app.factory('Task', function (CMSModelInterceptor, _, $timeout, configurationService, employeeService, $q) {
         'ngInject';
         return function Task(model) {
             var self = this, taskService, completedStateLookupKey = 3;
@@ -91,27 +91,15 @@ module.exports = function (app) {
                 }
             };
 
-            Task.prototype.deleteParticipant = function (taskParticipant) {
+            Task.prototype.removeParticipant = function (taskParticipant) {
                 var self = this;
-                var index = self.findParticipantIndex(taskParticipant);
-                if (!this.hasId()) {
-                    return $timeout(function () {
-                        self.taskParticipants.splice(index, 1);
-                        return taskParticipant;
-                    });
+                if (!this.hasId() || !taskParticipant.id) {
+                    return $q.resolve(true);
                 } else {
-                    if (taskParticipant.id) {
-                        return taskService.deleteTaskParticipant(self, taskParticipant)
-                            .then(function () {
-                                self.taskParticipants.splice(index, 1);
-                                return taskParticipant;
-                            });
-                    } else {
-                        return $timeout(function () {
-                            self.taskParticipants.splice(index, 1);
-                            return taskParticipant;
+                    return taskService.deleteTaskParticipant(self, taskParticipant)
+                        .then(function () {
+                            return true;
                         });
-                    }
                 }
             };
 

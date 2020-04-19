@@ -1,27 +1,12 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.tasks}}">
-    <popup-toolbar-directive header-text="{{lang.edit_task_participant}}"></popup-toolbar-directive>
+    <popup-toolbar-directive header-text="{{lang.edit_task_participant}} : {{ctrl.taskParticipant.userId.getTranslatedName()}} - {{ctrl.taskParticipant.ouId.getTranslatedName()}}"
+                             close-callback="ctrl.closeTaskParticipantPopupFromCtrl"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form autocomplete="off" name="participant_form">
                 <div layout="column">
-                    <div layout="row">
-                        <table md-whiteframe="2" flex class="task-management-attendance-table">
-                            <thead>
-                            <tr>
-                                <th><span>{{lang.name}}</span></th>
-                                <th><span>{{lang.department}}</span></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ctrl.taskParticipant.userId.getTranslatedName()}}</td>
-                                <td>{{ctrl.taskParticipant.ouId.getTranslatedName()}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
                     <div layout="row">
                         <md-input-container flex>
                             <label>{{lang.task_state}}</label>
@@ -72,7 +57,8 @@
                             <div flex layout="row">
                                 <md-input-container flex class="cms-datepicker">
                                     <label>{{lang.task_end_date}}</label>
-                                    <md-datepicker ng-disabled="ctrl.fromView" md-min-date="ctrl.taskParticipant.startDate"
+                                    <md-datepicker ng-disabled="ctrl.fromView"
+                                                   md-min-date="ctrl.taskParticipant.startDate"
                                                    md-max-date="ctrl.task.dueDate"
                                                    required
                                                    ng-model="ctrl.taskParticipant.dueDate"></md-datepicker>
