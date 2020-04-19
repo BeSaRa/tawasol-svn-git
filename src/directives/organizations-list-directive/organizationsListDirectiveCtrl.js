@@ -11,7 +11,9 @@ module.exports = function (app) {
                                                                _,
                                                                rootEntity,
                                                                Entity,
-                                                               toast) {
+                                                               toast,
+                                                               employeeService,
+                                                               dialog) {
         'ngInject';
         var self = this,
             columnSearchCriteria = {
@@ -29,10 +31,10 @@ module.exports = function (app) {
         self.rootEntity = new Entity(rootEntity.returnRootEntity().rootEntity);
 
         self.selectedOrganizations = [];
-        _getAllParentIds();
 
         $timeout(function () {
             self.organizationsListCopy = angular.copy(self.organizationsList);
+            _getAllParentIds();
         });
 
         self.grid = {
