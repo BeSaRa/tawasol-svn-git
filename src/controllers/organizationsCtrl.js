@@ -57,15 +57,13 @@ module.exports = function (app) {
                 .then(function () {
                     if (ignoreLoadOrganizations)
                         return;
-                   return organizationService
+                    return organizationService
                         .loadAllOrganizationsStructure()
                         .then(function (result) {
                             self.needSync = _checkOrganizationsNeedSync(result);
-                            organizationChartService.createHierarchy(result);
-                            self.selectedFilter = self.organizationChartService.rootOrganizations;
-
+                            // organizationChartService.createHierarchy(result);
+                            // self.selectedFilter = self.organizationChartService.rootOrganizations;
                             self.organizationsList = angular.copy(result);
-
                             return result;
                         });
                 })

@@ -1,0 +1,29 @@
+#organization-chart-svg {
+  height: 100%;
+  width: 100%;
+  background-color: #EEE;
+}
+
+#organization-chart-wrapper {
+  position: relative;
+}
+
+#chart-tools {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#chart-search-input {
+  min-width: 300px;
+  position: absolute;
+  left: 50%;
+  margin-left: -150px;
+}
+
+html.rtl {
+  #chart-tools {
+    right: auto;
+    left: 0;
+  }
+}

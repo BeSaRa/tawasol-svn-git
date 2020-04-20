@@ -1,0 +1,20 @@
+<div class="md-whiteframe-z2">
+    <md-menu-content class="context-menu md-dense md-menu-bar-menu" width="3">
+        <md-menu-item>
+            <md-button ng-click="ctrl.openAddDialog(ctrl.organization , $event )">
+                    <span layout="row">
+                        <md-icon md-svg-icon="plus"></md-icon>
+                        <span>{{lang.add}}</span>
+                    </span>
+            </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="!ctrl.organization.itIsRoot">
+            <md-button ng-click="ctrl.openEditDialog(ctrl.organization , $event)">
+                    <span layout="row">
+                        <md-icon md-svg-icon="pencil"></md-icon>
+                        <span>{{lang.edit}}</span>
+                    </span>
+            </md-button>
+        </md-menu-item>
+    </md-menu-content>
+</div>

@@ -566,6 +566,7 @@ module.exports = function (app) {
              * @return {promise}
              */
             organizationEdit: function (organization, $event, defaultTab) {
+                console.log('ROOT');
                 return dialog.showDialog({
                     templateUrl: cmsTemplate.getPopup('organization'),
                     targetEvent: $event,
@@ -573,7 +574,7 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     escapeToClose: false, // TODO: check if need as business
                     locals: {
-                        rootMode: !organization.parent,
+                        rootMode: (!organization.parent || organization.parent === -1),
                         editMode: true,
                         // organization: organization,
                         organizations: self.allOrganizationsStructure,

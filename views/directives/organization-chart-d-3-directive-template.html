@@ -1,0 +1,31 @@
+<div id="organization-chart-wrapper" flex>
+    <div id="chart-tools" layout="row">
+        <md-button ng-click="ctrl.zoomOut()" class="md-icon-button">
+            <md-icon md-svg-icon="magnify-minus-outline"></md-icon>
+        </md-button>
+        <md-button ng-click="ctrl.zoomIn()" class="md-icon-button">
+            <md-icon md-svg-icon="magnify-plus-outline"></md-icon>
+        </md-button>
+        <md-button ng-click="ctrl.resetZoom()" class="md-icon-button">
+            <md-icon md-svg-icon="backup-restore"></md-icon>
+        </md-button>
+    </div>
+    <div layout="row" id="chart-search-input">
+        <md-autocomplete
+                flex
+                md-no-cache="true"
+                md-selected-item="ctrl.selectedNode"
+                md-search-text="ctrl.searchText"
+                md-selected-item-change="ctrl.selectedNodeChange(item)"
+                md-items="item in ctrl.nodeSearch(ctrl.searchText)"
+                md-item-text="item[lang.current]"
+                md-min-length="0"
+                md-escape-options="clear"
+                placeholder="{{lang.search_department}}">
+            <md-item-template>
+                <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item[lang.current]}}</span>
+            </md-item-template>
+        </md-autocomplete>
+    </div>
+    <svg dir="ltr" id="organization-chart-svg"></svg>
+</div>

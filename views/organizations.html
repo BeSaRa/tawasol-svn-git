@@ -24,49 +24,13 @@
             </md-button>
         </div>
 
-        <md-tabs md-selected="ctrl.selectedTabIndex" class="content white-bg" md-dynamic-height>
+        <md-tabs md-selected="ctrl.selectedTabIndex" class="content white-bg">
             <md-tab label="{{lang.organization_view}}"
                     md-on-select="ctrl.setCurrentTab('chart')"
                     ng-if="ctrl.showTab('chart')">
-                <md-content class="block-content over-flow-hidden">
-                    <!--<md-button id="importOrganizations" ng-click="ctrl.importOrganizations($event)" class="md-icon-button">
-                        <md-icon md-svg-icon="file-import"></md-icon>
-                    </md-button>-->
-                    <!--<md-button id="full-screen-view" ng-click="orgCtrl.fullScreenMode()" class="md-icon-button">-->
-                    <!--<md-icon md-svg-icon="fullscreen"></md-icon>-->
-                    <!--</md-button>-->
-                    <div layout-align="center center" flex layout="row" class="p10-0">
-                        <div flex="25"></div>
-                        <div flex>
-                            <md-autocomplete
-                                    flex
-                                    ng-model-options="{debounce: 500}"
-                                    ng-disabled="ctrl.isDisabled"
-                                    md-no-cache="ctrl.noCache"
-                                    md-selected-item="ctrl.selectedItem"
-                                    md-selected-item-change="ctrl.selectedItemChange(ctrl.selectedItem)"
-                                    md-search-text="ctrl.searchText"
-                                    md-items="item in ctrl.querySearch(ctrl.searchText)"
-                                    md-item-text="item[lang.current + 'Name']"
-                                    md-min-length="0"
-                                    placeholder="{{lang.search_department}}">
-                                <md-item-template>
-                                    <span md-highlight-text="ctrl.searchText"
-                                          md-highlight-flags="i">{{item['arName'] + ' - ' + item['enName'] }}</span>
-                                </md-item-template>
-                                <md-not-found>
-                                    {{lang.no_records_found_matching_search}}
-                                    <!--<a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>-->
-                                </md-not-found>
-                            </md-autocomplete>
-                        </div>
-                        <div flex="25"></div>
-                    </div>
-                    <organization-chart-directive
-                            organizations="ctrl.selectedFilter"
-                            reload-callback="ctrl.reloadOrganizations()"
-                            id="organization-chart">
-                    </organization-chart-directive>
+                <md-content layout="column" class="block-content over-flow-hidden">
+                    <organization-chart-d3-directive
+                            reload-callback="ctrl.reloadOrganizations"></organization-chart-d3-directive>
                 </md-content>
             </md-tab>
             <!--<md-tab label="{{lang.hierarchy_view}}">
