@@ -74,7 +74,8 @@ module.exports = function (app) {
                 item.parent = item.parent ? item.parent : -1;
                 return item;
             });
-            organizations.push(angular.copy(self.rootEntity));
+
+            organizations.push(self.rootEntity);
             self.nodes = organizations.map(function (item) {
                 return {
                     ar: item.arName,
@@ -206,7 +207,15 @@ module.exports = function (app) {
                     return d._children && d._children.length ? "lightsteelblue" : "#fff";
                 });
 
-            nodeUpdate.selectAll('text')
+            nodeUpdate.select('text.clone')
+                .attr("text-anchor", function (d) {
+                    return d.children || d._children ? (langService.current === 'en' ? 'end' : 'start') : (langService.current === 'en' ? 'start' : 'end');
+                })
+                .text(function (d) {
+                    return d.name;
+                });
+
+            nodeUpdate.select('text:not(.clone)')
                 .attr("text-anchor", function (d) {
                     return d.children || d._children ? (langService.current === 'en' ? 'end' : 'start') : (langService.current === 'en' ? 'start' : 'end');
                 })
@@ -250,6 +259,7 @@ module.exports = function (app) {
                     return self.diagonal({source: o, target: o});
                 })
                 .remove();
+
 
             self.nodesIds = [];
             // Stash the old positions for transition.
