@@ -32,6 +32,8 @@ module.exports = function (app) {
 
         self.allParents = [];
 
+        self.sidebarLoaded = false;
+
         self.setDynamicMenuItems = function (dynamicMenuItems) {
             var isICNEntryOrSearchTemplate = false, index;
             self.dynamicMenuItems = _.filter(dynamicMenuItems, function (menuItem) {
