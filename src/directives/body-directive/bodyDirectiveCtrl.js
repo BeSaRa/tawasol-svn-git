@@ -20,6 +20,7 @@ module.exports = function (app) {
                                                   $cookies,
                                                   $http,
                                                   cmsTemplate,
+                                                  sidebarService,
                                                   $mdMedia,
                                                   rootEntity,
                                                   $scope) {
@@ -31,7 +32,7 @@ module.exports = function (app) {
         self.loadingService = loadingIndicatorService;
 
         self.isSidebarOpen = function () {
-            return $mdSidenav('main-sidebar').isLockedOpen();
+            return sidebarService.sidebarLoaded && $mdSidenav('main-sidebar').isLockedOpen();
         };
 
         $rootScope.mediaSize = function (mediaSize) {

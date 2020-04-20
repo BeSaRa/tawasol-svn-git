@@ -28,6 +28,9 @@ module.exports = function (app) {
             self.items = sidebarService.getMenuHierarchy();
         });
 
+        self.$onInit = function () {
+            sidebarService.sidebarLoaded = true;
+        }
 
     });
 };
