@@ -30,24 +30,26 @@ module.exports = function (app) {
          * @description Load the document templates from server.
          * @returns {Promise|documentTemplates}
          */
-        self.loadDocumentTemplates = function (organization, documentClass) {
-            /*if (employeeService.isSubAdminUser){
-                return self.loadDocumentTemplatesForSubAdmin();
-            }*/
+        self.loadDocumentTemplates = function (organization, documentClass, ouId) {
+            var url = '';
             organization = organization.hasOwnProperty('id') ? organization.id : organization;
+            if (documentClass) {
+                url = urlService.documentTemplates + '/active/' + documentClass
+            } else {
+                url = urlService.documentTemplates + '/reg-ou/' + (ouId ? '-1' : organization) + (ouId ? '/ou/' + ouId : '/ou/-1');
+            }
 
-            return $http.get(urlService.documentTemplates + ((documentClass) ? ('/active/' + documentClass + '/ou/') : '/ou/') + organization).then(function (result) {
+            return $http.get(url).then(function (result) {
                 self.documentTemplates = generator.generateCollection(result.data.rs, DocumentTemplate, self._sharedMethods);
                 self.documentTemplates = generator.interceptReceivedCollection('DocumentTemplate', self.documentTemplates);
                 return self.documentTemplates;
             });
         };
-
         /**
          * @description Load the document templates from server for sub admin.
          * @returns {Promise|documentTemplates}
          */
-        self.loadDocumentTemplatesForSubAdmin= function () {
+        self.loadDocumentTemplatesForSubAdmin = function () {
             return $http.get(urlService.documentTemplates + '/sub-admin').then(function (result) {
                 self.documentTemplates = generator.generateCollection(result.data.rs, DocumentTemplate, self._sharedMethods);
                 self.documentTemplates = generator.interceptReceivedCollection('DocumentTemplate', self.documentTemplates);
@@ -79,16 +81,18 @@ module.exports = function (app) {
             /**
              * @description Opens popup to add new document template
              * @param selectedOrganization
+             * @param selectedSection
              * @param $event
              */
-            documentTemplateAdd: function (selectedOrganization, $event) {
+            documentTemplateAdd: function (selectedOrganization, selectedSection, $event) {
                 var documentTemplate = new DocumentTemplate();
                 if (selectedOrganization > 0) {
-                    documentTemplate.ou = selectedOrganization;
+                    documentTemplate.ou = selectedSection ? selectedSection : null;
+                    documentTemplate.registryOU = !selectedSection ? selectedOrganization : null;
                     documentTemplate.isGlobal = false;
-                }
-                else {
+                } else {
                     documentTemplate.ou = null;
+                    documentTemplate.registryOU = null;
                     documentTemplate.isGlobal = true;
                 }
 

@@ -557,7 +557,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Document Templates -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('document_templates')"
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('document_templates')"
                             label="{{lang.document_templates}}" ng-click="ctrl.setCurrentTab('document_templates')">
                         <md-content class="md-padding">
                             <div layout="column">
@@ -625,6 +625,10 @@
                                                             </td>
                                                             <td md-cell>
                                                                 <div flex layout="row" layout-align="start center">
+                                                                    <md-button class="md-icon-button" title="{{lang.download}}"
+                                                                               ng-click="ctrl.downloadDocumentTemplate(documentTemplate, $event)">
+                                                                        <md-icon md-svg-icon="download"></md-icon>
+                                                                    </md-button>
                                                                     <md-button class="md-icon-button"
                                                                                title="{{lang.delete}}"
                                                                                ng-click="ctrl.removeDocumentTemplate(documentTemplate, $event)">

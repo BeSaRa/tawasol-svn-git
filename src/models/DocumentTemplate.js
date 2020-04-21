@@ -8,6 +8,7 @@ module.exports = function (app) {
             self.docSubject = null;
             self.documentTitle = null;
             self.docType = null;
+            self.registryOU = null;
             self.ou = null;
             self.templateType = null;
             self.signaturesCount = null;

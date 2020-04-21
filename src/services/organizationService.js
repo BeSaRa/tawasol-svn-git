@@ -612,7 +612,7 @@ module.exports = function (app) {
                         documentTemplates: function (documentTemplateService) {
                             'ngInject';
                             return documentTemplateService
-                                .loadDocumentTemplates(organization.id);
+                                .loadDocumentTemplates(organization.id , null , (!organization.hasRegistry ? organization.id : null));
                         },
                         allPropertyConfigurations: function (propertyConfigurationService, $q) {
                             'ngInject';

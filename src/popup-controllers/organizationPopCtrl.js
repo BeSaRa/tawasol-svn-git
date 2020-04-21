@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                     generator,
                                                     langService,
                                                     lookupService,
+                                                    downloadService,
                                                     toast,
                                                     editMode,
                                                     rootMode,
@@ -1254,7 +1255,7 @@ module.exports = function (app) {
         self.openAddDocumentTemplateDialog = function ($event) {
             documentTemplateService
                 .controllerMethod
-                .documentTemplateAdd(organization.id, $event)
+                .documentTemplateAdd(organization.id, (organization.hasRegistry ? null : organization.id), $event)
                 .then(function (result) {
                     self.reloadDocumentTemplates(self.documentTemplateGrid.page)
                         .then(function () {
@@ -1289,7 +1290,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.documentTemplateGrid.progress = defer.promise;
             return documentTemplateService
-                .loadDocumentTemplates(organization)
+                .loadDocumentTemplates(organization, null, (!organization.hasRegistry ? organization.id : null))
                 .then(function (result) {
                     self.documentTemplates = result;
                     self.documentTemplatesCopy = angular.copy(self.documentTemplates);
@@ -1315,6 +1316,16 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadDocumentTemplates(self.documentTemplateGrid.page);
                 });
+        };
+
+        /**
+         * @description Downloads the original document template
+         * @param documentTemplate
+         * @param $event
+         */
+        self.downloadDocumentTemplate = function (documentTemplate, $event) {
+            downloadService.controllerMethod
+                .documentTemplateDownload(documentTemplate);
         };
 
 
@@ -2019,7 +2030,6 @@ module.exports = function (app) {
                 self.reloadDepartmentUsers(self.departmentUsersGrid.page);
             });
         };
-
 
 
         self.tabsToShow = [

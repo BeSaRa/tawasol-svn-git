@@ -15,16 +15,8 @@
             <span flex></span>
             <md-input-container flex class="cms-default">
                 <label for="organization">{{ctrl.selectedOrganization > 0 ? lang.organization_unit : "" }}</label>
-                <!--<md-select id="organization" name="organization" aria-label="{{lang.organization_unit}}"
-                           ng-change="ctrl.reloadDocumentTemplates()"
-                           ng-model="ctrl.selectedOrganization">
-                    <md-option ng-value="organization.id"
-                               ng-repeat="organization in ctrl.organizations track by $index">
-                        {{organization.getTranslatedName()}}
-                    </md-option>
-                </md-select>-->
                 <md-select id="organization" name="organization" aria-label="{{lang.organization_unit}}"
-                           ng-change="ctrl.reloadDocumentTemplates()"
+                           ng-change="ctrl.regOuChanged()"
                            ng-model="ctrl.selectedOrganization"
                            ng-model-options="{trackBy: '$value'}"
                            md-on-close="ctrl.clearSearchText('ou')"
@@ -39,6 +31,29 @@
                                ng-repeat="organization in ctrl.organizations |translatedNameFilter: ctrl.ouSearchText">
                         <span
                                 md-highlight-text="ctrl.ouSearchText"
+                                md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container flex class="cms-default">
+                <label for="section">{{lang.select + ' ' + lang.department}}</label>
+                <md-select id="section" name="section" aria-label="{{lang.department}}"
+                           ng-change="ctrl.reloadDocumentTemplates()"
+                           ng-model="ctrl.selectedSection"
+                           ng-model-options="{trackBy: '$value'}"
+                           md-on-close="ctrl.clearSearchText('ouSection')"
+                           data-md-container-class="select-header-container sticky-search-bar">
+                    <md-select-header class="select-header">
+                        <input ng-model="ctrl.ouSectionSearchText"
+                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                               placeholder="{{lang.search}}"
+                               class="select-header-input">
+                    </md-select-header>
+                    <md-option ng-value="null">{{lang.none}}</md-option>
+                    <md-option ng-value="organization.id"
+                               ng-repeat="organization in ctrl.sections |translatedNameFilter: ctrl.ouSectionSearchText">
+                        <span
+                                md-highlight-text="ctrl.ouSectionSearchText"
                                 md-highlight-flags="i">{{organization.getTranslatedName()}}</span>
                     </md-option>
                 </md-select>

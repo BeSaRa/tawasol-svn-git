@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('documentTemplateCtrl', function (lookupService,
+                                                     organizationService,
                                                      documentTemplateService,
                                                      documentTemplates,
                                                      $q,
@@ -30,6 +31,8 @@ module.exports = function (app) {
         }
         self.ouSearchText = '';
 
+        self.sections = [];
+
         contextHelpService.setHelpTo('document-templates');
         /**
          * @description All document templates
@@ -43,6 +46,8 @@ module.exports = function (app) {
          * @type {null}
          */
         self.selectedOrganization = selectedRegOU;
+
+        self.selectedSection = null;
 
         /**
          * @description Contains the selected document templates
@@ -101,12 +106,12 @@ module.exports = function (app) {
          * @param $event
          */
         self.openAddDocumentTemplateDialog = function ($event) {
-            if (!self.isActionAllowed(null, true)){
+            if (!self.isActionAllowed(null, true)) {
                 return false;
             }
             documentTemplateService
                 .controllerMethod
-                .documentTemplateAdd(self.selectedOrganization, $event)
+                .documentTemplateAdd(self.selectedOrganization, self.selectedSection, $event)
                 .then(function (result) {
                     self.reloadDocumentTemplates(self.grid.page)
                         .then(function () {
@@ -121,7 +126,7 @@ module.exports = function (app) {
          * @param documentTemplate
          */
         self.openEditDocumentTemplateDialog = function (documentTemplate, $event) {
-            if (!self.isActionAllowed(documentTemplate)){
+            if (!self.isActionAllowed(documentTemplate)) {
                 return false;
             }
             documentTemplateService
@@ -151,7 +156,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             return documentTemplateService
-                .loadDocumentTemplates(self.selectedOrganization)
+                .loadDocumentTemplates(self.selectedOrganization, null, self.selectedSection)
                 .then(function (result) {
                     self.documentTemplates = result;
                     self.documentTemplatesCopy = angular.copy(self.documentTemplates);
@@ -164,20 +169,38 @@ module.exports = function (app) {
                 });
         };
 
+        self.regOuChanged = function (ignoreLoadTemplates) {
+            self.selectedSection = null;
+            if (self.selectedOrganization > 0) {
+                organizationService
+                    .loadOrganizationChildren(self.selectedOrganization)
+                    .then(function (result) {
+                        self.sections = _.filter(result, function (item) {
+                            return !item.hasRegistry;
+                        });
+                    });
+            }
+
+            if (!ignoreLoadTemplates) {
+                return self.reloadDocumentTemplates();
+            }
+
+        };
+
         /**
          * @description Delete single document template
          * @param documentTemplate
          * @param $event
          */
         self.removeDocumentTemplate = function (documentTemplate, $event) {
-            if (!self.isActionAllowed(documentTemplate)){
+            if (!self.isActionAllowed(documentTemplate)) {
                 return false;
             }
             documentTemplateService
                 .controllerMethod
                 .documentTemplateDelete(documentTemplate, $event)
                 .then(function () {
-                    self.reloadDocumentTemplates(self.grid.page);
+                    return self.reloadDocumentTemplates(self.grid.page);
                 });
         };
 
@@ -186,7 +209,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkDocumentTemplates = function ($event) {
-            if (!self.isBulkActionAllowed()){
+            if (!self.isBulkActionAllowed()) {
                 return false;
             }
             documentTemplateService
@@ -205,7 +228,7 @@ module.exports = function (app) {
          * @param documentTemplate
          */
         self.changeStatusDocumentTemplate = function (documentTemplate) {
-            if (!self.isActionAllowed(documentTemplate)){
+            if (!self.isActionAllowed(documentTemplate)) {
                 documentTemplate.status = !documentTemplate.status;
                 return false;
             }
@@ -224,7 +247,7 @@ module.exports = function (app) {
          * @param status
          */
         self.changeStatusBulkDocumentTemplates = function (status) {
-            if (!self.isBulkActionAllowed()){
+            if (!self.isBulkActionAllowed()) {
                 return false;
             }
             self.statusServices[status](self.selectedDocumentTemplates)
@@ -292,6 +315,10 @@ module.exports = function (app) {
                     $event.stopPropagation();
             }
         };
+
+        self.$onInit = function () {
+            self.regOuChanged();
+        }
 
     });
 };
