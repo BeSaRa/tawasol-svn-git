@@ -1,13 +1,23 @@
 <div id="organization-chart-wrapper" flex>
     <div id="chart-tools" layout="row">
-        <md-button ng-click="ctrl.zoomOut()" class="md-icon-button">
+        <md-button title="{{lang.back_to_the_root}}" ng-click="ctrl.resetZoom()"
+                   class="md-icon-button">
+            <md-icon md-svg-icon="backup-restore"></md-icon>
+        </md-button>
+        <md-button title="{{lang.zoom_out}}" ng-click="ctrl.zoomOut()" class="md-icon-button">
             <md-icon md-svg-icon="magnify-minus-outline"></md-icon>
         </md-button>
-        <md-button ng-click="ctrl.zoomIn()" class="md-icon-button">
+        <md-button title="{{lang.zoom_in}}" ng-click="ctrl.zoomIn()" class="md-icon-button">
             <md-icon md-svg-icon="magnify-plus-outline"></md-icon>
         </md-button>
-        <md-button ng-click="ctrl.resetZoom()" class="md-icon-button">
-            <md-icon md-svg-icon="backup-restore"></md-icon>
+        <md-button title="{{lang.collapse_all}}" ng-click="ctrl.collapseAll(ctrl.root , true)" class="md-icon-button">
+            <md-icon md-svg-icon="arrow-collapse-horizontal"></md-icon>
+        </md-button>
+        <md-button title="{{lang.expand_all}}" ng-click="ctrl.expandAll(ctrl.root , true)" class="md-icon-button">
+            <md-icon md-svg-icon="arrow-expand-horizontal"></md-icon>
+        </md-button>
+        <md-button title="{{lang.download}}" ng-click="ctrl.printChart()" class="md-icon-button">
+            <md-icon md-svg-icon="download"></md-icon>
         </md-button>
     </div>
     <div layout="row" id="chart-search-input">
@@ -28,4 +38,5 @@
         </md-autocomplete>
     </div>
     <svg dir="ltr" id="organization-chart-svg"></svg>
+    <canvas id="organization-chart-canvas"></canvas>
 </div>

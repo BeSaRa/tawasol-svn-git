@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('organizationsCtrl', function (organizationService,
+                                                  $scope,
                                                   _,
                                                   cmsTemplate,
                                                   dialog,
@@ -61,9 +62,8 @@ module.exports = function (app) {
                         .loadAllOrganizationsStructure()
                         .then(function (result) {
                             self.needSync = _checkOrganizationsNeedSync(result);
-                            // organizationChartService.createHierarchy(result);
-                            // self.selectedFilter = self.organizationChartService.rootOrganizations;
                             self.organizationsList = angular.copy(result);
+                            $scope.$broadcast('organizations-loaded');
                             return result;
                         });
                 })

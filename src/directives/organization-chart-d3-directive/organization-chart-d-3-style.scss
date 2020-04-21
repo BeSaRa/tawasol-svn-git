@@ -1,7 +1,16 @@
 #organization-chart-svg {
   height: 100%;
   width: 100%;
-  background-color: #EEE;
+}
+
+#organization-chart-canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 
 #organization-chart-wrapper {

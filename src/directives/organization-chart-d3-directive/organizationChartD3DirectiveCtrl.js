@@ -22,7 +22,7 @@ module.exports = function (app) {
             self.mainGroup.attr('transform', d3.event.transform);
         });
         // catch svg element
-        self.svg = d3.select($element[0]).select('svg').call(self.zoomListener);
+        self.svg = d3.select($element[0]).select('svg').call(self.zoomListener).style('background-color', '#EEE');
         // create main group to zoom in/out
         self.mainGroup = self.svg.append('g');
         // node size
@@ -63,10 +63,16 @@ module.exports = function (app) {
             self.render(node);
         }
 
-        function _updateNodes() {
+        function _updateNodes(node) {
+            self.root = _prepareOrganizations();
             self.root.eachBefore(function (node) {
                 node.class = self.nodesIds.indexOf(node.id) !== -1 ? 'found' : null;
             });
+            self.collapseAllNotFound(self.root);
+            self.clearAll(self.root);
+            self.render(self.root);
+
+            if (node) self.centerNode(node);
         }
 
         function _prepareOrganizations() {
@@ -102,6 +108,20 @@ module.exports = function (app) {
 
         function _getViewPort(property) {
             return eval('_getViewPort' + generator.ucFirst(property) + '()');
+        }
+
+        function triggerDownload(imgURI) {
+            var evt = new MouseEvent('click', {
+                view: window,
+                bubbles: false,
+                cancelable: true
+            });
+
+            var a = document.createElement('a');
+            a.setAttribute('download', 'Chart.svg');
+            a.setAttribute('href', imgURI);
+            a.setAttribute('target', '_blank');
+            a.dispatchEvent(evt);
         }
 
         self.render = function (source) {
@@ -291,6 +311,29 @@ module.exports = function (app) {
             self.svg.transition().duration(duration).call(self.zoomListener.scaleBy, 2);
         };
 
+        self.printChart = function () {
+            var svg = self.svg.node();
+            var dimensions = self.mainGroup.node().getBBox();
+            var canvas = d3.select('canvas#organization-chart-canvas');
+            var serializer = new XMLSerializer();
+            var serializedSVG = serializer.serializeToString(svg);
+            var DOMUrl = window.URL || window.webkitURL || window;
+
+            if (langService.current === 'ar') {
+                serializedSVG = serializedSVG
+                    .replace(/text-anchor="start"/g, 'text-anchor="x"')
+                    .replace(/text-anchor="end"/g, 'text-anchor="y"')
+                    .replace(/text-anchor="x"/g, 'text-anchor="end"')
+                    .replace(/text-anchor="y"/g, 'text-anchor="start"');
+            }
+
+            serializedSVG = serializedSVG.replace(/<text /g, '<text style="font-size:2rem;" ');
+
+            var img = new Image();
+            var svgBlob = new Blob([serializedSVG], {type: 'image/svg+xml;charset=utf-8'});
+            triggerDownload(DOMUrl.createObjectURL(svgBlob));
+        };
+
         self.resetZoom = function () {
             var scale = 1;
             var x = self.root.y0 * scale + _getViewPort('width') / 2;
@@ -323,7 +366,7 @@ module.exports = function (app) {
             node._children = null;
         };
 
-        self.collapseAll = function (node) {
+        self.collapseAll = function (node, render) {
             if (node.children) {
                 node._children = node.children;
                 node._children.forEach(self.collapseAll);
@@ -331,9 +374,10 @@ module.exports = function (app) {
             } else if (node._children) {
                 node._children.forEach(self.collapseAll)
             }
+            render && self.render(node);
         };
 
-        self.expandAll = function (node) {
+        self.expandAll = function (node, render) {
             if (node._children) {
                 node.children = node._children;
                 node.children.forEach(self.expandAll);
@@ -341,6 +385,7 @@ module.exports = function (app) {
             } else if (node.children) {
                 node.children.forEach(self.expandAll);
             }
+            render && self.render(node);
         };
 
         self.clearAll = function (node) {
@@ -446,11 +491,7 @@ module.exports = function (app) {
                             .then(function () {
                                 self.reloadCallback() // this function
                                     .then(function () {
-                                        self.root = _prepareOrganizations();
-                                        _updateNodes();
-                                        self.collapseAllNotFound(self.root);
-                                        self.clearAll(self.root);
-                                        self.render(self.root);
+                                        _updateNodes(node);
                                     });
                             })
                             .catch(function () {
@@ -484,6 +525,10 @@ module.exports = function (app) {
                 });
             }, 1000);
         };
+
+        $scope.$on('organizations-loaded', function () {
+            _updateNodes();
+        });
 
     });
 };

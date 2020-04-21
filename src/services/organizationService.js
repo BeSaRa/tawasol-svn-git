@@ -566,7 +566,6 @@ module.exports = function (app) {
              * @return {promise}
              */
             organizationEdit: function (organization, $event, defaultTab) {
-                console.log('ROOT');
                 return dialog.showDialog({
                     templateUrl: cmsTemplate.getPopup('organization'),
                     targetEvent: $event,
