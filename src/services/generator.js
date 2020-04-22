@@ -662,11 +662,14 @@ module.exports = function (app) {
          * @description Get the sorting key for information or lookup model
          * @param property
          * @param modelType
+         * @param overrideSortingKey
          * @returns {*}
          */
-        self.getColumnSortingKey = function (property, modelType) {
+        self.getColumnSortingKey = function (property, modelType, overrideSortingKey) {
             modelType = modelType.toLowerCase();
-            if (modelType === 'information' || modelType === 'documenttype' || modelType === 'workflowaction' || modelType === 'senderinfo' ||
+            if (overrideSortingKey)
+                return property + '.' + overrideSortingKey;
+            else if (modelType === 'information' || modelType === 'documenttype' || modelType === 'workflowaction' || modelType === 'senderinfo' ||
                 modelType === 'attachmenttype' || modelType === 'organization' || modelType === 'correspondencesite')
                 return property + '.' + (langService.current === 'ar' ? 'arName' : 'enName');
             else if (modelType === 'lookup')

@@ -80,7 +80,7 @@
                                             <span>{{lang.priority_level}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedReviewOutgoings.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
+                                            md-order-by="securityLevel.lookupKey">
                                             <span>{{lang.security_level}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedReviewOutgoings.length" md-column
