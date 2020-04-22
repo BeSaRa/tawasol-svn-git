@@ -423,6 +423,10 @@ module.exports = function (app) {
             viewTrackingSheetService.controllerMethod.viewTrackingSheetPrint(self.heading, self.popupHeadingForPrint);
         };
 
+        self.printSheetFromWebPage = function($event){
+            viewTrackingSheetService.controllerMethod.viewTrackingSheetWebPage(self.heading, self.popupHeadingForPrint);
+        };
+
         /**
          * @description Close the popup
          */

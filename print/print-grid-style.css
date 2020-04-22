@@ -1,0 +1,46 @@
+#header {
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    display: table;
+    border-collapse: separate;
+    border-spacing: 0px;
+    border-color: grey;
+    font-family: Roboto, "Helvetica Neue", sans-serif;;
+}
+
+table tr {
+    height: 56px;
+    display: table-row;
+}
+
+table thead td {
+    padding: 0 24px;
+    vertical-align: middle;
+    text-align: left;
+    color: #FFFFFF;
+    border-bottom: 1px rgba(0, 0, 0, 0.12) solid;
+    font-size: 12px;
+    white-space: nowrap;
+    font-weight: bold;
+    background: #3F51B5;
+}
+
+table tbody tr td {
+    padding: 0 20px;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 13px;
+    border-bottom: 1px rgba(0, 0, 0, 0.12) solid;
+    vertical-align: middle;
+    text-align: left;
+}
+span{
+    white-space: pre;
+}
+html.rtl table thead td,
+html.rtl table tbody tr td{
+    text-align: right;
+}
+

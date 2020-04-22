@@ -40,6 +40,8 @@ module.exports = function (app) {
             self.fullHistory = [];
             self.documentLinkViewerRecords = [];
 
+            self.printPage = 'print/TrackingSheetPrint.html';
+
             var splitNumber = 7;
 
             function _splitToNumberOfWords(string, number) {
@@ -419,6 +421,10 @@ module.exports = function (app) {
                  */
                 viewTrackingSheetPrint: function (heading, popupHeading) {
                     self.printTrackingSheet(heading, popupHeading);
+                },
+
+                viewTrackingSheetWebPage: function (heading, popupHeading) {
+                    self.printTrackingSheetFromWebPage(heading, popupHeading);
                 }
             };
 
@@ -1032,6 +1038,25 @@ module.exports = function (app) {
                         .catch(function (error) {
                             toast.error(langService.get('error_print'));
                         });
+                }
+            };
+
+            /**
+             * @description store tracking sheet data to local storage
+             * @param heading
+             * @param popupHeading
+             */
+            self.printTrackingSheetFromWebPage = function (heading, popupHeading) {
+                var exportData = self.getExportData(heading, popupHeading);
+                if (!exportData.headerNames.length) {
+                    toast.info(langService.get('no_data_to_print'));
+                } else {
+                    localStorage.setItem('trackingSheetData', JSON.stringify(exportData));
+                    localStorage.setItem('currentLang', langService.current);
+                    var printWindow = window.open(self.printPage, '', 'left=0,top=0,width=0,height=0,toolbar=0,scrollbars=0,status=0');
+                    if (!printWindow) {
+                        toast.error(langService.get('msg_error_occurred_while_processing_request'))
+                    }
                 }
             };
 

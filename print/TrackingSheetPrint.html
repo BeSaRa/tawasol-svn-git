@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link media="all" rel="stylesheet" href="print-grid-style.css">
+</head>
+<body>
+<h3 id="header"></h3>
+<table id="trackingSheetTable">
+
+</table>
+
+<script>
+    (function () {
+        var data = JSON.parse(localStorage.getItem('trackingSheetData'));
+        var columns = data.headerNames;
+        var columnCount = columns.length;
+        var records = data.data;
+        var pageHeader = data.headerText;
+
+        document.title = pageHeader;
+        var currentLang = localStorage.getItem('currentLang');
+        var htmlTag = document.getElementsByTagName("html")[0];
+        if (currentLang === 'ar') {
+            htmlTag.classList.add('rtl');
+            htmlTag.setAttribute('dir', 'rtl');
+        } else {
+            htmlTag.classList.remove('rtl');
+            htmlTag.setAttribute('dir', 'ltr');
+        }
+
+        function fillData() {
+            return new Promise(function (resolve, reject) {
+                // page header
+                document.getElementById('header').innerText = pageHeader;
+
+                var table = document.getElementById('trackingSheetTable');
+
+                //create header
+                var tableHeader = table.createTHead();
+                var rowHeader = tableHeader.insertRow(0);
+
+                // loop through headers
+                for (var i = 0; i < columnCount; i++) {
+                    rowHeader.insertCell(i).innerHTML = columns[i];
+                }
+
+                var tableBody = table.createTBody();
+                // loop through data
+                for (var i = 0; i < records.length; i++) {
+                    var record = records[i];
+                    var row = tableBody.insertRow();
+                    for (var j = 0; j < columnCount; j++) {
+                        var cell = row.insertCell(j);
+                        cell.innerHTML = record[j] ? ('<span>' + record[j] + '</span>') : '';
+                    }
+                }
+                localStorage.removeItem('trackingSheetData');
+                localStorage.removeItem('currentLang');
+                resolve(true);
+            });
+        }
+
+        fillData().then(function (value) {
+            window.print()
+        });
+    })();
+</script>
+</body>
+</html>
