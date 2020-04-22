@@ -51,7 +51,7 @@
                                             <span>{{lang.document_type}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('securityLevel', 'Information')}}">
+                                            md-order-by="securityLevel.lookupKey">
                                             <span>{{lang.security_level}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column

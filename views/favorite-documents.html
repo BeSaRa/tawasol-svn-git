@@ -58,7 +58,7 @@
                                             <span>{{lang.label_document_type}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('securityLevelInfo','Information')}}">
+                                            md-order-by="securityLevel.lookupKey">
                                             <span>{{lang.security_level}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column

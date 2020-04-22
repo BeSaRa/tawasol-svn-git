@@ -50,7 +50,7 @@
                     </div>
                 </th>
                 <th ng-if="!ctrl.selectedWorkItems.length" md-column
-                    md-order-by="{{ctrl.getSortingKey('securityLevel','Information')}}">
+                    md-order-by="securityLevel.lookupKey">
                     <md-icon md-svg-icon="security" class="indicator"></md-icon>
                     <!-- Security Level, Document type, Tags, Re-assigned Indicators -->
                 </th>
