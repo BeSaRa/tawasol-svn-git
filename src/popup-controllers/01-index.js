@@ -139,4 +139,5 @@ module.exports = function (app) {
     require('./selectedDownloadPopCtrl')(app);
     require('./selectEscalationUserPopCtrl')(app);
     require('./distWorkflowGroupMembersPopCtrl')(app);
+    require('./exportBulkWorkItemsPopCtrl')(app);
 };

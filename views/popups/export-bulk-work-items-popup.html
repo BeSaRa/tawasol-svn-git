@@ -1,0 +1,80 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="ready-to-export-options" ng-attr-aria-label="{{lang.export_options}}">
+    <popup-toolbar-directive header-text="{{lang.export_options}}"
+                             close-callback="ctrl.closeExportPopupFromCtrl"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="exportBullkForm" autocomplete="off">
+                <div layout="column">
+                    <div ng-if="ctrl.canExportAnyRelatedData()">
+                        <!-- Group selection -->
+                        <div layout="row">
+                            <div ng-repeat="option in ctrl.exportOptions" flex
+                                 ng-if="ctrl.canExportRelatedData(option)">
+                                <md-checkbox ng-true-value="true" ng-false-value="false" aria-label="{{option}}"
+                                             ng-model="ctrl.model[option]">
+                                    {{lang.get(ctrl.labels[$index])}}
+                                </md-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <md-card md-whiteframe="3" class="card-overlay">
+                <md-table-container>
+                    <div flex scroll-directive>
+                        <table md-table md-row-select="false" md-progress="ctrl.progress">
+                            <thead md-head>
+                            <tr md-row>
+                                <th md-column>
+                                    <span>{{lang.document_subject}}</span>
+                                </th>
+                                <th md-column>
+                                    <span>{{lang.correspondence_sites}}</span>
+                                </th>
+                                <th md-column>
+                                    <span>{{lang.actions}}</span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row md-select="site"
+                                ng-repeat="item in ctrl.workItems  track by $index">
+                                <td md-cell>
+                                    <div flex layout="column">
+                                        <span class="span-column">{{item.generalStepElm.docSubject}}</span>
+                                    </div>
+                                </td>
+                                <td md-cell>
+                                    <div flex layout="column">
+                                        <a href="#" ng-click="ctrl.showExportedCorrespondenceSites(item , $event)">{{item.sites[0].getTranslatedParentName()
+                                            + ' - ' +item.sites[0].getTranslatedName()}}</a>
+                                    </div>
+                                </td>
+                                <td md-cell>
+                                    <div flex layout="column">
+                                        <md-button tooltip="{{lang.print}}" ng-click="ctrl.printExportedDocument(item)"
+                                                   class="md-icon-button">
+                                            <md-icon md-svg-icon="printer"></md-icon>
+                                        </md-button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </md-table-container>
+            </md-card>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button ng-disabled="ctrl.disableExport" class="md-raised md-primary"
+                   ng-click="ctrl.exportWorkItemsFromCtrl()">
+            {{lang.export}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closeExportPopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

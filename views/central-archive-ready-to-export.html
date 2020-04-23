@@ -48,21 +48,11 @@
                                                            ng-click="ctrl.returnBulkWorkItemsFromCentral($event)">
                                                     <md-icon md-svg-icon="undo-variant" class="action-green"></md-icon>
                                                 </md-button>
-                                                <!--<md-button class="md-icon-button" aria-label="{{lang.inbox_export}}"
+                                                <md-button class="md-icon-button" aria-label="{{lang.inbox_export}}"
                                                            tooltip="{{lang.inbox_export}}"
                                                            ng-click="ctrl.exportReadyToExportBulk($event)">
                                                     <md-icon md-svg-icon="export" class="action-red"></md-icon>
-                                                </md-button>-->
-                                                <!--<md-button class="md-icon-button action-green" aria-label="{{lang.star}}"
-                                                           tooltip="{{lang.star}}"
-                                                           ng-click="ctrl.changeReadyToExportStarBulk('starBulk',$event)">
-                                                    <md-icon class="star-yellow" md-svg-icon="star"></md-icon>
                                                 </md-button>
-                                                <md-button class="md-icon-button action-green" aria-label="{{lang.un_star}}"
-                                                           tooltip="{{lang.un_star}}"
-                                                           ng-click="ctrl.changeReadyToExportStarBulk('unStarBulk' ,$event)">
-                                                    <md-icon class="star-yellow" md-svg-icon="star-outline"></md-icon>
-                                                </md-button>-->
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedWorkItems.length" md-column

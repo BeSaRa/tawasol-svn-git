@@ -3016,6 +3016,59 @@ module.exports = function (app) {
                 });
         };
 
+        self.prepareExportedBulkData = function (vsIds) {
+            return $http.put(urlService.correspondence + '/outgoing/bulk/prepare-export', vsIds)
+                .then(function (result) {
+                    var vsIdObject = {};
+                    _.map(result.data.rs, function (item, key) {
+                        vsIdObject[key] = {};
+                        item.sitesitesToList = _.map(item.sitesitesToList, function (site) {
+                            site.docClassName = 'outgoing';
+                            return site;
+                        });
+                        item.sitesCCList = _.map(item.sitesCCList, function (site) {
+                            site.docClassName = 'outgoing';
+                            return site;
+                        });
+                        item.sitesitesToList = generator.interceptReceivedCollection('Site', generator.generateCollection(item.sitesitesToList, Site));
+                        item.sitesCCList = generator.interceptReceivedCollection('Site', generator.generateCollection(item.sitesCCList, Site));
+                        vsIdObject[key] = [].concat(item.sitesitesToList, item.sitesCCList);
+                    });
+                    return vsIdObject;
+                })
+        };
+
+        self.exportBulkWorkItemsDialog = function (workItems, $event) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    templateUrl: cmsTemplate.getPopup('export-bulk-work-items'),
+                    controller: 'exportBulkWorkItemsPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        workItems: workItems
+                    },
+                    resolve: {
+                        exportedData: function () {
+                            'ngInject';
+                            var vsIds = _.map(workItems, 'generalStepElm.vsId');
+                            return self.prepareExportedBulkData(vsIds);
+                        }
+                    }
+                })
+        };
+
+        self.exportBulkWorkItems = function (workItems, options) {
+            var items = _.map(workItems, function (item) {
+                var info = item.getInfo();
+                return {first: info.vsId, second: info.wobNumber};
+            });
+            return $http.put(urlService.correspondenceWF + '/outgoing/bulk/export', {data: items, options: options})
+                .then(function () {
+                    return workItems;
+                });
+        };
+
         /**
          * @description resend the workItem again to correspondences sites
          * @param workItem
@@ -4628,8 +4681,7 @@ module.exports = function (app) {
             // if the selected correspondences has just one record.
             if (correspondences.length === 1) {
                 return self.removePermanentlyCorrespondence(correspondences[0], $event);
-            }
-            else {
+            } else {
                 return dialog
                     .confirmMessage(langService.get('confirm_remove_permanently_selected_multiple'), null, null, $event || null)
                     .then(function () {

@@ -348,7 +348,10 @@ module.exports = function (app) {
         };
 
         self.exportReadyToExportBulk = function ($event) {
-            console.log('exportReadyToExportBulk', self.selectedReadyToExports);
+            correspondenceService.exportBulkWorkItemsDialog(self.selectedReadyToExports)
+                .then(function () {
+                    self.reloadReadyToExports(self.grid.page);
+                });
         };
 
 

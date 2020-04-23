@@ -336,7 +336,10 @@ module.exports = function (app) {
         };
 
         self.exportReadyToExportBulk = function ($event) {
-            console.log('exportReadyToExportBulk', self.selectedWorkItems);
+            correspondenceService.exportBulkWorkItemsDialog(self.selectedWorkItems)
+                .then(function () {
+                    self.reloadReadyToExports(self.grid.page);
+                });
         };
 
 
@@ -1600,7 +1603,7 @@ module.exports = function (app) {
                 });
         };
 
-        if (employeeService.getEmployee().getIntervalMin()){
+        if (employeeService.getEmployee().getIntervalMin()) {
             self.refreshGrid(employeeService.getEmployee().getIntervalMin());
         }
     });

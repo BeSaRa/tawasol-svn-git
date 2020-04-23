@@ -1,0 +1,66 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           id="ready-to-export-options"
+           ng-attr-aria-label="{{lang.correspondence_sites + ' : ' +ctrl.workItem.generalStepElm.docSubject}}">
+    <popup-toolbar-directive
+            header-text="{{lang.correspondence_sites + ' : ' +ctrl.workItem.generalStepElm.docSubject}}"
+            close-callback="ctrl.closeDialog"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <md-card md-whiteframe="3" class="card-overlay">
+                <md-table-container>
+                    <div flex scroll-directive>
+                        <table md-table md-row-select="false" md-progress="ctrl.progress">
+                            <thead md-head>
+                            <tr md-row>
+                                <th md-column>
+                                    <span>{{lang.sites_main_site}}</span>
+                                </th>
+                                <th md-column>
+                                    <span>{{lang.sites_sub_site}}</span>
+                                </th>
+                                <th md-column>
+                                    <span>{{lang.type}}</span>
+                                </th>
+                                <th md-column>
+                                    <span>{{lang.export_type}}</span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row md-select="site"
+                                ng-repeat="site in ctrl.workItem.sites  track by $index">
+                                <td md-cell>
+                                    <div flex layout="column">
+                                        <span class="span-column">{{site.getTranslatedParentName()}}</span>
+                                    </div>
+                                </td>
+                                <td md-cell>
+                                    <div flex layout="column">
+                                        <span class="span-column">{{site.getTranslatedName()}}</span>
+                                    </div>
+                                </td>
+                                <td md-cell>
+                                    <div flex layout="column">
+                                        <span class="span-column">{{site.getVersionType()}}</span>
+                                    </div>
+                                </td>
+                                <td md-cell>
+                                    <div flex layout="column">
+                                        <span class="span-column">{{site.getExportWayText()}}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </md-table-container>
+            </md-card>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised red-text" ng-click="ctrl.closeDialog()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>
