@@ -215,7 +215,8 @@ module.exports = function (app) {
                 type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                 parent: self.selectedMainSite ? self.selectedMainSite.id : null,
                 criteria: null,
-                excludeOuSites: true
+                excludeOuSites: true,
+                maxRows: 300
             }).then(function (result) {
                 self.subSearchResultCopy = angular.copy(result);
                 filterSearchedSubSites();
@@ -290,7 +291,8 @@ module.exports = function (app) {
                             type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                             parent: self.selectedMainSite ? self.selectedMainSite.id : null,
                             criteria: self.subSiteSearchText,
-                            excludeOuSites: true
+                            excludeOuSites: true,
+                            maxRows: 300
                         }).then(function (result) {
                             if (self.subSiteSearchText.length < 3) {
                                 self.subSearchResult = [];
