@@ -4,7 +4,9 @@ module.exports = function (app) {
                                                    $stateParams,
                                                    outgoingService,
                                                    queueStatusService,
+                                                   loadingIndicatorService,
                                                    organizationService,
+                                                   configurationService,
                                                    // documentTypes,
                                                    officeWebAppService,
                                                    counterService,
@@ -177,8 +179,11 @@ module.exports = function (app) {
         self.requestCompleted = false;
 
         self.saveCorrespondence = function (status) {
+            self.saveInProgress = true;
+            loadingIndicatorService.loading = true;
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
+                self.saveInProgress = false;
                 return;
             }
 
@@ -223,8 +228,14 @@ module.exports = function (app) {
                         self.outgoing.docStatus = queueStatusService.getDocumentStatus(status);
                     }
                     angular.element('iframe#document-viewer').remove();
-                    promise = self.outgoing[method.withContent](self.documentInformation, vsId);
-
+                    var defer = $q.defer();
+                    promise = defer.promise;
+                    $timeout(function () {
+                        self.outgoing[method.withContent](self.documentInformation, vsId)
+                            .then(function (result) {
+                                defer.resolve(result);
+                            });
+                    }, configurationService.OFFICE_ONLINE_DELAY);
                 } else {
                     // Save Document
                     promise = self.outgoing[method.metaData](status, vsId);
@@ -304,6 +315,7 @@ module.exports = function (app) {
                 }
 
                 self.requestCompleted = true;
+                self.saveInProgress = false;
                 toast.success(langService.get(successKey));
             }
         };
@@ -417,7 +429,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.docActionSendLinkToDocumentByEmail = function(model, $event, defer){
+        self.docActionSendLinkToDocumentByEmail = function (model, $event, defer) {
             downloadService.getMainDocumentEmailContent(model.getInfo().vsId);
         };
 
@@ -874,7 +886,7 @@ module.exports = function (app) {
             }
 
             return form.$invalid
-                || !self.outgoing.sitesInfoTo.length || !_isValidFirstSubSite()
+                || self.saveInProgress || !self.outgoing.sitesInfoTo.length || !_isValidFirstSubSite()
                 || ((self.documentInformationExist || (self.contentFileExist && self.contentFileSizeExist))
                     && !(self.documentInformation || self.outgoing.contentFile));
         };

@@ -5,6 +5,8 @@ module.exports = function (app) {
                                                    internalService,
                                                    queueStatusService,
                                                    organizationService,
+                                                   configurationService,
+                                                   loadingIndicatorService,
                                                    // documentTypes,
                                                    officeWebAppService,
                                                    counterService,
@@ -106,12 +108,15 @@ module.exports = function (app) {
 
         self.requestCompleted = false;
         self.saveCorrespondence = function (status) {
+            self.saveInProgress = true;
+            loadingIndicatorService.loading = true;
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
+                self.saveInProgress = false;
                 return;
             }
 
-            self.saveInProgress = true;
+
             var promise = null;
             var defer = $q.defer();
             if (replyTo && $stateParams.wobNum) {
@@ -154,7 +159,15 @@ module.exports = function (app) {
                         self.internal.docStatus = queueStatusService.getDocumentStatus(status);
                     }
                     angular.element('iframe#document-viewer').remove();
-                    promise = self.internal[method.withContent](self.documentInformation, vsId);
+                    var defer = $q.defer();
+                    promise = defer.promise;
+                    $timeout(function () {
+                        self.internal[method.withContent](self.documentInformation, vsId)
+                            .then(function (result) {
+                                defer.resolve(result);
+                            });
+                    }, configurationService.OFFICE_ONLINE_DELAY);
+
                 } else {
                     // Save Document
                     promise = self.internal[method.metaData](status, vsId);
@@ -230,6 +243,7 @@ module.exports = function (app) {
                 }
 
                 self.requestCompleted = true;
+                self.saveInProgress = false;
                 toast.success(langService.get(successKey));
             }
         };
@@ -321,7 +335,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.docActionSendLinkToDocumentByEmail = function(model, $event, defer){
+        self.docActionSendLinkToDocumentByEmail = function (model, $event, defer) {
             downloadService.getMainDocumentEmailContent(model.getInfo().vsId);
         };
 
@@ -338,7 +352,7 @@ module.exports = function (app) {
                 return;
             }
 
-            model.approveDocument($event, defer, false,true)
+            model.approveDocument($event, defer, false, true)
                 .then(function (result) {
                     model.launchWorkFlow($event, 'forward', 'favorites')
                         .then(function () {
@@ -671,6 +685,20 @@ module.exports = function (app) {
                 }).catch(function (result) {
                 self.internal.linkedEntities = result;
             })
+        };
+
+        /**
+         * @description Checks if form is invalid
+         * @param form
+         * @returns {boolean|boolean}
+         */
+        self.isInValidForm = function (form) {
+            if (!form) {
+                return true;
+            }
+            return form.$invalid
+                || self.saveInProgress || ((self.documentInformationExist
+                    || (self.contentFileExist && self.contentFileSizeExist)) && !(self.documentInformation || self.internal.contentFile))
         };
     });
 };

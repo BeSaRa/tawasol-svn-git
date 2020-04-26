@@ -37,20 +37,20 @@
                             <div class="mb10" layout="column">
                                 <div layout="row">
                                     <md-button ng-click="ctrl.saveCorrespondence()"
-                                               ng-disabled="ctrl.document_properties.$invalid || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.internal.contentFile))"
+                                               ng-disabled="ctrl.isInValidForm(ctrl.document_properties)"
                                                class="md-raised"
                                                ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                         <!--|| (ctrl.documentInformation || ctrl.internal.contentFile)-->
                                         {{lang.internal_save}}
                                     </md-button>
                                     <md-button ng-click="ctrl.saveCorrespondenceAndPrintBarcode()"
-                                               ng-disabled="ctrl.document_properties.$invalid || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.internal.contentFile))"
+                                               ng-disabled="ctrl.isInValidForm(ctrl.document_properties)"
                                                class="md-raised"
                                                ng-if="ctrl.internal.addMethod">
                                         {{lang.internal_save_print_barcode}}
                                     </md-button>
                                     <div ng-if="!ctrl.internal.addMethod">
-                                        <md-button ng-disabled="ctrl.document_properties.$invalid
+                                        <md-button ng-disabled="ctrl.document_properties.$invalid || ctrl.saveInProgress
                                             || !(ctrl.documentInformation || ctrl.internal.contentFile)"
                                                    ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
                                             {{lang.internal_save_draft}}

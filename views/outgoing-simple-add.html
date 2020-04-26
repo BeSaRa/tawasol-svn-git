@@ -69,7 +69,7 @@
                                         {{lang.outgoing_save_print_barcode}}
                                     </md-button>
                                     <div ng-if="!ctrl.outgoing.addMethod && !ctrl.editContent">
-                                        <md-button ng-disabled="ctrl.document_properties.$invalid
+                                        <md-button ng-disabled="ctrl.document_properties.$invalid || ctrl.saveInProgress
                                                     || !ctrl.outgoing.sitesInfoTo.length
                                                     || !(ctrl.documentInformation || ctrl.outgoing.contentFile)"
                                                    ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">

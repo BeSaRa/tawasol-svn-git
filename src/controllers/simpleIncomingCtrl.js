@@ -6,6 +6,8 @@ module.exports = function (app) {
                                                    incomingService,
                                                    queueStatusService,
                                                    organizationService,
+                                                   configurationService,
+                                                   loadingIndicatorService,
                                                    // documentTypes,
                                                    officeWebAppService,
                                                    counterService,
@@ -122,8 +124,11 @@ module.exports = function (app) {
 
 
         self.saveCorrespondence = function (status, skipCheck, isSaveAndPrintBarcode) {
+            self.saveInProgress = true;
+            loadingIndicatorService.loading = true;
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
+                self.saveInProgress = false;
                 return;
             }
             var promise = null;
@@ -163,6 +168,7 @@ module.exports = function (app) {
                 }
 
             }).catch(function (error) {
+                self.saveInProgress = false;
                 if (isSaveAndPrintBarcode) {
                     return $q.reject(error);
                 }
@@ -219,6 +225,7 @@ module.exports = function (app) {
                 }
 
                 self.requestCompleted = true;
+                self.saveInProgress = false;
                 toast.success(langService.get(successKey));
 
                 if (!isSaveAndPrintBarcode && employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')) {
@@ -330,7 +337,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.docActionSendLinkToDocumentByEmail = function(model, $event, defer){
+        self.docActionSendLinkToDocumentByEmail = function (model, $event, defer) {
             downloadService.getMainDocumentEmailContent(model.getInfo().vsId);
         };
 
@@ -584,7 +591,7 @@ module.exports = function (app) {
             }
 
             return form.$invalid
-                || !self.incoming.site || !_isValidSubSite()
+                || self.saveInProgress || !self.incoming.site || !_isValidSubSite()
                 || ((self.documentInformationExist || (self.contentFileExist && self.contentFileSizeExist))
                     && !(self.documentInformation || self.incoming.contentFile))
         };
