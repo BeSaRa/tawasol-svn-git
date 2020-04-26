@@ -36,7 +36,7 @@ module.exports = function (app) {
        */
 
         self.controllerName = 'readyToExportDepartmentInboxCtrl';
-
+        self.employeeService = employeeService;
         contextHelpService.setHelpTo('department-inbox-ready-to-export');
 
         /**

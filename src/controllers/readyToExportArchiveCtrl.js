@@ -38,7 +38,7 @@ module.exports = function (app) {
          */
 
         contextHelpService.setHelpTo('central-archive-ready-to-export');
-
+        self.employeeService = employeeService;
         /**
          * @description All ready To Exports
          * @type {*}

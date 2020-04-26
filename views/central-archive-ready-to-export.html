@@ -48,7 +48,7 @@
                                                            ng-click="ctrl.returnBulkWorkItemsFromCentral($event)">
                                                     <md-icon md-svg-icon="undo-variant" class="action-green"></md-icon>
                                                 </md-button>
-                                                <md-button class="md-icon-button" aria-label="{{lang.inbox_export}}"
+                                                <md-button ng-if="ctrl.employeeService.hasPermissionTo('BULK_EXPORT')" class="md-icon-button" aria-label="{{lang.inbox_export}}"
                                                            tooltip="{{lang.inbox_export}}"
                                                            ng-click="ctrl.exportReadyToExportBulk($event)">
                                                     <md-icon md-svg-icon="export" class="action-red"></md-icon>
