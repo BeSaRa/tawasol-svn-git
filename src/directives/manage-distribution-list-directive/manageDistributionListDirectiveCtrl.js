@@ -200,8 +200,7 @@ module.exports = function (app) {
                 }).then(function (result) {
                     self.mainSites = result;
                 });
-            }
-            else {
+            } else {
                 self.mainSites = self.subSearchResult = self.subSearchResultCopy = [];
             }
         };
@@ -264,8 +263,12 @@ module.exports = function (app) {
          * @description empty the subSearch result and selected to hide the search result grid.
          */
         self.onCloseSearch = function () {
-            self.subSearchResult = self.subSearchResultCopy = [];
-            self.subSearchSelected = [];
+            if (!self.isSimpleCorrespondenceSiteSearchType) {
+                self.subSearchResult = self.subSearchResultCopy = [];
+                self.subSearchSelected = [];
+            } else {
+                self.getSubSites();
+            }
             self.subSiteSearchText = '';
         };
 
@@ -275,8 +278,12 @@ module.exports = function (app) {
          */
         self.onSubSearch = function () {
             if (self.subSiteSearchText.length < 3) {
-                self.subSearchResult = [];
-                return;
+                if (self.isSimpleCorrespondenceSiteSearchType) {
+                    self.getSubSites();
+                } else {
+                    self.subSearchResult = [];
+                    return;
+                }
             }
 
             if (!pendingSearch || !debounceSearch()) {
@@ -295,8 +302,12 @@ module.exports = function (app) {
                             maxRows: 300
                         }).then(function (result) {
                             if (self.subSiteSearchText.length < 3) {
-                                self.subSearchResult = [];
-                                return;
+                                if (self.isSimpleCorrespondenceSiteSearchType) {
+                                    self.getSubSites();
+                                } else {
+                                    self.subSearchResult = [];
+                                    return;
+                                }
                             }
                             self.subSearchResultCopy = angular.copy(result);
                             filterSearchedSubSites();

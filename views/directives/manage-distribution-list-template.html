@@ -21,6 +21,18 @@
                 </md-option>
             </md-select>
         </md-input-container>
+        <!-- Simple Sub Site search -->
+        <md-input-container flex>
+            <label for="subSiteSimpleSearchText">{{lang.sites_select_sub_site}}</label>
+            <input id="subSiteSimpleSearchText" ng-model="ctrl.subSiteSearchText"
+                   ng-disabled="!ctrl.selectedMainSite || !ctrl.selectedMainSite.id">
+        </md-input-container>
+        <div>
+            <md-button class="md-raised md-primary"
+                       ng-disabled="!ctrl.selectedMainSite || !ctrl.selectedMainSite.id || ctrl.subSiteSearchText.length < 3"
+                       ng-click="ctrl.onSubSearch($event)">{{lang.search}}
+            </md-button>
+        </div>
     </div>
     <!-- Advanced Search -->
     <div layout="row" flex ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType">
