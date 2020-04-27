@@ -229,12 +229,12 @@
         </md-button>
         <md-button class="md-raised md-primary"
                    ng-disabled="distributionList_form.$invalid || !ctrl.checkValidGlobal()"
-                   ng-if="ctrl.editMode && ctrl.selectedTabName === 'basic'"
+                   ng-if="ctrl.editMode"
                    ng-click="ctrl.saveDistributionList()">
             {{lang.save}}
         </md-button>
         <md-button class="md-raised"
-                   ng-if="((ctrl.editMode && ctrl.selectedTabName === 'basic') || !ctrl.editMode)"
+                   ng-if="ctrl.selectedTabName !== 'ou'"
                    ng-click="ctrl.resetModel()">
             {{lang.reset}}
         </md-button>
