@@ -61,11 +61,15 @@ module.exports = function (app) {
             };
 
             DistributionWFItem.prototype.setDueDate = function (dueDate) {
-                this.dueDate = (this.getWorkflowItemType().toLowerCase() === 'group_mail') ? null : dueDate;
+                this.dueDate = (this.getWorkflowItemType().toLowerCase() === 'groupmail') ? null : dueDate;
                 return this;
             };
             DistributionWFItem.prototype.setAction = function (action) {
                 this.action = action;
+                return this;
+            };
+            DistributionWFItem.prototype.setSLADueDate = function (sLADueDate) {
+                this.sLADueDate = sLADueDate || null;
                 return this;
             };
             DistributionWFItem.prototype.clearWFActionSearchText = function () {
@@ -125,6 +129,10 @@ module.exports = function (app) {
             DistributionWFItem.prototype.isGroup = function () {
                 return false;
             };
+            DistributionWFItem.prototype.setId = function (id) {
+                this.id = id || null;
+                return this;
+            };
             DistributionWFItem.prototype.setArName = function (arName) {
                 this.arName = arName;
                 return this;
@@ -163,7 +171,7 @@ module.exports = function (app) {
                 return icon;
             };
 
-            DistributionWFItem.prototype.getWorkflowItemType = function () {
+            DistributionWFItem.prototype.getWorkflowItemIconTooltip = function () {
                 var title = 'BulkSettings';
                 if (this.gridName === 'OUGroup') {
                     title = 'group_mail';
@@ -176,6 +184,21 @@ module.exports = function (app) {
                 }
                 return title;
             };
+
+            DistributionWFItem.prototype.getWorkflowItemType = function () {
+                var type = '';
+                if (this.gridName === 'OUGroup') {
+                    type = 'groupMail';
+                } else if (this.isDepartment()) {
+                    type = 'organization';
+                } else if (this.isGroup()) {
+                    type = 'workflowGroup'
+                } else if (this.isUser()) {
+                    type = 'user';
+                }
+                return type;
+            };
+
             DistributionWFItem.prototype.getActionMessage = function () {
                 return langService.get('please_select_action');
             };

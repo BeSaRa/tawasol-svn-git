@@ -24,7 +24,8 @@ module.exports = function (app) {
                 gridName: '@',
                 grid: '=',
                 wfGroupMemberAddCallback: '=?',
-                organizationGroups: '='
+                organizationGroups: '=',
+                fromPredefined: '='
             }
         }
     })

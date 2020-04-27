@@ -120,4 +120,5 @@ module.exports = function (app) {
     require('./g2gPendingService')(app);
     require('./desktopNotificationService')(app);
     require('./encryptionService')(app);
+    require('./predefinedActionService')(app);
 };

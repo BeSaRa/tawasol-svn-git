@@ -1,104 +1,52 @@
 module.exports = function (app) {
-    app.controller('launchCorrespondenceWorkflowPopCtrl', function (LangWatcher,
-                                                                    $timeout,
-                                                                    $mdSidenav,
-                                                                    $scope,
-                                                                    moment,
-                                                                    $q,
-                                                                    comments,
-                                                                    toast,
-                                                                    cmsTemplate,
-                                                                    errorMessage,
-                                                                    _,
-                                                                    organizationService,
-                                                                    replyOn,
-                                                                    centralArchiveOUs,
-                                                                    actionKey,
-                                                                    multi,
-                                                                    tableGeneratorService,
-                                                                    workflowActions,
-                                                                    distributionWFService,
-                                                                    DistributionWF,
-                                                                    DistributionOUWFItem,
-                                                                    DistributionUserWFItem,
-                                                                    DistributionGroupWFItem,
-                                                                    DistributionWFItem,
-                                                                    employeeService,
-                                                                    UserSearchCriteria,
-                                                                    loadingIndicatorService,
-                                                                    langService,
-                                                                    selectedTab,
-                                                                    dialog,
-                                                                    correspondence,
-                                                                    isDeptIncoming,
-                                                                    Information,
-                                                                    fromSimplePopup,
-                                                                    errorCode,
-                                                                    gridService) {
+    app.controller('predefinedActionPopCtrl', function (_,
+                                                        toast,
+                                                        generator,
+                                                        dialog,
+                                                        langService,
+                                                        predefinedAction,
+                                                        editMode,
+                                                        LangWatcher,
+                                                        $timeout,
+                                                        $mdSidenav,
+                                                        $scope,
+                                                        moment,
+                                                        $q,
+                                                        comments,
+                                                        cmsTemplate,
+                                                        errorMessage,
+                                                        centralArchiveOUs,
+                                                        actionKey,
+                                                        tableGeneratorService,
+                                                        workflowActions,
+                                                        distributionWFService,
+                                                        DistributionWF,
+                                                        DistributionOUWFItem,
+                                                        DistributionUserWFItem,
+                                                        DistributionGroupWFItem,
+                                                        DistributionWFItem,
+                                                        employeeService,
+                                                        UserSearchCriteria,
+                                                        loadingIndicatorService,
+                                                        selectedTab,
+                                                        Information,
+                                                        errorCode,
+                                                        gridService,
+                                                        PredefinedActionMember,
+                                                        predefinedActionService) {
         'ngInject';
         var self = this;
-        self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
+        self.controllerName = 'predefinedActionPopCtrl';
+
+        self.predefinedAction = predefinedAction;
+        self.predefinedActionModel = angular.copy(self.predefinedAction);
+        self.editMode = editMode;
+
         self.inlineUserOUSearchText = '';
         var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess;
-        self.disableSend = false;
 
-        /**
-         * get multi info in case the correspondence array.
-         * @param correspondences
-         * @returns {Array}
-         * @private
-         */
-        function _getMultiInfo(correspondences) {
-            return _.map(correspondences, function (item) {
-                return item.getInfo();
-            });
-        }
-
-        /**
-         * @description get multi approve status.
-         * @param info
-         * @returns {Array}
-         * @private
-         */
-        function _getMultiApproveStatus(info) {
-            return _.map(info, function (item) {
-                return {
-                    title: item.title,
-                    status: item.needToApprove()
-                };
-            });
-        }
-
-        function _justForYourInformationDialog(multiStatus, ignoreMessage) {
-            var result = self.multi ? approvedStatus = _.some(multiStatus, function (item) {
-                    return item.status
-                }) : approvedStatus,
-                message = self.multi ? langService.get('selected_document_has_not_approved_document') : langService.get('cannot_send_to_multi');
-            self.multi ? _.map(multiStatus, function (item) {
-                if (item.status)
-                    message = message.addLineBreak(item.title);
-            }) : null;
-            result && !ignoreMessage ? $timeout(function () {
-                dialog.infoMessage(message)
-            }, 800) : false;
-        }
-
-        function _getApprovedStatus() {
-            return approvedStatus;
-        }
-
-        // cannot_send_to_multi
         self.actionKey = actionKey;
-        // selected_document_has_not_approved_document
-        self.multi = multi;
-        // current correspondence information
-        self.info = self.multi ? _getMultiInfo(correspondence) : correspondence.getInfo();
-        self.multiStatus = null;
-        var approvedStatus = null;
-        // check document if approved or not.
-        self.multi ? self.multiStatus = _getMultiApproveStatus(self.info) : approvedStatus = self.info.needToApprove();
-        // current correspondence or workItem
-        self.correspondence = correspondence;
+
         // in case if the current user in central archive and in add incoming page.
         self.selectedOrganizationToSend = angular.isString(selectedTab) ? false : selectedTab;
         // current selected tab
@@ -127,10 +75,10 @@ module.exports = function (app) {
         // our grids properties
         // users
         self.users = _mapWFUser(distributionWFService.workflowUsers);
-
         // favorite Users
         self.favoriteUsers = _mapWFUser(distributionWFService.favoriteUsers);
         self.favoriteUsersCopy = angular.copy(self.favoriteUsers);
+        console.log('predefined favoriteUsers', self.favoriteUsers);
         // favorite Organizations
         self.favoriteOrganizations = _mapOrganizationByType(distributionWFService.favoriteOrganizations);
         self.favoriteOrganizationsCopy = angular.copy(self.favoriteOrganizations);
@@ -167,7 +115,7 @@ module.exports = function (app) {
 
         // selected workflowItems
         self.selectedWorkflowItems = [];
-        self.textButton = 'send';
+        self.textButton = 'save';
         self.selectedFavoriteTab = 'users';
 
 
@@ -210,16 +158,6 @@ module.exports = function (app) {
                 });
 
         };
-
-        if (replyOn) {
-            if (fromSimplePopup) {
-                self.users = [fromSimplePopup];
-            } else {
-                self.users = _mapWFUser([replyOn]);
-            }
-            _addUserReply(self.users);
-            self.textButton = 'reply';
-        }
 
         if (self.selectedOrganizationToSend) {
             self.selectTab(self.selectedTab).then(function () {
@@ -390,40 +328,16 @@ module.exports = function (app) {
             ous: null
         };
 
-        // to display alert to inform the user this document not approved and will not send it to many users.
-        if (!isDeptIncoming) {
-            _justForYourInformationDialog(self.multiStatus, true);
-        } else {
-            approvedStatus = false;
-        }
-
         function _checkPermission(permission) {
             return employeeService.hasPermissionTo(permission);
         }
 
         self.checkIfNotInternalDocument = function () {
-            if (self.multi) {
-                return !(_.some(_.map(self.correspondence, function (correspondence) {
-                    return correspondence.getInfo().documentClass === 'internal';
-                }), function (matchingResult) {
-                    return matchingResult === true;
-                }));
-            } else {
-                return self.correspondence.getInfo().documentClass !== 'internal';
-            }
+            return true;
         };
 
         self.isPrivateDoc = function () {
-            if (self.multi) {
-                return (_.some(_.map(self.correspondence, function (correspondence) {
-                    return correspondence.getSecurityLevelLookup().lookupKey === 4;
-                }), function (matchingResult) {
-                    return matchingResult === true;
-                }));
-            } else {
-                return self.correspondence.getSecurityLevelLookup().lookupKey === 4;
-            }
-
+            return false;
         };
 
         // workflow tabs
@@ -473,23 +387,15 @@ module.exports = function (app) {
             workflow_groups: {
                 lang: 'workflow_menu_item_workflow_groups',
                 icon: 'account-group',
-                show: _checkPermission('SEND_TO_GROUPS_') && !self.isPrivateDoc(),
-                disabled: _getApprovedStatus(),
+                show: false,  //_checkPermission('SEND_TO_GROUPS_'),
+                disabled: false,
                 modelName: 'workflowGroups'
-            }, /*,
-             organizational_unit_mail: {
-             lang: 'workflow_menu_item_registry_organizational_unit_mail',
-             icon: 'contact-mail',
-             show: true,
-             disabled: _getApprovedStatus(),
-             modelName: 'organizationalUnits'
-
-             },*/
+            },
             registry_organizations: {
                 lang: 'workflow_menu_item_registry_organizations',
                 icon: 'bank',
-                show: _checkPermission('SEND_TO_ELECTRONIC_INCOMING_QUEUES') && self.checkIfNotInternalDocument() && !self.isPrivateDoc(),
-                disabled: _getApprovedStatus(),
+                show: _checkPermission('SEND_TO_ELECTRONIC_INCOMING_QUEUES'),
+                disabled: false,
                 modelName: 'registryOrganizations'
             }
         };
@@ -536,8 +442,6 @@ module.exports = function (app) {
 
         // create default workflow item Settings for each tab
         _createDefaultWFItemTabs();
-
-        //_checkFavoritesError();
 
 
         function _mapOrganizationByType(organizations, includeCentralArchive, allOuGroup) {
@@ -598,18 +502,6 @@ module.exports = function (app) {
             });
         }
 
-        function _checkFavoritesError() {
-            if (!errorMessage || !errorMessage.length)
-                return;
-
-            return dialog
-                .errorMessage(langService.get('error_occurred_while_load_favorites').change({
-                    name: _.map(errorMessage, function (item) {
-                        return langService.get(item);
-                    }).join(', ')
-                }));
-        }
-
         /**
          * @description map workflow Item to WorkflowGroup
          * @param collection
@@ -650,6 +542,18 @@ module.exports = function (app) {
             });
         }
 
+        function _mapPredefinedActionMemberUsers(collection, gridName) {
+            return _.map(collection, function (workflowUser) {
+                return (new DistributionUserWFItem()).mapFromPredefinedActionMemberUser(workflowUser).setGridName(gridName || null);
+            });
+        }
+
+        function _mapPredefinedActionMemberOrganizations(collection, gridName) {
+            return _.map(collection, function (workflowOrganization) {
+                return (new DistributionOUWFItem()).mapFromPredefinedActionMemberOrganization(workflowOrganization).setGridName(gridName || null);
+            });
+        }
+
         /**
          * @description map ouApplicationUser
          * @param collection
@@ -673,18 +577,6 @@ module.exports = function (app) {
             });
         }
 
-
-        /**
-         * @description map from source depend on if the workflowItem is ouApplicationUser or normal User.
-         * @param collection
-         * @param mapType
-         * @returns {*}
-         * @private
-         */
-        function _mapUsersFromSource(collection, mapType) {
-            return self.mapTypes[mapType](collection);
-        }
-
         /**
          * @description set dist workflow Item properties.
          * @param distWorkflowItem
@@ -694,6 +586,7 @@ module.exports = function (app) {
         function _setDistWorkflowItem(distWorkflowItem, result) {
             distWorkflowItem
                 .setDueDate(result.dueDate)
+                .setSLADueDate(result.sLADueDate)
                 .setComments(result.comments)
                 .setAction(result.action)
                 .setSendSMS(result.sendSMS)
@@ -765,29 +658,6 @@ module.exports = function (app) {
         }
 
         /**
-         * @description to chekc if the group exists inside selected groups
-         * @param group
-         * @private
-         */
-        function _groupExists(group) {
-            return _.find(self.selectedGrids.workflowGroups.collection, function (disWorkflowGroupItem) {
-                return disWorkflowGroupItem.isSameGroup(user);
-            })
-        }
-
-        /**
-         * @description get uncompleted distWorkflowItem
-         * @param gridName
-         * @returns {Array}
-         * @private
-         */
-        function _getUnCompletedItems(gridName) {
-            return _.filter(self.selectedGrids[gridName].collection, function (item) {
-                return !item.isWFComplete();
-            })
-        }
-
-        /**
          * @description to get array of exists/not users from given users array
          * @param users
          * @param exists
@@ -809,16 +679,6 @@ module.exports = function (app) {
         function _getUsersNotExists(users) {
             users = angular.isArray(users) ? users : [users];
             return _getUsersExistORNotFromSelectedGrid(users, false);
-        }
-
-        /**
-         * @description to get array of exists users from given array.
-         * @param users
-         * @returns {Array}
-         * @private
-         */
-        function _getUsersExists(users) {
-            return _getUsersExistORNotFromSelectedGrid(users, true);
         }
 
         /**
@@ -896,18 +756,6 @@ module.exports = function (app) {
             'registryOrganizations',
             'organizationGroups'
         ];
-
-        /**
-         * @description change relationId for organizations.
-         * @param collection
-         * @param workflowItem
-         * @private
-         */
-        function _changeRelationForOrganizations(collection, workflowItem) {
-            _.map(collection, function (item, index) {
-                collection[index].isSameWorkflowItem(workflowItem) ? collection[index].setRelationId(workflowItem.relationId) : null;
-            })
-        }
 
         /**
          * @description change relationId for users.
@@ -993,12 +841,6 @@ module.exports = function (app) {
             return item.gridName === 'OUGroup';
         }
 
-        /**
-         * @description close workflow dialog.
-         */
-        self.closeCorrespondenceWorkflow = function () {
-            dialog.cancel();
-        };
         self.tabMapper = {
             privateUsers: _mapWFUser,
             managerUsers: _mapWFUser,
@@ -1010,30 +852,9 @@ module.exports = function (app) {
         };
 
         /**
-         * @description delete from selected bulk correspondence by index.
-         * @param $index
-         * @param $event
-         */
-        self.deleteFromSelectedCorrespondence = function ($index, $event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            correspondence.splice($index, 1);
-            if (self.correspondence.length === 1) {
-                correspondence = correspondence[0];
-                self.multi = false;
-            }
-            self.info = self.multi ? _getMultiInfo(correspondence) : correspondence.getInfo();
-            self.correspondence = correspondence;
-            self.multi ? self.multiStatus = _getMultiApproveStatus(self.info) : approvedStatus = self.info.needToApprove();
-            _justForYourInformationDialog(self.multiStatus, true);
-
-        };
-        /**
          * @description toggle sidebar.
          */
         self.toggleWorkflowSidebar = function () {
-            // $mdSidenav('correspondence-workflow-popup').toggle();
             self.sidebarStatus = !self.sidebarStatus;
         };
 
@@ -1047,13 +868,6 @@ module.exports = function (app) {
          */
         self.isSelectedTab = function (tabName) {
             return self.selectedTab === tabName;
-        };
-
-        /**
-         * @description to get approved status for multi document or one document.
-         */
-        self.getApprovedStatus = function () {
-            return _getApprovedStatus();
         };
 
         /**
@@ -1176,7 +990,7 @@ module.exports = function (app) {
                     distWorkflowItem: distWorkflowItem,
                     gridName: currentGridName || false,
                     organizationGroups: self.organizationGroupsCopy,
-                    fromPredefined: false
+                    fromPredefined: true
                 }
             })
         };
@@ -1220,18 +1034,6 @@ module.exports = function (app) {
                 })
         };
 
-        function _addUserReply(selectedUsers) {
-            // just to filter the users before add.
-            selectedUsers = _getUsersNotExists(selectedUsers);
-            // get proxies users to display message before add.
-            var proxies = _getProxiesUsers(selectedUsers);
-            // display proxy message
-            if (proxies.length)
-                dialog.alertMessage(_prepareProxyMessage(proxies));
-            // add users to grid
-            _addUsersToSelectedGrid(selectedUsers);
-        }
-
         /**
          * @description add selected users to selectedGrid
          * @param selectedUsers
@@ -1264,18 +1066,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.addSelectedUserWithIgnoreToGrid = function (selectedUser, $event) {
-            /* if (self.selectedWorkflowItems.length && self.getApprovedStatus()) {
-                 dialog
-                     .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
-                     .then(function () {
-                         self.selectedWorkflowItems = [];
-                         var user = _getUsersNotExists([selectedUser]);
-                         _addUsersToSelectedGrid(user);
-                     });
-             } else {*/
             var user = _getUsersNotExists([selectedUser]);
             _addUsersToSelectedGrid(user);
-            //   }
         };
         /**
          * @description add selected user to grid
@@ -1285,21 +1077,6 @@ module.exports = function (app) {
         self.addSelectedUserToGrid = function (selectedUser, $event) {
             // just to filter the users before add.
             var users = _getUsersNotExists([selectedUser]);
-
-            /*           if (self.selectedWorkflowItems.length && self.getApprovedStatus()) {
-                           dialog
-                               .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
-                               .then(function () {
-                                   self.selectedWorkflowItems = [];
-                                   // get proxies users to display message before add.
-                                   var proxies = _getProxiesUsers(users);
-                                   // display proxy message
-                                   if (proxies.length)
-                                       dialog.alertMessage(_prepareProxyMessage(proxies));
-                                   // add users to grid
-                                   _addUsersToSelectedGrid(users);
-                               });
-                       } else {*/
             // get proxies users to display message before add.
             var proxies = _getProxiesUsers(users);
             // display proxy message
@@ -1307,8 +1084,6 @@ module.exports = function (app) {
                 dialog.alertMessage(_prepareProxyMessage(proxies));
             // add users to grid
             _addUsersToSelectedGrid(users);
-            //}
-
         };
         /**
          * @description check if the user not exists.
@@ -1403,34 +1178,14 @@ module.exports = function (app) {
             }
         };
 
-        self.launchDistributionCorrespondenceWorkFlow = function () {
-            self.disableSend = true;
-            return self.checkWorkflowItemsCompleteStatus()
-                .then(function (collection) {
-                    self.distributionWF.setNormalUsers(_.filter(collection, _filterWFUsers));
-                    self.distributionWF.setReceivedOUs(_.filter(collection, _filterWFDepartmentsGroup));
-                    self.distributionWF.setReceivedRegOUs(_.filter(collection, _filterWFRegDepartments));
-                    self.distributionWF.setWfGroups(_.filter(collection, _filterWFGroups));
-
-                    distributionWFService.startLaunchWorkflow(self.distributionWF, self.correspondence)
-                        .then(function () {
-                            toast.success(langService.get('launch_success_distribution_workflow'));
-                            dialog.hide();
-                        }).catch(function (error) {
-                        self.disableSend = false;
-                        if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
-                            var info = self.correspondence.getInfo();
-                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
-                            return false;
-                        }
-                    });
-                }).catch(function () {
-                    self.disableSend = false;
-                })
-        };
-
         self.checkWorkflowItemsCompleteStatus = function () {
-            var result = false, collections = self.selectedWorkflowItems;
+            var collections = self.selectedWorkflowItems,
+                types = langService.get('users_or_organizations');
+            if (!collections.length) {
+                dialog.errorMessage(langService.get('please_select_workflow_items_to').change({name: types}));
+                return $q.reject();
+            }
+
             // unCompleted
             var unCompleted = _.filter(collections, function (item) {
                 return !item.isWFComplete() || !item.isEscalationComplate();
@@ -1439,13 +1194,6 @@ module.exports = function (app) {
             var completed = _.filter(collections, function (item) {
                 return item.isWFComplete() && item.isEscalationComplate();
             });
-
-            var types = !self.getApprovedStatus() ? langService.get('users_or_organizations') : langService.get('user');
-
-            if (!collections.length) {
-                dialog.errorMessage(langService.get('please_select_workflow_items_to').change({name: types}));
-                return $q.reject();
-            }
 
             if (unCompleted.length) {
                 return dialog
@@ -1463,6 +1211,71 @@ module.exports = function (app) {
                     });
             }
             return $q.resolve(collections);
+        };
+
+        function _setPredefinedActionMember(member, data) {
+            member
+                .setId(data.id)
+                .setToUserId(data.toUserId)
+                //.setToOUID(data.toOUId)
+                .setActionId(data.action)
+                .setSLADueDate(data.sLADueDate)
+                .setActionType(data.getWorkflowItemType())
+                .setSendSMS(data.sendSMS)
+                .setSendEmail(data.sendEmail)
+                .setUserComment(data.comments)
+                .setSecureComment(data.isSecureAction)
+                .setSendRelatedDocs(data.sendRelatedDocs)
+                .setEscalationStatus(data.escalationStatus)
+                .setEscalationUser(data.escalationUserId)
+                .setEscalationUserOUId(data.escalationUserOUId);
+
+            if (data.getWorkflowItemType() === 'user') {
+                member.setToOUID(data.appUserOUID);
+            } else if (data.getWorkflowItemType() === 'groupMail' || data.getWorkflowItemType() === 'organization') {
+                member.setToOUID(data.toOUId);
+            }
+
+            return member;
+        }
+
+        function _typeCastToPredefinedAction() {
+            self.predefinedAction.members = [];
+            for (var recordType in self.distributionWF) {
+                // check property should not be in prototype, but it should be attached to the object itself
+                if (self.distributionWF.hasOwnProperty(recordType)) {
+                    for (var i = 0; i < self.distributionWF[recordType].length; i++) {
+                        var member = _setPredefinedActionMember(new PredefinedActionMember(), self.distributionWF[recordType][i]);
+                        self.predefinedAction.members.push(member);
+                    }
+                }
+            }
+            return self.predefinedAction;
+        }
+
+        self.savePredefinedAction = function (form, $event) {
+            if (form.$invalid) {
+                return;
+            }
+
+            return self.checkWorkflowItemsCompleteStatus()
+                .then(function (collection) {
+                    self.distributionWF.setNormalUsers(_.filter(collection, _filterWFUsers));
+                    self.distributionWF.setReceivedOUs(_.filter(collection, _filterWFDepartmentsGroup));
+                    self.distributionWF.setReceivedRegOUs(_.filter(collection, _filterWFRegDepartments));
+
+                    // workflowGroup is not added to predefined action
+                    //self.distributionWF.setWfGroups(_.filter(collection, _filterWFGroups));
+
+                    _typeCastToPredefinedAction();
+
+                    var method = self.editMode ? 'updatePredefinedAction' : 'addPredefinedAction';
+
+                    return predefinedActionService[method](self.predefinedAction)
+                        .then(function (result) {
+                            dialog.hide(result);
+                        });
+                })
         };
 
         /**
@@ -1485,5 +1298,50 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description Close the popup
+         */
+        self.closePopup = function () {
+            dialog.cancel();
+        };
+
+        function _checkFavoritesError() {
+            if (!errorMessage || !errorMessage.length)
+                return;
+
+            return dialog
+                .errorMessage(langService.get('error_occurred_while_load_favorites').change({
+                    name: _.map(errorMessage, function (item) {
+                        return langService.get(item);
+                    }).join(', ')
+                }));
+        }
+
+        function _typeCastMembersToDistributionWFItems() {
+            if (!self.editMode) {
+                return;
+            }
+            self.selectedWorkflowItems = [];
+            var users = [], groupMails = [], organizations = [], actions = [];
+            _.map(self.predefinedAction.members, function (member) {
+                if (member.isUserMember()) {
+                    users.push(member);
+                } else if (member.isGroupMailMember()) {
+                    groupMails.push(member);
+                } else if (member.isOrganizationMember()) {
+                    organizations.push(member);
+                }
+                return member;
+            });
+            actions = self.selectedWorkflowItems
+                .concat(_mapPredefinedActionMemberUsers(users))
+                .concat(_mapPredefinedActionMemberOrganizations(groupMails, 'OUGroup'))
+                .concat(_mapPredefinedActionMemberOrganizations(organizations, 'OUReg'));
+            self.selectedWorkflowItems = actions;
+        }
+
+        $timeout(function () {
+            _typeCastMembersToDistributionWFItems();
+        });
     });
 };

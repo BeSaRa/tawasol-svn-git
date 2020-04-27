@@ -138,7 +138,7 @@ module.exports = function (app) {
          */
         self.isEscalationHidden = function () {
             return self.gridName &&
-                distWorkflowItem.getWorkflowItemType().toLowerCase() === 'group_mail';
+                distWorkflowItem.getWorkflowItemType().toLowerCase() === 'groupmail';
             /*                (self.gridName.toLowerCase() === 'ous' && self.distWorkflowItem.getWorkflowItemType().toLowerCase() === 'organization' && self.distWorkflowItem.gridName.toLowerCase() === 'oureg') ||
                             (self.gridName.toLowerCase() === 'selectedgrid' && self.distWorkflowItem.getWorkflowItemType().toLowerCase() === 'organization' && self.distWorkflowItem.gridName.toLowerCase() === 'oureg') ||
                             (self.gridName.toLowerCase() === 'ous' && distWorkflowItem.getWorkflowItemType().toLowerCase() === 'bulksettings') ||

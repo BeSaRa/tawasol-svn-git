@@ -64,6 +64,10 @@ module.exports = function (app) {
                 .setEscalationUser(result.escalationUserId)
                 .setEscalationUserOUId(result.escalationUserId);
 
+            if (self.fromPredefined){
+                distWorkflowItem.setSLADueDate(result.sLADueDate);
+            }
+
             // hide the comment dropdown
             distWorkflowItem.showCommentDropdown = false;
         }
@@ -181,7 +185,8 @@ module.exports = function (app) {
                     dialogTitle: dialogTitle,
                     distWorkflowItem: distWorkflowItem,
                     gridName: self.gridName,
-                    organizationGroups: self.organizationGroups
+                    organizationGroups: self.organizationGroups,
+                    fromPredefined: self.fromPredefined
                 }
             })
         };

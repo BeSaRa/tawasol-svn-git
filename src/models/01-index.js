@@ -179,4 +179,6 @@ module.exports = function (app) {
     require('./OUPrivateRegistry')(app);
     require('./SelectedDownload')(app);
     require('./FollowupAction')(app);
+    require('./PredefinedAction')(app);
+    require('./PredefinedActionMember')(app);
 };

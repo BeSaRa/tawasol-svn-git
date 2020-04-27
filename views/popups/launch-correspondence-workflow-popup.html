@@ -55,8 +55,10 @@
                                 <current-tab-label-directive selected-tab="ctrl.selectedTab"
                                                              workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
                                 <span flex></span>
-                                <grid-search-directive grid="ctrl.grid.favoriteUsers" ng-if="ctrl.selectedFavoriteTab === 'users'"></grid-search-directive>
-                                <grid-search-directive grid="ctrl.grid.favoriteOus" ng-if="ctrl.selectedFavoriteTab === 'ou'"></grid-search-directive>
+                                <grid-search-directive grid="ctrl.grid.favoriteUsers"
+                                                       ng-if="ctrl.selectedFavoriteTab === 'users'"></grid-search-directive>
+                                <grid-search-directive grid="ctrl.grid.favoriteOus"
+                                                       ng-if="ctrl.selectedFavoriteTab === 'ou'"></grid-search-directive>
                             </div>
                             <div>
                                 <br/>
@@ -89,7 +91,7 @@
                                                     grid-name="favoriteUsers"
                                                     grid-items="ctrl.favoriteUsers"
                                                     organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
-                                                <!--multi-select="!ctrl.getApprovedStatus()"-->
+                                            <!--multi-select="!ctrl.getApprovedStatus()"-->
                                         </div>
                                     </md-tab>
                                     <!-- Organizations -->
@@ -97,7 +99,7 @@
                                             md-on-select="ctrl.setCurrentFavoriteTab('ou')"
                                             label="{{lang.organizations}}">
                                         <div>
-<!--                                            multi-select="!ctrl.getApprovedStatus()"-->
+                                            <!--                                            multi-select="!ctrl.getApprovedStatus()"-->
                                             <workflow-items-directive
                                                     multi-select="true"
                                                     exclude-selected="false"
@@ -112,7 +114,8 @@
                                                     workflow-items="ctrl.favoriteOrganizations"
                                                     grid-name="favoriteOUs"
                                                     grid="ctrl.grid.favoriteOus"
-                                                    organization-groups="ctrl.organizationGroupsCopy"></workflow-items-directive>
+                                                    organization-groups="ctrl.organizationGroupsCopy"
+                                                    from-predefined="false"></workflow-items-directive>
                                         </div>
                                     </md-tab>
                                 </md-tabs>
@@ -131,7 +134,8 @@
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
-                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
+                                    organization-groups="ctrl.organizationGroupsCopy"
+                                    from-predefined="false"></selected-workflow-items-directive>
                         </div>
                         <!-- Users -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('users')">
@@ -162,12 +166,12 @@
                                     </md-select>
                                 </md-input-container>
                                 <div ng-if="!ctrl.usersCriteria.hide">
-<!--                                    <md-button tooltip="{{lang.send_to_whole_department}}" id="add_organization"-->
-<!--                                               ng-disabled="ctrl.getApprovedStatus() || !ctrl.workItemNotExists(ctrl.usersCriteria.ou) || ctrl.loadingIndicatorService.loading || !ctrl.usersCriteria.ou || ctrl.usersCriteria.ou.isRegOU() || ctrl.isPrivateDoc()"-->
-<!--                                               class="md-icon-button mt16"-->
-<!--                                               ng-click="ctrl.addToSelected(ctrl.usersCriteria.ou)">-->
-<!--                                        <md-icon md-svg-icon="plus"></md-icon>-->
-<!--                                    </md-button>-->
+                                    <!--                                    <md-button tooltip="{{lang.send_to_whole_department}}" id="add_organization"-->
+                                    <!--                                               ng-disabled="ctrl.getApprovedStatus() || !ctrl.workItemNotExists(ctrl.usersCriteria.ou) || ctrl.loadingIndicatorService.loading || !ctrl.usersCriteria.ou || ctrl.usersCriteria.ou.isRegOU() || ctrl.isPrivateDoc()"-->
+                                    <!--                                               class="md-icon-button mt16"-->
+                                    <!--                                               ng-click="ctrl.addToSelected(ctrl.usersCriteria.ou)">-->
+                                    <!--                                        <md-icon md-svg-icon="plus"></md-icon>-->
+                                    <!--                                    </md-button>-->
                                     <md-button tooltip="{{lang.send_to_whole_department}}" id="add_organization"
                                                ng-disabled="!ctrl.workItemNotExists(ctrl.usersCriteria.ou) || ctrl.loadingIndicatorService.loading || !ctrl.usersCriteria.ou || ctrl.isPrivateDoc()"
                                                class="md-icon-button mt16"
@@ -230,7 +234,8 @@
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
-                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
+                                    organization-groups="ctrl.organizationGroupsCopy"
+                                    from-predefined="false"></selected-workflow-items-directive>
                         </div>
                         <!-- Private Users -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('private_users')">
@@ -281,7 +286,8 @@
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
-                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
+                                    organization-groups="ctrl.organizationGroupsCopy"
+                                    from-predefined="false"></selected-workflow-items-directive>
                         </div>
                         <!-- Managers -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('manager_users')">
@@ -332,7 +338,8 @@
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
-                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
+                                    organization-groups="ctrl.organizationGroupsCopy"
+                                    from-predefined="false"></selected-workflow-items-directive>
                         </div>
                         <!-- Vice Managers -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('vice_manager_users')">
@@ -383,7 +390,8 @@
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
-                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
+                                    organization-groups="ctrl.organizationGroupsCopy"
+                                    from-predefined="false"></selected-workflow-items-directive>
                         </div>
                         <!-- Head of government entities -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('heads_of_government_entities')">
@@ -434,7 +442,8 @@
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
-                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
+                                    organization-groups="ctrl.organizationGroupsCopy"
+                                    from-predefined="false"></selected-workflow-items-directive>
                         </div>
                         <!-- Workflow Groups -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('workflow_groups')">
@@ -462,7 +471,8 @@
                                     grid-name="workflowGroups"
                                     grid="ctrl.grid.workflowGroups"
                                     wf-group-member-add-callback="ctrl.addSelectedUsersToGrid"
-                                    organization-groups="ctrl.organizationGroupsCopy"></workflow-items-directive>
+                                    organization-groups="ctrl.organizationGroupsCopy"
+                                    from-predefined="false"></workflow-items-directive>
                             <div>
                                 <br/>
                             </div>
@@ -477,7 +487,8 @@
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
-                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
+                                    organization-groups="ctrl.organizationGroupsCopy"
+                                    from-predefined="false"></selected-workflow-items-directive>
                         </div>
                         <!-- Organization Units -->
                         <div flex layout="column" ng-if="ctrl.isSelectedTab('registry_organizations')">
@@ -505,7 +516,8 @@
                                     workflow-items="ctrl.registryOrganizations"
                                     grid-name="Ous"
                                     grid="ctrl.grid.ous"
-                                    organization-groups="ctrl.organizationGroupsCopy"></workflow-items-directive>
+                                    organization-groups="ctrl.organizationGroupsCopy"
+                                    from-predefined="false"></workflow-items-directive>
                             <div>
                                 <br/>
                             </div>
@@ -520,7 +532,8 @@
                                     workflow-comments="ctrl.comments"
                                     workflow-actions="ctrl.workflowActions"
                                     workflow-items="ctrl.selectedWorkflowItems"
-                                    organization-groups="ctrl.organizationGroupsCopy"></selected-workflow-items-directive>
+                                    organization-groups="ctrl.organizationGroupsCopy"
+                                    from-predefined="false"></selected-workflow-items-directive>
                         </div>
                     </div>
                 </md-content>
@@ -529,11 +542,12 @@
     </md-dialog-content>
     <!-- Buttons and info -->
     <md-dialog-actions class="cms-dialog-actions">
-<!--
-        <span layout-align="center center"><span ng-if="ctrl.getApprovedStatus()" class="red-color">{{ctrl.multi ?  lang.get('selected_document_has_not_approved_document') : lang.get('cannot_send_to_multi')}}</span></span>
--->
+        <!--
+                <span layout-align="center center"><span ng-if="ctrl.getApprovedStatus()" class="red-color">{{ctrl.multi ?  lang.get('selected_document_has_not_approved_document') : lang.get('cannot_send_to_multi')}}</span></span>
+        -->
         <span flex></span>
-        <md-button class="md-raised md-primary" ng-click="ctrl.launchDistributionCorrespondenceWorkFlow()" ng-disabled="ctrl.disableSend">
+        <md-button class="md-raised md-primary" ng-click="ctrl.launchDistributionCorrespondenceWorkFlow()"
+                   ng-disabled="ctrl.disableSend">
             {{lang.get(ctrl.textButton)}}
         </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closeCorrespondenceWorkflow()">{{lang.close}}</md-button>

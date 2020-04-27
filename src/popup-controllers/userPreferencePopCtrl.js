@@ -48,7 +48,9 @@ module.exports = function (app) {
                                                       cmsTemplate,
                                                       ProxyInfo,
                                                       $compile,
-                                                      organizationService) {
+                                                      organizationService,
+                                                      predefinedActions,
+                                                      predefinedActionService) {
         'ngInject';
         var self = this;
         self.controllerName = 'userPreferencePopCtrl';
@@ -102,19 +104,6 @@ module.exports = function (app) {
 
 
         self.rootEntity = rootEntity;
-
-        /*self.ouApplicationUsers = ouApplicationUsers;
-        self.getOrganizationsForAppUser = function (ouAppUser) {
-            self.organizationsForAppUser = _.map(self.ouApplicationUsers, function (ouAppUser) {
-                return {
-                    ou: ouAppUser.ouid,
-                    status: (ouAppUser ? ouAppUser.status : ouAppUser.status),
-                    id: ouAppUser.id
-                }
-            });
-        };
-
-        self.getOrganizationsForAppUser();*/
         self.organizationsForAppUser = employeeService.getEmployee().ouList;
         /**
          * @description Current ou application user
@@ -292,20 +281,25 @@ module.exports = function (app) {
         self.requestForApprove = (selectedTab === 'signature');
         self.usersWhoSetYouAsProxy = [];
 
+        self.isSignaturesLoaded = false;
+        self.isOutOfOfficeLoaded = false;
+
         /**
          * @description Set the current tab name
          * @param tabName
          */
         self.setCurrentTab = function (tabName) {
             var defer = $q.defer();
-            if (tabName === 'signature') {
+            if (tabName.toLowerCase() === 'signature' && !self.isSignaturesLoaded) {
                 self.loadSignatures(self.applicationUser.id)
                     .then(function () {
+                        self.isSignaturesLoaded = true;
                         defer.resolve(tabName);
                     });
-            } else if (tabName === 'ooos') {
+            } else if (tabName.toLowerCase() === 'outofofficesettings') {
                 ouApplicationUserService.getUsersWhoSetYouAsProxy(self.applicationUser.id)
                     .then(function (result) {
+                        self.isOutOfOfficeLoaded = true;
                         self.usersWhoSetYouAsProxy = result;
                         defer.resolve(tabName);
                     })
@@ -319,17 +313,22 @@ module.exports = function (app) {
 
         self.tabsToShow = [
             'general',
-            'ns',
-            'ooos',
-            'uc',
-            'wfg',
+            'notificationSettings',
+            'outOfOfficeSettings',
+            'userComments',
+            'workflowGroups',
             'folders',
-            'signature'
+            'signature',
+            'predefinedActions'
         ];
         self.showTab = function (tabName) {
             return (self.tabsToShow.indexOf(tabName) > -1);
         };
         self.selectedTabIndex = self.tabsToShow.indexOf(self.selectedTab);
+
+        if (self.selectedTab !== 'general') {
+            self.setCurrentTab('general');
+        }
 
         /**
          * @description Changes the sms notifications to null/empty/0 when notifications are set to false or revert them when set to true
@@ -365,20 +364,6 @@ module.exports = function (app) {
             self.resetNotificationsUserPreferences('newItemEmailNotify', 'newItemEmailPriority', [userPreferencesForm.newItemEmailPriority]);
             self.resetNotificationsUserPreferences('deadlineEmailNotify', 'deadlineEmailPriority', [userPreferencesForm.deadlineEmailPriority]);
             self.resetNotificationsUserPreferences('reminderEmailNotify', ['reminderEmailPriority', 'reminderEmailDays'], [userPreferencesForm.reminderEmailPriority, userPreferencesForm.reminderEmailDays]);
-        };
-
-        /**
-         * @description Opens dialog for add new theme
-         * @param $event
-         */
-        self.openAddThemeDialog = function ($event) {
-            themeService
-                .controllerMethod
-                .themeAdd($event)
-                .then(function (result) {
-                    self.themes.unshift(result);
-                    self.applicationUser.defaultThemeID = result.id;
-                })
         };
 
         /**
@@ -964,6 +949,7 @@ module.exports = function (app) {
         /**
          * @description Delete single user workflow group
          * @param userWorkflowGroup
+         * @param workflowGroup
          * @param $event
          */
         self.removeUserWorkflowGroup = function (userWorkflowGroup, workflowGroup, $event) {
@@ -985,7 +971,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Delete single user workflow group
+         * @description Delete bulk user workflow groups
          * @param $event
          */
         self.removeBulkUserWorkflowGroups = function ($event) {
@@ -1064,16 +1050,6 @@ module.exports = function (app) {
                             toast.success(langService.get('selected_status_updated'));
                         });
                 });
-        };
-
-
-        /**
-         * @description Close the popup
-         */
-        self.closeUserPreferencePopupFromCtrl = function () {
-            if (self.requestForApprove)
-                dialog.hide(self.applicationUser.signature);
-            dialog.cancel();
         };
 
 
@@ -1188,7 +1164,6 @@ module.exports = function (app) {
             self.enableAdd = false;
         };
 
-
         /**
          * @description edit signature
          * @param signature
@@ -1302,6 +1277,136 @@ module.exports = function (app) {
             return proxyUser.applicationUser.id === self.ouApplicationUser.applicationUser.id;
         };
 
+
+        self.predefinedActions = angular.copy(predefinedActions);
+        self.predefinedActionsCopy = angular.copy(self.predefinedActions);
+        self.selectedPredefinedActions = [];
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataPredefinedActions = function () {
+            self.predefinedActions = $filter('orderBy')(self.predefinedActions, self.predefinedActionsGrid.order);
+        };
+
+        self.predefinedActionsGrid = {
+            name: 'predefinedActions',
+            progress: null,
+            limit: 5, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20,
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.predefinedActions.length + 21);
+                    }
+                }
+            ],
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.predefinedActions = gridService.searchGridData(self.predefinedActionsGrid, self.predefinedActionsCopy);
+            }
+        };
+
+        self.predefinedActionServices = {
+            'activate': predefinedActionService.activateBulkPredefinedActions,
+            'deactivate': predefinedActionService.deactivateBulkPredefinedActions,
+            'true': predefinedActionService.activatePredefinedAction,
+            'false': predefinedActionService.deactivatePredefinedAction
+        };
+
+        /**
+         * @description reload the predefined actions grid
+         * @param pageNumber
+         * @param $event
+         * @return {*|Promise<U>}
+         */
+        self.reloadPredefinedActions = function (pageNumber, $event) {
+            var defer = $q.defer();
+            self.predefinedActionsGrid.progress = defer.promise;
+
+            return predefinedActionService
+                .loadPredefinedActionsForUser($event)
+                .then(function (result) {
+                    self.predefinedActions = result;
+                    self.predefinedActionsCopy = angular.copy(self.predefinedActions);
+                    console.log('self.predefinedActionsCopy', self.predefinedActionsCopy);
+                    self.selectedPredefinedActions = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.predefinedActionsGrid.page = pageNumber;
+                    self.getSortedDataPredefinedActions();
+                });
+        };
+
+
+        /**
+         * @description Opens the popup to add new predefined action
+         * @param $event
+         */
+        self.openAddPredefinedActionDialog = function ($event) {
+            predefinedActionService
+                .controllerMethod
+                .predefinedActionAdd($event)
+                .then(function (result) {
+                    self.reloadPredefinedActions(self.predefinedActionsGrid.page).then(function () {
+                        toast.success(langService.get('add_success').change({name: result.getNames()}));
+                    });
+                });
+        };
+
+        /**
+         * @description Opens the popup to edit predefined action
+         * @param record
+         * @param $event
+         */
+        self.openEditPredefinedActionDialog = function (record, $event) {
+            predefinedActionService
+                .controllerMethod
+                .predefinedActionEdit(record, $event)
+                .then(function (result) {
+                    self.reloadPredefinedActions(self.predefinedActionsGrid.page).then(function () {
+                        toast.success(langService.get('edit_success').change({name: result.getNames()}));
+                    });
+                });
+        };
+
+
+        /**
+         * @description Delete single predefined action
+         * @param record
+         * @param $event
+         */
+        self.removePredefinedAction = function (record, $event) {
+            predefinedActionService
+                .controllerMethod
+                .predefinedActionDelete(record, $event)
+                .then(function () {
+                    self.reloadPredefinedActions(self.grid.page);
+                });
+        };
+
+        /**
+         * @description Change the status of predefined action
+         * @param record
+         */
+        self.changeStatusPredefinedAction = function (record) {
+            self.predefinedActionServices[record.status](record)
+                .then(function () {
+                    toast.success(langService.get('status_success'));
+                })
+                .catch(function () {
+                    record.status = !record.status;
+                    dialog.errorMessage(langService.get('something_happened_when_update_status'));
+                });
+        };
+
+
         /**
          * @description Clears the searchText for the given field
          * @param fieldType
@@ -1322,9 +1427,18 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description Close the popup
+         */
+        self.closeUserPreferencePopupFromCtrl = function () {
+            if (self.requestForApprove)
+                dialog.hide(self.applicationUser.signature);
+            dialog.cancel();
+        };
+
         self.$onInit = function () {
             self.filteredSecurityLevels = _.filter(self.securityLevels, self.isSecurityLevelInclude);
-        }
+        };
 
     });
 };

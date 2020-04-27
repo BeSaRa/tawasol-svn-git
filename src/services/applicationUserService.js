@@ -420,8 +420,11 @@ module.exports = function (app) {
                                 return resolveOuApplicationUsers.promise.then(function () {
                                     return _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser);
                                 });
+                            },
+                            predefinedActions: function (predefinedActionService) {
+                                'ngInject';
+                                return predefinedActionService.loadPredefinedActionsForUser();
                             }
-
                         }
                     });
             },

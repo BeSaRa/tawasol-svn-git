@@ -90,6 +90,10 @@ module.exports = function (app) {
                 .setEscalationStatus(result.escalationStatus)
                 .setEscalationUser(result.escalationUserId)
                 .setEscalationUserOUId(result.escalationUserId);
+
+            if (self.fromPredefined) {
+                distWorkflowItem.setSLADueDate(result.sLADueDate);
+            }
         }
 
         /**
@@ -132,7 +136,8 @@ module.exports = function (app) {
                     dialogTitle: dialogTitle,
                     distWorkflowItem: distWorkflowItem,
                     gridName: self.gridName,
-                    organizationGroups: self.organizationGroups
+                    organizationGroups: self.organizationGroups,
+                    fromPredefined: self.fromPredefined
                 }
             })
         };

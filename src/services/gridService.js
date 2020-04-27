@@ -153,6 +153,9 @@ module.exports = function (app) {
                 presidentMinisters: 'launchPreMinisters',
                 wfGroups: 'launchWfGroups',
                 ous: 'launchOus',
+            },
+            userPreference: {
+                predefinedActions: 'predefinedActions'
             }
         };
 

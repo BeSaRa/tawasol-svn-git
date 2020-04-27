@@ -393,6 +393,8 @@
                 .addToAllWithBase('overdueCounters', 'cms-entity/user/landing-page/followup-counter')
                 // linked person
                 .addToAllWithBase('linkedPerson', 'cms-entity/admin/linked-person')
+                // predefined actions
+                .addToAllWithBase('predefinedAction', 'cms-entity/admin/user-dist-wf')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

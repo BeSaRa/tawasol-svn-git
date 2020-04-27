@@ -58,6 +58,25 @@ module.exports = function (app) {
                     .setRegOuId(organization.regouId || organization.regOuId)
                     .setTempRegOUSection(organization.tempRegOUSection);
             };
+            DistributionOUWFItem.prototype.mapFromPredefinedActionMemberOrganization = function (organization) {
+                return this
+                    //.setRelationId(organization.toOUInfo.relationId)
+                    .setArName(organization.toOUInfo.arName)
+                    .setEnName(organization.toOUInfo.enName)
+                    .setHasRegistry(organization.toOUInfo.hasRegistry)
+                    .setToOUId(organization.toOUID)
+                    .setSendSMS(organization.sendSMS)
+                    .setSendEmail(organization.sendEmail)
+                    .setRegOuId(organization.toOUInfo.regouId || organization.toOUInfo.regOuId)
+                    //.setTempRegOUSection(organization.tempRegOUSection)
+                    .setEscalationStatus(organization.escalationStatus)
+                    .setEscalationUser(organization.escalationUserId)
+                    .setEscalationUserOUId(organization.escalationUserOUId)
+                    .setAction(organization.wfActionInfo)
+                    .setComments(organization.userComment)
+                    .setSecureAction(organization.secureComment)
+                    .setSLADueDate(organization.sLADueDate);
+            };
             DistributionOUWFItem.prototype.setToOUId = function (toOUId) {
                 this.toOUId = toOUId;
                 return this;

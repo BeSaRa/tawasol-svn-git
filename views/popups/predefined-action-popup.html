@@ -1,0 +1,843 @@
+<md-dialog class="dialog-extend" layout="column"
+           ng-class="{'fullscreen':ctrl.fullScreen}"
+           id="correspondence-workflow-popup"
+           aria-label="launch correspondence workflow">
+    <!-- Header -->
+    <div class="correspondence-workflow-popup-dialog-header" layout="row" layout-align="start center">
+        <div>
+            <md-button class="md-icon-button" ng-click="ctrl.toggleWorkflowSidebar()">
+                <md-icon md-svg-icon="menu"></md-icon>
+            </md-button>
+        </div>
+        <span md-truncate ng-if="!ctrl.editMode" class="p20 subject-header">{{lang.predefined_actions}}</span>
+        <span md-truncate ng-if="ctrl.editMode" class="p20 subject-header">{{lang.predefined_actions}} - {{ctrl.predefinedActionModel.getNames()}}</span>
+
+        <span flex></span>
+        <!--<md-progress-circular md-mode="indeterminate"
+                              ng-if="ctrl.loadingIndicatorService.loading"></md-progress-circular>-->
+        <md-button ng-click="ctrl.toggleWorkflowFullScreen()" class="md-icon-button">
+            <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen'}}"></md-icon>
+        </md-button>
+        <md-button ng-click="ctrl.closePopup()"
+                   class="md-icon-button">
+            <md-icon md-svg-icon="close" class="red-text"></md-icon>
+        </md-button>
+    </div>
+    <md-dialog-content scroll-directive flex>
+        <div>
+            <div flex layout="row">
+                <!-- Side-nav -->
+                <md-sidenav layout="column" md-is-locked-open="ctrl.sidebarStatus"
+                            md-component-id="correspondence-workflow-popup" id="sidebar-correspondence-workflow-popup">
+                    <div scroll-directive>
+                        <ul class="workflow-list">
+                            <li layout="row" ng-if="model.show" ng-class="{'selected-tab':ctrl.isSelectedTab(tab)}"
+                                ng-repeat="(tab , model) in ctrl.workflowTabs track by $index">
+                                <md-button flex ng-disabled="model.disabled" ng-click="ctrl.selectTab(tab)">
+                                    <div layout="row" layout-align="start center">
+                                        <md-icon md-svg-icon="{{model.icon}}"></md-icon>
+                                        <span flex>{{lang.get(model.lang)}}</span>
+                                    </div>
+                                </md-button>
+                            </li>
+                        </ul>
+                    </div>
+                </md-sidenav>
+                <!-- Content -->
+                <md-content flex scroll-directive class="relative" layout="row">
+                    <div class="p20">
+                        <form name="predefinedActionForm">
+                            <!-- Favorites -->
+                            <div flex layout="column" ng-if="ctrl.isSelectedTab('favorites')">
+                                <fieldset>
+                                    <legend class="md-accent">{{lang.basic_info}}</legend>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="arName">{{lang.arabic_name}}</label>
+                                            <input name="arName" id="arName" required minlength="4"
+                                                   ng-model="ctrl.predefinedAction.arName" maxlength="80"
+                                                   custom-validate-directive="A1NS">
+                                            <div ng-messages="predefinedActionForm.arName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="enName">{{lang.english_name}}</label>
+                                            <input name="enName" id="enName" required minlength="3"
+                                                   ng-model="ctrl.predefinedAction.enName" maxlength="80"
+                                                   custom-validate-directive="E1NS">
+                                            <div ng-messages="predefinedActionForm.enName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <div class="cms-input-container">
+                                            <md-switch flex ng-model="ctrl.predefinedAction.status">
+                                                <label>{{lang.status}} :
+                                                    {{ctrl.predefinedAction.getTranslatedYesNo('status')}}</label>
+                                            </md-switch>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div layout="row">
+                                    <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                                 workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                    <span flex></span>
+                                    <grid-search-directive grid="ctrl.grid.favoriteUsers"
+                                                           ng-if="ctrl.selectedFavoriteTab === 'users'"></grid-search-directive>
+                                    <grid-search-directive grid="ctrl.grid.favoriteOus"
+                                                           ng-if="ctrl.selectedFavoriteTab === 'ou'"></grid-search-directive>
+                                </div>
+                                <div>
+                                    <br/>
+                                </div>
+                                <md-card layout="row" class="m0">
+                                    <md-tabs md-dynamic-height flex id="favorites-tabs">
+                                        <!-- Users -->
+                                        <md-tab label="{{lang.users}}"
+                                                md-on-select="ctrl.setCurrentFavoriteTab('users')">
+                                            <div>
+                                                <workflow-users-directive
+                                                        apply-notification-settings="ctrl.applyNotificationSettings"
+                                                        exclude-selected="false"
+                                                        allow-favorites="true"
+                                                        callback-delete-from-selected="ctrl.deleteFromSelected"
+                                                        callback-add-selected-user-with-ignore-to-grid="ctrl.addSelectedUserWithIgnoreToGrid"
+                                                        callback-add-selected-user-to-grid="ctrl.addSelectedUserToGrid"
+                                                        callback-set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                                        callback-add-selected-users-with-ignore-to-grid="ctrl.addSelectedUsersWithIgnoreToGrid"
+                                                        callback-add-selected-users-to-grid="ctrl.addSelectedUsersToGrid"
+                                                        callback-set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                                        callback-open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                                        callback-toggle-fav="ctrl.toggleFav"
+                                                        callback-user-not-exists="ctrl.workItemNotExists"
+                                                        callback-all-in-favorites="ctrl.allInFavorites"
+                                                        callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                                        workflow-comments="ctrl.comments"
+                                                        workflow-actions="ctrl.workflowActions"
+                                                        grid="ctrl.grid"
+                                                        multi-select="true"
+                                                        grid-name="favoriteUsers"
+                                                        grid-items="ctrl.favoriteUsers"
+                                                        organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
+                                            </div>
+                                        </md-tab>
+                                        <!-- Organizations -->
+                                        <md-tab
+                                                md-on-select="ctrl.setCurrentFavoriteTab('ou')"
+                                                label="{{lang.organizations}}">
+                                            <div>
+                                                <workflow-items-directive
+                                                        multi-select="true"
+                                                        exclude-selected="false"
+                                                        allow-favorites="true"
+                                                        grid-type="Organization"
+                                                        callback-all-in-favorites="ctrl.allInFavorites"
+                                                        callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                                        item-not-exists-callback="ctrl.workItemNotExists"
+                                                        workflow-actions="ctrl.workflowActions"
+                                                        workflow-comments="ctrl.comments"
+                                                        selected="ctrl.selectedWorkflowItems"
+                                                        workflow-items="ctrl.favoriteOrganizations"
+                                                        grid-name="favoriteOUs"
+                                                        grid="ctrl.grid.favoriteOus"
+                                                        organization-groups="ctrl.organizationGroupsCopy"
+                                                        from-predefined="true"></workflow-items-directive>
+                                            </div>
+                                        </md-tab>
+                                    </md-tabs>
+                                </md-card>
+                                <div>
+                                    <br/>
+                                </div>
+                                <current-tab-label-directive override-icon="vector-selection"
+                                                             override-title="selected_users_departments"
+                                                             selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <selected-workflow-items-directive
+                                        workflow-comments="ctrl.comments"
+                                        workflow-actions="ctrl.workflowActions"
+                                        workflow-items="ctrl.selectedWorkflowItems"
+                                        organization-groups="ctrl.organizationGroupsCopy"
+                                        from-predefined="true"></selected-workflow-items-directive>
+                            </div>
+                            <!-- Users -->
+                            <div flex layout="column" ng-if="ctrl.isSelectedTab('users')">
+                                <fieldset>
+                                    <legend class="md-accent">{{lang.basic_info}}</legend>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="arName">{{lang.arabic_name}}</label>
+                                            <input name="arName" id="arName" required minlength="4"
+                                                   ng-model="ctrl.predefinedAction.arName" maxlength="80"
+                                                   custom-validate-directive="A1NS">
+                                            <div ng-messages="predefinedActionForm.arName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="enName">{{lang.english_name}}</label>
+                                            <input name="enName" id="enName" required minlength="3"
+                                                   ng-model="ctrl.predefinedAction.enName" maxlength="80"
+                                                   custom-validate-directive="E1NS">
+                                            <div ng-messages="predefinedActionForm.enName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <div class="cms-input-container">
+                                            <md-switch flex ng-model="ctrl.predefinedAction.status">
+                                                <label>{{lang.status}} :
+                                                    {{ctrl.predefinedAction.getTranslatedYesNo('status')}}</label>
+                                            </md-switch>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <!-- Search users -->
+                                <div enter-submit-directive="user_search" layout="row">
+                                    <md-input-container ng-if="!ctrl.usersCriteria.hide">
+                                        <label for="ou">{{lang.select_organization}}</label>
+                                        <md-select id="ou" name="ou"
+                                                   ng-change="ctrl.onSearchUsers()"
+                                                   ng-model="ctrl.usersCriteria.ou"
+                                                   md-on-close="ctrl.clearSearchText('inlineUserOU')"
+                                                   data-md-container-class="select-header-container sticky-search-bar">
+                                            <md-select-header class="select-header">
+                                                <input ng-model="ctrl.inlineUserOUSearchText"
+                                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                            </md-select-header>
+                                            <md-option
+                                                    ng-repeat="organization in ctrl.organizationGroups | translatedNameFilter: ctrl.inlineUserOUSearchText : 'getNameByLanguageRegOUSection'"
+                                                    ng-value="organization">
+                                        <span
+                                                md-highlight-text="ctrl.inlineUserOUSearchText"
+                                                md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <div ng-if="!ctrl.usersCriteria.hide">
+                                        <md-button tooltip="{{lang.send_to_whole_department}}" id="add_organization"
+                                                   ng-disabled="!ctrl.workItemNotExists(ctrl.usersCriteria.ou) || ctrl.loadingIndicatorService.loading || !ctrl.usersCriteria.ou || ctrl.isPrivateDoc()"
+                                                   class="md-icon-button mt16"
+                                                   ng-click="ctrl.addToSelected(ctrl.usersCriteria.ou)">
+                                            <md-icon md-svg-icon="bank-plus"></md-icon>
+                                        </md-button>
+                                    </div>
+                                    <md-input-container flex>
+                                        <label for="arabic_name">{{lang.arabic_name}}</label>
+                                        <input id="arabic_name" ng-model="ctrl.usersCriteria.arName">
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="english_name">{{lang.english_name}}</label>
+                                        <input id="english_name" ng-model="ctrl.usersCriteria.enName">
+                                    </md-input-container>
+                                    <div>
+                                        <md-button id="user_search" ng-disabled="ctrl.loadingIndicatorService.loading"
+                                                   class="md-raised md-primary"
+                                                   ng-click="ctrl.onSearchUsers()">
+                                            {{lang.search}}
+                                        </md-button>
+                                    </div>
+                                </div>
+
+                                <workflow-users-directive
+                                        apply-notification-settings="ctrl.applyNotificationSettings"
+                                        exclude-selected="true"
+                                        allow-favorites="true"
+                                        callback-delete-from-selected="ctrl.deleteFromSelected"
+                                        callback-add-selected-user-with-ignore-to-grid="ctrl.addSelectedUserWithIgnoreToGrid"
+                                        callback-add-selected-user-to-grid="ctrl.addSelectedUserToGrid"
+                                        callback-set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                        callback-add-selected-users-with-ignore-to-grid="ctrl.addSelectedUsersWithIgnoreToGrid"
+                                        callback-add-selected-users-to-grid="ctrl.addSelectedUsersToGrid"
+                                        callback-set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                        callback-open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                        callback-toggle-fav="ctrl.toggleFav"
+                                        callback-user-not-exists="ctrl.workItemNotExists"
+                                        callback-all-in-favorites="ctrl.allInFavorites"
+                                        callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                        grid="ctrl.grid"
+                                        workflow-comments="ctrl.comments"
+                                        workflow-actions="ctrl.workflowActions"
+                                        multi-select="true"
+                                        grid-name="users"
+                                        grid-items="ctrl.users"
+                                        organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <current-tab-label-directive override-icon="vector-selection"
+                                                             override-title="selected_users_departments"
+                                                             selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <selected-workflow-items-directive
+                                        workflow-comments="ctrl.comments"
+                                        workflow-actions="ctrl.workflowActions"
+                                        workflow-items="ctrl.selectedWorkflowItems"
+                                        organization-groups="ctrl.organizationGroupsCopy"
+                                        from-predefined="true"></selected-workflow-items-directive>
+                            </div>
+                            <!-- Private Users -->
+                            <div flex layout="column" ng-if="ctrl.isSelectedTab('private_users')">
+                                <fieldset>
+                                    <legend class="md-accent">{{lang.basic_info}}</legend>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="arName">{{lang.arabic_name}}</label>
+                                            <input name="arName" id="arName" required minlength="4"
+                                                   ng-model="ctrl.predefinedAction.arName" maxlength="80"
+                                                   custom-validate-directive="A1NS">
+                                            <div ng-messages="predefinedActionForm.arName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="enName">{{lang.english_name}}</label>
+                                            <input name="enName" id="enName" required minlength="3"
+                                                   ng-model="ctrl.predefinedAction.enName" maxlength="80"
+                                                   custom-validate-directive="E1NS">
+                                            <div ng-messages="predefinedActionForm.enName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <div class="cms-input-container">
+                                            <md-switch flex ng-model="ctrl.predefinedAction.status">
+                                                <label>{{lang.status}} :
+                                                    {{ctrl.predefinedAction.getTranslatedYesNo('status')}}</label>
+                                            </md-switch>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div layout="row">
+                                    <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                                 workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                    <span flex></span>
+                                    <grid-search-directive grid="ctrl.grid.privateUsers"></grid-search-directive>
+                                </div>
+                                <div>
+                                    <br/>
+                                </div>
+                                <workflow-users-directive
+                                        apply-notification-settings="ctrl.applyNotificationSettings"
+                                        exclude-selected="false"
+                                        allow-favorites="false"
+                                        callback-delete-from-selected="ctrl.deleteFromSelected"
+                                        callback-add-selected-user-with-ignore-to-grid="ctrl.addSelectedUserWithIgnoreToGrid"
+                                        callback-add-selected-user-to-grid="ctrl.addSelectedUserToGrid"
+                                        callback-set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                        callback-add-selected-users-with-ignore-to-grid="ctrl.addSelectedUsersWithIgnoreToGrid"
+                                        callback-add-selected-users-to-grid="ctrl.addSelectedUsersToGrid"
+                                        callback-set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                        callback-open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                        callback-toggle-fav="ctrl.toggleFav"
+                                        callback-user-not-exists="ctrl.workItemNotExists"
+                                        callback-all-in-favorites="ctrl.allInFavorites"
+                                        callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                        grid="ctrl.grid"
+                                        workflow-comments="ctrl.comments"
+                                        workflow-actions="ctrl.workflowActions"
+                                        multi-select="true"
+                                        grid-name="privateUsers"
+                                        grid-items="ctrl.privateUsers"
+                                        organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <current-tab-label-directive override-icon="vector-selection"
+                                                             override-title="selected_users_departments"
+                                                             selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <selected-workflow-items-directive
+                                        workflow-comments="ctrl.comments"
+                                        workflow-actions="ctrl.workflowActions"
+                                        workflow-items="ctrl.selectedWorkflowItems"
+                                        organization-groups="ctrl.organizationGroupsCopy"
+                                        from-predefined="true"></selected-workflow-items-directive>
+                            </div>
+                            <!-- Managers -->
+                            <div flex layout="column" ng-if="ctrl.isSelectedTab('manager_users')">
+                                <fieldset>
+                                    <legend class="md-accent">{{lang.basic_info}}</legend>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="arName">{{lang.arabic_name}}</label>
+                                            <input name="arName" id="arName" required minlength="4"
+                                                   ng-model="ctrl.predefinedAction.arName" maxlength="80"
+                                                   custom-validate-directive="A1NS">
+                                            <div ng-messages="predefinedActionForm.arName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="enName">{{lang.english_name}}</label>
+                                            <input name="enName" id="enName" required minlength="3"
+                                                   ng-model="ctrl.predefinedAction.enName" maxlength="80"
+                                                   custom-validate-directive="E1NS">
+                                            <div ng-messages="predefinedActionForm.enName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <div class="cms-input-container">
+                                            <md-switch flex ng-model="ctrl.predefinedAction.status">
+                                                <label>{{lang.status}} :
+                                                    {{ctrl.predefinedAction.getTranslatedYesNo('status')}}</label>
+                                            </md-switch>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div layout="row">
+                                    <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                                 workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                    <span flex></span>
+                                    <grid-search-directive grid="ctrl.grid['managerUsers']"></grid-search-directive>
+                                </div>
+                                <div>
+                                    <br/>
+                                </div>
+                                <workflow-users-directive
+                                        apply-notification-settings="ctrl.applyNotificationSettings"
+                                        exclude-selected="false"
+                                        allow-favorites="true"
+                                        callback-delete-from-selected="ctrl.deleteFromSelected"
+                                        callback-add-selected-user-with-ignore-to-grid="ctrl.addSelectedUserWithIgnoreToGrid"
+                                        callback-add-selected-user-to-grid="ctrl.addSelectedUserToGrid"
+                                        callback-set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                        callback-add-selected-users-with-ignore-to-grid="ctrl.addSelectedUsersWithIgnoreToGrid"
+                                        callback-add-selected-users-to-grid="ctrl.addSelectedUsersToGrid"
+                                        callback-set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                        callback-open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                        callback-toggle-fav="ctrl.toggleFav"
+                                        callback-user-not-exists="ctrl.workItemNotExists"
+                                        callback-all-in-favorites="ctrl.allInFavorites"
+                                        callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                        grid="ctrl.grid"
+                                        workflow-comments="ctrl.comments"
+                                        workflow-actions="ctrl.workflowActions"
+                                        multi-select="true"
+                                        grid-name="managerUsers"
+                                        grid-items="ctrl.managerUsers"
+                                        organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <current-tab-label-directive override-icon="vector-selection"
+                                                             override-title="selected_users_departments"
+                                                             selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <selected-workflow-items-directive
+                                        workflow-comments="ctrl.comments"
+                                        workflow-actions="ctrl.workflowActions"
+                                        workflow-items="ctrl.selectedWorkflowItems"
+                                        organization-groups="ctrl.organizationGroupsCopy"
+                                        from-predefined="true"></selected-workflow-items-directive>
+                            </div>
+                            <!-- Vice Managers -->
+                            <div flex layout="column" ng-if="ctrl.isSelectedTab('vice_manager_users')">
+                                <fieldset>
+                                    <legend class="md-accent">{{lang.basic_info}}</legend>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="arName">{{lang.arabic_name}}</label>
+                                            <input name="arName" id="arName" required minlength="4"
+                                                   ng-model="ctrl.predefinedAction.arName" maxlength="80"
+                                                   custom-validate-directive="A1NS">
+                                            <div ng-messages="predefinedActionForm.arName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="enName">{{lang.english_name}}</label>
+                                            <input name="enName" id="enName" required minlength="3"
+                                                   ng-model="ctrl.predefinedAction.enName" maxlength="80"
+                                                   custom-validate-directive="E1NS">
+                                            <div ng-messages="predefinedActionForm.enName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <div class="cms-input-container">
+                                            <md-switch flex ng-model="ctrl.predefinedAction.status">
+                                                <label>{{lang.status}} :
+                                                    {{ctrl.predefinedAction.getTranslatedYesNo('status')}}</label>
+                                            </md-switch>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div layout="row">
+                                    <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                                 workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                    <span flex></span>
+                                    <grid-search-directive grid="ctrl.grid['viceManagerUsers']"></grid-search-directive>
+                                </div>
+                                <div>
+                                    <br/>
+                                </div>
+                                <workflow-users-directive
+                                        apply-notification-settings="ctrl.applyNotificationSettings"
+                                        exclude-selected="false"
+                                        allow-favorites="true"
+                                        callback-delete-from-selected="ctrl.deleteFromSelected"
+                                        callback-add-selected-user-with-ignore-to-grid="ctrl.addSelectedUserWithIgnoreToGrid"
+                                        callback-add-selected-user-to-grid="ctrl.addSelectedUserToGrid"
+                                        callback-set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                        callback-add-selected-users-with-ignore-to-grid="ctrl.addSelectedUsersWithIgnoreToGrid"
+                                        callback-add-selected-users-to-grid="ctrl.addSelectedUsersToGrid"
+                                        callback-set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                        callback-open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                        callback-toggle-fav="ctrl.toggleFav"
+                                        callback-user-not-exists="ctrl.workItemNotExists"
+                                        callback-all-in-favorites="ctrl.allInFavorites"
+                                        callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                        grid="ctrl.grid"
+                                        workflow-comments="ctrl.comments"
+                                        workflow-actions="ctrl.workflowActions"
+                                        multi-select="true"
+                                        grid-name="viceManagerUsers"
+                                        grid-items="ctrl.viceManagerUsers"
+                                        organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <current-tab-label-directive override-icon="vector-selection"
+                                                             override-title="selected_users_departments"
+                                                             selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <selected-workflow-items-directive
+                                        workflow-comments="ctrl.comments"
+                                        workflow-actions="ctrl.workflowActions"
+                                        workflow-items="ctrl.selectedWorkflowItems"
+                                        organization-groups="ctrl.organizationGroupsCopy"
+                                        from-predefined="true"></selected-workflow-items-directive>
+                            </div>
+                            <!-- Head of government entities -->
+                            <div flex layout="column" ng-if="ctrl.isSelectedTab('heads_of_government_entities')">
+                                <fieldset>
+                                    <legend class="md-accent">{{lang.basic_info}}</legend>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="arName">{{lang.arabic_name}}</label>
+                                            <input name="arName" id="arName" required minlength="4"
+                                                   ng-model="ctrl.predefinedAction.arName" maxlength="80"
+                                                   custom-validate-directive="A1NS">
+                                            <div ng-messages="predefinedActionForm.arName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="enName">{{lang.english_name}}</label>
+                                            <input name="enName" id="enName" required minlength="3"
+                                                   ng-model="ctrl.predefinedAction.enName" maxlength="80"
+                                                   custom-validate-directive="E1NS">
+                                            <div ng-messages="predefinedActionForm.enName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <div class="cms-input-container">
+                                            <md-switch flex ng-model="ctrl.predefinedAction.status">
+                                                <label>{{lang.status}} :
+                                                    {{ctrl.predefinedAction.getTranslatedYesNo('status')}}</label>
+                                            </md-switch>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div layout="row">
+                                    <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                                 workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                    <span flex></span>
+                                    <grid-search-directive
+                                            grid="ctrl.grid.governmentEntitiesHeads"></grid-search-directive>
+                                </div>
+                                <div>
+                                    <br/>
+                                </div>
+                                <workflow-users-directive
+                                        apply-notification-settings="ctrl.applyNotificationSettings"
+                                        exclude-selected="false"
+                                        allow-favorites="false"
+                                        callback-delete-from-selected="ctrl.deleteFromSelected"
+                                        callback-add-selected-user-with-ignore-to-grid="ctrl.addSelectedUserWithIgnoreToGrid"
+                                        callback-add-selected-user-to-grid="ctrl.addSelectedUserToGrid"
+                                        callback-set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                        callback-add-selected-users-with-ignore-to-grid="ctrl.addSelectedUsersWithIgnoreToGrid"
+                                        callback-add-selected-users-to-grid="ctrl.addSelectedUsersToGrid"
+                                        callback-set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                        callback-open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                        callback-toggle-fav="ctrl.toggleFav"
+                                        callback-user-not-exists="ctrl.workItemNotExists"
+                                        callback-all-in-favorites="ctrl.allInFavorites"
+                                        callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                        grid="ctrl.grid"
+                                        workflow-comments="ctrl.comments"
+                                        workflow-actions="ctrl.workflowActions"
+                                        multi-select="true"
+                                        grid-name="governmentEntitiesHeads"
+                                        grid-items="ctrl.governmentEntitiesHeads"
+                                        organization-groups="ctrl.organizationGroupsCopy"></workflow-users-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <current-tab-label-directive override-icon="vector-selection"
+                                                             override-title="selected_users_departments"
+                                                             selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <selected-workflow-items-directive
+                                        workflow-comments="ctrl.comments"
+                                        workflow-actions="ctrl.workflowActions"
+                                        workflow-items="ctrl.selectedWorkflowItems"
+                                        organization-groups="ctrl.organizationGroupsCopy"
+                                        from-predefined="true"></selected-workflow-items-directive>
+                            </div>
+                            <!-- Workflow Groups -->
+                            <div flex layout="column" ng-if="ctrl.isSelectedTab('workflow_groups')">
+                                <fieldset>
+                                    <legend class="md-accent">{{lang.basic_info}}</legend>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="arName">{{lang.arabic_name}}</label>
+                                            <input name="arName" id="arName" required minlength="4"
+                                                   ng-model="ctrl.predefinedAction.arName" maxlength="80"
+                                                   custom-validate-directive="A1NS">
+                                            <div ng-messages="predefinedActionForm.arName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="enName">{{lang.english_name}}</label>
+                                            <input name="enName" id="enName" required minlength="3"
+                                                   ng-model="ctrl.predefinedAction.enName" maxlength="80"
+                                                   custom-validate-directive="E1NS">
+                                            <div ng-messages="predefinedActionForm.enName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <div class="cms-input-container">
+                                            <md-switch flex ng-model="ctrl.predefinedAction.status">
+                                                <label>{{lang.status}} :
+                                                    {{ctrl.predefinedAction.getTranslatedYesNo('status')}}</label>
+                                            </md-switch>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div layout="row">
+                                    <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                                 workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                    <span flex></span>
+                                    <grid-search-directive grid="ctrl.grid.workflowGroups"></grid-search-directive>
+                                </div>
+                                <div>
+                                    <br/>
+                                </div>
+                                <workflow-items-directive
+                                        multi-select="true"
+                                        exclude-selected="false"
+                                        allow-favorites="false"
+                                        grid-type="Organization"
+                                        callback-all-in-favorites="ctrl.allInFavorites"
+                                        callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                        item-not-exists-callback="ctrl.workItemNotExists"
+                                        workflow-actions="ctrl.workflowActions"
+                                        workflow-comments="ctrl.comments"
+                                        selected="ctrl.selectedWorkflowItems"
+                                        workflow-items="ctrl.workflowGroups"
+                                        grid-name="workflowGroups"
+                                        grid="ctrl.grid.workflowGroups"
+                                        wf-group-member-add-callback="ctrl.addSelectedUsersToGrid"
+                                        organization-groups="ctrl.organizationGroupsCopy"
+                                        from-predefined="true"></workflow-items-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <current-tab-label-directive override-icon="vector-selection"
+                                                             override-title="selected_users_departments"
+                                                             selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <selected-workflow-items-directive
+                                        workflow-comments="ctrl.comments"
+                                        workflow-actions="ctrl.workflowActions"
+                                        workflow-items="ctrl.selectedWorkflowItems"
+                                        organization-groups="ctrl.organizationGroupsCopy"
+                                        from-predefined="true"></selected-workflow-items-directive>
+                            </div>
+                            <!-- Organization Units -->
+                            <div flex layout="column" ng-if="ctrl.isSelectedTab('registry_organizations')">
+                                <fieldset>
+                                    <legend class="md-accent">{{lang.basic_info}}</legend>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="arName">{{lang.arabic_name}}</label>
+                                            <input name="arName" id="arName" required minlength="4"
+                                                   ng-model="ctrl.predefinedAction.arName" maxlength="80"
+                                                   custom-validate-directive="A1NS">
+                                            <div ng-messages="predefinedActionForm.arName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="enName">{{lang.english_name}}</label>
+                                            <input name="enName" id="enName" required minlength="3"
+                                                   ng-model="ctrl.predefinedAction.enName" maxlength="80"
+                                                   custom-validate-directive="E1NS">
+                                            <div ng-messages="predefinedActionForm.enName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <div class="cms-input-container">
+                                            <md-switch flex ng-model="ctrl.predefinedAction.status">
+                                                <label>{{lang.status}} :
+                                                    {{ctrl.predefinedAction.getTranslatedYesNo('status')}}</label>
+                                            </md-switch>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div layout="row">
+                                    <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                                 workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                    <span flex></span>
+                                    <grid-search-directive grid="ctrl.grid.ous"></grid-search-directive>
+                                </div>
+                                <div>
+                                    <br/>
+                                </div>
+                                <workflow-items-directive
+                                        multi-select="true"
+                                        exclude-selected="true"
+                                        allow-favorites="true"
+                                        grid-type="Organization"
+                                        callback-all-in-favorites="ctrl.allInFavorites"
+                                        callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                        toggle-fav="ctrl.toggleFav"
+                                        item-not-exists-callback="ctrl.workItemNotExists"
+                                        workflow-actions="ctrl.workflowActions"
+                                        workflow-comments="ctrl.comments"
+                                        selected="ctrl.selectedWorkflowItems"
+                                        workflow-items="ctrl.registryOrganizations"
+                                        grid-name="Ous"
+                                        grid="ctrl.grid.ous"
+                                        organization-groups="ctrl.organizationGroupsCopy"
+                                        from-predefined="true"></workflow-items-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <current-tab-label-directive override-icon="vector-selection"
+                                                             override-title="selected_users_departments"
+                                                             selected-tab="ctrl.selectedTab"
+                                                             workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                                <div>
+                                    <br/>
+                                </div>
+                                <selected-workflow-items-directive
+                                        workflow-comments="ctrl.comments"
+                                        workflow-actions="ctrl.workflowActions"
+                                        workflow-items="ctrl.selectedWorkflowItems"
+                                        organization-groups="ctrl.organizationGroupsCopy"
+                                        from-predefined="true"></selected-workflow-items-directive>
+                            </div>
+                        </form>
+                    </div>
+                </md-content>
+            </div>
+        </div>
+    </md-dialog-content>
+    <!-- Buttons and info -->
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary" ng-disabled="predefinedActionForm.$invalid"
+                   ng-click="ctrl.savePredefinedAction(predefinedActionForm, $event)">
+            {{lang.get(ctrl.textButton)}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">{{lang.close}}</md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -111,4 +111,6 @@ module.exports = function (app) {
     require('./DocumentLinkInterceptor')(app);
     require('./TaskCalenderItemInterceptor')(app);
     require('./WFUserInterceptor')(app);
+    require('./PredefinedAction')(app);
+    require('./PredefinedActionMember')(app);
 };

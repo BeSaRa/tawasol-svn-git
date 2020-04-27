@@ -55,6 +55,28 @@ module.exports = function (app) {
                     .setEscalationUserOUId(user.escalationUserId);
             };
 
+            DistributionUserWFItem.prototype.mapFromPredefinedActionMemberUser = function (user) {
+                return this
+                    .setArName(user.toUserInfo.arName)
+                    .setEnName(user.toUserInfo.enName)
+                    .setToUserDomain(user.domainName)
+                    .setAppUserOUID(user.toOUID)
+                    .setToUserId(user.toUserId)
+                    .setArOUName(user.toOUInfo.arName)
+                    .setEnOUName(user.toOUInfo.enName)
+                    //.setRelationId(user.relationId)
+                    .setProxyInfo(user.proxyInfo)
+                    .setSendSMS(user.sendSMS)
+                    .setSendEmail(user.sendEmail)
+                    .setEscalationStatus(user.escalationStatus)
+                    .setEscalationUser(user.escalationUserId)
+                    .setEscalationUserOUId(user.escalationUserOUId)
+                    .setAction(user.wfActionInfo)
+                    .setSLADueDate(user.sLADueDate)
+                    .setComments(user.userComment)
+                    .setSecureAction(user.secureComment);
+            };
+
             DistributionUserWFItem.prototype.setToUserDomain = function (toUserDomain) {
                 this.toUserDomain = toUserDomain;
                 return this;

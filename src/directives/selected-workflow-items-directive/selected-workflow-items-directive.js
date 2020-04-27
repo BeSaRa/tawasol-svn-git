@@ -15,7 +15,8 @@ module.exports = function (app) {
                 workflowComments: '=',
                 deleteCallback: '=',
                 deleteBulkCallback: '=',
-                organizationGroups : '='
+                organizationGroups : '=',
+                fromPredefined: '='
             }
         }
     })
