@@ -563,11 +563,12 @@ module.exports = function (app) {
             Correspondence.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming);
             };
-            Correspondence.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, actionMembers) {
-                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, false, false, false, actionMembers);
+            Correspondence.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, isDeptIncoming, isDeptSent, actionMembers) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, isDeptSent, false, actionMembers);
             };
-            Correspondence.prototype.quickSendLaunchWorkflow = function ($event, defaultTab) {
-                return correspondenceService.openQuickSendDialog(this, defaultTab, $event);
+            Correspondence.prototype.quickSendLaunchWorkflow = function ($event, tab, action, isDeptIncoming, isDeptSent) {
+                action = action || 'forward';
+                return correspondenceService.openQuickSendDialog(this, tab, action, isDeptIncoming, isDeptSent, $event);
             };
 
             Correspondence.prototype.launchWorkFlowAndCheckExists = function ($event, action, tab, isDeptIncoming, ignoreConformation) {
@@ -682,7 +683,7 @@ module.exports = function (app) {
                 return correspondenceService.archiveCorrespondence(this, $event, ignoreMessage);
             };
 
-            Correspondence.prototype.removePermanentlyDocument= function($event){
+            Correspondence.prototype.removePermanentlyDocument = function ($event) {
                 return correspondenceService.removePermanentlyCorrespondence(this, $event);
             };
 

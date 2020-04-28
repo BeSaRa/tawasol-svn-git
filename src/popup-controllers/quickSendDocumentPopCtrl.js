@@ -6,6 +6,9 @@ module.exports = function (app) {
                                                          langService,
                                                          record,
                                                          defaultTab,
+                                                         action,
+                                                         isDeptIncoming,
+                                                         isDeptSent,
                                                          predefinedActions,
                                                          predefinedActionService,
                                                          errorCode,
@@ -114,7 +117,7 @@ module.exports = function (app) {
             if (!self.isValidMembers()) {
                 return;
             }
-            self.record.launchWorkFlowFromPredefinedAction($event, 'forward', defaultTab, self.includedMembers)
+            self.record.launchWorkFlowFromPredefinedAction($event, 'forward', defaultTab, isDeptIncoming, isDeptSent, self.includedMembers)
                 .then(function () {
                     dialog.hide();
                 })

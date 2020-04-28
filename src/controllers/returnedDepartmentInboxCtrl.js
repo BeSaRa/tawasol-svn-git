@@ -284,6 +284,30 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Launch New Distribution Workflow with quick send
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.quickSend = function (workItem, $event, defer) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
+                return;
+            }
+            workItem.generalStepElm.workFlowName = "Outgoing";
+            dialog.confirmMessage(langService.get("confirm_launch_workflow")).then(function () {
+                workItem.quickSendLaunchWorkflow($event, 'favorites')
+                    .then(function () {
+                        self.reloadReturnedDepartmentInboxes(self.grid.page)
+                            .then(function () {
+                                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                                new ResolveDefer(defer);
+                            });
+                    })
+            });
+        };
+
+        /**
          * @description Manage Tags for returned department inbox item
          * @param workItem
          * @param $event
@@ -974,6 +998,22 @@ module.exports = function (app) {
                     return true;
                 }
             },
+            // Quick Send (Quick Launch)
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_quick_send',
+                shortcut: false,
+                callback: self.quickSend,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
             // View Tracking Sheet
             {
                 type: 'action',
@@ -1392,7 +1432,7 @@ module.exports = function (app) {
                     $state.is('app.department-inbox.returned') && self.refreshGrid(time);
                 });
         };
-        if (employeeService.getEmployee().getIntervalMin()){
+        if (employeeService.getEmployee().getIntervalMin()) {
             self.refreshGrid(employeeService.getEmployee().getIntervalMin());
         }
     });

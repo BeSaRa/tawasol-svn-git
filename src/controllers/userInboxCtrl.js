@@ -655,6 +655,24 @@ module.exports = function (app) {
                         });
                 });
         };
+
+        /**
+         * @description Launch distribution workflow with quick send
+         * @param record
+         * @param $event
+         * @param defer
+         */
+        self.quickSend = function (record, $event, defer) {
+            record.quickSendLaunchWorkflow($event, 'favorites')
+                .then(function () {
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                })
+        };
+
         /**
          * @description luanch workflow from after approve.
          * @param workItem
@@ -1495,6 +1513,19 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return true
                     /*&& !model.isBroadcasted()*/ // remove the this cond. after talk  with ;
+                }
+            },
+            // Quick Send (Quick Launch)
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_quick_send',
+                shortcut: true,
+                callback: self.quickSend,
+                class: "action-green",
+                //permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: function (action, model) {
+                    return true;
                 }
             },
             // Broadcast

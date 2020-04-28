@@ -900,7 +900,9 @@ module.exports = function (app) {
                 fullScreen: 'fullscreen',
                 fullScreenExit: 'fullscreen-exit',
                 endFollowup: 'calendar-remove-outline',
-                exportAndSend: 'file-export-outline'
+                exportAndSend: 'file-export-outline',
+                launch: 'sitemap',
+                quickSend: 'sitemap'
             },
             indicators: {
                 securityLevel: 'security',

@@ -324,6 +324,23 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Launch Distribution Workflow with quick send
+         * @param record
+         * @param $event
+         * @param defer
+         */
+        self.quickSend = function (record, $event, defer) {
+            record.quickSendLaunchWorkflow($event, 'favorites')
+                .then(function () {
+                    self.reloadFolders(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                })
+        };
+
+        /**
          * @description Reply user inbox
          * @param workItem
          * @param $event
@@ -1065,6 +1082,19 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function (action, model) {
                     return true;//!model.isBroadcasted();
+                }
+            },
+            // Quick Send (Quick Launch)
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_quick_send',
+                shortcut: true,
+                callback: self.quickSend,
+                class: "action-green",
+                //permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: function (action, model) {
+                    return true;
                 }
             },
             // Broadcast

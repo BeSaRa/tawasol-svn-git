@@ -172,6 +172,13 @@ module.exports = function (app) {
             SentItemDepartmentInbox.prototype.launchWorkFlow = function ($event, action, tab) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, false, true);
             };
+            SentItemDepartmentInbox.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, actionMembers) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, false, true, false, actionMembers);
+            };
+            SentItemDepartmentInbox.prototype.quickSendLaunchWorkflow = function ($event, tab, action) {
+                action = action || 'forward';
+                return correspondenceService.openQuickSendDialog(this, tab, action, false, true, $event);
+            };
 
 
             SentItemDepartmentInbox.prototype.manageDocumentAttachments = function ($event) {

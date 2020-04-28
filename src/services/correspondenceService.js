@@ -2151,6 +2151,7 @@ module.exports = function (app) {
          * @param isDeptIncoming
          * @param isDeptSent
          * @param fromSimplePopup
+         * @param predefinedActionMembers
          * @returns {promise|*}
          */
         self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers) {
@@ -2186,6 +2187,7 @@ module.exports = function (app) {
          * @param record
          * @param action
          * @param $event
+         * @param defaultReplyToIdentifier
          * @returns {promise|*}
          */
         self.replySimple = function (record, $event, action, defaultReplyToIdentifier) {
@@ -4711,7 +4713,7 @@ module.exports = function (app) {
 
         };
 
-        self.openQuickSendDialog = function (record, defaultTab, $event) {
+        self.openQuickSendDialog = function (record, defaultTab, action, isDeptIncoming, isDeptSent, $event) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('quick-send-document'),
@@ -4720,7 +4722,10 @@ module.exports = function (app) {
                     targetEvent: $event,
                     locals: {
                         record: record,
-                        defaultTab: defaultTab
+                        defaultTab: defaultTab,
+                        action: action,
+                        isDeptIncoming: isDeptIncoming,
+                        isDeptSent: isDeptSent
                     },
                     resolve: {
                         predefinedActions: function (predefinedActionService) {

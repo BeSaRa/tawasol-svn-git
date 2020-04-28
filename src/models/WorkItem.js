@@ -327,6 +327,13 @@ module.exports = function (app) {
             WorkItem.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming, fromSimplePopup) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, null, fromSimplePopup);
             };
+            WorkItem.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, isDeptIncoming, isDeptSent, actionMembers) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming, isDeptSent, false, actionMembers);
+            };
+            WorkItem.prototype.quickSendLaunchWorkflow = function ($event, tab, action, isDeptIncoming, isDeptSent) {
+                action = action || 'forward';
+                return correspondenceService.openQuickSendDialog(this, tab, action, isDeptIncoming, isDeptSent, $event);
+            };
             /**
              * @description to start simple launch workflow item.
              * @param $event

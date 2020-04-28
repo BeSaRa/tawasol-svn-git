@@ -220,6 +220,27 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Launch Distribution Workflow with quick send
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.quickSend = function (workItem, $event, defer) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
+                return;
+            }
+            workItem.quickSendLaunchWorkflow($event, 'favorites')
+                .then(function () {
+                    self.reloadGroupInbox(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                })
+        };
+
+        /**
          * @description Forward
          * @param workItem
          * @param $event
@@ -1074,6 +1095,22 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.forward,
                 class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            // Quick Send (Quick Launch)
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_quick_send',
+                shortcut: true,
+                callback: self.quickSend,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },

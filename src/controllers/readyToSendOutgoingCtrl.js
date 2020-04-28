@@ -215,6 +215,28 @@ module.exports = function (app) {
                         });
                 });
         };
+
+        /**
+         * @description Launch Distribution Workflow with quick send
+         * @param record
+         * @param $event
+         * @param defer
+         */
+        self.quickSend = function (record, $event, defer) {
+            if (!record.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            record.quickSendLaunchWorkflow($event, 'favorites')
+                .then(function () {
+                    self.reloadReadyToSendOutgoings(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                })
+        };
+
         /**
          * @description Archive the ready to send outgoing item
          * @param correspondence
@@ -655,6 +677,19 @@ module.exports = function (app) {
                 text: 'grid_action_launch_distribution_workflow',
                 shortcut: true,
                 callback: self.launchDistributionWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            // Quick Send (Quick Launch)
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_quick_send',
+                shortcut: true,
+                callback: self.quickSend,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {

@@ -389,6 +389,27 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Launch distribution workflow with quick send
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.quickSend = function (workItem, $event, defer) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(generator.getBookLockMessage(workItem, null));
+                return;
+            }
+            workItem.quickSendLaunchWorkflow($event, 'favorites', 'forward', true)
+                .then(function () {
+                    self.reloadIncomingDepartmentInboxes(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                })
+        };
+
         var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
             /*var info = model.getInfo();
              var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
@@ -966,6 +987,23 @@ module.exports = function (app) {
                 text: 'grid_action_launch_distribution_workflow',
                 shortcut: true,
                 callback: self.launchDistributionWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
+                checkShow: function (action, model) {
+                    //var info = model.getInfo();
+                    return model.generalStepElm.isReassigned;//!info.incomingVsId;
+                }
+            },
+            // Quick Send (Quick Launch)
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_quick_send',
+                shortcut: true,
+                callback: self.quickSend,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 disabled: function (model) {

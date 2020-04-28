@@ -302,6 +302,28 @@ module.exports = function (app) {
                         });
                 });
         };
+
+        /**
+         * @description Launch Distribution Workflow with quick send
+         * @param record
+         * @param $event
+         * @param defer
+         */
+        self.quickSend = function (record, $event, defer) {
+            if (!record.hasContent()) {
+                dialog.alertMessage(langService.get("content_not_found"));
+                return;
+            }
+            record.quickSendLaunchWorkflow($event, 'favorites')
+                .then(function () {
+                    self.reloadRejectedIncomings(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        });
+                })
+        };
+
         /**
          * @description Archive the rejected incoming item
          * @param correspondence
@@ -538,7 +560,7 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function (action, model) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
-                        }
+                }
             },
             // view
             {
@@ -556,7 +578,7 @@ module.exports = function (app) {
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
-                        },
+                },
                 subMenu: [
                     // Preview
                     {
@@ -608,8 +630,8 @@ module.exports = function (app) {
             {
                 type: 'separator',
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 showInView: false
             },
             // Remove
@@ -622,8 +644,8 @@ module.exports = function (app) {
                 callback: self.removeRejectedIncoming,
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Edit
             {
@@ -634,7 +656,7 @@ module.exports = function (app) {
                 showInView: false,
                 checkShow: function (action, model) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
-                        },
+                },
                 permissionKey: [
                     "EDIT_INCOMING’S_CONTENT",
                     "EDIT_INCOMING’S_PROPERTIES"
@@ -691,8 +713,21 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
+            },
+            // Quick Send (Quick Launch)
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_quick_send',
+                shortcut: true,
+                callback: self.quickSend,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: function (action, model) {
+                    return true;
+                }
             },
             // Archive
             {
@@ -703,8 +738,8 @@ module.exports = function (app) {
                 callback: self.archive,
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Send To Review
             {
@@ -715,8 +750,8 @@ module.exports = function (app) {
                 callback: self.sendToReview,
                 class: "action-green",
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // View Tracking Sheet
             {
@@ -726,8 +761,8 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: function (action, model) {
-                            return true;
-                        },
+                    return true;
+                },
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
             },
             // Manage
@@ -739,7 +774,7 @@ module.exports = function (app) {
                 showInView: false,
                 checkShow: function (action, model) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
-                        },
+                },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
@@ -840,8 +875,8 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model) {
-                            return true;
-                        }
+                    return true;
+                }
             },
             // Duplicate
             {
@@ -852,7 +887,7 @@ module.exports = function (app) {
                 showInView: false,
                 checkShow: function (action, model) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
-                        },
+                },
                 permissionKey: [
                     "DUPLICATE_BOOK_FROM_VERSION"
                 ],

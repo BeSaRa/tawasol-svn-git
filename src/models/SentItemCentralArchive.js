@@ -165,6 +165,13 @@ module.exports = function (app) {
             SentItemCentralArchive.prototype.launchWorkFlow = function ($event, action, tab) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, false, true);
             };
+            SentItemCentralArchive.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, actionMembers) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, false, true, false, actionMembers);
+            };
+            SentItemCentralArchive.prototype.quickSendLaunchWorkflow = function ($event, tab, action) {
+                action = action || 'forward';
+                return correspondenceService.openQuickSendDialog(this, tab, action, false, true, $event);
+            };
 
 
             SentItemCentralArchive.prototype.manageDocumentAttachments = function ($event) {
