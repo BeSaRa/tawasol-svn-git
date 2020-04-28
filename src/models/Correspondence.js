@@ -563,6 +563,12 @@ module.exports = function (app) {
             Correspondence.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming);
             };
+            Correspondence.prototype.launchWorkFlowFromPredefinedAction = function ($event, action, tab, actionMembers) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, false, false, false, actionMembers);
+            };
+            Correspondence.prototype.quickSendLaunchWorkflow = function ($event, defaultTab) {
+                return correspondenceService.openQuickSendDialog(this, defaultTab, $event);
+            };
 
             Correspondence.prototype.launchWorkFlowAndCheckExists = function ($event, action, tab, isDeptIncoming, ignoreConformation) {
                 var info = this.getInfo();

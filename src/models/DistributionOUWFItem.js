@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('DistributionOUWFItem', function (CMSModelInterceptor, langService, DistributionWFItem, rootEntity) {
+    app.factory('DistributionOUWFItem', function (CMSModelInterceptor, langService, DistributionWFItem, rootEntity, generator) {
         'ngInject';
         return function DistributionOUWFItem(model) {
             var self = this;
@@ -58,8 +58,8 @@ module.exports = function (app) {
                     .setRegOuId(organization.regouId || organization.regOuId)
                     .setTempRegOUSection(organization.tempRegOUSection);
             };
-            DistributionOUWFItem.prototype.mapFromPredefinedActionMemberOrganization = function (organization) {
-                return this
+            DistributionOUWFItem.prototype.mapFromPredefinedActionMemberOrganization = function (organization, forLaunch) {
+                this
                     //.setRelationId(organization.toOUInfo.relationId)
                     .setArName(organization.toOUInfo.arName)
                     .setEnName(organization.toOUInfo.enName)
@@ -74,8 +74,18 @@ module.exports = function (app) {
                     .setEscalationUserOUId(organization.escalationUserOUId)
                     .setAction(organization.wfActionInfo)
                     .setComments(organization.userComment)
-                    .setSecureAction(organization.secureComment)
-                    .setSLADueDate(organization.sLADueDate);
+                    .setSecureAction(organization.secureComment);
+
+                if (!forLaunch) {
+                    this.setSLADueDate(organization.sLADueDate)
+                } else {
+                    if (organization.sLADueDate) {
+                        var dueDate = generator.getNextDaysDate(organization.sLADueDate);
+                        this.setDueDate(dueDate);
+                    }
+                }
+
+                return this;
             };
             DistributionOUWFItem.prototype.setToOUId = function (toOUId) {
                 this.toOUId = toOUId;

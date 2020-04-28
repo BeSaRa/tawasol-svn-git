@@ -34,7 +34,9 @@ module.exports = function (app) {
                                                                     Information,
                                                                     fromSimplePopup,
                                                                     errorCode,
-                                                                    gridService) {
+                                                                    gridService,
+                                                                    predefinedActionService,
+                                                                    predefinedActionMembers) {
         'ngInject';
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
@@ -1484,6 +1486,16 @@ module.exports = function (app) {
                     $event.stopPropagation();
             }
         };
+
+        $timeout(function () {
+            if (predefinedActionMembers && predefinedActionMembers.length) {
+                self.selectedWorkflowItems = [];
+                predefinedActionService.typeCastMembersToDistributionWFItems(predefinedActionMembers, true, true)
+                    .then(function (result) {
+                        self.selectedWorkflowItems = result;
+                    });
+            }
+        })
 
     });
 };

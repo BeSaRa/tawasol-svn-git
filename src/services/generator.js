@@ -807,6 +807,12 @@ module.exports = function (app) {
             return -(date1.diff(date2, 'days'));
         };
 
+        self.getNextDaysDate = function(days){
+            var date = new Date();
+            date.setDate(date.getDate() + (days || 0));
+            return date;
+        };
+
         /**
          * @description Deletes all the indicators from the model
          * @param record

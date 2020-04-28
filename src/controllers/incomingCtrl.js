@@ -370,6 +370,27 @@ module.exports = function (app) {
                 });
         };
 
+        self.docActionQuickSend = function (document, $event) {
+            if (!self.incoming.hasContent()) {
+                dialog.alertMessage(langService.get("content_not_found"));
+                return;
+            }
+            var defaultTab = 'favorites';
+            if (centralArchives && self.incoming.hasContent()) {
+                defaultTab = {
+                    tab: 'registry_organizations',
+                    registryOU: self.incoming.registryOU,
+                    ou: self.incoming.ou || self.incoming.registryOU
+                }
+            }
+            document.quickSendLaunchWorkflow($event, defaultTab)
+                .then(function () {
+                    counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    self.resetAddCorrespondence();
+                });
+        };
+
         /**
          * @description Send Link To Document By Email
          * @param model
@@ -437,6 +458,18 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model, index) {
                     //Show if content is uploaded
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // Quick Send
+            {
+                text: langService.get('grid_action_quick_send'),
+                callback: self.docActionQuickSend,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: function (action, model, index) {
                     isVisible = gridService.checkToShowAction(action) && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;

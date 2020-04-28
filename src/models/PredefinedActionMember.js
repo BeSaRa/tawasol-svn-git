@@ -1,6 +1,8 @@
 module.exports = function (app) {
     app.factory('PredefinedActionMember', function (CMSModelInterceptor,
-                                                    langService) {
+                                                    langService,
+                                                    gridService,
+                                                    Information) {
         'ngInject';
         return function PredefinedActionMember(model) {
             var self = this,
@@ -31,6 +33,43 @@ module.exports = function (app) {
 
             if (model)
                 angular.extend(this, model);
+
+            /**
+             * @description Get the translated arabic or english name according to current language for member. If reverse is passed, it will return the name in language other than current language
+             * @param reverse
+             * @returns {string}
+             */
+            PredefinedActionMember.prototype.getTranslatedName = function (reverse) {
+                var name = {};
+                if (this.isUserMember()){
+                    name = this.toUserInfo;
+                } else if (this.isOrganizationMember()){
+                    name = this.toOUInfo;
+                } else if (this.isGroupMailMember()){
+                    name = this.toOUInfo;
+                }
+                return new Information(name).getTranslatedName(reverse);
+            };
+            PredefinedActionMember.prototype.getMemberTooltip = function () {
+                var title = '';
+                if (this.isGroupMailMember()) {
+                    title = 'group_mail';
+                } else if (this.isOrganizationMember()) {
+                    title = 'organization';
+                }  else if (this.isUserMember()) {
+                    title = 'user';
+                }
+                return title;
+            };
+            PredefinedActionMember.prototype.getMemberIcon = function () {
+                var icon = gridService.gridIcons.indicators.user;
+                if (this.isGroupMailMember()) {
+                    icon = gridService.gridIcons.indicators.groupMail;
+                } else if (this.isOrganizationMember()) {
+                    icon = gridService.gridIcons.indicators.regOu;
+                }
+                return icon;
+            };
 
             PredefinedActionMember.prototype.setId = function (id) {
                 this.id = id || null;

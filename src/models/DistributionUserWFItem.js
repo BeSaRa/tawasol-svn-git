@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('DistributionUserWFItem', function (CMSModelInterceptor, ProxyInfo, moment, cmsTemplate, dialog, langService, DistributionWFItem, rootEntity) {
+    app.factory('DistributionUserWFItem', function (CMSModelInterceptor, ProxyInfo, moment, cmsTemplate, dialog, langService, DistributionWFItem, rootEntity, generator) {
         'ngInject';
         return function DistributionUserWFItem(model) {
             var self = this;
@@ -55,8 +55,8 @@ module.exports = function (app) {
                     .setEscalationUserOUId(user.escalationUserId);
             };
 
-            DistributionUserWFItem.prototype.mapFromPredefinedActionMemberUser = function (user) {
-                return this
+            DistributionUserWFItem.prototype.mapFromPredefinedActionMemberUser = function (user, forLaunch) {
+                this
                     .setArName(user.toUserInfo.arName)
                     .setEnName(user.toUserInfo.enName)
                     .setToUserDomain(user.domainName)
@@ -72,9 +72,19 @@ module.exports = function (app) {
                     .setEscalationUser(user.escalationUserId)
                     .setEscalationUserOUId(user.escalationUserOUId)
                     .setAction(user.wfActionInfo)
-                    .setSLADueDate(user.sLADueDate)
                     .setComments(user.userComment)
                     .setSecureAction(user.secureComment);
+
+                if (!forLaunch) {
+                    this.setSLADueDate(user.sLADueDate)
+                } else {
+                    if (user.sLADueDate) {
+                        var dueDate = generator.getNextDaysDate(user.sLADueDate);
+                        this.setDueDate(dueDate);
+                    }
+                }
+
+                return this;
             };
 
             DistributionUserWFItem.prototype.setToUserDomain = function (toUserDomain) {

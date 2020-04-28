@@ -141,4 +141,5 @@ module.exports = function (app) {
     require('./distWorkflowGroupMembersPopCtrl')(app);
     require('./exportBulkWorkItemsPopCtrl')(app);
     require('./predefinedActionPopCtrl')(app);
+    require('./quickSendDocumentPopCtrl')(app);
 };

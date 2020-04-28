@@ -78,7 +78,6 @@ module.exports = function (app) {
         // favorite Users
         self.favoriteUsers = _mapWFUser(distributionWFService.favoriteUsers);
         self.favoriteUsersCopy = angular.copy(self.favoriteUsers);
-        console.log('predefined favoriteUsers', self.favoriteUsers);
         // favorite Organizations
         self.favoriteOrganizations = _mapOrganizationByType(distributionWFService.favoriteOrganizations);
         self.favoriteOrganizationsCopy = angular.copy(self.favoriteOrganizations);
@@ -539,18 +538,6 @@ module.exports = function (app) {
         function _mapWFUser(collection, gridName) {
             return _.map(collection, function (workflowUser) {
                 return (new DistributionUserWFItem()).mapFromWFUser(workflowUser).setGridName(gridName || null);
-            });
-        }
-
-        function _mapPredefinedActionMemberUsers(collection, gridName) {
-            return _.map(collection, function (workflowUser) {
-                return (new DistributionUserWFItem()).mapFromPredefinedActionMemberUser(workflowUser).setGridName(gridName || null);
-            });
-        }
-
-        function _mapPredefinedActionMemberOrganizations(collection, gridName) {
-            return _.map(collection, function (workflowOrganization) {
-                return (new DistributionOUWFItem()).mapFromPredefinedActionMemberOrganization(workflowOrganization).setGridName(gridName || null);
             });
         }
 
@@ -1213,46 +1200,6 @@ module.exports = function (app) {
             return $q.resolve(collections);
         };
 
-        function _setPredefinedActionMember(member, data) {
-            member
-                .setId(data.id)
-                .setToUserId(data.toUserId)
-                //.setToOUID(data.toOUId)
-                .setActionId(data.action)
-                .setSLADueDate(data.sLADueDate)
-                .setActionType(data.getWorkflowItemType())
-                .setSendSMS(data.sendSMS)
-                .setSendEmail(data.sendEmail)
-                .setUserComment(data.comments)
-                .setSecureComment(data.isSecureAction)
-                .setSendRelatedDocs(data.sendRelatedDocs)
-                .setEscalationStatus(data.escalationStatus)
-                .setEscalationUser(data.escalationUserId)
-                .setEscalationUserOUId(data.escalationUserOUId);
-
-            if (data.getWorkflowItemType() === 'user') {
-                member.setToOUID(data.appUserOUID);
-            } else if (data.getWorkflowItemType() === 'groupMail' || data.getWorkflowItemType() === 'organization') {
-                member.setToOUID(data.toOUId);
-            }
-
-            return member;
-        }
-
-        function _typeCastToPredefinedAction() {
-            self.predefinedAction.members = [];
-            for (var recordType in self.distributionWF) {
-                // check property should not be in prototype, but it should be attached to the object itself
-                if (self.distributionWF.hasOwnProperty(recordType)) {
-                    for (var i = 0; i < self.distributionWF[recordType].length; i++) {
-                        var member = _setPredefinedActionMember(new PredefinedActionMember(), self.distributionWF[recordType][i]);
-                        self.predefinedAction.members.push(member);
-                    }
-                }
-            }
-            return self.predefinedAction;
-        }
-
         self.savePredefinedAction = function (form, $event) {
             if (form.$invalid) {
                 return;
@@ -1317,31 +1264,54 @@ module.exports = function (app) {
                 }));
         }
 
-        function _typeCastMembersToDistributionWFItems() {
-            if (!self.editMode) {
-                return;
+        function _setPredefinedActionMember(member, data) {
+            member
+                .setId(data.id)
+                .setToUserId(data.toUserId)
+                .setActionId(data.action)
+                .setSLADueDate(data.sLADueDate)
+                .setActionType(data.getWorkflowItemType())
+                .setSendSMS(data.sendSMS)
+                .setSendEmail(data.sendEmail)
+                .setUserComment(data.comments)
+                .setSecureComment(data.isSecureAction)
+                .setSendRelatedDocs(data.sendRelatedDocs)
+                .setEscalationStatus(data.escalationStatus)
+                .setEscalationUser(data.escalationUserId)
+                .setEscalationUserOUId(data.escalationUserOUId);
+
+            if (data.getWorkflowItemType() === 'user') {
+                member.setToOUID(data.appUserOUID);
+            } else if (data.getWorkflowItemType() === 'groupMail' || data.getWorkflowItemType() === 'organization') {
+                member.setToOUID(data.toOUId);
             }
-            self.selectedWorkflowItems = [];
-            var users = [], groupMails = [], organizations = [], actions = [];
-            _.map(self.predefinedAction.members, function (member) {
-                if (member.isUserMember()) {
-                    users.push(member);
-                } else if (member.isGroupMailMember()) {
-                    groupMails.push(member);
-                } else if (member.isOrganizationMember()) {
-                    organizations.push(member);
+
+            return member;
+        }
+
+        function _typeCastToPredefinedAction() {
+            self.predefinedAction.members = [];
+            for (var recordType in self.distributionWF) {
+                // check property should not be in prototype, but it should be attached to the object itself
+                if (self.distributionWF.hasOwnProperty(recordType)) {
+                    for (var i = 0; i < self.distributionWF[recordType].length; i++) {
+                        var member = _setPredefinedActionMember(new PredefinedActionMember(), self.distributionWF[recordType][i]);
+                        self.predefinedAction.members.push(member);
+                    }
                 }
-                return member;
-            });
-            actions = self.selectedWorkflowItems
-                .concat(_mapPredefinedActionMemberUsers(users))
-                .concat(_mapPredefinedActionMemberOrganizations(groupMails, 'OUGroup'))
-                .concat(_mapPredefinedActionMemberOrganizations(organizations, 'OUReg'));
-            self.selectedWorkflowItems = actions;
+            }
+            return self.predefinedAction;
         }
 
         $timeout(function () {
-            _typeCastMembersToDistributionWFItems();
+            if (self.editMode) {
+                self.selectedWorkflowItems = [];
+                predefinedActionService.typeCastMembersToDistributionWFItems(self.predefinedAction.members, false, true)
+                    .then(function (result) {
+                        self.selectedWorkflowItems = result;
+                    });
+            }
         });
+
     });
 };

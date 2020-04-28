@@ -387,6 +387,19 @@ module.exports = function (app) {
                 });
         };
 
+        self.docActionQuickSend = function (document, $event) {
+            if (!self.outgoing.hasContent()) {
+                dialog.alertMessage(langService.get("content_not_found"));
+                return;
+            }
+            document.quickSendLaunchWorkflow($event, 'favorites')
+                .then(function () {
+                    counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    self.resetAddCorrespondence();
+                });
+        };
+
 
         self.docActionSendToReview = function (document, $event) {
             //console.log('send to review', document);
@@ -570,6 +583,18 @@ module.exports = function (app) {
             {
                 text: langService.get('content_action_launch_distribution_workflow'),
                 callback: self.docActionLaunchDistributionWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: function (action, model, index) {
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // Quick Send
+            {
+                text: langService.get('grid_action_quick_send'),
+                callback: self.docActionQuickSend,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model, index) {

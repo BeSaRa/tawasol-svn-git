@@ -2053,7 +2053,7 @@ module.exports = function (app) {
             });
         };
 
-        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup) {
+        function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup, predefinedActionMembers) {
             var multi = angular.isArray(correspondence) && correspondence.length > 1;
             action = action || 'forward';
             var errorMessage = [];
@@ -2070,7 +2070,8 @@ module.exports = function (app) {
                         actionKey: action,
                         errorMessage: errorMessage,
                         isDeptIncoming: isDeptIncoming,
-                        fromSimplePopup: fromSimplePopup
+                        fromSimplePopup: fromSimplePopup,
+                        predefinedActionMembers: predefinedActionMembers
                     },
                     resolve: {
                         favoritesUsers: function (distributionWFService) {
@@ -2152,7 +2153,7 @@ module.exports = function (app) {
          * @param fromSimplePopup
          * @returns {promise|*}
          */
-        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup) {
+        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, isDeptSent, fromSimplePopup, predefinedActionMembers) {
             var normalCorrespondence = false;
             if (!isDeptSent) {
                 normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
@@ -2168,14 +2169,14 @@ module.exports = function (app) {
                             return managerService
                                 .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
                                 .then(function (result) {
-                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup) : null;
+                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup, predefinedActionMembers) : null;
                                 })
                         })
                 } else {
-                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup);
+                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup, predefinedActionMembers);
                 }
             }
-            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup);
+            return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming, fromSimplePopup, predefinedActionMembers);
 
         };
 
@@ -4710,9 +4711,29 @@ module.exports = function (app) {
 
         };
 
+        self.openQuickSendDialog = function (record, defaultTab, $event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('quick-send-document'),
+                    controller: 'quickSendDocumentPopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    locals: {
+                        record: record,
+                        defaultTab: defaultTab
+                    },
+                    resolve: {
+                        predefinedActions: function (predefinedActionService) {
+                            'ngInject';
+                            return predefinedActionService.loadActivePredefinedActionsForUserAsDistWF();
+                        }
+                    }
+                })
+        };
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);
-    })
-    ;
+
+    });
 };

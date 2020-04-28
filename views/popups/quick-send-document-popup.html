@@ -1,0 +1,131 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           aria-label="{{lang.quick_send}}">
+    <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{ctrl.headerText}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="column">
+                <form name="quickSendForm" autocomplete="off">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="predefinedAction">{{lang.predefined_action}}</label>
+                            <md-select name="predefinedAction" id="predefinedAction" required
+                                       ng-model="ctrl.selectedPredefinedAction"
+                                       ng-change="ctrl.onChangePredefinedAction($event)">
+                                <md-option ng-repeat="option in ctrl.predefinedActions track by $index"
+                                           ng-value="option.id">{{option.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="quickSendForm.predefinedAction.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </form>
+
+                <fieldset>
+                    <legend class="md-accent">Included Members</legend>
+                    <div class="full-width-fieldset">
+                        <div layout="row">
+                            <md-card flex>
+                                <md-table-container>
+                                    <table md-table>
+                                        <thead md-head>
+                                        <tr md-row>
+                                            <th md-column>{{lang.name}}</th>
+                                            <th md-column>{{lang.type}}</th>
+                                            <th md-column>{{lang.action}}</th>
+                                            <th md-column>{{lang.comment}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-row
+                                            ng-repeat="record in ctrl.includedMembers |limitTo: ctrl.includedMembersGrid.limit: ((ctrl.includedMembersGrid.page - 1) * ctrl.includedMembersGrid.limit) |orderBy:ctrl.includedMembersGrid.order track by $index">
+                                            <td md-cell>
+                                                <span>{{record.getTranslatedName()}}</span>
+                                            </td>
+                                            <td md-cell>
+                                                <md-icon tooltip="{{lang.get(record.getMemberTooltip())}}"
+                                                         md-svg-icon="{{record.getMemberIcon()}}"></md-icon>
+                                            </td>
+                                            <td md-cell>
+                                                <span>{{record.wfActionInfo.getTranslatedName()}}</span>
+                                            </td>
+                                            <td md-cell>
+                                                {{record.userComment}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <md-table-pagination
+                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                            md-limit-options="ctrl.includedMembersGrid.limitOptions"
+                                            md-limit="ctrl.includedMembersGrid.limit"
+                                            md-page="ctrl.includedMembersGrid.page"
+                                            md-total="{{ctrl.includedMembers.length}}" md-page-select>
+                                    </md-table-pagination>
+                                </md-table-container>
+                            </md-card>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend class="md-accent">Excluded Members</legend>
+                    <div class="full-width-fieldset">
+                        <div layout="row">
+                            <md-card flex>
+                                <md-table-container>
+                                    <table md-table>
+                                        <thead md-head>
+                                        <tr md-row>
+                                            <th md-column>{{lang.name}}</th>
+                                            <th md-column>{{lang.type}}</th>
+                                            <th md-column>{{lang.action}}</th>
+                                            <th md-column>{{lang.comment}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-row
+                                            ng-repeat="record in ctrl.excludedMembers |limitTo: ctrl.excludedMembersGrid.limit: ((ctrl.excludedMembersGrid.page - 1) * ctrl.excludedMembersGrid.limit) |orderBy:ctrl.excludedMembersGrid.order track by $index">
+                                            <td md-cell>
+                                                <span>{{record.getTranslatedName()}}</span>
+                                            </td>
+                                            <td md-cell>
+                                                <md-icon tooltip="{{lang.get(record.getMemberTooltip())}}"
+                                                         md-svg-icon="{{record.getMemberIcon()}}"></md-icon>
+                                            </td>
+                                            <td md-cell>
+                                                <span>{{record.wfActionInfo.getTranslatedName()}}</span>
+                                            </td>
+                                            <td md-cell>
+                                                {{record.userComment}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <md-table-pagination
+                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                            md-limit-options="ctrl.includedMembersGrid.limitOptions"
+                                            md-limit="ctrl.excludedMembersGrid.limit"
+                                            md-page="ctrl.excludedMembersGrid.page"
+                                            md-total="{{ctrl.excludedMembers.length}}" md-page-select>
+                                    </md-table-pagination>
+                                </md-table-container>
+                            </md-card>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary" ng-disabled="quickSendForm.$invalid || !ctrl.isValidMembers()"
+                   ng-click="ctrl.quickSend()">{{lang.send}}
+        </md-button>
+        <md-button class="md-raised md-primary" ng-disabled="!ctrl.isValidMembers()"
+                   ng-click="ctrl.advanceLaunch($event)">{{lang.more_details}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">{{lang.close}}</md-button>
+    </md-dialog-actions>
+</md-dialog>

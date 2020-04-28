@@ -10,7 +10,9 @@ module.exports = function (app) {
                                                      langService,
                                                      toast,
                                                      employeeService,
-                                                     Outgoing) {
+                                                     Information,
+                                                     DistributionUserWFItem,
+                                                     DistributionOUWFItem) {
         'ngInject';
         var self = this;
         self.serviceName = 'predefinedActionService';
@@ -42,6 +44,20 @@ module.exports = function (app) {
          * @description Loads all active predefined actions for user
          * @returns {*}
          */
+        self.loadPredefinedActionById = function (predefinedActionId) {
+            predefinedActionId = predefinedActionId.hasOwnProperty('id') ? predefinedActionId.id : predefinedActionId;
+            return $http.get(urlService.predefinedAction + '/' + predefinedActionId)
+                .then(function (result) {
+                    var predefinedAction = generator.generateInstance(result.data.rs, PredefinedAction, self._sharedMethods);
+                    predefinedAction = generator.interceptReceivedInstance('PredefinedAction', predefinedAction);
+                    return predefinedAction;
+                });
+        };
+
+        /**
+         * @description Loads all active predefined actions for user
+         * @returns {*}
+         */
         self.loadActivePredefinedActionsForUser = function () {
             return $http.get(urlService.predefinedAction + '/user/active')
                 .then(function (result) {
@@ -50,18 +66,16 @@ module.exports = function (app) {
                     return predefinedActions;
                 });
         };
-
         /**
-         * @description Loads all active predefined actions for user
+         * @description Loads all active predefined actions for user as information model
          * @returns {*}
          */
-        self.loadActivePredefinedActionById = function (predefinedActionId) {
-            predefinedActionId = predefinedActionId.hasOwnProperty('id') ? predefinedActionId.id : predefinedActionId;
-            return $http.get(urlService.predefinedAction + '/' + predefinedActionId)
+        self.loadActivePredefinedActionsForUserAsDistWF = function () {
+            return $http.get(urlService.predefinedAction + '/dist/user')
                 .then(function (result) {
-                    var predefinedAction = generator.generateInstance(result.data.rs, PredefinedAction, self._sharedMethods);
-                    predefinedAction = generator.interceptReceivedInstance('PredefinedAction', predefinedAction);
-                    return predefinedAction;
+                    var predefinedActions = generator.generateCollection(result.data.rs, Information, self._sharedMethods);
+                    predefinedActions = generator.interceptReceivedCollection('Information', predefinedActions);
+                    return predefinedActions;
                 });
         };
 
@@ -157,7 +171,7 @@ module.exports = function (app) {
                         resolve: {
                             predefinedAction: function () {
                                 'ngInject';
-                                return self.loadActivePredefinedActionById(predefinedAction);
+                                return self.loadPredefinedActionById(predefinedAction);
                             },
                             favoritesUsers: function (distributionWFService) {
                                 'ngInject';
@@ -345,6 +359,46 @@ module.exports = function (app) {
                     return generator.interceptReceivedInstance('PredefinedAction', generator.generateInstance(predefinedAction, PredefinedAction, self._sharedMethods));
                 });
         };
+
+
+        /**
+         * @description Converts the predefined action members to distribution workflow items(users/organizations)
+         * @param predefinedActionMembers
+         * @param fromLaunch
+         * @param returnPromise
+         * @returns {*}
+         */
+        self.typeCastMembersToDistributionWFItems = function (predefinedActionMembers, fromLaunch, returnPromise) {
+            var selectedWorkflowItems = [];
+            var users = [], groupMails = [], organizations = [];
+            _.map(predefinedActionMembers, function (member) {
+                if (member.isUserMember()) {
+                    users.push(member);
+                } else if (member.isGroupMailMember()) {
+                    groupMails.push(member);
+                } else if (member.isOrganizationMember()) {
+                    organizations.push(member);
+                }
+                return member;
+            });
+            selectedWorkflowItems = [].concat(_mapPredefinedActionMemberUsers(users, null, fromLaunch))
+                .concat(_mapPredefinedActionMemberOrganizations(groupMails, 'OUGroup', fromLaunch))
+                .concat(_mapPredefinedActionMemberOrganizations(organizations, 'OUReg', fromLaunch));
+
+            return returnPromise ? $q.resolve(selectedWorkflowItems) : selectedWorkflowItems;
+        };
+
+        function _mapPredefinedActionMemberUsers(collection, gridName, fromLaunch) {
+            return _.map(collection, function (workflowUser) {
+                return (new DistributionUserWFItem()).mapFromPredefinedActionMemberUser(workflowUser, fromLaunch).setGridName(gridName || null);
+            });
+        }
+
+        function _mapPredefinedActionMemberOrganizations(collection, gridName, fromLaunch) {
+            return _.map(collection, function (workflowOrganization) {
+                return (new DistributionOUWFItem()).mapFromPredefinedActionMemberOrganization(workflowOrganization, fromLaunch).setGridName(gridName || null);
+            });
+        }
 
         /**
          * @description create the shared method to the model.

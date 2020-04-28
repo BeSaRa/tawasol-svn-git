@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
+                      WorkflowAction,
                       Information,
                       generator) {
         'ngInject';
@@ -39,16 +40,11 @@ module.exports = function (app) {
                 model.sLADueDate = null;
             }
 
-            delete model.toUserInfo;
-            delete model.toOUInfo;
-            delete model.escalationUserOUInfo;
-            delete model.escalationUserInfo;
-            delete model.proxyInfo;
-
             return model;
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            model.wfActionInfo = new WorkflowAction(model.wfActionInfo);
             return model;
         });
 
