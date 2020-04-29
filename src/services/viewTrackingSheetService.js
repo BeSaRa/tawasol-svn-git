@@ -634,7 +634,6 @@ module.exports = function (app) {
                 return $http.get(urlService.vts_receivedIncomingHistory + '/' + vsId).then(function (result) {
                     self.receivedIncomingHistoryRecords = generator.generateCollection(result.data.rs, ExportedTrackingSheetResult, self._sharedMethods);
                     self.receivedIncomingHistoryRecords = generator.interceptReceivedCollection('ExportedTrackingSheetResult', self.receivedIncomingHistoryRecords);
-                    console.log('self.receivedIncomingHistoryRecords', self.receivedIncomingHistoryRecords);
                     return self.receivedIncomingHistoryRecords;
                 }).catch(function (error) {
                     if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
