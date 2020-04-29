@@ -139,6 +139,7 @@ module.exports = function (app) {
                 contentViewHistory: 'vts_contentViewHistory',
                 smsLogs: 'vts_smsLogs',
                 outgoingDeliveryReport: 'vts_outDeliveryReport',
+                receivedIncomingHistory: 'vts_receivedIncomingHistory',
                 fullHistory: 'vts_fullHistory',
                 docLinkViewers: 'vts_docLinkViewer',
                 mergedLinkedDocsHistoryActions: 'vts_mergedLinkedDocsHistoryActions',

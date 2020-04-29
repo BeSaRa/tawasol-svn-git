@@ -4,7 +4,7 @@
     <popup-toolbar-directive header-text="{{ctrl.popupHeading}}"
                              full-screen-button="true" full-screen="ctrl.fullScreen"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
-        <div class="md-dialog-content cms-dialog-content">
+        <div class="{{(ctrl.heading === 'view_tracking_sheet_outgoing_delivery_reports' || ctrl.heading === 'view_tracking_sheet_received_incoming_history') ? '' : ' md-dialog-content cms-dialog-content' }}">
             <!-- SINGLE GRID VIEW -->
             <div md-dynamic-height>
                 <!-- Workflow History Grid -->
@@ -75,89 +75,176 @@
                     </md-card>
                 </div>
                 <!-- Outgoing Delivery Reports / Messaging History -->
-                <div ng-if="ctrl.heading === 'view_tracking_sheet_outgoing_delivery_reports' && ctrl.showTab('view_tracking_sheet_outgoing_delivery_reports')">
-                    <md-card>
-                        <md-table-container>
-                            <div flex scroll-directive>
-                                <table md-table>
-                                    <thead md-head md-order="ctrl.outgoingDeliveryReportGrid.order"
-                                           md-on-reorder="ctrl.getSortedDataOutgoingDeliveryReport">
-                                    <tr md-row>
-                                        <th md-column
-                                            md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}">
-                                            <span>{{lang.view_tracking_sheet_sent_by}}</span></th>
-                                        <th md-column
-                                            md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'Information')}}">
-                                            <span>{{lang.view_tracking_sheet_main_site_from}}</span></th>
-                                        <th md-column
-                                            md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'Information')}}">
-                                            <span>{{lang.view_tracking_sheet_sub_site_from}}</span></th>
-                                        <!--<th md-column md-order-by="priorityLevelInfo"><span>{{lang.view_tracking_sheet_priority_level}}</span></th>-->
-                                        <th md-column
-                                            md-order-by="{{ctrl.getSortingKey('receivedByIdInfo', 'Information')}}">
-                                            <span>{{lang.view_tracking_sheet_received_by}}</span></th>
-                                        <th md-column
-                                            md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'Information')}}">
-                                            <span>{{lang.view_tracking_sheet_main_site_to}}</span></th>
-                                        <th md-column
-                                            md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}">
-                                            <span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
-                                        <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
-                                        </th>
-                                        <th md-column md-order-by="deliveryDate_vts"><span>{{lang.view_tracking_sheet_delivery_date}}</span>
-                                        </th>
-                                        <th md-column
-                                            md-order-by="{{ctrl.getSortingKey('messageStatus','Information')}}">
-                                            <span>{{lang.view_tracking_sheet_message_status}}</span></th>
-                                        <th md-column md-order-by="comment">
-                                            <span>{{lang.view_tracking_sheet_comments}}</span>
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody md-body>
-                                    <tr md-row
-                                        ng-repeat="outgoingDeliveryReportRecord in ctrl.outgoingDeliveryReportRecords | filter:ctrl.searchModelOutgoingDeliveryReports | limitTo: ctrl.outgoingDeliveryReportGrid.limit: ((ctrl.outgoingDeliveryReportGrid.page - 1) * ctrl.outgoingDeliveryReportGrid.limit)  track by $index">
-                                        <td md-cell>
-                                            {{outgoingDeliveryReportRecord.sentByIdInfo.getTranslatedName()}}
-                                        </td>
-                                        <td md-cell>
-                                            {{outgoingDeliveryReportRecord.mainSiteFromIdInfo.getTranslatedName()}}
-                                        </td>
-                                        <td md-cell>
-                                            {{outgoingDeliveryReportRecord.subSiteFromIdInfo.getTranslatedName()}}
-                                        </td>
-                                        <!--<td md-cell>{{outgoingDeliveryReportRecord.priorityLevelInfo.getTranslatedName()}}</td>-->
-                                        <td md-cell>
-                                            {{outgoingDeliveryReportRecord.receivedByIdInfo.getTranslatedName()}}
-                                        </td>
-                                        <td md-cell>
-                                            {{outgoingDeliveryReportRecord.mainSiteToIdInfo.getTranslatedName()}}
-                                        </td>
-                                        <td md-cell>
-                                            {{outgoingDeliveryReportRecord.subSiteToIdInfo.getTranslatedName()}}
-                                        </td>
-                                        <td md-cell>{{outgoingDeliveryReportRecord.actionDate_vts}}</td>
-                                        <td md-cell>{{outgoingDeliveryReportRecord.deliveryDate_vts}}</td>
-                                        <td md-cell>
-                                            {{outgoingDeliveryReportRecord.messageStatus.getTranslatedName()}}
-                                        </td>
-                                        <td md-cell class="cms-comment">
-                                            {{outgoingDeliveryReportRecord.comment}}
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <md-table-pagination
-                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                    md-limit-options="ctrl.outgoingDeliveryReportGrid.limitOptions"
-                                    md-limit="ctrl.outgoingDeliveryReportGrid.limit"
-                                    md-page="ctrl.outgoingDeliveryReportGrid.page"
-                                    md-total="{{ctrl.outgoingDeliveryReportRecords.length}}"
-                                    md-page-select
-                                    md-on-paginate="ctrl.outgoingDeliveryReportGrid.pagingCallback"></md-table-pagination>
-                        </md-table-container>
-                    </md-card>
+                <div ng-if="(ctrl.heading === 'view_tracking_sheet_outgoing_delivery_reports' && ctrl.showTab('view_tracking_sheet_outgoing_delivery_reports'))
+                        || (ctrl.heading === 'view_tracking_sheet_received_incoming_history' && ctrl.showTab('view_tracking_sheet_received_incoming_history'))">
+                    <md-tabs md-dynamic-height>
+                        <md-tab label="{{lang.view_tracking_sheet_outgoing_delivery_reports}}"
+                                md-on-select="ctrl.setCurrentTab('view_tracking_sheet_outgoing_delivery_reports')">
+                            <md-content class="md-padding">
+                                <md-card>
+                                    <md-table-container>
+                                        <div flex scroll-directive>
+                                            <table md-table>
+                                                <thead md-head md-order="ctrl.outgoingDeliveryReportGrid.order"
+                                                       md-on-reorder="ctrl.getSortedDataOutgoingDeliveryReport">
+                                                <tr md-row>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_sent_by}}</span></th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_main_site_from}}</span></th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_sub_site_from}}</span></th>
+                                                    <!--<th md-column md-order-by="priorityLevelInfo"><span>{{lang.view_tracking_sheet_priority_level}}</span></th>-->
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('receivedByIdInfo', 'Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_received_by}}</span></th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_main_site_to}}</span></th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
+                                                    <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="deliveryDate_vts"><span>{{lang.view_tracking_sheet_delivery_date}}</span>
+                                                    </th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('messageStatus','Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_message_status}}</span></th>
+                                                    <th md-column md-order-by="comment"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-select="outgoingDeliveryReportRecord" md-row
+                                                    ng-repeat="outgoingDeliveryReportRecord in ctrl.outgoingDeliveryReportRecords | filter:ctrl.searchModelOutgoingDeliveryReports | limitTo: ctrl.outgoingDeliveryReportGrid.limit: ((ctrl.outgoingDeliveryReportGrid.page - 1) * ctrl.outgoingDeliveryReportGrid.limit) track by $index">
+                                                    <td md-cell>
+                                                        {{outgoingDeliveryReportRecord.sentByIdInfo.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        {{outgoingDeliveryReportRecord.mainSiteFromIdInfo.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        {{outgoingDeliveryReportRecord.subSiteFromIdInfo.getTranslatedName()}}
+                                                    </td>
+                                                    <!--<td md-cell>{{outgoingDeliveryReportRecord.priorityLevelInfo.getTranslatedName()}}</td>-->
+                                                    <td md-cell>
+                                                        {{outgoingDeliveryReportRecord.receivedByIdInfo.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        {{outgoingDeliveryReportRecord.mainSiteToIdInfo.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        {{outgoingDeliveryReportRecord.subSiteToIdInfo.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>{{outgoingDeliveryReportRecord.actionDate_vts}}</td>
+                                                    <td md-cell>{{outgoingDeliveryReportRecord.deliveryDate_vts}}</td>
+                                                    <td md-cell>
+                                                        {{outgoingDeliveryReportRecord.messageStatus.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell class="cms-comment">
+                                                        {{outgoingDeliveryReportRecord.comment}}
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <md-table-pagination
+                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                md-limit-options="ctrl.outgoingDeliveryReportGrid.limitOptions"
+                                                md-limit="ctrl.outgoingDeliveryReportGrid.limit"
+                                                md-page="ctrl.outgoingDeliveryReportGrid.page"
+                                                md-total="{{ctrl.outgoingDeliveryReportRecords.length}}"
+                                                md-page-select
+                                                md-on-paginate="ctrl.outgoingDeliveryReportGrid.pagingCallback"></md-table-pagination>
+                                    </md-table-container>
+                                </md-card>
+                            </md-content>
+                        </md-tab>
+                        <md-tab label="{{lang.view_tracking_sheet_received_incoming_history}}"
+                                ng-if="ctrl.showTab('view_tracking_sheet_received_incoming_history')"
+                                md-on-select="ctrl.setCurrentTab('view_tracking_sheet_received_incoming_history')">
+                            <md-content class="md-padding">
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="receivedIncomingSite">{{lang.sites_sub_site}}</label>
+                                        <md-select name="receivedIncomingSite" id="receivedIncomingSite"
+                                                   ng-model="ctrl.selectedReceivedIncomingSite"
+                                                   ng-model-options="{trackBy: '$value.vsId'}">
+                                            <md-option ng-repeat="option in ctrl.receivedIncomingHistoryRecords track by $index"
+                                                       ng-value="option">{{option.vts_subSiteInfo.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <md-card>
+                                    <md-table-container>
+                                        <div flex scroll-directive>
+                                            <table md-table>
+                                                <thead md-head md-order="ctrl.receivedIncomingHistoryGrid.order"
+                                                       md-on-reorder="ctrl.getSortedDataReceivedIncomingHistory">
+                                                <tr md-row>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('userFromInfo','Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_sender}}</span>
+                                                    </th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('userToInfo','Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_receiver}}</span>
+                                                    </th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('action','Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_action}}</span>
+                                                    </th>
+                                                    <!--<th md-column md-order-by="documentCreationDate_vts"><span>{{lang.view_tracking_sheet_creation_date}}</span>
+                                                    </th>-->
+                                                    <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                                    </th>
+                                                    <th md-column md-order-by="comments"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-select="record" md-row
+                                                    ng-repeat="record in ctrl.selectedReceivedIncomingSite.eventLogViewList | filter:ctrl.searchModelReceivedIncomingHistory | limitTo: ctrl.receivedIncomingHistoryGrid.limit: ((ctrl.receivedIncomingHistoryGrid.page - 1) * ctrl.receivedIncomingHistoryGrid.limit) track by $index">
+                                                    <td md-cell class="zero-p-right">
+                                                        {{record.userFromInfo.getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>
+                                                <span class="action-type-icon-container">
+                                                    <md-icon
+                                                            ng-if="record.actionType_vts"
+                                                            md-svg-icon="{{record.actionType_vts.icon}}"
+                                                            tooltip="{{lang[record.actionType_vts.langKey]}}"
+                                                    ></md-icon>
+                                                </span>
+                                                        {{record.userToInfo.getTranslatedName()}}
+                                                    </td><!--{{record.getTranslatedUserTo()}}-->
+                                                    <td md-cell>{{record.getTranslatedAction()}}</td>
+                                                    <!--<td md-cell>{{record.documentCreationDate_vts}}</td>-->
+                                                    <td md-cell>{{record.actionDate_vts}}</td>
+                                                    <td md-cell class="cms-comment">{{record.comments}}
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <md-table-pagination
+                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                md-limit-options="ctrl.receivedIncomingHistoryGrid.limitOptions"
+                                                md-limit="ctrl.receivedIncomingHistoryGrid.limit"
+                                                md-page="ctrl.receivedIncomingHistoryGrid.page"
+                                                md-total="{{ctrl.receivedIncomingHistoryRecords.length}}"
+                                                md-page-select
+                                                md-on-paginate="ctrl.receivedIncomingHistoryGrid.pagingCallback"></md-table-pagination>
+                                    </md-table-container>
+                                </md-card>
+                            </md-content>
+                        </md-tab>
+                    </md-tabs>
                 </div>
                 <!-- Full History -->
                 <div ng-if="ctrl.heading === 'view_tracking_sheet_full_history' && ctrl.showTab('view_tracking_sheet_full_history')">

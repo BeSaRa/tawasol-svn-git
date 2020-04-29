@@ -23,7 +23,8 @@ module.exports = function (app) {
                                                          documentLinkViewerRecords,
                                                          viewTrackingSheetService,
                                                          gridService,
-                                                         employeeService) {
+                                                         employeeService,
+                                                         $q) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewTrackingSheetPopCtrl';
@@ -61,8 +62,11 @@ module.exports = function (app) {
         self.contentViewHistoryRecords = contentViewHistoryRecords;
         self.smsLogRecords = smsLogRecords;
         self.outgoingDeliveryReportRecords = outgoingDeliveryReportRecords;
+        self.receivedIncomingHistoryRecords = [];
         self.fullHistoryRecords = fullHistoryRecords;
         self.documentLinkViewerRecords = documentLinkViewerRecords;
+
+        self.selectedReceivedIncomingSite = null;
 
         /**
          * @description Gets the grid records by sorting
@@ -249,6 +253,28 @@ module.exports = function (app) {
         /**
          * @description Gets the grid records by sorting
          */
+        self.getSortedDataReceivedIncomingHistory = function () {
+            self.receivedIncomingHistoryRecords = $filter('orderBy')(self.receivedIncomingHistoryRecords, self.receivedIncomingHistoryGrid.order);
+        };
+
+        self.receivedIncomingHistoryGrid = {
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.receivedIncomingHistory) || 5, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.receivedIncomingHistory, self.receivedIncomingHistoryRecords.length),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.receivedIncomingHistory, limit);
+            },
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.trackingSheet.receivedIncomingHistory),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.trackingSheet.receivedIncomingHistory, self.receivedIncomingHistoryGrid.truncateSubject);
+            },
+            firstLoaded: false
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
         self.getSortedDataFullHistory = function () {
             self.fullHistoryRecords = $filter('orderBy')(self.fullHistoryRecords, self.fullHistoryGrid.order);
         };
@@ -323,6 +349,7 @@ module.exports = function (app) {
         self.tabsToShow = [
             'view_tracking_sheet_work_flow_history',
             'view_tracking_sheet_outgoing_delivery_reports',
+            'view_tracking_sheet_received_incoming_history',
             'view_tracking_sheet_full_history',
             'view_tracking_sheet_merged_linked_document_history',
             'view_tracking_sheet_attachments_history',
@@ -344,6 +371,8 @@ module.exports = function (app) {
         self.showTab = function (tabName) {
             if (tabName === 'view_tracking_sheet_outgoing_delivery_reports' || tabName === 'view_tracking_sheet_destination_history') {
                 return (self.tabsToShow.indexOf(tabName) > -1 && info.documentClass === 'outgoing');
+            } else if (tabName === 'view_tracking_sheet_received_incoming_history') {
+                return (self.showTab('view_tracking_sheet_outgoing_delivery_reports') && employeeService.hasPermissionTo('VIEW_INCOMING_TRACKING'));
             } else if (tabName === 'view_tracking_sheet_content_view_history') {
                 return (self.tabsToShow.indexOf(tabName) > -1 && employeeService.hasPermissionTo('VIEW_CONTENT_LOG'));
             } else if (tabName === 'view_tracking_sheet_sms_logs') {
@@ -363,24 +392,41 @@ module.exports = function (app) {
 
         self.selectedTab = '';
         self.setCurrentTab = function (tabName) {
-            self.selectedTab = tabName;
-            self.heading = tabName;
+            var defer = $q.defer();
+            if (tabName === 'view_tracking_sheet_received_incoming_history') {
+                if (self.receivedIncomingHistoryGrid.firstLoaded) {
+                    defer.resolve(tabName);
+                } else {
+                    self.loadGridRecordsOnDemand(tabName)
+                        .then(function (result) {
+                            defer.resolve(tabName);
+                        })
+                }
+            } else {
+                defer.resolve(tabName);
+            }
 
-            self.popupHeading = langService.get('view_tracking_sheet');
-            self.popupHeadingForPrint = langService.get(self.selectedTab);
-            if (docSubject) {
-                self.popupHeading = self.popupHeading + ' : ' + docSubject;
-                self.popupHeadingForPrint = self.popupHeadingForPrint + ' : ' + docSubject;
-            }
-            if (info.docFullSerial) {
-                self.popupHeading = self.popupHeading + ' : ' + info.docFullSerial;
-                self.popupHeadingForPrint = self.popupHeadingForPrint + ' : ' + info.docFullSerial;
-            }
+            defer.promise.then(function (tab) {
+                self.selectedTab = tab;
+                self.heading = tab;
+
+                self.popupHeading = langService.get('view_tracking_sheet');
+                self.popupHeadingForPrint = langService.get(self.selectedTab);
+                if (docSubject) {
+                    self.popupHeading = self.popupHeading + ' : ' + docSubject;
+                    self.popupHeadingForPrint = self.popupHeadingForPrint + ' : ' + docSubject;
+                }
+                if (info.docFullSerial) {
+                    self.popupHeading = self.popupHeading + ' : ' + info.docFullSerial;
+                    self.popupHeadingForPrint = self.popupHeadingForPrint + ' : ' + info.docFullSerial;
+                }
+            })
         };
 
         self.gridNameRecordCountMap = {
             'view_tracking_sheet_work_flow_history': self.workflowHistoryRecords.length,
             'view_tracking_sheet_outgoing_delivery_reports': self.outgoingDeliveryReportRecords.length,
+            'view_tracking_sheet_received_incoming_history': self.receivedIncomingHistoryRecords.length,
             'view_tracking_sheet_full_history': self.fullHistoryRecords.length,
             'view_tracking_sheet_merged_linked_document_history': self.mergedLinkedDocumentHistoryRecords.length,
             'view_tracking_sheet_attachments_history': self.attachmentsHistoryRecords.length,
@@ -423,8 +469,21 @@ module.exports = function (app) {
             viewTrackingSheetService.controllerMethod.viewTrackingSheetPrint(self.heading, self.popupHeadingForPrint);
         };
 
-        self.printSheetFromWebPage = function($event){
+        self.printSheetFromWebPage = function ($event) {
             viewTrackingSheetService.controllerMethod.viewTrackingSheetWebPage(self.heading, self.popupHeadingForPrint);
+        };
+
+        self.loadGridRecordsOnDemand = function (tabName) {
+            if (tabName === 'view_tracking_sheet_received_incoming_history') {
+                return viewTrackingSheetService.loadReceivedIncomingHistory(self.document)
+                    .then(function (result) {
+                        self.receivedIncomingHistoryRecords = result;
+                        _setGridNameRecordCountMap(tabName, result.length);
+                        self.receivedIncomingHistoryGrid.firstLoaded = true;
+                        return result;
+                    })
+            }
+            return $q.reject('GRID_NOT_AVAILABLE');
         };
 
         /**
@@ -432,6 +491,10 @@ module.exports = function (app) {
          */
         self.closeTrackingSheetPopupFromCtrl = function () {
             dialog.cancel();
+        };
+
+        function _setGridNameRecordCountMap(gridName, count) {
+            self.gridNameRecordCountMap[gridName] = count;
         }
 
     });

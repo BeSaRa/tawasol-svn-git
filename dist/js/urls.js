@@ -199,6 +199,8 @@
                 .addToAllWithBase('vts_destinations', 'cms-entity/user/action-log/destinations/')
                 //messaging history
                 .addToAllWithBase('vts_messagingHistory', 'cms-entity/user/messaging-history/vsid')
+                //incoming delivery report
+                .addToAllWithBase('vts_receivedIncomingHistory', 'cms-entity/user/event-log/export/history/vsid')
                 //view content
                 .addToAllWithBase('vts_viewContentLog', 'cms-entity/user/view-content-log/vsid/')
                 //sms

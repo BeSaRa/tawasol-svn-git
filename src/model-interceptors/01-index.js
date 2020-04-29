@@ -113,4 +113,5 @@ module.exports = function (app) {
     require('./WFUserInterceptor')(app);
     require('./PredefinedActionInterceptor')(app);
     require('./PredefinedActionMemberInterceptor')(app);
+    require('./ExportedTrackingSheetResultInterceptor')(app);
 };

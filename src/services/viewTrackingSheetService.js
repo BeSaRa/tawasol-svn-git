@@ -17,6 +17,7 @@ module.exports = function (app) {
                                                       SmsLog,
                                                       FullHistory,
                                                       OutgoingDeliveryReport,
+                                                      ExportedTrackingSheetResult,
                                                       MergedLinkedDocumentHistory,
                                                       downloadService,
                                                       employeeService,
@@ -36,6 +37,7 @@ module.exports = function (app) {
             self.destinationHistory = [];
             self.contentViewHistory = [];
             self.outgoingDeliveryReports = [];
+            self.receivedIncomingHistoryRecords =[];
             self.mergedLinkedDocumentHistory = [];
             self.fullHistory = [];
             self.documentLinkViewerRecords = [];
@@ -458,9 +460,9 @@ module.exports = function (app) {
                         forceViewAll: forceViewAll
                     }
                 }).then(function (result) {
-                    self.eventHistory = generator.generateCollection(result.data.rs, EventHistory, self._sharedMethods);
-                    self.eventHistory = generator.interceptReceivedCollection('EventHistory', self.eventHistory);
-                    return self.eventHistory;
+                    self.workflowHistory = generator.generateCollection(result.data.rs, EventHistory, self._sharedMethods);
+                    self.workflowHistory = generator.interceptReceivedCollection('EventHistory', self.workflowHistory);
+                    return self.workflowHistory;
                 }).catch(function (error) {
                     if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
                         dialog.errorMessage(langService.get('access_denied'));
@@ -625,6 +627,25 @@ module.exports = function (app) {
             };
 
             /**
+             * @description load received incoming logs by vsId
+             */
+            self.loadReceivedIncomingHistory = function (document) {
+                var vsId = getVsId(document);
+                return $http.get(urlService.vts_receivedIncomingHistory + '/' + vsId).then(function (result) {
+                    self.receivedIncomingHistoryRecords = generator.generateCollection(result.data.rs, ExportedTrackingSheetResult, self._sharedMethods);
+                    self.receivedIncomingHistoryRecords = generator.interceptReceivedCollection('ExportedTrackingSheetResult', self.receivedIncomingHistoryRecords);
+                    console.log('self.receivedIncomingHistoryRecords', self.receivedIncomingHistoryRecords);
+                    return self.receivedIncomingHistoryRecords;
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                        dialog.errorMessage(langService.get('access_denied'));
+                        return $q.reject(false);
+                    }
+                    return [];
+                });
+            };
+
+            /**
              * @description load full history logs by vsId
              */
             self.loadFullHistory = function (document, forceViewAll) {
@@ -695,7 +716,7 @@ module.exports = function (app) {
 
                 /* Workflow History */
                 if (heading === 'view_tracking_sheet_work_flow_history') {
-                    if (self.eventHistory.length) {
+                    if (self.workflowHistory.length) {
                         headerNames = [
                             langService.get('view_tracking_sheet_sender'),
                             langService.get('view_tracking_sheet_receiver'),
@@ -704,8 +725,8 @@ module.exports = function (app) {
                             langService.get('view_tracking_sheet_action_date'),
                             langService.get('view_tracking_sheet_comments')
                         ];
-                        for (i = 0; i < self.eventHistory.length; i++) {
-                            record = self.eventHistory[i];
+                        for (i = 0; i < self.workflowHistory.length; i++) {
+                            record = self.workflowHistory[i];
                             data.push([
                                 record.userFromInfo.getTranslatedName(),
                                 record.userToInfo.getTranslatedName(),
@@ -933,6 +954,30 @@ module.exports = function (app) {
                                 record.deliveryDate_vts,
                                 record.messageStatus.getTranslatedName(),
                                 _splitToNumberOfWords(record.comment || '', splitNumber)
+                            ]);
+                        }
+                    }
+                }
+                /* Received Incoming Book History / ExportedTrackingSheetResult */
+                else if (heading === 'view_tracking_sheet_received_incoming_history') {
+                    if (self.receivedIncomingHistoryRecords.length) {
+                        headerNames = [
+                            langService.get('view_tracking_sheet_sender'),
+                            langService.get('view_tracking_sheet_receiver'),
+                            langService.get('view_tracking_sheet_action'),
+                            //langService.get('view_tracking_sheet_creation_date'),
+                            langService.get('view_tracking_sheet_action_date'),
+                            langService.get('view_tracking_sheet_comments')
+                        ];
+                        for (i = 0; i < self.receivedIncomingHistoryRecords.length; i++) {
+                            record = self.receivedIncomingHistoryRecords[i];
+                            data.push([
+                                record.userFromInfo.getTranslatedName(),
+                                record.userToInfo.getTranslatedName(),
+                                record.getTranslatedAction(),
+                                //record.documentCreationDate_vts,
+                                record.actionDate_vts,
+                                _splitToNumberOfWords(record.comments || '', splitNumber)
                             ]);
                         }
                     }

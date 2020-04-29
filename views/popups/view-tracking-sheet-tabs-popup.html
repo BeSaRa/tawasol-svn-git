@@ -164,6 +164,87 @@
                         </md-card>
                     </md-content>
                 </md-tab>
+                <!-- Received Incoming History / ExportedTrackingSheetResult -->
+                <md-tab label="{{lang.view_tracking_sheet_received_incoming_history}}"
+                        ng-if="ctrl.showTab('view_tracking_sheet_received_incoming_history')"
+                        md-on-select="ctrl.setCurrentTab('view_tracking_sheet_received_incoming_history')">
+                    <md-content class="md-padding">
+                        <div layout="row">
+                            <md-input-container flex>
+                                <label for="receivedIncomingSite">{{lang.sites_sub_site}}</label>
+                                <md-select name="receivedIncomingSite" id="receivedIncomingSite"
+                                           ng-model="ctrl.selectedReceivedIncomingSite"
+                                           ng-model-options="{trackBy: '$value.vsId'}">
+                                    <md-option ng-repeat="option in ctrl.receivedIncomingHistoryRecords track by $index"
+                                               ng-value="option">{{option.vts_subSiteInfo.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <md-card>
+                            <md-table-container>
+                                <div flex scroll-directive>
+                                    <table md-table>
+                                        <thead md-head md-order="ctrl.receivedIncomingHistoryGrid.order"
+                                               md-on-reorder="ctrl.getSortedDataReceivedIncomingHistory">
+                                        <tr md-row>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('userFromInfo','Information')}}">
+                                                <span>{{lang.view_tracking_sheet_sender}}</span>
+                                            </th>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('userToInfo','Information')}}">
+                                                <span>{{lang.view_tracking_sheet_receiver}}</span>
+                                            </th>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('action','Information')}}">
+                                                <span>{{lang.view_tracking_sheet_action}}</span>
+                                            </th>
+                                            <!--<th md-column md-order-by="documentCreationDate_vts"><span>{{lang.view_tracking_sheet_creation_date}}</span>
+                                            </th>-->
+                                            <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            </th>
+                                            <th md-column md-order-by="comments"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-select="record" md-row
+                                            ng-repeat="record in ctrl.selectedReceivedIncomingSite.eventLogViewList | filter:ctrl.searchModelReceivedIncomingHistory | limitTo: ctrl.receivedIncomingHistoryGrid.limit: ((ctrl.receivedIncomingHistoryGrid.page - 1) * ctrl.receivedIncomingHistoryGrid.limit) track by $index">
+                                            <td md-cell class="zero-p-right">
+                                                {{record.userFromInfo.getTranslatedName()}}
+                                            </td>
+                                            <td md-cell>
+                                                <span class="action-type-icon-container">
+                                                    <md-icon
+                                                            ng-if="record.actionType_vts"
+                                                            md-svg-icon="{{record.actionType_vts.icon}}"
+                                                            tooltip="{{lang[record.actionType_vts.langKey]}}"
+                                                    ></md-icon>
+                                                </span>
+                                                {{record.userToInfo.getTranslatedName()}}
+                                            </td><!--{{record.getTranslatedUserTo()}}-->
+                                            <td md-cell>{{record.getTranslatedAction()}}</td>
+                                            <!--<td md-cell>{{record.documentCreationDate_vts}}</td>-->
+                                            <td md-cell>{{record.actionDate_vts}}</td>
+                                            <td md-cell class="cms-comment">{{record.comments}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <md-table-pagination
+                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                        md-limit-options="ctrl.receivedIncomingHistoryGrid.limitOptions"
+                                        md-limit="ctrl.receivedIncomingHistoryGrid.limit"
+                                        md-page="ctrl.receivedIncomingHistoryGrid.page"
+                                        md-total="{{ctrl.receivedIncomingHistoryRecords.length}}"
+                                        md-page-select
+                                        md-on-paginate="ctrl.receivedIncomingHistoryGrid.pagingCallback"></md-table-pagination>
+                            </md-table-container>
+                        </md-card>
+                    </md-content>
+                </md-tab>
                 <!-- Full History -->
                 <md-tab label="{{lang.view_tracking_sheet_full_history}}"
                         ng-if="ctrl.showTab('view_tracking_sheet_full_history')"
