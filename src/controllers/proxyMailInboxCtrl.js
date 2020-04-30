@@ -779,7 +779,7 @@ module.exports = function (app) {
                     $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        wobNum: info.wobNum
+                        wobNum: info.wobNumber
                     });
                 });
         };
@@ -797,7 +797,7 @@ module.exports = function (app) {
                     $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        wobNum: info.wobNum
+                        wobNum: info.wobNumber
                     });
                 });
         };
