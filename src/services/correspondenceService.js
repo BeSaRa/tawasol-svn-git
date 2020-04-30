@@ -2069,7 +2069,8 @@ module.exports = function (app) {
                         errorMessage: errorMessage,
                         isDeptIncoming: isDeptIncoming,
                         fromSimplePopup: fromSimplePopup,
-                        predefinedActionMembers: predefinedActionMembers
+                        predefinedActionMembers: predefinedActionMembers,
+                        fromQuickSend: (predefinedActionMembers && predefinedActionMembers.length > 0)
                     },
                     resolve: {
                         favoritesUsers: function (distributionWFService) {

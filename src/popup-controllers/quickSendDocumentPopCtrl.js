@@ -117,6 +117,7 @@ module.exports = function (app) {
             if (!self.isValidMembers()) {
                 return;
             }
+            dialog.cancel();
             self.record.launchWorkFlowFromPredefinedAction($event, 'forward', defaultTab, isDeptIncoming, isDeptSent, self.includedMembers)
                 .then(function () {
                     dialog.hide();

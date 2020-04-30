@@ -36,7 +36,8 @@ module.exports = function (app) {
                                                                     errorCode,
                                                                     gridService,
                                                                     predefinedActionService,
-                                                                    predefinedActionMembers) {
+                                                                    predefinedActionMembers,
+                                                                    fromQuickSend) {
         'ngInject';
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
@@ -1500,6 +1501,7 @@ module.exports = function (app) {
         };
 
         $timeout(function () {
+            self.fromQuickSend = fromQuickSend;
             if (predefinedActionMembers && predefinedActionMembers.length) {
                 self.selectedWorkflowItems = [];
                 predefinedActionService.typeCastMembersToDistributionWFItems(predefinedActionMembers, true, true)
