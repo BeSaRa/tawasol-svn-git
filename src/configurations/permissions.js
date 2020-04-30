@@ -19,6 +19,7 @@ module.exports = function (app) {
             .addMenuPermissions('menu_item_cross_site_management', ['MANAGE_CORRESPONDENCE_SITES'])
             .addMenuPermissions('menu_item_application_users', ['MANAGE_APPLICATION_USERS'])
             .addMenuPermissions('menu_item_reference_number_plans', ['MANAGE_REFERENCE_NUMBER_PLANS'])
+            .addMenuPermissions('menu_item_serials', ['MANAGE_REFERENCE_NUMBER_PLANS'])
             .addMenuPermissions('menu_item_ranks', ['MANAGE_RANKS'])
             .addMenuPermissions('menu_item_distribution_lists', ['MANAGE_DISTRIBUTION_LISTS'])
             .addMenuPermissions('menu_item_entity_type', ['MANAGE_ENTITY_TYPES'])

@@ -7,7 +7,7 @@
             <md-button ng-click="ctrl.selectedOrganizationsChanged()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
-            <md-button ng-click="ctrl.printRecords()" class="md-icon-button" tooltip="{{lang.print}}">
+            <md-button ng-if="ctrl.records.length" ng-click="ctrl.printRecords()" class="md-icon-button" tooltip="{{lang.print}}">
                 <md-icon md-svg-icon="printer"></md-icon>
             </md-button>
             <span flex></span>
@@ -33,7 +33,7 @@
                     </md-option>
                 </md-select>
             </md-input-container>
-            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
+            <!--<grid-search-directive grid="ctrl.grid"></grid-search-directive>-->
         </div>
         <!-- end page-header -->
         <!-- page-content -->
