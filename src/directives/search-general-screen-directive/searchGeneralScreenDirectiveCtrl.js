@@ -64,8 +64,13 @@ module.exports = function (app) {
         self.registryOrganizations = [];
         // no matter if we used Outgoing as document class to get siteTypes because it is common for all document classes
         self.siteTypes = correspondenceService.getLookup('outgoing', 'siteTypes');
-        // no matter if we used Outgoing as document class to get docTypes because it is common for all document classes
-        self.docTypes = correspondenceService.getLookup('outgoing', 'docTypes');
+
+        var docTypes = []
+            .concat(correspondenceService.getLookup('outgoing', 'docTypes'))
+            .concat(correspondenceService.getLookup('incoming', 'docTypes'))
+            .concat(correspondenceService.getLookup('internal', 'docTypes'));
+        self.docTypes = _.uniqBy(docTypes, 'id');
+
         // search text for filtering docTypes DDL
         self.docTypeSearchText = '';
         // organization to fill ou property in search criteria
