@@ -625,7 +625,8 @@
                                                             </td>
                                                             <td md-cell>
                                                                 <div flex layout="row" layout-align="start center">
-                                                                    <md-button class="md-icon-button" title="{{lang.download}}"
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.download}}"
                                                                                ng-click="ctrl.downloadDocumentTemplate(documentTemplate, $event)">
                                                                         <md-icon md-svg-icon="download"></md-icon>
                                                                     </md-button>
@@ -653,6 +654,31 @@
                                                         md-total="{{ctrl.documentTemplates.length}}" md-page-select>
                                                 </md-table-pagination>
                                             </md-table-container>
+                                        </md-card>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <!-- Serials  -->
+                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('serials')"
+                            label="{{lang.menu_item_serials}}" ng-click="ctrl.setCurrentTab('serials')">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div layout="row" class="p20-0">
+                                    <md-button ng-click="ctrl.reloadSerials()" class="md-icon-button"
+                                               tooltip="{{lang.reload}}">
+                                        <md-icon md-svg-icon="refresh"></md-icon>
+                                    </md-button>
+                                    <md-button ng-click="ctrl.printSerials()" class="md-icon-button"
+                                               tooltip="{{lang.print}}">
+                                        <md-icon md-svg-icon="printer"></md-icon>
+                                    </md-button>
+                                </div>
+                                <div layout="column">
+                                    <div scroll-directive>
+                                        <md-card md-whiteframe="3" class="card-overlay">
+                                            !! INSDIE THIS TAB !!
                                         </md-card>
                                     </div>
                                 </div>

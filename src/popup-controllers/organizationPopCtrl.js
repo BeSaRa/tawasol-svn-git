@@ -2043,7 +2043,8 @@ module.exports = function (app) {
             'private_registry_ou',
             'property_config',
             'users',
-            'departmentUsers'
+            'departmentUsers',
+            'serials'
         ];
 
         self.setCurrentTab = function (tabName) {
