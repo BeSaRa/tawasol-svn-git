@@ -1716,6 +1716,13 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module'
             })
+            .state('app.administration.serials-screen', {
+                url: '/serials-screen',
+                templateUrl: templateProvider.getView('serials-screen'),
+                controller: 'serialsScreenCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_serials'
+            })
 
     });
 };

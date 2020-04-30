@@ -701,6 +701,14 @@ module.exports = function (app) {
                         }));
                 }
             })
+            .bulkResolveToState('app.administration.serials-screen', {
+                registryOrganizations: function (organizationService, _) {
+                    'ngInject';
+                    return organizationService.loadOrganizations(true).then(function (organizations) {
+                        return _.filter(organizations, 'hasRegistry');
+                    });
+                }
+            })
             .registerResolver();
     });
 };

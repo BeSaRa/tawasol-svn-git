@@ -1258,5 +1258,17 @@
     "sort_order": 3,
     "active": true,
     "sort_value": 0
+  },
+  {
+    "ID": 118,
+    "lang_key": "menu_item_serials",
+    "icon": "inbox",
+    "parent": 8,
+    "link": "#serials-screen",
+    "state": "app.administration.serials-screen",
+    "icon_type": "font",
+    "sort_order": 3,
+    "active": true,
+    "sort_value": 0
   }
 ]

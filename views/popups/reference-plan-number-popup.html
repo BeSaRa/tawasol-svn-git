@@ -113,14 +113,16 @@
                                                        md-progress="promise">
                                                     <thead md-head>
                                                     <tr md-row>
-                                                        <th md-column>{{lang.name}}</th>
+<!--                                                        <th md-column>{{lang.name}}</th>-->
+                                                        <th md-column>{{lang.description}}</th>
                                                         <th md-column>{{lang.actions}}</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody md-body>
                                                     <tr md-row
                                                         ng-repeat="element in ctrl.referencePlanNumber.referencePlanItems track by $index">
-                                                        <td md-cell>{{element.refernceExpression}}</td>
+<!--                                                        <td md-cell>{{element.refernceExpression}}</td>-->
+                                                        <td md-cell>{{element.description}}</td>
                                                         <td md-cell>
                                                             <div layout="row">
                                                                 <md-button class="md-icon-button"

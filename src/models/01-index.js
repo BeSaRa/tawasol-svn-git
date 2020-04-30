@@ -181,5 +181,6 @@ module.exports = function (app) {
     require('./FollowupAction')(app);
     require('./PredefinedAction')(app);
     require('./PredefinedActionMember')(app);
+    require('./ReferencePlanItemResult')(app);
     require('./ExportedTrackingSheetResult')(app);
 };

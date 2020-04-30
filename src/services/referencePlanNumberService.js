@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                         $q,
                                                         generator,
                                                         ReferencePlanNumber,
+                                                        ReferencePlanItemResult,
                                                         _,
                                                         dialog,
                                                         langService,
@@ -365,6 +366,13 @@ module.exports = function (app) {
                     self.referencePlanNumberRelatedOUs = generator.generateCollection(result.data.rs, Organization);
                     self.referencePlanNumberRelatedOUs = generator.interceptReceivedCollection('Organization', self.referencePlanNumberRelatedOUs);
                     return self.referencePlanNumberRelatedOUs;
+                });
+        };
+
+        self.loadSerials = function (year, ous) {
+            return $http.post(urlService.referencePlanNumbers + '-item/details/' + year, ous)
+                .then(function (result) {
+                    return generator.generateCollection(result.data.rs, ReferencePlanItemResult);
                 });
         }
     });

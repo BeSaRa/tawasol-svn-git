@@ -66,10 +66,24 @@
                                         <label for="siteType">{{lang.correspondence_site_type}}</label>
                                         <md-select id="siteType" name="siteType"
                                                    ng-model="ctrl.referencePlanItem.expressionComponents.siteType">
-                                            <md-option ng-repeat="type in ctrl.correspondenceSiteTypes" ng-value="type.lookupKey" >
+                                            <md-option ng-repeat="type in ctrl.correspondenceSiteTypes"
+                                                       ng-value="type.lookupKey">
                                                 {{type.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="description">{{lang.description}}</label>
+                                        <textarea required="true" id="description"
+                                                  md-maxlength="250"
+                                                  name="description"
+                                                  ng-model="ctrl.referencePlanItem.description"
+                                                  id="description" rows="10"></textarea>
+                                        <div ng-messages="referencePlanNumberForm.description.$error">
+                                            <div ng-message="required">{{lang.required_filed}}</div>
+                                        </div>
                                     </md-input-container>
                                 </div>
                             </div>
