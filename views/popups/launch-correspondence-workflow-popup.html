@@ -542,13 +542,15 @@
     </md-dialog-content>
     <!-- Buttons and info -->
     <md-dialog-actions class="cms-dialog-actions">
-        <!--
-                <span layout-align="center center"><span ng-if="ctrl.getApprovedStatus()" class="red-color">{{ctrl.multi ?  lang.get('selected_document_has_not_approved_document') : lang.get('cannot_send_to_multi')}}</span></span>
-        -->
-        <span flex></span>
         <md-button class="md-raised md-primary" ng-click="ctrl.launchDistributionCorrespondenceWorkFlow()"
                    ng-disabled="ctrl.disableSend">
             {{lang.get(ctrl.textButton)}}
+        </md-button>
+        <md-button class="md-raised md-primary"
+                   ng-if="!ctrl.multi && ctrl.actionKey === 'forward'"
+                   ng-click="ctrl.quickSendCorrespondenceWorkFlow($event)"
+                   ng-disabled="ctrl.disableSend">
+            {{lang.quick_send}}
         </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closeCorrespondenceWorkflow()">{{lang.close}}</md-button>
     </md-dialog-actions>

@@ -1468,6 +1468,18 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Opens the quick send dialog
+         * @param $event
+         */
+        self.quickSendCorrespondenceWorkFlow = function ($event) {
+            dialog.cancel();
+            self.correspondence.quickSendLaunchWorkflow($event, 'favorites', null, isDeptIncoming)
+                .then(function (result) {
+                    dialog.hide();
+                })
+        };
+
+        /**
          * @description Clears the searchText for the given field
          * @param fieldType
          */
