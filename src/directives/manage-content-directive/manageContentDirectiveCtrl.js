@@ -243,7 +243,7 @@ module.exports = function (app) {
                     return '.' + availableTypes[key].extension;
                 });
 
-                if (info.isPaper) {
+                if (info.documentClass.toLowerCase() === 'incoming' || info.isPaper) {
                     allowedDocument = 'Paper' + info.documentClass;
                     // create run time group extensions to check it later beforeUpload function.
                     attachmentService.getProvider().addExtensionGroup(allowedDocument, extensions).prepareExtensions();
@@ -349,7 +349,8 @@ module.exports = function (app) {
         };
 
         self.showEditContentInEditPopup = function () {
-            return (self.fromDialog && !self.document.getInfo().isPaper && self.document.contentSize && self.document.getInfo().docStatus < 24) && !self.editContent;
+            var info = self.document.getInfo();
+            return (self.fromDialog && info.documentClass.toLowerCase() !== 'incoming' && !info.isPaper && self.document.contentSize && info.docStatus < 24) && !self.editContent;
         };
         /**
          * @description open edit correspondence when editAfterApproved = true.
