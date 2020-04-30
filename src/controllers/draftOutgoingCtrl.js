@@ -536,7 +536,7 @@ module.exports = function (app) {
                     $state.go('app.outgoing.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        workItem: info.wobNum
+                        wobNum: info.wobNum
                     });
                 });
         };
@@ -554,7 +554,7 @@ module.exports = function (app) {
                     $state.go('app.outgoing.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        workItem: info.wobNum
+                        wobNum: info.wobNum
                     });
                 });
         };

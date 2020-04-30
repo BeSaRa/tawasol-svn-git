@@ -229,7 +229,7 @@ module.exports = function (app) {
             }
             var info = workItem.getInfo();
             dialog.hide();
-            $state.go('app.incoming.add', {action: 'receive', workItem: info.wobNumber});
+            $state.go('app.incoming.add', {action: 'receive', wobNum: info.wobNumber});
         };
 
 
@@ -535,7 +535,7 @@ module.exports = function (app) {
                     $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        workItem: info.wobNum
+                        wobNum: info.wobNum
                     });
                 });
         };
@@ -558,7 +558,7 @@ module.exports = function (app) {
                     $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        workItem: info.wobNum
+                        wobNum: info.wobNum
                     });
                 });
         };

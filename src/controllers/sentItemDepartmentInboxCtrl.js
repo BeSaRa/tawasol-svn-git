@@ -541,7 +541,7 @@ module.exports = function (app) {
                     $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        workItem: info.wobNum
+                        wobNum: info.wobNum
                     });
                 });
         };
@@ -559,7 +559,7 @@ module.exports = function (app) {
                     $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        workItem: info.wobNum
+                        wobNum: info.wobNum
                     });
                 });
         };
@@ -578,7 +578,7 @@ module.exports = function (app) {
             dialog.confirmMessage(list.getList(), null, null, $event)
                 .then(function () {
                     $state.go('app.outgoing.add', {
-                        workItem: info.wobNumber,
+                        wobNum: info.wobNumber,
                         vsId: info.vsId,
                         action: 'editAfterExport'
                     });

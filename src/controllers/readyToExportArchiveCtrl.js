@@ -687,7 +687,7 @@ module.exports = function (app) {
                         .runEditAfter('Approved', workItem)
                         .then(function () {
                             $state.go('app.outgoing.add', {
-                                workItem: info.wobNumber,
+                                wobNum: info.wobNumber,
                                 vsId: info.vsId,
                                 action: 'editAfterApproved'
                             });
@@ -804,7 +804,7 @@ module.exports = function (app) {
                     $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        workItem: info.wobNum
+                        wobNum: info.wobNum
                     });
                 });
         };
@@ -826,7 +826,7 @@ module.exports = function (app) {
                     $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        workItem: info.wobNum
+                        wobNum: info.wobNum
                     });
                 });
         };

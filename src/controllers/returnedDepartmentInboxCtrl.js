@@ -536,7 +536,7 @@ module.exports = function (app) {
                         .then(function () {
                             dialog.hide();
                             $state.go('app.outgoing.add', {
-                                workItem: info.wobNumber,
+                                wobNum: info.wobNumber,
                                 vsId: info.vsId,
                                 action: 'editAfterExport'
                             });
@@ -678,7 +678,7 @@ module.exports = function (app) {
                     $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        workItem: info.wobNum
+                        wobNum: info.wobNum
                     });
                 });
         };
@@ -700,7 +700,7 @@ module.exports = function (app) {
                     $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        workItem: info.wobNum
+                        wobNum: info.wobNum
                     });
                 });
         };

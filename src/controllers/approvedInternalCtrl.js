@@ -571,7 +571,7 @@ module.exports = function (app) {
                     $state.go('app.internal.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        workItem: info.wobNum
+                        wobNum: info.wobNum
                     });
                 });
         };
@@ -593,7 +593,7 @@ module.exports = function (app) {
                     $state.go('app.internal.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        workItem: info.wobNum
+                        wobNum: info.wobNum
                     });
                 });
         };
@@ -638,7 +638,7 @@ module.exports = function (app) {
                         .runEditAfter('Approved', model)
                         .then(function () {
                             $state.go('app.internal.add', {
-                                workItem: info.wobNumber,
+                                wobNum: info.wobNumber,
                                 vsId: info.vsId,
                                 action: 'editAfterApproved'
                             });

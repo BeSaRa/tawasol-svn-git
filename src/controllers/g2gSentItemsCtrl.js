@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('g2gSentItemsCtrl', function (lookupService,
                                                  g2gSentItemsService,
                                                  $q,
+                                                 $state,
                                                  correspondenceStorageService,
                                                  listGeneratorService,
                                                  $filter,

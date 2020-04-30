@@ -737,7 +737,7 @@ module.exports = function (app) {
                     $state.go('app.incoming.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
-                        workItem: info.wobNum
+                        wobNum: info.wobNum
                     });
                 });
         };
