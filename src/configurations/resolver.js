@@ -162,7 +162,8 @@ module.exports = function (app) {
                     'ngInject';
                     var vsId = $stateParams.vsId, wobNum = $stateParams.wobNum, action = $stateParams.action,
                         createAsAttachment = $stateParams.createAsAttachment === "true",
-                        sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'outgoing';
+                        sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'outgoing',
+                        addMethod = $stateParams.addMethod;
 
                     if (action !== 'reply')
                         return $timeout(function () {
@@ -181,7 +182,7 @@ module.exports = function (app) {
 
                                 outgoing.docDate = new Date();
                                 outgoing.createdOn = new Date();
-                                outgoing.addMethod = 0;
+                                outgoing.addMethod = Number(addMethod);
                                 outgoing.sitesInfoTo = angular.copy(outgoing.sitesToList); //[result.site];
                                 outgoing.classDescription = 'Outgoing';
                                 return outgoing
@@ -273,7 +274,8 @@ module.exports = function (app) {
                     'ngInject';
                     var vsId = $stateParams.vsId, wobNum = $stateParams.wobNum, action = $stateParams.action,
                         createAsAttachment = $stateParams.createAsAttachment === "true",
-                        sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'outgoing';
+                        sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'outgoing',
+                        addMethod = $stateParams.addMethod;
 
                     if (action !== 'reply')
                         return $timeout(function () {
@@ -291,7 +293,7 @@ module.exports = function (app) {
                                 }
                                 outgoing.docDate = new Date();
                                 outgoing.createdOn = new Date();
-                                outgoing.addMethod = 0;
+                                outgoing.addMethod = Number(addMethod);
                                 outgoing.sitesInfoTo = angular.copy(outgoing.sitesToList); //[result.site];
                                 outgoing.classDescription = 'Outgoing';
                                 outgoing.isComposite = false;
@@ -475,7 +477,8 @@ module.exports = function (app) {
                     'ngInject';
                     var vsId = $stateParams.vsId, wobNum = $stateParams.wobNum, action = $stateParams.action,
                         createAsAttachment = $stateParams.createAsAttachment === "true",
-                        sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'internal';
+                        sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'internal',
+                        addMethod = $stateParams.addMethod;
 
                     if (action !== 'reply')
                         return $timeout(function () {
@@ -493,7 +496,7 @@ module.exports = function (app) {
                                 }
                                 internal.docDate = new Date();
                                 internal.createdOn = new Date();
-                                internal.addMethod = 0;
+                                internal.addMethod = Number(addMethod);
                                 internal.classDescription = 'Internal';
                                 return internal;
                             });
@@ -545,7 +548,8 @@ module.exports = function (app) {
                     'ngInject';
                     var vsId = $stateParams.vsId, wobNum = $stateParams.wobNum, action = $stateParams.action,
                         createAsAttachment = $stateParams.createAsAttachment === "true",
-                        sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'internal';
+                        sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'internal',
+                        addMethod = $stateParams.addMethod;
 
                     if (action !== 'reply')
                         return $timeout(function () {
@@ -563,7 +567,7 @@ module.exports = function (app) {
                                 }
                                 internal.docDate = new Date();
                                 internal.createdOn = new Date();
-                                internal.addMethod = 0;
+                                internal.addMethod = Number(addMethod);
                                 internal.classDescription = 'Internal';
                                 return internal;
                             });

@@ -365,7 +365,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.docActionSendLinkToDocumentByEmail = function(model, $event, defer){
+        self.docActionSendLinkToDocumentByEmail = function (model, $event, defer) {
             downloadService.getMainDocumentEmailContent(model.getInfo().vsId);
         };
 
@@ -662,7 +662,7 @@ module.exports = function (app) {
 
 
         self.isDocumentTypeSwitchDisabled = function () {
-            return !!self.internal.vsId || self.duplicateVersion || !self.employeeService.hasPermissionTo('INTERNAL_PAPER') || self.employee.isBacklogMode();
+            return !!self.internal.vsId || self.duplicateVersion || !self.employeeService.hasPermissionTo('INTERNAL_PAPER') || self.employee.isBacklogMode() || replyTo;
         }
 
     });

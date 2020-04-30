@@ -697,7 +697,6 @@ module.exports = function (app) {
         self.addCreateReplyCorrespondence = function (correspondence, vsId) {
             var sourceDocClass = $stateParams.sourceDocClass,
                 url = urlService.correspondence + '/' + correspondence.docClassName.toLowerCase() + '/create-reply-metadata/' + sourceDocClass + '/' + vsId;
-            var urlOld = _createUrlSchema('create-reply-metadata/incoming/' + vsId, correspondence.docClassName, null);
 
             return $http.post(url, generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence))
                 .then(function (result) {
@@ -718,7 +717,6 @@ module.exports = function (app) {
             var book = _createCorrespondenceStructure(correspondence, information),
                 sourceDocClass = $stateParams.sourceDocClass,
                 url = urlService.correspondence + '/' + correspondence.docClassName.toLowerCase() + '/create-reply-full/' + sourceDocClass + '/' + vsId;
-            var urlOld = _createUrlSchema('create-reply-full/incoming/' + vsId, correspondence.docClassName, null);
 
             return $http.post(url, book)
                 .then(function (result) {
