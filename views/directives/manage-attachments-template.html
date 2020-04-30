@@ -172,22 +172,6 @@
                    md-progress="ctrl.progress">
                 <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                 <tr md-row ng-class="{'text-transparent': ctrl.selectedAttachments.length}">
-                    <!--<th colspan="5" class="table-selector-header"
-                        ng-if="ctrl.selectedAttachments.length && ctrl.employeeService.hasPermissionTo('MANAGE_ATTACHMENTS')"
-                        md-column>
-                        <div layout="row" layout-align="start center">
-                            <span>{{ctrl.selectedAttachments.length}} {{lang.items_selected}} </span>
-                            <span flex></span>
-                            <md-button class="md-icon-button"
-                                       ng-if="ctrl.isEnabledDeleteBulkAttachments($event)"
-                                       ng-click="ctrl.deleteBulkAttachments($event)">
-                                <md-icon md-svg-icon="delete"></md-icon>
-                            </md-button>
-                        </div>
-                    </th>-->
-                    <!--<th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="">
-                        &lt;!&ndash; linked exported doc(attachment with refVSID) Indicators &ndash;&gt;
-                    </th>-->
                     <th md-column md-order-by="docSubject">
                         <span class="color-default" ng-if="ctrl.selectedAttachments.length">{{ctrl.selectedAttachments.length}} {{lang.items_selected}} </span>
                         <span ng-if="!ctrl.selectedAttachments.length">{{lang.attachment_document_title}}</span>

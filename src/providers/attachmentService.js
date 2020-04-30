@@ -185,7 +185,7 @@ module.exports = function (app) {
                     });
                 };
 
-                self.checkAttachmentIsDeletable = function (documentInfo, attachment) {
+                self.checkAttachmentIsDeletable = function (documentInfo, attachment, receiveOrReceiveG2G) {
                     // if create reply as attachment
                     if (attachment.createReplyDisableDelete) {
                         return false;
@@ -193,6 +193,9 @@ module.exports = function (app) {
                     // if no vsId for document, means, document is not added yet. so user can edit/delete
                     else if (!documentInfo.vsId) {
                         return true;
+                    }
+                    else if (receiveOrReceiveG2G){
+                        return employeeService.getEmployee().hasPermissionTo('DELETE_ATTACHMENT_RECEIPT');
                     }
                     return attachment.isDeletable;
                 };

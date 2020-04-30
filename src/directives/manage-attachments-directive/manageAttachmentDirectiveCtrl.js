@@ -209,15 +209,8 @@ module.exports = function (app) {
          */
         self.addFileToAttachments = function () {
             self.attachment = self.setNameToAttachment(self.attachment);
-            var promise = null;
-
-            /*if (self.vsId) {
-                promise = attachmentService.addAttachmentWithVsId(self.vsId, self.documentClass, self.attachment);
-            } else {
-                promise = attachmentService.addAttachmentWithOutVsId(self.documentClass, self.attachment);
-            }*/
             var info = self.document.getInfo();
-            promise = attachmentService.addAttachment(info, self.attachment);
+            var promise = attachmentService.addAttachment(info, self.attachment);
 
             promise
                 .then(function (attachment) {
@@ -281,12 +274,16 @@ module.exports = function (app) {
         };
 
         self.isAttachmentDeletable = function (attachment, editAttachment) {
+            if (self.disableEverything) {
+                return false;
+            }
+
             var isDeletable, isEditable;
 
-            isDeletable = !self.disableEverything && !attachment.refVSID && !_checkReceiveG2G()
-                && attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment);
+            isDeletable = !attachment.refVSID
+                && attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment, (self.receive || self.receiveG2G));
 
-            isEditable = !self.disableEverything && !attachment.refVSID
+            isEditable = !attachment.refVSID
                 && attachmentService.checkAttachmentIsEditable(self.document.getInfo(), attachment, (self.receive || self.receiveG2G))
                 && !self.isLinkedExportedDocAttachment;
 
