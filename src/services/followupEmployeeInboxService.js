@@ -28,7 +28,7 @@ module.exports = function (app) {
          * @description Load the followup employee inboxes from server.
          * @returns {Promise|followupEmployeeInboxes}
          */
-        self.loadFollowupEmployeeInboxes = function (employee, organization) {
+        self.loadFollowupEmployeeInboxes = function (employee, organization, securityLevels) {
             if (!employee) {
                 return $timeout(function () {
                     return [];
@@ -40,7 +40,8 @@ module.exports = function (app) {
             return $http.get(urlService.followupEmployeeInbox.change({
                 domainName: domainName,
                 ouId: ouId
-            })).then(function (result) {
+            }) + (securityLevels ? ('?securityLevels=' + securityLevels) : '')
+            ).then(function (result) {
                 self.followupEmployeeInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                 self.followupEmployeeInboxes = generator.interceptReceivedCollection('WorkItem', self.followupEmployeeInboxes);
                 return self.followupEmployeeInboxes;

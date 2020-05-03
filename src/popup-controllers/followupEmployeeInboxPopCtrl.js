@@ -84,6 +84,17 @@ module.exports = function (app) {
                 });
         };
 
+        self.getSecurityLevelsForUser = function ($event) {
+            self.selectedSecurityLevels = null;
+            if (!self.selectedApplicationUser)
+                return;
+
+            var index = _.findIndex(self.ouApplicationUsers, function (ouApplicationUser) {
+                return ouApplicationUser.applicationUser === self.selectedApplicationUser;
+            });
+            self.securityLevels = self.ouApplicationUsers[index].securityLevels;
+        };
+
         /**
          * @description Close the popup and get inbox according to selected ou and user
          * @param $event
@@ -94,7 +105,8 @@ module.exports = function (app) {
                 {
                     organization: self.selectedOrganization,
                     applicationUser: self.selectedApplicationUser,
-                    availableUsers: self.ouApplicationUsers
+                    availableUsers: self.ouApplicationUsers,
+                    securityLevels: self.selectedSecurityLevels ? generator.getResultFromSelectedCollection(self.selectedSecurityLevels, 'lookupKey') : null
                 }
             );
         };

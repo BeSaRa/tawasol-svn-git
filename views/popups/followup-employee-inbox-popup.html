@@ -42,6 +42,7 @@
                                        ng-disabled="!ctrl.selectedOrganization"
                                        aria-label="{{lang.app_users}}"
                                        ng-model="ctrl.selectedApplicationUser"
+                                       ng-change="ctrl.getSecurityLevelsForUser($event)"
                                        md-on-close="ctrl.clearSearchText('inlineAppUser')"
                                        data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
@@ -60,6 +61,20 @@
                             <div ng-messages="organizationAndUserForm.applicationUser.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
+                        </md-input-container>
+                        <!-- Security Levels -->
+                        <md-input-container flex ng-if="!ctrl.isFollowupSentItems">
+                            <label for="securityLevels">{{lang.security_level}}</label>
+                            <md-select id="securityLevels" name="securityLevels"
+                                       ng-model-options="{trackBy:'$value.lookupKey'}"
+                                       multiple
+                                       ng-disabled="!ctrl.selectedApplicationUser || !ctrl.securityLevels"
+                                       ng-model="ctrl.selectedSecurityLevels">
+                                <md-option ng-value="option"
+                                           ng-repeat="option in ctrl.securityLevels track by $index">
+                                    {{option.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
                         </md-input-container>
                     </div>
                 </div>
