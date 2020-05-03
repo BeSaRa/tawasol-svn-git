@@ -4713,6 +4713,32 @@ module.exports = function (app) {
         };
 
         self.openQuickSendDialog = function (record, defaultTab, action, isDeptIncoming, isDeptSent, $event) {
+            var normalCorrespondence = false;
+            if (!isDeptSent) {
+                normalCorrespondence = angular.isArray(record) ? !record[0].isWorkItem() : !record.isWorkItem();
+            }
+            var count = angular.isArray(record) ? record.length : 1;
+            if (normalCorrespondence) {
+                var sitesValidation = self.validateBeforeSend(record);
+                if (sitesValidation.length && sitesValidation.length === count && count === 1) {
+                    var info = record.getInfo();
+                    return dialog
+                        .confirmMessage(langService.get('no_sites_cannot_send'), 'add', 'cancel', $event)
+                        .then(function () {
+                            return managerService
+                                .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
+                                .then(function (result) {
+                                    return result.hasSite() ? _quickSendDialog(record, defaultTab, action, isDeptIncoming, isDeptSent, $event) : null;
+                                })
+                        })
+                } else {
+                    return _quickSendDialog(record, defaultTab, action, isDeptIncoming, isDeptSent, $event);
+                }
+            }
+            return _quickSendDialog(record, defaultTab, action, isDeptIncoming, isDeptSent, $event);
+        };
+
+        function _quickSendDialog(record, defaultTab, action, isDeptIncoming, isDeptSent, $event) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('quick-send-document'),
@@ -4733,7 +4759,7 @@ module.exports = function (app) {
                         }
                     }
                 })
-        };
+        }
 
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
