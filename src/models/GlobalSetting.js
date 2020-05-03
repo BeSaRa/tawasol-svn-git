@@ -57,6 +57,7 @@ module.exports = function (app) {
             self.separateActionOnTransfer = false;
             self.defaultDisplayLang = 1;
             self.excludedConversionFileTypes = [];
+            self.slowConnectionMode = false;
             //endregion
 
             // every model has required fields
@@ -140,6 +141,10 @@ module.exports = function (app) {
 
             GlobalSetting.prototype.getSecurityLevels = function () {
                 return this.securityLevels;
+            };
+
+            GlobalSetting.prototype.isSlowConnectionMode = function () {
+                return this.slowConnectionMode;
             };
 
             // don't remove CMSModelInterceptor from last line

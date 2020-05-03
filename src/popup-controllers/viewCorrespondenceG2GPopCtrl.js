@@ -11,7 +11,8 @@ module.exports = function (app) {
                                                              correspondenceService,
                                                              G2GMessagingHistory,
                                                              downloadService,
-                                                             generator) {
+                                                             generator,
+                                                             rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondenceG2GPopCtrl';
@@ -62,6 +63,10 @@ module.exports = function (app) {
          */
         function _resetViewModeToggle(firstLoadOrReloadMainDoc) {
             self.slowConnectionEnabled = !!employeeService.getEmployee().isSlowConnectionMode();
+            if (!rootEntity.getGlobalSettings().isSlowConnectionMode()) {
+                return _getOriginalMainDocContent();
+            }
+
             if (self.slowConnectionEnabled) {
                 _getMainDocContentByViewUrl();
             } else {
@@ -80,6 +85,14 @@ module.exports = function (app) {
             } else {
                 _getOriginalMainDocContent();
             }
+        };
+
+        /**
+         * @description Checks if toggle slow connection is enabled for entity from global settings and for user from preferences to switch views
+         * @returns {*|boolean}
+         */
+        self.isShowSlowConnection = function () {
+            return rootEntity.getGlobalSettings().isSlowConnectionMode() && !employeeService.getEmployee().isSlowConnectionMode();
         };
 
         /**

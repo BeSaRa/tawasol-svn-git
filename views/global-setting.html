@@ -200,17 +200,29 @@
                                     </div>
                                 </md-input-container>
                                 <!-- Enable Mobile Access -->
-                                <md-switch flex ng-model="ctrl.globalSetting.enableMobileAccess"
-                                           aria-label="{{lang.enable_mobile_access}}">
-                                    <span>{{lang.enable_mobile_access}} : </span>{{
-                                    ctrl.globalSetting.getTranslatedYesNo('enableMobileAccess')}}
-                                </md-switch>
+                                <md-input-container flex>
+                                    <md-switch flex ng-model="ctrl.globalSetting.enableMobileAccess"
+                                               aria-label="{{lang.enable_mobile_access}}">
+                                        <span>{{lang.enable_mobile_access}} : </span>{{
+                                        ctrl.globalSetting.getTranslatedYesNo('enableMobileAccess')}}
+                                    </md-switch>
+                                </md-input-container>
                                 <!-- Can Change Password -->
-                                <md-switch flex ng-model="ctrl.globalSetting.canChangePassword"
-                                           aria-label="{{lang.can_change_password}} ">
-                                    <span>{{lang.can_change_password}} : </span>{{
-                                    ctrl.globalSetting.getTranslatedYesNo('canChangePassword')}}
-                                </md-switch>
+                                <md-input-container flex>
+                                    <md-switch flex ng-model="ctrl.globalSetting.canChangePassword"
+                                               aria-label="{{lang.can_change_password}} ">
+                                        <span>{{lang.can_change_password}} : </span>{{
+                                        ctrl.globalSetting.getTranslatedYesNo('canChangePassword')}}
+                                    </md-switch>
+                                </md-input-container>
+                                <!-- Slow Connection Mode -->
+                                <md-input-container flex>
+                                    <md-switch flex ng-model="ctrl.globalSetting.slowConnectionMode"
+                                               aria-label="{{lang.slow_connection_mode}} ">
+                                        <span>{{lang.slow_connection_mode}} : </span>{{
+                                        ctrl.globalSetting.getTranslatedYesNo('slowConnectionMode')}}
+                                    </md-switch>
+                                </md-input-container>
 
                             </div>
                         </div>

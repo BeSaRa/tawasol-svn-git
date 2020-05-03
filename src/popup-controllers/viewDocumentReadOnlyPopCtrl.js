@@ -6,7 +6,8 @@ module.exports = function (app) {
                                                             employeeService,
                                                             downloadService,
                                                             $sce,
-                                                            generator) {
+                                                            generator,
+                                                            rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewDocumentReadOnlyPopCtrl';
@@ -20,8 +21,15 @@ module.exports = function (app) {
 
         self.viewURL = '';
 
+        /**
+         * @description Checks if toggle slow connection is enabled for entity from global settings and for user from preferences to switch views
+         * @returns {*|boolean}
+         */
         self.isShowSlowConnection = function () {
-            return !(self.typeOfDoc === 'otp-doc' || self.employeeService.getEmployee().isSlowConnectionMode());
+            if (self.typeOfDoc === 'otp-doc') {
+                return false;
+            }
+            return rootEntity.getGlobalSettings().isSlowConnectionMode() && !employeeService.getEmployee().isSlowConnectionMode();
         };
 
         var _getOriginalMainDocContent = function () {
@@ -46,6 +54,10 @@ module.exports = function (app) {
          * @description Toggles the view mode for the attachment
          */
         self.toggleSlowConnectionMode = function ($event) {
+            if (!rootEntity.getGlobalSettings().isSlowConnectionMode()) {
+                return _getOriginalMainDocContent();
+            }
+
             if (self.slowConnectionEnabled) {
                 if (self.typeOfDoc === 'attachment') {
                     _getAttachmentContentByVsId(self.document.vsId)

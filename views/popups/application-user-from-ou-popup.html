@@ -298,7 +298,7 @@
                                     <!-- Security Levels for view -->
                                     <md-input-container flex>
                                         <label for="ouSecurityLevel">{{lang.security_level_view}}</label>
-<!--                                        ng-required="!ctrl.ouApplicationUser.archiveSecurityLevels || !ctrl.ouApplicationUser.archiveSecurityLevels.length"-->
+                                        <!--                                        ng-required="!ctrl.ouApplicationUser.archiveSecurityLevels || !ctrl.ouApplicationUser.archiveSecurityLevels.length"-->
                                         <md-select id="ouSecurityLevel" name="ouSecurityLevel" multiple
 
                                                    ng-model-options="{trackBy:'$value.lookupKey'}"
@@ -315,7 +315,7 @@
                                     <!-- Security Levels for add -->
                                     <md-input-container flex>
                                         <label for="ouArchiveSecurityLevel">{{lang.security_level_add}}</label>
-<!--                                        ng-required="!ctrl.ouApplicationUser.securityLevels || !ctrl.ouApplicationUser.securityLevels.length"-->
+                                        <!--                                        ng-required="!ctrl.ouApplicationUser.securityLevels || !ctrl.ouApplicationUser.securityLevels.length"-->
                                         <md-select id="ouArchiveSecurityLevel" name="ouArchiveSecurityLevel" multiple
 
                                                    ng-model-options="{trackBy:'$value.lookupKey'}"
@@ -418,16 +418,21 @@
                                     <md-input-container flex></md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <md-switch flex ng-model="ctrl.applicationUser.slowConnectionMode"
-                                               aria-label="{{lang.slow_connection_mode}}">
-                                        <label>{{lang.slow_connection_mode}} :
-                                            {{ctrl.applicationUser.getTranslatedYesNo('slowConnectionMode')}}</label>
-                                    </md-switch>
-                                    <md-switch flex ng-model="ctrl.applicationUser.backLogMode"
-                                               aria-label="{{lang.backlog_mode}}">
-                                        <label>{{lang.backlog_mode}} :
-                                            {{ctrl.applicationUser.getTranslatedYesNo('backLogMode')}}</label>
-                                    </md-switch>
+                                    <div class="cms-input-container" flex>
+                                        <md-switch flex ng-model="ctrl.applicationUser.slowConnectionMode"
+                                                   ng-disabled="!ctrl.globalSetting.slowConnectionMode"
+                                                   aria-label="{{lang.slow_connection_mode}}">
+                                            <label>{{lang.slow_connection_mode}} :
+                                                {{ctrl.applicationUser.getTranslatedYesNo('slowConnectionMode')}}</label>
+                                        </md-switch>
+                                    </div>
+                                    <div class="cms-input-container" flex>
+                                        <md-switch flex ng-model="ctrl.applicationUser.backLogMode"
+                                                   aria-label="{{lang.backlog_mode}}">
+                                            <label>{{lang.backlog_mode}} :
+                                                {{ctrl.applicationUser.getTranslatedYesNo('backLogMode')}}</label>
+                                        </md-switch>
+                                    </div>
                                 </div>
                             </div>
                         </md-content>

@@ -23,7 +23,8 @@ module.exports = function (app) {
                                                           G2GMessagingHistory,
                                                           downloadService,
                                                           $sce,
-                                                          generator) {
+                                                          generator,
+                                                          rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondencePopCtrl';
@@ -94,6 +95,10 @@ module.exports = function (app) {
             self.slowConnectionEnabled = !!employeeService.getEmployee().isSlowConnectionMode();
 
             if (firstLoadOrReloadMainDoc) {
+                if (!rootEntity.getGlobalSettings().isSlowConnectionMode()) {
+                    return _getOriginalMainDocContent();
+                }
+
                 if (self.slowConnectionEnabled) {
                     _getMainDocContentByViewUrl();
                 } else {
@@ -104,6 +109,14 @@ module.exports = function (app) {
 
         // set the slowConnectionMode when popup opens
         _resetViewModeToggle(true);
+
+        /**
+         * @description Checks if toggle slow connection is enabled for entity from global settings and for user from preferences to switch views
+         * @returns {*|boolean}
+         */
+        self.isShowSlowConnection = function () {
+            return rootEntity.getGlobalSettings().isSlowConnectionMode() && !employeeService.getEmployee().isSlowConnectionMode();
+        };
 
         /**
          * @description Toggles the view mode for the document/attachment/linked doc

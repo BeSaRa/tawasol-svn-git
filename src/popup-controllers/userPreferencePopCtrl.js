@@ -272,6 +272,10 @@ module.exports = function (app) {
             );
         }
 
+        if (!self.globalSetting.isSlowConnectionMode()) {
+            self.disabledFields.push('slowConnectionMode');
+        }
+
 
         /**
          * @description Contains the selected tab name

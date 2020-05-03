@@ -340,6 +340,10 @@ module.exports = function (app) {
             );
         }
 
+        if (!self.globalSetting.isSlowConnectionMode()) {
+            self.disabledFields.push('slowConnectionMode');
+        }
+
         /**
          * @description Changes the sms notifications to null/empty/0 when notifications are set to false or revert them when set to true
          * @param applicationUserForm
