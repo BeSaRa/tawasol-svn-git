@@ -16,18 +16,25 @@ module.exports = function (app) {
          */
         self.grid = {
             progress: null,
-            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.smsTemplate) || 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.serialNumbers) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.smsTemplate, self.smsTemplates),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.serialNumbers, self.records),
             pagingCallback: function (page, limit) {
-                gridService.setGridPagingLimitByGridName(gridService.grids.administration.smsTemplate, limit);
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.serialNumbers, limit);
             },
             searchColumns: {
                 arabicName: 'arName',
                 englishName: 'enName'
             },
             searchText: ''
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.records = $filter('orderBy')(self.records, self.grid.order);
         };
 
         self.selectedOrganizationsChanged = function () {
@@ -47,7 +54,7 @@ module.exports = function (app) {
         };
 
         self.printRecords = function () {
-            printService.printData(self.records, Object.keys(self.records[0].getExportedData()), langService.get('serial_number'));
+            printService.printData(self.records, Object.keys(self.records[0].getExportedData()), langService.get('menu_item_serials') + ' : ' + self.selectedYear);
         }
 
 

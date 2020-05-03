@@ -521,7 +521,8 @@ module.exports = function (app) {
                         unAssignedUsers: [],
                         ouAssignedUsers: [],
                         organizations: self.allOrganizationsStructure,
-                        defaultTab: 'basic'
+                        defaultTab: 'basic',
+                        serials: []
                     },
                     resolve: {
                         classifications: function (classificationService) {
@@ -612,7 +613,7 @@ module.exports = function (app) {
                         documentTemplates: function (documentTemplateService) {
                             'ngInject';
                             return documentTemplateService
-                                .loadDocumentTemplates(organization.id , null , (!organization.hasRegistry ? organization.id : null));
+                                .loadDocumentTemplates(organization.id, null, (!organization.hasRegistry ? organization.id : null));
                         },
                         allPropertyConfigurations: function (propertyConfigurationService, $q) {
                             'ngInject';
@@ -670,6 +671,10 @@ module.exports = function (app) {
                         distributionLists: function (distributionListService) {
                             'ngInject';
                             return distributionListService.getDistributionLists();
+                        },
+                        serials: function (referencePlanNumberService) {
+                            'ngInject';
+                            return organization.hasRegistry ? referencePlanNumberService.loadSerials((new Date()).getFullYear(), [organization.id]) : [];
                         }
                     }
                 });

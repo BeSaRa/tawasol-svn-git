@@ -670,15 +670,77 @@
                                                tooltip="{{lang.reload}}">
                                         <md-icon md-svg-icon="refresh"></md-icon>
                                     </md-button>
-                                    <md-button ng-click="ctrl.printSerials()" class="md-icon-button"
+                                    <md-button ng-if="ctrl.serials.length" ng-click="ctrl.printSerials()"
+                                               class="md-icon-button"
                                                tooltip="{{lang.print}}">
                                         <md-icon md-svg-icon="printer"></md-icon>
                                     </md-button>
+                                    <span flex></span>
+                                    <md-input-container flex class="cms-default">
+                                        <label for="selectedSerialYear">{{lang.search_module_year}}</label>
+                                        <md-select id="selectedSerialYear" name="selectedSerialYear"
+                                                   aria-label="{{lang.search_module_year}}"
+                                                   ng-change="ctrl.reloadSerials()"
+                                                   ng-model="ctrl.selectedSerialYear">
+                                            <md-option ng-value="year"
+                                                       ng-repeat="year in ctrl.serialYears">
+                                                {{year}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <!--<grid-search-directive grid="ctrl.serialGrid"></grid-search-directive>-->
                                 </div>
                                 <div layout="column">
-                                    <div scroll-directive>
-                                        <md-card md-whiteframe="3" class="card-overlay">
-                                            !! INSDIE THIS TAB !!
+                                    <div>
+                                        <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                                            <md-table-container>
+                                                <div>
+                                                    <table md-table md-progress="ctrl.serialGrid.progress">
+                                                        <thead fix-head md-head md-order="ctrl.serialGrid.order"
+                                                               md-on-reorder="ctrl.getSerialSortedData">
+                                                        <tr md-row>
+                                                            <th md-column>
+                                                                <span>{{lang.organization}}</span>
+                                                            </th>
+                                                            <th md-column>
+                                                                <span>{{lang.reference_number_plan}}</span>
+                                                            </th>
+
+                                                            <th md-column md-order-by="maxSerial">
+                                                                <span>{{lang.max_serial_number}}</span>
+                                                            </th>
+                                                            <th md-column>
+                                                                <span>{{lang.reference_plan_element_expression}}</span>
+                                                            </th>
+                                                            <th md-column>
+                                                                <span>{{lang.description}}</span>
+                                                            </th>
+                                                            <th md-column>
+                                                                <span>{{lang.type}}</span>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody md-body>
+                                                        <tr md-row
+                                                            ng-repeat="item in ctrl.serials | limitTo: ctrl.serialGrid.limit: ((ctrl.serialGrid.page - 1) * ctrl.serialGrid.limit) track by $index">
+                                                            <td md-cell>{{item.getTranslatedOUName()}}</td>
+                                                            <td md-cell>{{item.getTranslatedName()}}</td>
+                                                            <td md-cell>{{item.maxSerial}}</td>
+                                                            <td md-cell>{{item.refernceItemExpression}}</td>
+                                                            <td md-cell>{{item.referncePlanItemDescription}}</td>
+                                                            <td md-cell>{{item.getPerOUEntityTranslate()}}</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </md-table-container>
+                                            <md-table-pagination
+                                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                    md-limit-options="ctrl.serialGrid.limitOptions"
+                                                    md-limit="ctrl.serialGrid.limit" md-page="ctrl.serialGrid.page"
+                                                    md-total="{{(ctrl.serials).length}}" md-page-select
+                                                    md-on-paginate="ctrl.serialGrid.pagingCallback">
+                                            </md-table-pagination>
                                         </md-card>
                                     </div>
                                 </div>

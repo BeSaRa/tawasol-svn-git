@@ -1,5 +1,8 @@
 module.exports = function (app) {
     app.controller('organizationPopCtrl', function ($scope,
+                                                    configurationService,
+                                                    serials,
+                                                    printService,
                                                     dialog,
                                                     generator,
                                                     langService,
@@ -150,6 +153,31 @@ module.exports = function (app) {
         self.ouDistributionLists = [];
         self.ouDistributionListsCopy = angular.copy(self.ouDistributionLists);
         self.selectedOUDistributionLists = [];
+
+        self.serials = serials;
+        self.selectedSerialYear = (new Date()).getFullYear();
+        self.serialYears = _.range(configurationService.SEARCH_YEARS, ((new Date()).getFullYear() + 1));
+        self.selectedSerialOrganizations = [];
+
+        /**
+         * @description Contains options for grid configuration
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
+         */
+        self.serialGrid = {
+            progress: null,
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.serialNumbers) || 5, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.serialNumbers, self.serials),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.serialNumbers, limit);
+            },
+            searchColumns: {
+                arabicName: 'arName',
+                englishName: 'enName'
+            },
+            searchText: ''
+        };
 
         self.listParentsHasCentralArchive.push(new Organization({
             id: null,
@@ -2029,6 +2057,24 @@ module.exports = function (app) {
                 self.reloadOuApplicationUsers(self.appUserGrid.page);
                 self.reloadDepartmentUsers(self.departmentUsersGrid.page);
             });
+        };
+
+        self.reloadSerials = function () {
+            if (!self.selectedSerialYear) {
+                return null;
+            }
+
+            referencePlanNumberService
+                .loadSerials(self.selectedSerialYear, [self.organization.id])
+                .then(function (result) {
+                    self.serials = result;
+                });
+        };
+        /**
+         * @description print serials function
+         */
+        self.printSerials = function () {
+            printService.printData(self.serials, Object.keys(self.serials[0].getExportedData()), langService.get('menu_item_serials') + ' : ' + self.selectedSerialYear);
         };
 
 

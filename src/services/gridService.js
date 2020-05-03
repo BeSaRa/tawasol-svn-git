@@ -116,7 +116,8 @@ module.exports = function (app) {
                 documentTemplate: 'docTemplate',
                 attachmentType: 'attachType',
                 dynamicMenuItem: 'dynamicMenu',
-                organization: 'organization'
+                organization: 'organization',
+                serialNumbers: 'serialNumbers'
             },
             others: {
                 linkedDoc: 'linkedDoc',
@@ -170,7 +171,7 @@ module.exports = function (app) {
          * @description Get the unique class to be added a row class to highlight row while opening shortcut or context actions menu
          * @returns {string}
          */
-        self.getUniqueIdentifier = function(){
+        self.getUniqueIdentifier = function () {
             return (new Date().valueOf()).toString();
         };
 
