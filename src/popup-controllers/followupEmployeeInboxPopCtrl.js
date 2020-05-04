@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                              followUpOrganizations,
                                                              ouApplicationUsers,
                                                              employeeService,
+                                                             rootEntity,
                                                              Information) {
         'ngInject';
         var self = this;
@@ -21,6 +22,7 @@ module.exports = function (app) {
         self.inlineOUSearchText = '';
         self.inlineAppUserSearchText = '';
         self.isFollowupSentItems = isFollowupSentItems;
+        self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
 
         var _mapRegOUSections = function () {
             // filter all regOU (has registry)
@@ -84,16 +86,6 @@ module.exports = function (app) {
                 });
         };
 
-        self.getSecurityLevelsForUser = function ($event) {
-            self.selectedSecurityLevels = null;
-            if (!self.selectedApplicationUser)
-                return;
-
-            var index = _.findIndex(self.ouApplicationUsers, function (ouApplicationUser) {
-                return ouApplicationUser.applicationUser === self.selectedApplicationUser;
-            });
-            self.securityLevels = self.ouApplicationUsers[index].securityLevels;
-        };
 
         /**
          * @description Close the popup and get inbox according to selected ou and user
