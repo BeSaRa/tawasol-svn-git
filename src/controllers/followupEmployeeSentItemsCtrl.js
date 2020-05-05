@@ -397,10 +397,10 @@ module.exports = function (app) {
         self.getEmployeeForFollowupEmployeeSentItems = function ($event) {
             followupEmployeeInboxService
                 .controllerMethod
-                .openOrganizationAndUserDialog(self.selectedOrganization, self.selectedEmployee, self.availableUsers, true, $event)
+                .openOrganizationAndUserDialog(self.selectedOrganization, self.selectedEmployee, null, true, $event)
                 .then(function (result) {
                     self.selectedOrganization = result.organization;
-                    self.selectedEmployee = result.applicationUser.id;
+                    self.selectedEmployee = result.applicationUser;
                     self.currentSelectedUser = result.applicationUser;
                     self.availableUsers = result.availableUsers;
                     self.reloadFollowupEmployeeSentItems(self.grid.page);

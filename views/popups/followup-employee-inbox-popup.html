@@ -42,6 +42,7 @@
                                        ng-disabled="!ctrl.selectedOrganization"
                                        aria-label="{{lang.app_users}}"
                                        ng-model="ctrl.selectedApplicationUser"
+                                       ng-model-options="{trackBy: '$value.id'}"
                                        md-on-close="ctrl.clearSearchText('inlineAppUser')"
                                        data-md-container-class="select-header-container sticky-search-bar">
                                 <md-select-header class="select-header">
@@ -52,7 +53,7 @@
                                 </md-select-header>
                                 <md-option ng-if="!ctrl.notCurrentUser(user.applicationUser)"
                                            ng-value="user.applicationUser"
-                                           ng-repeat="user in ctrl.ouApplicationUsers | translatedNameFilter: ctrl.inlineAppUserSearchText : null:'applicationUser'  track by $index ">
+                                           ng-repeat="user in ctrl.ouApplicationUsers | translatedNameFilter: ctrl.inlineAppUserSearchText : null:'applicationUser'">
                                        <span md-highlight-text="ctrl.inlineAppUserSearchText"
                                              md-highlight-flags="i">{{user.getTranslatedApplicationUserName()}}</span>
                                 </md-option>
@@ -70,7 +71,7 @@
                                        ng-disabled="!ctrl.selectedApplicationUser"
                                        ng-model="ctrl.selectedSecurityLevels">
                                 <md-option ng-value="option"
-                                           ng-repeat="option in ctrl.securityLevels track by $index">
+                                           ng-repeat="option in ctrl.securityLevels">
                                     {{option.getTranslatedName()}}
                                 </md-option>
                             </md-select>

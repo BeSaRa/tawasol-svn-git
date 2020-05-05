@@ -139,7 +139,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.progress = defer.promise;
             return followupEmployeeInboxService
-                .loadFollowupEmployeeInboxes(self.selectedUserForFollowUpEmployeeInbox, self.selectedOrganizationForFollowUpEmployeeInbox, self.selectSecurityLevels)
+                .loadFollowupEmployeeInboxes(self.selectedUserForFollowUpEmployeeInbox, self.selectedOrganizationForFollowUpEmployeeInbox, self.selectedSecurityLevels)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
@@ -156,19 +156,19 @@ module.exports = function (app) {
 
         self.selectedOrganizationForFollowUpEmployeeInbox = null;
         self.selectedUserForFollowUpEmployeeInbox = null;
-        self.selectSecurityLevels = null;
+        self.selectedSecurityLevels = null;
         self.availableUsers = [];
 
         self.getEmployeeForFollowupEmployeeInbox = function ($event) {
             followupEmployeeInboxService
                 .controllerMethod
-                .openOrganizationAndUserDialog(self.selectedOrganizationForFollowUpEmployeeInbox, self.selectedUserForFollowUpEmployeeInbox, self.availableUsers, false, $event)
+                .openOrganizationAndUserDialog(self.selectedOrganizationForFollowUpEmployeeInbox, self.selectedUserForFollowUpEmployeeInbox, self.selectedSecurityLevels, false, $event)
                 .then(function (result) {
                     self.selectedOrganizationForFollowUpEmployeeInbox = result.organization;
-                    self.selectedUserForFollowUpEmployeeInbox = result.applicationUser.domainName;
+                    self.selectedUserForFollowUpEmployeeInbox = result.applicationUser;
                     self.currentSelectedUser = result.applicationUser;
                     self.availableUsers = result.availableUsers;
-                    self.selectSecurityLevels = result.securityLevels;
+                    self.selectedSecurityLevels = result.securityLevels;
                     self.reloadFollowupEmployeeInboxes(self.grid.page);
                 });
         };

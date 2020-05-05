@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                              ApplicationUser,
                                                              selectedOrganization,
                                                              selectedUser,
+                                                             selectedSecurityLevels,
                                                              isFollowupSentItems,
                                                              followUpOrganizations,
                                                              ouApplicationUsers,
@@ -70,9 +71,11 @@ module.exports = function (app) {
 
         self.selectedOrganizationCopy = angular.copy(selectedOrganization);
         self.selectedApplicationUserCopy = angular.copy(selectedUser);
+        self.selectedSecurityLevelsCopy = angular.copy(selectedSecurityLevels);
 
         self.selectedOrganization = selectedOrganization || null;
         self.selectedApplicationUser = selectedUser || null;
+        self.selectedSecurityLevels = selectedSecurityLevels || null;
 
         /**
          * @description Get the Application Users for the selected Organization
@@ -98,7 +101,7 @@ module.exports = function (app) {
                     organization: self.selectedOrganization,
                     applicationUser: self.selectedApplicationUser,
                     availableUsers: self.ouApplicationUsers,
-                    securityLevels: self.selectedSecurityLevels ? generator.getResultFromSelectedCollection(self.selectedSecurityLevels, 'lookupKey') : null
+                    securityLevels: self.selectedSecurityLevels
                 }
             );
         };
@@ -112,7 +115,7 @@ module.exports = function (app) {
 
         self.notCurrentUser = function (user) {
             return employeeService.getEmployee().id === user.id;
-        }
+        };
 
 
         /**

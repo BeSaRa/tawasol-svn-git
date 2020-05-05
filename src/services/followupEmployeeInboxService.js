@@ -37,15 +37,16 @@ module.exports = function (app) {
 
             var domainName = employee.hasOwnProperty('domainName') ? employee.domainName : employee;
             var ouId = organization.hasOwnProperty('id') ? organization.id : organization;
+            var securityLevel = (securityLevels && securityLevels.length) ? generator.getResultFromSelectedCollection(securityLevels, 'lookupKey') : null;
+
             return $http.get(urlService.followupEmployeeInbox.change({
                 domainName: domainName,
                 ouId: ouId
-            }) + (securityLevels ? ('?securityLevels=' + securityLevels) : '')
+            }) + (securityLevel ? ('?securityLevels=' + securityLevel) : '')
             ).then(function (result) {
                 self.followupEmployeeInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                 self.followupEmployeeInboxes = generator.interceptReceivedCollection('WorkItem', self.followupEmployeeInboxes);
                 return self.followupEmployeeInboxes;
-                //return _.sortBy(self.followupEmployeeInboxes, 'generalStepElm.starred').reverse();
             });
         };
 
@@ -65,11 +66,11 @@ module.exports = function (app) {
              * @description Opens the dialog to select the organization and the user to get the data in the grid
              * @param selectedOrganization
              * @param selectedUser
-             * @param availableUsers
+             * @param selectedSecurityLevels
              * @param isFollowupSentItems
              * @param $event
              */
-            openOrganizationAndUserDialog: function (selectedOrganization, selectedUser, availableUsers, isFollowupSentItems, $event) {
+            openOrganizationAndUserDialog: function (selectedOrganization, selectedUser, selectedSecurityLevels, isFollowupSentItems, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -79,6 +80,7 @@ module.exports = function (app) {
                         locals: {
                             selectedOrganization: selectedOrganization,
                             selectedUser: selectedUser,
+                            selectedSecurityLevels: selectedSecurityLevels || null,
                             isFollowupSentItems: isFollowupSentItems
                         },
                         resolve: {
