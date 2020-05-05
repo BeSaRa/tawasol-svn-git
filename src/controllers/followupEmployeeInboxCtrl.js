@@ -157,7 +157,6 @@ module.exports = function (app) {
         self.selectedOrganizationForFollowUpEmployeeInbox = null;
         self.selectedUserForFollowUpEmployeeInbox = null;
         self.selectedSecurityLevels = null;
-        self.availableUsers = [];
 
         self.getEmployeeForFollowupEmployeeInbox = function ($event) {
             followupEmployeeInboxService
@@ -167,7 +166,6 @@ module.exports = function (app) {
                     self.selectedOrganizationForFollowUpEmployeeInbox = result.organization;
                     self.selectedUserForFollowUpEmployeeInbox = result.applicationUser;
                     self.currentSelectedUser = result.applicationUser;
-                    self.availableUsers = result.availableUsers;
                     self.selectedSecurityLevels = result.securityLevels;
                     self.reloadFollowupEmployeeInboxes(self.grid.page);
                 });

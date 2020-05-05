@@ -100,7 +100,6 @@ module.exports = function (app) {
                 {
                     organization: self.selectedOrganization,
                     applicationUser: self.selectedApplicationUser,
-                    availableUsers: self.ouApplicationUsers,
                     securityLevels: self.selectedSecurityLevels
                 }
             );

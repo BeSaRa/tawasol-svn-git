@@ -39,7 +39,6 @@ module.exports = function (app) {
         self.totalRecords = followupEmployeeInboxService.followupSentItemsTotalCount;
         self.selectedOrganization = null;
         self.selectedEmployee = null;
-        self.availableUsers = [];
 
         self.selectedFollowupEmployeeSentItems = [];
         self.globalSetting = rootEntity.returnRootEntity().settings;
@@ -402,7 +401,6 @@ module.exports = function (app) {
                     self.selectedOrganization = result.organization;
                     self.selectedEmployee = result.applicationUser;
                     self.currentSelectedUser = result.applicationUser;
-                    self.availableUsers = result.availableUsers;
                     self.reloadFollowupEmployeeSentItems(self.grid.page);
                 });
         };
