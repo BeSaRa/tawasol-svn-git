@@ -104,50 +104,7 @@
                             </div>
                         </div>
                     </fieldset>
-                    <fieldset>
-                        <legend class="md-accent">
-                            <md-switch ng-disabled="ctrl.editMode" ng-model="ctrl.task.withoutParticipant">
-                                {{lang.task_without_participant}} : {{ ctrl.task.withoutParticipant ?
-                                lang.yes : lang.no}}
-                            </md-switch>
-                        </legend>
-                        <div class="full-width-fieldset">
-                            <div layout="column">
-                                <md-chips name="taskParticipants"
-                                          ng-model="ctrl.task.taskParticipants"
-                                          ng-required="!ctrl.task.withoutParticipant"
-                                          md-autocomplete-snap
-                                          md-require-match="true"
-                                          input-aria-label="Participants"
-                                          readonly="ctrl.isSelectParticipantDisabled()"
-                                          md-on-add="ctrl.onAddTaskParticipant($chip, $index)"
-                                          md-removable="ctrl.canDeleteTaskParticipant()"
-                                          md-on-remove="ctrl.onRemoveTaskParticipant($chip, $index, $event)"
-                                          ng-dblclick="ctrl.editTaskParticipant($event)">
-                                    <md-autocomplete flex
-                                                     md-no-cache="true"
-                                                     md-selected-item="ctrl.selectedParticipant"
-                                                     md-search-text="ctrl.searchText"
-                                                     md-items="item in ctrl.personQuerySearch(ctrl.searchText)"
-                                                     md-item-text="item.display"
-                                                     placeholder="{{lang.search}}">
-                                                        <span md-highlight-text="ctrl.searchText"
-                                                              md-highlight-flags="i">{{item.display}}</span>
-                                    </md-autocomplete>
-                                    <md-chip-template>
-                                        <span>
-                                          <strong>{{$chip.display}}</strong>
-                                        </span>
-                                    </md-chip-template>
-                                </md-chips>
-                                <div class="md-chips-messages"
-                                     ng-if="task_form.$dirty"
-                                     ng-messages="task_form.taskParticipants.$error">
-                                    <div ng-message="required">{{lang.field_required}}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
+
                     <fieldset>
                         <legend class="md-accent">{{lang.linked_documents}}</legend>
                         <div class="full-width-fieldset">
@@ -258,6 +215,50 @@
                                         </table>
                                     </md-table-container>
                                 </md-card>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend class="md-accent">
+                            <md-switch ng-disabled="ctrl.editMode" ng-model="ctrl.task.withoutParticipant">
+                                {{lang.task_without_participant}} : {{ ctrl.task.withoutParticipant ?
+                                lang.yes : lang.no}}
+                            </md-switch>
+                        </legend>
+                        <div class="full-width-fieldset">
+                            <div layout="column">
+                                <md-chips name="taskParticipants"
+                                          ng-model="ctrl.task.taskParticipants"
+                                          ng-required="!ctrl.task.withoutParticipant"
+                                          md-autocomplete-snap
+                                          md-require-match="true"
+                                          input-aria-label="Participants"
+                                          readonly="ctrl.isSelectParticipantDisabled()"
+                                          md-on-add="ctrl.onAddTaskParticipant($chip, $index)"
+                                          md-removable="ctrl.canDeleteTaskParticipant()"
+                                          md-on-remove="ctrl.onRemoveTaskParticipant($chip, $index, $event)"
+                                          ng-dblclick="ctrl.editTaskParticipant($event)">
+                                    <md-autocomplete flex
+                                                     md-no-cache="true"
+                                                     md-selected-item="ctrl.selectedParticipant"
+                                                     md-search-text="ctrl.searchText"
+                                                     md-items="item in ctrl.personQuerySearch(ctrl.searchText)"
+                                                     md-item-text="item.display"
+                                                     placeholder="{{lang.search}}">
+                                                        <span md-highlight-text="ctrl.searchText"
+                                                              md-highlight-flags="i">{{item.display}}</span>
+                                    </md-autocomplete>
+                                    <md-chip-template>
+                                        <span>
+                                          <strong>{{$chip.display}}</strong>
+                                        </span>
+                                    </md-chip-template>
+                                </md-chips>
+                                <div class="md-chips-messages"
+                                     ng-if="task_form.$dirty"
+                                     ng-messages="task_form.taskParticipants.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
                             </div>
                         </div>
                     </fieldset>
