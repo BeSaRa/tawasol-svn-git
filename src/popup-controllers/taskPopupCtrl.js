@@ -112,6 +112,7 @@ module.exports = function (app) {
                 return user;
             });
         }
+
         function _prepareTaskParticipants(users) {
             return _.map(users, function (user) {
                 user.display = user.userId.getTranslatedName() + ' - ' + user.ouId.getTranslatedName();
@@ -405,6 +406,27 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Handles the change of without participant switch
+         * @param $event
+         */
+        self.onChangeWithoutParticipant = function ($event) {
+            if (self.editMode) {
+                self.task.withoutParticipant = !self.task.withoutParticipant;
+                return false;
+            }
+            if (self.task.taskParticipants && self.task.taskParticipants.length) {
+                dialog.confirmMessage(langService.get('confirm_remove').change({name: langService.get('task_linked')}))
+                    .then(function () {
+                        self.task.taskParticipants = [];
+                        _getParticipantIds();
+                    })
+                    .catch(function (error) {
+                        self.task.withoutParticipant = !self.task.withoutParticipant;
+                    })
+            }
+        };
+
         function _getSelectedChip(event) {
             var chipCtrl = angular.element(event.currentTarget).controller('mdChips');
             if (!chipCtrl || chipCtrl.selectedChip === -1) {
@@ -416,8 +438,8 @@ module.exports = function (app) {
             };
         }
 
-        function _removeChipByIndex(index){
-            if (index === -1){
+        function _removeChipByIndex(index) {
+            if (index === -1) {
                 return;
             }
             if (self.task.taskParticipants && self.task.taskParticipants.length) {
