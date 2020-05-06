@@ -215,6 +215,8 @@
                                         ctrl.globalSetting.getTranslatedYesNo('canChangePassword')}}
                                     </md-switch>
                                 </md-input-container>
+                            </div>
+                            <div layout="row" class="p20">
                                 <!-- Slow Connection Mode -->
                                 <md-input-container flex>
                                     <md-switch flex ng-model="ctrl.globalSetting.slowConnectionMode"
@@ -223,7 +225,31 @@
                                         ctrl.globalSetting.getTranslatedYesNo('slowConnectionMode')}}
                                     </md-switch>
                                 </md-input-container>
-
+                                <!-- Digital Certificate Enabled -->
+                                <md-input-container flex>
+                                    <md-switch flex ng-model="ctrl.globalSetting.digitalCertificateEnabled"
+                                               ng-change="ctrl.onChangeIsDigitalCertificate($event)"
+                                               aria-label="{{lang.digital_certificate_enabled}} ">
+                                        <span>{{lang.digital_certificate_enabled}} : </span>{{
+                                        ctrl.globalSetting.getTranslatedYesNo('digitalCertificateEnabled')}}
+                                    </md-switch>
+                                </md-input-container>
+                                <!-- Default Certificate Mode -->
+                                <md-input-container flex>
+                                    <label for="digitalCertificateMode">{{lang.digital_certificate_mode}}</label>
+                                    <md-select name="digitalCertificateMode" id="digitalCertificateMode"
+                                               ng-required="ctrl.globalSetting.digitalCertificateEnabled"
+                                               ng-model="ctrl.globalSetting.digitalCertificateMode"
+                                               ng-model-options="{trackBy: '$value'}">
+                                        <md-option ng-repeat="option in ctrl.digitalCertificateModesList"
+                                                   ng-value="option.lookupKey">
+                                            {{option.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="globalSettingForm.digitalCertificateMode.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
                             </div>
                         </div>
                         <br/>

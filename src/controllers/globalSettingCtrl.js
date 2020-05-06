@@ -55,6 +55,8 @@ module.exports = function (app) {
         self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.thumbnailModes = lookupService.returnLookups(lookupService.thumbnailMode);
         self.languages = lookupService.returnLookups(lookupService.language);
+        self.digitalCertificateModesList = lookupService.returnLookups(lookupService.digitalCertificateMode);
+        
         self.correspondenceSiteSearchTypeOptions = [
             {
                 key: 'search_type_simple',
@@ -150,7 +152,8 @@ module.exports = function (app) {
             useCentralArchiveInternally: 'use_central_archive_internally',
             escalationProcess: 'choose_escalation_process',
             simpleCorsSiteSearch: 'correspondence_Site_search_type',
-            theme: 'default_application_theme'
+            theme: 'default_application_theme',
+            digitalCertificateMode: 'digital_certificate_mode'
         };
 
         /**
@@ -356,6 +359,13 @@ module.exports = function (app) {
 
         self.getMaxSearchAmountLimit = function () {
             return Number(self.globalSetting.searchAmountLimit || 0) + 1;
-        }
+        };
+        
+        /**
+         * @description Handles the change of digitalCertificateEnabled
+         */
+        self.onChangeIsDigitalCertificate = function ($event) {
+            self.globalSetting.digitalCertificateMode = null;
+        };
     });
 };

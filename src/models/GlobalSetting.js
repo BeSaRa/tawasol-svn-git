@@ -58,6 +58,8 @@ module.exports = function (app) {
             self.defaultDisplayLang = 1;
             self.excludedConversionFileTypes = [];
             self.slowConnectionMode = false;
+            self.digitalCertificateEnabled = false;
+            self.digitalCertificateMode = null;
             //endregion
 
             // every model has required fields
