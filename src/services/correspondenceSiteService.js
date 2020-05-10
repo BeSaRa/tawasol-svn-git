@@ -82,7 +82,7 @@ module.exports = function (app) {
          */
         self.loadCorrespondenceSitesWithLimit = function (limit) {
             return $http
-                .get(urlService.entityWithlimit.replace('{entityName}', 'correspondence-site').replace('{number}', limit ? limit : 50))
+                .get(urlService.entityWithlimit.replace('{entityName}', 'correspondence-site').replace('{number}', limit ? limit : 300))
                 .then(function (result) {
                     self.correspondenceSites = generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods);
                     _getSubCorrespondenceSites(self.correspondenceSites);
