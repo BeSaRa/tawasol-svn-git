@@ -215,8 +215,6 @@
                                         ctrl.globalSetting.getTranslatedYesNo('canChangePassword')}}
                                     </md-switch>
                                 </md-input-container>
-                            </div>
-                            <div layout="row" class="p20">
                                 <!-- Slow Connection Mode -->
                                 <md-input-container flex>
                                     <md-switch flex ng-model="ctrl.globalSetting.slowConnectionMode"
@@ -224,31 +222,6 @@
                                         <span>{{lang.slow_connection_mode}} : </span>{{
                                         ctrl.globalSetting.getTranslatedYesNo('slowConnectionMode')}}
                                     </md-switch>
-                                </md-input-container>
-                                <!-- Digital Certificate Enabled -->
-                                <md-input-container flex>
-                                    <md-switch flex ng-model="ctrl.globalSetting.digitalCertificateEnabled"
-                                               ng-change="ctrl.onChangeIsDigitalCertificate($event)"
-                                               aria-label="{{lang.digital_certificate_enabled}} ">
-                                        <span>{{lang.digital_certificate_enabled}} : </span>{{
-                                        ctrl.globalSetting.getTranslatedYesNo('digitalCertificateEnabled')}}
-                                    </md-switch>
-                                </md-input-container>
-                                <!-- Default Certificate Mode -->
-                                <md-input-container flex>
-                                    <label for="digitalCertificateMode">{{lang.digital_certificate_mode}}</label>
-                                    <md-select name="digitalCertificateMode" id="digitalCertificateMode"
-                                               ng-required="ctrl.globalSetting.digitalCertificateEnabled"
-                                               ng-model="ctrl.globalSetting.digitalCertificateMode"
-                                               ng-model-options="{trackBy: '$value'}">
-                                        <md-option ng-repeat="option in ctrl.digitalCertificateModesList"
-                                                   ng-value="option.lookupKey">
-                                            {{option.getTranslatedName()}}
-                                        </md-option>
-                                    </md-select>
-                                    <div ng-messages="globalSettingForm.digitalCertificateMode.$error">
-                                        <div ng-message="required">{{lang.field_required}}</div>
-                                    </div>
                                 </md-input-container>
                             </div>
                         </div>
@@ -510,6 +483,33 @@
                                 </div>
                             </div>
                             <div layout="row" class="p20">
+                                <!-- Digital Certificate Enabled -->
+                                <md-input-container flex>
+                                    <md-switch flex ng-model="ctrl.globalSetting.digitalCertificateEnabled"
+                                               ng-change="ctrl.onChangeIsDigitalCertificate($event)"
+                                               aria-label="{{lang.digital_certificate}} ">
+                                        <span>{{lang.digital_certificate}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('digitalCertificateEnabled')}}
+                                    </md-switch>
+                                </md-input-container>
+                                <!-- Default Certificate Mode -->
+                                <md-input-container flex>
+                                    <label for="digitalCertificateMode">{{lang.digital_certificate_mode}}</label>
+                                    <md-select name="digitalCertificateMode" id="digitalCertificateMode"
+                                               ng-disabled="!ctrl.globalSetting.digitalCertificateEnabled"
+                                               ng-required="ctrl.globalSetting.digitalCertificateEnabled"
+                                               ng-model="ctrl.globalSetting.digitalCertificateMode"
+                                               ng-model-options="{trackBy: '$value'}">
+                                        <md-option ng-repeat="option in ctrl.digitalCertificateModesList"
+                                                   ng-value="option.lookupKey">
+                                            {{option.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="globalSettingForm.digitalCertificateMode.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout="row" class="p20">
                                 <!-- Document Security Schema -->
                                 <md-input-container flex>
                                     <label for="securitySchema">{{lang.documents_security_schema}}</label>
@@ -552,10 +552,12 @@
                                 <!-- Excluded Conversion File Types -->
                                 <md-input-container flex>
                                     <label for="excludedConversionFileTypes">{{lang.excluded_conversion_file_types}}</label>
-                                    <md-select multiple name="excludedConversionFileTypes" id="excludedConversionFileTypes"
+                                    <md-select multiple name="excludedConversionFileTypes"
+                                               id="excludedConversionFileTypes"
                                                ng-model-options="{trackBy: '$value'}"
                                                ng-model="ctrl.globalSetting.excludedConversionFileTypes">
-                                        <md-option ng-repeat="fileType in ctrl.excludedFileTypes" ng-value="fileType.id">
+                                        <md-option ng-repeat="fileType in ctrl.excludedFileTypes"
+                                                   ng-value="fileType.id">
                                             {{fileType.getExtension()}}
                                         </md-option>
                                     </md-select>

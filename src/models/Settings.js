@@ -44,6 +44,10 @@ module.exports = function (app) {
                 return this.slowConnectionMode;
             };
 
+            Settings.prototype.isDigitalCertificateEnabled = function () {
+                return this.digitalCertificateEnabled;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Settings', 'init', this);

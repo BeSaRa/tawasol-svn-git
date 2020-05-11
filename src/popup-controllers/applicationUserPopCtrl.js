@@ -44,7 +44,8 @@ module.exports = function (app) {
                                                        $filter,
                                                        $timeout,
                                                        Information,
-                                                       gridService) {
+                                                       gridService,
+                                                       AppUserCertificate) {
         'ngInject';
         var self = this;
         self.controllerName = 'applicationUserPopCtrl';
@@ -65,6 +66,70 @@ module.exports = function (app) {
 
         self.hrEnabled = self.rootEntity.returnRootEntity().rootEntity.hrEnabled;
 
+        self.tabsToShow = [
+            'basic',
+            'notificationSettings',
+            'organizations',
+            'signature',
+            //'classificationViewPermission',
+            'ouViewPermission',
+            'digitalCertificates'
+        ];
+
+        self.showTab = function (tabName) {
+            var isAvailable = (self.tabsToShow.indexOf(tabName) > -1);
+            if (tabName.toLowerCase() === 'digitalcertificates') {
+                return isAvailable && self.globalSetting.isDigitalCertificateEnabled();
+            }
+            return isAvailable;
+        };
+
+        function _getAvailableTabs() {
+            return _.filter(self.tabsToShow, function (tab) {
+                return self.showTab(tab);
+            });
+        }
+
+        function _getTabIndex(tabName) {
+            return _.findIndex(_getAvailableTabs(), function (tab) {
+                return tab.toLowerCase() === tabName.toLowerCase();
+            })
+        }
+
+        /**
+         * @description Contains the selected tab name
+         * @type {string}
+         */
+        self.selectedTab = "basic";
+        self.selectedTabIndex = _getTabIndex(self.selectedTab);
+
+        self.isCertificateLoaded = false;
+
+        /**
+         * @description Set the current tab name
+         * @param tabName
+         */
+        self.setCurrentTab = function (tabName) {
+            var defer = $q.defer();
+            if (tabName === 'signature') {
+                self.loadSignatures(self.applicationUser.id)
+                    .then(function (result) {
+                        defer.resolve(tabName);
+                    });
+            } else if (tabName.toLowerCase() === 'digitalcertificates' && !self.isCertificateLoaded) {
+                self.loadUserCertificates(self.applicationUser.id)
+                    .then(function (result) {
+                        self.isCertificateLoaded = true;
+                        self.showCertificateForm = !result; // if no user certificate exists on first load of tab, show form
+                        defer.resolve(tabName);
+                    });
+            } else {
+                defer.resolve(tabName);
+            }
+            return defer.promise.then(function (tab) {
+                self.selectedTab = tab;
+            });
+        };
 
         self.validateLabels = {
             arFullName: 'arabic_full_name',
@@ -106,6 +171,12 @@ module.exports = function (app) {
             docSubject: 'subject',
             documentTitle: 'title',
             fileUrl: 'upload_signature'
+        };
+
+        self.validateCertificateLabels = {
+            docSubject: 'subject',
+            documentTitle: 'title',
+            pinCode: 'pin'
         };
 
         self.genders = lookupService.returnLookups(lookupService.gender);
@@ -509,32 +580,6 @@ module.exports = function (app) {
                 .catch(function () {
 
                 });
-        };
-
-
-        /**
-         * @description Contains the selected tab name
-         * @type {string}
-         */
-        self.selectedTab = "basic";
-
-        /**
-         * @description Set the current tab name
-         * @param tabName
-         */
-        self.setCurrentTab = function (tabName) {
-            var defer = $q.defer();
-            if (tabName === 'signature') {
-                self.loadSignatures(self.applicationUser.id)
-                    .then(function (result) {
-                        defer.resolve(tabName);
-                    });
-            } else {
-                defer.resolve(tabName);
-            }
-            return defer.promise.then(function (tab) {
-                self.selectedTab = tab;
-            });
         };
 
 
@@ -1305,32 +1350,6 @@ module.exports = function (app) {
             }
         ];
 
-
-        /**
-         * @description Clears the searchText for the given field
-         * @param fieldType
-         */
-        self.clearSearchText = function (fieldType) {
-            self[fieldType + 'SearchText'] = '';
-        };
-
-        /**
-         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
-         * @param $event
-         */
-        self.preventSearchKeyDown = function ($event) {
-            if ($event) {
-                var code = $event.which || $event.keyCode;
-                if (code !== 38 && code !== 40)
-                    $event.stopPropagation();
-            }
-        };
-        /**
-         * @description Close the popup
-         */
-        self.closeApplicationUserPopupFromCtrl = function () {
-            dialog.cancel();
-        };
         /**
          * @default get the employee date from HR Service
          * @param $event
@@ -1420,6 +1439,207 @@ module.exports = function (app) {
 
         self.getSortedOUApplicationUserData = function () {
             self.ouApplicationUsers = $filter('orderBy')(self.ouApplicationUsers, self.ouApplicationUsersGrid.order);
+        };
+
+        /**
+         * @description Initialize the application user certificate form
+         * @private
+         */
+        function _initCertificate(forceReset) {
+            if (forceReset || !self.userCertificate || !self.userCertificate.vsId) {
+                self.userCertificate = new AppUserCertificate({
+                    appUserId: self.applicationUser.id
+                });
+            } else {
+                self.userCertificate = angular.copy(self.applicationUser.certificate);
+            }
+            self.attachedCertificate = null;
+        }
+
+        _initCertificate(true);
+
+        self.showCertificateForm = false; // defines if form will be shown or not
+        self.certificateTypeUpload = false; // false means generate certificate, true means upload certificate
+        self.certificateExtensions = attachmentService.getExtensionGroup('userCertificate').join(',');
+
+        /**
+         * @description Loads the user certificates
+         * @param appUserId
+         * @returns {Promise<any>}
+         */
+        self.loadUserCertificates = function (appUserId) {
+            return applicationUserSignatureService.loadApplicationUserCertificate(appUserId || self.applicationUser.id)
+                .then(function (result) {
+                    self.applicationUser.certificate = result;
+                    return result;
+                });
+        };
+
+        self.onChangeCertificateTypeUpload = function () {
+            _initCertificate();
+        };
+
+        self.removeCertificateContent = function ($event) {
+            _initCertificate();
+        };
+
+        /**
+         * @description Check validation of required fields for user certificate
+         * @param model
+         * @return {Array}
+         */
+        self.checkUserCertificateRequiredFields = function (model) {
+            var required = model.getRequiredFields(), result = [];
+            _.map(required, function (property) {
+                if (!generator.validRequired(model[property]))
+                    result.push(property);
+            });
+            return result;
+        };
+
+        self.checkRequiredCertificate = function () {
+            if (!self.certificateTypeUpload) {
+                return true;
+            }
+            return !!self.attachedCertificate;
+        };
+
+        /**
+         * @description saves user certificate
+         */
+        self.addUserCertificate = function ($event) {
+            if (!self.checkRequiredCertificate()) {
+                toast.error(langService.get('file_required'));
+                return;
+            }
+            validationService
+                .createValidation('SAVE_USER_CERTIFICATE')
+                .addStep('check_required_fields', true, self.checkUserCertificateRequiredFields, self.userCertificate, function (result) {
+                    return !result.length;
+                })
+                .notifyFailure(function (step, result) {
+                    var labels = _.map(result, function (label) {
+                        return self.validateCertificateLabels[label];
+                    });
+                    generator.generateErrorFields('check_this_fields', labels);
+                })
+                .validate()
+                .then(function () {
+                    applicationUserSignatureService.addApplicationUserCertificate(self.userCertificate, self.attachedCertificate)
+                        .then(function () {
+                            var defer = $q.defer();
+                            self.userCertificateGrid.progress = defer.promise;
+                            self.loadUserCertificates(self.applicationUser.id)
+                                .then(function (result) {
+                                    _initCertificate(true);
+                                    self.showCertificateForm = false;
+
+                                    defer.resolve(true);
+                                    toast.success(langService.get('save_success'));
+                                });
+                        });
+                })
+                .catch(function () {
+
+                });
+        };
+
+        /**
+         * @description remove user certificate
+         * @param certificate
+         */
+        self.removeUserCertificate = function (certificate) {
+            dialog.confirmMessage((langService.get('confirm_delete_msg'))).then(function () {
+                applicationUserSignatureService
+                    .deleteApplicationUserCertificate(certificate).then(function () {
+                    var defer = $q.defer();
+                    self.userCertificateGrid.progress = defer.promise;
+                    self.loadUserCertificates(self.applicationUser.id)
+                        .then(function (result) {
+                            _initCertificate(true);
+                            self.showCertificateForm = true;
+
+                            defer.resolve(true);
+                            toast.success(langService.get('delete_success'));
+                        });
+                });
+            })
+        };
+
+        /**
+         * @description Handles the uploaded certificate to verify extension
+         * @param files
+         * @param element
+         */
+        self.handleUploadCertificate = function (files, element) {
+            _initCertificate(false);
+            attachmentService
+                .validateBeforeUpload('userCertificate', files[0])
+                .then(function (file) {
+                    self.attachedCertificate = file;
+                })
+                .catch(function (availableExtensions) {
+                    _initCertificate();
+                    dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
+                });
+        };
+
+        self.userCertificateGrid = {
+            progress: null
+        };
+
+        /**
+         * @description clear user certificate fields
+         */
+        self.clearUserCertificate = function ($event) {
+            if (self.userCertificate.vsId) {
+                self.showCertificateForm = false;
+            }
+            _initCertificate(true);
+        };
+
+        /**
+         * @description Checks if save button can be displayed
+         * @param isUpdateButton
+         * @returns {*|boolean}
+         */
+        self.isShowSaveButton = function (isUpdateButton) {
+            if (!isUpdateButton) {
+                return !self.editMode;
+            }
+            return self.editMode
+                && self.selectedTab !== 'organizations'
+                && self.selectedTab !== 'signature'
+                && self.selectedTab !== 'ouViewPermission'
+                && self.selectedTab !== 'classificationViewPermission'
+                && self.selectedTab !== 'digitalCertificates';
+        };
+
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
+        };
+
+        /**
+         * @description Close the popup
+         */
+        self.closeApplicationUserPopupFromCtrl = function () {
+            dialog.cancel();
         };
 
     });

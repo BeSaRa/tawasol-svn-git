@@ -9,7 +9,8 @@ module.exports = function (app) {
                                                  workItem,
                                                  signatures,
                                                  additionalData,
-                                                 ignoreMessage) {
+                                                 ignoreMessage,
+                                                 pinCodeRequired) {
         'ngInject';
         var self = this;
 
@@ -22,6 +23,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.signatures = signatures;
+        self.pinCodeRequired = pinCodeRequired;
 
         var signatureChunkLength = 5;
         self.signatureChunks = _.chunk(signatures, signatureChunkLength);
@@ -31,11 +33,13 @@ module.exports = function (app) {
             return (new Array(diff));
         };
 
+
         /**
          * @description Contains the selected signatures
          * @type {Array}
          */
         self.selectedSignature = null;
+        self.pinCode = null;
 
         /**
          * @description Contains options for grid configuration
@@ -79,27 +83,41 @@ module.exports = function (app) {
          * @param $event
          */
         self.signDocumentFromCtrl = function ($event) {
+            if (self.checkDisabled()) {
+                return false;
+            }
             var isComposite = workItem.isWorkItem() ? workItem.isComposite() : workItem.isCompositeSites();
             if (isComposite) {
                 return dialog
                     .confirmMessage(langService.get('document_is_composite'))
                     .then(function () {
-                        return _approveBook(workItem, self.selectedSignature, true, ignoreMessage, additionalData);
+                        return _approveBook(workItem, true, ignoreMessage, additionalData);
                     })
                     .catch(function () {
-                        return _approveBook(workItem, self.selectedSignature, false, ignoreMessage, additionalData);
+                        return _approveBook(workItem, false, ignoreMessage, additionalData);
                     })
             } else {
-                return _approveBook(workItem, self.selectedSignature, false, ignoreMessage, additionalData);
+                return _approveBook(workItem, false, ignoreMessage, additionalData);
             }
         };
 
-        var _approveBook = function (workItem, selectedSignature, isComposite, ignoreMessage, additionalData) {
-            return correspondenceService.approveCorrespondence(workItem, selectedSignature, isComposite, ignoreMessage, additionalData)
+        var _approveBook = function (workItem, isComposite, ignoreMessage, additionalData) {
+            return correspondenceService.approveCorrespondence(workItem, self.selectedSignature, self.pinCode, isComposite, ignoreMessage, additionalData)
                 .then(function (result) {
                     dialog.hide(result);
                     return result;
                 });
+        };
+
+        /**
+         * @description Checks if approve button is disabled
+         * @returns {boolean}
+         */
+        self.checkDisabled = function () {
+            if (self.pinCodeRequired) {
+                return !self.selectedSignature || !self.pinCode;
+            }
+            return !self.selectedSignature;
         };
 
         /**

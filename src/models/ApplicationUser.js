@@ -49,6 +49,7 @@ module.exports = function (app) {
             self.defaultEditMode = 0;
             self.backLogMode = false;
             self.slowConnectionMode = false;
+            self.pinCodePrompt = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -341,6 +342,9 @@ module.exports = function (app) {
             ApplicationUser.prototype.setDefaultEditMode = function (defaultEditMode) {
                 this.defaultEditMode = defaultEditMode;
                 return this;
+            };
+            ApplicationUser.prototype.hasPinCodePrompt = function () {
+                return this.pinCodePrompt;
             };
 
             // don't remove CMSModelInterceptor from last line

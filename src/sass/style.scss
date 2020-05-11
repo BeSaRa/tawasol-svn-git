@@ -1510,6 +1510,10 @@ form#signature-form {
   }
 }
 
+#add-user-cert {
+  max-height: 50px;
+}
+
 .hidden {
   display: none !important;
 }
@@ -2544,8 +2548,8 @@ md-chips.custom-chips {
           top: 50%;
           left: 50%;
           transform: translate3d(-50%, -50%, 0) scale(0.7);
-          color: rgb(97,97,97);
-          fill: rgb(97,97,97);
+          color: rgb(97, 97, 97);
+          fill: rgb(97, 97, 97);
         }
       }
     }

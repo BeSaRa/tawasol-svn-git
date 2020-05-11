@@ -8,7 +8,8 @@ module.exports = function (app) {
                                                              dialog,
                                                              langService,
                                                              toast,
-                                                             cmsTemplate) {
+                                                             cmsTemplate,
+                                                             AppUserCertificate) {
         'ngInject';
         var self = this;
         self.serviceName = 'applicationUserSignatureService';
@@ -41,27 +42,6 @@ module.exports = function (app) {
          */
         self.controllerMethod = {
             /**
-             * @description Opens popup to add new application user signature
-             * @param $event
-             */
-            applicationUserSignatureAdd: function ($event) {
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('application-user-signature'),
-                        controller: 'applicationUserSignaturePopCtrl',
-                        controllerAs: 'ctrl',
-                        locals: {
-                            editMode: false,
-                            applicationUserSignature: new ApplicationUserSignature(
-                                {
-                                    itemOrder: generator.createNewID(self.applicationUserSignatures, 'itemOrder')
-                                }),
-                            applicationUserSignatures: self.applicationUserSignatures
-                        }
-                    });
-            },
-            /**
              * @description Opens popup to edit application user signature
              * @param applicationUserSignature
              * @param $event
@@ -79,54 +59,13 @@ module.exports = function (app) {
                             applicationUserSignatures: self.applicationUserSignatures
                         }
                     });
-            },
-            /**
-             * @description Show confirm box and delete application user signature
-             * @param applicationUserSignature
-             * @param $event
-             */
-            applicationUserSignatureDelete: function (applicationUserSignature, $event) {
-                return dialog.confirmMessage(langService.get('confirm_delete').change({name: applicationUserSignature.getNames()}), null, null, $event)
-                    .then(function () {
-                        return self.deleteApplicationUserSignature(applicationUserSignature).then(function () {
-                            toast.success(langService.get("delete_specific_success").change({name: applicationUserSignature.getNames()}));
-                            return true;
-                        })
-                    });
-            },
-            /**
-             * @description Show confirm box and delete bulk application user signature s
-             * @param applicationUserSignatures
-             * @param $event
-             */
-            applicationUserSignatureDeleteBulk: function (applicationUserSignatures, $event) {
-                return dialog
-                    .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event || null)
-                    .then(function () {
-                        return self.deleteBulkApplicationUserSignatures(applicationUserSignatures)
-                            .then(function (result) {
-                                var response = false;
-                                if (result.length === applicationUserSignatures.length) {
-                                    toast.error(langService.get("failed_delete_selected"));
-                                    response = false;
-                                } else if (result.length) {
-                                    generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (applicationUserSignature) {
-                                        return applicationUserSignature.getNames();
-                                    }));
-                                    response = true;
-                                } else {
-                                    toast.success(langService.get("delete_success"));
-                                    response = true;
-                                }
-                                return response;
-                            });
-                    });
             }
         };
 
         /**
          * @description Add new application user signature
          * @param signature
+         * @param file
          * @return {Promise|ApplicationUserSignature}
          */
         self.addApplicationUserSignature = function (signature, file) {
@@ -297,6 +236,54 @@ module.exports = function (app) {
 
         self.emptySignatures = function () {
             self.applicationUserSignatures = [];
-        }
+        };
+
+        /**
+         * @description Loads the certificate of user by userId
+         * @param appUserId
+         * @returns {*}
+         */
+        self.loadApplicationUserCertificate = function (appUserId) {
+            appUserId = appUserId.hasOwnProperty('id') ? appUserId.id : appUserId;
+            return $http.get(urlService.applicationUserSignatures + '/cert/user-id/' + appUserId).then(function (result) {
+                if (!result.data.rs) {
+                    return null;
+                }
+                return generator.interceptReceivedInstance('AppUserCertificate', generator.generateInstance(result.data.rs, AppUserCertificate, self._sharedCertificateMethods));
+            });
+        };
+
+        /**
+         * @description Add new application user certificate
+         * @param certificate
+         * @param file
+         * @return {Promise|AppUserCertificate}
+         */
+        self.addApplicationUserCertificate = function (certificate, file) {
+            var form = new FormData();
+            form.append('entity', JSON.stringify(generator.interceptSendInstance('AppUserCertificate', certificate)));
+            form.append('content', file);
+            return $http.post(urlService.applicationUserSignatures + '/cert', form, {
+                headers: {
+                    'Content-Type': undefined
+                }
+            })
+                .then(function (result) {
+                    return generator.generateInstance(result.data.rs, AppUserCertificate, self._sharedCertificateMethods);
+                })
+        };
+
+        /**
+         * @description Delete given application user certificate .
+         * @param certificate
+         * @return {Promise|null}
+         */
+        self.deleteApplicationUserCertificate = function (certificate) {
+            var vsId = certificate.hasOwnProperty('vsId') ? certificate.vsId : certificate;
+            vsId = vsId.replace(/[{}]/g, "");
+            return $http.delete((urlService.applicationUserSignatures + '/cert/' + vsId));
+        };
+
+        self._sharedCertificateMethods = generator.generateSharedMethods(self.deleteApplicationUserCertificate, self.updateApplicationUserCertificate);
     });
 };

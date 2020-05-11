@@ -50,13 +50,13 @@ module.exports = function (app) {
                                                       $compile,
                                                       organizationService,
                                                       predefinedActions,
-                                                      predefinedActionService) {
+                                                      predefinedActionService,
+                                                      AppUserCertificate) {
         'ngInject';
         var self = this;
         self.controllerName = 'userPreferencePopCtrl';
         self.applicationUser = new ApplicationUser(applicationUser);
 
-        //self.applicationUser.signature = signature;
         self.model = angular.copy(self.applicationUser);
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.genders = lookupService.returnLookups(lookupService.gender);
@@ -102,9 +102,9 @@ module.exports = function (app) {
         self.jobTitleSearchText = '';
         self.rankSearchText = '';
 
-
         self.rootEntity = rootEntity;
         self.organizationsForAppUser = employeeService.getEmployee().ouList;
+
         /**
          * @description Current ou application user
          */
@@ -205,6 +205,12 @@ module.exports = function (app) {
             fileUrl: 'upload_signature'
         };
 
+        self.validateCertificateLabels = {
+            docSubject: 'subject',
+            documentTitle: 'title',
+            pinCode: 'pin'
+        };
+
 
         self.notificationProperties = [
             {
@@ -286,6 +292,7 @@ module.exports = function (app) {
         self.usersWhoSetYouAsProxy = [];
 
         self.isSignaturesLoaded = false;
+        self.isCertificateLoaded = false;
         self.isOutOfOfficeLoaded = false;
 
         /**
@@ -298,6 +305,12 @@ module.exports = function (app) {
                 self.loadSignatures(self.applicationUser.id)
                     .then(function () {
                         self.isSignaturesLoaded = true;
+                        defer.resolve(tabName);
+                    });
+            } else if (tabName.toLowerCase() === 'digitalcertificates' && !self.isCertificateLoaded) {
+                self.loadUserCertificates(self.applicationUser.id)
+                    .then(function () {
+                        self.isCertificateLoaded = true;
                         defer.resolve(tabName);
                     });
             } else if (tabName.toLowerCase() === 'outofofficesettings') {
@@ -323,10 +336,15 @@ module.exports = function (app) {
             'workflowGroups',
             'folders',
             'signature',
-            'predefinedActions'
+            'predefinedActions',
+            'digitalCertificates'
         ];
         self.showTab = function (tabName) {
-            return (self.tabsToShow.indexOf(tabName) > -1);
+            var isAvailable = (self.tabsToShow.indexOf(tabName) > -1);
+            if (tabName === 'digitalCertificates') {
+                return isAvailable && self.globalSetting.isDigitalCertificateEnabled();
+            }
+            return isAvailable;
         };
         self.selectedTabIndex = self.tabsToShow.indexOf(self.selectedTab);
 
@@ -1061,13 +1079,6 @@ module.exports = function (app) {
          * @description check upload file
          * @return {Array}
          */
-        /*self.checkRequiredFile = function () {
-         var result = [];
-         if (!self.fileUrl)
-         result.push('fileUrl');
-         return result;
-         };*/
-
         self.checkRequiredFile = function () {
             return self.selectedFile;
         };
@@ -1408,6 +1419,138 @@ module.exports = function (app) {
                     record.status = !record.status;
                     dialog.errorMessage(langService.get('something_happened_when_update_status'));
                 });
+        };
+
+        /**
+         * @description Initialize the application user certificate form
+         * @private
+         */
+        function _initCertificate(forceReset) {
+            if (forceReset || !self.userCertificate || !self.userCertificate.vsId) {
+                self.userCertificate = new AppUserCertificate({
+                    appUserId: self.applicationUser.id
+                });
+            }
+            self.attachedCertificate = null;
+        }
+
+        _initCertificate(true);
+
+        self.certificateTypeUpload = false; // false means generate certificate, true means upload certificate
+        self.certificateExtensions = attachmentService.getExtensionGroup('userCertificate').join(',');
+
+        /**
+         * @description Loads the user certificates
+         * @param appUserId
+         * @returns {Promise<any>}
+         */
+        self.loadUserCertificates = function (appUserId) {
+            return applicationUserSignatureService.loadApplicationUserCertificate(appUserId || self.applicationUser.id)
+                .then(function (result) {
+                    self.applicationUser.certificate = result;
+                    return result;
+                });
+        };
+
+        self.onChangeCertificateTypeUpload = function () {
+            _initCertificate();
+        };
+
+        self.removeCertificateContent = function ($event) {
+            _initCertificate();
+        };
+
+        /**
+         * @description Check validation of required fields for user certificate
+         * @param model
+         * @return {Array}
+         */
+        self.checkUserCertificateRequiredFields = function (model) {
+            var required = model.getRequiredFields(), result = [];
+            _.map(required, function (property) {
+                if (!generator.validRequired(model[property]))
+                    result.push(property);
+            });
+            return result;
+        };
+
+        self.checkRequiredCertificate = function () {
+            if (!self.certificateTypeUpload) {
+                return true;
+            }
+            return !!self.attachedCertificate;
+        };
+
+        /**
+         * @description saves user certificate
+         */
+        self.saveUserCertificate = function ($event) {
+            if (self.userCertificate.id || self.userCertificate.vsId) {
+                // stop updating for user preference. admin can update
+                return;
+            }
+            if (!self.checkRequiredCertificate()) {
+                toast.error(langService.get('file_required'));
+                return;
+            }
+            validationService
+                .createValidation('ADD_USER_CERTIFICATE')
+                .addStep('check_required_fields', true, self.checkUserCertificateRequiredFields, self.userCertificate, function (result) {
+                    return !result.length;
+                })
+                .notifyFailure(function (step, result) {
+                    var labels = _.map(result, function (label) {
+                        return self.validateCertificateLabels[label];
+                    });
+                    generator.generateErrorFields('check_this_fields', labels);
+                })
+                .validate()
+                .then(function () {
+                    applicationUserSignatureService
+                        .addApplicationUserCertificate(self.userCertificate, self.attachedCertificate).then(function () {
+                        var defer = $q.defer();
+                        self.userCertificateGrid.progress = defer.promise;
+                        self.loadUserCertificates(self.applicationUser.id)
+                            .then(function (result) {
+                                _initCertificate(true);
+                                defer.resolve(true);
+                                toast.success(langService.get('save_success'));
+                            });
+                    });
+                })
+                .catch(function () {
+
+                });
+        };
+
+        /**
+         * @description Handles the uploaded certificate to verify extension
+         * @param files
+         * @param element
+         */
+        self.handleUploadCertificate = function (files, element) {
+            _initCertificate();
+
+            attachmentService
+                .validateBeforeUpload('userCertificate', files[0])
+                .then(function (file) {
+                    self.attachedCertificate = file;
+                })
+                .catch(function (availableExtensions) {
+                    _initCertificate();
+                    dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
+                });
+        };
+
+        self.userCertificateGrid = {
+            progress: null
+        };
+
+        /**
+         * @description clear user certificate fields
+         */
+        self.clearUserCertificate = function ($event) {
+            _initCertificate(true);
         };
 
 

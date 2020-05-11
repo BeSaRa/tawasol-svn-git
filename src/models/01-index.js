@@ -63,6 +63,7 @@ module.exports = function (app) {
     require('./AttachmentType')(app);
     require('./DocumentTag')(app);
     require('./ApplicationUserSignature')(app);
+    require('./AppUserCertificate')(app);
     require('./Attachment')(app);
     require('./DocumentComment')(app);
     require('./DocumentSearch')(app);

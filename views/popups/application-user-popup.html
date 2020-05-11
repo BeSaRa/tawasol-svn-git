@@ -8,9 +8,10 @@
     <md-dialog-content scroll-directive flex>
         <div>
             <form name="applicationUserForm" autocomplete="off">
-                <md-tabs md-dynamic-height>
+                <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
                     <!-- Basic Info Tab -->
-                    <md-tab label="{{lang.basic_info}}" md-on-select="ctrl.setCurrentTab('basic')">
+                    <md-tab label="{{lang.basic_info}}" ng-if="ctrl.showTab('basic')"
+                            md-on-select="ctrl.setCurrentTab('basic')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row">
@@ -399,11 +400,24 @@
                                         </md-switch>
                                     </div>
                                 </div>
+
+                                <div layout="row">
+                                    <div class="cms-input-container" flex>
+                                        <md-switch flex ng-model="ctrl.applicationUser.pinCodePrompt"
+                                                   ng-disabled="!ctrl.globalSetting.isDigitalCertificateEnabled()"
+                                                   aria-label="{{lang.digital_certificate}}">
+                                            <label>{{lang.digital_certificate}} :
+                                                {{ctrl.applicationUser.getTranslatedYesNo('pinCodePrompt')}}</label>
+                                        </md-switch>
+                                    </div>
+                                    <span flex></span>
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>
                     <!-- Notification Settings Tab -->
-                    <md-tab label="{{lang.notification_settings}}" md-on-select="ctrl.setCurrentTab('ns')">
+                    <md-tab label="{{lang.notification_settings}}" ng-if="ctrl.showTab('notificationSettings')"
+                            md-on-select="ctrl.setCurrentTab('notificationSettings')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <!-- SMS Notifications -->
@@ -664,8 +678,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Organizations Tab -->
-                    <md-tab label="{{lang.organizations}}" ng-if="ctrl.editMode"
-                            md-on-select="ctrl.setCurrentTab('ot')">
+                    <md-tab label="{{lang.organizations}}" ng-if="ctrl.editMode && ctrl.showTab('organizations')"
+                            md-on-select="ctrl.setCurrentTab('organizations')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row" class="p20-0">
@@ -813,7 +827,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Signature -->
-                    <md-tab label="{{lang.signature}}" ng-if="ctrl.editMode"
+                    <md-tab label="{{lang.signature}}" ng-if="ctrl.editMode && ctrl.showTab('signature')"
                             md-on-select="ctrl.setCurrentTab('signature')">
                         <md-content class="md-padding">
                             <div layout="column">
@@ -955,8 +969,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Classification View Permission Tab -->
-                    <!--<md-tab label="{{lang.classification_view_permission}}" ng-if="ctrl.editMode"
-                            md-on-select="ctrl.setCurrentTab('cvp')">
+                    <!--<md-tab label="{{lang.classification_view_permission}}" ng-if="ctrl.editMode && ctrl.showTab('classificationViewPermission')"
+                            md-on-select="ctrl.setCurrentTab('classificationViewPermission')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row">
@@ -1067,8 +1081,9 @@
                         </md-content>
                     </md-tab>-->
                     <!-- OU View Permission Tab -->
-                    <md-tab label="{{lang.ou_view_permission}}" ng-if="ctrl.editMode"
-                            md-on-select="ctrl.setCurrentTab('ouvp')">
+                    <md-tab label="{{lang.ou_view_permission}}"
+                            ng-if="ctrl.editMode && ctrl.showTab('ouViewPermission')"
+                            md-on-select="ctrl.setCurrentTab('ouViewPermission')">
                         <md-content class="md-padding">
                             <div layout="column">
                                 <div layout="row">
@@ -1192,6 +1207,116 @@
                                     </md-card>
                                 </div>
                             </div>
+                        </md-content>
+                    </md-tab>
+                    <!-- Digital Certificates -->
+                    <md-tab label="{{lang.digital_certificates}}"
+                            ng-if="ctrl.editMode && ctrl.showTab('digitalCertificates')"
+                            md-on-select="ctrl.setCurrentTab('digitalCertificates')">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <ng-form name="certificateForm">
+                                    <fieldset ng-if="ctrl.showCertificateForm">
+                                        <legend class="md-accent">
+                                            <div layout="row" layout-align="center center">
+                                                <span>{{lang.digital_certificate}} :&nbsp;</span>
+                                                <span>{{lang.generate}}</span>
+                                                <span>&nbsp;&nbsp;</span>
+                                                <md-switch
+                                                        class="m0"
+                                                        aria-label="{{lang.digital_certificate}}"
+                                                        ng-change="ctrl.onChangeCertificateTypeUpload()"
+                                                        ng-model="ctrl.certificateTypeUpload">
+                                                </md-switch>
+                                                <span>{{lang.upload}}</span>
+                                            </div>
+                                        </legend>
+                                        <div class="full-width-fieldset">
+                                            <div layout="row">
+                                                <div class="position-relative" ng-if="ctrl.certificateTypeUpload">
+                                                    <md-button class="md-raised">
+                                                        <div>
+                                                            <span><md-icon md-svg-icon="upload"></md-icon></span>
+                                                            <span>{{lang.upload}}</span>
+                                                        </div>
+                                                    </md-button>
+                                                    <input reset-after-change="true"
+                                                           accept="{{ctrl.certificateExtensions}}"
+                                                           catch-upload-file-directive="ctrl.handleUploadCertificate"
+                                                           class="hide-import-file" type="file"
+                                                           id="add-user-cert" name="add-user-cert">
+                                                </div>
+                                                <md-input-container flex>
+                                                    <label for="pinCode">{{lang.pin}}</label>
+                                                    <input name="pinCode" id="pinCode" type="password"
+                                                           ng-model="ctrl.userCertificate.pinCode" required
+                                                           custom-validate-directive="number">
+                                                    <div ng-messages="certificateForm.pinCode.$error">
+                                                        <div ng-message="required">{{lang.field_required}}</div>
+                                                        <div ng-message="number">{{lang.numberonly}}</div>
+                                                    </div>
+                                                </md-input-container>
+                                                <div>
+                                                    <md-button class="md-raised md-primary"
+                                                               ng-disabled="certificateForm.$invalid"
+                                                               ng-click="ctrl.addUserCertificate($event)">
+                                                        {{lang.add}}
+                                                    </md-button>
+                                                    <md-button class="md-raised red-text"
+                                                               ng-click="ctrl.clearUserCertificate($event)">
+                                                        {{lang.clear}}
+                                                    </md-button>
+                                                </div>
+                                            </div>
+                                            <div ng-if="ctrl.attachedCertificate">
+                                                <span>{{ctrl.attachedCertificate.name}}</span>
+                                                <md-icon md-svg-icon="close" class="cursor-pointer red-text"
+                                                         tooltip="{{lang.remove}}"
+                                                         aria-label="{{lang.remove}}"
+                                                         ng-click="ctrl.removeCertificateContent($event)">
+                                                </md-icon>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </ng-form>
+
+                                <div layout="row" ng-if="ctrl.applicationUser.certificate">
+                                    <md-card md-whiteframe="3" flex class="card-overlay">
+                                        <md-table-container>
+                                            <div flex scroll-directive>
+                                                <table md-table md-progress="ctrl.userCertificateGrid.progress">
+                                                    <thead md-head>
+                                                    <tr md-row>
+                                                        <th md-column>
+                                                            <span>{{lang.subject}}</span>
+                                                        </th>
+                                                        <th md-column>
+                                                            <span>{{lang.actions}}</span>
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody md-body>
+                                                    <tr md-row>
+                                                        <td md-cell>{{ctrl.applicationUser.certificate.docSubject}}</td>
+                                                        <td md-cell>
+                                                            <div flex layout="row" layout-align="start center">
+                                                                <md-button class="md-icon-button"
+                                                                           title="{{lang.delete}}"
+                                                                           ng-click="ctrl.removeUserCertificate(ctrl.applicationUser.certificate, $event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </md-table-container>
+                                    </md-card>
+                                </div>
+
+                            </div>
+                        </md-content>
                     </md-tab>
                 </md-tabs>
             </form>
@@ -1199,11 +1324,11 @@
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised md-primary" ng-disabled="applicationUserForm.$invalid"
-                   ng-if="!ctrl.editMode"
+                   ng-if="ctrl.isShowSaveButton(false)"
                    ng-click="ctrl.addApplicationUserFromCtrl()">{{lang.add}}
         </md-button>
         <md-button class="md-raised md-primary" ng-disabled="applicationUserForm.$invalid"
-                   ng-if="ctrl.editMode && ctrl.selectedTab!=='cvp' && ctrl.selectedTab!=='ot' && ctrl.selectedTab !== 'signature'"
+                   ng-if="ctrl.isShowSaveButton(true)"
                    ng-click="ctrl.editApplicationUserFromCtrl()">{{lang.save}}
         </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closeApplicationUserPopupFromCtrl()">

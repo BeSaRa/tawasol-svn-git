@@ -149,6 +149,10 @@ module.exports = function (app) {
                 return this.slowConnectionMode;
             };
 
+            GlobalSetting.prototype.isDigitalCertificateEnabled = function () {
+                return this.digitalCertificateEnabled;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('GlobalSetting', 'init', this);

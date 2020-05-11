@@ -58,6 +58,7 @@ module.exports = function (app) {
             self.isSubAdmin = false;
             self.backLogMode = false;
             self.slowConnectionMode = false;
+            self.pinCodePrompt = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -344,6 +345,11 @@ module.exports = function (app) {
             Employee.prototype.hasProxy = function () {
                 return this.organization ? this.organization.proxyUser : false;
             };
+
+            Employee.prototype.hasPinCodePrompt = function () {
+                return this.pinCodePrompt;
+            };
+
             /**
              * @description check if the current proxy user for the employee inside the given collection of proxyUsers.
              * @param collectionOfProxyUsers

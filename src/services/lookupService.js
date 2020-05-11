@@ -35,7 +35,7 @@ module.exports = function (app) {
         self.menuItemParam = 'menuItemParam';
         self.taskState = 'taskState';
         self.attachmentPriority = 'attachmentPriority';
-        self.digitalCertificateMode = 'digitalCertificateMode';
+        self.digitalCertificateMode = 'digitalCertificate';
 
         // this propertyConfiguration related to the property configurations Service.
         self.propertyConfigurations = {

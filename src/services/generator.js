@@ -807,7 +807,7 @@ module.exports = function (app) {
             return -(date1.diff(date2, 'days'));
         };
 
-        self.getNextDaysDate = function(days){
+        self.getNextDaysDate = function (days) {
             var date = new Date();
             date.setDate(date.getDate() + (days || 0));
             return date;
@@ -910,5 +910,24 @@ module.exports = function (app) {
             }
             return message;
         };
+
+        /**
+         * @description Gets the extension of given file object.
+         * Url will not work
+         * @param file
+         * @param includeDot
+         * @returns {string|null}
+         */
+        self.getFileExtension = function (file, includeDot) {
+            var name = self.getNormalizedValue(file, 'name');
+            if (!file || !name) {
+                return null;
+            }
+            var extension = name.split('.').pop().toLowerCase();
+            if (includeDot) {
+                extension = '.' + extension;
+            }
+            return extension;
+        }
     })
 };

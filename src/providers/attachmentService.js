@@ -432,9 +432,11 @@ module.exports = function (app) {
                         var allowedExtensions = [];
                         if (groupName === 'scannerImport') {
                             allowedExtensions = provider.getExtensionGroup(groupName);
-                        } else if (groupName === 'userSignature')
+                        } else if (groupName === 'userSignature') {
                             allowedExtensions = provider.getExtensionGroup(groupName);
-                        else {
+                        } else if (groupName === 'userCertificate') {
+                            allowedExtensions = provider.getExtensionGroup(groupName);
+                        } else {
                             allowedExtensions = _.map(rootEntity.getGlobalSettings().fileType, function (allowed) {
                                 var type = _.find(allFileTypes, function (fileType) {
                                     return fileType.id === allowed;

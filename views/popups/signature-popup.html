@@ -1,10 +1,22 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
-           ng-attr-aria-label="{{lang.add_signature}}">
-    <popup-toolbar-directive ng-if="!ctrl.model.id" header-text="{{lang.add_signature}}"></popup-toolbar-directive>
+           aria-label="{{lang.select_signature}}">
+    <popup-toolbar-directive header-text="{{lang.select_signature}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="signaturesForm" id="signature-form" autocomplete="off">
+                <div layout="row" ng-if="ctrl.pinCodeRequired">
+                    <md-input-container flex>
+                        <label for="pinCode">{{lang.pin}}</label>
+                        <input name="pinCode" id="pinCode" type="password"
+                               ng-model="ctrl.pinCode" required
+                               custom-validate-directive="number">
+                        <div ng-messages="signaturesForm.pinCode.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="number">{{lang.numberonly}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
                 <div ng-repeat="signatureChunk in ctrl.signatureChunks track by $index">
                     <div flex layout="row">
                         <img flex ng-repeat="signature in signatureChunk track by $index"
@@ -21,7 +33,7 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised md-primary" ng-disabled="!ctrl.selectedSignature"
+        <md-button class="md-raised md-primary" ng-disabled="ctrl.checkDisabled()"
                    ng-click="ctrl.signDocumentFromCtrl()">
             {{lang.approve}}
         </md-button>

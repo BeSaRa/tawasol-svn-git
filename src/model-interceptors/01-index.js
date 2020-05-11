@@ -65,6 +65,7 @@ module.exports = function (app) {
     require('./SearchCriteriaInterceptor')(app);
     require('./OUDocumentFileInterceptor')(app);
     require('./ApplicationUserSignatureInterceptor')(app);
+    require('./AppUserCertificateInterceptor')(app);
     require('./ViewOutgoingInterceptor')(app);
     require('./ViewIncomingInterceptor')(app);
     require('./ViewInternalInterceptor')(app);

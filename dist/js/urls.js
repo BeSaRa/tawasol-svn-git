@@ -416,6 +416,9 @@
                 .addExtensionGroup('userSignature', [
                     '.png'
                 ])
+                .addExtensionGroup('userCertificate', [
+                    '.pfx'
+                ])
                 .addExtensionGroup('wordDocument', [
                     '.doc',
                     '.docx'

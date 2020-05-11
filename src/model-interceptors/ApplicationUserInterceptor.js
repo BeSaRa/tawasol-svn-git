@@ -25,6 +25,8 @@ module.exports = function (app) {
             delete model.organization;
             delete model.signature;
             delete model.userOrganization;
+            delete model.certificate;
+
             return model;
         });
 

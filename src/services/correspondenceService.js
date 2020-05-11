@@ -68,7 +68,8 @@ module.exports = function (app) {
                                                    DocumentLink,
                                                    SmsLog,
                                                    rootEntity,
-                                                   FollowupAction) {
+                                                   FollowupAction,
+                                                   encryptionService) {
         'ngInject';
         var self = this, managerService, correspondenceStorageService;
         self.serviceName = 'correspondenceService';
@@ -3233,11 +3234,12 @@ module.exports = function (app) {
          * @description approve the workItem
          * @param workItem
          * @param signature
+         * @param pinCode
          * @param isComposite
          * @param ignoreMessage
          * @param additionalData
          */
-        self.approveCorrespondence = function (workItem, signature, isComposite, ignoreMessage, additionalData) {
+        self.approveCorrespondence = function (workItem, signature, pinCode, isComposite, ignoreMessage, additionalData) {
             var defer = $q.defer();
             if (additionalData && workItem.isWorkItem()) {
                 additionalData.preApproveAction(null, true, true)
@@ -3250,7 +3252,7 @@ module.exports = function (app) {
             return defer.promise.then(function (changesSaved) {
                 if (changesSaved === 'savedBeforeApprove' || changesSaved === 'noSaveRequired') {
                     var info = workItem.getInfo();
-                    var sign = (new SignDocumentModel()).setSignature(workItem, signature).setIsComposite(isComposite);
+                    var sign = (new SignDocumentModel()).setSignature(workItem, signature).setIsComposite(isComposite).setPinCode(pinCode ? encryptionService.encrypt(pinCode) : null);
                     return $http
                         .put(_createUrlSchema(null, info.documentClass, 'authorize'), sign)
                         .then(function (result) {
@@ -3266,6 +3268,12 @@ module.exports = function (app) {
                         .catch(function (error) {
                             errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
                                 dialog.errorMessage(langService.get('authorize_failed'))
+                            });
+                            errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
+                                dialog.errorMessage(langService.get('certificate_missing'))
+                            });
+                            errorCode.checkIf(error, 'PIN_CODE_NOT_MATCH', function () {
+                                dialog.errorMessage(langService.get('pincode_not_match'))
                             });
                             return $q.reject(error);
                         })
@@ -3284,20 +3292,45 @@ module.exports = function (app) {
             return applicationUserSignatureService
                 .loadApplicationUserSignatures(employeeService.getEmployee().id)
                 .then(function (signatures) {
+                    var pinCodeRequired = rootEntity.getGlobalSettings().isDigitalCertificateEnabled() && employeeService.getEmployee().hasPinCodePrompt();
                     if (signatures && signatures.length === 1) {
-                        var isComposite = workItem.isWorkItem() ? workItem.isComposite() : workItem.isCompositeSites();
-                        if (isComposite) {
-                            return dialog
-                                .confirmMessage(langService.get('document_is_composite'))
-                                .then(function () {
-                                    return self.approveCorrespondence(workItem, signatures[0], true, ignoreMessage, additionalData);
+                        var pinCodeDefer = $q.defer();
+                        if (!pinCodeRequired) {
+                            pinCodeDefer.resolve('PINCODE_NOT_REQUIRED');
+                        } else {
+                            dialog
+                                .showDialog({
+                                    targetEvent: $event,
+                                    templateUrl: cmsTemplate.getPopup('pincode'),
+                                    controller: 'pinCodePopCtrl',
+                                    controllerAs: 'ctrl'
+                                })
+                                .then(function (result) {
+                                    result ? pinCodeDefer.resolve(result) : pinCodeDefer.reject('PINCODE_MISSING');
                                 })
                                 .catch(function () {
-                                    return self.approveCorrespondence(workItem, signatures[0], false, ignoreMessage, additionalData);
-                                })
-                        } else {
-                            return self.approveCorrespondence(workItem, signatures[0], false, ignoreMessage, additionalData);
+                                    pinCodeDefer.reject('PINCODE_MISSING');
+                                });
                         }
+
+                        return pinCodeDefer.promise.then(function (pinCode) {
+                            if (pinCode === 'PINCODE_NOT_REQUIRED'){
+                                pinCode = null;
+                            }
+                            var isComposite = workItem.isWorkItem() ? workItem.isComposite() : workItem.isCompositeSites();
+                            if (isComposite) {
+                                return dialog
+                                    .confirmMessage(langService.get('document_is_composite'))
+                                    .then(function () {
+                                        return self.approveCorrespondence(workItem, signatures[0], pinCode, true, ignoreMessage, additionalData);
+                                    })
+                                    .catch(function () {
+                                        return self.approveCorrespondence(workItem, signatures[0], pinCode, false, ignoreMessage, additionalData);
+                                    })
+                            } else {
+                                return self.approveCorrespondence(workItem, signatures[0], pinCode, false, ignoreMessage, additionalData);
+                            }
+                        });
                     } else if (signatures && signatures.length > 1) {
                         return dialog
                             .showDialog({
@@ -3309,7 +3342,8 @@ module.exports = function (app) {
                                     workItem: workItem,
                                     signatures: signatures,
                                     additionalData: additionalData,
-                                    ignoreMessage: ignoreMessage
+                                    ignoreMessage: ignoreMessage,
+                                    pinCodeRequired: pinCodeRequired
                                 }
                             });
                     } else {

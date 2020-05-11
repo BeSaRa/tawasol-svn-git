@@ -7,6 +7,8 @@ module.exports = function (app) {
             self.signatureVsid = null;
             self.wobNum = null;
             self.authorizeAsComposite = false;
+            self.pinCode = null;
+
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
@@ -37,6 +39,11 @@ module.exports = function (app) {
 
             SignDocumentModel.prototype.setIsComposite = function (value) {
                 this.authorizeAsComposite = value;
+                return this;
+            };
+
+            SignDocumentModel.prototype.setPinCode = function (value) {
+                this.pinCode = value;
                 return this;
             };
 

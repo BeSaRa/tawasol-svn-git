@@ -1,0 +1,32 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           aria-label="{{lang.enter_pincode}}">
+    <popup-toolbar-directive header-text="{{lang.enter_pincode}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="pinCodeForm" id="pinCodeForm" autocomplete="off">
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="pinCode">{{lang.pin}}</label>
+                        <input name="pinCode" id="pinCode" type="password"
+                               ng-model="ctrl.pinCode" required
+                               custom-validate-directive="number">
+                        <div ng-messages="pinCodeForm.pinCode.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="number">{{lang.numberonly}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary" ng-disabled="pinCodeForm.$invalid"
+                   ng-click="ctrl.submitPinCode()">
+            {{lang.approve}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -61,7 +61,9 @@ module.exports = function (app) {
                 OPERATION_NOT_SUPPORTED: 3002,
                 USER_NOT_EXIST: 9006,
                 USER_NOT_LINKED_WITH_DEPARTMENT: 9007,
-                DOCUMENT_HAS_BEEN_DELETED: 3045
+                DOCUMENT_HAS_BEEN_DELETED: 3045,
+                NOT_ENOUGH_CERTIFICATES: 3047,
+                PIN_CODE_NOT_MATCH: 3048,
             },
             errorLangKeys = {
                 1001: 'no_records_found',
@@ -88,7 +90,9 @@ module.exports = function (app) {
                 9017: 'password_not_correct',
                 9016: 'user_not_active',
                 9007: 'user_not_linked_with_department',
-                3045: 'document_has_been_deleted'
+                3045: 'document_has_been_deleted',
+                3047: 'certificate_missing',
+                3048: 'pincode_not_match'
             };
 
         return {

@@ -142,4 +142,5 @@ module.exports = function (app) {
     require('./exportBulkWorkItemsPopCtrl')(app);
     require('./predefinedActionPopCtrl')(app);
     require('./quickSendDocumentPopCtrl')(app);
+    require('./pinCodePopCtrl')(app);
 };
