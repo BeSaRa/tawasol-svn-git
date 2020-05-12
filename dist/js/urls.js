@@ -382,7 +382,7 @@
                 // correspondence common
                 .addToAllWithBase('correspondenceCommon', 'cms-entity/correspondence/common')
                 // download selected book options
-                .addToAllWithBase('downloadSelected', 'cms-entity/correspondence/common/merge-book')
+                .addToAllWithBase('downloadSelected', 'cms-entity/correspondence/{documentClass}/merge-book')
                 // downlaod document content
                 .addToAllWithBase('downloadDocumentContent', 'cms-entity/correspondence/common/download-content/{vsId}')
                 // downlaod document content as PDF

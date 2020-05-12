@@ -435,7 +435,7 @@ module.exports = function (app) {
          */
         self.downloadSelectedOptions = function (downloadOptions, correspondence) {
             var info = correspondence.getInfo();
-            return $http.put(urlService.downloadSelected + "/" + info.vsId, downloadOptions).then(function (result) {
+            return $http.put(urlService.downloadSelected.replace('{documentClass}', info.documentClass.toLowerCase()) + "/" + info.vsId, downloadOptions).then(function (result) {
                     window.open(result.data.rs, '_blank');
                 }
             );
@@ -447,7 +447,7 @@ module.exports = function (app) {
          */
         self.mergeAndDownload = function (correspondence) {
             var info = correspondence.getInfo();
-            return $http.put(urlService.downloadSelected + "/" + info.vsId, {
+            return $http.put(urlService.downloadSelected.replace('{documentClass}', info.documentClass.toLowerCase()) + "/" + info.vsId, {
                 BOOK: true,
                 ATTACHMENTS: [],
                 RELATED_BOOKS: []
