@@ -90,7 +90,7 @@
                                         <md-input-container flex>
                                             <label>{{lang.time}}</label>
                                             <md-select name="endTime" ng-change="ctrl.timeChange('endTime','EndTime')"
-                                                       ng-disabled="!ctrl.task.dueDate"
+                                                       ng-disabled="!ctrl.task.startTime || !ctrl.task.dueDate"
                                                        ng-model="ctrl.task.endTime">
                                                 <md-option ng-disabled="ctrl.lessThanStartTime(hour)"
                                                            ng-value="hour.value"
