@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.service('correspondenceService', function (urlService,
                                                    $http,
                                                    ImageThumbnail,
+                                                   FollowUpFolder,
                                                    cmsTemplate,
                                                    tokenService,
                                                    Pair,

@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.controller('userPreferencePopCtrl', function (_,
                                                       toast,
+                                                      followupFolders,
                                                       validationService,
                                                       LangWatcher,
                                                       generator,
@@ -35,6 +36,7 @@ module.exports = function (app) {
                                                       themeService,
                                                       availableProxies,
                                                       userFolderService,
+                                                      followUpUserService,
                                                       ApplicationUserSignature,
                                                       applicationUserSignatureService,
                                                       attachmentService,
@@ -78,6 +80,7 @@ module.exports = function (app) {
         self.userWorkflowGroups = userWorkflowGroups;
         self.userWorkflowGroupsCopy = angular.copy(userWorkflowGroups);
         self.userFolderService = userFolderService;
+        self.followupFolders = followupFolders;
         self.currentNode = null;
         self.viewInboxAsOptions = [
             {
@@ -335,6 +338,7 @@ module.exports = function (app) {
             'userComments',
             'workflowGroups',
             'folders',
+            'followupFolders',
             'signature',
             'predefinedActions',
             'digitalCertificates'

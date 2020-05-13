@@ -25,6 +25,7 @@ module.exports = function (app) {
         return function WorkItem(model) {
             var self = this,
                 correspondenceService = null,
+                followUpUserService = null,
                 managerService = null,
                 downloadService = null,
                 classesMap = {
@@ -139,6 +140,10 @@ module.exports = function (app) {
             };
             WorkItem.prototype.setDownloadService = function (service) {
                 downloadService = service;
+                return this;
+            };
+            WorkItem.prototype.setFollowUpUserService = function (service) {
+                followUpUserService = service;
                 return this;
             };
             WorkItem.prototype.hasContent = function () {
@@ -917,6 +922,10 @@ module.exports = function (app) {
                 var employee = employeeService.getEmployee();
                 return ((info.documentClass === 'outgoing' && employee.hasPermissionTo('ELECTRONIC_SIGNATURE')) ||
                     (info.documentClass === 'internal' && employee.hasPermissionTo('ELECTRONIC_SIGNATURE_MEMO')))
+            };
+
+            WorkItem.prototype.addToMyDirectFollowUp = function () {
+                return followUpUserService.addCorrespondenceToMyFollowUp(this);
             };
 
             // don't remove CMSModelInterceptor from last line

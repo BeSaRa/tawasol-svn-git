@@ -1070,6 +1070,21 @@
                             </div>
                         </md-content>
                     </md-tab>
+
+                    <md-tab label="{{lang.followup_folders}}" ng-if="ctrl.showTab('followupFolders')"
+                            md-on-select="ctrl.setCurrentTab('folders')">
+                        <md-content class="md-padding">
+                            <div>
+                                <user-folders-tree-view-directive
+                                        followup="true"
+                                        folders="ctrl.followupFolders"
+                                        current-node="ctrl.currentNode"
+                                        allow-actions="true"
+                                        add-root-folder="true">
+                                </user-folders-tree-view-directive>
+                            </div>
+                        </md-content>
+                    </md-tab>
                     <!-- Signature -->
                     <md-tab label="{{lang.signature}}" ng-if="ctrl.showTab('signature')"
                             md-on-select="ctrl.setCurrentTab('signature')">

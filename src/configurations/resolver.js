@@ -709,6 +709,11 @@ module.exports = function (app) {
                     });
                 }
             })
+            .bulkResolveToState('app.inbox.user-followup', {
+                folders: function (followUpUserService) {
+                    return followUpUserService.getFollowupFolders(true);
+                }
+            })
             .registerResolver();
     });
 };

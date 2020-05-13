@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                                  $q,
                                                                  $rootScope,
                                                                  langService,
+                                                                 followUpUserService,
                                                                  toast,
                                                                  dialog) {
         'ngInject';
@@ -16,6 +17,14 @@ module.exports = function (app) {
          * @description reload user folders from server
          */
         self.reloadUserFolders = function () {
+            if (self.followup) {
+                followUpUserService
+                    .getFollowupFolders(true)
+                    .then(function (result) {
+                        self.folders = result;
+                    });
+                return;
+            }
             userFolderService
                 .getUserFoldersForApplicationUser()
                 .then(function (result) {
@@ -39,12 +48,23 @@ module.exports = function (app) {
 
         /**
          * @description Delete user folder and sub folders
-         * @param userFolder
+         * @param folders
          * @param $event
          */
-        self.removeUserFolder = function (userFolder, $event) {
-            var array = [userFolder.id];
-            getChildIds(userFolder, array);
+        self.removeUserFolder = function (folders, $event) {
+            var array = [folders.id];
+            getChildIds(folders, array);
+
+            if (self.followup) {
+                followUpUserService
+                    .controllerMethod
+                    .followupFolderDeleteBulk(array.reverse())
+                    .then(function () {
+                        self.reloadUserFolders();
+                    });
+                return;
+            }
+
             userFolderService
                 .controllerMethod
                 .userFolderDeleteBulk(array.reverse(), $event)
@@ -56,13 +76,24 @@ module.exports = function (app) {
 
         /**
          * @description Opens dialog for add new user folder
-         * @param userFolder
+         * @param folder
          * @param $event
          */
-        self.openAddUserFolderDialog = function (userFolder, $event) {
+        self.openAddUserFolderDialog = function (folder, $event) {
+            if (self.followup) {
+                followUpUserService
+                    .controllerMethod
+                    .followupFolderAdd(folder, $event)
+                    .then(function () {
+                        self.reloadUserFolders();
+                    });
+                return;
+            }
+
+
             userFolderService
                 .controllerMethod
-                .userFolderAdd(userFolder, $event)
+                .userFolderAdd(folder, $event)
                 .then(function () {
                     self.reloadUserFolders();
                 });
@@ -73,10 +104,20 @@ module.exports = function (app) {
          * @param userFolder
          * @param $event
          */
-        self.openEditUserFolderDialog = function (userFolder, $event) {
+        self.openEditUserFolderDialog = function (folder, $event) {
+            if (self.followup) {
+                followUpUserService
+                    .controllerMethod
+                    .followupFolderEdit(folder, $event)
+                    .then(function () {
+                        self.reloadUserFolders();
+                    });
+                return;
+            }
+
             userFolderService
                 .controllerMethod
-                .userFolderEdit(userFolder, $event)
+                .userFolderEdit(folder, $event)
                 .then(function () {
                     self.reloadUserFolders();
                 });

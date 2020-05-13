@@ -15,6 +15,7 @@ module.exports = function (app) {
                       downloadService,
                       documentCommentService,
                       correspondenceService,
+                      followUpUserService,
                       Information,
                       viewDocumentService) {
         'ngInject';
@@ -53,7 +54,8 @@ module.exports = function (app) {
                 .setDocumentCommentService(documentCommentService)
                 .setManagerService(managerService)
                 .setDownloadService(downloadService)
-                .setViewDocumentService(viewDocumentService);
+                .setViewDocumentService(viewDocumentService)
+                .setFollowUpUserService(followUpUserService);
             return model;
         });
 

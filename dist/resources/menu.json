@@ -1270,5 +1270,17 @@
     "sort_order": 3,
     "active": true,
     "sort_value": 0
+  },
+  {
+    "ID": 119,
+    "lang_key": "menu_item_user_followup",
+    "icon": "inbox",
+    "parent": 53,
+    "link": "#serials-screen",
+    "state": "app.inbox.user-followup",
+    "icon_type": "font",
+    "sort_order": 3,
+    "active": true,
+    "sort_value": 0
   }
 ]

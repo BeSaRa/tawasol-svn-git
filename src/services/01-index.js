@@ -121,4 +121,5 @@ module.exports = function (app) {
     require('./desktopNotificationService')(app);
     require('./encryptionService')(app);
     require('./predefinedActionService')(app);
+    require('./followUpUserService')(app);
 };

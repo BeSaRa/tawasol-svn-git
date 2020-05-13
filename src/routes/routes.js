@@ -1723,6 +1723,13 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_serials'
             })
+            .state('app.inbox.user-followup', {
+                url: '/user-followup',
+                templateUrl: templateProvider.getView('user-followup'),
+                controller: 'userFollowupScreenCtrl',
+                controllerAs: 'ctrl',
+                permission: 'USER_FOLLOWUP_BOOKS'
+            })
 
     });
 };

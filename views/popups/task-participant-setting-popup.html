@@ -1,28 +1,39 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.tasks}}">
-    <popup-toolbar-directive header-text="{{lang.edit_task_participant}} : {{ctrl.taskParticipant.userId.getTranslatedName()}} - {{ctrl.taskParticipant.ouId.getTranslatedName()}}"
-                             close-callback="ctrl.closeTaskParticipantPopupFromCtrl"></popup-toolbar-directive>
+    <popup-toolbar-directive
+            header-text="{{lang.edit_task_participant}} : {{ctrl.taskParticipant.userId.getTranslatedName()}} - {{ctrl.taskParticipant.ouId.getTranslatedName()}}"
+            close-callback="ctrl.closeTaskParticipantPopupFromCtrl"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form autocomplete="off" name="participant_form">
                 <div layout="column">
                     <div layout="row">
-                        <md-input-container flex>
-                            <label>{{lang.task_state}}</label>
-                            <md-select name="taskState" id="taskState"
-                                       ng-model="ctrl.taskParticipant.taskState">
-                                <md-option ng-value="state.lookupKey"
-                                           ng-repeat="state in ctrl.taskParticipantStates">
-                                    {{state.getTranslatedName()}}
-                                </md-option>
-                            </md-select>
-                        </md-input-container>
-                        <md-input-container>
-                            <md-switch ng-disabled="ctrl.fromView" ng-model="ctrl.taskParticipant.allDay">
-                                {{lang.task_all_day}}
-                            </md-switch>
-                        </md-input-container>
+                        <div layout="row" flex>
+                            <md-input-container flex>
+                                <label>{{lang.task_state}}</label>
+                                <md-select name="taskState" id="taskState"
+                                           ng-model="ctrl.taskParticipant.taskState">
+                                    <md-option ng-value="state.lookupKey"
+                                               ng-repeat="state in ctrl.taskParticipantStates">
+                                        {{state.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div layout="row" flex>
+                            <md-input-container>
+                                <md-switch ng-disabled="ctrl.fromView || !ctrl.task.documentVSID"
+                                           ng-model="ctrl.taskParticipant.addtoUserFollowup">
+                                    {{lang.follow_up_status}}
+                                </md-switch>
+                            </md-input-container>
+                            <md-input-container>
+                                <md-switch ng-disabled="ctrl.fromView" ng-model="ctrl.taskParticipant.allDay">
+                                    {{lang.task_all_day}}
+                                </md-switch>
+                            </md-input-container>
+                        </div>
                     </div>
                     <div layout="row">
                         <div layout="row" flex>

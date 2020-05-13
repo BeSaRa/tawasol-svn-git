@@ -1,6 +1,5 @@
 module.exports = function (app) {
-    require('./user-folders-tree-view-style.css');
-    app.directive('userFoldersTreeViewDirective', function ($compile,cmsTemplate) {
+    app.directive('userFoldersTreeViewDirective', function ($compile, cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
@@ -8,11 +7,12 @@ module.exports = function (app) {
             controllerAs: 'ctrl',
             templateUrl: cmsTemplate.getDirective('user-folders-tree-view-directive.html'),
             bindToController: true,
-            scope:{
-                folders : '=',
-                currentNode : '=',
+            scope: {
+                folders: '=',
+                currentNode: '=',
                 allowActions: '@',
-                addRootFolder: '@'
+                addRootFolder: '@',
+                followup: '='
             }
         };
     });

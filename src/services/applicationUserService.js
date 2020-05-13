@@ -415,6 +415,10 @@ module.exports = function (app) {
                                         return result;
                                     });
                             },
+                            followupFolders: function (followUpUserService) {
+                                'ngInject';
+                                return followUpUserService.getFollowupFolders(true);
+                            },
                             availableProxies: function (ouApplicationUserService) {
                                 'ngInject';
                                 return resolveOuApplicationUsers.promise.then(function () {

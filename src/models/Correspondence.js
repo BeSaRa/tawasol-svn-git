@@ -30,6 +30,7 @@ module.exports = function (app) {
                 documentTagService,
                 downloadService,
                 documentCommentService,
+                followUpUserService,
                 viewDocumentService;
 
             self.docSubject = null;
@@ -115,6 +116,11 @@ module.exports = function (app) {
 
             Correspondence.prototype.setViewDocumentService = function (service) {
                 viewDocumentService = service;
+                return this;
+            };
+
+            Correspondence.prototype.setFollowUpUserService = function (service) {
+                followUpUserService = service;
                 return this;
             };
 
@@ -937,6 +943,10 @@ module.exports = function (app) {
                 } else if (info.documentClass === 'incoming') {
                     return this.followupDate;
                 }
+            };
+
+            Correspondence.prototype.addToMyDirectFollowUp = function () {
+                return followUpUserService.addCorrespondenceToMyFollowUp(this);
             };
 
             // don't remove CMSModelInterceptor from last line

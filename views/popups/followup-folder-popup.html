@@ -1,0 +1,75 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{!ctrl.editMode ? ctrl.addFolderHeader : ctrl.model.getNames()}}">
+    <popup-toolbar-directive ng-if="!ctrl.editMode"
+                             header-text="{{ctrl.addFolderHeader}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode"
+                             header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="followupFolder_form" autocomplete="off">
+                <div layout="column">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="arName">{{lang.arabic_name}}</label>
+                            <input name="arName" id="arName" ng-required="!ctrl.followupFolder.enName"
+                                   minlength="4" maxlength="80"
+                                   ng-model="ctrl.followupFolder.arName">
+                            <div ng-messages="followupFolder_form.arName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="enName">{{lang.english_name}}</label>
+                            <input name="enName" id="enName" ng-required="!ctrl.followupFolder.arName"
+                                   minlength="4" maxlength="80"
+                                   ng-model="ctrl.followupFolder.enName">
+                            <div ng-messages="followupFolder_form.enName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+<!--                        <div flex class="p20">-->
+<!--                            <md-switch ng-model="ctrl.followupFolder.status" aria-label="{{lang.status}}">-->
+<!--                                <label>{{lang.status}} : {{ctrl.followupFolder.getTranslatedStatus()}}</label>-->
+<!--                            </md-switch>-->
+<!--                        </div>-->
+                        <md-input-container flex ng-if="ctrl.editMode">
+                            <label for="parent">{{lang.parent}}</label>
+                            <md-select name="parent" id="parent" required
+                                       ng-model="ctrl.followupFolder.parent">
+                                <md-option ng-repeat="folder in ctrl.otherFolders"
+                                           ng-value="folder.id">
+                                    {{folder.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="followupFolder_form.parent.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="followupFolder_form.$invalid"
+                   ng-if="!ctrl.editMode"
+                   ng-click="ctrl.addFollowUpFolderFromCtrl()">{{lang.add}}
+        </md-button>
+        <md-button class="md-raised md-primary"
+                   ng-disabled="followupFolder_form.$invalid"
+                   ng-if="ctrl.editMode"
+                   ng-click="ctrl.editFollowUpFolderFromCtrl()">{{lang.save}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closeFollowUpFolderPopupFromCtrl()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

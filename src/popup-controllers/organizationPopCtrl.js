@@ -109,6 +109,7 @@ module.exports = function (app) {
         self.allPropertyConfigurations = allPropertyConfigurations;
         self.propertyConfigurations = [];
         self.propertyConfigurationsCopy = angular.copy(self.propertyConfigurations);
+        self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
 
         if (self.editMode && !self.rootMode) {
             self.parentOrganization = organizationService.getOrganizationById(self.organization.parent);

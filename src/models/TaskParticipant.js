@@ -14,6 +14,7 @@ module.exports = function (app) {
             self.taskCreatorComment = null;
             self.participantReply = null;
             self.allDay = false;
+            self.addtoUserFollowup = false;
 
             self.startTime = configurationService.DEFAULT_START_TASK_TIME;
             self.endTime = null;

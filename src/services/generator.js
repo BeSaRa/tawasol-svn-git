@@ -646,15 +646,16 @@ module.exports = function (app) {
         /**
          * @description get document class by document type number.
          * @param docType
+         * @param reverse to get from document class name the int number
          * @return {*}
          */
-        self.getDocumentClassName = function (docType) {
+        self.getDocumentClassName = function (docType , reverse) {
             var documentClass = {
                 0: 'outgoing',
                 1: 'incoming',
                 2: 'internal'
             };
-            return documentClass[Number(docType)];
+            return reverse ? Object.values(documentClass).indexOf(docType.toLowerCase()) :  documentClass[Number(docType)];
         };
 
 

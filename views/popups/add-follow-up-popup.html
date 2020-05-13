@@ -1,0 +1,31 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.add_to_my_direct_followup}}">
+    <popup-toolbar-directive ng-if="!ctrl.model.id"
+                             header-text="{{lang.follow_up_to + ' : ' + ctrl.model.docSubject}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div layout="row" class="md-dialog-content cms-dialog-content">
+            <md-input-container ng-if="ctrl.folders.length" flex>
+                <label for="folder">{{lang.add_to_folder}}</label>
+                <md-select id="folder" ng-model="ctrl.model.folderId">
+                    <md-option ng-value="folder.id" ng-repeat="folder in ctrl.folders">{{folder[lang.current+'Name']}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container flex class="cms-datepicker md-block">
+                <label>{{lang.followup_date}}</label>
+                <md-datepicker ng-required="true" md-min-date="ctrl.minDate"
+                               ng-model="ctrl.model.followupDate"></md-datepicker>
+            </md-input-container>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-click="ctrl.saveToMyFollowUp()">
+            {{lang.add}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closeDialog()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

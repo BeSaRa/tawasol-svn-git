@@ -54,7 +54,7 @@ module.exports = function (app) {
             if (!(model.hasRegistry || model.centralArchive)) {
                 model.faxId = '';
             }
-
+            model.sla = angular.toJson(model.sla);
             // delete model.ldapPrefix;
             delete model.children;
             delete model.parentId;
@@ -102,6 +102,15 @@ module.exports = function (app) {
             model.privateRegOuIndicator = model.getPrivateRegOuIndicator();
             model.centralArchiveIndicator = model.getCentralArchiveIndicator();
             model.notSyncOuIndicator = model.getNotSyncOuIndicator();
+            model.sla = angular.fromJson(model.sla);
+            var priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
+            if (!isNaN(model.sla)) {
+                var number = model.sla;
+                model.sla = {};
+                priorityLevels.map(function (level) {
+                    model.sla[level.lookupKey] = number;
+                });
+            }
 
             return model;
         });

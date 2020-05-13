@@ -397,6 +397,12 @@
                 .addToAllWithBase('linkedPerson', 'cms-entity/admin/linked-person')
                 // predefined actions
                 .addToAllWithBase('predefinedAction', 'cms-entity/admin/user-dist-wf')
+                // get followup folders
+                .addToAllWithBase('followUpFolders', 'cms-entity/user/user-followup-book/folder')
+                // get followup folders
+                .addToAllWithBase('userFollowUp', 'cms-entity/user/user-followup-book')
+                // preapre followup
+                .addToAllWithBase('prepareFollowUp', 'cms-entity/user/user-followup-book/prepare-followup/vsid/:vsId/doc-class/:classKey')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

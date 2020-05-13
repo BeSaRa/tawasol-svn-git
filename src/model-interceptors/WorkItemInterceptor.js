@@ -16,6 +16,7 @@ module.exports = function (app) {
                       downloadService,
                       WorkItemType,
                       lookupService,
+                      followUpUserService,
                       Information,
                       generator) {
         'ngInject';
@@ -27,7 +28,8 @@ module.exports = function (app) {
             model
                 .setCorrespondenceService(correspondenceService)
                 .setManagerService(managerService)
-                .setDownloadService(downloadService);
+                .setDownloadService(downloadService)
+                .setFollowUpUserService(followUpUserService);
             model.mainCoreSite = new CorrespondenceSite(model.mainCoreSite);
             model.subCoreSite = new CorrespondenceSite(model.subCoreSite);
             model.siteType = new CorrespondenceSiteType(model.siteType);

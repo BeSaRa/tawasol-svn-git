@@ -143,4 +143,6 @@ module.exports = function (app) {
     require('./predefinedActionPopCtrl')(app);
     require('./quickSendDocumentPopCtrl')(app);
     require('./pinCodePopCtrl')(app);
+    require('./followUpPopCtrl')(app);
+    require('./followupFolderPopCtrl')(app);
 };
