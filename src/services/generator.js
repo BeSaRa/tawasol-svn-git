@@ -919,11 +919,10 @@ module.exports = function (app) {
          * @returns {string|null}
          */
         self.getFileExtension = function (file, includeDot) {
-            var name = self.getNormalizedValue(file, 'name');
-            if (!file || !name) {
+            if (!file || !file.name) {
                 return null;
             }
-            var extension = name.split('.').pop().toLowerCase();
+            var extension = file.name.split('.').pop().toLowerCase();
             if (includeDot) {
                 extension = '.' + extension;
             }

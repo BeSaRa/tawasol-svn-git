@@ -331,7 +331,7 @@
                             <div layout="row" class="p20">
                                 <!--  Usage Terms and Condition -->
                                 <div flex>
-                                    <label>{{$parent.lang.usage_terms_and_condition }} <span
+                                    <label>{{lang.usage_terms_and_condition }} <span
                                             class="red-text">*</span></label>
                                     <text-angular name="tamcontent" id="tamcontent" flex
                                                   ng-model="ctrl.globalSetting.tamcontent"
@@ -678,8 +678,8 @@
                                 </md-switch>
                                 <!-- Use Central Archive Internally -->
                                 <md-switch flex ng-model="ctrl.globalSetting.useCentralArchiveInternally"
-                                           aria-label="{{$root.lang.use_central_archive_internally}}">
-                                    <span>{{$root.lang.use_central_archive_internally}} : </span>{{
+                                           aria-label="{{lang.use_central_archive_internally}}">
+                                    <span>{{lang.use_central_archive_internally}} : </span>{{
                                     ctrl.globalSetting.getTranslatedYesNo('useCentralArchiveInternally')}}
                                 </md-switch>
                             </div>
@@ -687,7 +687,7 @@
                             <div layout="row" class="p20">
                                 <!-- Escalation process -->
                                 <md-input-container flex>
-                                    <label for="escalationProcess">{{$parent.lang.choose_escalation_process}}</label>
+                                    <label for="escalationProcess">{{lang.choose_escalation_process}}</label>
                                     <md-select name="escalationProcess" id="escalationProcess"
                                                ng-disabled="!ctrl.globalSetting.enableEscalation"
                                                ng-model="ctrl.globalSetting.escalationProcess">
@@ -699,7 +699,7 @@
                                         </md-option>
                                     </md-select>
                                     <div ng-messages="globalSettingForm.escalationProcess.$error">
-                                        <div ng-message="required">{{$parent.lang.field_required}}</div>
+                                        <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
 
@@ -721,15 +721,15 @@
 
                             <div layout="row" class="p20">
                                 <md-input-container flex>
-                                    <label for="deadlineReminderDays">{{$parent.lang.send_a_reminder_before_deadline_date_with}}</label>
+                                    <label for="deadlineReminderDays">{{lang.send_a_reminder_before_deadline_date_with}}</label>
                                     <input id="deadlineReminderDays" name="deadlineReminderDays" maxlength="5"
                                            aria-label="Send a reminder before deadline days"
                                            ng-model="ctrl.globalSetting.deadlineReminder"
                                            custom-validate-directive="number" min="1">
                                     <div ng-messages="globalSettingForm.deadlineReminderDays.$error">
-                                        <div ng-message="required">{{$parent.lang.field_required}}</div>
+                                        <div ng-message="required">{{lang.field_required}}</div>
                                         <div ng-message="min">
-                                            {{$parent.lang.should_greater_equal_min_limit.replace(':minlimit',1)}}
+                                            {{lang.should_greater_equal_min_limit.replace(':minlimit',1)}}
                                         </div>
                                         <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
                                         <div ng-message="number">{{lang.numberonly}}</div>
@@ -761,12 +761,13 @@
                                                 call-back="ctrl.viewImage"
                                                 model-name='loginLogo'
                                                 model-obj="ctrl.globalSetting.loginLogo"
-                                                button-label="{{$parent.lang.upload_login_logo}}">
+                                                button-label="{{lang.upload_login_logo}}"
+                                                selected-file-extension="ctrl.loginLogoExtensions">
                                         </upload-file-directive>
                                         <div>
                                             <md-button class="md-raised" ng-disabled="ctrl.saveLogo"
                                                        ng-click="ctrl.saveLoginLogoImage('loginLogo')">
-                                                {{$parent.$parent.lang.save}}
+                                                {{lang.save}}
                                             </md-button>
                                         </div>
                                     </div>
@@ -784,12 +785,13 @@
                                                 call-back="ctrl.viewImage"
                                                 model-name="bannerLogo"
                                                 model-obj='ctrl.globalSetting.bannerLogo'
-                                                button-label="{{$parent.lang.upload_banner_logo}}">
+                                                button-label="{{lang.upload_banner_logo}}"
+                                                selected-file-extension="ctrl.bannerLogoExtensions">
                                         </upload-file-directive>
                                         <div>
                                             <md-button class="md-raised" ng-disabled="ctrl.saveBanner"
                                                        ng-click="ctrl.saveBannerImage('bannerLogo')">
-                                                {{$parent.$parent.lang.save}}
+                                                {{lang.save}}
                                             </md-button>
                                         </div>
                                     </div>

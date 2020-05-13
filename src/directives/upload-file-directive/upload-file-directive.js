@@ -4,7 +4,7 @@
 module.exports = function (app) {
     app.directive('uploadFileDirective', uploadFileDirective);
 
-    function uploadFileDirective(toast, langService) {
+    function uploadFileDirective(toast, langService, dialog, _, generator) {
         'ngInject';
         return {
             restrict: 'E',
@@ -37,53 +37,56 @@ module.exports = function (app) {
 
             input.on('change', function (e) {
                 var file = e.target.files[0];
+                if (!file) {
+                    return;
+                }
+
+                var fileExt = generator.getFileExtension(file, true);
+                var isValidFileExtension = _.find(scope.selectedFileExtension, function (validExt) {
+                    return validExt === fileExt;
+                });
+
+                if (!isValidFileExtension) {
+                    dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(scope.selectedFileExtension.join(', ')));
+                    input.val('');
+                    return false;
+                }
+
                 var _URL = window.URL || window.webkitURL;
                 var img = new Image();
-                if (file) {
-                    img.src = _URL.createObjectURL(file);
-                    img.onload = function () {
-                        var name = input[0].name;
-                        if (name === 'loginLogo' || name === 'bannerLogo') {
-                            var width = this.naturalWidth || this.width;
-                            var height = this.naturalHeight || this.height;
-                            if ((name === 'loginLogo' || name === 'bannerLogo') && width > 283 && height > 283) {
-                                toast.error(langService.get('image_dimensions_info').change({width: 283, height: 283}));
-                                input.val('');
-                                return false;
-                            }
-                            /*else if (name === 'signatureImage' && width > 283 && height > 283) {
-                                toast.error(langService.get('image_dimensions_info')).change({width: 283, height: 283});
-                                input.val('');
-                                return false;
-                            }*/
+                img.src = _URL.createObjectURL(file);
+                img.onload = function () {
+                    var fieldName = input[0].name;
+                    if (fieldName === 'loginLogo' || fieldName === 'bannerLogo') { //fieldName === 'signatureImage'
+                        if (!_checkValidDimensions(this, 283, 283)) {
+                            input.val('');
+                            return false;
                         }
+                    }
 
-                        if (scope.selectedFileExtension) {
-                            if (scope.selectedFileExtension.length > 0) {
-                                var fileExt = file.name.split('.').pop();
+                    if (scope.modelObj) {
+                        scope.selectedFile = scope.modelObj;
+                    } else {
+                        scope.selectedFile = file;
+                    }
 
-                                var isValidFileExtension = scope.selectedFileExtension.filter(function (validExt) {
-                                    return validExt === fileExt;
-                                })[0];
+                    scope.callBack(file, scope.modelName);
 
-                                if (!isValidFileExtension) {
-                                    //toastService.error(langService.lang.invalid_file_upload);
-                                    return false;
-                                }
-                            }
-                        }
-                        if (scope.modelObj) {
-                            scope.selectedFile = scope.modelObj;
-                        }
-                        else {
-                            scope.selectedFile = file;
-                        }
-
-                        scope.callBack(file, scope.modelName);
-
-                    };
-                }
+                };
             });
+        }
+
+        function _checkValidDimensions(file, allowedWidth, allowedHeight) {
+            var width = file.naturalWidth || file.width;
+            var height = file.naturalHeight || file.height;
+            if (width > allowedWidth || height > allowedHeight) {
+                toast.error(langService.get('image_dimensions_info').change({
+                    width: allowedWidth,
+                    height: allowedHeight
+                }));
+                return false;
+            }
+            return true;
         }
     }
 

@@ -56,7 +56,10 @@ module.exports = function (app) {
         self.thumbnailModes = lookupService.returnLookups(lookupService.thumbnailMode);
         self.languages = lookupService.returnLookups(lookupService.language);
         self.digitalCertificateModesList = lookupService.returnLookups(lookupService.digitalCertificateMode);
-        
+
+        self.loginLogoExtensions = ['.png'];
+        self.bannerLogoExtensions = ['.png'];
+
         self.correspondenceSiteSearchTypeOptions = [
             {
                 key: 'search_type_simple',
