@@ -647,6 +647,10 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description add Correspondence To My FollowUp
+         * @param item
+         */
         self.addToDirectFollowUp = function (item) {
             item.addToMyDirectFollowUp();
         };

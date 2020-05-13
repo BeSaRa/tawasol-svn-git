@@ -487,6 +487,14 @@ module.exports = function (app) {
         };
 
         /**
+         * @description add Correspondence To My FollowUp
+         * @param item
+         */
+        self.addToDirectFollowUp = function (item) {
+            item.addToMyDirectFollowUp();
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -583,6 +591,19 @@ module.exports = function (app) {
                     return true;
                 },
                 showInView: false
+            },
+            // add to follow up
+            {
+                type: 'action',
+                icon: 'book-search-outline',
+                text: 'add_to_my_direct_followup',
+                shortcut: true,
+                callback: self.addToDirectFollowUp,
+                permissionKey: 'USER_FOLLOWUP_BOOKS',
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return true;
+                }
             },
             // Launch Distribution Workflow
             {
