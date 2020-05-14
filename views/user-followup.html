@@ -29,7 +29,18 @@
                     <md-icon md-svg-icon="folder"></md-icon>
                 </md-button>
             </div>
-            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
+            <md-button ng-click="ctrl.resetFilter($event)"
+                       ng-if="ctrl.searchCriteriaUsed"
+                       aria-label="{{lang.reset}}"
+                       class="md-icon-button" tooltip="{{lang.reset}}">
+                <md-icon md-svg-icon="filter-remove"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.openFilterDialog($event)"
+                       aria-label="{{lang.filter}}"
+                       class="md-icon-button" tooltip="{{lang.filter}}">
+                <md-icon md-svg-icon="filter"></md-icon>
+            </md-button>
+            <!--<grid-search-directive grid="ctrl.grid"></grid-search-directive>-->
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -58,18 +69,11 @@
                                        md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
-                                        <th colspan="{{ctrl.selectedFollowupBooks.length > 1 ? 10 : 11}}"
+                                        <th colspan="{{ctrl.selectedFollowupBooks.length > 1 ? 8 : 9}}"
                                             ng-if="ctrl.selectedFollowupBooks.length" md-column>
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedFollowupBooks.length}} {{lang.items_selected}} </span>
                                                 <span flex></span>
-
-                                                <!--ng-if="ctrl.selectedFollowupBooks.length > 1"-->
-                                                <md-button class="md-icon-button"
-                                                           tooltip="{{lang.grid_action_forward}}"
-                                                           ng-click="ctrl.forwardBulk($event)">
-                                                    <md-icon md-svg-icon="share" class="action-green"></md-icon>
-                                                </md-button>
                                                 <md-button class="md-icon-button" aria-label="{{lang.inbox_terminate}}"
                                                            tooltip="{{lang.inbox_terminate}}"
                                                            ng-click="ctrl.terminateBulk($event)">
@@ -81,201 +85,111 @@
                                                            ng-click="ctrl.moveToFolderBulk($event)">
                                                     <md-icon md-svg-icon="folder-move" class="action-green"></md-icon>
                                                 </md-button>
-                                                <md-button class="md-icon-button action-green"
-                                                           aria-label="{{lang.star}}"
-                                                           tooltip="{{lang.star}}"
-                                                           ng-click="ctrl.changeStarBulk('starBulk',$event)">
-                                                    <md-icon class="star-yellow" md-svg-icon="star"></md-icon>
-                                                </md-button>
-                                                <md-button class="md-icon-button action-green"
-                                                           aria-label="{{lang.un_star}}"
-                                                           tooltip="{{lang.un_star}}"
-                                                           ng-click="ctrl.changeStarBulk('unStarBulk' ,$event)">
-                                                    <md-icon class="star-yellow" md-svg-icon="star-outline"></md-icon>
-                                                </md-button>
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column md-order-by="">
-                                            <!-- Security Level, Document type, Tags, Re-assigned Indicators -->
-                                        </th>
-                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column md-order-by="">
-                                            <!-- Star/unstar -->
+                                            <!-- Security Level, Document type Indicators -->
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
-                                            md-order-by="generalStepElm.docFullSerial">
+                                            md-order-by="docFullSerial">
                                             <span>{{lang.inbox_serial}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column md-order-by="">
-                                            <!-- Priority Level and Has Attachment Indicators -->
+                                            <!-- Priority Level Indicators -->
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
-                                            md-order-by="generalStepElm.docSubject">
+                                            md-order-by="docSubject">
                                             <span>{{lang.subject}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
-                                            md-order-by="generalStepElm.receivedDate">
-                                            <span>{{lang.received_date}}</span>
+                                            md-order-by="docDate">
+                                            <span>{{lang.created_on}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('action', 'WorkflowAction')}}">
-                                            <span>{{lang.action}}</span>
+                                            md-order-by="followupDate">
+                                            <span>{{lang.followup_date}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('senderInfo', 'SenderInfo')}}">
-                                            <span>{{lang.sender}}</span>
-                                        </th>
-                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
-                                            md-order-by="generalStepElm.dueDate">
-                                            <span>{{lang.due_date}}</span>
-                                        </th>
-                                        <!--<th ng-if="!ctrl.selectedFollowupBooks.length" md-column md-order-by="">
+                                            md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString','Information')}}">
                                             <span>{{lang.correspondence_sites}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column md-order-by="docType">
-                                            <span>{{lang.type}}</span>
-                                        </th>
-                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column md-order-by="generalStepElm.numberOfDays">
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
+                                            md-order-by="numberOfDays">
                                             <span>{{lang.number_of_days}}</span>
-                                        </th>-->
+                                        </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column>
                                             <!-- Grid Actions -->
-                                            <md-button tooltip="{{lang.view_magazine}}"
-                                                       ng-click="ctrl.employeeService.getEmployee().toggleInboxView()"
-                                                       class="md-icon-button">
-                                                <md-icon md-svg-icon="view-list"></md-icon>
-                                            </md-button>
-                                        </th>
-                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column>
-                                            <!-- Read/Unread Indicator -->
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody md-body>
-                                    <tr md-row md-select="workItem" grid-right-click-directive="workItem"
-                                        model="workItem"
-                                        ng-class="!workItem.generalStepElm.isOpen? 'unread-row': 'read-row'"
+                                    <tr md-row md-select="record" grid-right-click-directive="record"
+                                        model="record"
                                         selected-length="{{ctrl.selectedFollowupBooks.length ? ctrl.selectedFollowupBooks.length : 0}}"
-                                        ng-repeat="workItem in searchResults = (ctrl.followupBooks | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        ng-repeat="record in searchResults = (ctrl.followupBooks | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
 
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
-                                            <grid-indicator-directive record="workItem"
+                                            <grid-indicator-directive record="record"
                                                                       indicator-type="securityLevel"
-                                                                      record-type="workItem"></grid-indicator-directive>
+                                                                      record-type="record"></grid-indicator-directive>
                                             <!-- Doc Type -->
-                                            <grid-indicator-directive record="workItem"
+                                            <grid-indicator-directive record="record"
                                                                       indicator-type="docClass"
-                                                                      record-type="workItem"></grid-indicator-directive>
-
-                                            <!-- Electronic/Paper Document -->
-                                            <grid-indicator-directive record="workItem"
-                                                                      indicator-type="paperElectronic"
-                                                                      record-type="workItem"></grid-indicator-directive>
-                                            <!-- Is Reassigned -->
-                                            <grid-indicator-directive record="workItem"
-                                                                      indicator-type="isReassigned"
-                                                                      record-type="workItem"></grid-indicator-directive>
-                                            <!-- Linked Documents -->
-                                            <grid-indicator-directive record="workItem"
-                                                                      indicator-type="hasLinkedDocuments"
-                                                                      record-type="workItem"></grid-indicator-directive>
-                                            <!-- Tags -->
-                                            <!--<grid-indicator-directive record="workItem"
-                                                                      type="tags"
-                                                                      record-type="workItem"></grid-indicator-directive>-->
-                                            <!-- Follow up Status -->
-                                            <grid-indicator-directive record="workItem"
-                                                                      indicator-type="followupStatus"
-                                                                      record-type="workItem"></grid-indicator-directive>
+                                                                      record-type="record"></grid-indicator-directive>
                                         </td>
-                                        <td md-cell>
-                                            <star-unstar-directive record="workItem"
-                                                                   record-type="WorkItem"
-                                                                   callback="ctrl.changeStar"
-                                                                   selected-records="ctrl.selectedFollowupBooks"
-                                            ></star-unstar-directive>
-                                        </td>
-                                        <td md-cell><span class="serial-td" >{{workItem.generalStepElm.docFullSerial}}</span></td>
+                                        <td md-cell><span class="serial-td" >{{record.docFullSerial}}</span></td>
                                         <td md-cell class="indicator-td text-right"
                                             style="padding-right:0 !important; padding-left:0 !important;">
                                             <!-- Priority Level -->
-                                            <grid-indicator-directive record="workItem"
+                                            <grid-indicator-directive record="record"
                                                                       indicator-type="priorityLevel"
-                                                                      record-type="workItem"></grid-indicator-directive>
-                                            <!-- Has Attachments -->
-                                            <grid-indicator-directive record="workItem" span-class="float-right"
-                                                                      indicator-type="hasAttachment"
-                                                                      record-type="workItem"></grid-indicator-directive>
+                                                                      record-type="record"></grid-indicator-directive>
                                         </td>
                                         <td md-cell class="subject">
-                                            <!--<grid-document-subject-directive record="workItem"
-                                                                             plain-text-only="!workItem.hasContent()"
+                                            <!--<grid-document-subject-directive record="record"
+                                                                             plain-text-only="!record.hasContent()"
                                                                              click-callback="ctrl.viewDocument">
                                             </grid-document-subject-directive>-->
-                                            <a href="" ng-if="workItem.hasContent() && ctrl.grid.truncateSubject"
+                                            <a href="" ng-if="record.hasContent() && ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal" md-truncate
-                                               tooltip="{{workItem.generalStepElm.docSubject}}"
-                                               ng-click="ctrl.viewDocument(workItem, $event)">{{workItem.generalStepElm.docSubject}}</a>
-                                            <span ng-if="!workItem.hasContent() && ctrl.grid.truncateSubject"
+                                               tooltip="{{record.docSubject}}"
+                                               ng-click="ctrl.viewDocument(record, $event)">{{record.docSubject}}</a>
+                                            <span ng-if="!record.hasContent() && ctrl.grid.truncateSubject"
                                                   class="view-doc subject-internal" md-truncate
-                                                  tooltip="{{workItem.generalStepElm.docSubject}}">{{workItem.generalStepElm.docSubject}}</span>
-                                            <a href="" ng-if="workItem.hasContent() && !ctrl.grid.truncateSubject"
+                                                  tooltip="{{record.docSubject}}">{{record.docSubject}}</span>
+                                            <a href="" ng-if="record.hasContent() && !ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal"
-                                               tooltip="{{workItem.generalStepElm.docSubject}}"
-                                               ng-click="ctrl.viewDocument(workItem, $event)">{{workItem.generalStepElm.docSubject}}</a>
-                                            <span ng-if="!workItem.hasContent() && !ctrl.grid.truncateSubject"
+                                               tooltip="{{record.docSubject}}"
+                                               ng-click="ctrl.viewDocument(record, $event)">{{record.docSubject}}</a>
+                                            <span ng-if="!record.hasContent() && !ctrl.grid.truncateSubject"
                                                   class="view-doc subject-internal"
-                                                  tooltip="{{workItem.generalStepElm.docSubject}}">{{workItem.generalStepElm.docSubject}}</span>
+                                                  tooltip="{{record.docSubject}}">{{record.docSubject}}</span>
                                         </td>
-                                        <td md-cell>{{workItem.getReceivedDate()}}</td>
-                                        <td md-cell>{{workItem.action.getTranslatedName()}}</td>
-                                        <td md-cell class="td-data">
-                                            <div layout="row">
-                                                <span flex>{{workItem.senderInfo.getTranslatedName()}}</span>
-                                                <grid-indicator-directive record="workItem"
-                                                                          indicator-type="comments"
-                                                                          class="p0p5"
-                                                                          record-type="WorkItem"></grid-indicator-directive>
-                                            </div>
+                                        <td md-cell>{{record.docDateString}}</td>
+                                        <td md-cell>{{record.followupDateString}}</td>
+                                        <td md-cell>
+                                            <main-site-sub-site-directive
+                                                    item="record"></main-site-sub-site-directive>
                                         </td>
-                                        <td md-cell class="td-data">
-                                            <grid-indicator-directive record="workItem"
-                                                                      indicator-type="dueDate"
-                                                                      record-type="workItem"></grid-indicator-directive>
-                                            <!--<span class="{{workItem.dueDateStatusIndicator.class}}"
-                                                  tooltip="{{lang[workItem.dueDateStatusIndicator.tooltip].change({due_date_status:lang[workItem.dueDateStatusIndicator.text] })}}">
-                                                {{workItem.generalStepElm.dueDate}}</span>-->
-                                        </td>
-                                        <!--<td md-cell></td>
-                                        <td md-cell>{{workItem.generalStepElm.docType}}</td>
-                                        <td md-cell>{{workItem.generalStepElm.numberOfDays}}</td>-->
+                                        <td md-cell>{{record.numberOfDays}}</td>
                                         <td md-cell class="p-r0" ng-if="ctrl.selectedFollowupBooks.length < 2">
                                             <div layout-align="start center" flex ng-if="!ctrl.selectedFollowupBooks.length
-                                                          || ctrl.selectedFollowupBooks.length===1 && ctrl.selectedFollowupBooks[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber">
+                                                          || ctrl.selectedFollowupBooks.length===1 && ctrl.selectedFollowupBooks[0].vsId === record.vsId">
                                                 <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
-                                                                        model="workItem">
+                                                                        model="record">
                                                 </grid-actions-directive>
-                                            </div>
-                                        </td>
-                                        <td md-cell class="read-td">
-                                            <div class="cursor-pointer status"
-                                                 ng-class="workItem.generalStepElm.isOpen===true? 'read' : 'unread'"
-                                                 ng-click="ctrl.markAsReadUnread(workItem, $event)"
-                                                 ng-if="!ctrl.selectedFollowupBooks.length
-                                                          || ctrl.selectedFollowupBooks.length===1 && ctrl.selectedFollowupBooks[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber"
-                                                 tooltip="{{workItem.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
-                                                 tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}">
                                             </div>
                                         </td>
                                     </tr>
                                     <tr md-row ng-if="!ctrl.followupBooks.length && ctrl.selectedFolder">
-                                        <td md-cell colspan="11" class="red-text text-center">
+                                        <td md-cell colspan="9" class="red-text text-center">
                                             {{lang.no_records_found}}
                                         </td>
                                     </tr>
                                     <tr md-row
                                         ng-if="ctrl.followupBooks.length && !searchResults.length && ctrl.selectedFolder">
-                                        <td md-cell colspan="11" class="red-text text-center">
+                                        <td md-cell colspan="9" class="red-text text-center">
                                             {{lang.no_records_found_matching_search}}
                                         </td>
                                     </tr>

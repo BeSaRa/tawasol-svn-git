@@ -19,7 +19,7 @@ module.exports = function (app) {
         self.reloadUserFolders = function () {
             if (self.followup) {
                 followUpUserService
-                    .getFollowupFolders(true)
+                    .loadFollowupFolders(true)
                     .then(function (result) {
                         self.folders = result;
                     });
@@ -101,7 +101,7 @@ module.exports = function (app) {
 
         /**
          * @description Opens dialog for edit user folder
-         * @param userFolder
+         * @param folder
          * @param $event
          */
         self.openEditUserFolderDialog = function (folder, $event) {

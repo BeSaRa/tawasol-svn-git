@@ -17,7 +17,8 @@ module.exports = function (app) {
                                                          G2GMessagingHistory,
                                                          SentItemDepartmentInbox,
                                                          Information,
-                                                         gridService) {
+                                                         gridService,
+                                                         FollowupBook) {
         'ngInject';
         var self = this, actionParentRow;
         self.controllerName = 'gridActionsDirectiveCtrl';
@@ -92,6 +93,7 @@ module.exports = function (app) {
                 || self.model instanceof SentItemDepartmentInbox
                 || self.model instanceof G2G
                 || self.model instanceof G2GMessagingHistory
+                || self.model instanceof FollowupBook
             );
         };
 
@@ -115,7 +117,9 @@ module.exports = function (app) {
                 || self.model instanceof SentItemDepartmentInbox
                 || self.model instanceof G2G
                 || self.model instanceof G2GMessagingHistory
-                || self.model instanceof WorkItem);
+                || self.model instanceof WorkItem
+                || self.model instanceof FollowupBook
+            );
         };
 
         /**
@@ -128,6 +132,7 @@ module.exports = function (app) {
                 || self.model instanceof G2GMessagingHistory
                 || self.model instanceof EventHistory
                 || self.model instanceof SentItemDepartmentInbox
+                || self.model instanceof FollowupBook
             );
         };
 

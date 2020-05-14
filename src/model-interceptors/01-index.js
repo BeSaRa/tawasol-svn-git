@@ -115,4 +115,6 @@ module.exports = function (app) {
     require('./PredefinedActionInterceptor')(app);
     require('./PredefinedActionMemberInterceptor')(app);
     require('./ExportedTrackingSheetResultInterceptor')(app);
+    require('./FollowupBookInterceptor')(app);
+    require('./FollowupBookCriteriaInterceptor')(app);
 };

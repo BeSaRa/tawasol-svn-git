@@ -145,4 +145,5 @@ module.exports = function (app) {
     require('./pinCodePopCtrl')(app);
     require('./followUpPopCtrl')(app);
     require('./followupFolderPopCtrl')(app);
+    require('./followupBookSearchPopCtrl')(app);
 };

@@ -1,11 +1,10 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.search}}">
-    <popup-toolbar-directive ng-if="!ctrl.editMode"
-                             header-text="{{lang.search}} : {{lang.menu_item_sent_items}}"></popup-toolbar-directive>
+    <popup-toolbar-directive header-text="{{lang.search}} : {{lang.menu_item_user_followup}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
-            <form name="userSentItemSearchForm" autocomplete="off">
+            <form name="followupBookSearchForm" autocomplete="off">
                 <div layout="column">
                     <div layout="row">
                         <!-- Doc Subject -->
@@ -13,7 +12,7 @@
                             <label for="docSubject">{{lang.subject}}</label>
                             <input name="docSubject" id="docSubject"
                                    ng-model="ctrl.searchCriteria.docSubject">
-                            <div ng-messages="userSentItemSearchForm.docSubject.$error">
+                            <div ng-messages="followupBookSearchForm.docSubject.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
@@ -22,80 +21,9 @@
                             <label for="docFullSerial">{{lang.serial_number}}</label>
                             <input name="docFullSerial" id="docFullSerial"
                                    ng-model="ctrl.searchCriteria.docFullSerial">
-                            <div ng-messages="userSentItemSearchForm.docFullSerial.$error">
+                            <div ng-messages="followupBookSearchForm.docFullSerial.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
-                        </md-input-container>
-                    </div>
-                    <div layout="row">
-                        <!-- Type / Document Class -->
-                        <md-input-container flex>
-                            <label for="docClassId">{{lang.type}}</label>
-                            <md-select name="docClassId" id="docClassId"
-                                       ng-model="ctrl.searchCriteria.docClassId">
-                                <md-option ng-value="null">{{lang.none}}</md-option>
-                                <md-option ng-repeat="option in ctrl.documentClasses track by $index"
-                                           ng-value="option.lookupKey">
-                                    {{option.getTranslatedName()}}
-                                </md-option>
-                            </md-select>
-                            <div ng-messages="userSentItemSearchForm.docClassId.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
-                        </md-input-container>
-                        <!-- Workflow Action -->
-                        <md-input-container flex>
-                            <label for="workflowActionId">{{lang.action}}</label>
-                            <md-select name="workflowActionId" id="workflowActionId"
-                                       ng-model="ctrl.searchCriteria.workflowActionId">
-                                <md-option ng-value="null">{{lang.none}}</md-option>
-                                <md-option ng-repeat="option in ctrl.workflowActions track by $index"
-                                           ng-value="option.id">
-                                    {{option.getTranslatedName()}}
-                                </md-option>
-                            </md-select>
-                            <div ng-messages="userSentItemSearchForm.workflowActionId.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
-                        </md-input-container>
-                    </div>
-                    <div layout="row">
-                        <!-- Document Status -->
-                        <md-input-container flex>
-                            <label for="documentStatusId">{{lang.status}}</label>
-                            <md-select name="documentStatusId" id="documentStatusId"
-                                       ng-model="ctrl.searchCriteria.documentStatusId">
-                                <md-option ng-value="null">{{lang.none}}</md-option>
-                                <md-option ng-repeat="option in ctrl.documentStatuses track by $index"
-                                           ng-value="option.lookupKey">
-                                    {{option.getTranslatedName()}}
-                                </md-option>
-                            </md-select>
-                            <div ng-messages="userSentItemSearchForm.documentStatusId.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
-                        </md-input-container>
-                        <!-- User To -->
-                        <md-input-container flex>
-                            <label for="userToId">{{lang.sent_items_receiver}}</label>
-                            <md-select name="userToId" id="userToId"
-                                       ng-model="ctrl.searchCriteria.userToId"
-                                       md-on-close="ctrl.clearSearchText('receiver')"
-                                       data-md-container-class="select-header-container sticky-search-bar">
-                                <md-select-header class="select-header">
-                                    <input ng-model="ctrl.receiverSearchText"
-                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
-                                           placeholder="{{lang.search}}"
-                                           class="select-header-input">
-                                </md-select-header>
-                                <md-option ng-value="null">{{lang.none}}</md-option>
-                                <md-option ng-repeat="userTo in ctrl.usersTo | translatedNameFilter: ctrl.receiverSearchText"
-                                           ng-value="userTo.id">
-                                    <span
-                                            md-highlight-text="ctrl.receiverSearchText"
-                                            md-highlight-flags="i">{{userTo.getTranslatedName()}}</span>
-                                </md-option>
-                            </md-select>
                         </md-input-container>
                     </div>
                     <div layout="row">
@@ -123,7 +51,7 @@
                                             md-highlight-flags="i">{{option.getTranslatedName()}}</span>
                                 </md-option>
                             </md-select>
-                            <div ng-messages="userSentItemSearchForm.selectedSiteType.$error">
+                            <div ng-messages="followupBookSearchForm.selectedSiteType.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
@@ -180,43 +108,55 @@
                     <div layout="row">
                         <!-- From -->
                         <md-input-container flex class="cms-datepicker">
-                            <label for="fromActionTime">{{lang.start_date}}</label>
-                            <md-datepicker id="fromActionTime" name="fromActionTime"
+                            <label for="fromFollowupDate">{{lang.follow_up_date_from}}</label>
+                            <md-datepicker id="fromFollowupDate" name="fromFollowupDate"
                                            ng-required="true"
-                                           ng-change="ctrl.onChangeFromActionTime($event)"
-                                           ng-model="ctrl.searchCriteria.fromActionTime"
-                                           md-max-date="ctrl.searchCriteria.toActionTime"
+                                           ng-change="ctrl.onChangeFromFollowupDate($event)"
+                                           ng-model="ctrl.searchCriteria.fromFollowupDate"
+                                           md-max-date="ctrl.searchCriteria.toFollowupDate"
                             ></md-datepicker>
-                            <!-- md-min-date="ctrl.fromActionTimeMinValue"-->
-                            <div ng-messages="userSentItemSearchForm.fromActionTime.$error">
+                            <div ng-messages="followupBookSearchForm.fromFollowupDate.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
                         <!-- To -->
                         <md-input-container flex class="cms-datepicker">
-                            <label for="toActionTime">{{lang.end_date}}</label>
-                            <md-datepicker id="toActionTime" name="toActionTime"
+                            <label for="toFollowupDate">{{lang.follow_up_date_to}}</label>
+                            <md-datepicker id="toFollowupDate" name="toFollowupDate"
                                            ng-required="true"
-                                           ng-model="ctrl.searchCriteria.toActionTime"
-                                           md-min-date="ctrl.searchCriteria.fromActionTime"
-                                           md-max-date="ctrl.toActionTimeMaxValue"
+                                           ng-model="ctrl.searchCriteria.toFollowupDate"
+                                           md-min-date="ctrl.searchCriteria.fromFollowupDate"
                             ></md-datepicker>
-                            <div ng-messages="userSentItemSearchForm.toActionTime.$error">
+                            <!--md-max-date="ctrl.toFollowupDateMaxValue"-->
+                            <div ng-messages="followupBookSearchForm.toFollowupDate.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Creation Date -->
+                        <md-input-container flex class="cms-datepicker">
+                            <label for="docDate">{{lang.created_on}}</label>
+                            <md-datepicker id="docDate" name="docDate"
+                                           ng-model="ctrl.searchCriteria.docDate"
+                            ></md-datepicker>
+                            <div ng-messages="followupBookSearchForm.docDate.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex></md-input-container>
                     </div>
                 </div>
             </form>
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised md-primary" ng-disabled="userSentItemSearchForm.$invalid || ctrl.isFilterDisabled()"
-                   ng-click="ctrl.filterUserSentItems($event)">{{lang.filter}}
+        <md-button class="md-raised md-primary" ng-disabled="followupBookSearchForm.$invalid || ctrl.isFilterDisabled()"
+                   ng-click="ctrl.filterRecords($event)">{{lang.filter}}
         </md-button>
         <md-button class="md-raised"
                    ng-click="ctrl.resetFilter($event)">{{lang.reset}}
         </md-button>
-        <md-button class="md-raised red-text" ng-click="ctrl.closePopUp()">{{lang.close}}</md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">{{lang.close}}</md-button>
     </md-dialog-actions>
 </md-dialog>

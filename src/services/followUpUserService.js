@@ -1,5 +1,17 @@
 module.exports = function (app) {
-    app.service('followUpUserService', function ($http, $q, employeeService, FollowupBook, toast, cmsTemplate, _, urlService, dialog, FollowUpFolder, generator, langService) {
+    app.service('followUpUserService', function ($http,
+                                                 $q,
+                                                 employeeService,
+                                                 FollowupBook,
+                                                 toast,
+                                                 cmsTemplate,
+                                                 _,
+                                                 urlService,
+                                                 dialog,
+                                                 FollowUpFolder,
+                                                 generator,
+                                                 langService,
+                                                 FollowupBookCriteria) {
         var self = this;
         self.serviceName = 'followUpUserService';
         self.allFollowUpFolders = [];
@@ -178,6 +190,25 @@ module.exports = function (app) {
                                 return response;
                             });
                     });
+            },
+            openFilterDialog: function (grid, searchCriteria, $event) {
+                return dialog
+                    .showDialog({
+                        targetEvent: $event || null,
+                        templateUrl: cmsTemplate.getPopup('followup-book-search'),
+                        controller: 'followupBookSearchPopCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            searchCriteria: searchCriteria,
+                            grid: grid,
+                        },
+                        resolve: {
+                            correspondenceSiteTypes: function (correspondenceSiteTypeService) {
+                                'ngInject';
+                                return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
+                            }
+                        }
+                    });
             }
         };
         /**
@@ -194,7 +225,7 @@ module.exports = function (app) {
                 resolve: {
                     folders: function () {
                         'ngInject';
-                        return self.getFollowupFolders().then(function (folders) {
+                        return self.loadFollowupFolders().then(function (folders) {
                             defer.resolve(folders);
                             return folders;
                         });
@@ -249,11 +280,12 @@ module.exports = function (app) {
                 _getChildren(item);
             });
             return parents;
-        }
+        };
+
         /**
-         * @description get followup folders for current user.
+         * @description loads followup folders for current user.
          */
-        self.getFollowupFolders = function (hierarchy) {
+        self.loadFollowupFolders = function (hierarchy) {
             return $http.get(urlService.followUpFolders)
                 .then(function (result) {
                     self.allFollowUpFolders = generator.generateCollection(result.data.rs, FollowUpFolder);
@@ -261,14 +293,59 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description get followup folders for current user.
+         */
+        self.getFollowupFolders = function (hierarchy) {
+            if (self.allFollowUpFolders.length) {
+                return hierarchy ? $q.when(self.hierarchy(self.allFollowUpFolders)) : $q.when(self.allFollowUpFolders);
+            }
+            return self.loadFollowupFolders(hierarchy);
+        };
+
+        /**
+         * @description Get the followup folder by id
+         * @param folderId
+         * @returns {*}
+         */
+        self.getFollowupFoldersById = function (folderId) {
+            folderId = generator.getNormalizedValue(folderId, 'id');
+            return _.find(self.allFollowUpFolders, function (folder) {
+                return folder.id === folderId;
+            })
+        };
+
+        /**
+         * @description Loads the records for given followup folder
+         * @param folder
+         * @returns {*}
+         */
         self.loadFollowupFolderContent = function (folder) {
             var id = folder.hasOwnProperty('id') ? folder.id : folder;
             return $http.get(urlService.followUpFolders + '/' + id)
                 .then(function (result) {
-                    return generator.generateCollection(result.data.rs, FollowupBook);
+                    return generator.interceptReceivedCollection('FollowupBook', generator.generateCollection(result.data.rs, FollowupBook));
                 });
-        }
+        };
 
+        /**
+         * @description Loads the records for given followup folder by criteria
+         * @param searchText
+         * @param searchCriteria
+         * @returns {*}
+         */
+        self.loadFollowupFolderContentByCriteria = function (searchText, searchCriteria) {
+            if (searchText && !searchCriteria) {
+                searchCriteria = new FollowupBookCriteria({
+                    docSubject: searchText
+                });
+            }
+
+            return $http.post(urlService.userFollowUp + '/search', generator.interceptSendInstance('FollowupBookCriteria', searchCriteria))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('FollowupBook', generator.generateCollection(result.data.rs, FollowupBook));
+                });
+        };
 
     });
 };

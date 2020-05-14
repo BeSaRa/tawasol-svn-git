@@ -186,4 +186,5 @@ module.exports = function (app) {
     require('./ExportedTrackingSheetResult')(app);
     require('./FollowUpFolder')(app);
     require('./FollowupBook')(app);
+    require('./FollowupBookCriteria')(app);
 };

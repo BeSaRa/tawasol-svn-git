@@ -60,7 +60,8 @@ module.exports = function (app) {
                 proxy: 'userProxy',
                 group: 'userGroup',
                 starred: 'starred',
-                inboxFilter: 'inboxFilter'
+                inboxFilter: 'inboxFilter',
+                userFollowupBook: 'userFollowupBook'
             },
             department: {
                 incoming: 'depInc',

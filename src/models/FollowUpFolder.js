@@ -29,7 +29,7 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Get the concatenated arabic name and english name with separator passed for User Folder. If no separator is passed, it will take hyphen(-)
+             * @description Get the concatenated arabic name and english name with separator passed for Followup Folder. If no separator is passed, it will take hyphen(-)
              * @param separator
              * @returns {string}
              */
@@ -43,7 +43,7 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Get the translated arabic or english name according to current language for User Folder. If reverse is passed, it will return the name in language other than current language
+             * @description Get the translated arabic or english name according to current language for Followup Folder. If reverse is passed, it will return the name in language other than current language
              * @param reverse
              * @returns {string}
              */
@@ -61,12 +61,24 @@ module.exports = function (app) {
                         name = this.enName ? this.enName : this.arName;
                 }
                 return name;
-
-                //return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
 
             /**
-             * @description Get the status of User Folder as Active or Inactive instead of true or false.
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            FollowUpFolder.prototype.getNameByLanguage = function (language) {
+                var name = this[language + 'Name'];
+                if (name) {
+                    return name;
+                }
+                // if name doesn't exist for language passed, return the name by other language
+                return this[language === 'ar' ? 'enName' : 'arName'];
+            };
+
+            /**
+             * @description Get the status of Followup Folder as Active or Inactive instead of true or false.
              * @returns {string}
              */
             FollowUpFolder.prototype.getTranslatedStatus = function () {
