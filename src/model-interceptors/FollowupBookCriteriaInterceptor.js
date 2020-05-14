@@ -23,9 +23,6 @@ module.exports = function (app) {
                 model.fromFollowupDate = moment(model.fromFollowupDate).startOf("day").valueOf();
             if (model.toFollowupDate)
                 model.toFollowupDate = moment(model.toFollowupDate).endOf("day").valueOf();
-            // actionDate is used for creationDate search
-            if (model.actionDate)
-                model.actionDate = moment(model.actionDate).startOf("day").valueOf();
 
             delete model.selectedSiteType;
             delete model.selectedMainSite;

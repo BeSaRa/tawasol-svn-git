@@ -69,7 +69,7 @@
                                        md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
-                                        <th colspan="{{ctrl.selectedFollowupBooks.length > 1 ? 9 : 10}}"
+                                        <th colspan="{{ctrl.selectedFollowupBooks.length > 1 ? 10 : 11}}"
                                             ng-if="ctrl.selectedFollowupBooks.length" md-column>
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedFollowupBooks.length}} {{lang.items_selected}} </span>
@@ -102,8 +102,12 @@
                                             <span>{{lang.subject}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
-                                            md-order-by="creationDate">
+                                            md-order-by="docDate">
                                             <span>{{lang.created_on}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
+                                            md-order-by="actionDate">
+                                            <span>{{lang.action_date}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
                                             md-order-by="followupDate">
@@ -170,7 +174,8 @@
                                                   class="view-doc subject-internal"
                                                   tooltip="{{record.docSubject}}">{{record.docSubject}}</span>
                                         </td>
-                                        <td md-cell>{{record.creationDateString}}</td>
+                                        <td md-cell>{{record.docDateString}}</td>
+                                        <td md-cell>{{record.actionDateString}}</td>
                                         <td md-cell class="td-data">
                                             <grid-indicator-directive record="record"
                                                                       indicator-type="followupDate"
@@ -192,13 +197,13 @@
                                         </td>
                                     </tr>
                                     <tr md-row ng-if="!ctrl.followupBooks.length && ctrl.selectedFolder">
-                                        <td md-cell colspan="10" class="red-text text-center">
+                                        <td md-cell colspan="11" class="red-text text-center">
                                             {{lang.no_records_found}}
                                         </td>
                                     </tr>
                                     <tr md-row
                                         ng-if="ctrl.followupBooksCopy.length && !searchResults.length && ctrl.searchCriteriaUsed">
-                                        <td md-cell colspan="10" class="red-text text-center">
+                                        <td md-cell colspan="11" class="red-text text-center">
                                             {{lang.no_records_found_matching_search}}
                                         </td>
                                     </tr>

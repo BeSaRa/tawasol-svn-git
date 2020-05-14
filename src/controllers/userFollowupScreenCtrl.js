@@ -71,7 +71,8 @@ module.exports = function (app) {
             searchColumns: {
                 serial: 'docFullSerial',
                 subject: 'docSubject',
-                createdOn: 'creationDateString',
+                createdOn: 'docDateString',
+                actionDate: 'actionDateString',
                 followupDate: 'followupDateString',
                 corrSite: function (record) {
                     return self.getSortingKey('mainSiteSubSiteString', 'Information');

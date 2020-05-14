@@ -9,8 +9,8 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             delete model.docClassIndicator;
-            delete model.creationDate;
-            delete model.creationDateString;
+            delete model.docDateString;
+            delete model.actionDateString;
             delete model.followupDateString;
             delete model.followDateIndicator;
             delete model.numberOfDays;
@@ -25,8 +25,8 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.docClassIndicator = model.getDocClassIndicator(generator.getDocumentClassName(model.docClassId));
-            model.creationDate = generator.getDateFromTimeStamp(model.actionDate);
-            model.creationDateString = generator.getDateFromTimeStamp(model.actionDate);
+            model.docDateString = generator.getDateFromTimeStamp(model.docDate);
+            model.actionDateString = generator.getDateFromTimeStamp(model.actionDate);
             model.followupDateString = generator.getDateFromTimeStamp(model.followupDate);
             model.followDateIndicator = model.getFollowupDateIndicator(model.followupDate);
             var numberOfDays = generator.getNumberOfDays(model.followupDate);
