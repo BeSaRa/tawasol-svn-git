@@ -69,7 +69,7 @@
                                        md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
-                                        <th colspan="{{ctrl.selectedFollowupBooks.length > 1 ? 8 : 9}}"
+                                        <th colspan="{{ctrl.selectedFollowupBooks.length > 1 ? 9 : 10}}"
                                             ng-if="ctrl.selectedFollowupBooks.length" md-column>
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedFollowupBooks.length}} {{lang.items_selected}} </span>
@@ -102,7 +102,7 @@
                                             <span>{{lang.subject}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
-                                            md-order-by="docDate">
+                                            md-order-by="creationDate">
                                             <span>{{lang.created_on}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
@@ -116,6 +116,10 @@
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
                                             md-order-by="numberOfDays">
                                             <span>{{lang.number_of_days}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length && ctrl.searchCriteriaUsed" md-column
+                                            md-order-by="{{ctrl.getSortingKey('folderInfo', 'Information')}}">
+                                            <span>{{lang.folder}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column>
                                             <!-- Grid Actions -->
@@ -138,7 +142,7 @@
                                                                       indicator-type="docClass"
                                                                       record-type="record"></grid-indicator-directive>
                                         </td>
-                                        <td md-cell><span class="serial-td" >{{record.docFullSerial}}</span></td>
+                                        <td md-cell><span class="serial-td">{{record.docFullSerial}}</span></td>
                                         <td md-cell class="indicator-td text-right"
                                             style="padding-right:0 !important; padding-left:0 !important;">
                                             <!-- Priority Level -->
@@ -166,13 +170,18 @@
                                                   class="view-doc subject-internal"
                                                   tooltip="{{record.docSubject}}">{{record.docSubject}}</span>
                                         </td>
-                                        <td md-cell>{{record.docDateString}}</td>
-                                        <td md-cell>{{record.followupDateString}}</td>
+                                        <td md-cell>{{record.creationDateString}}</td>
+                                        <td md-cell class="td-data">
+                                            <grid-indicator-directive record="record"
+                                                                      indicator-type="followupDate"
+                                                                      record-type="FollowupBook"></grid-indicator-directive>
+                                        </td>
                                         <td md-cell>
                                             <main-site-sub-site-directive
                                                     item="record"></main-site-sub-site-directive>
                                         </td>
                                         <td md-cell>{{record.numberOfDays}}</td>
+                                        <td md-cell ng-if="ctrl.searchCriteriaUsed">{{record.folderInfo.getTranslatedName()}}</td>
                                         <td md-cell class="p-r0" ng-if="ctrl.selectedFollowupBooks.length < 2">
                                             <div layout-align="start center" flex ng-if="!ctrl.selectedFollowupBooks.length
                                                           || ctrl.selectedFollowupBooks.length===1 && ctrl.selectedFollowupBooks[0].vsId === record.vsId">
@@ -183,13 +192,13 @@
                                         </td>
                                     </tr>
                                     <tr md-row ng-if="!ctrl.followupBooks.length && ctrl.selectedFolder">
-                                        <td md-cell colspan="9" class="red-text text-center">
+                                        <td md-cell colspan="10" class="red-text text-center">
                                             {{lang.no_records_found}}
                                         </td>
                                     </tr>
                                     <tr md-row
-                                        ng-if="ctrl.followupBooks.length && !searchResults.length && ctrl.selectedFolder">
-                                        <td md-cell colspan="9" class="red-text text-center">
+                                        ng-if="ctrl.followupBooksCopy.length && !searchResults.length && ctrl.searchCriteriaUsed">
+                                        <td md-cell colspan="10" class="red-text text-center">
                                             {{lang.no_records_found_matching_search}}
                                         </td>
                                     </tr>

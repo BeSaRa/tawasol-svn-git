@@ -4,7 +4,8 @@ module.exports = function (app) {
                                           Indicator,
                                           Information,
                                           Lookup,
-                                          correspondenceService) {
+                                          correspondenceService,
+                                          generator) {
         'ngInject';
         return function FollowupBook(model) {
             var self = this;
@@ -81,6 +82,10 @@ module.exports = function (app) {
                 return true;
             };
 
+            FollowupBook.prototype.getFollowupDate = function (returnString) {
+                return returnString ? generator.getDateFromTimeStamp(this.followupDate) : this.followupDate;
+            };
+
             var indicator = new Indicator();
             FollowupBook.prototype.getDocClassIndicator = function (docType) {
                 return indicator.getDocClassIndicator(docType);
@@ -92,6 +97,10 @@ module.exports = function (app) {
 
             FollowupBook.prototype.getPriorityLevelIndicator = function (priorityLevel) {
                 return indicator.getPriorityLevelIndicator(priorityLevel);
+            };
+
+            FollowupBook.prototype.getFollowupDateIndicator = function (followupDate) {
+                return indicator.getFollowUpDateIndicator(followupDate);
             };
 
 

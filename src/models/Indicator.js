@@ -148,31 +148,6 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Returns the due date status(passed/today/coming) indicator and description
-             * @param dueDate
-             * @returns {Indicator}
-             */
-            Indicator.prototype.getDueDateStatusIndicator = function (dueDate) {
-                if (!dueDate) {
-                    return false;
-                }
-
-                var today = moment(new Date()).startOf('day');
-                var recordDueDate = moment(dueDate).startOf('day');
-                var diff = recordDueDate.diff(today, 'days');
-                var dueDateStatus = (diff < 0) ? 'past' : (diff === 0 ? 'today' : 'future');
-                return new Indicator({
-                    class: 'indicator date-' + dueDateStatus,
-                    text: diff < 0 ? 'indicator_date_passed' : (diff === 0 ? 'indicator_date_today' : 'indicator_date_coming'),
-                    icon: self.getIndicatorIcons('dueDate'),
-                    tooltip: 'indicator_due_date',
-                    legendText: function (indicator) {
-                        return '';
-                    }
-                });
-            };
-
-            /**
              * @description Returns the tags count indicator(badge) and description
              * @param tagsCount
              * @returns {Indicator}
@@ -435,7 +410,28 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Returns the site followup status due indicator and description
+             * @description Returns the due date status(passed/today/coming) indicator and description
+             * @param dueDate
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getDueDateStatusIndicator = function (dueDate) {
+                if (!dueDate) {
+                    return false;
+                }
+                var indicatorData = _getDateIndicator(dueDate);
+                return new Indicator({
+                    class: 'indicator date-' + indicatorData.status,
+                    text: indicatorData.diff < 0 ? 'indicator_date_passed' : (indicatorData.diff === 0 ? 'indicator_date_today' : 'indicator_date_coming'),
+                    icon: self.getIndicatorIcons('dueDate'),
+                    tooltip: 'indicator_due_date',
+                    legendText: function (indicator) {
+                        return '';
+                    }
+                });
+            };
+
+            /**
+             * @description Returns the site followup status due(passed/today/coming) indicator and description
              * @param siteMaxFollowupDate
              * @returns {Indicator}
              */
@@ -443,17 +439,35 @@ module.exports = function (app) {
                 if (!siteMaxFollowupDate) {
                     return false;
                 }
-                var today = moment(new Date()).startOf('day');
-                var recordDueDate = moment(siteMaxFollowupDate).startOf('day');
-                var diff = recordDueDate.diff(today, 'days');
-                var dueDateStatus = (diff < 0) ? 'past' : (diff === 0 ? 'today' : 'future');
+                var indicatorData = _getDateIndicator(siteMaxFollowupDate);
                 return new Indicator({
-                    class: 'indicator date-' + dueDateStatus,
-                    text: diff < 0 ? 'indicator_date_passed' : (diff === 0 ? 'indicator_date_today' : 'indicator_date_coming'),
+                    class: 'indicator date-' + indicatorData.status,
+                    text: indicatorData.diff < 0 ? 'indicator_date_passed' : (indicatorData.diff === 0 ? 'indicator_date_today' : 'indicator_date_coming'),
                     icon: self.getIndicatorIcons('siteFollowupDueDate'),
                     tooltip: 'indicator_site_followup_due_date',
                     legendText: function (indicator) {
                         return langService.get('indicator_site_followup_due_date').change({due_date_status: langService.get(this.text)});
+                    }
+                });
+            };
+
+            /**
+             * @description Returns the followup date(passed/today/coming) indicator and description
+             * @param bookFollowupDate
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getFollowUpDateIndicator = function (bookFollowupDate) {
+                if (!bookFollowupDate) {
+                    return false;
+                }
+                var indicatorData = _getDateIndicator(bookFollowupDate);
+                return new Indicator({
+                    class: 'indicator date-' + indicatorData.status,
+                    text: indicatorData.diff < 0 ? 'indicator_date_passed' : (indicatorData.diff === 0 ? 'indicator_date_today' : 'indicator_date_coming'),
+                    icon: self.getIndicatorIcons('bookFollowupDate'),
+                    tooltip: 'indicator_followup_date',
+                    legendText: function (indicator) {
+                        return langService.get('indicator_followup_date').change({date_status: langService.get(this.text)});
                     }
                 });
             };
@@ -562,6 +576,26 @@ module.exports = function (app) {
                     }
                 });
             };
+
+            /**
+             * @description Returns the difference in days and date status(passed/today/coming)
+             * @param dateToCheck
+             * @param iconType
+             * @param tooltip
+             * @returns {{diff: number, status: (string)}}
+             * @private
+             */
+            function _getDateIndicator(dateToCheck, iconType, tooltip) {
+                dateToCheck = moment(dateToCheck).startOf('day');
+                var today = moment(new Date()).startOf('day');
+                var diff = dateToCheck.diff(today, 'days');
+                var dateStatus = (diff < 0) ? 'past' : (diff === 0 ? 'today' : 'future');
+
+                return {
+                    status: dateStatus,
+                    diff: diff
+                };
+            }
 
 
             // don't remove CMSModelInterceptor from last line

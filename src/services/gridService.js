@@ -926,6 +926,7 @@ module.exports = function (app) {
                 exportViaCentralArchive: 'archive',
                 linkedExportedDoc: 'link',
                 dueDate: 'calendar',
+                bookFollowupDate: 'calendar',
                 copy: 'content-copy',
                 lockedG2g: 'lock',
                 versionHasContent: 'file-check',

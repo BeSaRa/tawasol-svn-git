@@ -71,7 +71,7 @@ module.exports = function (app) {
             searchColumns: {
                 serial: 'docFullSerial',
                 subject: 'docSubject',
-                createdOn: 'docDateString',
+                createdOn: 'creationDateString',
                 followupDate: 'followupDateString',
                 corrSite: function (record) {
                     return self.getSortingKey('mainSiteSubSiteString', 'Information');
@@ -79,7 +79,10 @@ module.exports = function (app) {
                 securityLevel: function (record) {
                     return self.getSortingKey('securityLevel', 'Lookup');
                 },
-                numberOfDays: 'numberOfDays'
+                numberOfDays: 'numberOfDays',
+                folder:  function (record) {
+                    return self.getSortingKey('folderInfo', 'Information');
+                }
             },
             searchText: '',
             searchCallback: function (grid) {
@@ -109,14 +112,26 @@ module.exports = function (app) {
          * @param pageNumber
          */
         self.reloadFolders = function (pageNumber) {
-            if (!self.selectedFolder)
-                return;
             var defer = $q.defer();
             self.grid.progress = defer.promise;
+            if (self.searchCriteriaUsed) {
+                return followUpUserService.loadFollowupFolderContentByCriteria(null, self.searchCriteria)
+                    .then(function (result) {
+                        self.followupBooks = result;
+                        defer.resolve(true);
+                        return result;
+                    });
+            }
+
+            if (!self.selectedFolder) {
+                defer.resolve(true);
+                return;
+            }
+
             return followUpUserService
                 .loadFollowupFolderContent(self.selectedFolder)
-                .then(function (followupBooks) {
-                    self.followupBooks = followupBooks;
+                .then(function (result) {
+                    self.followupBooks = result;
                     self.followupBooksCopy = angular.copy(self.followupBooks);
                     // counterService.loadCounters();
                     // mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
@@ -563,13 +578,13 @@ module.exports = function (app) {
 
 
         var _initSearchCriteria = function (skipDates) {
-            if (skipDates) {
-                self.searchCriteria = new FollowupBookCriteria();
-            } else {
-                self.searchCriteria = new FollowupBookCriteria({
-                    fromFollowupDate: moment().subtract(configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE, configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_TYPE).toDate(),
-                    toFollowupDate: moment().endOf("day").toDate()
-                })
+            self.searchCriteria = new FollowupBookCriteria({
+                userId: employeeService.getEmployee().id,
+                userOUID: employeeService.getEmployee().getOUID()
+            });
+            if (!skipDates) {
+                self.searchCriteria.fromFollowupDate = moment().subtract(configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE, configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_TYPE).toDate();
+                self.searchCriteria.toFollowupDate = moment().endOf("day").toDate();
             }
         };
 

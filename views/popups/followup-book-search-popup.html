@@ -136,11 +136,11 @@
                     <div layout="row">
                         <!-- Creation Date -->
                         <md-input-container flex class="cms-datepicker">
-                            <label for="docDate">{{lang.created_on}}</label>
-                            <md-datepicker id="docDate" name="docDate"
-                                           ng-model="ctrl.searchCriteria.docDate"
+                            <label for="actionDate">{{lang.created_on}}</label>
+                            <md-datepicker id="actionDate" name="actionDate"
+                                           ng-model="ctrl.searchCriteria.actionDate"
                             ></md-datepicker>
-                            <div ng-messages="followupBookSearchForm.docDate.$error">
+                            <div ng-messages="followupBookSearchForm.actionDate.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>

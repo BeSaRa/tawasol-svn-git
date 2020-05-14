@@ -203,6 +203,12 @@
              tooltip="{{ctrl.langService.get(ctrl.record.siteFollowUpEndedIndicator.tooltip)}}"
     ></md-icon>
 </span>
+<!-- Followup Date -->
+<span ng-if="ctrl.indicatorType === 'followupDate'" class="{{ctrl.record.followDateIndicator.class}} {{ctrl.spanClass}}"
+      tooltip="{{ctrl.langService.get(ctrl.record.followDateIndicator.tooltip)
+                        .change({date_status:ctrl.langService.get(ctrl.record.followDateIndicator.text) })}}">
+        {{ctrl.record.getFollowupDate(true)}}
+</span>
 <!-- comments -->
 <span ng-if="ctrl.indicatorType === 'comments' && ctrl.record.generalStepElm.comments" class="{{ctrl.spanClass}}"
       ng-class="{'indicator-content': ctrl.record.commentsIndicator}">

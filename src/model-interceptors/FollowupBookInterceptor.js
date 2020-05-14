@@ -9,8 +9,10 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             delete model.docClassIndicator;
-            delete model.docDateString;
+            delete model.creationDate;
+            delete model.creationDateString;
             delete model.followupDateString;
+            delete model.followDateIndicator;
             delete model.numberOfDays;
             delete model.securityLevelLookup;
             delete model.securityLevelIndicator;
@@ -23,10 +25,13 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.docClassIndicator = model.getDocClassIndicator(generator.getDocumentClassName(model.docClassId));
-            model.docDateString = generator.getDateFromTimeStamp(model.docDate);
+            model.creationDate = generator.getDateFromTimeStamp(model.actionDate);
+            model.creationDateString = generator.getDateFromTimeStamp(model.actionDate);
             model.followupDateString = generator.getDateFromTimeStamp(model.followupDate);
-            model.followupDate = '1589494164';
-            model.numberOfDays = generator.getNumberOfDays(model.followupDate);
+            model.followDateIndicator = model.getFollowupDateIndicator(model.followupDate);
+            var numberOfDays = generator.getNumberOfDays(model.followupDate);
+            // -(numberOfDays) means, get positive number if date is in future
+            model.numberOfDays = numberOfDays === 0 ? numberOfDays : -(generator.getNumberOfDays(model.followupDate));
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
             model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
