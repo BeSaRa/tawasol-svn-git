@@ -228,9 +228,7 @@ module.exports = function (app) {
          */
         self.lessThanStartTime = function (hour) {
             _getSelectedDates();
-            if (!self.selectedStartTime)
-                return true;
-            return (self.startDate && self.endDate && self.startDate === self.endDate) && hour.compareValue <= self.selectedStartTime.compareValue;
+            return (self.startDate && self.endDate && self.startDate === self.endDate) && self.selectedStartTime && hour.compareValue <= self.selectedStartTime.compareValue;
         };
 
         self.getAvailableDate = function () {
