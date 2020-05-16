@@ -67,6 +67,7 @@ module.exports = function (app) {
         };
 
         self.desktopNotify = function (workItems) {
+            var inboxUrl = $state.href('app.inbox.user-inbox', {identifier: $stateParams.identifier}, {absolute: true});
             var items = _.filter(workItems, function (item) {
                 return !item.generalStepElm.isOpen;
             });
@@ -77,7 +78,7 @@ module.exports = function (app) {
                         langService.get('you_have_received_new_books').change({count: items.length}));
 
                 notification.addEventListener('click', function () {
-                    window.open($state.href('app.inbox.user-inbox', {identifier: $stateParams.identifier}, {absolute: true}));
+                    window.open(inboxUrl);
                 }, true);
             }
         };
