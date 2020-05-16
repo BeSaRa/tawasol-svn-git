@@ -23,7 +23,7 @@ module.exports = function (app) {
         self.subSiteSearchText = '';
 
         self.correspondenceSiteTypes = correspondenceSiteTypes;
-        self.toFollowupDateMaxValue = moment().endOf("day").toDate();
+        self.todayEndOfDay = moment().endOf("day").toDate();
 
         $timeout(function () {
             if (self.searchCriteria.selectedSiteType) {

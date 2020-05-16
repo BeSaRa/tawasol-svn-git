@@ -9,6 +9,8 @@ module.exports = function (app) {
             self.siteCriteria = null;
             self.fromFollowupDate = null;
             self.toFollowupDate = null;
+            self.fromDocDate = null;
+            self.toDocDate = null;
             self.forPrinting = false;
 
             // every model has required fields

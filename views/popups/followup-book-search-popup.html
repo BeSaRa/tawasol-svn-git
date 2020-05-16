@@ -127,7 +127,36 @@
                                            ng-model="ctrl.searchCriteria.toFollowupDate"
                                            md-min-date="ctrl.searchCriteria.fromFollowupDate"
                             ></md-datepicker>
-                            <!--md-max-date="ctrl.toFollowupDateMaxValue"-->
+                            <!--md-max-date="ctrl.todayEndOfDay"-->
+                            <div ng-messages="followupBookSearchForm.toFollowupDate.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- From -->
+                        <md-input-container flex class="cms-datepicker">
+                            <label for="fromDocDate">{{lang.create_date_from}}</label>
+                            <md-datepicker id="fromDocDate" name="fromFollowupDate"
+                                           ng-required="ctrl.searchCriteria.toDocDate"
+                                           ng-change="ctrl.onChangeFromFollowupDate($event)"
+                                           ng-model="ctrl.searchCriteria.fromDocDate"
+                                           md-max-date="ctrl.searchCriteria.toDocDate"
+                            ></md-datepicker>
+                            <div ng-messages="followupBookSearchForm.fromFollowupDate.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- To -->
+                        <md-input-container flex class="cms-datepicker">
+                            <label for="toDocDate">{{lang.create_date_to}}</label>
+                            <md-datepicker id="toDocDate" name="toDocDate"
+                                           ng-required="ctrl.searchCriteria.fromDocDate"
+                                           ng-model="ctrl.searchCriteria.toDocDate"
+                                           md-min-date="ctrl.searchCriteria.fromDocDate"
+                                           md-max-date="ctrl.todayEndOfDay"
+                            ></md-datepicker>
+                            <!--md-max-date="ctrl.todayEndOfDay"-->
                             <div ng-messages="followupBookSearchForm.toFollowupDate.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>

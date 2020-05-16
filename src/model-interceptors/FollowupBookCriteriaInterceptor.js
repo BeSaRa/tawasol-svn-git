@@ -23,6 +23,10 @@ module.exports = function (app) {
                 model.fromFollowupDate = moment(model.fromFollowupDate).startOf("day").valueOf();
             if (model.toFollowupDate)
                 model.toFollowupDate = moment(model.toFollowupDate).endOf("day").valueOf();
+            if (model.fromDocDate)
+                model.fromDocDate = moment(model.fromDocDate).startOf("day").valueOf();
+            if (model.toDocDate)
+                model.toDocDate = moment(model.toDocDate).endOf("day").valueOf();
 
             delete model.selectedSiteType;
             delete model.selectedMainSite;
