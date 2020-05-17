@@ -29,6 +29,10 @@
                     <md-icon md-svg-icon="folder"></md-icon>
                 </md-button>
             </div>
+            <md-button ng-if="ctrl.followupBooks.length"
+                       ng-click="ctrl.printResult($event)" class="md-icon-button" tooltip="{{lang.print}}">
+                <md-icon md-svg-icon="printer"></md-icon>
+            </md-button>
             <md-button ng-click="ctrl.resetFilter($event)"
                        ng-if="ctrl.searchCriteriaUsed"
                        aria-label="{{lang.reset}}"
@@ -121,7 +125,8 @@
                                             md-order-by="numberOfDays">
                                             <span>{{lang.number_of_days}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedFollowupBooks.length && ctrl.searchCriteriaUsed" md-column
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length && ctrl.searchCriteriaUsed"
+                                            md-column
                                             md-order-by="{{ctrl.getSortingKey('folderInfo', 'Information')}}">
                                             <span>{{lang.folder}}</span>
                                         </th>
@@ -186,7 +191,9 @@
                                                     item="record"></main-site-sub-site-directive>
                                         </td>
                                         <td md-cell>{{record.numberOfDays}}</td>
-                                        <td md-cell ng-if="ctrl.searchCriteriaUsed">{{record.folderInfo.getTranslatedName()}}</td>
+                                        <td md-cell ng-if="ctrl.searchCriteriaUsed">
+                                            {{record.folderInfo.getTranslatedName()}}
+                                        </td>
                                         <td md-cell class="p-r0" ng-if="ctrl.selectedFollowupBooks.length < 2">
                                             <div layout-align="start center" flex ng-if="!ctrl.selectedFollowupBooks.length
                                                           || ctrl.selectedFollowupBooks.length===1 && ctrl.selectedFollowupBooks[0].vsId === record.vsId">

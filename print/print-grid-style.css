@@ -36,11 +36,22 @@ table tbody tr td {
     vertical-align: middle;
     text-align: left;
 }
-span{
+
+span {
     white-space: pre;
 }
+
+table tbody tr table {
+    border: 1px rgba(0, 0, 0, 0.12) solid;
+}
+
+table tbody tr table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+
 html.rtl table thead td,
-html.rtl table tbody tr td{
+html.rtl table tbody tr td {
     text-align: right;
 }
 

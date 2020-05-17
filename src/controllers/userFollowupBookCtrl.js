@@ -348,6 +348,10 @@ module.exports = function (app) {
 
         };
 
+        self.printResult = function ($event) {
+            followUpUserService.printUserFollowupFromWebPage(langService.get('menu_item_my_followup') + '-' + self.selectedFolder.getTranslatedName(), self.followupBooks);
+        };
+
         self.gridActions = [
             // Document Information
             {

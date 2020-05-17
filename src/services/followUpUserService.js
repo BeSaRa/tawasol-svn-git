@@ -15,6 +15,7 @@ module.exports = function (app) {
         var self = this;
         self.serviceName = 'followUpUserService';
         self.allFollowUpFolders = [];
+        self.printPage = "print/UserFollowupPrint.html";
         /**
          * @description prepare follow up for correspondence
          * @param correspondence
@@ -414,6 +415,63 @@ module.exports = function (app) {
                             return followUpBook;
                         });
                 });
+        }
+
+        self.printUserFollowupFromWebPage = function (heading, data) {
+            var exportData = _getExportData(heading, data);
+            if (!exportData.headerNames.length) {
+                toast.info(langService.get('no_data_to_print'));
+            } else {
+                localStorage.setItem('userFollowupData', JSON.stringify(exportData));
+                localStorage.setItem('currentLang', langService.current);
+                var printWindow = window.open(self.printPage, '', 'left=0,top=0,width=0,height=0,toolbar=0,scrollbars=0,status=0');
+                if (!printWindow) {
+                    toast.error(langService.get('msg_error_occurred_while_processing_request'))
+                }
+            }
+        };
+
+        var _getExportData = function (heading, userFollowups) {
+            console.log(userFollowups);
+            var headerNames = [],
+                data = [],
+                i, record;
+            if (userFollowups && userFollowups.length) {
+                headerNames = [
+                    langService.get('inbox_serial'),
+                    langService.get('correspondence_sites'),
+                    langService.get('document_number'),
+                    langService.get('subject'),
+                    langService.get('created_on'),
+                    langService.get('action_date'),
+                    langService.get('followup_date'),
+                    langService.get('type'),
+                    langService.get('document_date'),
+                    //langService.get('comment'),
+                    langService.get('number_of_days')
+                ];
+                for (i = 0; i < userFollowups.length; i++) {
+                    record = userFollowups[i];
+                    data.push([
+                        record.docFullSerial,
+                        record.getTranslatedCorrespondenceSiteInfo(),
+                        record.refDocNumber,
+                        record.docSubject,
+                        record.docDateString,
+                        record.actionDateString,
+                        record.followupDateString,
+                        generator.getDocumentClassName(record.docClassId),
+                        generator.convertDateToString(record.docDate),
+                        //_.map(record.commentList, 'description'),
+                        record.numberOfDays
+                    ]);
+                }
+            }
+            return {
+                headerText: heading,
+                headerNames: headerNames,
+                data: data
+            };
         }
 
     });
