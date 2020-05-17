@@ -285,10 +285,10 @@ module.exports = function (app) {
             }
             record.viewFromQueue(self.gridActions, 'search' + generator.ucFirst(record.getInfo().documentClass), $event)
                 .then(function () {
-                    return self.reloadSearchCorrespondence(self.grid.page);
+                    return self.reloadFolders(self.grid.page);
                 })
                 .catch(function () {
-                    return self.reloadSearchCorrespondence(self.grid.page);
+                    return self.reloadFolders(self.grid.page);
                 });
         };
 
