@@ -122,6 +122,9 @@ module.exports = function (app) {
                     this.dueDate = null;
                 }
                 this.escalationStatus = (this.escalationStatus && this.escalationStatus.hasOwnProperty('id')) ? this.escalationStatus.lookupKey : this.escalationStatus;
+                if (this.escalationStatus === -1) {
+                    this.escalationStatus = null;
+                }
                 this.escalationUserOUId = (this.escalationUserId && this.escalationUserId.hasOwnProperty('ouId')) ? this.escalationUserId.ouId : this.escalationUserOUId;
                 this.escalationUserId = (this.escalationUserId && this.escalationUserId.hasOwnProperty('id')) ? this.escalationUserId.id : this.escalationUserId;
 
