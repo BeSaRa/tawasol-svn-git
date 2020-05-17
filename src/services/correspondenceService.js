@@ -69,6 +69,8 @@ module.exports = function (app) {
                                                    DocumentLink,
                                                    SmsLog,
                                                    rootEntity,
+                                                   FollowupBook,
+                                                   FollowupBookCriteria,
                                                    FollowupAction,
                                                    encryptionService) {
         'ngInject';
@@ -90,6 +92,8 @@ module.exports = function (app) {
         util.inherits(InternalSearch, Outgoing);
         util.inherits(GeneralSearch, Correspondence);
         util.inherits(OutgoingIncomingSearch, IncomingSearch);
+        // follow up
+        util.inherits(FollowupBookCriteria, FollowupBook);
 
 
         /**
@@ -3315,7 +3319,7 @@ module.exports = function (app) {
                         }
 
                         return pinCodeDefer.promise.then(function (pinCode) {
-                            if (pinCode === 'PINCODE_NOT_REQUIRED'){
+                            if (pinCode === 'PINCODE_NOT_REQUIRED') {
                                 pinCode = null;
                             }
                             var isComposite = workItem.isWorkItem() ? workItem.isComposite() : workItem.isCompositeSites();

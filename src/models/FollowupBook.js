@@ -5,11 +5,12 @@ module.exports = function (app) {
                                           Information,
                                           viewDocumentService,
                                           Lookup,
-                                          correspondenceService,
                                           generator) {
         'ngInject';
         return function FollowupBook(model) {
-            var self = this;
+            var self = this,
+                followUpUserService,
+                correspondenceService;
             self.id = null;
             self.actionDate = null;
             self.commentList = null;
@@ -51,7 +52,24 @@ module.exports = function (app) {
             FollowupBook.prototype.getInfo = function () {
                 return correspondenceService.getCorrespondenceInformation(this);
             };
-
+            /**
+             *  setCorrespondenceService
+             * @param service
+             * @returns {*}
+             */
+            FollowupBook.prototype.setCorrespondenceService = function (service) {
+                correspondenceService = service;
+                return this;
+            };
+            /**
+             * setFollowUpUserService
+             * @param service
+             * @returns {*}
+             */
+            FollowupBook.prototype.setFollowUpUserService = function (service) {
+                followUpUserService = service;
+                return this;
+            };
             /**
              * @description Set the main site sub site string to display/sort in the grid
              * @returns {*}
@@ -106,6 +124,10 @@ module.exports = function (app) {
 
             FollowupBook.prototype.viewFromQueue = function (actions, queueName, $event, viewOnly) {
                 return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly);
+            };
+
+            FollowupBook.prototype.terminate = function (ignoreMessage, $event) {
+                return followUpUserService.terminateFollowup(this, $event);
             };
 
 

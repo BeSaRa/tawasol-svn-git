@@ -27,12 +27,6 @@ module.exports = function (app) {
         };
 
         self.openReasonDialog = function (workItem) {
-            /*userInboxService
-                .controllerMethod
-                .userInboxTerminate(workItem, false, true)
-                .then(function (reason) {
-                    workItem.reason = reason;
-                });*/
             correspondenceService
                 .openCommentDialog()
                 .then(function (reason) {

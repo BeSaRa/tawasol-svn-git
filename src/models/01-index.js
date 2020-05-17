@@ -185,6 +185,6 @@ module.exports = function (app) {
     require('./ReferencePlanItemResult')(app);
     require('./ExportedTrackingSheetResult')(app);
     require('./FollowUpFolder')(app);
-    require('./FollowupBook')(app);
     require('./FollowupBookCriteria')(app);
+    require('./FollowupBook')(app);
 };

@@ -28,7 +28,7 @@ module.exports = function (app) {
                     classKey: generator.getDocumentClassName(info.documentClass, true)
                 }))
                 .then(function (result) {
-                    return generator.generateInstance(result.data.rs, FollowupBook);
+                    return generator.interceptReceivedInstance('FollowupBook', generator.generateInstance(result.data.rs, FollowupBook));
                 });
         };
         /**
@@ -346,6 +346,75 @@ module.exports = function (app) {
                     return generator.interceptReceivedCollection('FollowupBook', generator.generateCollection(result.data.rs, FollowupBook));
                 });
         };
+
+        /**
+         * @description  open reason dialog
+         * @param dialogTitle
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.showReasonDialog = function (dialogTitle, $event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('reason'),
+                    controller: 'reasonPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    targetEvent: $event,
+                    locals: {
+                        title: dialogTitle
+                    },
+                    resolve: {
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.loadUserCommentsForDistribution();
+                        }
+                    }
+                });
+        };
+        /**
+         * @description open bulk reason.
+         * @param dialogTitle
+         * @param workItems
+         * @param $event
+         */
+        self.showReasonBulkDialog = function (dialogTitle, workItems, $event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('reason-bulk'),
+                    controller: 'reasonBulkPopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    bindToController: true,
+                    locals: {
+                        workItems: workItems,
+                        title: dialogTitle
+                    },
+                    resolve: {
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.loadUserCommentsForDistribution();
+                        }
+                    }
+                });
+        };
+
+        self.terminateFollowup = function (followUpBook, $event, ignoreMessage) {
+            return self.showReasonDialog('terminate_reason', $event)
+                .then(function (reason) {
+                    return $http
+                        .put(urlService.userFollowUp + "/terminate", {
+                            id: followUpBook.id,
+                            comment: reason
+                        })
+                        .then(function () {
+                            if (!ignoreMessage) {
+                                toast.success(langService.get("terminate_specific_success").change({name: followUpBook.docSubject}));
+                            }
+                            return followUpBook;
+                        });
+                });
+        }
 
     });
 };

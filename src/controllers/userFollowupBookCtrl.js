@@ -149,8 +149,8 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.followupBooks = result;
                     self.followupBooksCopy = angular.copy(self.followupBooks);
-                    // counterService.loadCounters();
-                    // mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.selectedFollowupBooks = [];
                     defer.resolve(true);
                     if (pageNumber)
@@ -226,7 +226,9 @@ module.exports = function (app) {
          * @param defer
          */
         self.terminate = function (record, $event, defer) {
-
+            record.terminate(false, $event).then(function () {
+                return self.reloadFollowupBooks(self.grid.page);
+            });
         };
 
         /**
@@ -620,12 +622,10 @@ module.exports = function (app) {
             }
         };
 
-        _initSearchCriteria();
         self.searchCriteriaUsed = false;
-
-
         self.$onInit = function () {
             self.toggleSidebarFolder();
+            _initSearchCriteria();
         };
     });
 };

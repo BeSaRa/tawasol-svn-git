@@ -5,7 +5,6 @@ module.exports = function (app) {
         return function FollowupBookCriteria(model) {
             var self = this;
             FollowupBook.call(this);
-
             self.siteCriteria = null;
             self.fromFollowupDate = null;
             self.toFollowupDate = null;
@@ -32,5 +31,5 @@ module.exports = function (app) {
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('FollowupBookCriteria', 'init', this);
         }
-    })
+    });
 };
