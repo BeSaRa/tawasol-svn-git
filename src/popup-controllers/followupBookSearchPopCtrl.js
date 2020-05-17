@@ -93,7 +93,7 @@ module.exports = function (app) {
          */
         self.filterRecords = function ($event) {
             if (!self.isFilterDisabled()) {
-                return followUpUserService.loadFollowupFolderContentByCriteria(null, self.searchCriteria)
+                return followUpUserService.loadUserFollowupBooksByCriteria(null, self.searchCriteria)
                     .then(function (result) {
                         dialog.hide({
                             result: result,

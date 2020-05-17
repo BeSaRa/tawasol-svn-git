@@ -1,0 +1,231 @@
+<!-- start of view -->
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <div>
+                <md-button layout="row" class="md-icon-button" ng-click="ctrl.toggleSidebarFolder()"><!--list-button-->
+                    <md-icon md-svg-icon="file-tree" id="list-icon"></md-icon>
+                    <!--<span class="list-counter">{{ctrl.inboxFolders.length}}</span>-->
+                </md-button>
+            </div>
+            <span>{{lang.menu_item_user_book_followup}}</span>
+            <md-button ng-click="ctrl.reloadUserFollowupBooks()" class="md-icon-button"
+                       tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <div class="p020">
+                <md-switch aria-label="{{lang.truncate_subject}}"
+                           ng-model="ctrl.grid.truncateSubject"
+                           ng-change="ctrl.grid.setTruncateSubject($event)">
+                    <span>{{lang.truncate_subject}} : </span>
+                    {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                </md-switch>
+            </div>
+            <md-input-container flex class="cms-default">
+                <label for="applicationUser">{{lang.select_user}}</label>
+                <md-select id="applicationUser" name="applicationUser" aria-label="{{lang.select_user}}"
+                           ng-change="ctrl.onChangeUser()"
+                           ng-model="ctrl.selectedUser"
+                           ng-model-options="{trackBy: '$value.id'}"
+                           md-on-close="ctrl.clearSearchText('appUser')"
+                           data-md-container-class="select-header-container sticky-search-bar">
+                    <md-select-header class="select-header">
+                        <input ng-model="ctrl.appUserSearchText"
+                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                               placeholder="{{lang.search}}"
+                               class="select-header-input">
+                    </md-select-header>
+                    <md-option
+                            ng-repeat="record in ctrl.ouApplicationUsers | translatedNameFilter: ctrl.appUserSearchText:'getAppUserAndOuTranslate'"
+                            ng-value="record">
+                        <span
+                                md-highlight-text="ctrl.appUserSearchText"
+                                md-highlight-flags="i">{{record.getAppUserAndOuTranslate()}}</span>
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-button ng-click="ctrl.resetFilter($event)"
+                       ng-if="ctrl.selectedUser && ctrl.searchCriteriaUsed"
+                       aria-label="{{lang.reset}}"
+                       class="md-icon-button" tooltip="{{lang.reset}}">
+                <md-icon md-svg-icon="filter-remove"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.openFilterDialog($event)"
+                       ng-if="ctrl.selectedUser"
+                       aria-label="{{lang.filter}}"
+                       class="md-icon-button" tooltip="{{lang.filter}}">
+                <md-icon md-svg-icon="filter"></md-icon>
+            </md-button>
+            <!--<grid-search-directive grid="ctrl.grid"></grid-search-directive>-->
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.selectedFollowupBooks"
+                                       md-progress="ctrl.grid.progress">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                    <tr md-row>
+                                        <th colspan="{{ctrl.selectedFollowupBooks.length > 1 ? 10 : 11}}"
+                                            ng-if="ctrl.selectedFollowupBooks.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedFollowupBooks.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+                                                <md-button class="md-icon-button" aria-label="{{lang.inbox_terminate}}"
+                                                           tooltip="{{lang.inbox_terminate}}"
+                                                           ng-click="ctrl.terminateBulk($event)">
+                                                    <md-icon md-svg-icon="stop" class="action-green"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button"
+                                                           aria-label="{{lang.grid_action_move_to_folder}}"
+                                                           tooltip="{{lang.grid_action_move_to_folder}}"
+                                                           ng-click="ctrl.moveToFolderBulk($event)">
+                                                    <md-icon md-svg-icon="folder-move" class="action-green"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column md-order-by="">
+                                            <!-- Security Level, Document type Indicators -->
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
+                                            md-order-by="docFullSerial">
+                                            <span>{{lang.inbox_serial}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column md-order-by="">
+                                            <!-- Priority Level Indicators -->
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
+                                            md-order-by="docSubject">
+                                            <span>{{lang.subject}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
+                                            md-order-by="docDate">
+                                            <span>{{lang.created_on}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
+                                            md-order-by="actionDate">
+                                            <span>{{lang.action_date}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
+                                            md-order-by="followupDate">
+                                            <span>{{lang.followup_date}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString','Information')}}">
+                                            <span>{{lang.correspondence_sites}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
+                                            md-order-by="numberOfDays">
+                                            <span>{{lang.number_of_days}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('folderInfo', 'Information')}}">
+                                            <span>{{lang.folder}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFollowupBooks.length" md-column>
+                                            <!-- Grid Actions -->
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="record" grid-right-click-directive="record"
+                                        model="record"
+                                        selected-length="{{ctrl.selectedFollowupBooks.length ? ctrl.selectedFollowupBooks.length : 0}}"
+                                        ng-repeat="record in searchResults = (ctrl.followupBooks | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+
+                                        <td md-cell class="indicator-td">
+                                            <!-- Security Level -->
+                                            <grid-indicator-directive record="record"
+                                                                      indicator-type="securityLevel"
+                                                                      record-type="record"></grid-indicator-directive>
+                                            <!-- Doc Type -->
+                                            <grid-indicator-directive record="record"
+                                                                      indicator-type="docClass"
+                                                                      record-type="record"></grid-indicator-directive>
+                                        </td>
+                                        <td md-cell><span class="serial-td">{{record.docFullSerial}}</span></td>
+                                        <td md-cell class="indicator-td text-right"
+                                            style="padding-right:0 !important; padding-left:0 !important;">
+                                            <!-- Priority Level -->
+                                            <grid-indicator-directive record="record"
+                                                                      indicator-type="priorityLevel"
+                                                                      record-type="record"></grid-indicator-directive>
+                                        </td>
+                                        <td md-cell class="subject">
+                                            <!--<grid-document-subject-directive record="record"
+                                                                             plain-text-only="!record.hasContent()"
+                                                                             click-callback="ctrl.viewDocument">
+                                            </grid-document-subject-directive>-->
+                                            <a href="" ng-if="record.hasContent() && ctrl.grid.truncateSubject"
+                                               class="view-doc subject-internal" md-truncate
+                                               tooltip="{{record.docSubject}}"
+                                               ng-click="ctrl.viewDocument(record, $event)">{{record.docSubject}}</a>
+                                            <span ng-if="!record.hasContent() && ctrl.grid.truncateSubject"
+                                                  class="view-doc subject-internal" md-truncate
+                                                  tooltip="{{record.docSubject}}">{{record.docSubject}}</span>
+                                            <a href="" ng-if="record.hasContent() && !ctrl.grid.truncateSubject"
+                                               class="view-doc subject-internal"
+                                               tooltip="{{record.docSubject}}"
+                                               ng-click="ctrl.viewDocument(record, $event)">{{record.docSubject}}</a>
+                                            <span ng-if="!record.hasContent() && !ctrl.grid.truncateSubject"
+                                                  class="view-doc subject-internal"
+                                                  tooltip="{{record.docSubject}}">{{record.docSubject}}</span>
+                                        </td>
+                                        <td md-cell>{{record.docDateString}}</td>
+                                        <td md-cell>{{record.actionDateString}}</td>
+                                        <td md-cell class="td-data">
+                                            <grid-indicator-directive record="record"
+                                                                      indicator-type="followupDate"
+                                                                      record-type="FollowupBook"></grid-indicator-directive>
+                                        </td>
+                                        <td md-cell>
+                                            <main-site-sub-site-directive
+                                                    item="record"></main-site-sub-site-directive>
+                                        </td>
+                                        <td md-cell>{{record.numberOfDays}}</td>
+                                        <td md-cell>{{record.folderInfo.getTranslatedName()}}</td>
+                                        <td md-cell class="p-r0" ng-if="ctrl.selectedFollowupBooks.length < 2">
+                                            <div layout-align="start center" flex ng-if="!ctrl.selectedFollowupBooks.length
+                                                          || ctrl.selectedFollowupBooks.length===1 && ctrl.selectedFollowupBooks[0].vsId === record.vsId">
+                                                <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
+                                                                        model="record">
+                                                </grid-actions-directive>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="!ctrl.followupBooks.length && ctrl.selectedFolder">
+                                        <td md-cell colspan="11" class="red-text text-center">
+                                            {{lang.no_records_found}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row
+                                        ng-if="ctrl.followupBooksCopy.length && !searchResults.length && ctrl.searchCriteriaUsed">
+                                        <td md-cell colspan="11" class="red-text text-center">
+                                            {{lang.no_records_found_matching_search}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{(ctrl.followupBooks).length}}" md-page-select
+                                    md-on-paginate="ctrl.grid.pagingCallback">
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

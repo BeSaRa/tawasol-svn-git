@@ -80,6 +80,22 @@ module.exports = function (app) {
                 return this;
             };
 
+            OUApplicationUser.prototype.getApplicationUserId = function () {
+                if (!this.applicationUser) {
+                    return null;
+                }
+                return this.applicationUser.hasOwnProperty('id') ? this.applicationUser.id : this.applicationUser;
+            };
+
+            OUApplicationUser.prototype.getOuId = function () {
+                if (this.ouInfo && this.ouInfo.id) {
+                    return this.ouInfo.id;
+                } else if (this.ouid && this.ouid.hasOwnProperty('id')) {
+                    return this.ouid.id;
+                }
+                return null;
+            };
+
             /**
              * @description Get the translated arabic or english name according to current language for application user. If reverse is passed, it will return the name in language other than current language
              * @param reverse
@@ -199,8 +215,8 @@ module.exports = function (app) {
                 return justResult ? (angular.isArray(this.securityLevels) ? this.getSecurityAsNumber() : this.securityLevels) : this.getSecurityAsLookup();
             };
 
-            OUApplicationUser.prototype.getManagerAndOuTranslate =  function(){
-                return this.ouid.getTranslatedName() + ' - '+ this.getTranslatedApplicationUserName();
+            OUApplicationUser.prototype.getManagerAndOuTranslate = function () {
+                return this.ouid.getTranslatedName() + ' - ' + this.getTranslatedApplicationUserName();
             };
 
             // don't remove CMSModelInterceptor from last line

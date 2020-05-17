@@ -1,24 +1,24 @@
 module.exports = function (app) {
-    app.controller('userFollowupScreenCtrl', function (folders,
-                                                       $q,
-                                                       $filter,
-                                                       langService,
-                                                       FollowUpFolder,
-                                                       mailNotificationService,
-                                                       followUpUserService,
-                                                       gridService,
-                                                       employeeService,
-                                                       dialog,
-                                                       viewTrackingSheetService,
-                                                       FollowupBookCriteria,
-                                                       moment,
-                                                       generator,
-                                                       configurationService,
-                                                       correspondenceService,
-                                                       ResolveDefer) {
+    app.controller('userFollowupBookCtrl', function (folders,
+                                                     $q,
+                                                     $filter,
+                                                     langService,
+                                                     FollowUpFolder,
+                                                     mailNotificationService,
+                                                     followUpUserService,
+                                                     gridService,
+                                                     employeeService,
+                                                     dialog,
+                                                     viewTrackingSheetService,
+                                                     FollowupBookCriteria,
+                                                     moment,
+                                                     generator,
+                                                     configurationService,
+                                                     correspondenceService,
+                                                     ResolveDefer) {
         'ngInject';
         var self = this;
-        self.controllerName = 'userFollowupScreenCtrl';
+        self.controllerName = 'userFollowupBookCtrl';
 
         self.sidebarStatus = false;
 
@@ -124,14 +124,14 @@ module.exports = function (app) {
         };
 
         /**
-         * @description reload current folder
+         * @description reload followup books
          * @param pageNumber
          */
-        self.reloadFolders = function (pageNumber) {
+        self.reloadFollowupBooks = function (pageNumber) {
             var defer = $q.defer();
             self.grid.progress = defer.promise;
             if (self.searchCriteriaUsed) {
-                return followUpUserService.loadFollowupFolderContentByCriteria(null, self.searchCriteria)
+                return followUpUserService.loadUserFollowupBooksByCriteria(null, self.searchCriteria)
                     .then(function (result) {
                         self.followupBooks = result;
                         defer.resolve(true);
@@ -170,7 +170,7 @@ module.exports = function (app) {
             if (folder.id === 0)
                 return;
             self.selectedFolder = folder;
-            return self.reloadFolders(self.grid.page);
+            return self.reloadFollowupBooks(self.grid.page);
         };
         /**
          * @description toggle sidebar folders.
@@ -179,6 +179,9 @@ module.exports = function (app) {
             self.sidebarStatus = !self.sidebarStatus;
         };
 
+        /**
+         * @description Reloads the followup folders
+         */
         self.reloadFollowupFolders = function () {
             followUpUserService.loadFollowupFolders(true)
                 .then(function (result) {
@@ -265,10 +268,10 @@ module.exports = function (app) {
             correspondenceService
                 .viewCorrespondence(record, [], checkIfEditPropertiesAllowed(record, true), false)
                 .then(function () {
-                    return self.reloadFolders(self.grid.page);
+                    return self.reloadFollowupBooks(self.grid.page);
                 })
                 .catch(function () {
-                    return self.reloadFolders(self.grid.page);
+                    return self.reloadFollowupBooks(self.grid.page);
                 });
 
         };
@@ -285,10 +288,10 @@ module.exports = function (app) {
             }
             record.viewFromQueue(self.gridActions, 'search' + generator.ucFirst(record.getInfo().documentClass), $event)
                 .then(function () {
-                    return self.reloadFolders(self.grid.page);
+                    return self.reloadFollowupBooks(self.grid.page);
                 })
                 .catch(function () {
-                    return self.reloadFolders(self.grid.page);
+                    return self.reloadFollowupBooks(self.grid.page);
                 });
         };
 

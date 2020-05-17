@@ -61,7 +61,8 @@ module.exports = function (app) {
                 group: 'userGroup',
                 starred: 'starred',
                 inboxFilter: 'inboxFilter',
-                userFollowupBook: 'userFollowupBook'
+                userFollowupBook: 'userFollowupBook',
+                userFollowupBookByUser: 'userFollowupBookByUser'
             },
             department: {
                 incoming: 'depInc',

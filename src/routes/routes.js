@@ -1723,10 +1723,17 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_serials'
             })
-            .state('app.inbox.user-followup', {
+            .state('app.inbox.my-followup', {
+                url: '/my-followup',
+                templateUrl: templateProvider.getView('user-followup-book'),
+                controller: 'userFollowupBookCtrl',
+                controllerAs: 'ctrl',
+                permission: 'USER_FOLLOWUP_BOOKS'
+            })
+            .state('app.administration.user-followup', {
                 url: '/user-followup',
-                templateUrl: templateProvider.getView('user-followup'),
-                controller: 'userFollowupScreenCtrl',
+                templateUrl: templateProvider.getView('user-followup-book-by-user'),
+                controller: 'userFollowupBookByUserCtrl',
                 controllerAs: 'ctrl',
                 permission: 'USER_FOLLOWUP_BOOKS'
             })

@@ -329,12 +329,12 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Loads the records for given followup folder by criteria
+         * @description Loads the user followup book records by criteria
          * @param searchText
          * @param searchCriteria
          * @returns {*}
          */
-        self.loadFollowupFolderContentByCriteria = function (searchText, searchCriteria) {
+        self.loadUserFollowupBooksByCriteria = function (searchText, searchCriteria) {
             if (searchText && !searchCriteria) {
                 searchCriteria = new FollowupBookCriteria({
                     docSubject: searchText
