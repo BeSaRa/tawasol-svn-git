@@ -14,6 +14,7 @@ module.exports = function (app) {
                                                        moment,
                                                        generator,
                                                        configurationService,
+                                                       correspondenceService,
                                                        ResolveDefer) {
         'ngInject';
         var self = this;
@@ -81,7 +82,7 @@ module.exports = function (app) {
                     return self.getSortingKey('securityLevel', 'Lookup');
                 },
                 numberOfDays: 'numberOfDays',
-                folder:  function (record) {
+                folder: function (record) {
                     return self.getSortingKey('folderInfo', 'Information');
                 }
             },
@@ -89,6 +90,20 @@ module.exports = function (app) {
             searchCallback: function (grid) {
                 self.followupBooks = gridService.searchGridData(self.grid, self.followupBooksCopy);
             }
+        };
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var isEditAllowed = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+            if (checkForViewPopup)
+                return !isEditAllowed;
+            return isEditAllowed;
+        };
+
+        var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
+            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+            if (checkForViewPopup)
+                return !(hasPermission);
+            return hasPermission;
         };
 
         /**
@@ -247,7 +262,14 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-
+            correspondenceService
+                .viewCorrespondence(record, [], checkIfEditPropertiesAllowed(record, true), false)
+                .then(function () {
+                    return self.reloadFolders(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadFolders(self.grid.page);
+                });
 
         };
 
@@ -261,7 +283,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-
+            record.viewFromQueue(self.gridActions, 'search' + generator.ucFirst(record.getInfo().documentClass), $event)
+                .then(function () {
+                    return self.reloadSearchCorrespondence(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadSearchCorrespondence(self.grid.page);
+                });
         };
 
         /**
@@ -493,7 +521,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 checkShow: function (action, model) {
-                    return gridService.checkToShowMainMenuBySubMenu(action, model) && !model.isBroadcasted();
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
                     "SEND_SMS"

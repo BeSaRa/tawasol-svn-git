@@ -3,6 +3,7 @@ module.exports = function (app) {
                                           langService,
                                           Indicator,
                                           Information,
+                                          viewDocumentService,
                                           Lookup,
                                           correspondenceService,
                                           generator) {
@@ -101,6 +102,10 @@ module.exports = function (app) {
 
             FollowupBook.prototype.getFollowupDateIndicator = function (followupDate) {
                 return indicator.getFollowUpDateIndicator(followupDate);
+            };
+
+            FollowupBook.prototype.viewFromQueue = function (actions, queueName, $event, viewOnly) {
+                return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly);
             };
 
 
