@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                      viewTrackingSheetService,
                                                      FollowupBookCriteria,
                                                      moment,
+                                                     counterService,
                                                      generator,
                                                      configurationService,
                                                      correspondenceService,
