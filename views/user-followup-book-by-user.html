@@ -46,6 +46,10 @@
                     </md-option>
                 </md-select>
             </md-input-container>
+            <md-button ng-if="ctrl.followupBooks.length"
+                       ng-click="ctrl.printResult($event)" class="md-icon-button" tooltip="{{lang.print}}">
+                <md-icon md-svg-icon="printer"></md-icon>
+            </md-button>
             <md-button ng-click="ctrl.resetFilter($event)"
                        ng-if="ctrl.selectedUser && ctrl.searchCriteriaUsed"
                        aria-label="{{lang.reset}}"

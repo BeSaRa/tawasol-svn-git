@@ -300,6 +300,10 @@ module.exports = function (app) {
 
         };
 
+        self.printResult = function ($event) {
+            followUpUserService.printUserFollowupFromWebPage(langService.get('menu_item_user_book_followup') + '-' + self.selectedUser.getAppUserAndOuTranslate(), self.followupBooks);
+        };
+
         self.gridActions = [
             // Document Information
             {

@@ -432,7 +432,6 @@ module.exports = function (app) {
         };
 
         var _getExportData = function (heading, userFollowups) {
-            console.log(userFollowups);
             var headerNames = [],
                 data = [],
                 i, record;
