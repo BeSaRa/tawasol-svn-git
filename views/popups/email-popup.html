@@ -1,0 +1,32 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.enter_otp}}">
+    <popup-toolbar-directive
+            header-text="{{ctrl.record.getTranslatedName()}} - {{lang.email}}" hide-close="true"
+            close-callback="ctrl.closePopup"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="emailForm" novalidate enter-submit-directive="btn-view-doc">
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="emailAddress">{{lang.email}}</label>
+                        <input name="emailAddress" id="emailAddress" required
+                               ng-model="ctrl.emailAddress"
+                               custom-validate-directive="email">
+                        <div ng-messages="emailForm.emailAddress.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="email">{{lang.invalid_email}}</div>
+                        </div>
+                    </md-input-container>
+                    <div>
+                        <md-button class="md-raised md-primary" ng-disabled="emailForm.$invalid"
+                                   id="btn-view-doc"
+                                   ng-click="ctrl.sendEmail(emailForm, $event)">
+                            {{lang.send}}
+                        </md-button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+</md-dialog>

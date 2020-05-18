@@ -13,11 +13,10 @@ module.exports = function (app) {
             self.smsMessage = {
                 linkedEntity: null,
                 smsTemplate: null,
-                mobileNumber: null,
+                mobileNumber: self.mobileNumber || null,
                 message: null
             };
         };
-        _resetSMSMessage();
 
         /**
          * @description Handles on change of linked entity
@@ -69,5 +68,9 @@ module.exports = function (app) {
         self.closePopup = function () {
             dialog.cancel();
         };
+
+        self.$onInit = function () {
+            _resetSMSMessage();
+        }
     });
 };

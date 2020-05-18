@@ -346,6 +346,12 @@ module.exports = function (app) {
             ApplicationUser.prototype.hasPinCodePrompt = function () {
                 return this.pinCodePrompt;
             };
+            ApplicationUser.prototype.getMobileNumber = function () {
+                return this.mobile;
+            };
+            ApplicationUser.prototype.getEmail = function () {
+                return this.email;
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

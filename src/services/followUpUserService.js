@@ -480,6 +480,77 @@ module.exports = function (app) {
                 })
         };
 
+        /**
+         * @description Opens dialog to enter email address
+         * @param record
+         * @param emailAddress
+         * @param $event
+         * @returns {promise}
+         * @private
+         */
+        function _openSendEmailDialog(record, emailAddress, $event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('email'),
+                    controllerAs: 'ctrl',
+                    eventTarget: $event || null,
+                    bindToController: true,
+                    controller: function (record, emailAddress, dialog) {
+                        var self = this;
+
+                        self.record = record;
+                        self.emailAddress = angular.copy(emailAddress);
+
+                        self.sendEmail = function (form, $event) {
+                            if (form.$invalid) {
+                                return;
+                            }
+                            dialog.hide(self.emailAddress);
+                        };
+
+                        self.closePopup = function () {
+                            dialog.cancel();
+                        };
+                    },
+                    locals: {
+                        record: record,
+                        emailAddress: emailAddress
+                    }
+                })
+        }
+
+        /**
+         * @description Send reminder email
+         * @param correspondence
+         * @param emailAddress
+         * @param $event
+         * @returns {promise}
+         */
+        self.sendReminderEmail = function (correspondence, emailAddress, $event) {
+            var info = correspondence.getInfo(),
+                defer = $q.defer();
+            /*if (emailAddress) {
+                defer.resolve(emailAddress);
+            } else {*/
+                _openSendEmailDialog(correspondence, emailAddress, $event)
+                    .then(function (email) {
+                        defer.resolve(email);
+                    })
+                    .catch(function (error) {
+                        defer.reject(false);
+                    });
+            //}
+            return defer.promise.then(function (email) {
+                return $http.put(urlService.userFollowUp + '/send-remainder/' + info.id + '/user-email?email=' + email, {})
+                    .then(function (result) {
+                        if (result.data.rs) {
+                            toast.success(langService.get('email_success'));
+                        }
+                        return result.data.rs;
+                    });
+            });
+        };
+
         self.printUserFollowupFromWebPage = function (heading, data) {
             var exportData = _getExportData(heading, data);
             if (!exportData.headerNames.length) {

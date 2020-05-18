@@ -4122,10 +4122,11 @@ module.exports = function (app) {
         /**
          * @description Opens the send sms dialog
          * @param correspondence
+         * @param mobileNumber
          * @param $event
          * @returns {promise}
          */
-        self.openSendSMSDialog = function (correspondence, $event) {
+        self.openSendSMSDialog = function (correspondence, mobileNumber, $event) {
             var info = correspondence.getInfo();
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('send-sms'),
@@ -4134,7 +4135,8 @@ module.exports = function (app) {
                 bindToController: true,
                 controller: 'sendSmsPopCtrl',
                 locals: {
-                    record: correspondence
+                    record: correspondence,
+                    mobileNumber: mobileNumber
                 },
                 resolve: {
                     linkedEntities: function () {

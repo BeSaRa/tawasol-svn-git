@@ -218,6 +218,12 @@ module.exports = function (app) {
             OUApplicationUser.prototype.getManagerAndOuTranslate = function () {
                 return this.ouid.getTranslatedName() + ' - ' + this.getTranslatedApplicationUserName();
             };
+            OUApplicationUser.prototype.getMobileNumber = function () {
+                return this.applicationUser.mobile;
+            };
+            OUApplicationUser.prototype.getEmail = function () {
+                return this.applicationUser.email;
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

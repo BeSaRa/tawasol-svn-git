@@ -829,7 +829,7 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.openSendSMSDialog = function ($event) {
-                return correspondenceService.openSendSMSDialog(this, $event);
+                return correspondenceService.openSendSMSDialog(this, null, $event);
             };
 
             WorkItem.prototype.openSendDocumentURLDialog = function ($event) {

@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.controller('userFollowupBookByUserCtrl', function ($q,
                                                            $filter,
+                                                           userSubscriptionService,
                                                            langService,
                                                            mailNotificationService,
                                                            followUpUserService,
@@ -13,6 +14,7 @@ module.exports = function (app) {
                                                            generator,
                                                            configurationService,
                                                            ouApplicationUsers,
+                                                           correspondenceService,
                                                            counterService,
                                                            ResolveDefer) {
         'ngInject';
@@ -113,7 +115,7 @@ module.exports = function (app) {
         self.onChangeUser = function () {
             _initSearchCriteria()
                 .then(function () {
-                    self.reloadUserFollowupBooks(1);
+                    self.reloadFollowupBooks(1);
                 });
         };
 
@@ -121,7 +123,7 @@ module.exports = function (app) {
          * @description reload user followup books
          * @param pageNumber
          */
-        self.reloadUserFollowupBooks = function (pageNumber) {
+        self.reloadFollowupBooks = function (pageNumber) {
             if (!self.selectedUser) {
                 return;
             }
@@ -183,7 +185,7 @@ module.exports = function (app) {
             self.grid.searchText = '';
             _initSearchCriteria()
                 .then(function () {
-                    self.reloadUserFollowupBooks(1);
+                    self.reloadFollowupBooks(1);
                 });
         };
 
@@ -195,7 +197,9 @@ module.exports = function (app) {
          * @param defer
          */
         self.terminate = function (record, $event, defer) {
-
+            record.terminate(false, $event).then(function () {
+                return self.reloadFollowupBooks(self.grid.page);
+            });
         };
 
         /**
@@ -203,7 +207,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.terminateBulk = function ($event) {
-
+            followUpUserService.terminateBulkFollowup(self.selectedFollowupBooks).then(function () {
+                return self.reloadFollowupBooks(self.grid.page);
+            });
         };
 
         /**
@@ -234,7 +240,14 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-
+            correspondenceService
+                .viewCorrespondence(record, [], checkIfEditPropertiesAllowed(record, true), false)
+                .then(function () {
+                    return self.reloadFollowupBooks(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadFollowupBooks(self.grid.page);
+                });
 
         };
 
@@ -248,7 +261,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-
+            record.viewFromQueue(self.gridActions, 'search' + generator.ucFirst(record.getInfo().documentClass), $event)
+                .then(function () {
+                    return self.reloadFollowupBooks(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadFollowupBooks(self.grid.page);
+                });
         };
 
         /**
@@ -269,7 +288,13 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (record, $event) {
-
+            record.manageDocumentComments($event)
+                .then(function () {
+                    return self.reloadFollowupBooks(self.grid.page);
+                })
+                .catch(function (e) {
+                    return self.reloadFollowupBooks(self.grid.page);
+                });
         };
 
         /**
@@ -279,7 +304,14 @@ module.exports = function (app) {
          * @param defer
          */
         self.sendSMS = function (record, $event, defer) {
-
+            if (!self.selectedUser) {
+                return;
+            }
+            record
+                .openSendSMSDialog(self.selectedUser.getMobileNumber(), $event)
+                .then(function () {
+                    return self.reloadFollowupBooks(self.grid.page);
+                });
         };
 
         /**
@@ -289,7 +321,16 @@ module.exports = function (app) {
          * @param defer
          */
         self.sendReminderEmailToUser = function (record, $event, defer) {
-
+            if (!self.selectedUser) {
+                return;
+            }
+            record
+                .sendReminderEmail(self.selectedUser.getEmail(), $event)
+                .then(function (result) {
+                    if (result) {
+                        return self.reloadFollowupBooks(self.grid.page);
+                    }
+                });
         };
 
         /**
@@ -298,7 +339,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.subscribe = function (record, $event) {
-
+            userSubscriptionService.controllerMethod.openAddSubscriptionDialog(record, $event);
         };
 
         self.printResult = function ($event) {
@@ -487,7 +528,8 @@ module.exports = function (app) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
                 permissionKey: [
-                    "SEND_SMS"
+                    "SEND_SMS",
+                    ""
                 ],
                 checkAnyPermission: true,
                 subMenu: [
