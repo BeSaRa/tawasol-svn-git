@@ -532,13 +532,13 @@ module.exports = function (app) {
             /*if (emailAddress) {
                 defer.resolve(emailAddress);
             } else {*/
-                _openSendEmailDialog(correspondence, emailAddress, $event)
-                    .then(function (email) {
-                        defer.resolve(email);
-                    })
-                    .catch(function (error) {
-                        defer.reject(false);
-                    });
+            _openSendEmailDialog(correspondence, emailAddress, $event)
+                .then(function (email) {
+                    defer.resolve(email);
+                })
+                .catch(function (error) {
+                    defer.reject(false);
+                });
             //}
             return defer.promise.then(function (email) {
                 return $http.put(urlService.userFollowUp + '/send-remainder/' + info.id + '/user-email?email=' + email, {})
@@ -605,7 +605,135 @@ module.exports = function (app) {
                 headerNames: headerNames,
                 data: data
             };
-        }
+        };
 
+        /**
+         * @description show folder dialog
+         * @param records
+         * @param folders
+         * @param showRoot
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.showFolderDialog = function (records, folders, showRoot, $event) {
+            records = angular.isArray(records) ? records : [records];
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('followup-folder-tree'),
+                    controller: 'followupFolderTreePopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event || null,
+                    locals: {
+                        folders: folders,
+                        records: records,
+                        showRoot: showRoot
+                    }
+                });
+        };
+
+        /**
+         * @description add followup book to folder
+         * @param record
+         * @param showRoot
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.showAddFollowupBookToFolder = function (record, showRoot, $event) {
+            var defer = $q.defer();
+            self.getFollowupFolders(true)
+                .then(function (result) {
+                    defer.resolve(result);
+                });
+            return defer.promise.then(function (folders) {
+                if (!folders.length) {
+                    toast.info(langService.get('no_folder_for_user'));
+                    return false;
+                } else {
+                    return self.showFolderDialog(record, folders, showRoot, $event);
+                }
+            });
+        };
+
+        /**
+         * @description add bulk followup books to folder.
+         * @param records
+         * @param showRoot
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.showAddBulkFollowupBooksToFolder = function (records, showRoot, $event) {
+            var defer = $q.defer();
+            self.getFollowupFolders(true)
+                .then(function (result) {
+                    defer.resolve(result);
+                });
+            return defer.promise.then(function (folders) {
+                if (!folders.length) {
+                    toast.info(langService.get('no_folder_for_user'));
+                    return false;
+                } else {
+                    return self.showFolderDialog(records, folders, showRoot, $event);
+                }
+            });
+        };
+
+        /**
+         * @description the
+         * @param records
+         * @param folder
+         * @returns {Promise}
+         */
+        self.commonAddToFolder = function (records, folder) {
+            var ids = _.map(records, function (item) {
+                return item.getInfo().id;
+            });
+            return $http
+                .put(urlService.userFollowUp + '/folder/move/bulk/' + (folder.hasOwnProperty('id') ? folder.id : folder), ids);
+        };
+
+        /**
+         * @description add followup book to folder
+         * @param records
+         * @param folder
+         * @param ignoreMessage
+         * @returns {Promise<any>}
+         */
+        self.addFollowupBookToFolder = function (records, folder, ignoreMessage) {
+            if (!folder.status || !folder.id) {
+                toast.error(langService.get('folder_deactivated'));
+                return $q.reject();
+            }
+
+            return self.commonAddToFolder(records, folder)
+                .then(function (result) {
+                    var info = records[0].getInfo();
+                    if (!ignoreMessage) {
+                        if (result.data.rs[info.id]) {
+                            toast.success(langService.get('inbox_add_to_folder_specific_success').change({
+                                name: info.title,
+                                folder: folder.getTranslatedName()
+                            }));
+                        } else {
+                            toast.success(langService.get('inbox_failed_add_to_folder_selected'));
+                        }
+                    }
+                    return records;
+                });
+        };
+        /**
+         * @description add bulk followup books to folder
+         * @param records
+         * @param folder
+         * @param ignoreMessage
+         * @returns {Promise<any>}
+         */
+        self.addBulkFollowupBooksToFolder = function (records, folder, ignoreMessage) {
+            if (records.length === 1)
+                return self.addFollowupBookToFolder(records, folder, ignoreMessage);
+            return self.commonAddToFolder(records, folder)
+                .then(function (result) {
+                    return _bulkMessages(result, records, ignoreMessage, 'inbox_failed_add_to_folder_selected', 'add_to_folder_success', 'add_to_folder_success_except_following');
+                });
+        };
     });
 };

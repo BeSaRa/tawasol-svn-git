@@ -156,6 +156,14 @@ module.exports = function (app) {
                 return followUpUserService.sendReminderEmail(this, email, $event);
             };
 
+            FollowupBook.prototype.getFolderId = function () {
+                return this.folderId;
+            };
+
+            FollowupBook.prototype.addToFolder = function (showRoot, $event) {
+                return followUpUserService.showAddFollowupBookToFolder(this, showRoot, $event);
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

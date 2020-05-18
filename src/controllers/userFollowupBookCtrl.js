@@ -251,7 +251,11 @@ module.exports = function (app) {
          * @param defer
          */
         self.moveToFolder = function (record, $event, defer) {
-
+            record
+                .addToFolder(true, $event)
+                .then(function () {
+                    self.reloadFollowupBooks(self.grid.page);
+                });
         };
 
         /**
@@ -259,7 +263,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.moveToFolderBulk = function ($event) {
-
+            return followUpUserService
+                .showAddBulkFollowupBooksToFolder(self.selectedFollowupBooks, true, $event)
+                .then(function () {
+                    self.reloadFollowupBooks(self.grid.page);
+                });
         };
 
         /**
