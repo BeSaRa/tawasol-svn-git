@@ -237,7 +237,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.terminateBulk = function ($event) {
-
+            followUpUserService.terminateBulkFollowup(self.selectedFollowupBooks).then(function () {
+                return self.reloadFollowupBooks(self.grid.page);
+            });
         };
 
         /**

@@ -16,6 +16,40 @@ module.exports = function (app) {
         self.serviceName = 'followUpUserService';
         self.allFollowUpFolders = [];
         self.printPage = "print/UserFollowupPrint.html";
+
+        /**
+         * @description bulk message for any bulk actions.
+         * @param result
+         * @param collection
+         * @param ignoreMessage
+         * @param errorMessage
+         * @param successMessage
+         * @param failureSomeMessage
+         * @returns {*}
+         * @private
+         */
+        function _bulkMessages(result, collection, ignoreMessage, errorMessage, successMessage, failureSomeMessage) {
+            var failureCollection = [];
+            var currentIndex = 0;
+            _.map(result.data.rs, function (value) {
+                if (!value)
+                    failureCollection.push(collection[currentIndex]);
+                currentIndex++;
+            });
+            if (!ignoreMessage) {
+                if (failureCollection.length === collection.length) {
+                    toast.error(langService.get(errorMessage));
+                } else if (failureCollection.length) {
+                    generator.generateFailedBulkActionRecords(failureSomeMessage, _.map(failureCollection, function (item) {
+                        return item.getTranslatedName();
+                    }));
+                } else {
+                    toast.success(langService.get(successMessage));
+                }
+            }
+            return collection;
+        }
+
         /**
          * @description prepare follow up for correspondence
          * @param correspondence
@@ -376,10 +410,10 @@ module.exports = function (app) {
         /**
          * @description open bulk reason.
          * @param dialogTitle
-         * @param workItems
+         * @param followupBooks
          * @param $event
          */
-        self.showReasonBulkDialog = function (dialogTitle, workItems, $event) {
+        self.showReasonBulkDialog = function (dialogTitle, followupBooks, $event) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('reason-bulk'),
@@ -388,7 +422,7 @@ module.exports = function (app) {
                     targetEvent: $event,
                     bindToController: true,
                     locals: {
-                        workItems: workItems,
+                        workItems: followupBooks,
                         title: dialogTitle
                     },
                     resolve: {
@@ -415,7 +449,36 @@ module.exports = function (app) {
                             return followUpBook;
                         });
                 });
-        }
+        };
+
+        /**
+         * @description terminate bulk followupBooks.
+         * @param followupBooks
+         * @param $event
+         * @param ignoreMessage
+         * @returns {*}
+         */
+        self.terminateBulkFollowup = function (followupBooks, $event, ignoreMessage) {
+
+            // if the selected workItem has just one record.
+            if (followupBooks.length === 1)
+                return self.terminateFollowup(followupBooks[0], $event);
+            return self
+                .showReasonBulkDialog('terminate_reason', followupBooks, $event)
+                .then(function (followupBooks) {
+                    var items = _.map(followupBooks, function (followupBook) {
+                        return {
+                            id: followupBook.id,
+                            comment: followupBook.reason
+                        };
+                    });
+                    return $http
+                        .put(urlService.userFollowUp + "/terminate/bulk", items)
+                        .then(function (result) {
+                            return _bulkMessages(result, followupBooks, ignoreMessage, 'failed_terminate_selected', 'selected_terminate_success', 'following_records_failed_to_terminate');
+                        });
+                })
+        };
 
         self.printUserFollowupFromWebPage = function (heading, data) {
             var exportData = _getExportData(heading, data);
