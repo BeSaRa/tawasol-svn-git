@@ -61,8 +61,7 @@ module.exports = function (app) {
                 group: 'userGroup',
                 starred: 'starred',
                 inboxFilter: 'inboxFilter',
-                userFollowupBook: 'userFollowupBook',
-                userFollowupBookByUser: 'userFollowupBookByUser'
+                userFollowupBook: 'userFollowupBook'
             },
             department: {
                 incoming: 'depInc',
@@ -119,7 +118,8 @@ module.exports = function (app) {
                 attachmentType: 'attachType',
                 dynamicMenuItem: 'dynamicMenu',
                 organization: 'organization',
-                serialNumbers: 'serialNumbers'
+                serialNumbers: 'serialNumbers',
+                userFollowupBookByUser: 'userFollowupBookByUser'
             },
             others: {
                 linkedDoc: 'linkedDoc',
@@ -146,7 +146,8 @@ module.exports = function (app) {
                 fullHistory: 'vts_fullHistory',
                 docLinkViewers: 'vts_docLinkViewer',
                 mergedLinkedDocsHistoryActions: 'vts_mergedLinkedDocsHistoryActions',
-                contentViewHistoryViewers: 'vts_contentViewHistoryViewers'
+                contentViewHistoryViewers: 'vts_contentViewHistoryViewers',
+                followupLog: 'vts_followupLog'
             },
             launch: {
                 favoritesUsers: 'launchFavUsers',

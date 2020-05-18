@@ -117,4 +117,5 @@ module.exports = function (app) {
     require('./ExportedTrackingSheetResultInterceptor')(app);
     require('./FollowupBookInterceptor')(app);
     require('./FollowupBookCriteriaInterceptor')(app);
+    require('./UserFollowupBookLogInterceptor')(app);
 };

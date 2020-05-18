@@ -34,17 +34,18 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            name: gridService.grids.administration.userFollowupBookByUser,
             progress: null,
-            limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.userFollowupBookByUser) || 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.userFollowupBookByUser) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.userFollowupBookByUser, self.workItems),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.userFollowupBookByUser, self.workItems),
             pagingCallback: function (page, limit) {
-                gridService.setGridPagingLimitByGridName(gridService.grids.inbox.userFollowupBookByUser, limit);
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.userFollowupBookByUser, limit);
             },
-            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.inbox.userFollowupBookByUser),
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.administration.userFollowupBookByUser),
             setTruncateSubject: function ($event) {
-                gridService.setGridSubjectTruncateByGridName(gridService.grids.inbox.userFollowupBookByUser, self.grid.truncateSubject);
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.administration.userFollowupBookByUser, self.grid.truncateSubject);
             },
             searchColumns: {
                 serial: 'docFullSerial',
@@ -429,7 +430,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return true;
                 },
-                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid', gridService.grids.administration.userFollowupBookByUser)
             },
             // View Tracking Sheet (Shortcut Only)
             {
@@ -444,7 +445,7 @@ module.exports = function (app) {
                     return true;
                 },
                 callback: self.viewTrackingSheet,
-                params: ['view_tracking_sheet', 'tabs']
+                params: ['view_tracking_sheet', 'tabs', gridService.grids.administration.userFollowupBookByUser]
             },
             // Manage
             {

@@ -174,8 +174,9 @@
                                         <md-select name="receivedIncomingSite" id="receivedIncomingSite"
                                                    ng-model="ctrl.selectedReceivedIncomingSite"
                                                    ng-model-options="{trackBy: '$value.vsId'}">
-                                            <md-option ng-repeat="option in ctrl.receivedIncomingHistoryRecords track by $index"
-                                                       ng-value="option">{{option.vts_subSiteInfo.getTranslatedName()}}
+                                            <md-option
+                                                    ng-repeat="option in ctrl.receivedIncomingHistoryRecords track by $index"
+                                                    ng-value="option">{{option.vts_subSiteInfo.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
@@ -812,6 +813,56 @@
                                     md-total="{{ctrl.documentLinkViewerRecords.length}}"
                                     md-page-select
                                     md-on-paginate="ctrl.documentLinkViewerGrid.pagingCallback"></md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+                <!-- Followup Logs -->
+                <div ng-if="ctrl.heading === 'view_tracking_sheet_followup_logs' && ctrl.showTab('view_tracking_sheet_followup_logs')">
+                    <md-card>
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table>
+                                    <thead md-head md-order="ctrl.followupLogGrid.order">
+                                    <tr md-row>
+                                        <th md-column
+                                            md-order-by="{{ctrl.getSortingKey('userInfo', 'Information')}}">
+                                            <span>{{lang.view_tracking_sheet_action_by}}</span>
+                                        </th>
+                                        <th md-column
+                                            md-order-by="{{ctrl.getSortingKey('ouInfo', 'WFOrganization')}}">
+                                            <span>{{lang.organization}}</span>
+                                        </th>
+                                        <th md-column
+                                            md-order-by="{{ctrl.getSortingKey('actionStatusInfo', 'Information')}}">
+                                            <span>{{lang.status}}</span>
+                                        </th>
+                                        <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                        </th>
+                                        <th md-column md-order-by="userComment">
+                                            <span>{{lang.view_tracking_sheet_comments}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-select="followupLog" md-row
+                                        ng-repeat="followupLog in ctrl.followupLogRecords | filter:ctrl.searchModelFollowupLog | limitTo: ctrl.followupLogGrid.limit: ((ctrl.followupLogGrid.page - 1) * ctrl.followupLogGrid.limit) |orderBy:ctrl.followupLogGrid.order  track by $index">
+                                        <td md-cell>{{followupLog.userInfo.getTranslatedName()}}</td>
+                                        <td md-cell>{{followupLog.ouInfo.getTranslatedName()}}</td>
+                                        <td md-cell>{{followupLog.actionStatusInfo.getTranslatedName()}}</td>
+                                        <td md-cell>{{followupLog.actionDate_vts}}</td>
+                                        <td md-cell>{{followupLog.userComment}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.followupLogGrid.limitOptions"
+                                    md-limit="ctrl.followupLogGrid.limit"
+                                    md-page="ctrl.followupLogGrid.page"
+                                    md-total="{{ctrl.followupLogRecords.length}}"
+                                    md-page-select
+                                    md-on-paginate="ctrl.followupLogGrid.pagingCallback"></md-table-pagination>
                         </md-table-container>
                     </md-card>
                 </div>

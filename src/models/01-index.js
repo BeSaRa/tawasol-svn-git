@@ -187,4 +187,5 @@ module.exports = function (app) {
     require('./FollowUpFolder')(app);
     require('./FollowupBookCriteria')(app);
     require('./FollowupBook')(app);
+    require('./UserFollowupBookLog')(app);
 };

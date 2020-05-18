@@ -1728,14 +1728,14 @@ module.exports = function (app) {
                 templateUrl: templateProvider.getView('user-followup-book'),
                 controller: 'userFollowupBookCtrl',
                 controllerAs: 'ctrl',
-                permission: 'USER_FOLLOWUP_BOOKS'
+                permission: 'menu_item_my_followup'
             })
             .state('app.administration.user-followup', {
                 url: '/user-followup',
                 templateUrl: templateProvider.getView('user-followup-book-by-user'),
                 controller: 'userFollowupBookByUserCtrl',
                 controllerAs: 'ctrl',
-                permission: 'USER_FOLLOWUP_BOOKS'
+                permission: 'menu_item_user_book_followup'
             })
 
     });

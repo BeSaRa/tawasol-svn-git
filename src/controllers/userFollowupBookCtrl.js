@@ -59,6 +59,7 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
+            name: gridService.grids.inbox.userFollowupBook,
             progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.userFollowupBook) || 5, // default limit
             page: 1, // first page
@@ -490,7 +491,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return true;
                 },
-                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid')
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions('grid', gridService.grids.inbox.userFollowupBook)
             },
             // View Tracking Sheet (Shortcut Only)
             {
@@ -505,7 +506,7 @@ module.exports = function (app) {
                     return true;
                 },
                 callback: self.viewTrackingSheet,
-                params: ['view_tracking_sheet', 'tabs']
+                params: ['view_tracking_sheet', 'tabs', gridService.grids.inbox.userFollowupBook]
             },
             // Manage
             {

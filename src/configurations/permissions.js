@@ -32,6 +32,7 @@ module.exports = function (app) {
             .addMenuPermissions('menu_item_attachment_types', ['MANAGE_ATTACHMENT_TYPE'])
             .addMenuPermissions('menu_item_document_types', ['MANAGE_DOCUMENT_TYPE'])
             .addMenuPermissions('menu_item_menu_items', ['DYNAMIC_MENU_ITEM'])
+            .addMenuPermissions('menu_item_user_book_followup', ['ADMIN_USER_FOLLOWUP_BOOKS'])
             .addMenuPermissions('menu_item_global_localization', function () {
                 return false;
             })
@@ -104,6 +105,7 @@ module.exports = function (app) {
                 return !employee.isAdmin && employee.isProxyUser();// && _.map(employee.proxyUsers, 'proxyUserOU').indexOf(employee.organization.ouid) > -1;
             })
             .addMenuPermission('menu_item_user_favorite_documents', 'MANAGE_FAVORITE')
+            .addMenuPermission('menu_item_my_followup', 'USER_FOLLOWUP_BOOKS')
             .end()
             .addMenuPermission('menu_item_dashboard', 'LANDING_PAGE')
             // .addMenuPermissionGroup('menu_item_search_module')

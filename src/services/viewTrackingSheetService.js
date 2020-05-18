@@ -15,6 +15,7 @@ module.exports = function (app) {
                                                       DestinationHistory,
                                                       ContentViewHistory,
                                                       SmsLog,
+                                                      UserFollowupBookLog,
                                                       FullHistory,
                                                       OutgoingDeliveryReport,
                                                       ExportedTrackingSheetResult,
@@ -37,10 +38,11 @@ module.exports = function (app) {
             self.destinationHistory = [];
             self.contentViewHistory = [];
             self.outgoingDeliveryReports = [];
-            self.receivedIncomingHistoryRecords =[];
+            self.receivedIncomingHistoryRecords = [];
             self.mergedLinkedDocumentHistory = [];
             self.fullHistory = [];
             self.documentLinkViewerRecords = [];
+            self.followupLogRecords = [];
 
             self.printPage = 'print/TrackingSheetPrint.html';
 
@@ -219,7 +221,22 @@ module.exports = function (app) {
                             text: 'view_tracking_sheet_document_link_viewer_history',
                             shortcut: false,
                             callback: self.viewTrackingSheet,
-                            params: ['view_tracking_sheet_document_link_viewer_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
+                            params: ['view_tracking_sheet_document_link_viewer_history', 'grid', parentGridName],
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // Followup Logs
+                        {
+                            type: 'action',
+                            icon: '',
+                            text: 'view_tracking_sheet_followup_logs',
+                            shortcut: false,
+                            callback: self.viewTrackingSheet,
+                            permissionKey: ["ADMIN_USER_FOLLOWUP_BOOKS", "USER_FOLLOWUP_BOOKS"],
+                            checkAnyPermission: true,
+                            params: ['view_tracking_sheet_followup_logs', 'grid', parentGridName],
                             class: "action-green",
                             checkShow: function (action, model) {
                                 return true;
@@ -361,6 +378,14 @@ module.exports = function (app) {
                                     ? self.loadDocumentLinkViewer(document)
                                         .then(function (result) {
                                             return result;
+                                        }) : [];
+                            },
+                            followupLogRecords: function () {
+                                'ngInject';
+                                return (heading === 'view_tracking_sheet_followup_logs' || gridType === 'tabs')
+                                    ? self.loadFollowupLogs(document)
+                                        .then(function (result) {
+                                            return [];
                                         }) : [];
                             }
                         }
@@ -688,6 +713,25 @@ module.exports = function (app) {
                         }
                         return [];
                     });
+            };
+
+            /**
+             * @description load followup logs update history by vsId
+             * @param document
+             */
+            self.loadFollowupLogs = function (document) {
+                var vsId = getVsId(document);
+                return $http.get(urlService.userFollowUp + '/logs/vsid/' + vsId).then(function (result) {
+                    self.followupLogRecords = generator.generateCollection(result.data.rs, UserFollowupBookLog, self._sharedMethods);
+                    self.followupLogRecords = generator.interceptReceivedCollection('UserFollowupBookLog', self.followupLogRecords);
+                    return self.followupLogRecords;
+                }).catch(function (error) {
+                    if (errorCode.checkIf(error, 'ACCESS_DENIED') === true) {
+                        dialog.errorMessage(langService.get('access_denied'));
+                        return $q.reject(false);
+                    }
+                    return [];
+                });
             };
 
 
@@ -1023,6 +1067,28 @@ module.exports = function (app) {
                                 record.sharedToMobileNum,
                                 record.sharedToEmail,
                                 record.viewTime
+                            ]);
+                        }
+                    }
+                }
+                /* Followup Logs */
+                else if (heading === 'view_tracking_sheet_followup_logs') {
+                    if (self.followupLogRecords.length) {
+                        headerNames = [
+                            langService.get('view_tracking_sheet_action_by'),
+                            langService.get('organization'),
+                            langService.get('status'),
+                            langService.get('view_tracking_sheet_action_date'),
+                            langService.get('view_tracking_sheet_comments')
+                        ];
+                        for (i = 0; i < self.followupLogRecords.length; i++) {
+                            record = self.followupLogRecords[i];
+                            data.push([
+                                record.userInfo.getTranslatedName(),
+                                record.ouInfo.getTranslatedName(),
+                                record.actionStatusInfo.getTranslatedName(),
+                                record.actionDate_vts,
+                                record.userComment
                             ]);
                         }
                     }

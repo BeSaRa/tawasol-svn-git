@@ -671,7 +671,7 @@ module.exports = function (app) {
             if (overrideSortingKey)
                 return property + '.' + overrideSortingKey;
             else if (modelType === 'information' || modelType === 'documenttype' || modelType === 'workflowaction' || modelType === 'senderinfo' ||
-                modelType === 'attachmenttype' || modelType === 'organization' || modelType === 'correspondencesite')
+                modelType === 'attachmenttype' || modelType === 'organization' || modelType === 'correspondencesite' || modelType === 'wforganization')
                 return property + '.' + (langService.current === 'ar' ? 'arName' : 'enName');
             else if (modelType === 'lookup')
                 return property + '.' + (langService.current === 'ar' ? 'defaultArName' : 'defaultEnName');
