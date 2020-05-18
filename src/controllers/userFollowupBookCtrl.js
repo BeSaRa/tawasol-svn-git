@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('userFollowupBookCtrl', function (folders,
                                                      $q,
                                                      $filter,
+                                                     userSubscriptionService,
                                                      langService,
                                                      FollowUpFolder,
                                                      mailNotificationService,
@@ -347,7 +348,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.subscribe = function (record, $event) {
-
+            userSubscriptionService.controllerMethod.openAddSubscriptionDialog(record, $event);
         };
 
         self.printResult = function ($event) {
