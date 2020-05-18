@@ -347,7 +347,14 @@ module.exports = function (app) {
         };
 
         self.printResult = function ($event) {
-            followUpUserService.printUserFollowupFromWebPage(langService.get('menu_item_my_followup') + '-' + self.selectedFolder.getTranslatedName(), self.followupBooks);
+            if (!self.searchCriteriaUsed) {
+                self.searchCriteriaCopy.folderId = self.selectedFolder.id
+            }
+
+            followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, self.searchCriteriaCopy, (self.selectedFolder ? self.selectedFolder.getTranslatedName() : null))
+                .then(function (heading) {
+                    followUpUserService.printUserFollowupFromWebPage(heading, self.searchCriteriaCopy);
+                });
         };
 
         self.gridActions = [
@@ -545,6 +552,7 @@ module.exports = function (app) {
                     if (result.criteria) {
                         self.searchCriteriaUsed = true;
                         self.searchCriteria = result.criteria;
+                        self.searchCriteriaCopy = angular.copy(result.criteria);
                     } else {
                         self.searchCriteriaUsed = false;
                         _initSearchCriteria();
@@ -581,6 +589,7 @@ module.exports = function (app) {
                 userId: employeeService.getEmployee().id,
                 userOUID: employeeService.getEmployee().getOUID()
             });
+            self.searchCriteriaCopy = angular.copy(self.searchCriteria);
             if (!skipDates) {
                 self.searchCriteria.fromFollowupDate = moment().subtract(configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE, configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_TYPE).toDate();
                 self.searchCriteria.toFollowupDate = moment().endOf("day").toDate();

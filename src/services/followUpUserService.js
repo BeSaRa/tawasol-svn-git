@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                  dialog,
                                                  FollowUpFolder,
                                                  generator,
+                                                 moment,
                                                  langService,
                                                  FollowupBookCriteria) {
         var self = this;
@@ -551,18 +552,67 @@ module.exports = function (app) {
             });
         };
 
-        self.printUserFollowupFromWebPage = function (heading, data) {
-            var exportData = _getExportData(heading, data);
-            if (!exportData.headerNames.length) {
-                toast.info(langService.get('no_data_to_print'));
+        /**
+         * @description dialog to enter report subject when filtering
+         * @returns {*}
+         */
+        self.setFollowupReportHeading = function (searchCriteriaUsed, searchCriteria, selected) {
+            var creationDate = moment(new Date()).format('YYYY-MM-DD');
+            var heading = {
+                subject: {
+                    header: langService.get('followup_report'),
+                    value: self.reportSubject
+                },
+                byUser: {
+                    header: langService.get('created_by'),
+                    value: employeeService.getEmployee().getTranslatedName()
+                },
+                creationDate: {header: langService.get('created_on'), value: creationDate}
+            };
+
+
+            if (!searchCriteriaUsed) {
+                var defer = $q.defer();
+                heading.subject.value = selected;
+                defer.resolve(heading);
+
+                return defer.promise;
             } else {
-                localStorage.setItem('userFollowupData', JSON.stringify(exportData));
-                localStorage.setItem('currentLang', langService.current);
-                var printWindow = window.open(self.printPage, '', 'left=0,top=0,width=0,height=0,toolbar=0,scrollbars=0,status=0');
-                if (!printWindow) {
-                    toast.error(langService.get('msg_error_occurred_while_processing_request'))
-                }
+                return dialog.showDialog({
+                    templateUrl: cmsTemplate.getPopup('followup-report-subject'),
+                    bindToController: true,
+                    controller: function () {
+                        'ngInject';
+                        var self = this;
+                        self.reportSubject = '';
+                        self.submitSubject = function () {
+                            heading.subject.value = self.reportSubject;
+                            dialog.hide(heading);
+                        }
+                    },
+                    controllerAs: 'ctrl'
+                });
             }
+        };
+
+
+        self.printUserFollowupFromWebPage = function (heading, criteria) {
+            $http.post(urlService.userFollowUp + '/print', criteria)
+                .then(result => {
+                    var exportData = _getExportData(heading,
+                        generator.interceptReceivedCollection('FollowupBook', generator.generateCollection(result.data.rs, FollowupBook))
+                    );
+                    if (!exportData.headerNames.length) {
+                        toast.info(langService.get('no_data_to_print'));
+                    } else {
+                        localStorage.setItem('userFollowupData', JSON.stringify(exportData));
+                        localStorage.setItem('currentLang', langService.current);
+                        var printWindow = window.open(self.printPage, '', 'left=0,top=0,width=0,height=0,toolbar=0,scrollbars=0,status=0');
+                        if (!printWindow) {
+                            toast.error(langService.get('msg_error_occurred_while_processing_request'))
+                        }
+                    }
+                });
         };
 
         var _getExportData = function (heading, userFollowups) {
@@ -580,7 +630,7 @@ module.exports = function (app) {
                     langService.get('followup_date'),
                     langService.get('type'),
                     langService.get('document_date'),
-                    //langService.get('comment'),
+                    langService.get('comment'),
                     langService.get('number_of_days')
                 ];
                 for (i = 0; i < userFollowups.length; i++) {
@@ -595,7 +645,7 @@ module.exports = function (app) {
                         record.followupDateString,
                         generator.getDocumentClassName(record.docClassId),
                         generator.convertDateToString(record.docDate),
-                        //_.map(record.commentList, 'description'),
+                        _.map(record.commentList, 'description'),
                         record.numberOfDays
                     ]);
                 }

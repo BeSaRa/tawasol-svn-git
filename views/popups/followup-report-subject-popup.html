@@ -1,0 +1,27 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.followup_report}}">
+    <popup-toolbar-directive header-text="{{lang.followup_report}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <form name="reportSubject_form">
+            <div class="md-dialog-content cms-dialog-content">
+                <div flex layout="row">
+                    <md-input-container flex>
+                        <label for="reportSubject">{{lang.followup_report}}</label>
+                        <input name="reportSubject" id="reportSubject"
+                               ng-model="ctrl.reportSubject"
+                               required>
+                        <div ng-messages="reportSubject_form.reportSubject.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+        </form>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary" ng-click="ctrl.submitSubject()" ng-disabled="reportSubject_form.$invalid">
+            {{lang.print}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

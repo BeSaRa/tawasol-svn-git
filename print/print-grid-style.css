@@ -35,6 +35,7 @@ table tbody tr td {
     border-bottom: 1px rgba(0, 0, 0, 0.12) solid;
     vertical-align: middle;
     text-align: left;
+    max-width: 200px;
 }
 
 span {
@@ -55,3 +56,16 @@ html.rtl table tbody tr td {
     text-align: right;
 }
 
+.row {
+    width: 100%;
+    margin: 10px;
+}
+
+.subRow {
+    display: inline-block;
+    width: 15%;
+}
+
+.text-bold {
+    font-weight: bold;
+}

@@ -102,6 +102,7 @@ module.exports = function (app) {
                 userId: self.selectedUser.getApplicationUserId(),
                 userOUID: self.selectedUser.getOuId()
             });
+            self.searchCriteriaCopy = angular.copy(self.searchCriteria);
             if (!skipDates) {
                 self.searchCriteria.fromFollowupDate = moment().subtract(configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE, configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_TYPE).toDate();
                 self.searchCriteria.toFollowupDate = moment().endOf("day").toDate();
@@ -165,6 +166,7 @@ module.exports = function (app) {
                     if (result.criteria) {
                         self.searchCriteriaUsed = true;
                         self.searchCriteria = result.criteria;
+                        self.searchCriteriaCopy = angular.copy(result.criteria);
                     } else {
                         _initSearchCriteria();
                     }
@@ -351,7 +353,10 @@ module.exports = function (app) {
         };
 
         self.printResult = function ($event) {
-            followUpUserService.printUserFollowupFromWebPage(langService.get('menu_item_user_book_followup') + '-' + self.selectedUser.getAppUserAndOuTranslate(), self.followupBooks);
+            followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, self.searchCriteriaCopy, (self.selectedUser ? self.selectedUser.getAppUserAndOuTranslate() : null))
+                .then(function (heading) {
+                    followUpUserService.printUserFollowupFromWebPage(heading, self.searchCriteriaCopy);
+                });
         };
 
         self.gridActions = [

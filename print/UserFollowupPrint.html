@@ -6,7 +6,21 @@
     <link media="all" rel="stylesheet" href="print-grid-style.css">
 </head>
 <body>
-<h3 id="header"></h3>
+<!--<h3 id="header"></h3>-->
+<div id="headerDataContainer">
+    <div class="row">
+        <label class="subRow text-bold">{{lblSubject}}: </label>
+        <label>{{txtSubject}}</label>
+    </div>
+    <div class="row">
+        <label class="subRow text-bold">{{lblByUser}}: </label>
+        <label>{{txtByUser}}</label>
+    </div>
+    <div class="row">
+        <label class="subRow text-bold">{{lblCreationDate}}: </label>
+        <label>{{txtCreationDate}}</label>
+    </div>
+</div>
 <table id="userFollowupTable">
 
 </table>
@@ -19,7 +33,7 @@
         var records = data.data;
         var pageHeader = data.headerText;
 
-        document.title = pageHeader;
+        document.title = pageHeader.subject.value;
         var currentLang = localStorage.getItem('currentLang');
         var htmlTag = document.getElementsByTagName("html")[0];
         if (currentLang === 'ar') {
@@ -30,11 +44,17 @@
             htmlTag.setAttribute('dir', 'ltr');
         }
 
+        var headerDataContainer = document.getElementById('headerDataContainer');
+        headerDataContainer.innerHTML = headerDataContainer.innerHTML
+            .replace('{{lblSubject}}', pageHeader.subject.header)
+            .replace('{{txtSubject}}', pageHeader.subject.value)
+            .replace('{{lblByUser}}', pageHeader.byUser.header)
+            .replace('{{txtByUser}}', pageHeader.byUser.value)
+            .replace('{{lblCreationDate}}', pageHeader.creationDate.header)
+            .replace('{{txtCreationDate}}', pageHeader.creationDate.value);
+
         function fillData() {
             return new Promise(function (resolve, reject) {
-                // page header
-                document.getElementById('header').innerText = pageHeader;
-
                 var table = document.getElementById('userFollowupTable');
 
                 //create header
@@ -53,17 +73,16 @@
                     var row = tableBody.insertRow();
                     for (var j = 0; j < columnCount; j++) {
                         var cell = row.insertCell(j);
-                        if (Array.isArray(record[j])) {
+                        if (Array.isArray(record[j]) && record[j].length) {
                             var subtable = document.createElement("table");
                             for (var s = 0; s < record[j].length; s++) {
                                 var subRow = subtable.insertRow();
                                 var subCell = subRow.insertCell();
-                                subCell.innerHTML = record[j][s] ? ('<span>' + record[j][s] + '</span>') : '';
+                                subCell.innerHTML = record[j][s] ? ('<div>' + record[j][s] + '</div>') : '';
                             }
-                            console.log(subtable);
                             cell.append(subtable);
                         } else {
-                            cell.innerHTML = record[j] ? ('<span>' + record[j] + '</span>') : '';
+                            cell.innerHTML = record[j] ? ('<div>' + record[j] + '</div>') : '';
                         }
                     }
                 }
