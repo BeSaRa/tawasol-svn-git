@@ -10,6 +10,7 @@ module.exports = function (app) {
         return function FollowupBook(model) {
             var self = this,
                 followUpUserService,
+                managerService,
                 correspondenceService;
             self.id = null;
             self.actionDate = null;
@@ -59,6 +60,15 @@ module.exports = function (app) {
              */
             FollowupBook.prototype.setCorrespondenceService = function (service) {
                 correspondenceService = service;
+                return this;
+            };
+            /**
+             *  setManagerService
+             * @param service
+             * @returns {*}
+             */
+            FollowupBook.prototype.setManagerService = function (service) {
+                managerService = service;
                 return this;
             };
             /**
@@ -132,6 +142,14 @@ module.exports = function (app) {
 
             FollowupBook.prototype.getTranslatedName = function () {
                 return this.docSubject;
+            };
+            FollowupBook.prototype.manageDocumentComments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentComments(info.vsId, info.title, $event);
+            };
+
+            FollowupBook.prototype.openSendSMSDialog = function ($event) {
+                return correspondenceService.openSendSMSDialog(this, $event);
             };
 
 

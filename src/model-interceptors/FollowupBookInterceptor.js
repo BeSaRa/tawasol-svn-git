@@ -1,10 +1,12 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, generator, lookupService, correspondenceService ,  Information, followUpUserService, _) {
+    app.run(function (CMSModelInterceptor, generator, lookupService, correspondenceService, managerService ,Information, followUpUserService, _) {
         'ngInject';
         var modelName = 'FollowupBook';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
-            model.setFollowUpUserService(followUpUserService)
+            model
+                .setFollowUpUserService(followUpUserService)
+                .setManagerService(managerService)
                 .setCorrespondenceService(correspondenceService);
             return model;
         });

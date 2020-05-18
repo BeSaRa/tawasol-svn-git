@@ -319,7 +319,13 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (record, $event) {
-
+            record.manageDocumentComments($event)
+                .then(function () {
+                    return self.reloadFollowupBooks(self.grid.page);
+                })
+                .catch(function (e) {
+                    return self.reloadFollowupBooks(self.grid.page);
+                });
         };
 
         /**
@@ -329,7 +335,11 @@ module.exports = function (app) {
          * @param defer
          */
         self.sendSMS = function (record, $event, defer) {
-
+            record
+                .openSendSMSDialog($event)
+                .then(function () {
+                    return self.reloadFollowupBooks(self.grid.page);
+                });
         };
 
         /**
