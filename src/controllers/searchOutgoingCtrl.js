@@ -407,7 +407,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (searchedOutgoingDocument, $event) {
-            managerService.manageDocumentComments(searchedOutgoingDocument.vsId, searchedOutgoingDocument.docSubject, $event)
+            searchedOutgoingDocument.manageDocumentComments($event)
                 .then(function (documentComments) {
                     searchedOutgoingDocument.documentComments = documentComments;
                 })

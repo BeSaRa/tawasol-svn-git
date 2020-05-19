@@ -269,7 +269,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (centralArchiveItem, $event) {
-            managerService.manageDocumentComments(centralArchiveItem.vsId, centralArchiveItem.docSubject, $event)
+            centralArchiveItem.manageDocumentComments($event)
                 .then(function (documentComments) {
                     centralArchiveItem.documentComments = documentComments;
                 })

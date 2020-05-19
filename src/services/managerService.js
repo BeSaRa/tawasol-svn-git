@@ -212,11 +212,12 @@ module.exports = function (app) {
 
         /**
          * @description manage document comment for any given document
+         * @param document
          * @param vsId
          * @param documentSubject
          * @param $event
          */
-        self.manageDocumentComments = function (vsId, documentSubject, $event) {
+        self.manageDocumentComments = function (document, vsId, documentSubject, $event) {
             var commentsDefer = $q.defer();
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('manage-document-comments'),
@@ -228,7 +229,8 @@ module.exports = function (app) {
                 locals: {
                     fromDialog: true,
                     vsId: vsId,
-                    documentSubject: documentSubject
+                    documentSubject: documentSubject,
+                    correspondence: document
                 },
                 resolve: {
                     documentComments: function (documentCommentService) {

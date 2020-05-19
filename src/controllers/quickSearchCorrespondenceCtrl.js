@@ -287,7 +287,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (searchedCorrespondenceDocument, $event) {
-            managerService.manageDocumentComments(searchedCorrespondenceDocument.vsId, searchedCorrespondenceDocument.docSubject, $event)
+            searchedCorrespondenceDocument.manageDocumentComments($event)
                 .then(function (documentComments) {
                     searchedCorrespondenceDocument.documentComments = documentComments;
                 })

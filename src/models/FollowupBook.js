@@ -145,7 +145,7 @@ module.exports = function (app) {
             };
             FollowupBook.prototype.manageDocumentComments = function ($event) {
                 var info = this.getInfo();
-                return managerService.manageDocumentComments(info.vsId, info.title, $event);
+                return managerService.manageDocumentComments(this, info.vsId, info.title, $event);
             };
 
             FollowupBook.prototype.openSendSMSDialog = function (mobileNumber, $event) {

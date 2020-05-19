@@ -363,7 +363,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (rejectedInternal, $event) {
-            managerService.manageDocumentComments(rejectedInternal.vsId, rejectedInternal.docSubject, $event)
+            rejectedInternal.manageDocumentComments($event)
                 .then(function (documentComments) {
                     rejectedInternal.documentComments = documentComments;
                 })

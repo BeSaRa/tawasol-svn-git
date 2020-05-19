@@ -16,6 +16,7 @@ module.exports = function (app) {
                                                             ouApplicationUserService,
                                                             $filter,
                                                             _,
+                                                            printService,
                                                             generator) {
         'ngInject';
         var self = this;
@@ -252,6 +253,11 @@ module.exports = function (app) {
 
             promise.promise.then(function () {
                 toast.success(langService.get('add_success').change({name: langService.get('comments_comment')}));
+                self.documentComment.createorInfo = new Information({
+                    id: self.employee.id,
+                    arName: self.employee.arFullName,
+                    enName: self.employee.enFullName
+                });
                 self.documentComments.push(self.documentComment);
                 self.model = angular.copy(self.documentComments);
                 self.showCommentForm = false;
@@ -857,6 +863,32 @@ module.exports = function (app) {
             else
                 return false;
 
+        };
+
+        self.printDocumentComments = function () {
+            var documentCommentsCopy = self.documentComments;
+            var info = self.correspondence.getInfo();
+            info.createdOn =
+                (self.correspondence.hasOwnProperty('generalStepElm')) ?
+                    generator.getDateFromTimeStamp(self.correspondence.generalStepElm.documentCreationDate) :
+                    self.correspondence.createdOn;
+
+            _.map(documentCommentsCopy, function (documentComment) {
+                documentComment.correspondence = info;
+                return documentComment;
+            });
+            var printTitle = langService.get('comments_manage_document_comments'),
+                headers = [
+                    'comments_description',
+                    'created_by',
+                    'comments_creation_date',
+                    'document_subject',
+                    'serial_number',
+                    'created_on'
+                ];
+
+            printService
+                .printData(documentCommentsCopy, headers, printTitle);
         };
 
         var _getCommentPrivacy = function (documentComment) {

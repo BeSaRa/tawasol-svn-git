@@ -239,7 +239,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (favoriteDocument, $event) {
-            managerService.manageDocumentComments(favoriteDocument.vsId, favoriteDocument.docSubject, $event)
+            favoriteDocument.manageDocumentComments($event)
                 .then(function (documentComments) {
                     favoriteDocument.documentComments = documentComments;
                 })

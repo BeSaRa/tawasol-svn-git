@@ -443,8 +443,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (reviewInternal, $event) {
-            console.log('manage comments : ', reviewInternal);
-            managerService.manageDocumentComments(reviewInternal.vsId, reviewInternal.docSubject, $event)
+            reviewInternal.manageDocumentComments($event)
                 .then(function (documentComments) {
                     reviewInternal.documentComments = documentComments;
                 })

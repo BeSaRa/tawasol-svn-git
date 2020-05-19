@@ -648,7 +648,7 @@ module.exports = function (app) {
 
             Correspondence.prototype.manageDocumentComments = function ($event) {
                 var info = this.getInfo();
-                return managerService.manageDocumentComments.apply(managerService, [info.vsId, info.title, $event]);
+                return managerService.manageDocumentComments.apply(managerService, [this, info.vsId, info.title, $event]);
             };
             Correspondence.prototype.manageDocumentAttachments = function ($event, isSimpleAdd) {
                 var info = this.getInfo();

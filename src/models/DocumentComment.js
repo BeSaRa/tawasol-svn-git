@@ -2,10 +2,30 @@ module.exports = function (app) {
     app.factory('DocumentComment', function (CMSModelInterceptor,
                                              moment,
                                              _,
+                                             generator,
                                              langService) {
         'ngInject';
         return function DocumentComment(model) {
-            var self = this, documentCommentService;
+            var self = this, documentCommentService,
+                exportData = {
+                    comments_description: 'description',
+                    created_by: function () {
+                        return this.createorInfo.getTranslatedName();
+                    },
+                    comments_creation_date: function () {
+                        return generator.getDateFromTimeStamp(this.creationDate)
+                    },
+                    document_subject: function () {
+                        return this.correspondence.title
+                    },
+                    serial_number: function () {
+                        return this.correspondence.docFullSerial
+                    },
+                    created_on: function () {
+                        return moment(this.correspondence.createdOn).format('YYYY-MM-DD');
+                    }
+                };
+
             self.id = null;
             self.shortDescription = null;
             self.description = null;
@@ -62,7 +82,7 @@ module.exports = function (app) {
                 return this.isGlobal;
             };
 
-            DocumentComment.prototype.commentCustomize = function(){
+            DocumentComment.prototype.commentCustomize = function () {
                 return !this.isPrivate && !this.isGlobal;
             };
 
@@ -113,6 +133,11 @@ module.exports = function (app) {
             DocumentComment.prototype.delete = function () {
                 return documentCommentService.deleteDocumentComment(this);
             };
+
+            DocumentComment.prototype.getExportedData = function () {
+                return exportData;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('DocumentComment', 'init', this);

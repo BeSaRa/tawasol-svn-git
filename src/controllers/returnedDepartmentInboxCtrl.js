@@ -339,7 +339,7 @@ module.exports = function (app) {
                 return;
             }
             var wfName = 'outgoing';
-            managerService.manageDocumentComments(returnedDepartmentInbox.getInfo().vsId, wfName, $event)
+            returnedDepartmentInbox.manageDocumentComments($event)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page);
                 })

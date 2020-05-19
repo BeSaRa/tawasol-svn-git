@@ -8,6 +8,14 @@
                     <span>{{lang.outgoing_add_document_comment}}</span>
                 </div>
             </md-button>
+            <md-button ng-if="!(ctrl.showCommentForm && ctrl.fromDialog) && ctrl.vsId"
+                       ng-disabled="!ctrl.documentComments.length"
+                       class="md-raised" ng-click="ctrl.printDocumentComments()">
+                <div>
+                    <md-icon md-svg-icon="printer"></md-icon>
+                    <span>{{lang.print}}</span>
+                </div>
+            </md-button>
         </div>
     </div>
     <!-- Comments Form -->
@@ -373,6 +381,10 @@
                                 <span>{{lang.comments_short_description}}</span>
                             </th>
                             <th md-column
+                                md-order-by="{{ctrl.getSortingKey('createorInfo', 'Information')}}">
+                                <span ng-if="!ctrl.selectedDocumentComments.length">{{lang.created_by}}</span>
+                            </th>
+                            <th md-column
                                 md-order-by="creationDate">
                                 <span ng-if="!ctrl.selectedDocumentComments.length">{{lang.comments_creation_date}}</span>
                             </th>
@@ -394,6 +406,9 @@
                             ng-disabled="ctrl.disableEverything || !ctrl.allowDelete(documentComment)">
                             <td md-cell><a href="#"
                                            ng-click="ctrl.showComment(documentComment , $event)">{{documentComment.shortDescription}}</a>
+                            </td>
+                            <td md-cell>
+                                {{documentComment.createorInfo.getTranslatedName()}}
                             </td>
                             <td md-cell>
                                 {{documentComment.creationDate |date:'yyyy-MM-dd'}}

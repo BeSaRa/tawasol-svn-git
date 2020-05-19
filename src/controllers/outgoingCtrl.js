@@ -337,8 +337,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.openManageDocumentComments = function ($event) {
-            managerService
-                .manageDocumentComments(self.outgoing.vsId, self.outgoing.docSubject, $event)
+            self.outgoing.manageDocumentComments($event)
                 .then(function (documentComments) {
                     self.outgoing.documentComments = documentComments;
                 })
@@ -426,7 +425,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.docActionSendLinkToDocumentByEmail = function(model, $event, defer){
+        self.docActionSendLinkToDocumentByEmail = function (model, $event, defer) {
             downloadService.getMainDocumentEmailContent(model.getInfo().vsId);
         };
 

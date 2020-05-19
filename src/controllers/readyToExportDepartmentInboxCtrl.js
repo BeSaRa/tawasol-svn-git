@@ -516,7 +516,7 @@ module.exports = function (app) {
                 return;
             }
             var info = readyToExport.getInfo();
-            managerService.manageDocumentComments(info.vsId, info.documentClass, $event)
+            readyToExport.manageDocumentComments($event)
                 .then(function () {
                     self.reloadReadyToExports(self.grid.page);
                 })

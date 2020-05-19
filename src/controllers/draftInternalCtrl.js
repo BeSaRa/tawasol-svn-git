@@ -344,7 +344,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (draftInternal, $event) {
-            managerService.manageDocumentComments(draftInternal.vsId, draftInternal.docSubject, $event)
+            draftInternal.manageDocumentComments($event)
                 .then(function (documentComments) {
                     draftInternal.documentComments = documentComments;
                 })

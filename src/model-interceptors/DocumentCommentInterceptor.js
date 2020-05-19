@@ -63,6 +63,7 @@ module.exports = function (app) {
                 }
                 return item;
             });*/
+            model.createorInfo = model.createorInfo ? new Information(model.createorInfo) : new Information();
             model.includedIDs = [];
             model.excludedIDs = [];
             if (model.includedList.length) {

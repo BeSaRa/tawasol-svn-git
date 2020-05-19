@@ -345,8 +345,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (userSentItem, $event) {
-            var info = userSentItem.getInfo();
-            managerService.manageDocumentComments(info.vsId, info.title, $event)
+           // var info = userSentItem.getInfo();
+            userSentItem.manageDocumentComments($event)
                 .then(function (documentComments) {
                     //userSentItem.comments = documentComments;
                 })

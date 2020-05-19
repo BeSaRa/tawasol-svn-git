@@ -325,7 +325,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (readyToSendIncoming, $event) {
-            managerService.manageDocumentComments(readyToSendIncoming.vsId, readyToSendIncoming.docSubject, $event)
+            readyToSendIncoming.manageDocumentComments($event)
                 .then(function (documentComments) {
                     readyToSendIncoming.documentComments = documentComments;
                 })

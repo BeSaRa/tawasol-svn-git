@@ -352,7 +352,7 @@ module.exports = function (app) {
         self.manageComments = function (followupEmployeeInbox, $event) {
             var info = followupEmployeeInbox.getInfo();
             var wfName = 'outgoing';
-            managerService.manageDocumentComments(info.vsId, wfName, $event)
+            followupEmployeeInbox.manageDocumentComments($event)
                 .then(function () {
                     self.reloadFollowupEmployeeInboxes(self.grid.page);
                 })

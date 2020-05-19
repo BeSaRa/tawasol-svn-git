@@ -425,8 +425,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (searchedInternalDocument, $event) {
-            //console.log('manage comments for searched internal document : ', searchedInternalDocument);
-            managerService.manageDocumentComments(searchedInternalDocument.vsId, searchedInternalDocument.docSubject, $event)
+            searchedInternalDocument.manageDocumentComments($event)
                 .then(function (documentComments) {
                     searchedInternalDocument.documentComments = documentComments;
                 })

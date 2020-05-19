@@ -313,8 +313,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.openManageDocumentComments = function ($event) {
-            managerService
-                .manageDocumentComments(self.incoming.vsId, self.incoming.docSubject, $event)
+            self.incoming.manageDocumentComments($event)
                 .then(function (documentComments) {
                     self.incoming.documentComments = documentComments;
                 })

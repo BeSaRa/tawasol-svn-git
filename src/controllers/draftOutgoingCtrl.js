@@ -380,7 +380,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (draftOutgoing, $event) {
-            managerService.manageDocumentComments(draftOutgoing.vsId, draftOutgoing.docSubject, $event)
+            draftOutgoing.manageDocumentComments($event)
                 .then(function (documentComments) {
                     draftOutgoing.documentComments = documentComments;
                 })

@@ -450,7 +450,7 @@ module.exports = function (app) {
                 return;
             }
             var info = workItem.getInfo();
-            managerService.manageDocumentComments(info.vsId, info.documentClass, $event)
+            workItem.manageDocumentComments($event)
                 .then(function () {
                     self.reloadGroupInbox(self.grid.page);
                 })

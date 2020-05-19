@@ -542,7 +542,7 @@ module.exports = function (app) {
 
             WorkItem.prototype.manageDocumentComments = function ($event) {
                 var info = this.getInfo();
-                return managerService.manageDocumentComments.apply(managerService, [info.vsId, info.title, $event]);
+                return managerService.manageDocumentComments.apply(managerService, [this, info.vsId, info.title, $event]);
             };
             WorkItem.prototype.manageDocumentAttachments = function ($event) {
                 var info = this.getInfo();

@@ -19,7 +19,8 @@ module.exports = function (app) {
                 sourceEditMode: '=?',
                 sourceComment: '=?',
                 disableEverything: '=?',
-                isValid: '=?'
+                isValid: '=?',
+                correspondence: '=?'
             },
             link: function ($scope, element, attrs) {
                 $scope.$watch(function () {

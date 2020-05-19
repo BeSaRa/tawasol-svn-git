@@ -198,7 +198,7 @@ module.exports = function (app) {
 
             G2GMessagingHistory.prototype.manageDocumentComments = function ($event) {
                 var info = this.getInfo();
-                return managerService.manageDocumentComments.apply(managerService, [this.refDocId, info.title, $event]);
+                return managerService.manageDocumentComments.apply(managerService, [this, this.refDocId, info.title, $event]);
             };
             G2GMessagingHistory.prototype.manageDocumentAttachments = function ($event) {
                 var info = this.getInfo();

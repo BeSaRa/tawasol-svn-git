@@ -411,7 +411,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (reviewOutgoing, $event) {
-            managerService.manageDocumentComments(reviewOutgoing.vsId, reviewOutgoing.docSubject, $event)
+            reviewOutgoing.manageDocumentComments($event)
                 .then(function (documentComments) {
                     reviewOutgoing.documentComments = documentComments;
                 })

@@ -240,8 +240,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (scanIncoming, $event) {
-            console.log('manage comments', scanIncoming);
-            managerService.manageDocumentComments(scanIncoming.vsId, scanIncoming.docSubject, $event)
+            scanIncoming.manageDocumentComments($event)
                 .then(function (documentComments) {
                     scanIncoming.documentComments = documentComments;
                 })

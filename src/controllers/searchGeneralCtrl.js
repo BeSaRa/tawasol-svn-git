@@ -493,7 +493,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (searchedGeneralDocument, $event) {
-            managerService.manageDocumentComments(searchedGeneralDocument.vsId, searchedGeneralDocument.docSubject, $event)
+            searchedGeneralDocument.manageDocumentComments($event)
                 .then(function (documentComments) {
                     searchedGeneralDocument.documentComments = documentComments;
                 })

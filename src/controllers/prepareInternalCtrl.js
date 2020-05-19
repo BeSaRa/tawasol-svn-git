@@ -225,7 +225,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (prepareInternal, $event) {
-            managerService.manageDocumentComments(prepareInternal.vsId, prepareInternal.docSubject, $event)
+            prepareInternal.manageDocumentComments($event)
                 .then(function (documentComments) {
                     prepareInternal.documentComments = documentComments;
                 })
