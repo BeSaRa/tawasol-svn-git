@@ -711,14 +711,17 @@ module.exports = function (app) {
             })
             .bulkResolveToState('app.inbox.my-followup', {
                 folders: function (followUpUserService) {
+                    'ngInject';
                     return followUpUserService.loadFollowupFolders(true);
                 }
             })
             .bulkResolveToState('app.administration.user-followup', {
                 folders: function (followUpUserService) {
+                    'ngInject';
                     return followUpUserService.loadFollowupFolders();
                 },
                 ouApplicationUsers: function (ouApplicationUserService, employeeService) {
+                    'ngInject';
                     return ouApplicationUserService.loadOuApplicationUserByRegOu(employeeService.getEmployee().getRegistryOUID());
                 }
             })
