@@ -20,7 +20,8 @@ module.exports = function (app) {
                 deleteCallback: '=?',
                 editCallback: '=?',
                 count: '=',
-                displayMenu:'=?'
+                counterProperty: '@',
+                displayMenu: '=?'
             }
         }
     })

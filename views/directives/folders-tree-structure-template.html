@@ -12,7 +12,7 @@
                                 <md-icon md-svg-icon="{{ctrl.icon ? ctrl.icon : 'folder'}}"></md-icon>
                             </div>
                             <div flex layout="row" layout-align="start center">{{folder.getTranslatedName()}} <span
-                                    ng-if="ctrl.count && ctrl.counterHasFolderId(folder)"> &nbsp;&nbsp; ( {{ctrl.counterService.folderCount[folder.id].first}} ) &nbsp;&nbsp;</span>
+                                    ng-if="ctrl.count && ctrl.counterHasFolderId(folder)"> &nbsp;&nbsp; ( {{ctrl.getCounter(folder).first}} ) &nbsp;&nbsp;</span>
                             </div>
                         </div>
                     </md-button>
@@ -39,7 +39,8 @@
                                     </div>
                                 </md-button>
                             </md-menu-item>
-                            <md-menu-item ng-if="ctrl.allowControl && ctrl.deleteCallback && !ctrl.sameFolder(folder) && !ctrl.checkSelected(folder)">
+                            <md-menu-item
+                                    ng-if="ctrl.allowControl && ctrl.deleteCallback && !ctrl.sameFolder(folder) && !ctrl.checkSelected(folder)">
                                 <md-button ng-click="ctrl.deleteCallback(folder, $event)">
                                     <div layout="row">
                                         <md-icon md-svg-icon="delete"></md-icon>
@@ -67,7 +68,8 @@
                 </div>
             </div>
         </div>
-        <folders-tree-structure-directive display-menu="ctrl.displayMenu" count="ctrl.count"
+        <folders-tree-structure-directive display-menu="ctrl.displayMenu" counter-property="{{ctrl.counterProperty}}"
+                                          count="ctrl.count"
                                           highlight-selected="ctrl.highlightSelected"
                                           disable-selected="ctrl.disableSelected" click-callback="ctrl.clickCallback"
                                           ng-if="folder.children.length"

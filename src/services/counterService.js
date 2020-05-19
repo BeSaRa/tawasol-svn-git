@@ -12,6 +12,7 @@ module.exports = function (app) {
         self.serviceName = 'counterService';
         self.counter = new Counter();
         self.folderCount = {};
+        self.followupFolderCount = {};
         self.g2gIncomingCount = {
             first: 0,
             second: 0
@@ -26,42 +27,66 @@ module.exports = function (app) {
          */
         self.loadCounters = function () {
             return $http
-                .get(urlService.folderCount, {
+                .get(urlService.followUpFolders + '/with-counter', {
                     excludeLoading: true
                 })
-                .then(function (folder) {
-                    self.folderCount = folder.data.rs;
-
-                    var firstCount = _.reduce(folder.data.rs, function (oldValue, currentValue) {
-                        return oldValue + currentValue.first;
-                    }, 0);
-
-                    var secondCount = _.reduce(folder.data.rs, function (oldValue, currentValue) {
-                        return oldValue + currentValue.second;
-                    }, 0);
-
-                    return $http.get(urlService.counters, {
-                        excludeLoading: true
-                    }).then(function (result) {
-                        result.data.rs.foldersCount = {
-                            first: firstCount,
-                            second: secondCount
-                        };
-                        // keep the g2g counters with original values unless reloaded by service after given interval
-                        result.data.rs.g2gDeptInbox = angular.copy(self.g2gIncomingCount);
-                        result.data.rs.g2gDeptReturned = angular.copy(self.g2gReturnedCount);
-
-                        self.counter = generator.interceptReceivedInstance('Counter', generator.generateInstance(result.data.rs, Counter));
-                        self.counter.overdueDocuments = self.counter.overdueIncomingDocuments = self.counter.overdueOutgoingDocuments = {
-                            first: 0,
+                .then(function (followup) {
+                    var followupFolderCount = {};
+                    _.map(followup.data.rs, function (item) {
+                        followupFolderCount[item.id] = {
+                            first: item.count,
                             second: 0
                         };
-                        return self.counter;
-                    }).catch(function (error) {
-                        return errorCode.checkIf(error, 'ENTITY_NOT_FOUND', function () {
-                            return $q.resolve({});
-                        });
                     });
+
+                    var firstFollowCount = _.reduce(followupFolderCount, function (oldValue, currentValue) {
+                        return oldValue + currentValue.first;
+                    }, 0);
+                    var secondFollowCount = _.reduce(followupFolderCount, function (oldValue, currentValue) {
+                        return oldValue + currentValue.second;
+                    }, 0);
+                    self.followupFolderCount = followupFolderCount;
+                    return $http
+                        .get(urlService.folderCount, {
+                            excludeLoading: true
+                        })
+                        .then(function (folder) {
+                            self.folderCount = folder.data.rs;
+                            var firstCount = _.reduce(folder.data.rs, function (oldValue, currentValue) {
+                                return oldValue + currentValue.first;
+                            }, 0);
+
+                            var secondCount = _.reduce(folder.data.rs, function (oldValue, currentValue) {
+                                return oldValue + currentValue.second;
+                            }, 0);
+
+                            return $http.get(urlService.counters, {
+                                excludeLoading: true
+                            }).then(function (result) {
+                                result.data.rs.foldersCount = {
+                                    first: firstCount,
+                                    second: secondCount
+                                };
+                                result.data.rs.followupFolderCount = {
+                                    first: firstFollowCount,
+                                    second: secondFollowCount
+                                };
+                                // keep the g2g counters with original values unless reloaded by service after given interval
+                                result.data.rs.g2gDeptInbox = angular.copy(self.g2gIncomingCount);
+                                result.data.rs.g2gDeptReturned = angular.copy(self.g2gReturnedCount);
+
+                                self.counter = generator.interceptReceivedInstance('Counter', generator.generateInstance(result.data.rs, Counter));
+                                self.counter.overdueDocuments = self.counter.overdueIncomingDocuments = self.counter.overdueOutgoingDocuments = {
+                                    first: 0,
+                                    second: 0
+                                };
+                                return self.counter;
+                            }).catch(function (error) {
+                                return errorCode.checkIf(error, 'ENTITY_NOT_FOUND', function () {
+                                    return $q.resolve({});
+                                });
+                            });
+                        })
                 });
 
         };

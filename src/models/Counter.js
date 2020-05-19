@@ -25,7 +25,8 @@ module.exports = function (app) {
                     'menu_item_user_favorite_documents',
                     'menu_item_outgoing_deleted',
                     'menu_item_incoming_deleted',
-                    'menu_item_internal_deleted'
+                    'menu_item_internal_deleted',
+                    'menu_item_my_followup'
                 ],
                 maps = {
                     menu_item_outgoing: [
@@ -110,6 +111,7 @@ module.exports = function (app) {
                         'userInbox',
                         'userFavouriteDocument',
                         'foldersCount',
+                        'followupFolderCount',
                         function (currentValue, counter, employee, property) {
                             if (!employee.inRegistry() && employee.hasThesePermissions('GROUP_MAIL')) {
                                 currentValue = (counter.groupMail[property] + currentValue);
@@ -169,6 +171,9 @@ module.exports = function (app) {
                     ],
                     menu_item_internal_deleted: [
                         'internalDeleted'
+                    ],
+                    menu_item_my_followup: [
+                        'followupFolderCount'
                     ]
                 };
             /*User Inbox*/

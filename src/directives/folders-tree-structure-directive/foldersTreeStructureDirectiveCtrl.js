@@ -24,7 +24,11 @@ module.exports = function (app) {
         };
 
         self.counterHasFolderId = function (folder) {
-            return self.counterService.folderCount.hasOwnProperty(folder.id);
+            return self.counterProperty ? self.counterService[self.counterProperty].hasOwnProperty(folder.id) : self.counterService.folderCount.hasOwnProperty(folder.id);
+        };
+
+        self.getCounter = function (folder) {
+            return self.counterProperty ? self.counterService[self.counterProperty][folder.id] : self.counterService.folderCount[folder.id];
         }
 
     });

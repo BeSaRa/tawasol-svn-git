@@ -218,7 +218,6 @@ module.exports = function (app) {
                 .followupFolderDeleteBulk(array.reverse(), $event)
                 .then(function () {
                     self.reloadFollowupFolders();
-
                 });
         };
 

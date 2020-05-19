@@ -39,7 +39,7 @@
                             ng-class="{'md-sidenav-right':lang.current === 'ar'}">
                     <div class="p20 first-folder-list" layout="column">
                         <p>{{lang.user_folders}}</p>
-                        <folders-tree-structure-directive display-menu="true" count="true" disable-selected="0"
+                        <folders-tree-structure-directive display-menu="true" counter-property="folderCount" count="true" disable-selected="0"
                                                           allow-control="true"
                                                           add-callback="ctrl.createFolder"
                                                           edit-callback="ctrl.editFolder"

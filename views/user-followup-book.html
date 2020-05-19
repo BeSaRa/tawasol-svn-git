@@ -53,7 +53,8 @@
                 <md-sidenav id="sidebar-folder-structure" md-is-open="ctrl.sidebarStatus"
                             ng-class="{'md-sidenav-right':lang.current === 'ar'}">
                     <div class="p20 first-folder-list" layout="column">
-                        <folders-tree-structure-directive display-menu="true" count="true" disable-selected="0"
+                        <folders-tree-structure-directive display-menu="true" counter-property="followupFolderCount"
+                                                          count="true" disable-selected="0"
                                                           allow-control="true"
                                                           add-callback="ctrl.createFolder"
                                                           edit-callback="ctrl.editFolder"
