@@ -92,6 +92,11 @@
                                                            ng-click="ctrl.moveToFolderBulk($event)">
                                                     <md-icon md-svg-icon="folder-move" class="action-green"></md-icon>
                                                 </md-button>
+                                                <md-button class="md-icon-button" aria-label="{{lang.transfer_mail}}"
+                                                           tooltip="{{lang.transfer_mail}}"
+                                                           ng-click="ctrl.transferToAnotherEmployeeBulk($event)">
+                                                    <md-icon md-svg-icon="transfer" class="action-green"></md-icon>
+                                                </md-button>
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedFollowupBooks.length" md-column md-order-by="">

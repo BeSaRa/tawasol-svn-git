@@ -253,7 +253,10 @@ module.exports = function (app) {
             record
                 .addToFolder(true, $event)
                 .then(function () {
-                    self.reloadFollowupBooks(self.grid.page);
+                    self.reloadFollowupBooks(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
                 });
         };
 
@@ -265,7 +268,10 @@ module.exports = function (app) {
             return followUpUserService
                 .showAddBulkFollowupBooksToFolder(self.selectedFollowupBooks, true, $event)
                 .then(function () {
-                    self.reloadFollowupBooks(self.grid.page);
+                    self.reloadFollowupBooks(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
                 });
         };
 

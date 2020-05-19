@@ -118,4 +118,5 @@ module.exports = function (app) {
     require('./FollowupBookInterceptor')(app);
     require('./FollowupBookCriteriaInterceptor')(app);
     require('./UserFollowupBookLogInterceptor')(app);
+    require('./UserFollowupRequestInterceptor')(app);
 };

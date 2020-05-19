@@ -147,4 +147,5 @@ module.exports = function (app) {
     require('./followupFolderPopCtrl')(app);
     require('./followupBookSearchPopCtrl')(app);
     require('./followupFolderTreePopCtrl')(app);
+    require('./transferFollowupBookPopCtrl')(app);
 };

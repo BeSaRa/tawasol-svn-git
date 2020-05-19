@@ -352,6 +352,23 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Loads the followup folders by ouId and userId
+         * @param ouId
+         * @param userId
+         * @param hierarchy
+         * @returns {*}
+         */
+        self.loadFollowupFolderByOuAndUser = function(ouId, userId, hierarchy){
+            ouId = generator.getNormalizedValue(ouId, 'id');
+            userId = generator.getNormalizedValue(userId, 'id');
+            return $http.get(urlService.followUpFolders + '/user-id/'+userId+'/ou-id/' + ouId)
+                .then(function (result) {
+                    var folders = generator.generateCollection(result.data.rs, FollowUpFolder);
+                    return hierarchy ? self.hierarchy(folders) : folders;
+                });
+        };
+
+        /**
          * @description Loads the records for given followup folder
          * @param folder
          * @returns {*}
@@ -784,6 +801,69 @@ module.exports = function (app) {
                 .then(function (result) {
                     return _bulkMessages(result, records, ignoreMessage, 'inbox_failed_add_to_folder_selected', 'add_to_folder_success', 'add_to_folder_success_except_following');
                 });
+        };
+
+        /**
+         * @description open transfer dialog to select user to transfer.
+         * @param records
+         * @param currentFollowedUpUser
+         * @param $event
+         */
+        self.openTransferDialog = function (records, currentFollowedUpUser, $event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('transfer-followup-book'),
+                    controller: 'transferFollowupBookPopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    locals: {
+                        records: records,
+                        currentFollowedUpUser: currentFollowedUpUser
+                    },
+                    resolve: {
+                        organizations: function (organizationService) {
+                            'ngInject';
+                            return organizationService.getOrganizationsByRegOU(employeeService.getEmployee().getRegistryOUID());
+                        },
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.loadUserCommentsForDistribution();
+                        }
+                    }
+                })
+                .then(function (records) {
+                    var promise;
+                    if (!angular.isArray(records)) {
+                        promise = self.transferSingleFollowupBook(records);
+                    } else {
+                        promise = self.transferBulkFollowupBooks(records);
+                    }
+                    return promise;
+                });
+        };
+
+
+        /**
+         * @description transfer single followup book.
+         * @param userFollowupRequest
+         */
+        self.transferSingleFollowupBook = function (userFollowupRequest) {
+            return $http
+                .put((urlService.userFollowUp + '/transfer'), generator.interceptSendInstance('UserFollowupRequest', userFollowupRequest))
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        };
+        /**
+         * @description transfer bulk followup books.
+         * @param userFollowupRequests
+         */
+        self.transferBulkFollowupBooks = function (userFollowupRequests) {
+            return $http
+                .put((urlService.userFollowUp + '/transfer/bulk'), generator.interceptSendCollection('UserFollowupRequest', userFollowupRequests))
+                .then(function (result) {
+                    return result.data.rs;
+                })
         };
     });
 };

@@ -16,7 +16,8 @@ module.exports = function (app) {
                                                            ouApplicationUsers,
                                                            correspondenceService,
                                                            counterService,
-                                                           ResolveDefer) {
+                                                           ResolveDefer,
+                                                           toast) {
         'ngInject';
         var self = this;
         self.controllerName = 'userFollowupBookByUserCtrl';
@@ -241,6 +242,35 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Transfer to another employee
+         * @param record
+         * @param $event
+         * @param defer
+         */
+        self.transferToAnotherEmployee = function (record, $event, defer) {
+            followUpUserService
+                .openTransferDialog(record, self.selectedUser, $event)
+                .then(function () {
+                    self.reloadFollowupBooks(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get('transfer_mail_success'));
+                            new ResolveDefer(defer)
+                        });
+                })
+        };
+
+        self.transferToAnotherEmployeeBulk = function ($event) {
+            followUpUserService
+                .openTransferDialog(self.selectedFollowupBooks, self.selectedUser, $event)
+                .then(function () {
+                    self.reloadFollowupBooks(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get('transfer_mail_success'))
+                        });
+                });
+        };
+
+        /**
          * @description Preview document
          * @param record
          * @param $event
@@ -458,6 +488,18 @@ module.exports = function (app) {
                 showInView: true,
                 callback: self.moveToFolder,
                 class: "action-green",
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },// Transfer To Another Employee
+            {
+                type: 'action',
+                icon: 'transfer',
+                text: 'transfer_mail',
+                shortcut: true,
+                callback: self.transferToAnotherEmployee,
+                class: "action-green",
+                showInView: true,
                 checkShow: function (action, model) {
                     return true;
                 }

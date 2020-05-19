@@ -1,0 +1,159 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.transfer_reason}}">
+    <popup-toolbar-directive header-text="{{lang.transfer_reason}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="reason_form" autocomplete="off">
+                <div layout="column">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="organization">{{lang.organization_unit}}</label>
+                            <md-select name="organization" id="organization" required
+                                       ng-change="ctrl.getApplicationUsersForOU($event)"
+                                       aria-label="{{lang.organization_unit}}"
+                                       ng-model="ctrl.selectedOrganization"
+                                       ng-model-options="{trackBy: '$value'}"
+                                       md-on-close="ctrl.clearSearchText('ou')"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.ouSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option ng-value="ou.id"
+                                           ng-repeat="ou in ctrl.organizations | translatedNameFilter: ctrl.ouSearchText">
+                                    <span
+                                            md-highlight-text="ctrl.ouSearchText"
+                                            md-highlight-flags="i">{{ou.getTranslatedName()}}</span>
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="selectedApplicationUser">{{lang.select_user}}</label>
+                            <md-select name="selectedApplicationUser" id="selectedApplicationUser"
+                                       ng-change="ctrl.setSelectedUser()"
+                                       ng-required="ctrl.selectedOrganization"
+                                       ng-disabled="!ctrl.selectedOrganization"
+                                       aria-label="{{lang.select_user}}"
+                                       ng-model="ctrl.selectedApplicationUser"
+                                       ng-model-options="{trackBy: '$value'}">
+                                <md-option ng-value="user.applicationUser.id"
+                                           ng-repeat="user in ctrl.ouApplicationUsers track by $index">
+                                    {{user.getTranslatedApplicationUserName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="comment">{{lang.comment}}</label>
+                            <md-select ng-change="ctrl.setSelectedReason()" id="comment"
+                                       ng-disabled="!ctrl.selectedOrganization"
+                                       ng-model="ctrl.selectedComment"
+                                       md-on-close="ctrl.clearSearchText('comment')"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.commentSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option
+                                        ng-repeat="comment in ctrl.comments | translatedNameFilter: ctrl.commentSearchText"
+                                        ng-value="comment">
+                                    <span
+                                            md-highlight-text="ctrl.commentSearchText"
+                                            md-highlight-flags="i">{{comment.getCommentTitle()}}</span>
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="reason">{{lang.reason}}</label>
+                            <textarea id="reason" maxlength="200" minlength="3" name="reason"
+                                      ng-required="ctrl.selectedOrganization"
+                                      ng-disabled="!ctrl.selectedOrganization"
+                                      ng-model="ctrl.reason">
+                            </textarea>
+                            <div ng-messages="reason_form.reason.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:200})}}</div>
+                            </div>
+                            <div class="hint" ng-if="ctrl.isArray && !reason_form.reason.$error.required">{{lang.reason_all}}</div>
+                        </md-input-container>
+                    </div>
+                    <div class="first-folder-list">
+                        <folders-tree-structure-directive folders="ctrl.folders"
+                                                          highlight-selected="ctrl.selectedFolder"
+                                                          click-callback="ctrl.setSelectedFolder"></folders-tree-structure-directive>
+                    </div>
+                </div>
+            </form>
+            <div ng-if="ctrl.isArray" layout="column">
+                <md-card md-whiteframe="3" class="card-overlay">
+                    <md-table-container>
+                        <div flex scroll-directive>
+                            <table md-table multiple md-progress="ctrl.progress">
+                                <thead md-head>
+                                <tr md-row>
+                                    <th md-column>
+                                        <span>{{lang.document_subject}}</span>
+                                    </th>
+                                    <th md-column>
+                                        <span>{{lang.reason}}</span>
+                                    </th>
+                                    <th md-column>
+                                        <span>{{lang.username}}</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="document"
+                                    ng-repeat="record in ctrl.records track by $index">
+                                    <td md-cell>{{record.getTranslatedName()}}</td>
+                                    <td md-cell>
+                                        <div>
+                                            <md-button class="md-raised"
+                                                       ng-class="{'md-primary':ctrl.hasCustomReason(record)}"
+                                                       ng-click="ctrl.openReasonDialog(record , $event)">
+                                                {{lang.custom_reason}}
+                                            </md-button>
+                                        </div>
+                                    </td>
+                                    <td md-cell>
+                                        <div>
+                                            <md-input-container>
+                                                <label for="customAppUser">{{lang.select_user}}</label>
+                                                <md-select id="customAppUser" ng-model="record.customAppUser">
+                                                    <md-option ng-value="user.applicationUser.id"
+                                                               ng-model-options="{trackBy: '$value'}"
+                                                               ng-repeat="user in ctrl.ouApplicationUsers">
+                                                        {{user.applicationUser.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </md-table-container>
+                </md-card>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!ctrl.isValidForm(reason_form)"
+                   ng-click="ctrl.transferFollowupBook($event)">
+            {{lang.transfer}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closeTransferReason()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>
