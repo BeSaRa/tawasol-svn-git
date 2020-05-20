@@ -1730,7 +1730,7 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_my_followup'
             })
-            .state('app.administration.user-followup', {
+            .state('app.inbox.user-followup', {
                 url: '/user-followup',
                 templateUrl: templateProvider.getView('user-followup-book-by-user'),
                 controller: 'userFollowupBookByUserCtrl',

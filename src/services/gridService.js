@@ -61,7 +61,8 @@ module.exports = function (app) {
                 group: 'userGroup',
                 starred: 'starred',
                 inboxFilter: 'inboxFilter',
-                userFollowupBook: 'userFollowupBook'
+                userFollowupBook: 'userFollowupBook',
+                userFollowupBookByUser: 'userFollowupBookByUser'
             },
             department: {
                 incoming: 'depInc',
@@ -118,8 +119,7 @@ module.exports = function (app) {
                 attachmentType: 'attachType',
                 dynamicMenuItem: 'dynamicMenu',
                 organization: 'organization',
-                serialNumbers: 'serialNumbers',
-                userFollowupBookByUser: 'userFollowupBookByUser'
+                serialNumbers: 'serialNumbers'
             },
             others: {
                 linkedDoc: 'linkedDoc',

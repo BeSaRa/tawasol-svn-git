@@ -715,7 +715,7 @@ module.exports = function (app) {
                     return followUpUserService.loadFollowupFolders(true);
                 }
             })
-            .bulkResolveToState('app.administration.user-followup', {
+            .bulkResolveToState('app.inbox.user-followup', {
                 folders: function (followUpUserService) {
                     'ngInject';
                     return followUpUserService.loadFollowupFolders();
