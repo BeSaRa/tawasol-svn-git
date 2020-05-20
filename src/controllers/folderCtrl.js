@@ -1113,7 +1113,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.quickSend,
                 class: "action-green",
-                //permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
                     return true;
                 }
