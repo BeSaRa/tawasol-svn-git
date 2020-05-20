@@ -24,7 +24,8 @@ module.exports = function (app) {
                                                           downloadService,
                                                           $sce,
                                                           generator,
-                                                          rootEntity) {
+                                                          rootEntity,
+                                                          $filter) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondencePopCtrl';
@@ -749,6 +750,7 @@ module.exports = function (app) {
             self.stickyActions = _.filter(self.stickyActions, function (action) {
                 return self.isShowViewerAction(action);
             });
+            self.stickyActions = $filter('orderBy')(self.stickyActions, 'stickyIndex');
             self.stickyActionsChunk = _.chunk(self.stickyActions, 5);
         };
 
