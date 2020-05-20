@@ -11,7 +11,8 @@ module.exports = function (app) {
                                                                 followupOrganizations,
                                                                 ouApplicationUser,
                                                                 FollowupOrganization,
-                                                                organizationService) {
+                                                                organizationService,
+                                                                rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'followupUserOrganizationPopCtrl';
@@ -23,13 +24,15 @@ module.exports = function (app) {
         self.subOrganizations = [];
         self.Ou = null;
         self.regOu = null;
+        self.selectedSecurityLevels = null;
         self.selectedFollowupOrganizations = [];
-
+        self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
         self.ouApplicationUser = ouApplicationUser;
 
         var _resetFollowupOUModel = function () {
             self.Ou = null;
             self.regOu = null;
+            self.selectedSecurityLevels = null;
 
             self.followupOrganization = new FollowupOrganization({
                 userId: ouApplicationUser.applicationUser.id,
@@ -48,6 +51,7 @@ module.exports = function (app) {
             }
             self.followupOrganization.canEditDelete = true;
             self.followupOrganization.ouInfo = angular.copy(self.followupOrganization.followeeOUId);
+            self.followupOrganization.securityLevels = self.selectedSecurityLevels;
             self.followupOrganizations.push(self.followupOrganization);
 
             _resetFollowupOUModel();
@@ -113,9 +117,9 @@ module.exports = function (app) {
                 .loadChildrenOrganizations(self.regOu, true)
                 .then(function (result) {
                     // sort sections/sub-organizations
-                     result = _.sortBy(result, [function (ou) {
-                         return ou[langService.current + 'Name'].toLowerCase();
-                     }]);
+                    result = _.sortBy(result, [function (ou) {
+                        return ou[langService.current + 'Name'].toLowerCase();
+                    }]);
 
                     self.subOrganizations = result;
                 })

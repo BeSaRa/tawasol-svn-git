@@ -15,6 +15,7 @@ module.exports = function (app) {
                                                              ouApplicationUsers,
                                                              employeeService,
                                                              rootEntity,
+                                                             lookupService,
                                                              Information) {
         'ngInject';
         var self = this;
@@ -23,7 +24,6 @@ module.exports = function (app) {
         self.inlineOUSearchText = '';
         self.inlineAppUserSearchText = '';
         self.isFollowupSentItems = isFollowupSentItems;
-        self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
 
         var _mapRegOUSections = function () {
             // filter all regOU (has registry)
@@ -78,10 +78,16 @@ module.exports = function (app) {
         self.selectedSecurityLevels = selectedSecurityLevels || null;
 
         /**
-         * @description Get the Application Users for the selected Organization
+         * @description Get the Application Users and security levels for the selected Organization
          */
-        self.getApplicationUsersForOU = function ($event) {
+        self.getAppUsersAndSecurityLevelsForOU = function ($event) {
             self.selectedApplicationUser = null;
+            self.selectedSecurityLevels = null;
+            // get security level
+            self.securityLevels = _.filter(self.organizations, function (ou) {
+                return ou.id === self.selectedOrganization;
+            })[0].securityLevels;
+
             return ouApplicationUserService.loadRelatedOUApplicationUsers(self.selectedOrganization)
                 .then(function (result) {
                     self.ouApplicationUsers = result;

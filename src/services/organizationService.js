@@ -840,7 +840,7 @@ module.exports = function (app) {
             return $http.get(urlService.followupOu)
                 .then(function (result) {
                     result = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
-                    result = generator.interceptReceivedCollection('Organization', result);
+                    result = generator.interceptReceivedCollection('FollowupOrganization', result);
                     return result;
                 })
         };

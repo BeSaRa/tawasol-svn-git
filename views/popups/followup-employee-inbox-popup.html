@@ -11,7 +11,7 @@
                         <md-input-container flex>
                             <label for="organization">{{lang.organization_unit}}</label>
                             <md-select id="organization" name="organization" required
-                                       ng-change="ctrl.getApplicationUsersForOU($event)"
+                                       ng-change="ctrl.getAppUsersAndSecurityLevelsForOU($event)"
                                        aria-label="{{lang.organization_unit}}"
                                        ng-model="ctrl.selectedOrganization"
                                        md-on-close="ctrl.clearSearchText('inlineOU')"
@@ -68,7 +68,7 @@
                             <md-select id="securityLevels" name="securityLevels"
                                        ng-model-options="{trackBy:'$value.lookupKey'}"
                                        multiple
-                                       ng-disabled="!ctrl.selectedApplicationUser"
+                                       ng-disabled="!ctrl.selectedOrganization"
                                        ng-model="ctrl.selectedSecurityLevels">
                                 <md-option ng-value="option"
                                            ng-repeat="option in ctrl.securityLevels">

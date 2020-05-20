@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('FollowupOrganization', function (CMSModelInterceptor) {
+    app.factory('FollowupOrganization', function (CMSModelInterceptor, _) {
 
 
         'ngInject';
@@ -13,12 +13,23 @@ module.exports = function (app) {
             self.withSubs = false;
             self.ouInfo = null;
             self.userInfo = null;
+            self.securityLevels = null;
 
 
             var requiredFields = [];
 
             if (model)
                 angular.extend(this, model);
+
+            /**
+             * @description Get the translated security levels as separated by comma.
+             * @returns {string}
+             */
+            FollowupOrganization.prototype.getSecurityLevelsText = function () {
+                return _.map(this.securityLevels, function (securityLevel) {
+                    return securityLevel.getTranslatedName();
+                }).join(', ');
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
