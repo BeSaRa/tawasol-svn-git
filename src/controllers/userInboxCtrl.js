@@ -1543,6 +1543,8 @@ module.exports = function (app) {
                 text: 'grid_action_quick_send',
                 shortcut: true,
                 callback: self.quickSend,
+                sticky: true,
+                stickyIndex: 8,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {

@@ -1111,6 +1111,7 @@ module.exports = function (app) {
                 icon: 'sitemap',
                 text: 'grid_action_quick_send',
                 shortcut: true,
+                sticky: true,
                 callback: self.quickSend,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
