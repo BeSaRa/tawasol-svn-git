@@ -382,7 +382,14 @@
                                                 {{ctrl.applicationUser.getTranslatedYesNo('slowConnectionMode')}}</label>
                                         </md-switch>
                                     </div>
-                                    <md-input-container flex></md-input-container>
+                                    <div class="cms-input-container" flex>
+                                        <md-switch flex ng-model="ctrl.applicationUser.pinCodePrompt"
+                                                   ng-disabled="!ctrl.globalSetting.isDigitalCertificateEnabled()"
+                                                   aria-label="{{lang.prompt_for_pincode_in_approve}}">
+                                            <label>{{lang.prompt_for_pincode_in_approve}} :
+                                                {{ctrl.applicationUser.getTranslatedYesNo('pinCodePrompt')}}</label>
+                                        </md-switch>
+                                    </div>
                                 </div>
                             </div>
                         </md-content>
