@@ -597,7 +597,7 @@ module.exports = function (app) {
             self.searchCriteriaCopy = angular.copy(self.searchCriteria);
             if (!skipDates) {
                 self.searchCriteria.fromFollowupDate = moment().subtract(configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE, configurationService.FOLLOWUP_BOOK_FILTER_START_BEFORE_TYPE).toDate();
-                self.searchCriteria.toFollowupDate = moment().endOf("day").toDate();
+                self.searchCriteria.toFollowupDate = moment(generator.getNextDaysDate(30)).endOf("day").toDate();
             }
         };
 
