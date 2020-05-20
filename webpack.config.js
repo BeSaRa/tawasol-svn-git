@@ -41,7 +41,8 @@ module.exports = function (env) {
         devServer: {
             hot: true,
             open: true,
-            stats: "errors-only"
+            stats: "errors-only",
+            historyApiFallback: true
         },
         module: {
             rules: [

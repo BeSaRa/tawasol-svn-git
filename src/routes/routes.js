@@ -9,7 +9,7 @@ module.exports = function (app) {
                          momentProvider) {
         'ngInject';
         $locationProvider.hashPrefix('');
-
+        $locationProvider.html5Mode(true);
         var templateProvider = cmsTemplateProvider;
 
         var moment = momentProvider.$get();
