@@ -34,11 +34,11 @@
                         </md-input-container>
                     </div>
                     <div layout="row">
-<!--                        <div flex class="p20">-->
-<!--                            <md-switch ng-model="ctrl.followupFolder.status" aria-label="{{lang.status}}">-->
-<!--                                <label>{{lang.status}} : {{ctrl.followupFolder.getTranslatedStatus()}}</label>-->
-<!--                            </md-switch>-->
-<!--                        </div>-->
+                        <div flex class="cms-input-container">
+                            <md-switch flex ng-model="ctrl.followupFolder.status" aria-label="{{lang.status}}">
+                                <label>{{lang.status}} : {{ctrl.followupFolder.getTranslatedStatus()}}</label>
+                            </md-switch>
+                        </div>
                         <md-input-container flex ng-if="ctrl.editMode">
                             <label for="parent">{{lang.parent}}</label>
                             <md-select name="parent" id="parent" required
