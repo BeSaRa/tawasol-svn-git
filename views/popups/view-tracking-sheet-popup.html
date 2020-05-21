@@ -172,8 +172,9 @@
                                     <md-input-container flex>
                                         <label for="receivedIncomingSite">{{lang.sites_sub_site}}</label>
                                         <md-select name="receivedIncomingSite" id="receivedIncomingSite"
-                                                   ng-model="ctrl.selectedReceivedIncomingSite"
-                                                   ng-model-options="{trackBy: '$value.vsId'}">
+                                                   ng-model="ctrl.trackingSheetService.selectedReceivedIncomingSite"
+                                                   ng-model-options="{trackBy: '$value.vsId'}"
+                                                   ng-change="ctrl.getSelectedReceivedIncomingSiteLength($event)">
                                             <md-option
                                                     ng-repeat="option in ctrl.receivedIncomingHistoryRecords track by $index"
                                                     ng-value="option">{{option.vts_subSiteInfo.getTranslatedName()}}
@@ -210,7 +211,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="record" md-row
-                                                    ng-repeat="record in ctrl.selectedReceivedIncomingSite.eventLogViewList | filter:ctrl.searchModelReceivedIncomingHistory | limitTo: ctrl.receivedIncomingHistoryGrid.limit: ((ctrl.receivedIncomingHistoryGrid.page - 1) * ctrl.receivedIncomingHistoryGrid.limit) track by $index">
+                                                    ng-repeat="record in ctrl.trackingSheetService.selectedReceivedIncomingSite.eventLogViewList | filter:ctrl.searchModelReceivedIncomingHistory | limitTo: ctrl.receivedIncomingHistoryGrid.limit: ((ctrl.receivedIncomingHistoryGrid.page - 1) * ctrl.receivedIncomingHistoryGrid.limit) track by $index">
                                                     <td md-cell class="zero-p-right">
                                                         {{record.userFromInfo.getTranslatedName()}}
                                                     </td>
@@ -238,7 +239,7 @@
                                                 md-limit-options="ctrl.receivedIncomingHistoryGrid.limitOptions"
                                                 md-limit="ctrl.receivedIncomingHistoryGrid.limit"
                                                 md-page="ctrl.receivedIncomingHistoryGrid.page"
-                                                md-total="{{ctrl.receivedIncomingHistoryRecords.length}}"
+                                                md-total="{{ctrl.selectedReceivedIncomingSiteLength}}"
                                                 md-page-select
                                                 md-on-paginate="ctrl.receivedIncomingHistoryGrid.pagingCallback"></md-table-pagination>
                                     </md-table-container>

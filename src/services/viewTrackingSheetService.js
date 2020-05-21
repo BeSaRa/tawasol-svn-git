@@ -43,6 +43,7 @@ module.exports = function (app) {
             self.fullHistory = [];
             self.documentLinkViewerRecords = [];
             self.followupLogRecords = [];
+            self.selectedReceivedIncomingSite = null;
 
             self.printPage = 'views/print/TrackingSheetPrint.html';
 
@@ -1003,7 +1004,7 @@ module.exports = function (app) {
                 }
                 /* Received Incoming Book History / ExportedTrackingSheetResult */
                 else if (heading === 'view_tracking_sheet_received_incoming_history') {
-                    if (self.receivedIncomingHistoryRecords.length) {
+                    if (self.selectedReceivedIncomingSite && self.selectedReceivedIncomingSite.eventLogViewList && self.selectedReceivedIncomingSite.eventLogViewList.length) {
                         headerNames = [
                             langService.get('view_tracking_sheet_sender'),
                             langService.get('view_tracking_sheet_receiver'),
@@ -1012,8 +1013,8 @@ module.exports = function (app) {
                             langService.get('view_tracking_sheet_action_date'),
                             langService.get('view_tracking_sheet_comments')
                         ];
-                        for (i = 0; i < self.receivedIncomingHistoryRecords.length; i++) {
-                            record = self.receivedIncomingHistoryRecords[i];
+                        for (i = 0; i < self.selectedReceivedIncomingSite.eventLogViewList.length; i++) {
+                            record = self.selectedReceivedIncomingSite.eventLogViewList[i];
                             data.push([
                                 record.userFromInfo.getTranslatedName(),
                                 record.userToInfo.getTranslatedName(),

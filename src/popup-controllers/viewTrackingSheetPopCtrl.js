@@ -33,6 +33,7 @@ module.exports = function (app) {
         var info = document.getInfo();
         self.gridType = gridType;
         self.heading = heading;
+        self.trackingSheetService = viewTrackingSheetService;
         var docSubject = info.title ? info.title : self.document.docSubject;
 
         if (self.gridType !== 'tabs') {
@@ -67,8 +68,9 @@ module.exports = function (app) {
         self.fullHistoryRecords = fullHistoryRecords;
         self.documentLinkViewerRecords = documentLinkViewerRecords;
         self.followupLogRecords = followupLogRecords;
-
-        self.selectedReceivedIncomingSite = null;
+        self.selectedReceivedIncomingSiteLength = 0;
+        self.trackingSheetService.selectedReceivedIncomingSite = null;
+        // self.selectedReceivedIncomingSite = null;
 
         /**
          * @description Gets the grid records by sorting
@@ -259,11 +261,18 @@ module.exports = function (app) {
             self.receivedIncomingHistoryRecords = $filter('orderBy')(self.receivedIncomingHistoryRecords, self.receivedIncomingHistoryGrid.order);
         };
 
+        self.getSelectedReceivedIncomingSiteLength = function ($event) {
+            if (self.trackingSheetService.selectedReceivedIncomingSite && self.trackingSheetService.selectedReceivedIncomingSite.eventLogViewList) {
+                self.selectedReceivedIncomingSiteLength = self.trackingSheetService.selectedReceivedIncomingSite.eventLogViewList.length;
+                _setGridNameRecordCountMap('view_tracking_sheet_received_incoming_history', self.selectedReceivedIncomingSiteLength);
+            }
+        };
+
         self.receivedIncomingHistoryGrid = {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.trackingSheet.receivedIncomingHistory) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.receivedIncomingHistory, self.receivedIncomingHistoryRecords.length),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.trackingSheet.receivedIncomingHistory, self.selectedReceivedIncomingSiteLength),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.trackingSheet.receivedIncomingHistory, limit);
             },
@@ -450,7 +459,7 @@ module.exports = function (app) {
         self.gridNameRecordCountMap = {
             'view_tracking_sheet_work_flow_history': self.workflowHistoryRecords.length,
             'view_tracking_sheet_outgoing_delivery_reports': self.outgoingDeliveryReportRecords.length,
-            'view_tracking_sheet_received_incoming_history': self.receivedIncomingHistoryRecords.length,
+            'view_tracking_sheet_received_incoming_history': self.selectedReceivedIncomingSiteLength,
             'view_tracking_sheet_full_history': self.fullHistoryRecords.length,
             'view_tracking_sheet_merged_linked_document_history': self.mergedLinkedDocumentHistoryRecords.length,
             'view_tracking_sheet_attachments_history': self.attachmentsHistoryRecords.length,
@@ -503,7 +512,7 @@ module.exports = function (app) {
                 return viewTrackingSheetService.loadReceivedIncomingHistory(self.document)
                     .then(function (result) {
                         self.receivedIncomingHistoryRecords = result;
-                        _setGridNameRecordCountMap(tabName, result.length);
+                        // _setGridNameRecordCountMap(tabName, result.length);
                         self.receivedIncomingHistoryGrid.firstLoaded = true;
                         return result;
                     })
