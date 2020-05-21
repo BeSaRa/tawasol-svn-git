@@ -44,7 +44,7 @@ module.exports = function (app) {
             self.documentLinkViewerRecords = [];
             self.followupLogRecords = [];
 
-            self.printPage = 'print/TrackingSheetPrint.html';
+            self.printPage = 'views/print/TrackingSheetPrint.html';
 
             var splitNumber = 7;
 

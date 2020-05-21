@@ -16,7 +16,7 @@ module.exports = function (app) {
         var self = this;
         self.serviceName = 'followUpUserService';
         self.allFollowUpFolders = [];
-        self.printPage = "print/UserFollowupPrint.html";
+        self.printPage = "views/print/UserFollowupPrint.html";
 
         /**
          * @description bulk message for any bulk actions.
