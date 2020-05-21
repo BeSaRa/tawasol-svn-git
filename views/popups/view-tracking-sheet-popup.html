@@ -174,7 +174,7 @@
                                         <md-select name="receivedIncomingSite" id="receivedIncomingSite"
                                                    ng-model="ctrl.trackingSheetService.selectedReceivedIncomingSite"
                                                    ng-model-options="{trackBy: '$value.vsId'}"
-                                                   ng-change="ctrl.getSelectedReceivedIncomingSiteLength($event)">
+                                                   ng-change="ctrl.setSelectedReceivedIncomingSiteLength($event)">
                                             <md-option
                                                     ng-repeat="option in ctrl.receivedIncomingHistoryRecords track by $index"
                                                     ng-value="option">{{option.vts_subSiteInfo.getTranslatedName()}}

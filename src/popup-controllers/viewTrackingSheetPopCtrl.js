@@ -261,7 +261,7 @@ module.exports = function (app) {
             self.receivedIncomingHistoryRecords = $filter('orderBy')(self.receivedIncomingHistoryRecords, self.receivedIncomingHistoryGrid.order);
         };
 
-        self.getSelectedReceivedIncomingSiteLength = function ($event) {
+        self.setSelectedReceivedIncomingSiteLength = function ($event) {
             if (self.trackingSheetService.selectedReceivedIncomingSite && self.trackingSheetService.selectedReceivedIncomingSite.eventLogViewList) {
                 self.selectedReceivedIncomingSiteLength = self.trackingSheetService.selectedReceivedIncomingSite.eventLogViewList.length;
                 _setGridNameRecordCountMap('view_tracking_sheet_received_incoming_history', self.selectedReceivedIncomingSiteLength);
