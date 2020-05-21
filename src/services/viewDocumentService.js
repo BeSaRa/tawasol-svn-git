@@ -1230,6 +1230,12 @@ module.exports = function (app) {
                         var documentClass = result.data.rs.metaData.classDescription;
                         result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
                         return result.data.rs;
+                    }).catch(function (error) {
+                        if (errorCode.checkIf(error, 'DOCUMENT_HAS_BEEN_DELETED') === true) {
+                            dialog.errorMessage(langService.get('document_has_been_deleted'));
+                            return $q.reject('documentDeleted');
+                        }
+                        return $q.reject(error);
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
