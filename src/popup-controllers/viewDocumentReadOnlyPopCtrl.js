@@ -54,7 +54,7 @@ module.exports = function (app) {
          * @description Toggles the view mode for the attachment
          */
         self.toggleSlowConnectionMode = function ($event) {
-            if (!rootEntity.getGlobalSettings().isSlowConnectionMode()) {
+            if (self.typeOfDoc === 'otp-doc' || !rootEntity.getGlobalSettings().isSlowConnectionMode()) {
                 return _getOriginalMainDocContent();
             }
 
