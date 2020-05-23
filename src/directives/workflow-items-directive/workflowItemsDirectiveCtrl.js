@@ -80,6 +80,14 @@ module.exports = function (app) {
             _getGridLimit();
         });
 
+        /**
+         * @description Checks if SLA Due date is disabled
+         * @returns {boolean}
+         */
+        self.isSLADueDateDisabled = function (distWorkflowItem) {
+            return distWorkflowItem.getWorkflowItemType().toLowerCase() === 'groupmail';
+        };
+
         function _setDistWorkflowItem(distWorkflowItem, result) {
             distWorkflowItem
                 .setDueDate(result.dueDate)
@@ -92,7 +100,9 @@ module.exports = function (app) {
                 .setEscalationUserOUId(result.escalationUserId);
 
             if (self.fromPredefined) {
-                distWorkflowItem.setSLADueDate(result.sLADueDate);
+                if (!self.isSLADueDateDisabled(distWorkflowItem)) {
+                    distWorkflowItem.setSLADueDate(result.sLADueDate);
+                }
             }
         }
 

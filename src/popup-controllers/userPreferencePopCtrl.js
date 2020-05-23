@@ -1354,7 +1354,6 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.predefinedActions = result;
                     self.predefinedActionsCopy = angular.copy(self.predefinedActions);
-                    console.log('self.predefinedActionsCopy', self.predefinedActionsCopy);
                     self.selectedPredefinedActions = [];
                     defer.resolve(true);
                     if (pageNumber)

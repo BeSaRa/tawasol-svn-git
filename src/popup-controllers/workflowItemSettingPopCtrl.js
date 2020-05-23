@@ -146,6 +146,14 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Checks if SLA Due date is disabled
+         * @returns {boolean}
+         */
+        self.isSLADueDateDisabled = function(){
+          return distWorkflowItem.getWorkflowItemType().toLowerCase() === 'groupmail';
+        };
+
+        /**
          * @desc open dialog to select escalation user
          * @param $event
          * @returns {promise}

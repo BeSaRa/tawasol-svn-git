@@ -52,6 +52,14 @@ module.exports = function (app) {
             });
         }
 
+        /**
+         * @description Checks if SLA Due date is disabled
+         * @returns {boolean}
+         */
+        self.isSLADueDateDisabled = function (distWorkflowItem) {
+            return distWorkflowItem.getWorkflowItemType().toLowerCase() === 'groupmail';
+        };
+
         function _setDistWorkflowItem(distWorkflowItem, result) {
             distWorkflowItem
                 .setDueDate(result.dueDate)
@@ -64,8 +72,10 @@ module.exports = function (app) {
                 .setEscalationUser(result.escalationUserId)
                 .setEscalationUserOUId(result.escalationUserId);
 
-            if (self.fromPredefined){
-                distWorkflowItem.setSLADueDate(result.sLADueDate);
+            if (self.fromPredefined) {
+                if (!self.isSLADueDateDisabled(distWorkflowItem)) {
+                    distWorkflowItem.setSLADueDate(result.sLADueDate);
+                }
             }
 
             // hide the comment dropdown

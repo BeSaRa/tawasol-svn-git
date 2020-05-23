@@ -396,6 +396,9 @@ module.exports = function (app) {
 
         function _mapPredefinedActionMemberOrganizations(collection, gridName, fromLaunch) {
             return _.map(collection, function (workflowOrganization) {
+                if (gridName === 'OUGroup') {
+                    workflowOrganization.sLADueDate = null;
+                }
                 return (new DistributionOUWFItem()).mapFromPredefinedActionMemberOrganization(workflowOrganization, fromLaunch).setGridName(gridName || null);
             });
         }

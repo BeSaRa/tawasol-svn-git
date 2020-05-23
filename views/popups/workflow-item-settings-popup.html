@@ -49,6 +49,7 @@
                                ng-model="ctrl.distWorkflowItem.sLADueDate"
                                custom-validate-directive="number"
                                min-max-number-directive
+                               ng-disabled="ctrl.isSLADueDateDisabled()"
                                min="1">
                         <div ng-messages="distWorkflowItem_form.sLADueDate.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
