@@ -104,6 +104,10 @@ module.exports = function (app) {
                 this.isSecureAction = isSecureAction;
                 return this;
             };
+            DistributionWFItem.prototype.setSendRelatedDocs = function (isSendRelatedDocs) {
+                this.sendRelatedDocs = isSendRelatedDocs;
+                return this;
+            };
             DistributionWFItem.prototype.setSendEmail = function (sendEmail) {
                 this.sendEmail = sendEmail || false;
                 return this;

@@ -73,7 +73,8 @@ module.exports = function (app) {
                     .setEscalationUserOUId(user.escalationUserOUId)
                     .setAction(user.wfActionInfo)
                     .setComments(user.userComment)
-                    .setSecureAction(user.secureComment);
+                    .setSecureAction(user.secureComment)
+                    .setSendRelatedDocs(user.sendRelatedDocs);
 
                 if (!forLaunch) {
                     this.setSLADueDate(user.sLADueDate)
