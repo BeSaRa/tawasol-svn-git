@@ -384,6 +384,9 @@ module.exports = function (app) {
         if (self.editMode && !employeeService.getEmployee().isAdmin) {
             self.disabledFields.push('loginName', 'domainName');
         }
+        if (!self.globalSetting.isDigitalCertificateEnabled()) {
+            self.disabledFields.push('pinCodePrompt');
+        }
 
         if (!self.globalSetting.enableSMSNotification) {
             self.disabledFields.push(

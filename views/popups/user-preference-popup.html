@@ -384,6 +384,7 @@
                                     </div>
                                     <div class="cms-input-container" flex>
                                         <md-switch flex ng-model="ctrl.applicationUser.pinCodePrompt"
+                                                   ng-if="ctrl.globalSetting.isDigitalCertificateEnabled()"
                                                    ng-disabled="!ctrl.globalSetting.isDigitalCertificateEnabled()"
                                                    aria-label="{{lang.prompt_for_pincode_in_approve}}">
                                             <label>{{lang.prompt_for_pincode_in_approve}} :

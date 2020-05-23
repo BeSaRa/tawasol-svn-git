@@ -255,6 +255,10 @@ module.exports = function (app) {
             // 'searchAmountLimit'
         ];
 
+        if (!self.globalSetting.isDigitalCertificateEnabled()) {
+            self.disabledFields.push('pinCodePrompt');
+        }
+
         if (!self.globalSetting.enableSMSNotification) {
             self.disabledFields.push(
                 'subscriptionsmsNotify',
