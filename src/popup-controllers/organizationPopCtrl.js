@@ -2084,14 +2084,14 @@ module.exports = function (app) {
             'security_settings',
             'workflow_settings',
             'document_templates',
+            'serials',
             'children',
             'classifications',
             'correspondence_sites',
             'private_registry_ou',
             'property_config',
             'users',
-            'departmentUsers',
-            'serials'
+            'departmentUsers'
         ];
 
         self.setCurrentTab = function (tabName) {
@@ -2136,7 +2136,7 @@ module.exports = function (app) {
             })
         }
 
-        self.selectedTab = '';
+        self.selectedTab = 'basic';
         self.selectedTabIndex = 0;
         _setDefaultSelectedTab();
     });
