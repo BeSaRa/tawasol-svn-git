@@ -9,6 +9,7 @@ module.exports = function (app) {
             self.ouId = null;
             self.parent = null;
             self.userId = null;
+            self.status = true;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [
