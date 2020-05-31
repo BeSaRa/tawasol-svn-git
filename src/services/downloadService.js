@@ -22,11 +22,12 @@ module.exports = function (app) {
         self.controllerMethod = {
             /**
              * @description Download the main document
-             * @param vsId
+             * @param record
              * @param $event
              * @param ignoreMAIP
              */
-            mainDocumentDownload: function (vsId, $event, ignoreMAIP) {
+            mainDocumentDownload: function (record, $event, ignoreMAIP) {
+                var info = record.getInfo();
                 return self.selectMAIPLabels(ignoreMAIP)
                     .then(function (selectedLabel) {
                         var labelId = null;
@@ -34,8 +35,7 @@ module.exports = function (app) {
                             // download with labelId
                             labelId = selectedLabel;
                         }
-                        vsId = typeof vsId.getInfo === 'function' ? vsId.getInfo().vsId : vsId;
-                        return self.downloadMainDocument(vsId, labelId).then(function (result) {
+                        return self.downloadMainDocument(info.vsId, info.docClassId, labelId).then(function (result) {
                             window.open(result);
                             //generator.checkIfBrowserPopupBlocked(window);
                             return true;
@@ -44,10 +44,11 @@ module.exports = function (app) {
             },
             /**
              * @description Download Composite Document
-             * @param vsId
+             * @param record
              * @param $event
              */
-            compositeDocumentDownload: function (vsId, $event) {
+            compositeDocumentDownload: function (record, $event) {
+                var info = record.getInfo();
                 return self.selectMAIPLabels()
                     .then(function (selectedLabel) {
                         var labelId = null;
@@ -55,8 +56,7 @@ module.exports = function (app) {
                             // download with labelId
                             labelId = selectedLabel;
                         }
-                        vsId = typeof vsId.getInfo === 'function' ? vsId.getInfo().vsId : vsId;
-                        return self.downloadCompositeDocument(vsId, labelId).then(function (result) {
+                        return self.downloadCompositeDocument(info.vsId, info.docClassId, labelId).then(function (result) {
                             window.open(result);
                             return true;
                         });
@@ -64,12 +64,14 @@ module.exports = function (app) {
             },
             /**
              * @description Download Attachment
-             * @param vsId
+             * @param attachmentVsId
+             * @param docClassId
+             * @param documentVsId
              * @param $event
              */
-            attachmentDownload: function (vsId, $event) {
-                vsId = typeof vsId.getInfo === 'function' ? vsId.getInfo().vsId : vsId;
-                return self.downloadAttachment(vsId).then(function (result) {
+            attachmentDownload: function (attachmentVsId, docClassId, documentVsId, $event) {
+                attachmentVsId = typeof attachmentVsId.getInfo === 'function' ? attachmentVsId.getInfo().vsId : attachmentVsId;
+                return self.downloadAttachment(attachmentVsId, docClassId, documentVsId).then(function (result) {
                     window.open(result);
                     return true;
                 });
@@ -119,10 +121,11 @@ module.exports = function (app) {
         };
 
         var _generateQueryString = function (queryStringOptions) {
-            var queryString = '?', keys = Object.keys(queryStringOptions), key;
+            var queryString = '?', keys = Object.keys(queryStringOptions), key, valid = false;
             for (var i = 0; i < keys.length; i++) {
                 key = keys[i];
-                if (queryStringOptions[key]) {
+                valid = typeof queryStringOptions[key] !== 'undefined' && queryStringOptions[key] !== null && queryStringOptions[key] !== '';
+                if (valid) {
                     queryString += key + '=' + queryStringOptions[key] + '&';
                 }
             }
@@ -202,10 +205,11 @@ module.exports = function (app) {
         /**
          * @description download main document from server
          */
-        self.downloadMainDocument = function (vsId, labelId) {
+        self.downloadMainDocument = function (vsId, docClassId, labelId) {
             var queryString = _generateQueryString({
                 //'tawasol-auth-header': tokenService.getToken(),
-                'labelId': labelId
+                'labelId': labelId,
+                'docClassId': docClassId
             });
             return $http
                 .get(urlService.downloadDocument + '/' + vsId + queryString)
@@ -232,6 +236,37 @@ module.exports = function (app) {
         };
 
         /**
+         * @description download composite document from server
+         */
+        self.downloadCompositeDocument = function (vsId, docClassId, labelId) {
+            var queryString = _generateQueryString({
+                //'tawasol-auth-header': tokenService.getToken(),
+                'labelId': labelId,
+                'docClassId': docClassId
+            });
+            return $http
+                .get(urlService.downloadDocumentComposite + '/' + vsId + queryString)
+                .then(function (result) {
+                    return result.data.rs;
+                })
+        };
+
+        /**
+         * @description download attachment from server
+         */
+        self.downloadAttachment = function (attachmentVsId, docClassId, documentVsId) {
+            var queryString = _generateQueryString({
+                'corVsid': documentVsId,
+                'docClassId': docClassId
+            });
+            return $http
+                .get(urlService.downloadDocumentAttachment + '/' + attachmentVsId + queryString)
+                .then(function (result) {
+                    return result.data.rs;
+                })
+        };
+
+        /**
          * @description download attachment content as PDF from server
          */
         self.getAttachmentContentAsPDF = function (vsId, labelId) {
@@ -249,32 +284,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description download composite document from server
-         */
-        self.downloadCompositeDocument = function (vsId, labelId) {
-            var queryString = _generateQueryString({
-                //'tawasol-auth-header': tokenService.getToken(),
-                'labelId': labelId
-            });
-            return $http
-                .get(urlService.downloadDocumentComposite + '/' + vsId + queryString)
-                .then(function (result) {
-                    return result.data.rs;
-                })
-        };
-
-        /**
-         * @description download attachment from server
-         */
-        self.downloadAttachment = function (vsId) {
-            return $http
-                .get(urlService.downloadDocumentAttachment + '/' + vsId)
-                .then(function (result) {
-                    return result.data.rs;
-                })
-        };
-
-        /**
          * @description download document template from server
          */
         self.downloadDocumentTemplate = function (vsId) {
@@ -287,8 +296,10 @@ module.exports = function (app) {
 
         /**
          * @description get main document email content from server
+         * @param vsId
+         * @param docClassId
          */
-        self.getMainDocumentEmailContent = function (vsId) {
+        self.getMainDocumentEmailContent = function (vsId, docClassId) {
             self.selectMAIPLabels()
                 .then(function (selectedLabel) {
                     var labelId = null;
@@ -298,7 +309,8 @@ module.exports = function (app) {
                     }
                     var queryString = _generateQueryString({
                         //'tawasol-auth-header' : tokenService.getToken(),
-                        'labelId': labelId
+                        'labelId': labelId,
+                        'docClassId': docClassId
                     });
                     $http
                         .get(urlService.getDocumentEmailContent + '/' + vsId + queryString)
@@ -314,8 +326,10 @@ module.exports = function (app) {
 
         /**
          * @description get composite document email content from server
+         * @param vsId
+         * @param docClassId
          */
-        self.getCompositeDocumentEmailContent = function (vsId) {
+        self.getCompositeDocumentEmailContent = function (vsId, docClassId) {
             self.selectMAIPLabels()
                 .then(function (selectedLabel) {
                     var labelId = null;
@@ -325,7 +339,8 @@ module.exports = function (app) {
                     }
                     var queryString = _generateQueryString({
                         //'tawasol-auth-header' : tokenService.getToken(),
-                        'labelId': labelId
+                        'labelId': labelId,
+                        'docClassId': docClassId
                     });
 
                     dialog.confirmThreeButtonMessage(langService.get('select_attachment_type_to_email'), '', langService.get('send_as_pdf_file'), langService.get('send_as_zip_file'))

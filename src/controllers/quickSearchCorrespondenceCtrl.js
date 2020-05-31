@@ -348,23 +348,22 @@ module.exports = function (app) {
 
         /**
          * @description download main document for searched Correspondence document
-         * @param searchedCorrespondenceDocument
+         * @param correspondence
          * @param $event
          */
-        self.downloadMainDocument = function (searchedCorrespondenceDocument, $event) {
-            downloadService.controllerMethod
-                .mainDocumentDownload(searchedCorrespondenceDocument.vsId);
+        self.downloadMainDocument = function (correspondence, $event) {
+            correspondence
+                .mainDocumentDownload($event);
         };
 
         /**
          * @description download composite document for searched Correspondence document
-         * @param searchedCorrespondenceDocument
+         * @param correspondence
          * @param $event
          */
-        self.downloadCompositeDocument = function (searchedCorrespondenceDocument, $event) {
-            //console.log('download composite document for searched outgoing document : ', searchedCorrespondenceDocument);
-            downloadService.controllerMethod
-                .compositeDocumentDownload(searchedCorrespondenceDocument.vsId);
+        self.downloadCompositeDocument = function (correspondence, $event) {
+            correspondence
+                .compositeDocumentDownload($event);
         };
 
         /**
@@ -386,20 +385,22 @@ module.exports = function (app) {
 
         /**
          * @description send link to document for searched Correspondence document
-         * @param searchedCorrespondenceDocument
+         * @param correspondence
          * @param $event
          */
-        self.sendLinkToDocumentByEmail = function (searchedCorrespondenceDocument, $event) {
-            downloadService.getMainDocumentEmailContent(searchedCorrespondenceDocument.getInfo().vsId);
+        self.sendLinkToDocumentByEmail = function (correspondence, $event) {
+            correspondence
+                .getMainDocumentEmailContent($event);
         };
 
         /**
          * @description send composite document as attachment for searched Correspondence document
-         * @param searchedCorrespondenceDocument
+         * @param correspondence
          * @param $event
          */
-        self.sendCompositeDocumentAsAttachmentByEmail = function (searchedCorrespondenceDocument, $event) {
-            downloadService.getCompositeDocumentEmailContent(searchedCorrespondenceDocument.getInfo().vsId);
+        self.sendCompositeDocumentAsAttachmentByEmail = function (correspondence, $event) {
+            correspondence
+                .getCompositeDocumentEmailContent($event);
         };
 
 

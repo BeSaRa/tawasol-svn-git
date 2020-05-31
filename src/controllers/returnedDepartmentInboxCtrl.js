@@ -427,22 +427,22 @@ module.exports = function (app) {
 
         /**
          * @description Download Main Document
-         * @param returnedDepartmentInbox
+         * @param workItem
          * @param $event
          */
-        self.downloadMainDocument = function (returnedDepartmentInbox, $event) {
-            downloadService.controllerMethod
-                .mainDocumentDownload(returnedDepartmentInbox)
+        self.downloadMainDocument = function (workItem, $event) {
+            workItem
+                .mainDocumentDownload($event);
         };
 
         /**
          * @description Download Composite Document
-         * @param returnedDepartmentInbox
+         * @param workItem
          * @param $event
          */
-        self.downloadCompositeDocument = function (returnedDepartmentInbox, $event) {
-            downloadService.controllerMethod
-                .compositeDocumentDownload(returnedDepartmentInbox);
+        self.downloadCompositeDocument = function (workItem, $event) {
+            workItem
+                .compositeDocumentDownload($event);
         };
 
         /**
@@ -472,7 +472,8 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
-            downloadService.getMainDocumentEmailContent(returnedDepartmentInbox.getInfo().vsId);
+            returnedDepartmentInbox
+                .getMainDocumentEmailContent($event);
         };
 
         /**
@@ -485,7 +486,8 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
-            downloadService.getCompositeDocumentEmailContent(returnedDepartmentInbox.getInfo().vsId);
+            returnedDepartmentInbox
+                .getCompositeDocumentEmailContent($event);
         };
 
         /**

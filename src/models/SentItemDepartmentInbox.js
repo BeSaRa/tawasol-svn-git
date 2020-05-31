@@ -5,7 +5,8 @@ module.exports = function (app) {
                                                      managerService,
                                                      lookupService,
                                                      _,
-                                                     rootEntity) {
+                                                     rootEntity,
+                                                     downloadService) {
         'ngInject';
         return function SentItemDepartmentInbox(model) {
             var self = this, correspondenceService = null, viewDocumentService;
@@ -226,6 +227,23 @@ module.exports = function (app) {
 
             SentItemDepartmentInbox.prototype.canSendByFax = function () {
                 return rootEntity.returnRootEntity().rootEntity.faxEnabled;
+            };
+
+            SentItemDepartmentInbox.prototype.mainDocumentDownload = function ($event) {
+                return downloadService.controllerMethod
+                    .mainDocumentDownload(this, $event);
+            };
+            SentItemDepartmentInbox.prototype.compositeDocumentDownload = function ($event) {
+                return downloadService.controllerMethod
+                    .compositeDocumentDownload(this, $event);
+            };
+            SentItemDepartmentInbox.prototype.getMainDocumentEmailContent = function ($event) {
+                var info = this.getInfo();
+                downloadService.getMainDocumentEmailContent(info.vsId, info.docClassId);
+            };
+            SentItemDepartmentInbox.prototype.getCompositeDocumentEmailContent = function ($event) {
+                var info = this.getInfo();
+                downloadService.getCompositeDocumentEmailContent(info.vsId, info.docClassId);
             };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

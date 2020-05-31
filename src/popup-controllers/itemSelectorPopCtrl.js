@@ -104,7 +104,7 @@ module.exports = function (app) {
 
         self.downloadAttachment = function (attachment, $event) {
             downloadService.controllerMethod
-                .attachmentDownload(attachment.vsId);
+                .attachmentDownload(attachment.vsId, info.docClassId, info.vsId, $event);
         };
 
 

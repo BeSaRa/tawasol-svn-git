@@ -391,8 +391,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadSentItemMainDocument = function (userSentItem, $event) {
-            downloadService.controllerMethod
-                .mainDocumentDownload(userSentItem);
+            userSentItem
+                .mainDocumentDownload($event);
         };
 
         /**
@@ -401,8 +401,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadSentItemCompositeDocument = function (userSentItem, $event) {
-            downloadService.controllerMethod
-                .compositeDocumentDownload(userSentItem);
+            userSentItem
+                .compositeDocumentDownload($event);
         };
 
         /**
@@ -428,7 +428,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendLinkToDocumentByEmail = function (userSentItem, $event) {
-            downloadService.getMainDocumentEmailContent(userSentItem.getInfo().vsId);
+            userSentItem
+                .getMainDocumentEmailContent($event);
         };
 
         /**
@@ -437,7 +438,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendCompositeDocumentAsAttachmentByEmail = function (userSentItem, $event) {
-            downloadService.getCompositeDocumentEmailContent(userSentItem.getInfo().vsId);
+            userSentItem
+                .getCompositeDocumentEmailContent($event);
         };
 
         /**

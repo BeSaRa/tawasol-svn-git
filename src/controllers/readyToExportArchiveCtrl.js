@@ -431,22 +431,22 @@ module.exports = function (app) {
 
         /**
          * @description Download Main Document
-         * @param readyToExport
+         * @param workItem
          * @param $event
          */
-        self.downloadMainDocument = function (readyToExport, $event) {
-            downloadService.controllerMethod
-                .mainDocumentDownload(readyToExport.generalStepElm.vsId);
+        self.downloadMainDocument = function (workItem, $event) {
+            workItem
+                .mainDocumentDownload($event);
         };
 
         /**
          * @description Download Composite Document
-         * @param readyToExport
+         * @param workItem
          * @param $event
          */
-        self.downloadCompositeDocument = function (readyToExport, $event) {
-            downloadService.controllerMethod
-                .compositeDocumentDownload(readyToExport.generalStepElm.vsId);
+        self.downloadCompositeDocument = function (workItem, $event) {
+            workItem
+                .compositeDocumentDownload($event);
         };
 
         /**
@@ -922,7 +922,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendLinkToDocumentByEmail = function (workItem, $event) {
-            downloadService.getMainDocumentEmailContent(workItem.getInfo().vsId);
+            workItem
+                .getMainDocumentEmailContent($event);
         };
 
         /**

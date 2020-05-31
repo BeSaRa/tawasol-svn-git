@@ -565,14 +565,20 @@ module.exports = function (app) {
                 return managerService.manageDocumentContent.apply(managerService, [info.vsId, info.documentClass, info.title, $event])
             };
             WorkItem.prototype.mainDocumentDownload = function ($event) {
-                var info = this.getInfo();
                 return downloadService.controllerMethod
-                    .mainDocumentDownload(info.vsId, $event);
+                    .mainDocumentDownload(this, $event);
             };
             WorkItem.prototype.compositeDocumentDownload = function ($event) {
-                var info = this.getInfo();
                 return downloadService.controllerMethod
-                    .compositeDocumentDownload(info.vsId, $event);
+                    .compositeDocumentDownload(this, $event);
+            };
+            WorkItem.prototype.getMainDocumentEmailContent = function ($event) {
+                var info = this.getInfo();
+                downloadService.getMainDocumentEmailContent(info.vsId, info.docClassId);
+            };
+            WorkItem.prototype.getCompositeDocumentEmailContent = function ($event) {
+                var info = this.getInfo();
+                downloadService.getCompositeDocumentEmailContent(info.vsId, info.docClassId);
             };
             WorkItem.prototype.addToFolder = function ($event, showInbox) {
                 return correspondenceService

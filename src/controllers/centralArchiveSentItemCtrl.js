@@ -322,8 +322,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadMainDocument = function (centralArchiveItem, $event) {
-            downloadService.controllerMethod
-                .mainDocumentDownload(centralArchiveItem.vsId, $event);
+            centralArchiveItem
+                .mainDocumentDownload($event);
         };
 
         /**
@@ -332,8 +332,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadCompositeDocument = function (centralArchiveItem, $event) {
-            downloadService.controllerMethod
-                .compositeDocumentDownload(centralArchiveItem.vsId, $event);
+            /*downloadService.controllerMethod
+                .compositeDocumentDownload(centralArchiveItem.vsId, $event);*/
+            centralArchiveItem
+                .compositeDocumentDownload($event);
         };
 
         /**
@@ -359,7 +361,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendLinkToDocumentByEmail = function (centralArchiveItem, $event) {
-            downloadService.getMainDocumentEmailContent(centralArchiveItem.getInfo().vsId);
+            centralArchiveItem
+                .getMainDocumentEmailContent($event);
         };
 
         /**
@@ -368,7 +371,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendCompositeDocumentAsAttachmentByEmail = function (centralArchiveItem, $event) {
-            downloadService.getCompositeDocumentEmailContent(centralArchiveItem.getInfo().vsId);
+            centralArchiveItem
+                .getCompositeDocumentEmailContent($event);
         };
 
         /**

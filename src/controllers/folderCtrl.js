@@ -563,7 +563,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendLinkToDocumentByEmail = function (workItem, $event) {
-            downloadService.getMainDocumentEmailContent(workItem.getInfo().vsId);
+            workItem
+                .getMainDocumentEmailContent($event);
         };
 
         /**
@@ -572,7 +573,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendCompositeDocumentAsAttachmentByEmail = function (workItem, $event) {
-            downloadService.getMainDocumentEmailContent(workItem.getInfo().vsId);
+            workItem
+                .getCompositeDocumentEmailContent($event);
         };
 
         /**

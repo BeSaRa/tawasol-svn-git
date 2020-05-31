@@ -442,7 +442,8 @@ module.exports = function (app) {
          * @param defer
          */
         self.docActionSendLinkToDocumentByEmail = function (model, $event, defer) {
-            downloadService.getMainDocumentEmailContent(model.getInfo().vsId);
+            model
+                .getMainDocumentEmailContent($event);
         };
 
         /**

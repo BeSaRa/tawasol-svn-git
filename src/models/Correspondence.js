@@ -671,14 +671,20 @@ module.exports = function (app) {
                 return managerService.manageDocumentContent.apply(managerService, [info.vsId, info.documentClass, info.title, $event])
             };
             Correspondence.prototype.mainDocumentDownload = function ($event) {
-                var info = this.getInfo();
                 return downloadService.controllerMethod
-                    .mainDocumentDownload(info.vsId, $event);
+                    .mainDocumentDownload(this, $event);
             };
             Correspondence.prototype.compositeDocumentDownload = function ($event) {
-                var info = this.getInfo();
                 return downloadService.controllerMethod
-                    .compositeDocumentDownload(info.vsId, $event);
+                    .compositeDocumentDownload(this, $event);
+            };
+            Correspondence.prototype.getMainDocumentEmailContent = function ($event) {
+                var info = this.getInfo();
+                downloadService.getMainDocumentEmailContent(info.vsId, info.docClassId);
+            };
+            Correspondence.prototype.getCompositeDocumentEmailContent = function ($event) {
+                var info = this.getInfo();
+                downloadService.getCompositeDocumentEmailContent(info.vsId, info.docClassId);
             };
 
             Correspondence.prototype.rejectDocument = function ($event, ignoreMessage) {

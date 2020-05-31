@@ -986,22 +986,22 @@ module.exports = function (app) {
 
         /**
          * @description download main document for searched incoming document
-         * @param searchedIncomingDocument
+         * @param correspondence
          * @param $event
          */
-        self.downloadMainDocument = function (searchedIncomingDocument, $event) {
-            downloadService.controllerMethod
-                .mainDocumentDownload(searchedIncomingDocument.vsId);
+        self.downloadMainDocument = function (correspondence, $event) {
+            correspondence
+                .mainDocumentDownload($event);
         };
 
         /**
          * @description download composite document for searched incoming document
-         * @param searchedIncomingDocument
+         * @param correspondence
          * @param $event
          */
-        self.downloadCompositeDocument = function (searchedIncomingDocument, $event) {
-            downloadService.controllerMethod
-                .compositeDocumentDownload(searchedIncomingDocument.vsId);
+        self.downloadCompositeDocument = function (correspondence, $event) {
+            correspondence
+                .compositeDocumentDownload($event);
         };
 
         /**
@@ -1023,20 +1023,22 @@ module.exports = function (app) {
 
         /**
          * @description send link to document for searched incoming document
-         * @param searchedIncomingDocument
+         * @param correspondence
          * @param $event
          */
-        self.sendLinkToDocumentByEmail = function (searchedIncomingDocument, $event) {
-            downloadService.getMainDocumentEmailContent(searchedIncomingDocument.getInfo().vsId);
+        self.sendLinkToDocumentByEmail = function (correspondence, $event) {
+            correspondence
+                .getMainDocumentEmailContent($event);
         };
 
         /**
          * @description send composite document as attachment for searched incoming document
-         * @param searchedIncomingDocument
+         * @param correspondence
          * @param $event
          */
-        self.sendCompositeDocumentAsAttachmentByEmail = function (searchedIncomingDocument, $event) {
-            downloadService.getCompositeDocumentEmailContent(searchedIncomingDocument.getInfo().vsId);
+        self.sendCompositeDocumentAsAttachmentByEmail = function (correspondence, $event) {
+            correspondence
+                .getCompositeDocumentEmailContent($event);
         };
 
 

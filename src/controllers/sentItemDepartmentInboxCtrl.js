@@ -380,8 +380,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadMainDocument = function (sentItemDepartmentInbox, $event) {
-            downloadService.controllerMethod
-                .mainDocumentDownload(sentItemDepartmentInbox.vsId, $event);
+            sentItemDepartmentInbox
+                .mainDocumentDownload($event);
         };
 
         /**
@@ -390,8 +390,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadCompositeDocument = function (sentItemDepartmentInbox, $event) {
-            downloadService.controllerMethod
-                .compositeDocumentDownload(sentItemDepartmentInbox.vsId, $event);
+            sentItemDepartmentInbox
+                .compositeDocumentDownload($event);
         };
 
         /**
@@ -417,7 +417,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendLinkToDocumentByEmail = function (sentItemDepartmentInbox, $event) {
-            downloadService.getMainDocumentEmailContent(sentItemDepartmentInbox.getInfo().vsId);
+            sentItemDepartmentInbox
+                .getMainDocumentEmailContent($event);
         };
 
         /**
@@ -426,7 +427,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendCompositeDocumentAsAttachmentByEmail = function (sentItemDepartmentInbox, $event) {
-            downloadService.getCompositeDocumentEmailContent(sentItemDepartmentInbox.getInfo().vsId);
+            sentItemDepartmentInbox
+                .getCompositeDocumentEmailContent($event);
         };
 
         /**

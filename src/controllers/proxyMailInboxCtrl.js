@@ -533,7 +533,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendProxyMailInboxLinkToDocumentByEmail = function (workItem, $event) {
-            downloadService.getMainDocumentEmailContent(workItem.getInfo().vsId);
+            workItem
+                .getMainDocumentEmailContent($event);
         };
 
         /**
@@ -551,7 +552,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendProxyMailInboxCompositeDocumentAsAttachmentByEmail = function (workItem, $event) {
-            downloadService.getCompositeDocumentEmailContent(workItem.getInfo().vsId);
+            workItem
+                .getCompositeDocumentEmailContent($event);
         };
 
         /**

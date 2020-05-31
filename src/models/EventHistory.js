@@ -6,7 +6,8 @@ module.exports = function (app) {
                                           Information,
                                           managerService,
                                           rootEntity,
-                                          gridService) {
+                                          gridService,
+                                          downloadService) {
         'ngInject';
         return function EventHistory(model) {
             var self = this, viewDocumentService,
@@ -276,6 +277,22 @@ module.exports = function (app) {
 
             EventHistory.prototype.barcodePrint = function ($event) {
                 return correspondenceService.correspondencePrintBarcode(this, $event);
+            };
+            EventHistory.prototype.mainDocumentDownload = function ($event) {
+                return downloadService.controllerMethod
+                    .mainDocumentDownload(this, $event);
+            };
+            EventHistory.prototype.compositeDocumentDownload = function ($event) {
+                return downloadService.controllerMethod
+                    .compositeDocumentDownload(this, $event);
+            };
+            EventHistory.prototype.getMainDocumentEmailContent = function ($event) {
+                var info = this.getInfo();
+                downloadService.getMainDocumentEmailContent(info.vsId, info.docClassId);
+            };
+            EventHistory.prototype.getCompositeDocumentEmailContent = function ($event) {
+                var info = this.getInfo();
+                downloadService.getCompositeDocumentEmailContent(info.vsId, info.docClassId);
             };
 
             // don't remove CMSModelInterceptor from last line

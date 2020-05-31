@@ -601,7 +601,9 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            downloadService.getMainDocumentEmailContent(workItem.getInfo().vsId);
+
+            workItem
+                .getMainDocumentEmailContent($event);
         };
 
         /**
@@ -614,7 +616,8 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            downloadService.getCompositeDocumentEmailContent(workItem.getInfo().vsId);
+            workItem
+                .getCompositeDocumentEmailContent($event);
         };
 
         /**

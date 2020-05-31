@@ -489,21 +489,22 @@ module.exports = function (app) {
 
         /**
          * @description download main document for searched internal document
-         * @param searchedInternalDocument
+         * @param correspondence
          * @param $event
          */
-        self.downloadMainDocument = function (searchedInternalDocument, $event) {
-            downloadService.controllerMethod
-                .mainDocumentDownload(searchedInternalDocument.vsId);
+        self.downloadMainDocument = function (correspondence, $event) {
+            correspondence
+                .mainDocumentDownload($event);
         };
 
         /**
          * @description download composite document for searched internal document
-         * @param searchedInternalDocument
+         * @param correspondence
          * @param $event
          */
-        self.downloadCompositeDocument = function (searchedInternalDocument, $event) {
-            downloadService.controllerMethod.compositeDocumentDownload(searchedInternalDocument.vsId);
+        self.downloadCompositeDocument = function (correspondence, $event) {
+            correspondence
+                .compositeDocumentDownload($event);
         };
 
         /**
@@ -525,20 +526,22 @@ module.exports = function (app) {
 
         /**
          * @description send link to document for searched internal document
-         * @param searchedInternalDocument
+         * @param correspondence
          * @param $event
          */
-        self.sendLinkToDocumentByEmail = function (searchedInternalDocument, $event) {
-            downloadService.getMainDocumentEmailContent(searchedInternalDocument.getInfo().vsId);
+        self.sendLinkToDocumentByEmail = function (correspondence, $event) {
+            correspondence
+                .getMainDocumentEmailContent($event);
         };
 
         /**
          * @description send composite document as attachment for searched internal document
-         * @param searchedInternalDocument
+         * @param correspondence
          * @param $event
          */
-        self.sendCompositeDocumentAsAttachmentByEmail = function (searchedInternalDocument, $event) {
-            downloadService.getCompositeDocumentEmailContent(searchedInternalDocument.getInfo().vsId);
+        self.sendCompositeDocumentAsAttachmentByEmail = function (correspondence, $event) {
+            correspondence
+                .getCompositeDocumentEmailContent($event);
         };
 
 

@@ -410,22 +410,22 @@ module.exports = function (app) {
 
         /**
          * @description Download Main Document
-         * @param followupEmployeeInbox
+         * @param workItem
          * @param $event
          */
-        self.downloadMainDocument = function (followupEmployeeInbox, $event) {
-            downloadService.controllerMethod
-                .mainDocumentDownload(followupEmployeeInbox.generalStepElm.vsId);
+        self.downloadMainDocument = function (workItem, $event) {
+            workItem
+                .mainDocumentDownload($event);
         };
 
         /**
          * @description Download Composite Document
-         * @param followupEmployeeInbox
+         * @param workItem
          * @param $event
          */
-        self.downloadCompositeDocument = function (followupEmployeeInbox, $event) {
-            downloadService.controllerMethod
-                .compositeDocumentDownload(followupEmployeeInbox.generalStepElm.vsId);
+        self.downloadCompositeDocument = function (workItem, $event) {
+            workItem
+                .compositeDocumentDownload($event);
         };
 
         /**
@@ -451,7 +451,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendFollowupEmployeeInboxLinkToDocumentByEmail = function (followupEmployeeInbox, $event) {
-            downloadService.getMainDocumentEmailContent(followupEmployeeInbox.getInfo().vsId);
+            followupEmployeeInbox
+                .getMainDocumentEmailContent($event);
         };
 
         /**
@@ -460,7 +461,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendFollowupEmployeeInboxCompositeDocumentAsAttachmentByEmail = function (followupEmployeeInbox, $event) {
-            downloadService.getCompositeDocumentEmailContent(followupEmployeeInbox.getInfo().vsId);
+            followupEmployeeInbox
+                .getCompositeDocumentEmailContent($event);
         };
 
         /**

@@ -335,8 +335,9 @@ module.exports = function (app) {
         };
 
         self.downloadAttachment = function (attachment, $event) {
+            var info = self.document.getInfo();
             downloadService.controllerMethod
-                .attachmentDownload(attachment.vsId);
+                .attachmentDownload(attachment.vsId, info.docClassId, info.vsId);
         };
 
         /**

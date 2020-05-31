@@ -450,22 +450,22 @@ module.exports = function (app) {
 
         /**
          * @description Download Main Document
-         * @param readyToExport
+         * @param workItem
          * @param $event
          */
-        self.downloadMainDocument = function (readyToExport, $event) {
-            downloadService.controllerMethod
-                .mainDocumentDownload(readyToExport.generalStepElm.vsId);
+        self.downloadMainDocument = function (workItem, $event) {
+            workItem
+                .mainDocumentDownload($event);
         };
 
         /**
          * @description Download Composite Document
-         * @param readyToExport
+         * @param workItem
          * @param $event
          */
-        self.downloadCompositeDocument = function (readyToExport, $event) {
-            downloadService.controllerMethod
-                .compositeDocumentDownload(readyToExport.generalStepElm.vsId);
+        self.downloadCompositeDocument = function (workItem, $event) {
+            workItem
+                .compositeDocumentDownload($event);
         };
 
         /**
@@ -947,20 +947,22 @@ module.exports = function (app) {
 
         /**
          * @description Send Link To Document By Email
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.sendLinkToDocumentByEmail = function (userInbox, $event) {
-            downloadService.getMainDocumentEmailContent(userInbox.getInfo().vsId);
+        self.sendLinkToDocumentByEmail = function (workItem, $event) {
+            workItem
+                .getMainDocumentEmailContent($event);
         };
 
         /**
          * @description Send Composite Document As Attachment By Email
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.sendCompositeDocumentAsAttachmentByEmail = function (userInbox, $event) {
-            downloadService.getCompositeDocumentEmailContent(userInbox.getInfo().vsId);
+        self.sendCompositeDocumentAsAttachmentByEmail = function (workItem, $event) {
+            workItem
+                .getCompositeDocumentEmailContent($event);
         };
 
         /**
