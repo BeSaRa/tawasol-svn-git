@@ -72,8 +72,8 @@ module.exports = function (app) {
         };
 
         self.setSelectedFolder = function (folder) {
-            // if root folder, don't do anything
-            if (!folder.id) {
+            // if root folder or disabled folder, don't do anything
+            if (!folder.id || !folder.status) {
                 return;
             }
             if (self.selectedFolder && (folder.id === self.selectedFolder.id)) {
@@ -121,7 +121,7 @@ module.exports = function (app) {
                 return;
             }
             self.inProgress = true;
-            followUpUserService.loadFollowupFolderByOuAndUser(self.selectedOrganization, self.selectedApplicationUser, true)
+            followUpUserService.loadFollowupFoldersByOuAndUser(self.selectedOrganization, self.selectedApplicationUser, true)
                 .then(function (folders) {
                     self.folders = folders.length ? _checkRootFolder(true, folders) : [];
                     self.inProgress = false;

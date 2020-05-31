@@ -88,10 +88,10 @@ module.exports = function (app) {
             };
 
             OUApplicationUser.prototype.getOuId = function () {
-                if (this.ouInfo && this.ouInfo.id) {
+                if (this.hasOwnProperty('ouInfo') && this.ouInfo && this.ouInfo.id) {
                     return this.ouInfo.id;
-                } else if (this.ouid && this.ouid.hasOwnProperty('id')) {
-                    return this.ouid.id;
+                } else if (this.ouid) {
+                    return this.ouid.hasOwnProperty('id') ? this.ouid.id : this.ouid;
                 }
                 return null;
             };

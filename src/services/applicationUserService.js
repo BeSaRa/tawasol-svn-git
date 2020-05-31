@@ -417,7 +417,7 @@ module.exports = function (app) {
                             },
                             followupFolders: function (followUpUserService) {
                                 'ngInject';
-                                return followUpUserService.loadFollowupFolders(true);
+                                return followUpUserService.loadFollowupFoldersByOuAndUser(ouApplicationUser.getOuId(), applicationUser.id, true);
                             },
                             availableProxies: function (ouApplicationUserService) {
                                 'ngInject';

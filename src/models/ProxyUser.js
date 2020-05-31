@@ -30,7 +30,12 @@ module.exports = function (app) {
             };
 
             ProxyUser.prototype.getOuId = function (ouApplicationUser) {
-                return ouApplicationUser.hasOwnProperty('ouInfo') ? ouApplicationUser.ouInfo.id : (ouApplicationUser.ouid.hasOwnProperty('id') ? ouApplicationUser.ouid.id : ouApplicationUser.ouid);
+                if (ouApplicationUser.hasOwnProperty('ouInfo') && ouApplicationUser.ouInfo && ouApplicationUser.ouInfo.id) {
+                    return ouApplicationUser.ouInfo.id;
+                } else if (ouApplicationUser.ouid) {
+                    return ouApplicationUser.ouid.hasOwnProperty('id') ? ouApplicationUser.ouid.id : ouApplicationUser.ouid;
+                }
+                return null;
             };
             ProxyUser.prototype.setId = function (ouApplicationUser) {
                 this.id = Number(ouApplicationUser.applicationUser.id + '' + this.getOuId(ouApplicationUser));

@@ -8,7 +8,9 @@
             <md-input-container ng-if="ctrl.folders.length" flex>
                 <label for="folder">{{lang.add_to_folder}}</label>
                 <md-select id="folder" ng-model="ctrl.model.folderId">
-                    <md-option ng-value="folder.id" ng-repeat="folder in ctrl.folders">{{folder.getTranslatedName()}}
+                    <md-option ng-repeat="folder in ctrl.folders"
+                               ng-value="folder.id"
+                               ng-disabled="!folder.status">{{folder.getTranslatedName()}}
                     </md-option>
                 </md-select>
             </md-input-container>

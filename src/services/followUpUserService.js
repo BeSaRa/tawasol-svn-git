@@ -291,7 +291,7 @@ module.exports = function (app) {
 
             function _separation(list) {
                 _.map(list, function (item) {
-                    item.status = true;
+                    //item.status = true;
                     if (item.parent) {
                         !children.hasOwnProperty(item.parent) ? children[item.parent] = [] : null;
                         children[item.parent].push(item);
@@ -358,7 +358,7 @@ module.exports = function (app) {
          * @param hierarchy
          * @returns {*}
          */
-        self.loadFollowupFolderByOuAndUser = function(ouId, userId, hierarchy){
+        self.loadFollowupFoldersByOuAndUser = function(ouId, userId, hierarchy){
             ouId = generator.getNormalizedValue(ouId, 'id');
             userId = generator.getNormalizedValue(userId, 'id');
             return $http.get(urlService.followUpFolders + '/user-id/'+userId+'/ou-id/' + ouId)
