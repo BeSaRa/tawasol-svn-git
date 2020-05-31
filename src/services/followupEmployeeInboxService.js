@@ -517,7 +517,7 @@ module.exports = function (app) {
          * @description Load the followup employee sent items from server.
          * @returns {Promise|followupEmployeeSentItems}
          */
-        self.loadFollowupEmployeeSentItems = function (employee, organization, page, limit) {
+        self.loadFollowupEmployeeSentItems = function (employee, organization, securityLevels, page, limit) {
             if (!employee) {
                 return $timeout(function () {
                     return [];
@@ -527,10 +527,13 @@ module.exports = function (app) {
             var offset = ((page - 1) * limit);
             var userId = employee.hasOwnProperty('id') ? employee.id : employee;
             var ouId = organization.hasOwnProperty('id') ? organization.id : organization;
+            var securityLevel = (securityLevels && securityLevels.length) ? generator.getResultFromSelectedCollection(securityLevels, 'lookupKey') : null;
+
             return $http.get(urlService.followupEmployeeSentItems.change({
-                userId: userId,
-                ouId: ouId
-            }), {
+                    userId: userId,
+                    ouId: ouId
+                }
+            ) + (securityLevel ? ('?securityLevels=' + securityLevel) : ''), {
                 params: {
                     offset: offset,
                     limit: limit

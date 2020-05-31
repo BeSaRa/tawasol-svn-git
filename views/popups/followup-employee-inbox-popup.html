@@ -63,7 +63,7 @@
                             </div>
                         </md-input-container>
                         <!-- Security Levels -->
-                        <md-input-container flex ng-if="!ctrl.isFollowupSentItems">
+                        <md-input-container flex>
                             <label for="securityLevels">{{lang.security_level}}</label>
                             <md-select id="securityLevels" name="securityLevels"
                                        ng-model-options="{trackBy:'$value.lookupKey'}"

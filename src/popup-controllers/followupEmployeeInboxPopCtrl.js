@@ -77,6 +77,15 @@ module.exports = function (app) {
         self.selectedApplicationUser = selectedUser || null;
         self.selectedSecurityLevels = selectedSecurityLevels || null;
 
+        var _mapSecurityLevels = function () {
+            if (!self.selectedOrganization)
+                return [];
+
+            return _.filter(self.organizations, function (ou) {
+                return ou.id === self.selectedOrganization;
+            })[0].securityLevels;
+        };
+        self.securityLevels = _mapSecurityLevels();
         /**
          * @description Get the Application Users and security levels for the selected Organization
          */
@@ -84,9 +93,7 @@ module.exports = function (app) {
             self.selectedApplicationUser = null;
             self.selectedSecurityLevels = null;
             // get security level
-            self.securityLevels = _.filter(self.organizations, function (ou) {
-                return ou.id === self.selectedOrganization;
-            })[0].securityLevels;
+            self.securityLevels = _mapSecurityLevels();
 
             return ouApplicationUserService.loadRelatedOUApplicationUsers(self.selectedOrganization)
                 .then(function (result) {

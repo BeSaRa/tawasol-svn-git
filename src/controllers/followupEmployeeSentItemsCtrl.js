@@ -42,6 +42,7 @@ module.exports = function (app) {
 
         self.selectedFollowupEmployeeSentItems = [];
         self.globalSetting = rootEntity.returnRootEntity().settings;
+        self.selectedSecurityLevels = null;
 
         /**
          * @description Get the sorting key for information or lookup model
@@ -146,7 +147,7 @@ module.exports = function (app) {
             }
 
             return followupEmployeeInboxService
-                .loadFollowupEmployeeSentItems(self.selectedEmployee, self.selectedOrganization, self.grid.page, self.grid.limit)
+                .loadFollowupEmployeeSentItems(self.selectedEmployee, self.selectedOrganization, self.selectedSecurityLevels, self.grid.page, self.grid.limit)
                 .then(function (result) {
                     self.followupEmployeeSentItems = result;
                     self.followupEmployeeSentItemsCopy = angular.copy(self.followupEmployeeSentItems);
@@ -396,11 +397,12 @@ module.exports = function (app) {
         self.getEmployeeForFollowupEmployeeSentItems = function ($event) {
             followupEmployeeInboxService
                 .controllerMethod
-                .openOrganizationAndUserDialog(self.selectedOrganization, self.selectedEmployee, null, true, $event)
+                .openOrganizationAndUserDialog(self.selectedOrganization, self.selectedEmployee, self.selectedSecurityLevels, true, $event)
                 .then(function (result) {
                     self.selectedOrganization = result.organization;
                     self.selectedEmployee = result.applicationUser;
                     self.currentSelectedUser = result.applicationUser;
+                    self.selectedSecurityLevels = result.securityLevels;
                     self.reloadFollowupEmployeeSentItems(self.grid.page);
                 });
         };
