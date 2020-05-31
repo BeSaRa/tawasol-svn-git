@@ -4674,6 +4674,12 @@ module.exports = function (app) {
                         .then(function (result) {
                             toast.success(langService.get("remove_specific_success").change({name: correspondence.getNames()}));
                             return true;
+                        }).catch(function (error) {
+                            if (errorCode.checkIf(error, 'G2G_RECALL_FAILED') === true) {
+                                return dialog.errorMessage(self.getTranslatedError(error));
+                            }
+
+                            return errorCode.showErrorDialog(error);
                         });
                 });
         };
@@ -4710,6 +4716,12 @@ module.exports = function (app) {
                         .then(function () {
                             toast.success(langService.get("remove_specific_success").change({name: correspondence.getTranslatedName()}));
                             return correspondence;
+                        }).catch(function (error) {
+                            if (errorCode.checkIf(error, 'G2G_RECALL_FAILED') === true) {
+                                return dialog.errorMessage(self.getTranslatedError(error));
+                            }
+
+                            return errorCode.showErrorDialog(error);
                         });
                 });
         };

@@ -42,6 +42,7 @@ module.exports = function (app) {
                 G2G_ERROR_WHILE_REMOVE_TRANSACTION: 14012,
                 G2G_ERROR_CAN_NOT_RESEND_ALREADY_PENDING_BOOK: 14013,
 
+                G2G_RECALL_FAILED: 3044,
                 NO_DOCUMENT_SECURITY: 13006,
                 FAIL_DUPLICATION: 2053,
                 INVALID_REFERENCE_FORMAT: 3025,
@@ -92,7 +93,8 @@ module.exports = function (app) {
                 9007: 'user_not_linked_with_department',
                 3045: 'document_has_been_deleted',
                 3047: 'certificate_missing',
-                3048: 'pincode_not_match'
+                3048: 'pincode_not_match',
+                3044: 'g2g_recall_failed'
             };
 
         return {
