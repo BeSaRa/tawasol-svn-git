@@ -180,7 +180,7 @@ module.exports = function (app) {
 
         self.saveCorrespondence = function (status) {
             self.saveInProgress = true;
-            loadingIndicatorService.loading = true;
+           // loadingIndicatorService.loading = true;
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
                 self.saveInProgress = false;
@@ -193,10 +193,12 @@ module.exports = function (app) {
                 dialog.confirmMessage(langService.get('prompt_terminate').change({name: self.replyToOriginalName}), langService.get('yes'), langService.get('no'))
                     .then(function () {
                         self.terminateAfterCreateReply = true;
+                        loadingIndicatorService.loading = true;
                         defer.resolve(true);
                     })
                     .catch(function (error) {
                         self.terminateAfterCreateReply = false;
+                        loadingIndicatorService.loading = true;
                         defer.resolve(true);
                     })
             } else {
