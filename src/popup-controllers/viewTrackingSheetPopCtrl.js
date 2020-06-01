@@ -512,8 +512,11 @@ module.exports = function (app) {
                 return viewTrackingSheetService.loadReceivedIncomingHistory(self.document)
                     .then(function (result) {
                         self.receivedIncomingHistoryRecords = result;
-                        // _setGridNameRecordCountMap(tabName, result.length);
                         self.receivedIncomingHistoryGrid.firstLoaded = true;
+                        if (result.length) {
+                            viewTrackingSheetService.selectedReceivedIncomingSite = result[0];
+                            self.setSelectedReceivedIncomingSiteLength();
+                        }
                         return result;
                     })
             }
