@@ -14,6 +14,10 @@ module.exports = function (app) {
         self.privateAnnouncements = privateAnnouncements;
 
         self.closeShowPrivateAnnouncementPopupFromCtrl = function () {
+            // if user close announcements after login, stop auto close
+            if (self.isCloseAutomatically) {
+                self.isCloseAutomatically = false;
+            }
             dialog.cancel();
         };
 
