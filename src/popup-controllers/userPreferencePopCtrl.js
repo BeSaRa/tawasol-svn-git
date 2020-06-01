@@ -58,7 +58,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'userPreferencePopCtrl';
         self.applicationUser = new ApplicationUser(applicationUser);
-
+        self.employee = employeeService.getEmployee();
         self.model = angular.copy(self.applicationUser);
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.genders = lookupService.returnLookups(lookupService.gender);
