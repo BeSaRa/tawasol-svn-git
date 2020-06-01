@@ -70,7 +70,8 @@
                                        ng-disabled="!ctrl.regOu"
                                        ng-model="ctrl.selectedSecurityLevels">
                                 <md-option ng-value="option"
-                                           ng-repeat="option in ctrl.securityLevels">
+                                           ng-repeat="option in ctrl.securityLevels"
+                                           ng-disabled="!ctrl.isSecurityLevelExistsInOu(option)">
                                     {{option.getTranslatedName()}}
                                 </md-option>
                             </md-select>

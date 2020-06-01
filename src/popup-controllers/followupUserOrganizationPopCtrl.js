@@ -155,6 +155,12 @@ module.exports = function (app) {
                 });
         };
 
+        self.isSecurityLevelExistsInOu = function (securityLevel) {
+            return _.some(self.ouApplicationUser.securityLevels, function (item) {
+                return item.lookupKey === securityLevel.lookupKey;
+            });
+        };
+
         /**
          * @description Clears the searchText for the given field
          * @param fieldType
