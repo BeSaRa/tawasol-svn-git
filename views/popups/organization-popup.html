@@ -547,7 +547,13 @@
                                                     <div style="min-width: 100px">{{priority.getTranslatedName()}}</div>
                                                     <md-input-container flex>
                                                         <label>{{lang.sla}}</label>
-                                                        <input ng-model="ctrl.organization.sla[priority.lookupKey]">
+                                                        <input ng-model="ctrl.organization.sla[priority.lookupKey]"
+                                                               custom-validate-directive="number"
+                                                               name="{{ priority.lookupKey }}"
+                                                               id="{{priority.lookupKey}}">
+                                                        <div ng-messages="org_form[priority.lookupKey].$error">
+                                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                                        </div>
                                                     </md-input-container>
                                                 </div>
                                             </div>
