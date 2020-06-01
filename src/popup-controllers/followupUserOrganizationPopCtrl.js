@@ -142,6 +142,7 @@ module.exports = function (app) {
 
         self.isAddFollowupOrganizationDisabled = function () {
             return !self.regOu ||
+                !self.selectedSecurityLevels || !self.selectedSecurityLevels.length ||
                 (!self.Ou &&
                     _.map(self.followupOrganizations, function (ou) {
                         return ou.ouInfo.id;
