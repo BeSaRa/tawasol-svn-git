@@ -7,7 +7,7 @@ module.exports = function (app) {
         self.selectedOrganizations = [];
         self.selectedYear = (new Date()).getFullYear();
         self.years = _.range(configurationService.SEARCH_YEARS, ((new Date()).getFullYear() + 1));
-
+        self.ouSearchText = '';
         self.records = [];
 
         /**
@@ -57,6 +57,25 @@ module.exports = function (app) {
             printService.printData(self.records, Object.keys(self.records[0].getExportedData()), langService.get('menu_item_serials') + ' : ' + self.selectedYear);
         }
 
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            if ($event) {
+                var code = $event.which || $event.keyCode;
+                if (code !== 38 && code !== 40)
+                    $event.stopPropagation();
+            }
+        };
 
     });
 };
