@@ -79,6 +79,19 @@ module.exports = function (app) {
             ]
         };
 
+        self.isAnyOutOfOffice = function () {
+            return _.some(self.includedMembers, function (item) {
+                return item.isUserOutOfOffice();
+            })
+        };
+
+        self.openWorkflowUserOutOfOffice = function (member, $event) {
+            predefinedActionService.typeCastMembersToDistributionWFItems([member], true, true)
+                .then(function (workflowUser) {
+                    return workflowUser[0].openOutOfOfficeDialog($event);
+                });
+        };
+
         /**
          *
          * @param $event

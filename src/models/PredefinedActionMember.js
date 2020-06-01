@@ -147,6 +147,10 @@ module.exports = function (app) {
                 return this.actionType === actionTypeMap.organization;
             };
 
+            PredefinedActionMember.prototype.isUserOutOfOffice = function () {
+                return this.isUserMember() && this.proxyInfo && this.proxyInfo.outOfOffice && this.proxyInfo.proxyEndDate >= Date.now() && this.proxyInfo.proxyStartDate <= Date.now();
+            };
+
             function _mapActionType(actionType) {
                 return actionTypeMap[actionType];
             }

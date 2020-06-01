@@ -32,6 +32,7 @@
                                     <table md-table>
                                         <thead md-head>
                                         <tr md-row>
+                                            <th md-column ng-if="ctrl.isAnyOutOfOffice()" class="no-padding"></th>
                                             <th md-column>{{lang.name}}</th>
                                             <th md-column>{{lang.type}}</th>
                                             <th md-column>{{lang.action}}</th>
@@ -41,6 +42,13 @@
                                         <tbody md-body>
                                         <tr md-row
                                             ng-repeat="record in ctrl.includedMembers |limitTo: ctrl.includedMembersGrid.limit: ((ctrl.includedMembersGrid.page - 1) * ctrl.includedMembersGrid.limit) |orderBy:ctrl.includedMembersGrid.order track by $index">
+                                            <td md-cell ng-if="ctrl.isAnyOutOfOffice()" class="no-padding">
+                                                <span flex ng-if="!record.isUserOutOfOffice()"></span>
+                                                <md-button class="md-icon-button" ng-if="record.isUserOutOfOffice()"
+                                                           ng-click="ctrl.openWorkflowUserOutOfOffice(record , $event)">
+                                                    <md-icon md-svg-icon="account-alert"></md-icon>
+                                                </md-button>
+                                            </td>
                                             <td md-cell>
                                                 <span>{{record.getTranslatedName()}}</span>
                                             </td>
