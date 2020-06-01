@@ -31,7 +31,7 @@ module.exports = function (app) {
         self.appUserSearchText = '';
 
         self.searchCriteriaUsed = false;
-
+        self.employeeService = employeeService;
         /**
          * @description
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
@@ -490,6 +490,7 @@ module.exports = function (app) {
                 shortcut: true,
                 showInView: true,
                 callback: self.moveToFolder,
+                permissionKey: 'USER_FOLLOWUP_BOOKS',
                 class: "action-green",
                 checkShow: function (action, model) {
                     return true;
