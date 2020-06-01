@@ -27,6 +27,7 @@ module.exports = function (app) {
                                                      $state,
                                                      mailNotificationService,
                                                      gridService,
+                                                     errorCode,
                                                      generator) {
         'ngInject';
 
@@ -84,8 +85,8 @@ module.exports = function (app) {
                 serial: 'generalStepElm.docFullSerial',
                 subject: 'generalStepElm.docSubject',
                 receivedDate: 'generalStepElm.receivedDate',
-                sender: function(record){
-                  return self.getSortingKey('senderInfo', 'SenderInfo');
+                sender: function (record) {
+                    return self.getSortingKey('senderInfo', 'SenderInfo');
                 },
                 dueDate: 'generalStepElm.dueDate',
                 numberOfDays: 'generalStepElm.numberOfDays'
@@ -724,6 +725,24 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Create Reply
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.createReply = function (workItem, $event, defer) {
+            workItem.createReply($event)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                }).catch(function (error) {
+                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: workItem.getInfo().wobNumber}));
+                    return false;
+                }
+            });
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -905,6 +924,17 @@ module.exports = function (app) {
                         }
                     }
                 ]
+            },
+            // Create Reply
+            {
+                type: 'action',
+                icon: 'pen',
+                text: 'grid_action_create_reply',
+                callback: self.createReply,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return employeeService.getEmployee().hasPermissionTo('CREATE_REPLY_INTERNAL') && !model.isBroadcasted();
+                }
             },
             // Launch Distribution Workflow
             {
