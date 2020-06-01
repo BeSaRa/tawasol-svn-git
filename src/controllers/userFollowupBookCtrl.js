@@ -31,13 +31,13 @@ module.exports = function (app) {
         self.folders = _prepareFollowupFolders(folders);
         self.selectedFolder = null;
 
-        function _prepareFollowupFolders(folders) {
-            return [new FollowUpFolder({
+        function _prepareFollowupFolders(folders, showRootFolder) {
+            return showRootFolder ? [new FollowUpFolder({
                 arName: langService.getKey('followup_folders', 'ar'),
                 enName: langService.getKey('followup_folders', 'en'),
                 id: 0,
                 status: true
-            }).setChildren(folders)];
+            }).setChildren(folders)] : folders;
         }
 
         /**

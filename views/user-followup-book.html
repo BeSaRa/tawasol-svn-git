@@ -52,7 +52,12 @@
             <div class="z-index-4">
                 <md-sidenav id="sidebar-folder-structure" md-is-open="ctrl.sidebarStatus"
                             ng-class="{'md-sidenav-right':lang.current === 'ar'}">
-                    <div class="p20 first-folder-list" layout="column">
+                    <div>
+                        <md-button class="md-raised md-primary" ng-click="ctrl.createFolder(false , $event)">
+                            {{lang.add_root_folder}}
+                        </md-button>
+                    </div>
+                    <div layout="column"> <!--class="p20 first-folder-list"-->
                         <folders-tree-structure-directive display-menu="true" counter-property="followupFolderCount"
                                                           count="true" disable-selected="0"
                                                           allow-control="true"
