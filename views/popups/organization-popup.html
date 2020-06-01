@@ -542,7 +542,8 @@
                                                 </md-select>
                                             </md-input-container>
                                             <div flex layout="column">
-                                                <div ng-repeat="priority in ctrl.priorityLevels" layout-align="start center" layout="row">
+                                                <div ng-repeat="priority in ctrl.priorityLevels"
+                                                     layout-align="start center" layout="row">
                                                     <div style="min-width: 100px">{{priority.getTranslatedName()}}</div>
                                                     <md-input-container flex>
                                                         <label>{{lang.sla}}</label>
@@ -661,7 +662,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Serials  -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('serials')"
+                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('serials') && ctrl.employeeService.hasPermissionTo('MANAGE_REFERENCE_NUMBER_PLANS')"
                             label="{{lang.menu_item_serials}}" ng-click="ctrl.setCurrentTab('serials')">
                         <md-content class="md-padding">
                             <div layout="column">
