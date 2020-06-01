@@ -74,7 +74,9 @@
                                         <td md-cell>{{item.getTranslatedOUName()}}</td>
                                         <td md-cell>{{item.getTranslatedName()}}</td>
                                         <td md-cell>{{item.maxSerial}}</td>
-                                        <td md-cell>{{item.refernceItemExpression}}</td>
+                                        <td md-cell>{{item.refernceItemExpression ? item.refernceItemExpression :
+                                            lang.all}}
+                                        </td>
                                         <td md-cell>{{item.referncePlanItemDescription}}</td>
                                         <td md-cell>{{item.getPerOUEntityTranslate()}}</td>
                                     </tr>
