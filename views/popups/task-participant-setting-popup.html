@@ -23,7 +23,7 @@
                         </div>
                         <div layout="row" flex>
                             <md-input-container>
-                                <md-switch ng-disabled="ctrl.fromView || !ctrl.task.documentVSID"
+                                <md-switch ng-if="ctrl.employeeService.hasPermissionTo('ADMIN_USER_FOLLOWUP_BOOKS')" ng-disabled="ctrl.fromView || !ctrl.task.documentVSID"
                                            ng-model="ctrl.taskParticipant.addtoUserFollowup">
                                     {{lang.follow_up_status}}
                                 </md-switch>

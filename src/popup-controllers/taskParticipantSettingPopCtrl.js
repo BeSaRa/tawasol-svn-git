@@ -1,8 +1,10 @@
 module.exports = function (app) {
-    app.controller('taskParticipantSettingPopCtrl', function (task, fromView, dialog, editMode, lookupService, taskParticipant, moment, generator) {
+    app.controller('taskParticipantSettingPopCtrl', function (task, employeeService ,fromView, dialog, editMode, lookupService, taskParticipant, moment, generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'taskParticipantSettingPopCtrl';
+
+        self.employeeService = employeeService;
 
         self.taskParticipantStates = lookupService.returnLookups('taskState');
 
