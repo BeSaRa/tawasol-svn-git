@@ -28,6 +28,9 @@
                             <thead md-head>
                             <tr md-row>
                                 <th md-column>
+                                    <!-- Indicators -->
+                                </th>
+                                <th md-column>
                                     <span>{{lang.document_subject}}</span>
                                 </th>
                                 <th md-column>
@@ -41,6 +44,16 @@
                             <tbody md-body>
                             <tr md-row md-select="site"
                                 ng-repeat="item in ctrl.workItems  track by $index">
+                                <td md-cell class="indicator-td">
+                                    <!-- Has Attachments -->
+                                    <grid-indicator-directive record="item" span-class="float-right"
+                                                              indicator-type="hasAttachment"
+                                                              record-type="WorkItem"></grid-indicator-directive>
+                                    <!-- Has Linked Documents -->
+                                    <grid-indicator-directive record="item" span-class="float-right"
+                                                              indicator-type="hasLinkedDocuments"
+                                                              record-type="WorkItem"></grid-indicator-directive>
+                                </td>
                                 <td md-cell>
                                     <div flex layout="column">
                                         <span class="span-column">{{item.generalStepElm.docSubject}}</span>
