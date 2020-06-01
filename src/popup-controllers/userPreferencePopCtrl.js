@@ -316,8 +316,9 @@ module.exports = function (app) {
                     });
             } else if (tabName.toLowerCase() === 'digitalcertificates' && !self.isCertificateLoaded) {
                 self.loadUserCertificates(self.applicationUser.id)
-                    .then(function () {
+                    .then(function (result) {
                         self.isCertificateLoaded = true;
+                        self.showCertificateForm = !result; // if no user certificate exists on first load of tab, show form
                         defer.resolve(tabName);
                     });
             } else if (tabName.toLowerCase() === 'outofofficesettings') {
@@ -1443,6 +1444,7 @@ module.exports = function (app) {
 
         _initCertificate(true);
 
+        self.showCertificateForm = false; // defines if form will be shown or not
         self.certificateTypeUpload = false; // false means generate certificate, true means upload certificate
         self.certificateExtensions = attachmentService.getExtensionGroup('userCertificate').join(',');
 
@@ -1520,6 +1522,8 @@ module.exports = function (app) {
                         self.loadUserCertificates(self.applicationUser.id)
                             .then(function (result) {
                                 _initCertificate(true);
+                                self.showCertificateForm = false;
+
                                 defer.resolve(true);
                                 toast.success(langService.get('save_success'));
                             });
@@ -1557,6 +1561,9 @@ module.exports = function (app) {
          * @description clear user certificate fields
          */
         self.clearUserCertificate = function ($event) {
+            if (self.userCertificate.vsId) {
+                self.showCertificateForm = false;
+            }
             _initCertificate(true);
         };
 
