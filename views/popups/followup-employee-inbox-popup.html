@@ -67,14 +67,17 @@
                             <label for="securityLevels">{{lang.security_level}}</label>
                             <md-select id="securityLevels" name="securityLevels"
                                        ng-model-options="{trackBy:'$value.lookupKey'}"
-                                       multiple
-                                       ng-disabled="!ctrl.selectedOrganization"
+                                       multiple required
+                                       ng-disabled="!ctrl.selectedApplicationUser"
                                        ng-model="ctrl.selectedSecurityLevels">
                                 <md-option ng-value="option"
                                            ng-repeat="option in ctrl.securityLevels">
                                     {{option.getTranslatedName()}}
                                 </md-option>
                             </md-select>
+                            <div ng-messages="organizationAndUserForm.securityLevels.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
                         </md-input-container>
                     </div>
                 </div>
