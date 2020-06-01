@@ -258,6 +258,10 @@ module.exports = function (app) {
                 templateUrl: cmsTemplate.getPopup('add-follow-up'),
                 controller: 'followUpPopCtrl',
                 controllerAs: 'ctrl',
+                locals: {
+                    addToMyFollowup: true,
+                    ouApplicationUsers: [] // used for add to other user followup only
+                },
                 resolve: {
                     folders: function () {
                         'ngInject';
@@ -279,6 +283,41 @@ module.exports = function (app) {
                 }
             })
         };
+
+        /**
+         * @description open dialog for adding the document to follow up of other employee.
+         * @param correspondence
+         * @returns {promise}
+         */
+        self.addCorrespondenceToEmployeeFollowUp = function (correspondence) {
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('add-follow-up'),
+                controller: 'followUpPopCtrl',
+                controllerAs: 'ctrl',
+                locals: {
+                    addToMyFollowup: false,
+                    folders: [] // folders is empty because they will be fetched from user
+                },
+                resolve: {
+                    ouApplicationUsers: function (ouApplicationUserService, employeeService) {
+                        'ngInject';
+                        return ouApplicationUserService.loadOuApplicationUserByRegOu(employeeService.getEmployee().getRegistryOUID());
+                    },
+                    followUpData: function () {
+                        'ngInject';
+                        return self.prepareFollowUp(correspondence).then(function (data) {
+                            // no need to set folder as folder will be set from ouApplicationUser
+                            //folders && folders.length > 0 ? data.folderId = folders[0].id : null;
+                            data.folderId = null;
+                            data.followupDate = data.followupDate ? generator.getDateObjectFromTimeStamp(data.followupDate) : null;
+                            return data;
+                        });
+
+                    }
+                }
+            })
+        };
+
         /**
          * return folders hierarchy
          * @param collection
@@ -358,10 +397,10 @@ module.exports = function (app) {
          * @param hierarchy
          * @returns {*}
          */
-        self.loadFollowupFoldersByOuAndUser = function(ouId, userId, hierarchy){
+        self.loadFollowupFoldersByOuAndUser = function (ouId, userId, hierarchy) {
             ouId = generator.getNormalizedValue(ouId, 'id');
             userId = generator.getNormalizedValue(userId, 'id');
-            return $http.get(urlService.followUpFolders + '/user-id/'+userId+'/ou-id/' + ouId)
+            return $http.get(urlService.followUpFolders + '/user-id/' + userId + '/ou-id/' + ouId)
                 .then(function (result) {
                     var folders = generator.generateCollection(result.data.rs, FollowUpFolder);
                     return hierarchy ? self.hierarchy(folders) : folders;

@@ -955,6 +955,10 @@ module.exports = function (app) {
                 return followUpUserService.addCorrespondenceToMyFollowUp(this);
             };
 
+            Correspondence.prototype.addToUserFollowUp = function () {
+                return followUpUserService.addCorrespondenceToEmployeeFollowUp(this);
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Correspondence', 'init', this);

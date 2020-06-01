@@ -1317,6 +1317,14 @@ module.exports = function (app) {
             item.addToMyDirectFollowUp();
         };
 
+        /**
+         * @description add workItem To other user's FollowUp
+         * @param item
+         */
+        self.addToEmployeeFollowUp = function (item) {
+            item.addToUserFollowUp();
+        };
+
         self.gridActions = [
             // Document Information
             {
@@ -1427,19 +1435,6 @@ module.exports = function (app) {
                 },
                 showInView: false
             },
-            // add to follow up
-            {
-                type: 'action',
-                icon: 'book-search-outline',
-                text: 'add_to_my_direct_followup',
-                shortcut: true,
-                callback: self.addToDirectFollowUp,
-                permissionKey: 'USER_FOLLOWUP_BOOKS',
-                class: "action-green",
-                checkShow: function (action, model) {
-                    return true;
-                }
-            },
             // Add To
             {
                 type: 'action',
@@ -1448,7 +1443,9 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: [
                     'MANAGE_FAVORITE',
-                    'ICN_ENTRY_TEMPLATE'
+                    'ICN_ENTRY_TEMPLATE',
+                    'USER_FOLLOWUP_BOOKS',
+                    'ADMIN_USER_FOLLOWUP_BOOKS'
                 ],
                 checkAnyPermission: true,
                 checkShow: function (action, model) {
@@ -1477,6 +1474,32 @@ module.exports = function (app) {
                         callback: self.addToIcnArchive,
                         class: "action-green",
                         permissionKey: 'ICN_ENTRY_TEMPLATE',
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // add to my follow up
+                    {
+                        type: 'action',
+                        icon: 'book-search-outline',
+                        text: 'grid_action_to_my_followup',
+                        shortcut: true,
+                        callback: self.addToDirectFollowUp,
+                        permissionKey: 'USER_FOLLOWUP_BOOKS',
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // add to employee follow up
+                    {
+                        type: 'action',
+                        icon: 'book-search-outline',
+                        text: 'grid_action_to_employee_followup',
+                        shortcut: true,
+                        callback: self.addToEmployeeFollowUp,
+                        permissionKey: 'ADMIN_USER_FOLLOWUP_BOOKS',
+                        class: "action-green",
                         checkShow: function (action, model) {
                             return true;
                         }

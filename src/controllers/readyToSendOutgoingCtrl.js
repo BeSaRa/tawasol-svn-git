@@ -536,6 +536,14 @@ module.exports = function (app) {
         };
 
         /**
+         * @description add workItem To other user's FollowUp
+         * @param item
+         */
+        self.addToEmployeeFollowUp = function (item) {
+            item.addToUserFollowUp();
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -641,6 +649,7 @@ module.exports = function (app) {
                     }
                 ]
             },
+            // Separator
             {
                 type: 'separator',
                 checkShow: function (action, model) {
@@ -648,18 +657,48 @@ module.exports = function (app) {
                 },
                 showInView: false
             },
-            // add to follow up
+            // Add To
             {
                 type: 'action',
-                icon: 'book-search-outline',
-                text: 'add_to_my_direct_followup',
-                shortcut: true,
-                callback: self.addToDirectFollowUp,
-                permissionKey: 'USER_FOLLOWUP_BOOKS',
+                icon: 'plus',
+                text: 'grid_action_add_to',
                 class: "action-green",
+                permissionKey: [
+                    'USER_FOLLOWUP_BOOKS',
+                    'ADMIN_USER_FOLLOWUP_BOOKS'
+                ],
+                checkAnyPermission: true,
                 checkShow: function (action, model) {
-                    return true;
-                }
+                    return gridService.checkToShowMainMenuBySubMenu(action, model);
+                },
+                subMenu: [
+                    // add to my follow up
+                    {
+                        type: 'action',
+                        icon: 'book-search-outline',
+                        text: 'add_to_my_direct_followup',
+                        shortcut: true,
+                        callback: self.addToDirectFollowUp,
+                        permissionKey: 'USER_FOLLOWUP_BOOKS',
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    },
+                    // add to employee follow up
+                    {
+                        type: 'action',
+                        icon: 'book-search-outline',
+                        text: 'grid_action_to_employee_followup',
+                        shortcut: true,
+                        callback: self.addToEmployeeFollowUp,
+                        permissionKey: 'ADMIN_USER_FOLLOWUP_BOOKS',
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return true;
+                        }
+                    }
+                ]
             },
             // Print Barcode
             {
