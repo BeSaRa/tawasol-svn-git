@@ -40,6 +40,11 @@ module.exports = function (app) {
                             //generator.checkIfBrowserPopupBlocked(window);
                             return true;
                         });
+                    }).catch(function (error) {
+                        errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
+                            dialog.errorMessage(langService.get('certificate_missing'))
+                        });
+                        return false;
                     })
             },
             /**
