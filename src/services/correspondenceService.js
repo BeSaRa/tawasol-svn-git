@@ -3039,7 +3039,10 @@ module.exports = function (app) {
                             return site;
                         });
                         item.sitesitesToList = generator.interceptReceivedCollection('Site', generator.generateCollection(item.sitesitesToList, Site));
-                        item.sitesCCList = generator.interceptReceivedCollection('Site', generator.generateCollection(item.sitesCCList, Site));
+                        item.sitesCCList = _.map(generator.interceptReceivedCollection('Site', generator.generateCollection(item.sitesCCList, Site)), function (site) {
+                            site.ccVerion = true;
+                            return site;
+                        });
                         vsIdObject[key] = [].concat(item.sitesitesToList, item.sitesCCList);
                     });
                     return vsIdObject;
