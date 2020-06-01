@@ -243,10 +243,10 @@ module.exports = function (app) {
                     self.subSitesCopy = [];
                     //load sub sites if create reply
                     if ($stateParams.action === 'reply') {
-                        self.getSubSites($event);
-                    } else {
-                        _selectDefaultMainSiteAndGetSubSites();
+                        self.getSubSites(true);
                     }
+
+                    _selectDefaultMainSiteAndGetSubSites();
                     return self.mainSites;
                 });
             } else {

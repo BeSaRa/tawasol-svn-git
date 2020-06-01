@@ -487,7 +487,6 @@ module.exports = function (app) {
                 });
             }
             defer.promise.then(function (resultUrl) {
-                debugger;
                 self.secondURL = resultUrl;
                 self.mainDocument = false;
                 self.selectedList = listName;
