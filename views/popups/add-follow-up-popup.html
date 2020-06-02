@@ -4,51 +4,67 @@
     <popup-toolbar-directive ng-if="!ctrl.model.id"
                              header-text="{{lang.follow_up_to + ' : ' + ctrl.model.docSubject}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
-        <div layout="row" class="md-dialog-content cms-dialog-content">
-            <md-input-container flex ng-if="!ctrl.addToMyFollowup">
-                <label for="applicationUser">{{lang.select_user}}</label>
-                <md-select id="applicationUser" name="applicationUser" aria-label="{{lang.select_user}}"
-                           ng-change="ctrl.onChangeUser()"
-                           ng-model="ctrl.selectedUser"
-                           ng-required="true"
-                           ng-model-options="{trackBy: '$value.id'}"
-                           md-on-close="ctrl.clearSearchText('appUser')"
-                           data-md-container-class="select-header-container sticky-search-bar">
-                    <md-select-header class="select-header">
-                        <input ng-model="ctrl.appUserSearchText"
-                               ng-keydown="ctrl.preventSearchKeyDown($event)"
-                               placeholder="{{lang.search}}"
-                               class="select-header-input">
-                    </md-select-header>
-                    <md-option
-                            ng-repeat="record in ctrl.ouApplicationUsers | translatedNameFilter: ctrl.appUserSearchText:'getAppUserAndOuTranslate'"
-                            ng-value="record">
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="followupForm" layout="row">
+                <md-input-container flex ng-if="!ctrl.addToMyFollowup">
+                    <label for="applicationUser">{{lang.select_user}}</label>
+                    <md-select id="applicationUser" name="applicationUser" aria-label="{{lang.select_user}}"
+                               ng-change="ctrl.onChangeUser()"
+                               ng-model="ctrl.selectedUser"
+                               ng-required="true"
+                               ng-model-options="{trackBy: '$value.id'}"
+                               md-on-close="ctrl.clearSearchText('appUser')"
+                               data-md-container-class="select-header-container sticky-search-bar">
+                        <md-select-header class="select-header">
+                            <input ng-model="ctrl.appUserSearchText"
+                                   ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                   placeholder="{{lang.search}}"
+                                   class="select-header-input">
+                        </md-select-header>
+                        <md-option
+                                ng-repeat="record in ctrl.ouApplicationUsers | translatedNameFilter: ctrl.appUserSearchText:'getAppUserAndOuTranslate'"
+                                ng-value="record">
                         <span
                                 md-highlight-text="ctrl.appUserSearchText"
                                 md-highlight-flags="i">{{record.getAppUserAndOuTranslate()}}</span>
-                    </md-option>
-                </md-select>
-            </md-input-container>
-            <md-input-container flex>
-                <label for="folder">{{lang.add_to_folder}}</label>
-                <md-select id="folder" ng-model="ctrl.model.folderId"
-                           ng-required="true">
-                    <md-option ng-repeat="folder in ctrl.folders"
-                               ng-value="folder.id"
-                               ng-disabled="!folder.status">{{folder.getTranslatedName()}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
-            <md-input-container flex class="cms-datepicker md-block">
-                <label>{{lang.followup_date}}</label>
-                <md-datepicker ng-required="true" md-min-date="ctrl.minDate"
-                               ng-model="ctrl.model.followupDate"></md-datepicker>
-            </md-input-container>
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="followupForm.applicationUser.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <md-input-container flex>
+                    <label for="folder">{{lang.add_to_folder}}</label>
+                    <md-select id="folder" name="folder"
+                               ng-model="ctrl.model.folderId"
+                               ng-required="true">
+                        <md-option ng-repeat="folder in ctrl.folders"
+                                   ng-value="folder.id"
+                                   ng-disabled="!folder.status">{{folder.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="followupForm.folder.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <md-input-container flex class="cms-datepicker md-block">
+                    <label for="followupDate">{{lang.followup_date}}</label>
+                    <md-datepicker id="followupDate" name="followupDate"
+                                   ng-required="true" md-min-date="ctrl.minDate"
+                                   ng-model="ctrl.model.followupDate"></md-datepicker>
+                    <div ng-messages="followupForm.followupDate.$error">
+                        <div ng-message="valid">{{lang.invalid_date_format}}</div>
+                        <div ng-message="required">{{lang.field_required}}</div>
+                        <div ng-message="mindate">{{lang.date_should_be_more_than_equal.change({datevalue: ctrl.minDateString})}}
+                        </div>
+                    </div>
+                </md-input-container>
+            </form>
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised md-primary"
-                   ng-disabled="!ctrl.isValidFollowup()"
+                   ng-disabled="!ctrl.isValidFollowup(followupForm)"
                    ng-click="ctrl.saveToFollowUp()">
             {{lang.add}}
         </md-button>

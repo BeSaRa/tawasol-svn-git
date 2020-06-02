@@ -29,6 +29,9 @@
                                             md-highlight-flags="i">{{ou.getTranslatedName()}}</span>
                                 </md-option>
                             </md-select>
+                            <div ng-messages="reason_form.organization.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
                         </md-input-container>
                         <md-input-container flex>
                             <label for="selectedApplicationUser">{{lang.select_user}}</label>
@@ -44,6 +47,9 @@
                                     {{user.getTranslatedApplicationUserName()}}
                                 </md-option>
                             </md-select>
+                            <div ng-messages="reason_form.selectedApplicationUser.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
                         </md-input-container>
                     </div>
                     <div layout="row">

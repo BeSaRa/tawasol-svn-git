@@ -6,7 +6,9 @@ module.exports = function (app) {
                                                 langService,
                                                 dialog,
                                                 addToMyFollowup,
-                                                ouApplicationUsers) {
+                                                ouApplicationUsers,
+                                                moment,
+                                                generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'followUpPopCtrl';
@@ -26,6 +28,7 @@ module.exports = function (app) {
 
         self.minDate = new Date();
         self.minDate.setDate(self.minDate.getDate() + 1);
+        self.minDateString = moment(self.minDate).format(generator.defaultDateFormat);
 
         if (!self.model.followupDate) {
             self.model.followupDate = self.minDate;
@@ -76,8 +79,8 @@ module.exports = function (app) {
          * @description Checks if followup is valid
          * @returns {boolean|*|null}
          */
-        self.isValidFollowup = function () {
-            var isValid = !self.inProgress && self.model.folderId && self.model.followupDate;
+        self.isValidFollowup = function (form) {
+            var isValid = form.$valid && !self.inProgress && self.model.folderId && (self.model.followupDate && self.model.followupDate >= self.minDate);
             if (addToMyFollowup) {
                 return isValid;
             }
