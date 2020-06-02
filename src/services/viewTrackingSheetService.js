@@ -386,7 +386,7 @@ module.exports = function (app) {
                                 return (heading === 'view_tracking_sheet_followup_logs' || gridType === 'tabs')
                                     ? self.loadFollowupLogs(document)
                                         .then(function (result) {
-                                            return [];
+                                            return result;
                                         }) : [];
                             }
                         }
