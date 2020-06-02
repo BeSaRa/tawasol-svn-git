@@ -88,10 +88,10 @@ module.exports = function (app) {
                                 'ngInject';
                                 return organizationService.getFollowUpOrganizations();
                             },
-                            ouApplicationUsers: function (ouApplicationUserService) {
+                            applicationUsers: function (distributionWFService) {
                                 'ngInject';
                                 return selectedOrganization ?
-                                    ouApplicationUserService.loadRelatedOUApplicationUsers(selectedOrganization) : [];
+                                    distributionWFService.searchUsersByCriteria({ou: selectedOrganization}) : [];
                             }
                         }
                     });

@@ -51,11 +51,11 @@
                                            placeholder="{{lang.search}}"
                                            class="select-header-input">
                                 </md-select-header>
-                                <md-option ng-if="!ctrl.notCurrentUser(user.applicationUser)"
-                                           ng-value="user.applicationUser"
-                                           ng-repeat="user in ctrl.ouApplicationUsers | translatedNameFilter: ctrl.inlineAppUserSearchText : null:'applicationUser'">
+                                <md-option ng-if="!ctrl.notCurrentUser(user)"
+                                           ng-value="user"
+                                           ng-repeat="user in ctrl.applicationUsers | translatedNameFilter: ctrl.inlineAppUserSearchText : null:'applicationUser'">
                                        <span md-highlight-text="ctrl.inlineAppUserSearchText"
-                                             md-highlight-flags="i">{{user.getTranslatedApplicationUserName()}}</span>
+                                             md-highlight-flags="i">{{user.getTranslatedName()}}</span>
                                 </md-option>
                             </md-select>
                             <div ng-messages="organizationAndUserForm.applicationUser.$error">

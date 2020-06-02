@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('followupEmployeeInboxPopCtrl', function (ouApplicationUserService,
+                                                             distributionWFService,
                                                              _,
                                                              toast,
                                                              generator,
@@ -12,7 +13,7 @@ module.exports = function (app) {
                                                              selectedSecurityLevels,
                                                              isFollowupSentItems,
                                                              followUpOrganizations,
-                                                             ouApplicationUsers,
+                                                             applicationUsers,
                                                              employeeService,
                                                              rootEntity,
                                                              lookupService,
@@ -67,7 +68,7 @@ module.exports = function (app) {
         };
         self.organizations = _mapRegOUSections();
 
-        self.ouApplicationUsers = ouApplicationUsers;
+        self.applicationUsers = applicationUsers;
 
         self.selectedOrganizationCopy = angular.copy(selectedOrganization);
         self.selectedApplicationUserCopy = angular.copy(selectedUser);
@@ -95,9 +96,10 @@ module.exports = function (app) {
             // get security level
             self.securityLevels = _mapSecurityLevels();
 
-            return ouApplicationUserService.loadRelatedOUApplicationUsers(self.selectedOrganization)
+            return distributionWFService
+                .searchUsersByCriteria({ou: self.selectedOrganization})
                 .then(function (result) {
-                    self.ouApplicationUsers = result;
+                    self.applicationUsers = result;
                     return result;
                 });
         };
