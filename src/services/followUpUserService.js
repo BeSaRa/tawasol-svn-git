@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                  generator,
                                                  moment,
                                                  langService,
+                                                 errorCode,
                                                  FollowupBookCriteria) {
         var self = this;
         self.serviceName = 'followUpUserService';
@@ -74,7 +75,10 @@ module.exports = function (app) {
          */
         self.saveUserFollowUp = function (followUpData) {
             return $http
-                .post(urlService.userFollowUp, followUpData);
+                .post(urlService.userFollowUp, followUpData)
+                .catch(function (error) {
+                    return errorCode.showErrorDialog(error);
+                });
         };
         /**
          * @description delete follow up folder
@@ -794,7 +798,10 @@ module.exports = function (app) {
                 return item.getInfo().id;
             });
             return $http
-                .put(urlService.userFollowUp + '/folder/move/bulk/' + (folder.hasOwnProperty('id') ? folder.id : folder), ids);
+                .put(urlService.userFollowUp + '/folder/move/bulk/' + (folder.hasOwnProperty('id') ? folder.id : folder), ids)
+                .catch(function (error) {
+                    return errorCode.showErrorDialog(error);
+                });
         };
 
         /**
@@ -891,6 +898,9 @@ module.exports = function (app) {
                 .put((urlService.userFollowUp + '/transfer'), generator.interceptSendInstance('UserFollowupRequest', userFollowupRequest))
                 .then(function (result) {
                     return result.data.rs;
+                })
+                .catch(function (error) {
+                    return errorCode.showErrorDialog(error);
                 });
         };
         /**

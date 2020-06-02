@@ -495,7 +495,8 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return true;
                 }
-            },// Transfer To Another Employee
+            },
+            // Transfer To Another Employee
             {
                 type: 'action',
                 icon: 'transfer',

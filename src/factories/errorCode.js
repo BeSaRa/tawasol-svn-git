@@ -65,6 +65,7 @@ module.exports = function (app) {
                 DOCUMENT_HAS_BEEN_DELETED: 3045,
                 NOT_ENOUGH_CERTIFICATES: 3047,
                 PIN_CODE_NOT_MATCH: 3048,
+                DUPLICATE_BOOK_FOLLOWUP: 3049
             },
             errorLangKeys = {
                 1001: 'no_records_found',
@@ -94,7 +95,8 @@ module.exports = function (app) {
                 3045: 'document_has_been_deleted',
                 3047: 'certificate_missing',
                 3048: 'pincode_not_match',
-                3044: 'g2g_recall_failed'
+                3044: 'g2g_recall_failed',
+                3049: 'duplicate_followup_book'
             };
 
         return {
