@@ -119,6 +119,15 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.resetFilter = function ($event) {
+            generator.resetFields(self.searchCriteria, self.model);
+        };
+
+        /**
+         * @description Clear the filter for followup book
+         * @param $event
+         * @returns {*}
+         */
+        self.clearFilter = function($event){
             dialog.hide({
                 result: [],
                 criteria: null,
