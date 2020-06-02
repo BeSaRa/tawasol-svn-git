@@ -541,7 +541,7 @@
                                                     </md-option>
                                                 </md-select>
                                             </md-input-container>
-                                            <div flex layout="column">
+                                            <div flex ng-if="ctrl.organization.hasRegistry" layout="column">
                                                 <div ng-repeat="priority in ctrl.priorityLevels"
                                                      layout-align="start center" layout="row">
                                                     <div style="min-width: 100px">{{priority.getTranslatedName()}}</div>
