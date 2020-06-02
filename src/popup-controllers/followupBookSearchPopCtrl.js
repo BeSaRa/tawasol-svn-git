@@ -11,7 +11,8 @@ module.exports = function (app) {
                                                           $timeout,
                                                           correspondenceSiteTypes,
                                                           correspondenceViewService,
-                                                          moment) {
+                                                          moment,
+                                                          folders) {
         'ngInject';
         var self = this;
         self.controllerName = 'followupBookSearchPopCtrl';
@@ -23,6 +24,7 @@ module.exports = function (app) {
         self.subSiteSearchText = '';
 
         self.correspondenceSiteTypes = correspondenceSiteTypes;
+        self.folders = folders;
         self.todayEndOfDay = moment().endOf("day").toDate();
 
         $timeout(function () {

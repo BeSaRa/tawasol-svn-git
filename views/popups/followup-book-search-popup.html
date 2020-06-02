@@ -162,6 +162,25 @@
                             </div>
                         </md-input-container>
                     </div>
+                    <div layout="row">
+                        <!-- Folder -->
+                        <md-input-container flex>
+                            <label for="folderId">{{lang.folder}}</label>
+                            <md-select id="folderId" name="folderId"
+                                       ng-model="ctrl.searchCriteria.folderId">
+                                <md-option ng-repeat="folder in ctrl.folders"
+                                           ng-value="folder.id">{{folder.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <!-- Terminated -->
+                        <div class="cms-input-container" flex>
+                            <md-switch flex ng-model="ctrl.searchCriteria.status">
+                                <label>{{lang.terminated}} :
+                                    {{ctrl.searchCriteria.getTranslatedYesNo('status')}}</label>
+                            </md-switch>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

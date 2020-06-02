@@ -246,6 +246,10 @@ module.exports = function (app) {
                             correspondenceSiteTypes: function (correspondenceSiteTypeService) {
                                 'ngInject';
                                 return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
+                            },
+                            folders: function (employeeService) {
+                                'ngInject';
+                                return self.loadFollowupFoldersByOuAndUser(employeeService.getEmployee().getRegistryOUID(), employeeService.getEmployee().id);
                             }
                         }
                     });

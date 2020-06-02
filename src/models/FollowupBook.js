@@ -143,6 +143,16 @@ module.exports = function (app) {
             FollowupBook.prototype.getTranslatedName = function () {
                 return this.docSubject;
             };
+
+            /**
+             * @description Get the localization of field as Yes or No instead of true or false
+             * @param fieldName
+             * @returns {string}
+             */
+            FollowupBook.prototype.getTranslatedYesNo = function (fieldName) {
+                return this[fieldName] ? langService.get('yes') : langService.get('no');
+            };
+
             FollowupBook.prototype.manageDocumentComments = function ($event) {
                 var info = this.getInfo();
                 return managerService.manageDocumentComments(this, info.vsId, info.title, $event);
