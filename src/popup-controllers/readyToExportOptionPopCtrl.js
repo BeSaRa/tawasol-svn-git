@@ -160,6 +160,7 @@ module.exports = function (app) {
 
         self.onChangeExportType = function () {
             self.partialExportList = self.partialExportList.changeExportType();
+            self.model.RELATED_BOOKS = true;
             if (!self.isGroupExport) {
                 _loadRecordsForSelection();
             }
@@ -337,6 +338,15 @@ module.exports = function (app) {
                     var currentModel = self.isGroupExport ? self.model : self.partialExportList;
                     currentModel.setAttachmentLinkedDocs(selectedCorrespondences);
                 })
+        };
+
+        self.resetExportLinkedDocumentAttachments = function (option) {
+            if (option === 'RELATED_BOOKS') {
+                self.model.setAttachmentLinkedDocs([]);
+
+                if (self.model.RELATED_BOOKS)
+                    _setDefaultLinkedDocs();
+            }
         };
 
         // if selective export from global settings, change export type because in this popup, default is group export

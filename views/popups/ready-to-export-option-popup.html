@@ -79,7 +79,8 @@
                             <div ng-repeat="option in ctrl.exportOptions" flex
                                  ng-if="ctrl.canExportRelatedData(option)">
                                 <md-checkbox ng-true-value="true" ng-false-value="false" aria-label="{{option}}"
-                                             ng-model="ctrl.model[option]">
+                                             ng-model="ctrl.model[option]"
+                                             ng-change="ctrl.resetExportLinkedDocumentAttachments(option)">
                                     {{lang.get(ctrl.labels[$index])}}
                                 </md-checkbox>
                             </div>
@@ -109,7 +110,8 @@
                         <div layout="row"
                              ng-if="ctrl.isGroupExport || (!ctrl.isGroupExport && ctrl.partialExportList.exportItems.RELATED_BOOKS.length)">
                             <span flex></span>
-                            <md-button class="md-raised" ng-click="ctrl.openLinkedDocsAttachmentDialog($event)">
+                            <md-button class="md-raised" ng-click="ctrl.openLinkedDocsAttachmentDialog($event)"
+                                       ng-disabled="!ctrl.model.RELATED_BOOKS">
                                 {{lang.export_attachments_related_to_linked_documents}} ({{ctrl.getLinkedDocsCount()}})
                             </md-button>
                             <span flex></span>
