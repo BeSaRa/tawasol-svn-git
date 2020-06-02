@@ -513,7 +513,6 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return gridService.checkToShowMainMenuBySubMenu(action, model);
                 },
-                showInView: false,
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_COMMENTS"
                 ],
