@@ -884,7 +884,7 @@ module.exports = function (app) {
                     'comments_creation_date',
                     'document_subject',
                     'serial_number',
-                    'created_on'
+                    'comment_date'
                 ];
 
             printService

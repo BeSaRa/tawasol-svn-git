@@ -21,7 +21,7 @@ module.exports = function (app) {
                     serial_number: function () {
                         return this.correspondence.docFullSerial
                     },
-                    created_on: function () {
+                    comment_date: function () {
                         return moment(this.correspondence.createdOn).format('YYYY-MM-DD');
                     }
                 };
