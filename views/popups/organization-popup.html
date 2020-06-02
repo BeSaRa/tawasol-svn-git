@@ -519,34 +519,39 @@
                                             </md-input-container>
                                         </div>
                                     </fieldset>
-                                    <fieldset class="size-50">
-                                        <legend class="md-accent">{{lang.escalation_settings}}</legend>
-                                        <div layout="column">
-                                            <md-switch id="enableEscalation"
-                                                       ng-change="ctrl.enableEscalationChanged($event)"
-                                                       ng-model="ctrl.organization.enableEscalation">
-                                                {{lang.enable_escalation_mode}}
-                                            </md-switch>
-                                            <md-input-container flex>
-                                                <label for="escalationProcess">{{lang.choose_escalation_process}}</label>
-                                                <md-select ng-model-options="{trackBy: '$value.id'}"
-                                                           id="escalationProcess"
-                                                           ng-disabled="!ctrl.organization.enableEscalation"
-                                                           ng-model="ctrl.organization.escalationProcess">
-                                                    <md-option ng-value="null">{{lang.none}}</md-option>
-                                                    <md-option tooltip="{{escalation.getTranslatedName(true)}}"
-                                                               ng-value="escalation"
-                                                               ng-repeat="escalation in ctrl.escalationProcess track by $index">
-                                                        {{escalation.getTranslatedName()}}
-                                                    </md-option>
-                                                </md-select>
-                                            </md-input-container>
-                                            <div flex ng-if="ctrl.organization.hasRegistry" layout="column">
+                                    <div class="size-50" layout="column">
+                                        <fieldset>
+                                            <legend class="md-accent">{{lang.escalation_settings}}</legend>
+                                            <div layout="column">
+                                                <md-switch id="enableEscalation"
+                                                           ng-change="ctrl.enableEscalationChanged($event)"
+                                                           ng-model="ctrl.organization.enableEscalation">
+                                                    {{lang.enable_escalation_mode}}
+                                                </md-switch>
+                                                <md-input-container flex>
+                                                    <label for="escalationProcess">{{lang.choose_escalation_process}}</label>
+                                                    <md-select ng-model-options="{trackBy: '$value.id'}"
+                                                               id="escalationProcess"
+                                                               ng-disabled="!ctrl.organization.enableEscalation"
+                                                               ng-model="ctrl.organization.escalationProcess">
+                                                        <md-option ng-value="null">{{lang.none}}</md-option>
+                                                        <md-option tooltip="{{escalation.getTranslatedName(true)}}"
+                                                                   ng-value="escalation"
+                                                                   ng-repeat="escalation in ctrl.escalationProcess track by $index">
+                                                            {{escalation.getTranslatedName()}}
+                                                        </md-option>
+                                                    </md-select>
+                                                </md-input-container>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset ng-if="ctrl.organization.hasRegistry">
+                                            <legend class="md-accent">{{lang.sla}}</legend>
+                                            <div layout="column">
                                                 <div ng-repeat="priority in ctrl.priorityLevels"
                                                      layout-align="start center" layout="row">
-                                                    <div style="min-width: 100px">{{priority.getTranslatedName()}}</div>
+                                                    <div style="min-width: 100px">{{priority.getTranslatedName()}}
+                                                    </div>
                                                     <md-input-container flex>
-                                                        <label>{{lang.sla}}</label>
                                                         <input ng-model="ctrl.organization.sla[priority.lookupKey]"
                                                                custom-validate-directive="number"
                                                                name="{{ priority.lookupKey }}"
@@ -557,8 +562,8 @@
                                                     </md-input-container>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </fieldset>
+                                        </fieldset>
+                                    </div>
                                 </div>
                             </div>
                         </md-content>
