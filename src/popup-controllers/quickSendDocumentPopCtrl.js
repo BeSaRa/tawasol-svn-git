@@ -86,6 +86,7 @@ module.exports = function (app) {
         };
 
         self.openWorkflowUserOutOfOffice = function (member, $event) {
+            // type cast to change to DistributionUserWFItem to access openOutOfOfficeDialog dialog
             predefinedActionService.typeCastMembersToDistributionWFItems([member], true, true)
                 .then(function (workflowUser) {
                     return workflowUser[0].openOutOfOfficeDialog($event);
