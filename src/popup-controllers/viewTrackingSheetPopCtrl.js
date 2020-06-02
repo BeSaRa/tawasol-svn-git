@@ -408,6 +408,8 @@ module.exports = function (app) {
                 return (self.showTab('view_tracking_sheet_outgoing_delivery_reports') && employeeService.hasPermissionTo('VIEW_INCOMING_TRACKING'));
             } else if (tabName === 'view_tracking_sheet_content_view_history') {
                 return (self.tabsToShow.indexOf(tabName) > -1 && employeeService.hasPermissionTo('VIEW_CONTENT_LOG'));
+            } else if (tabName === 'view_tracking_sheet_followup_logs') {
+                return (self.tabsToShow.indexOf(tabName) > -1 && (employeeService.hasPermissionTo('USER_FOLLOWUP_BOOKS') || employeeService.hasPermissionTo('ADMIN_USER_FOLLOWUP_BOOKS')));
             } else if (tabName === 'view_tracking_sheet_sms_logs') {
                 return (parentGridName === gridService.grids.inbox.userInbox
                     || parentGridName === gridService.grids.inbox.group
