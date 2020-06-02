@@ -473,7 +473,7 @@ module.exports = function (app) {
             {
                 type: 'action',
                 icon: 'stop',
-                text: 'grid_action_terminate',
+                text: 'grid_action_terminate_followup',
                 shortcut: true,
                 callback: self.terminate,
                 class: "action-green",
