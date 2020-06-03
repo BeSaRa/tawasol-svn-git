@@ -810,7 +810,7 @@ module.exports = function (app) {
 
         self.getNextDaysDate = function (days) {
             var date = new Date();
-            date.setDate(date.getDate() + (days || 0));
+            date.setDate(date.getDate() + ((days ? Number(days) : 0) || 0));
             return date;
         };
 
