@@ -14,6 +14,7 @@ module.exports = function (app) {
             self.incomingVsId = null;
             self.docType = null;
             self.docClassId = null;
+            self.priorityLevel = null;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];

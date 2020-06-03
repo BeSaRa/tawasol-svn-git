@@ -421,6 +421,26 @@ module.exports = function (app) {
             return correspondence.hasOwnProperty('generalStepElm') ? false : (correspondence.hasOwnProperty('fromEditOnDesktop') ? correspondence.fromEditOnDesktop : false);
         }
 
+        function _getPriorityLevel(correspondence) {
+            var priorityLevel = null;
+            if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) { /* WorkItem */
+                priorityLevel = correspondence.generalStepElm.priorityLevel;
+            } else if (correspondence.hasOwnProperty('priorityLevel')) { /* Event History */
+                priorityLevel = correspondence.priorityLevel;
+            }
+            /*in case of G2G*/
+            else if (correspondence.hasOwnProperty('correspondence')) {
+                if (correspondence.hasOwnProperty('priorityLevel')){
+                    priorityLevel = correspondence.correspondence.priorityLevel;
+                } else {
+                    priorityLevel = correspondence.correspondence.priorityLevel;
+                }
+            } else {  /* Correspondence */
+                priorityLevel = correspondence.priorityLevel;
+            }
+            return priorityLevel;
+        }
+
         /**
          * @description bulk message for any bulk actions.
          * @param result
@@ -506,7 +526,8 @@ module.exports = function (app) {
                 incomingVsId: _getIncomingVsId(correspondence),
                 docType: _getDocType(correspondence),
                 editByDeskTop: _getEditInDesktop(correspondence),
-                docClassId: self.docClassIds[dc]
+                docClassId: self.docClassIds[dc],
+                priorityLevel: _getPriorityLevel(correspondence)
             });
         };
         /**
