@@ -174,7 +174,7 @@ module.exports = function (app) {
             self.searchCriteria = new FollowupBookCriteria({
                 userId: self.selectedUser,
                 userOUID: self.selectedOrganization,
-                //securityLevel: self.selectedUser.securityLevel
+                securityLevel: self.selectedUser.securityLevel
             });
             self.searchCriteriaCopy = angular.copy(self.searchCriteria);
             if (!skipDates) {
