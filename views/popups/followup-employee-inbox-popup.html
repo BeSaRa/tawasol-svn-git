@@ -53,7 +53,7 @@
                                 </md-select-header>
                                 <md-option ng-if="!ctrl.notCurrentUser(user)"
                                            ng-value="user"
-                                           ng-repeat="user in ctrl.applicationUsers | translatedNameFilter: ctrl.inlineAppUserSearchText : null:'applicationUser'">
+                                           ng-repeat="user in ctrl.applicationUsers | translatedNameFilter: ctrl.inlineAppUserSearchText">
                                        <span md-highlight-text="ctrl.inlineAppUserSearchText"
                                              md-highlight-flags="i">{{user.getTranslatedName()}}</span>
                                 </md-option>
