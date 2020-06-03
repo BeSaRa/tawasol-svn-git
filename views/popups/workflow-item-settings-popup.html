@@ -47,6 +47,7 @@
                         <label for="sLADueDate">{{lang.sla_due_date}}</label>
                         <input name="sLADueDate" id="sLADueDate"
                                ng-model="ctrl.distWorkflowItem.sLADueDate"
+                               ng-required="ctrl.currentUserOrg.enableEscalation && !ctrl.isEscalationHidden() &&  ctrl.isEscalationStatusSelected()"
                                custom-validate-directive="number"
                                min-max-number-directive
                                ng-disabled="ctrl.isSLADueDateDisabled()"
