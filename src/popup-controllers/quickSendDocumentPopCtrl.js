@@ -13,7 +13,8 @@ module.exports = function (app) {
                                                          predefinedActionService,
                                                          errorCode,
                                                          distributionWFService,
-                                                         DistributionWF) {
+                                                         DistributionWF,
+                                                         employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'quickSendDocumentPopCtrl';
@@ -28,6 +29,27 @@ module.exports = function (app) {
         self.includedMembers = [];
         self.excludedMembers = [];
 
+        function _checkPermission(permission) {
+            return employeeService.hasPermissionTo(permission);
+        }
+
+        function _isValidUser(member) {
+            return (member.isUserMember() && _checkPermission('SEND_TO_USERS_'));
+        }
+
+        function _isValidOrganization(member) {
+            return (member.isOrganizationMember()
+                && _checkPermission('SEND_TO_ELECTRONIC_INCOMING_QUEUES')
+                && self.record.getInfo().documentClass.toLowerCase() !== 'internal'
+                && !self.record.isPrivateSecurityLevel()
+                && !self.record.getInfo().needToApprove()
+            );
+        }
+
+        function _isValidGroupMail(member) {
+            return (member.isGroupMailMember() && !self.record.isPrivateSecurityLevel());
+        }
+
         self.onChangePredefinedAction = function ($event) {
             self.includedMembers = [];
             self.excludedMembers = [];
@@ -36,10 +58,7 @@ module.exports = function (app) {
                 predefinedActionService.loadPredefinedActionById(self.selectedPredefinedAction)
                     .then(function (result) {
                         _.map(result.members, function (member) {
-                            if (member.isUserMember()
-                                || (member.isOrganizationMember() && !self.record.getInfo().needToApprove())
-                                || (member.isGroupMailMember() && !self.record.isPrivateSecurityLevel())
-                            ) {
+                            if (_isValidUser(member) || _isValidOrganization(member) || _isValidGroupMail(member)) {
                                 self.includedMembers.push(member);
                             } else {
                                 self.excludedMembers.push(member);
@@ -94,7 +113,7 @@ module.exports = function (app) {
         };
 
         /**
-         *
+         * @description Quick send the correspondence
          * @param $event
          */
         self.quickSend = function ($event) {
