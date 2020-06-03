@@ -133,7 +133,7 @@ module.exports = function (app) {
         var isNeedReplyFromConfiguration = followupStatusConfiguration ? followupStatusConfiguration.isMandatory : false;
 
         self.isDocumentTypeSwitchDisabled = function () {
-            return !!self.outgoing.vsId || !employeeService.hasPermissionTo('OUTGOING_PAPER') || self.employee.isBacklogMode();
+            return !!self.outgoing.vsId || self.duplicateVersion || !employeeService.hasPermissionTo('OUTGOING_PAPER') || self.employee.isBacklogMode() || replyTo;
         };
 
         self.preventPropagation = function ($event) {
