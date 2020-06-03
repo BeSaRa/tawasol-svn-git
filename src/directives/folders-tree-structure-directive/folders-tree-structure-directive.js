@@ -21,7 +21,8 @@ module.exports = function (app) {
                 editCallback: '=?',
                 count: '=',
                 counterProperty: '@',
-                displayMenu: '=?'
+                displayMenu: '=?',
+                showTooltipName: '=?'
             }
         }
     })

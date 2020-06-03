@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('foldersTreeStructureDirectiveCtrl', function ($scope, LangWatcher, counterService) {
+    app.controller('foldersTreeStructureDirectiveCtrl', function ($scope, LangWatcher, counterService, langService) {
         'ngInject';
         var self = this;
         self.controllerName = 'foldersTreeStructureDirectiveCtrl';
@@ -29,7 +29,20 @@ module.exports = function (app) {
 
         self.getCounter = function (folder) {
             return self.counterProperty ? self.counterService[self.counterProperty][folder.id] : self.counterService.folderCount[folder.id];
-        }
+        };
+
+        self.getTooltip = function (folder) {
+            var tooltip = '';
+            if (!folder.status) {
+                tooltip = langService.get('folder_deactivated');
+            } else if (self.showTooltipName) {
+                tooltip = folder.getTranslatedName();
+                if (self.count && self.counterHasFolderId(folder)) {
+                    tooltip = tooltip + ' (' + self.getCounter(folder).first + ')';
+                }
+            }
+            return tooltip;
+        };
 
     });
 };

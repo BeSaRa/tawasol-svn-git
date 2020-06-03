@@ -7,7 +7,8 @@
                                ng-disabled="ctrl.sameFolder(folder) || !folder.status"
                                ng-click="ctrl.clickCallback(folder , $event)">
                         <div layout="row" layout-align="start center"
-                             tooltip="{{(!folder.status) ? lang.folder_deactivated:''}}">
+                             tooltip="{{ctrl.getTooltip(folder)}}">
+                            <!--tooltip="{{(!folder.status) ? lang.folder_deactivated:''}}"-->
                             <div class="folder-icon">
                                 <md-icon md-svg-icon="{{ctrl.icon ? ctrl.icon : 'folder'}}"></md-icon>
                             </div>
@@ -77,6 +78,7 @@
                                           add-callback="ctrl.addCallback"
                                           edit-callback="ctrl.editCallback"
                                           delete-callback="ctrl.deleteCallback"
-                                          folders="folder.children"></folders-tree-structure-directive>
+                                          folders="folder.children"
+                                          show-tooltip-name="ctrl.showTooltipName"></folders-tree-structure-directive>
     </li>
 </ul>

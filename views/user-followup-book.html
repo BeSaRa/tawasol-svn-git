@@ -66,7 +66,8 @@
                                                           delete-callback="ctrl.deleteFolder"
                                                           highlight-selected="ctrl.selectedFolder"
                                                           click-callback="ctrl.getFolderContent"
-                                                          folders="ctrl.folders"></folders-tree-structure-directive>
+                                                          folders="ctrl.folders"
+                                                          show-tooltip-name="true"></folders-tree-structure-directive>
                     </div>
                 </md-sidenav>
             </div>
@@ -84,7 +85,8 @@
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedFollowupBooks.length}} {{lang.items_selected}} </span>
                                                 <span flex></span>
-                                                <md-button class="md-icon-button" aria-label="{{lang.grid_action_terminate_followup}}"
+                                                <md-button class="md-icon-button"
+                                                           aria-label="{{lang.grid_action_terminate_followup}}"
                                                            tooltip="{{lang.grid_action_terminate_followup}}"
                                                            ng-click="ctrl.terminateBulk($event)">
                                                     <md-icon md-svg-icon="stop" class="action-green"></md-icon>
