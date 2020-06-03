@@ -17,6 +17,7 @@ module.exports = function (app) {
             delete model.actionDateString;
             delete model.followupDateString;
             delete model.followDateIndicator;
+            delete model.siteFollowUpDueDateIndicator;
             delete model.numberOfDays;
             delete model.securityLevelLookup;
             delete model.securityLevelIndicator;
@@ -33,6 +34,7 @@ module.exports = function (app) {
             model.actionDateString = generator.getDateFromTimeStamp(model.actionDate);
             model.followupDateString = generator.getDateFromTimeStamp(model.followupDate);
             model.followDateIndicator = model.getFollowupDateIndicator(model.followupDate);
+            model.siteFollowUpDueDateIndicator = model.getSiteFollowupDueDateIndicator(); // this indicator is used to show followup date of book. its not showing info for correspondence site followup date
             var numberOfDays = generator.getNumberOfDays(model.followupDate, new Date(), true);
             // -(numberOfDays) means, get positive number if date is in future
             model.numberOfDays = numberOfDays === 0 ? numberOfDays : -(numberOfDays);

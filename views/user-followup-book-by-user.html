@@ -184,11 +184,15 @@
                                             <!-- Security Level -->
                                             <grid-indicator-directive record="record"
                                                                       indicator-type="securityLevel"
-                                                                      record-type="record"></grid-indicator-directive>
+                                                                      record-type="FollowupBook"></grid-indicator-directive>
                                             <!-- Doc Type -->
                                             <grid-indicator-directive record="record"
                                                                       indicator-type="docClass"
-                                                                      record-type="record"></grid-indicator-directive>
+                                                                      record-type="FollowupBook"></grid-indicator-directive>
+                                            <!-- Book Follow up Due Date (this indicator is used to show followup date of book. its not showing info for correspondence site followup date) -->
+                                            <grid-indicator-directive record="record"
+                                                                      indicator-type="siteFollowUpDueDate"
+                                                                      record-type="FollowupBook"></grid-indicator-directive>
                                         </td>
                                         <td md-cell><span class="serial-td">{{record.docFullSerial}}</span></td>
                                         <td md-cell class="indicator-td text-right"

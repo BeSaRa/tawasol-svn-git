@@ -132,6 +132,15 @@ module.exports = function (app) {
                 return indicator.getFollowUpDateIndicator(followupDate);
             };
 
+            /**
+             * @description Get the indicator to show followup date of book. its not showing info for correspondence site followup date
+             * @param followupDate
+             * @returns {Indicator}
+             */
+            FollowupBook.prototype.getSiteFollowupDueDateIndicator = function (followupDate) {
+                return indicator.getSiteFollowUpDueDateIndicator(this.followupDate);
+            };
+
             FollowupBook.prototype.viewFromQueue = function (actions, queueName, $event, viewOnly) {
                 return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly);
             };
