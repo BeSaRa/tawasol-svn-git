@@ -254,7 +254,7 @@ module.exports = function (app) {
                     var attachments = angular.copy(self.attachments);
                     linkedExportedAttachments = angular.copy(self.linkedExportedAttachments);
                     attachments.splice(self.attachments.indexOf(attachment), 1);
-                    if (attachment.refVSID) {
+                    if (attachment.refVSID && !(self.receive || self.receiveG2g)) {
                         var index = _.findIndex(linkedExportedAttachments, function (linkedExportedAttachment) {
                             return linkedExportedAttachment.vsId === attachment.vsId;
                         });
@@ -280,8 +280,9 @@ module.exports = function (app) {
 
             var isDeletable, isEditable;
 
-            isDeletable = !attachment.refVSID
-                && attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment, (self.receive || self.receiveG2G));
+            isDeletable = (self.receive || self.receiveG2G) ?
+                attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment, (self.receive || self.receiveG2G)) :
+                !attachment.refVSID && attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment, (self.receive || self.receiveG2G));
 
             isEditable = !attachment.refVSID
                 && attachmentService.checkAttachmentIsEditable(self.document.getInfo(), attachment, (self.receive || self.receiveG2G))
