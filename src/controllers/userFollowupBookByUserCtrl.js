@@ -424,7 +424,7 @@ module.exports = function (app) {
                 return;
             }
             record
-                .openSendSMSDialog(self.selectedUser.getMobileNumber(), $event)
+                .openSendSMSDialog(null, $event)
                 .then(function () {
                     return self.reloadFollowupBooks(self.grid.page);
                 });
@@ -441,7 +441,7 @@ module.exports = function (app) {
                 return;
             }
             record
-                .sendReminderEmail(self.selectedUser.getEmail(), $event)
+                .sendReminderEmail(null, $event)
                 .then(function (result) {
                     if (result) {
                         return self.reloadFollowupBooks(self.grid.page);
