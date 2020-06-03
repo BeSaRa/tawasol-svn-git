@@ -661,7 +661,7 @@ module.exports = function (app) {
 
 
         self.printUserFollowupFromWebPage = function (heading, criteria) {
-            $http.post(urlService.userFollowUp + '/print', criteria)
+            $http.post(urlService.userFollowUp + '/print', generator.interceptSendInstance('FollowupBookCriteria', criteria))
                 .then(result => {
                     var exportData = _getExportData(heading,
                         generator.interceptReceivedCollection('FollowupBook', generator.generateCollection(result.data.rs, FollowupBook))

@@ -83,7 +83,7 @@ module.exports = function (app) {
         self.organizations = _mapRegOUSections();
 
         /**
-         * @description Get the Application Users and security levels for the selected Organization
+         * @description Get the Application Users for the selected Organization
          */
         self.getAppUsersForOU = function ($event) {
             self.selectedUser = null;
@@ -459,7 +459,7 @@ module.exports = function (app) {
         };
 
         self.printResult = function ($event) {
-            followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, self.searchCriteriaCopy, (self.selectedUser ? self.selectedUser.getAppUserAndOuTranslate() : null))
+            followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, self.searchCriteriaCopy, (self.selectedUser ? self.selectedUser.getTranslatedNameAndOU() : null))
                 .then(function (heading) {
                     followUpUserService.printUserFollowupFromWebPage(heading, self.searchCriteriaCopy);
                 });
