@@ -720,9 +720,9 @@ module.exports = function (app) {
                     'ngInject';
                     return followUpUserService.loadFollowupFolders();
                 },
-                ouApplicationUsers: function (ouApplicationUserService, employeeService) {
+                followUpOrganizations: function (organizationService) {
                     'ngInject';
-                    return ouApplicationUserService.loadOuApplicationUserByRegOu(employeeService.getEmployee().getRegistryOUID());
+                    return organizationService.getFollowUpOrganizations();
                 }
             })
             .registerResolver();

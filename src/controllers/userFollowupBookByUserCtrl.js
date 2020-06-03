@@ -13,11 +13,14 @@ module.exports = function (app) {
                                                            moment,
                                                            generator,
                                                            configurationService,
-                                                           ouApplicationUsers,
+                                                           followUpOrganizations,
                                                            correspondenceService,
                                                            counterService,
                                                            ResolveDefer,
-                                                           toast) {
+                                                           toast,
+                                                           _,
+                                                           Information,
+                                                           distributionWFService) {
         'ngInject';
         var self = this;
         self.controllerName = 'userFollowupBookByUserCtrl';
@@ -26,12 +29,81 @@ module.exports = function (app) {
         self.followupBooksCopy = angular.copy(self.followupBooks);
         self.selectedFollowupBooks = [];
 
-        self.ouApplicationUsers = ouApplicationUsers;
         self.selectedUser = null;
         self.appUserSearchText = '';
+        self.inlineOUSearchText = '';
+        self.inlineAppUserSearchText = '';
+
+        self.selectedOrganization = null;
+        self.applicationUsers = [];
 
         self.searchCriteriaUsed = false;
         self.employeeService = employeeService;
+
+        var _mapRegOUSections = function () {
+            // filter all regOU (has registry)
+            var regOus = _.filter(followUpOrganizations, function (item) {
+                    return item.hasRegistry;
+                }),
+                // filter all sections (no registry)
+                sections = _.filter(followUpOrganizations, function (ou) {
+                    return !ou.hasRegistry;
+                }),
+                // registry parent organization
+                parentRegistryOu;
+
+            // To show (regou - section), append the dummy property "tempRegOUSection"
+            regOus = _.map(regOus, function (regOu) {
+                regOu.tempRegOUSection = new Information({
+                    arName: regOu.arName,
+                    enName: regOu.enName
+                });
+                return regOu;
+            });
+            sections = _.map(sections, function (section) {
+                parentRegistryOu = (section.regouId || section.regOuId);
+                if (typeof parentRegistryOu === 'number') {
+                    parentRegistryOu = _.find(followUpOrganizations, function (ou) {
+                        return ou.id === parentRegistryOu;
+                    })
+                }
+
+                section.tempRegOUSection = new Information({
+                    arName: ((parentRegistryOu) ? parentRegistryOu.arName + ' - ' : '') + section.arName,
+                    enName: ((parentRegistryOu) ? parentRegistryOu.enName + ' - ' : '') + section.enName
+                });
+                return section;
+            });
+
+            // sort regOu-section
+            return _.sortBy([].concat(regOus, sections), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]);
+        };
+        self.organizations = _mapRegOUSections();
+
+        /**
+         * @description Get the Application Users and security levels for the selected Organization
+         */
+        self.getAppUsersForOU = function ($event) {
+            self.selectedUser = null;
+            self.followupBooks = [];
+            self.followupBooksCopy = angular.copy(self.followupBooks);
+            self.selectedFollowupBooks = [];
+
+            return distributionWFService
+                .searchUsersByCriteria({ou: self.selectedOrganization})
+                .then(function (result) {
+                    self.applicationUsers = result;
+                    return result;
+                });
+        };
+
+        self.notCurrentUser = function (user) {
+            return employeeService.getEmployee().id === user.id;
+        };
+
+
         /**
          * @description
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
@@ -95,13 +167,14 @@ module.exports = function (app) {
             self.searchCriteria = null;
             self.searchCriteriaUsed = false;
 
-            if (!self.selectedUser) {
-                return;
+            if (!self.selectedOrganization || !self.selectedUser) {
+                return $q.reject(false);
             }
 
             self.searchCriteria = new FollowupBookCriteria({
-                userId: self.selectedUser.getApplicationUserId(),
-                userOUID: self.selectedUser.getOuId()
+                userId: self.selectedUser,
+                userOUID: self.selectedOrganization,
+                //securityLevel: self.selectedUser.securityLevel
             });
             self.searchCriteriaCopy = angular.copy(self.searchCriteria);
             if (!skipDates) {
@@ -126,7 +199,7 @@ module.exports = function (app) {
          * @param pageNumber
          */
         self.reloadFollowupBooks = function (pageNumber) {
-            if (!self.selectedUser) {
+            if (!self.selectedOrganization || !self.selectedUser) {
                 return;
             }
             var defer = $q.defer();
@@ -151,7 +224,7 @@ module.exports = function (app) {
          * @description Opens the search dialog for books
          */
         self.openFilterDialog = function ($event) {
-            if (!self.selectedUser) {
+            if (!self.selectedOrganization || !self.selectedUser) {
                 return;
             }
             if (self.grid.searchText) {
@@ -252,7 +325,7 @@ module.exports = function (app) {
          */
         self.transferToAnotherEmployee = function (record, $event, defer) {
             followUpUserService
-                .openTransferDialog(record, self.selectedUser, $event)
+                .openTransferDialog(record, self.selectedOrganization, self.selectedUser, $event)
                 .then(function () {
                     self.reloadFollowupBooks(self.grid.page)
                         .then(function () {
@@ -264,7 +337,7 @@ module.exports = function (app) {
 
         self.transferToAnotherEmployeeBulk = function ($event) {
             followUpUserService
-                .openTransferDialog(self.selectedFollowupBooks, self.selectedUser, $event)
+                .openTransferDialog(self.selectedFollowupBooks, self.selectedOrganization, self.selectedUser, $event)
                 .then(function () {
                     self.reloadFollowupBooks(self.grid.page)
                         .then(function () {
@@ -347,7 +420,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.sendSMS = function (record, $event, defer) {
-            if (!self.selectedUser) {
+            if (!self.selectedOrganization || !self.selectedUser) {
                 return;
             }
             record
@@ -364,7 +437,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.sendReminderEmailToUser = function (record, $event, defer) {
-            if (!self.selectedUser) {
+            if (!self.selectedOrganization || !self.selectedUser) {
                 return;
             }
             record

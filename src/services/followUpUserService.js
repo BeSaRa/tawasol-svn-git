@@ -856,10 +856,11 @@ module.exports = function (app) {
         /**
          * @description open transfer dialog to select user to transfer.
          * @param records
+         * @param currentFollowedUpOu
          * @param currentFollowedUpUser
          * @param $event
          */
-        self.openTransferDialog = function (records, currentFollowedUpUser, $event) {
+        self.openTransferDialog = function (records, currentFollowedUpOu, currentFollowedUpUser, $event) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('transfer-followup-book'),
@@ -868,12 +869,13 @@ module.exports = function (app) {
                     targetEvent: $event,
                     locals: {
                         records: records,
+                        currentFollowedUpOu: currentFollowedUpOu,
                         currentFollowedUpUser: currentFollowedUpUser
                     },
                     resolve: {
-                        organizations: function (organizationService) {
+                        followUpOrganizations: function (organizationService) {
                             'ngInject';
-                            return organizationService.getOrganizationsByRegOU(employeeService.getEmployee().getRegistryOUID());
+                            return organizationService.getFollowUpOrganizations();
                         },
                         comments: function (userCommentService) {
                             'ngInject';

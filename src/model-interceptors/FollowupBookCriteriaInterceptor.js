@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, moment) {
+    app.run(function (CMSModelInterceptor, moment, generator) {
         'ngInject';
         var modelName = 'FollowupBookCriteria';
         
@@ -27,6 +27,9 @@ module.exports = function (app) {
                 model.fromDocDate = moment(model.fromDocDate).startOf("day").valueOf();
             if (model.toDocDate)
                 model.toDocDate = moment(model.toDocDate).endOf("day").valueOf();
+
+            model.userId = generator.getNormalizedValue(model.userId, 'id')
+            model.userOUID = generator.getNormalizedValue(model.userOUID, 'id')
 
             delete model.selectedSiteType;
             delete model.selectedMainSite;

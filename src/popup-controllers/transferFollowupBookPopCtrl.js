@@ -3,14 +3,19 @@ module.exports = function (app) {
                                                             _,
                                                             correspondenceService,
                                                             dialog,
-                                                            organizations,
+                                                            followUpOrganizations,
+                                                            currentFollowedUpOu,
                                                             currentFollowedUpUser,
                                                             ouApplicationUserService,
                                                             comments,
                                                             followUpUserService,
                                                             FollowUpFolder,
                                                             langService,
-                                                            UserFollowupRequest) {
+                                                            UserFollowupRequest,
+                                                            Information,
+                                                            employeeService,
+                                                            distributionWFService,
+                                                            generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'transferFollowupBookPopCtrl';
@@ -24,8 +29,9 @@ module.exports = function (app) {
         self.isArray = angular.isArray(records);
         // all comments
         self.comments = comments;
-        // all ou's under current regOu for the user
-        self.organizations = organizations;
+
+        // current followed up ou
+        self.currentFollowedUpOu = currentFollowedUpOu;
         // current followed up user
         self.currentFollowedUpUser = currentFollowedUpUser;
         // all ouApplication users
@@ -41,6 +47,49 @@ module.exports = function (app) {
         self.ouSearchText = '';
         self.commentSearchText = '';
         self.inProgress = false;
+
+
+        var _mapRegOUSections = function () {
+            // filter all regOU (has registry)
+            var regOus = _.filter(followUpOrganizations, function (item) {
+                    return item.hasRegistry;
+                }),
+                // filter all sections (no registry)
+                sections = _.filter(followUpOrganizations, function (ou) {
+                    return !ou.hasRegistry;
+                }),
+                // registry parent organization
+                parentRegistryOu;
+
+            // To show (regou - section), append the dummy property "tempRegOUSection"
+            regOus = _.map(regOus, function (regOu) {
+                regOu.tempRegOUSection = new Information({
+                    arName: regOu.arName,
+                    enName: regOu.enName
+                });
+                return regOu;
+            });
+            sections = _.map(sections, function (section) {
+                parentRegistryOu = (section.regouId || section.regOuId);
+                if (typeof parentRegistryOu === 'number') {
+                    parentRegistryOu = _.find(followUpOrganizations, function (ou) {
+                        return ou.id === parentRegistryOu;
+                    })
+                }
+
+                section.tempRegOUSection = new Information({
+                    arName: ((parentRegistryOu) ? parentRegistryOu.arName + ' - ' : '') + section.arName,
+                    enName: ((parentRegistryOu) ? parentRegistryOu.enName + ' - ' : '') + section.enName
+                });
+                return section;
+            });
+
+            // sort regOu-section
+            return _.sortBy([].concat(regOus, sections), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]);
+        };
+        self.organizations = _mapRegOUSections();
 
         function _checkRootFolder(showRootFolder, folders) {
             return showRootFolder ? [new FollowUpFolder({
@@ -84,19 +133,23 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Get the Application Users for the selected Organization
+         * @description Get the Application Users and security levels for the selected Organization
          */
-        self.getApplicationUsersForOU = function ($event) {
+        self.getAppUsersForOU = function ($event) {
             self.selectedApplicationUser = null;
             self.folders = [];
             self.selectedFolder = null;
             self.inProgress = true;
-            return ouApplicationUserService.loadRelatedOUApplicationUsers(self.selectedOrganization)
+
+            return distributionWFService
+                .searchUsersByCriteria({ou: self.selectedOrganization})
                 .then(function (result) {
+                    // transfer should not be to current user in current ou
                     result = _.filter(result, function (item) {
-                        return item.applicationUser.id !== self.currentFollowedUpUser.id;
+                        return !(item.id === generator.getNormalizedValue(self.currentFollowedUpUser, 'id')
+                            && item.ouId === generator.getNormalizedValue(self.currentFollowedUpOu, 'id'));
                     });
-                    self.ouApplicationUsers = result;
+                    self.applicationUsers = result;
                     self.selectedApplicationUser = null;
                     if (!self.isArray) {
                         self.records.customAppUser = null;

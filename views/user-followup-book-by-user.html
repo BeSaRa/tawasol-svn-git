@@ -23,29 +23,60 @@
                     {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
                 </md-switch>
             </div>
+            <!-- Organizations -->
             <md-input-container flex class="cms-default">
-                <label for="applicationUser">{{lang.select_user}}</label>
-                <md-select id="applicationUser" name="applicationUser" aria-label="{{lang.select_user}}"
-                           ng-change="ctrl.onChangeUser()"
-                           ng-model="ctrl.selectedUser"
-                           ng-model-options="{trackBy: '$value.id'}"
-                           md-on-close="ctrl.clearSearchText('appUser')"
+                <label for="organization">{{lang.organization_unit}}</label>
+                <md-select id="organization" name="organization"
+                           ng-change="ctrl.getAppUsersForOU($event)"
+                           aria-label="{{lang.organization_unit}}"
+                           ng-model="ctrl.selectedOrganization"
+                           md-on-close="ctrl.clearSearchText('inlineOU')"
+                           ng-model-options="{trackBy: '$value'}"
                            data-md-container-class="select-header-container sticky-search-bar">
                     <md-select-header class="select-header">
-                        <input ng-model="ctrl.appUserSearchText"
+                        <input ng-model="ctrl.inlineOUSearchText"
                                ng-keydown="ctrl.preventSearchKeyDown($event)"
                                placeholder="{{lang.search}}"
                                class="select-header-input">
                     </md-select-header>
                     <md-option
-                            ng-repeat="record in ctrl.ouApplicationUsers | translatedNameFilter: ctrl.appUserSearchText:'getAppUserAndOuTranslate'"
-                            ng-value="record">
-                        <span
-                                md-highlight-text="ctrl.appUserSearchText"
-                                md-highlight-flags="i">{{record.getAppUserAndOuTranslate()}}</span>
+                            ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.inlineOUSearchText : 'getNameByLanguageRegOUSection'"
+                            ng-value="organization.id">
+                                        <span
+                                                md-highlight-text="ctrl.inlineOUSearchText"
+                                                md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
                     </md-option>
                 </md-select>
             </md-input-container>
+            <!-- Users -->
+            <md-input-container flex class="cms-default">
+                <label for="applicationUser">{{lang.select_user}}</label>
+                <md-select name="applicationUser" id="applicationUser"
+                           ng-change="ctrl.onChangeUser()"
+                           ng-disabled="!ctrl.selectedOrganization"
+                           aria-label="{{lang.select_user}}"
+                           ng-model="ctrl.selectedUser"
+                           ng-model-options="{trackBy: '$value.id'}"
+                           md-on-close="ctrl.clearSearchText('inlineAppUser')"
+                           data-md-container-class="select-header-container sticky-search-bar">
+                    <md-select-header class="select-header">
+                        <input ng-model="ctrl.inlineAppUserSearchText"
+                               ng-keydown="ctrl.preventSearchKeyDown($event)"
+                               placeholder="{{lang.search}}"
+                               class="select-header-input">
+                    </md-select-header>
+                    <md-option ng-if="!ctrl.notCurrentUser(user)"
+                               ng-value="user"
+                               ng-repeat="user in ctrl.applicationUsers | translatedNameFilter: ctrl.inlineAppUserSearchText">
+                                       <span md-highlight-text="ctrl.inlineAppUserSearchText"
+                                             md-highlight-flags="i">{{user.getTranslatedName()}}</span>
+                    </md-option>
+                </md-select>
+                <div ng-messages="organizationAndUserForm.applicationUser.$error">
+                    <div ng-message="required">{{lang.field_required}}</div>
+                </div>
+            </md-input-container>
+
             <md-button ng-if="ctrl.followupBooks.length"
                        ng-click="ctrl.printResult($event)" class="md-icon-button" tooltip="{{lang.print}}">
                 <md-icon md-svg-icon="printer"></md-icon>
