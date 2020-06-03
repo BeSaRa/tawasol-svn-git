@@ -33,9 +33,9 @@ module.exports = function (app) {
             model.actionDateString = generator.getDateFromTimeStamp(model.actionDate);
             model.followupDateString = generator.getDateFromTimeStamp(model.followupDate);
             model.followDateIndicator = model.getFollowupDateIndicator(model.followupDate);
-            var numberOfDays = generator.getNumberOfDays(model.followupDate);
+            var numberOfDays = generator.getNumberOfDays(model.followupDate, new Date(), true);
             // -(numberOfDays) means, get positive number if date is in future
-            model.numberOfDays = numberOfDays === 0 ? numberOfDays : -(generator.getNumberOfDays(model.followupDate));
+            model.numberOfDays = numberOfDays === 0 ? numberOfDays : -(numberOfDays);
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
             model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
