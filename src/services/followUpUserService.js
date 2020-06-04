@@ -268,7 +268,7 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 locals: {
                     addToMyFollowup: true,
-                    ouApplicationUsers: [] // used for add to other user followup only
+                    followUpOrganizations: [] // used for add to other user followup only
                 },
                 resolve: {
                     folders: function () {
@@ -315,9 +315,9 @@ module.exports = function (app) {
                     folders: [] // folders is empty because they will be fetched from user
                 },
                 resolve: {
-                    ouApplicationUsers: function (ouApplicationUserService, employeeService) {
+                    followUpOrganizations: function (organizationService) {
                         'ngInject';
-                        return ouApplicationUserService.loadOuApplicationUserByRegOu(employeeService.getEmployee().getRegistryOUID());
+                        return organizationService.getFollowUpOrganizations();
                     },
                     followUpData: function () {
                         'ngInject';

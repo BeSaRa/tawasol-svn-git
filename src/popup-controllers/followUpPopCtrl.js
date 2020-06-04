@@ -3,13 +3,16 @@ module.exports = function (app) {
                                                 followUpUserService,
                                                 folders,
                                                 toast,
+                                                _,
                                                 langService,
                                                 dialog,
                                                 addToMyFollowup,
-                                                ouApplicationUsers,
+                                                followUpOrganizations,
                                                 organizationForSLA,
                                                 moment,
-                                                generator) {
+                                                generator,
+                                                Information,
+                                                distributionWFService) {
         'ngInject';
         var self = this;
         self.controllerName = 'followUpPopCtrl';
@@ -21,9 +24,10 @@ module.exports = function (app) {
         if (!addToMyFollowup) {
             self.folders = [];
         }
-        // used for followup for other user
-        self.ouApplicationUsers = ouApplicationUsers;
-        self.selectedUser = null;
+
+        self.selectedOrganization = null;
+        self.selectedApplicationUser = null;
+        self.ouSearchText = '';
         self.appUserSearchText = '';
         self.inProgress = false;
 
@@ -36,17 +40,80 @@ module.exports = function (app) {
             self.model.followupDate = generator.getNextDaysDate(organizationForSLA.sla[followUpData.priorityLevel]);
         }
 
+        var _mapRegOUSections = function () {
+            // filter all regOU (has registry)
+            var regOus = _.filter(followUpOrganizations, function (item) {
+                    return item.hasRegistry;
+                }),
+                // filter all sections (no registry)
+                sections = _.filter(followUpOrganizations, function (ou) {
+                    return !ou.hasRegistry;
+                }),
+                // registry parent organization
+                parentRegistryOu;
+
+            // To show (regou - section), append the dummy property "tempRegOUSection"
+            regOus = _.map(regOus, function (regOu) {
+                regOu.tempRegOUSection = new Information({
+                    arName: regOu.arName,
+                    enName: regOu.enName
+                });
+                return regOu;
+            });
+            sections = _.map(sections, function (section) {
+                parentRegistryOu = (section.regouId || section.regOuId);
+                if (typeof parentRegistryOu === 'number') {
+                    parentRegistryOu = _.find(followUpOrganizations, function (ou) {
+                        return ou.id === parentRegistryOu;
+                    })
+                }
+
+                section.tempRegOUSection = new Information({
+                    arName: ((parentRegistryOu) ? parentRegistryOu.arName + ' - ' : '') + section.arName,
+                    enName: ((parentRegistryOu) ? parentRegistryOu.enName + ' - ' : '') + section.enName
+                });
+                return section;
+            });
+
+            // sort regOu-section
+            return _.sortBy([].concat(regOus, sections), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]);
+        };
+        self.organizations = _mapRegOUSections(); // used for followup for other user
+        self.applicationUsers = [];
+
+        /**
+         * @description Get the Application Users for the selected Organization
+         */
+        self.getAppUsersForOU = function ($event) {
+            self.selectedApplicationUser = null;
+            self.folders = [];
+            self.inProgress = true;
+            if (!self.selectedOrganization) {
+                self.applicationUsers = [];
+                return;
+            }
+            return distributionWFService
+                .searchUsersByCriteria({ou: self.selectedOrganization})
+                .then(function (result) {
+                    self.applicationUsers = result;
+                    self.inProgress = false;
+                    return result;
+                });
+        };
+
         /**
          * @description Gets the folder for selected application user
          */
         self.getUserFollowupFolders = function () {
             self.folders = [];
 
-            if (!self.selectedUser) {
+            if (!self.selectedOrganization || !self.selectedApplicationUser) {
                 return;
             }
             self.inProgress = true;
-            followUpUserService.loadFollowupFoldersByOuAndUser(self.selectedUser.getOuId(), self.selectedUser.getApplicationUserId(), false)
+            followUpUserService.loadFollowupFoldersByOuAndUser(self.selectedOrganization, self.selectedApplicationUser, false)
                 .then(function (folders) {
                     self.folders = folders;
                     self.inProgress = false;
@@ -64,9 +131,9 @@ module.exports = function (app) {
 
         self.saveToFollowUp = function () {
             var modelToSave = angular.copy(self.model);
-            if (!addToMyFollowup){
-                modelToSave.userId = self.selectedUser.getApplicationUserId();
-                modelToSave.userOUID = self.selectedUser.getOuId();
+            if (!addToMyFollowup) {
+                modelToSave.userId = self.selectedApplicationUser;
+                modelToSave.userOUID = self.selectedOrganization;
             }
 
             return followUpUserService
@@ -86,7 +153,7 @@ module.exports = function (app) {
             if (addToMyFollowup) {
                 return isValid;
             }
-            return isValid && self.selectedUser;
+            return isValid && self.selectedOrganization && self.selectedApplicationUser;
         };
 
 
