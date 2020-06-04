@@ -27,6 +27,63 @@
                         </md-input-container>
                     </div>
                     <div layout="row">
+                        <!-- Followup Date From -->
+                        <md-input-container flex class="cms-datepicker">
+                            <label for="fromFollowupDate">{{lang.follow_up_date_from}}</label>
+                            <md-datepicker id="fromFollowupDate" name="fromFollowupDate"
+                                           ng-required="true"
+                                           ng-change="ctrl.onChangeFromFollowupDate($event)"
+                                           ng-model="ctrl.searchCriteria.fromFollowupDate"
+                                           md-max-date="ctrl.searchCriteria.toFollowupDate"
+                            ></md-datepicker>
+                            <div ng-messages="followupBookSearchForm.fromFollowupDate.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- Followup Date To -->
+                        <md-input-container flex class="cms-datepicker">
+                            <label for="toFollowupDate">{{lang.follow_up_date_to}}</label>
+                            <md-datepicker id="toFollowupDate" name="toFollowupDate"
+                                           ng-required="true"
+                                           ng-model="ctrl.searchCriteria.toFollowupDate"
+                                           md-min-date="ctrl.searchCriteria.fromFollowupDate"
+                            ></md-datepicker>
+                            <!--md-max-date="ctrl.todayEndOfDay"-->
+                            <div ng-messages="followupBookSearchForm.toFollowupDate.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Create Date From -->
+                        <md-input-container flex class="cms-datepicker">
+                            <label for="fromDocDate">{{lang.create_date_from}}</label>
+                            <md-datepicker id="fromDocDate" name="fromFollowupDate"
+                                           ng-required="ctrl.searchCriteria.toDocDate"
+                                           ng-change="ctrl.onChangeFromFollowupDate($event)"
+                                           ng-model="ctrl.searchCriteria.fromDocDate"
+                                           md-max-date="ctrl.searchCriteria.toDocDate"
+                            ></md-datepicker>
+                            <div ng-messages="followupBookSearchForm.fromFollowupDate.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- Create Date To -->
+                        <md-input-container flex class="cms-datepicker">
+                            <label for="toDocDate">{{lang.create_date_to}}</label>
+                            <md-datepicker id="toDocDate" name="toDocDate"
+                                           ng-required="ctrl.searchCriteria.fromDocDate"
+                                           ng-model="ctrl.searchCriteria.toDocDate"
+                                           md-min-date="ctrl.searchCriteria.fromDocDate"
+                                           md-max-date="ctrl.todayEndOfDay"
+                            ></md-datepicker>
+                            <!--md-max-date="ctrl.todayEndOfDay"-->
+                            <div ng-messages="followupBookSearchForm.toFollowupDate.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
                         <!-- Correspondence Site Type -->
                         <md-input-container flex>
                             <label for="selectedSiteType">{{lang.correspondence_site_type}}</label>
@@ -106,65 +163,8 @@
                         </md-input-container>
                     </div>
                     <div layout="row">
-                        <!-- From -->
-                        <md-input-container flex class="cms-datepicker">
-                            <label for="fromFollowupDate">{{lang.follow_up_date_from}}</label>
-                            <md-datepicker id="fromFollowupDate" name="fromFollowupDate"
-                                           ng-required="true"
-                                           ng-change="ctrl.onChangeFromFollowupDate($event)"
-                                           ng-model="ctrl.searchCriteria.fromFollowupDate"
-                                           md-max-date="ctrl.searchCriteria.toFollowupDate"
-                            ></md-datepicker>
-                            <div ng-messages="followupBookSearchForm.fromFollowupDate.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
-                        </md-input-container>
-                        <!-- To -->
-                        <md-input-container flex class="cms-datepicker">
-                            <label for="toFollowupDate">{{lang.follow_up_date_to}}</label>
-                            <md-datepicker id="toFollowupDate" name="toFollowupDate"
-                                           ng-required="true"
-                                           ng-model="ctrl.searchCriteria.toFollowupDate"
-                                           md-min-date="ctrl.searchCriteria.fromFollowupDate"
-                            ></md-datepicker>
-                            <!--md-max-date="ctrl.todayEndOfDay"-->
-                            <div ng-messages="followupBookSearchForm.toFollowupDate.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
-                        </md-input-container>
-                    </div>
-                    <div layout="row">
-                        <!-- From -->
-                        <md-input-container flex class="cms-datepicker">
-                            <label for="fromDocDate">{{lang.create_date_from}}</label>
-                            <md-datepicker id="fromDocDate" name="fromFollowupDate"
-                                           ng-required="ctrl.searchCriteria.toDocDate"
-                                           ng-change="ctrl.onChangeFromFollowupDate($event)"
-                                           ng-model="ctrl.searchCriteria.fromDocDate"
-                                           md-max-date="ctrl.searchCriteria.toDocDate"
-                            ></md-datepicker>
-                            <div ng-messages="followupBookSearchForm.fromFollowupDate.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
-                        </md-input-container>
-                        <!-- To -->
-                        <md-input-container flex class="cms-datepicker">
-                            <label for="toDocDate">{{lang.create_date_to}}</label>
-                            <md-datepicker id="toDocDate" name="toDocDate"
-                                           ng-required="ctrl.searchCriteria.fromDocDate"
-                                           ng-model="ctrl.searchCriteria.toDocDate"
-                                           md-min-date="ctrl.searchCriteria.fromDocDate"
-                                           md-max-date="ctrl.todayEndOfDay"
-                            ></md-datepicker>
-                            <!--md-max-date="ctrl.todayEndOfDay"-->
-                            <div ng-messages="followupBookSearchForm.toFollowupDate.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
-                        </md-input-container>
-                    </div>
-                    <div layout="row">
                         <!-- Folder -->
-                        <md-input-container flex>
+                        <md-input-container flex ng-if="!ctrl.isAdminFollowup">
                             <label for="folderId">{{lang.folder}}</label>
                             <md-select id="folderId" name="folderId"
                                        ng-model="ctrl.searchCriteria.folderId">

@@ -546,7 +546,7 @@ module.exports = function (app) {
                 self.searchCriteria.docSubject = self.grid.searchText;
             }
             followUpUserService
-                .controllerMethod.openFilterDialog(self.grid, self.searchCriteria)
+                .controllerMethod.openFilterDialog(self.grid, self.searchCriteria, false, $event)
                 .then(function (result) {
                     self.selectedFolder = null;
                     self.grid.page = 1;

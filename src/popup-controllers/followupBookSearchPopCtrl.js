@@ -12,12 +12,14 @@ module.exports = function (app) {
                                                           correspondenceSiteTypes,
                                                           correspondenceViewService,
                                                           moment,
-                                                          folders) {
+                                                          folders,
+                                                          isAdminFollowup) {
         'ngInject';
         var self = this;
         self.controllerName = 'followupBookSearchPopCtrl';
         self.searchCriteria = angular.copy(searchCriteria);
         self.model = angular.copy(searchCriteria);
+        self.isAdminFollowup = isAdminFollowup;
 
         self.siteTypeSearchText = '';
         self.mainSiteSearchText = '';

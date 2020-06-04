@@ -172,7 +172,7 @@ module.exports = function (app) {
             self.searchCriteria = null;
             self.searchCriteriaUsed = false;
 
-            if (!self.selectedOrganization || !self.selectedUser) {
+            if (!self.isValidBasicCriteria()) {
                 return $q.reject(false);
             }
 
@@ -216,7 +216,7 @@ module.exports = function (app) {
          * @param pageNumber
          */
         self.reloadFollowupBooks = function (pageNumber) {
-            if (!self.selectedOrganization || !self.selectedUser) {
+            if (!self.isValidBasicCriteria()) {
                 return;
             }
             var defer = $q.defer();
@@ -237,18 +237,22 @@ module.exports = function (app) {
                 });
         };
 
+        self.isValidBasicCriteria = function () {
+            return !!self.selectedOrganization && !!self.selectedSecurityLevels && !!self.selectedUser;
+        };
+
         /**
          * @description Opens the search dialog for books
          */
         self.openFilterDialog = function ($event) {
-            if (!self.selectedOrganization || !self.selectedUser) {
+            if (!self.isValidBasicCriteria()) {
                 return;
             }
             if (self.grid.searchText) {
                 self.searchCriteria.docSubject = self.grid.searchText;
             }
             followUpUserService
-                .controllerMethod.openFilterDialog(self.grid, self.searchCriteria)
+                .controllerMethod.openFilterDialog(self.grid, self.searchCriteria, true, $event)
                 .then(function (result) {
                     self.grid.page = 1;
                     self.grid.searchText = '';
@@ -294,7 +298,10 @@ module.exports = function (app) {
          */
         self.terminate = function (record, $event, defer) {
             record.terminate(false, $event).then(function () {
-                return self.reloadFollowupBooks(self.grid.page);
+                return self.reloadFollowupBooks(self.grid.page)
+                    .then(function (result) {
+                        new ResolveDefer(defer);
+                    });
             });
         };
 
@@ -306,32 +313,6 @@ module.exports = function (app) {
             followUpUserService.terminateBulkFollowup(self.selectedFollowupBooks).then(function () {
                 return self.reloadFollowupBooks(self.grid.page);
             });
-        };
-
-        /**
-         * @description Moves the record to other folder
-         * @param record
-         * @param $event
-         * @param defer
-         */
-        self.moveToFolder = function (record, $event, defer) {
-            record
-                .addToFolder(true, $event)
-                .then(function () {
-                    self.reloadFollowupBooks(self.grid.page);
-                });
-        };
-
-        /**
-         * @description move bulk to folder
-         * @param $event
-         */
-        self.moveToFolderBulk = function ($event) {
-            return followUpUserService
-                .showAddBulkFollowupBooksToFolder(self.selectedFollowupBooks, true, $event)
-                .then(function () {
-                    self.reloadFollowupBooks(self.grid.page);
-                });
         };
 
         /**
@@ -347,7 +328,7 @@ module.exports = function (app) {
                     self.reloadFollowupBooks(self.grid.page)
                         .then(function () {
                             toast.success(langService.get('transfer_mail_success'));
-                            new ResolveDefer(defer)
+                            new ResolveDefer(defer);
                         });
                 })
         };
@@ -437,13 +418,16 @@ module.exports = function (app) {
          * @param defer
          */
         self.sendSMS = function (record, $event, defer) {
-            if (!self.selectedOrganization || !self.selectedUser) {
+            if (!self.isValidBasicCriteria()) {
                 return;
             }
             record
                 .openSendSMSDialog(null, $event)
                 .then(function () {
-                    return self.reloadFollowupBooks(self.grid.page);
+                    return self.reloadFollowupBooks(self.grid.page)
+                        .then(function (result) {
+                            new ResolveDefer(defer);
+                        });
                 });
         };
 
@@ -454,14 +438,17 @@ module.exports = function (app) {
          * @param defer
          */
         self.sendReminderEmailToUser = function (record, $event, defer) {
-            if (!self.selectedOrganization || !self.selectedUser) {
+            if (!self.isValidBasicCriteria()) {
                 return;
             }
             record
                 .sendReminderEmail(null, $event)
                 .then(function (result) {
                     if (result) {
-                        return self.reloadFollowupBooks(self.grid.page);
+                        return self.reloadFollowupBooks(self.grid.page)
+                            .then(function (result) {
+                                new ResolveDefer(defer);
+                            });
                     }
                 });
         };
@@ -568,20 +555,6 @@ module.exports = function (app) {
                 callback: self.terminate,
                 class: "action-green",
                 sticky: true,
-                checkShow: function (action, model) {
-                    return true;
-                }
-            },
-            // Move To Folder
-            {
-                type: 'action',
-                icon: 'folder-move',
-                text: 'grid_action_move_to_folder',
-                shortcut: true,
-                showInView: true,
-                callback: self.moveToFolder,
-                permissionKey: 'USER_FOLLOWUP_BOOKS',
-                class: "action-green",
                 checkShow: function (action, model) {
                     return true;
                 }

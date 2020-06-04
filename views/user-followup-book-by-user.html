@@ -100,7 +100,8 @@
                 <md-icon md-svg-icon="filter-remove"></md-icon>
             </md-button>
             <md-button ng-click="ctrl.openFilterDialog($event)"
-                       ng-if="ctrl.selectedUser"
+                       ng-if="ctrl.isValidBasicCriteria()"
+                       ng-disabled="!ctrl.isValidBasicCriteria()"
                        aria-label="{{lang.filter}}"
                        class="md-icon-button" tooltip="{{lang.filter}}">
                 <md-icon md-svg-icon="filter"></md-icon>
@@ -128,13 +129,6 @@
                                                            tooltip="{{lang.grid_action_terminate_followup}}"
                                                            ng-click="ctrl.terminateBulk($event)">
                                                     <md-icon md-svg-icon="stop" class="action-green"></md-icon>
-                                                </md-button>
-                                                <md-button class="md-icon-button"
-                                                           ng-if="ctrl.employeeService.hasPermissionTo('USER_FOLLOWUP_BOOKS')"
-                                                           aria-label="{{lang.grid_action_move_to_folder}}"
-                                                           tooltip="{{lang.grid_action_move_to_folder}}"
-                                                           ng-click="ctrl.moveToFolderBulk($event)">
-                                                    <md-icon md-svg-icon="folder-move" class="action-green"></md-icon>
                                                 </md-button>
                                                 <md-button class="md-icon-button" aria-label="{{lang.transfer_mail}}"
                                                            tooltip="{{lang.transfer_mail}}"

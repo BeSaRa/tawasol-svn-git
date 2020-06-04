@@ -231,7 +231,7 @@ module.exports = function (app) {
                             });
                     });
             },
-            openFilterDialog: function (grid, searchCriteria, $event) {
+            openFilterDialog: function (grid, searchCriteria, isAdminFollowup, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event || null,
@@ -241,6 +241,7 @@ module.exports = function (app) {
                         locals: {
                             searchCriteria: searchCriteria,
                             grid: grid,
+                            isAdminFollowup: isAdminFollowup
                         },
                         resolve: {
                             correspondenceSiteTypes: function (correspondenceSiteTypeService) {
@@ -249,7 +250,7 @@ module.exports = function (app) {
                             },
                             folders: function (employeeService) {
                                 'ngInject';
-                                return self.loadFollowupFoldersByOuAndUser(employeeService.getEmployee().getRegistryOUID(), employeeService.getEmployee().id);
+                                return isAdminFollowup ? [] : self.loadFollowupFoldersByOuAndUser(employeeService.getEmployee().getRegistryOUID(), employeeService.getEmployee().id);
                             }
                         }
                     });
