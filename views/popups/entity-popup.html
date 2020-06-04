@@ -1,9 +1,9 @@
 <md-dialog class="dialog-extend cms-tabs-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_entity: ctrl.model.getTranslatedName()}}">
-        <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_entity}}"></popup-toolbar-directive>
-        <popup-toolbar-directive ng-if="ctrl.editMode"
-                                 header-text="{{ctrl.model.getTranslatedName()}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="!ctrl.editMode" header-text="{{lang.add_new_entity}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.editMode"
+                             header-text="{{ctrl.model.getTranslatedName()}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div>
             <form name="entityForm" autocomplete="off">
@@ -129,23 +129,30 @@
                                                 <div ng-message="FILE_NET_USER">{{lang.english_number}}</div>
                                             </div>
                                         </md-input-container>
-                                        <md-input-container flex>
-                                            <label for="cmPassword">{{lang.filenet_content_manager_password}}</label>
-                                            <input type="password" name="cmPassword" id="cmPassword"
-                                                   no-space-directive
-                                                   minlength="2" ng-model="ctrl.entity.cmPassword" maxlength="50"
-                                                   ng-required="ctrl.entity.cmUserName && !ctrl.entity.id"
-                                                   ng-disabled="!ctrl.entity.cmUserName">
-                                            <div ng-messages="entityForm.cmPassword.$error">
-                                                <div ng-message="required">{{lang.field_required}}</div>
-                                                <div ng-message="minlength">{{lang.short}}</div>
-                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                        <div layout-align="start center" layout="row" flex>
+                                            <md-input-container flex>
+                                                <label for="cmPassword">{{lang.filenet_content_manager_password}}</label>
+                                                <input type="password" name="cmPassword" id="cmPassword"
+                                                       no-space-directive
+                                                       minlength="2" ng-model="ctrl.entity.cmPassword" maxlength="50"
+                                                       ng-required="ctrl.entity.cmUserName && !ctrl.entity.id || (ctrl.editMode && ctrl.entity.editPassword)"
+                                                       ng-disabled="!ctrl.entity.cmUserName">
+                                                <div ng-messages="entityForm.cmPassword.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                    <div ng-message="minlength">{{lang.short}}</div>
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="help-text-div" ng-if="ctrl.entity.id && ctrl.entity.cmUserName">
-                                                {{lang.enter_password_to_override}}
-                                            </div>
-                                        </md-input-container>
+                                                <div class="help-text-div"
+                                                     ng-if="ctrl.entity.id && ctrl.entity.cmUserName">
+                                                    {{lang.enter_password_to_override}}
+                                                </div>
+                                            </md-input-container>
+                                            <md-input-container ng-if="ctrl.editMode">
+                                                <md-checkbox ng-model="ctrl.entity.editPassword"
+                                                             title="{{lang.edit_password}}"></md-checkbox>
+                                            </md-input-container>
+                                        </div>
                                     </div>
                                     <div layout="row">
                                         <md-input-container flex>
@@ -393,7 +400,8 @@
                                     <legend class="md-accent">{{lang.hr_integration}}</legend>
                                     <div layout="row">
                                         <md-switch flex ng-model="ctrl.entity.hrEnabled" aria-label="{{lang.status}}">
-                                            <label>{{lang.hr_integration}} : {{ctrl.entity.getTranslatedHRIntegrationStatus()}}</label>
+                                            <label>{{lang.hr_integration}} :
+                                                {{ctrl.entity.getTranslatedHRIntegrationStatus()}}</label>
                                         </md-switch>
                                     </div>
                                 </fieldset>
@@ -419,13 +427,17 @@
                                         <table md-table md-row-select="true"
                                                ng-model="ctrl.selectedLDAPs"
                                                md-progress="ctrl.ldapGrid.progress">
-                                            <thead md-head md-order="ctrl.ldapGrid.order" md-on-reorder="ctrl.getSortedLDAPData">
+                                            <thead md-head md-order="ctrl.ldapGrid.order"
+                                                   md-on-reorder="ctrl.getSortedLDAPData">
                                             <tr md-row>
-                                                <th ng-if="!ctrl.selectedLDAPs.length" md-column md-order-by="serverAddress"><span>{{lang.server_name}}</span>
+                                                <th ng-if="!ctrl.selectedLDAPs.length" md-column
+                                                    md-order-by="serverAddress"><span>{{lang.server_name}}</span>
                                                 </th>
-                                                <th ng-if="!ctrl.selectedLDAPs.length" md-column md-order-by="serverName"><span>{{lang.server_host}}</span>
+                                                <th ng-if="!ctrl.selectedLDAPs.length" md-column
+                                                    md-order-by="serverName"><span>{{lang.server_host}}</span>
                                                 </th>
-                                                <th ng-if="!ctrl.selectedLDAPs.length" md-column md-order-by="isDefault"><span>{{lang.default_ldap}}</span>
+                                                <th ng-if="!ctrl.selectedLDAPs.length" md-column
+                                                    md-order-by="isDefault"><span>{{lang.default_ldap}}</span>
                                                 </th>
                                                 <th ng-if="!ctrl.selectedLDAPs.length" md-column md-order-by=""><span>{{lang.actions}}</span>
                                                 </th>

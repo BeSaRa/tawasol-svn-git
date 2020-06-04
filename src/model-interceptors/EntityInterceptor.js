@@ -30,6 +30,7 @@ module.exports = function (app) {
                 if (model.internalG2gServerAddress && !model.internalG2gPassword)
                     delete model.internalG2gPassword;
             }
+            delete model.editPassword;
             return model;
         });
 

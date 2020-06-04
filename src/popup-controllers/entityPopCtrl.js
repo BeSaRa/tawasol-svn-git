@@ -163,6 +163,9 @@ module.exports = function (app) {
          * @description Edit entity
          */
         self.editEntityFromCtrl = function () {
+            if (!self.entity.editPassword) {
+                self.entity.cmPassword = null;
+            }
             validationService
                 .createValidation('EDIT_ENTITY')
                 .addStep('check_required', true, self.checkRequiredFields, self.entity, function (result) {
