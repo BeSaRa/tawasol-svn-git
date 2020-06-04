@@ -2,7 +2,7 @@ module.exports = function (app) {
     app.run(function (CMSModelInterceptor, moment, generator) {
         'ngInject';
         var modelName = 'FollowupBookCriteria';
-        
+
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
             return model;
         });
@@ -19,17 +19,25 @@ module.exports = function (app) {
             if (model.selectedSubSite && model.selectedSubSite.id && model.siteCriteria) {
                 model.siteCriteria.subSiteId = model.selectedSubSite.id;
             }
-            if (model.fromFollowupDate)
+            if (model.fromFollowupDate) {
                 model.fromFollowupDate = moment(model.fromFollowupDate).startOf("day").valueOf();
-            if (model.toFollowupDate)
+            }
+            if (model.toFollowupDate) {
                 model.toFollowupDate = moment(model.toFollowupDate).endOf("day").valueOf();
-            if (model.fromDocDate)
+            }
+            if (model.fromDocDate) {
                 model.fromDocDate = moment(model.fromDocDate).startOf("day").valueOf();
-            if (model.toDocDate)
+            }
+            if (model.toDocDate) {
                 model.toDocDate = moment(model.toDocDate).endOf("day").valueOf();
+            }
 
-            model.userId = generator.getNormalizedValue(model.userId, 'id')
-            model.userOUID = generator.getNormalizedValue(model.userOUID, 'id')
+            model.userId = generator.getNormalizedValue(model.userId, 'id');
+            model.userOUID = generator.getNormalizedValue(model.userOUID, 'id');
+
+            if (model.securityLevel && model.securityLevel.length && model.securityLevel[0].hasOwnProperty('lookupKey')) {
+                model.securityLevel = generator.getResultFromSelectedCollection(model.securityLevel, 'lookupKey');
+            }
 
             delete model.selectedSiteType;
             delete model.selectedMainSite;
@@ -40,6 +48,6 @@ module.exports = function (app) {
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             return model;
         });
-        
+
     })
 };

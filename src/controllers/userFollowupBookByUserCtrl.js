@@ -29,13 +29,10 @@ module.exports = function (app) {
         self.followupBooksCopy = angular.copy(self.followupBooks);
         self.selectedFollowupBooks = [];
 
-        self.selectedUser = null;
         self.appUserSearchText = '';
         self.inlineOUSearchText = '';
         self.inlineAppUserSearchText = '';
 
-        self.selectedOrganization = null;
-        self.applicationUsers = [];
 
         self.searchCriteriaUsed = false;
         self.employeeService = employeeService;
@@ -81,15 +78,23 @@ module.exports = function (app) {
             }]);
         };
         self.organizations = _mapRegOUSections();
+        self.applicationUsers = [];
+        self.securityLevels = [];
+        self.selectedOrganization = null;
+        self.selectedUser = null;
+        self.selectedSecurityLevels = null;
 
         /**
-         * @description Get the Application Users for the selected Organization
+         * @description Get the Application Users and Security Levels for the selected Organization
          */
         self.getAppUsersForOU = function ($event) {
             self.selectedUser = null;
             self.followupBooks = [];
             self.followupBooksCopy = angular.copy(self.followupBooks);
             self.selectedFollowupBooks = [];
+
+            self.securityLevels = self.selectedOrganization ? self.selectedOrganization.securityLevels : [];
+            self.selectedSecurityLevels = angular.copy(self.securityLevels); // by default, all security levels will be selected
 
             return distributionWFService
                 .searchUsersByCriteria({ou: self.selectedOrganization})
@@ -174,7 +179,7 @@ module.exports = function (app) {
             self.searchCriteria = new FollowupBookCriteria({
                 userId: self.selectedUser,
                 userOUID: self.selectedOrganization,
-                securityLevel: self.selectedUser.securityLevel
+                securityLevel: self.selectedSecurityLevels
             });
             self.searchCriteriaCopy = angular.copy(self.searchCriteria);
             if (!skipDates) {
@@ -185,7 +190,19 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Reset the filter and search for user followup books again
+         * @description Handle the change of security levels
+         * Reset the filter and search for user followup books again
+         */
+        self.onChangeSecurityLevel = function () {
+            _initSearchCriteria()
+                .then(function () {
+                    self.reloadFollowupBooks(1);
+                });
+        };
+
+        /**
+         * @description Handle the change of application user
+         * Reset the filter and search for user followup books again
          */
         self.onChangeUser = function () {
             _initSearchCriteria()

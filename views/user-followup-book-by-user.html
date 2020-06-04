@@ -31,7 +31,7 @@
                            aria-label="{{lang.organization_unit}}"
                            ng-model="ctrl.selectedOrganization"
                            md-on-close="ctrl.clearSearchText('inlineOU')"
-                           ng-model-options="{trackBy: '$value'}"
+                           ng-model-options="{trackBy: '$value.id'}"
                            data-md-container-class="select-header-container sticky-search-bar">
                     <md-select-header class="select-header">
                         <input ng-model="ctrl.inlineOUSearchText"
@@ -41,10 +41,25 @@
                     </md-select-header>
                     <md-option
                             ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.inlineOUSearchText : 'getNameByLanguageRegOUSection'"
-                            ng-value="organization.id">
+                            ng-value="organization">
                                         <span
                                                 md-highlight-text="ctrl.inlineOUSearchText"
                                                 md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <!-- Security Levels -->
+            <md-input-container flex class="cms-default">
+                <label for="securityLevels">{{lang.security_level}}</label>
+                <md-select id="securityLevels" name="securityLevels"
+                           ng-model-options="{trackBy:'$value.lookupKey'}"
+                           multiple
+                           ng-change="ctrl.onChangeSecurityLevel()"
+                           ng-disabled="!ctrl.selectedOrganization"
+                           ng-model="ctrl.selectedSecurityLevels">
+                    <md-option ng-value="option"
+                               ng-repeat="option in ctrl.securityLevels">
+                        {{option.getTranslatedName()}}
                     </md-option>
                 </md-select>
             </md-input-container>
@@ -72,9 +87,6 @@
                                              md-highlight-flags="i">{{user.getTranslatedName()}}</span>
                     </md-option>
                 </md-select>
-                <div ng-messages="organizationAndUserForm.applicationUser.$error">
-                    <div ng-message="required">{{lang.field_required}}</div>
-                </div>
             </md-input-container>
 
             <md-button ng-if="ctrl.followupBooks.length"
