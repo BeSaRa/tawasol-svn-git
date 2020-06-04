@@ -287,6 +287,14 @@ module.exports = function (app) {
                                 return data;
                             });
                         });
+                    },
+                    organizationForSLA: function (employeeService, organizationService) {
+                        'ngInject';
+                        var ou = employeeService.getEmployee().userOrganization;
+                        if (ou.hasRegistry) {
+                            return ou;
+                        }
+                        return organizationService.loadOrganizationById(ou.getRegistryOUID());
                     }
                 }
             })
@@ -320,7 +328,14 @@ module.exports = function (app) {
                             data.followupDate = data.followupDate ? generator.getDateObjectFromTimeStamp(data.followupDate) : null;
                             return data;
                         });
-
+                    },
+                    organizationForSLA: function (employeeService, organizationService) {
+                        'ngInject';
+                        var ou = employeeService.getEmployee().userOrganization;
+                        if (ou.hasRegistry) {
+                            return ou;
+                        }
+                        return organizationService.loadOrganizationById(ou.getRegistryOUID());
                     }
                 }
             })

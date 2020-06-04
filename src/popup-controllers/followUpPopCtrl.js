@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                 dialog,
                                                 addToMyFollowup,
                                                 ouApplicationUsers,
+                                                organizationForSLA,
                                                 moment,
                                                 generator) {
         'ngInject';
@@ -27,11 +28,12 @@ module.exports = function (app) {
         self.inProgress = false;
 
         self.minDate = new Date();
-        self.minDate.setDate(self.minDate.getDate() + 1);
+        //self.minDate.setDate(self.minDate.getDate() + 1);
         self.minDateString = moment(self.minDate).format(generator.defaultDateFormat);
 
+        // if no followupDate, set followupDate from organization SLA
         if (!self.model.followupDate) {
-            self.model.followupDate = self.minDate;
+            self.model.followupDate = generator.getNextDaysDate(organizationForSLA.sla[followUpData.priorityLevel]);
         }
 
         /**
