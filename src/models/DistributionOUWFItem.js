@@ -81,7 +81,7 @@ module.exports = function (app) {
                     this.setSLADueDate(organization.sLADueDate)
                 } else {
                     if (organization.sLADueDate) {
-                        var dueDate = generator.getNextDaysDate(organization.sLADueDate);
+                        var dueDate = generator.getFutureDate(organization.sLADueDate);
                         this.setDueDate(dueDate);
                     }
                 }

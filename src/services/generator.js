@@ -808,9 +808,9 @@ module.exports = function (app) {
             return -(date1.diff(date2, 'days'));
         };
 
-        self.getNextDaysDate = function (days) {
+        self.getFutureDate = function (daysToAdd) {
             var date = new Date();
-            date.setDate(date.getDate() + ((days ? Number(days) : 0) || 0));
+            date.setDate(date.getDate() + ((daysToAdd ? Number(daysToAdd) : 0) || 0));
             return date;
         };
 

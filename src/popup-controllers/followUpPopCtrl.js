@@ -37,7 +37,7 @@ module.exports = function (app) {
 
         // if no followupDate, set followupDate from organization SLA
         if (!self.model.followupDate) {
-            self.model.followupDate = generator.getNextDaysDate(organizationForSLA.sla[followUpData.priorityLevel]);
+            self.model.followupDate = generator.getFutureDate(organizationForSLA.sla[followUpData.priorityLevel]);
         }
 
         var _mapRegOUSections = function () {
