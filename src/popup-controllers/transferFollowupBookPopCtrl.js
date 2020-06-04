@@ -133,7 +133,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Get the Application Users and security levels for the selected Organization
+         * @description Get the Application Users for the selected Organization
          */
         self.getAppUsersForOU = function ($event) {
             self.selectedApplicationUser = null;

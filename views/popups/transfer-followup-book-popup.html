@@ -10,6 +10,7 @@
                         <md-input-container flex>
                             <label for="organization">{{lang.organization_unit}}</label>
                             <md-select id="organization" name="organization"
+                                       ng-required="true"
                                        ng-change="ctrl.getAppUsersForOU($event)"
                                        aria-label="{{lang.organization_unit}}"
                                        ng-model="ctrl.selectedOrganization"
@@ -30,6 +31,9 @@
                                                 md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
                                 </md-option>
                             </md-select>
+                            <div ng-messages="reason_form.organization.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
                         </md-input-container>
                         <md-input-container flex>
                             <label for="applicationUser">{{lang.select_user}}</label>
@@ -54,7 +58,7 @@
                                              md-highlight-flags="i">{{user.getTranslatedName()}}</span>
                                 </md-option>
                             </md-select>
-                            <div ng-messages="reason_form.selectedApplicationUser.$error">
+                            <div ng-messages="reason_form.applicationUser.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
                         </md-input-container>
