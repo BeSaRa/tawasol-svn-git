@@ -115,6 +115,10 @@ module.exports = function (app) {
             return self.receiveG2g;
         }
 
+        self.checkReceiveOrReceiveG2G = function() {
+            return (self.receive || self.receiveG2g);
+        };
+
         /**
          * to display scanner dialog
          * @param buttonType
@@ -196,7 +200,7 @@ module.exports = function (app) {
         self.reloadAttachments = function () {
             return attachmentService.loadDocumentAttachments(self.vsId, self.documentClass)
                 .then(function (result) {
-                    self.attachments = (self.receive || self.receiveG2g) ? self.document.filterLinkedDocuments(result) : result;
+                    self.attachments = self.checkReceiveOrReceiveG2G() ? self.document.filterLinkedDocuments(result) : result;
                     self.model = managerService.deepCopyAttachments(self.attachments);
                     self.getSortedData();
                     self.selectedAttachments = [];
@@ -244,7 +248,7 @@ module.exports = function (app) {
         };
 
         self.deleteDocumentAttachment = function (attachment, $event) {
-            if (_checkReceiveG2G()) {
+            if (!self.isAttachmentDeletable(attachment, false)) {
                 return;
             }
             var linkedExportedAttachments = [];
@@ -254,7 +258,7 @@ module.exports = function (app) {
                     var attachments = angular.copy(self.attachments);
                     linkedExportedAttachments = angular.copy(self.linkedExportedAttachments);
                     attachments.splice(self.attachments.indexOf(attachment), 1);
-                    if (attachment.refVSID && !(self.receive || self.receiveG2g)) {
+                    if (attachment.refVSID) {
                         var index = _.findIndex(linkedExportedAttachments, function (linkedExportedAttachment) {
                             return linkedExportedAttachment.vsId === attachment.vsId;
                         });
@@ -278,15 +282,12 @@ module.exports = function (app) {
                 return false;
             }
 
-            var isDeletable, isEditable;
+            var isDeletable = attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment, self.checkReceiveOrReceiveG2G()),
+                isEditable = attachmentService.checkAttachmentIsEditable(self.document.getInfo(), attachment, self.checkReceiveOrReceiveG2G());
 
-            isDeletable = (self.receive || self.receiveG2G) ?
-                attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment, (self.receive || self.receiveG2G)) :
-                !attachment.refVSID && attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment, (self.receive || self.receiveG2G));
+            isDeletable = self.checkReceiveOrReceiveG2G() ? isDeletable : (!attachment.refVSID && isDeletable);
 
-            isEditable = !attachment.refVSID
-                && attachmentService.checkAttachmentIsEditable(self.document.getInfo(), attachment, (self.receive || self.receiveG2G))
-                && !self.isLinkedExportedDocAttachment;
+            isEditable = !attachment.refVSID && isEditable && !self.isLinkedExportedDocAttachment;
 
             return (editAttachment ? isEditable : isDeletable);
         };
@@ -305,7 +306,7 @@ module.exports = function (app) {
         };
 
         self.deleteBulkAttachments = function ($event) {
-            if (_checkReceiveG2G()) {
+            if (!self.isEnabledDeleteBulkAttachments()) {
                 return;
             }
             dialog

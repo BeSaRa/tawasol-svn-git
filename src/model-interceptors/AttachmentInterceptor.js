@@ -47,7 +47,7 @@ module.exports = function (app) {
             if (!model.attachmentType && model.classDescription === 'TawasolLinkedAttachment') {
                 model.attachmentType = new AttachmentType();//{enName: 'Linked document', arName: 'Linked document'}
                 model.isLinkedExportedDocIndicator = model.getIsLinkedExportedDocIndicator();
-                self.isLinkedExportedDocAttachment = true;
+                model.isLinkedExportedDocAttachment = true;
             } else {
                 model.attachmentType = attachmentTypeService.getAttachmentTypeByLookupKey(model.attachmentType);
             }
