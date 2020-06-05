@@ -224,7 +224,7 @@
                                     <md-icon md-svg-icon="delete"></md-icon>
                                 </md-button>
                             </div>
-                            <div ng-if="workflowItem.isWFComplete() && workflowItem.isEscalationComplate()">
+                            <div ng-if="workflowItem.isWFComplete() && workflowItem.isEscalationComplete(ctrl.fromPredefined)">
                                 <md-button tooltip="{{lang.complete}}" class="md-icon-button">
                                     <md-icon md-svg-icon="checkbox-marked-circle-outline"></md-icon>
                                 </md-button>

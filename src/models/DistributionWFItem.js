@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('DistributionWFItem', function (CMSModelInterceptor, langService, distributionWFService, gridService) {
+    app.factory('DistributionWFItem', function (CMSModelInterceptor, langService, distributionWFService, gridService, generator) {
         'ngInject';
         return function DistributionWFItem(model) {
             var self = this;
@@ -148,8 +148,15 @@ module.exports = function (app) {
             DistributionWFItem.prototype.isWFComplete = function () {
                 return (this.hasOwnProperty('isSecureAction') && this.isSecureAction) ? !!this.action && this.comments : !!this.action;
             };
-            DistributionWFItem.prototype.isEscalationComplate = function () {
-                return (this.isCustomEscalationStatusSelected()) ? this.escalationUserId : true;
+            DistributionWFItem.prototype.isEscalationComplete = function (fromPredefined) {
+                if (!this.escalationStatus || generator.getNormalizedValue(this.escalationStatus, 'lookupKey') === -1) {
+                    return true;
+                }
+                var isComplete = fromPredefined ? !!this.sLADueDate : !!this.dueDate;
+                if (this.isCustomEscalationStatusSelected()) {
+                    isComplete = isComplete && !!this.escalationUserId;
+                }
+                return isComplete;
             };
 
             DistributionWFItem.prototype.setGridName = function (gridName) {

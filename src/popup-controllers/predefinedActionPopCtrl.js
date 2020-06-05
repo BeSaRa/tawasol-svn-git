@@ -1158,7 +1158,7 @@ module.exports = function (app) {
         self.addToSelected = function (workflowItem, checkProxy) {
             if (_getUsersNotExists(workflowItem).length) {
                 // && workflowItem.gridName.toLowerCase() !== 'oureg'
-                if (!workflowItem.escalationStatus) {
+                if (workflowItem.gridName !== 'OUGroup' && !workflowItem.escalationStatus) {
                     workflowItem.escalationStatus = currentOUEscalationProcess;
                 }
                 self.selectedWorkflowItems.push(workflowItem);
@@ -1175,11 +1175,11 @@ module.exports = function (app) {
 
             // unCompleted
             var unCompleted = _.filter(collections, function (item) {
-                return !item.isWFComplete() || !item.isEscalationComplate();
+                return !item.isWFComplete() || !item.isEscalationComplete(true);
             });
             // completed
             var completed = _.filter(collections, function (item) {
-                return item.isWFComplete() && item.isEscalationComplate();
+                return item.isWFComplete() && item.isEscalationComplete(true);
             });
 
             if (unCompleted.length) {

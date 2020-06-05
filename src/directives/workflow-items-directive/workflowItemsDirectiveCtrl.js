@@ -10,9 +10,18 @@ module.exports = function (app) {
                                                            $timeout,
                                                            _,
                                                            employeeService,
-                                                           gridService) {
+                                                           gridService,
+                                                           lookupService,
+                                                           Lookup) {
         'ngInject';
-        var self = this;
+        var self = this,
+        noneLookup = new Lookup({
+            id: -1,
+            defaultEnName: langService.getByLangKey('none', 'en'),
+            defaultArName: langService.getByLangKey('none', 'ar'),
+            lookupKey: -1
+        });
+
         self.controllerName = 'workflowItemsDirectiveCtrl';
         LangWatcher($scope);
 
@@ -123,6 +132,17 @@ module.exports = function (app) {
         };
 
         self.addWorkflowItem = function (workflowItem) {
+            var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess || noneLookup;
+            if (workflowItem.escalationStatus) {
+                if (workflowItem.escalationStatus.hasOwnProperty('lookupKey') && workflowItem.escalationStatus.lookupKey === -1) {
+                    workflowItem.escalationStatus = noneLookup;
+                } else {
+                    workflowItem.escalationStatus = lookupService.getLookupByLookupKey(lookupService.escalationProcess, workflowItem.escalationStatus);
+                }
+            } else {
+                workflowItem.escalationStatus = currentOUEscalationProcess;
+            }
+
             /*   if (!workflowItem.escalationStatus && workflowItem.isGroup()) {
                 var currentOUEscalationProcess = employeeService.getEmployee().userOrganization.escalationProcess;
                 workflowItem.escalationStatus = currentOUEscalationProcess;

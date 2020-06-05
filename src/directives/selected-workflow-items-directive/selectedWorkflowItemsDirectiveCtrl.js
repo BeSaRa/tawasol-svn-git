@@ -48,7 +48,7 @@ module.exports = function (app) {
          */
         function _allActionsSelected(items) {
             return !_.some(items, function (item) {
-                return !item.isWFComplete() || !item.isEscalationComplate();
+                return !item.isWFComplete() || !item.isEscalationComplete(self.fromPredefined);
             });
         }
 

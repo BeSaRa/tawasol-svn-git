@@ -1399,7 +1399,7 @@ module.exports = function (app) {
         self.addToSelected = function (workflowItem, checkProxy) {
             if (_getUsersNotExists(workflowItem).length) {
                 // && workflowItem.gridName.toLowerCase() !== 'oureg'
-                if (!workflowItem.escalationStatus) {
+                if (workflowItem.gridName !== 'OUGroup' && !workflowItem.escalationStatus) {
                     workflowItem.escalationStatus = currentOUEscalationProcess;
                 }
                 self.selectedWorkflowItems.push(workflowItem);
@@ -1436,11 +1436,11 @@ module.exports = function (app) {
             var result = false, collections = self.selectedWorkflowItems;
             // unCompleted
             var unCompleted = _.filter(collections, function (item) {
-                return !item.isWFComplete() || !item.isEscalationComplate();
+                return !item.isWFComplete() || !item.isEscalationComplete(false);
             });
             // completed
             var completed = _.filter(collections, function (item) {
-                return item.isWFComplete() && item.isEscalationComplate();
+                return item.isWFComplete() && item.isEscalationComplete(false);
             });
 
             var types = !self.getApprovedStatus() ? langService.get('users_or_organizations') : langService.get('user');
