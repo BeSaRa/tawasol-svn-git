@@ -16,7 +16,7 @@ module.exports = function (app) {
                                                                               correspondenceService,
                                                                               toast,
                                                                               rootEntity,
-                                                                              gridService) {
+                                                                              employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSiteIncomingDirectiveCtrl';
@@ -60,7 +60,7 @@ module.exports = function (app) {
         // selected followup Status.
         self.followupStatus = null;
         // current for need replay
-        self.minDate = _createCurrentDate(1);
+        self.minDate = generator.getFutureDate(1);
         // all sub correspondence sites
         self.subRecords = _concatCorrespondenceSites(true);
         // default followupStatusDate
@@ -89,7 +89,36 @@ module.exports = function (app) {
                 return status.lookupStrKey === 'NEED_REPLY';
             }),
             properties = angular.copy(lookupService.getPropertyConfigurations('incoming')),
-            defaultNeedReplyFollowupDate = _createCurrentDate(3);
+            defaultFollowupNumberOfDays = 3,
+            defaultNeedReplyFollowupDate = generator.getFutureDate(defaultFollowupNumberOfDays),
+            organizationForSLA = null;
+
+        var _resetDefaultNeedReplyFollowupDate = function () {
+            if (self.correspondence && organizationForSLA) {
+                var priorityLevel = self.correspondence.getInfo().priorityLevel;
+                priorityLevel = priorityLevel.hasOwnProperty('lookupKey') ? priorityLevel.lookupKey : priorityLevel;
+
+                var slaDays = null;
+                if (typeof priorityLevel !== 'undefined' && priorityLevel !== null) {
+                    // organization has sla property and sla has property as same as document priority level
+                    if (organizationForSLA.hasOwnProperty('sla') && organizationForSLA.sla && organizationForSLA.sla.hasOwnProperty(priorityLevel)) {
+                        slaDays = organizationForSLA.sla[priorityLevel];
+                    }
+                    // if no SLA days or its less than 1, use default number of days to followup date to be today
+                    if (!slaDays || slaDays < 1) {
+                        slaDays = angular.copy(defaultFollowupNumberOfDays);
+                    }
+                }
+            }
+
+            defaultNeedReplyFollowupDate = generator.getFutureDate(slaDays);
+
+            // set followup date for all searched sites
+            if (self.subSearchResultCopy && self.subSearchResultCopy.length) {
+                self.onFollowupStatusChange(self.followupStatus);
+            }
+            return defaultNeedReplyFollowupDate;
+        };
 
         /**
          * @description Finds the property configuration by symbolic name
@@ -112,22 +141,12 @@ module.exports = function (app) {
                 self.isFollowupStatusMandatory = property.isMandatory;
                 if (property.isMandatory) {
                     self.followupStatus = followupStatusNeedReply;
+                } else {
+                    self.followupStatus = followupStatusWithoutReply;
                 }
+            } else {
+                self.followupStatus = followupStatusWithoutReply;
             }
-        }
-
-        _checkFollowupStatusMandatory();
-
-        /**
-         * create current date + given days if provided.
-         * @param days
-         * @return {Date}
-         * @private
-         */
-        function _createCurrentDate(days) {
-            var date = new Date();
-            date.setDate(date.getDate() + (days || 0));
-            return date;
         }
 
         /**
@@ -263,98 +282,6 @@ module.exports = function (app) {
         }
 
         /**
-         * @description add given site to (CC|TO)
-         * @param to
-         * @param site
-         * @return {*}
-         * @private
-         */
-        function _addSite(to, site) {
-            return $timeout(function () {
-                self['sitesInfo' + to].push(site);
-                return true;
-            });
-        }
-
-        /**
-         * @description add single site to To.
-         * @param site
-         */
-        self.addSiteTo = function (site) {
-            // if (!self.isValidSite(site)) {
-            //     // dialog.errorMessage(langService)
-            //     return;
-            // }
-            _addSite('To', site)
-                .then(function () {
-                    self.subSearchSelected = [];
-                    self.simpleSubSiteResultSearchText = '';
-
-                    _concatCorrespondenceSites(true).then(function () {
-                        self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
-                        self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
-                    });
-                })
-        };
-        /**
-         * @description add single site to CC.
-         * @param site
-         */
-        self.addSiteCC = function (site) {
-            _addSite('CC', site)
-                .then(function () {
-                    self.subSearchSelected = [];
-                    self.simpleSubSiteResultSearchText = '';
-
-                    _concatCorrespondenceSites(true).then(function () {
-                        self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
-                    });
-                });
-        };
-        /**
-         * @description add all selected sites to To.
-         * @param sites
-         * @param $event
-         */
-        self.addSitesTo = function (sites, $event) {
-            if (self.needReply(self.followupStatus) && !self.followUpStatusDate) {
-                dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
-                return;
-            }
-            _.map(sites, function (site) {
-                self.addSiteTo(site);
-            });
-            self.followUpStatusDate = null;
-            self.followupStatus = null;
-            self.subSearchSelected = [];
-        };
-        /**
-         * @description add all selected sites to CC.
-         * @param sites
-         */
-        self.addSitesCC = function (sites) {
-            if (self.needReply(self.followupStatus) && !self.followUpStatusDate) {
-                dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
-                return;
-            }
-            _.map(sites, function (site) {
-                self.addSiteCC(site);
-            });
-            self.followUpStatusDate = null;
-            self.followupStatus = null;
-            self.subSearchSelected = [];
-        };
-        /**
-         * @description change site from CC to To and else.
-         * @param type
-         * @param site
-         * @param index
-         */
-        self.changeSiteTo = function (type, site, index) {
-            self['sitesInfo' + type] = self['sitesInfo' + type].concat(self['sitesInfo' + self.reversedMap[type]].splice(index, 1));
-        };
-
-        /**
          * @description Get main correspondence sites on change of correspondence site type in simple search.
          * @param $event
          */
@@ -468,13 +395,20 @@ module.exports = function (app) {
          */
         self.onFollowupStatusChange = function (status) {
             self.followupStatus = status;
-            _setSitesProperty(self.subSearchSelected, 'followupStatus', status);
+            _setSitesProperty(self.subSearchResult, 'followupStatus', status);
+
+            if (self.needReply(status)) {
+                self.followUpStatusDate = defaultNeedReplyFollowupDate;
+                _setSitesProperty(self.subSearchResult, 'followupDate', defaultNeedReplyFollowupDate);
+            } else {
+                _setSitesProperty(self.subSearchResult, 'followupDate', null);
+            }
         };
         /**
          * @description set all followupDate for all subSearchResult.
          */
         self.onFollowupDateChange = function () {
-            _setSitesProperty(self.subSearchSelected, 'followupDate', self.followUpStatusDate);
+            _setSitesProperty(self.subSearchResult, 'followupDate', self.followUpStatusDate);
         };
         /**
          * single select to set follow up status for selected row.
@@ -659,6 +593,14 @@ module.exports = function (app) {
             }
         });
 
+        function _initPriorityLevelWatch() {
+            $scope.$watch(function () {
+                return self.correspondence.getInfo().priorityLevel;
+            }, function (value) {
+                _resetDefaultNeedReplyFollowupDate();
+            });
+        }
+
         self.getSortingKey = function (property, modelType) {
             generator.getColumnSortingKey(property, modelType);
         };
@@ -812,6 +754,23 @@ module.exports = function (app) {
         self.isSubSiteSearchEnabled = function () {
             return self.simpleSubSiteResultSearchText;
         };
+
+        function _setSLAOrganization() {
+            return employeeService.getEmployee().getRegistryOrganization()
+                .then(function (result) {
+                    organizationForSLA = result;
+                });
+        }
+
+        self.$onInit = function () {
+            // just in case document is not passed to directive, avoid check for priority level
+            if (self.correspondence) {
+                _initPriorityLevelWatch();
+            }
+            _setSLAOrganization();
+
+            _checkFollowupStatusMandatory();
+        }
 
     });
 };

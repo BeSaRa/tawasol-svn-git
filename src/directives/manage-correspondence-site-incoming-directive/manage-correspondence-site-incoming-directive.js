@@ -12,7 +12,8 @@ module.exports = function (app) {
                 documentClass: '=',
                 emptySubRecords: '=',
                 site: '=',
-                disableCorrespondence: '='
+                disableCorrespondence: '=',
+                correspondence: '=?'
             }
         }
     });

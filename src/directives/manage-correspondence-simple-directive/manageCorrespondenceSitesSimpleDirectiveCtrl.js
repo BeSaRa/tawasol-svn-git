@@ -18,8 +18,7 @@ module.exports = function (app) {
                                                                              generator,
                                                                              SiteView,
                                                                              rootEntity,
-                                                                             toast,
-                                                                             customValidationService) {
+                                                                             employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSitesSimpleDirectiveCtrl';
@@ -27,12 +26,24 @@ module.exports = function (app) {
         // watch the language for any changes from current user.
         LangWatcher($scope);
 
+        self.form = null;
+
         self.mainSiteSearchText = '';
         self.subSiteSearchText = '';
 
         self.documentClass = null;
         // followup statuses
         self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
+
+        self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup('outgoing', 'siteTypes'));
+        self.correspondenceSiteTypesCopy = angular.copy(self.correspondenceSiteTypes);
+
+        self.mainSites = [];
+        self.mainSitesCopy = angular.copy(self.mainSites);
+
+        self.subSites = [];
+        self.subSitesCopy = angular.copy(self.subSites);
+
         self.querySearchDefer = false;
 
         self.selectedSiteType = null;
@@ -45,18 +56,62 @@ module.exports = function (app) {
         self.defaultDateFormat = generator.defaultDateFormat;
         self.minFollowupDate = moment().add(1, 'days').format(generator.defaultDateFormat);
 
-        var properties = [];
-
         var followupStatusWithoutReply = _.find(self.followUpStatuses, function (status) {
                 return status.lookupStrKey === 'WITHOUT_REPLY';
             }),
             followupStatusNeedReply = _.find(self.followUpStatuses, function (item) {
                 return item.lookupStrKey === 'NEED_REPLY'
             }),
-            defaultNeedReplyFollowupDate = moment().add(3, 'days').format(generator.defaultDateFormat);
+            properties = angular.copy(lookupService.getPropertyConfigurations('outgoing')),
+            defaultFollowupNumberOfDays = 3,
+            defaultNeedReplyFollowupDate = generator.convertDateToString(generator.getFutureDate(defaultFollowupNumberOfDays)),
+            organizationForSLA = null;
+
         self.selectedSubSiteFollowUpStatus = angular.copy(followupStatusWithoutReply);
         self.selectedSubSiteFollowupDate = null;
         self.isFollowupStatusMandatory = false;
+
+        function _resetDefaultNeedReplyFollowupDate() {
+            if (self.correspondence && organizationForSLA) {
+                var priorityLevel = self.correspondence.getInfo().priorityLevel;
+                priorityLevel = priorityLevel.hasOwnProperty('lookupKey') ? priorityLevel.lookupKey : priorityLevel;
+
+                var slaDays = null;
+                if (typeof priorityLevel !== 'undefined' && priorityLevel !== null) {
+                    // organization has sla property and sla has property as same as document priority level
+                    if (organizationForSLA.hasOwnProperty('sla') && organizationForSLA.sla && organizationForSLA.sla.hasOwnProperty(priorityLevel)) {
+                        slaDays = organizationForSLA.sla[priorityLevel];
+                    }
+                    // if no SLA days or its less than 1, use default number of days to followup date to be today
+                    if (!slaDays || slaDays < 1) {
+                        slaDays = angular.copy(defaultFollowupNumberOfDays);
+                    }
+                }
+            }
+
+            defaultNeedReplyFollowupDate = generator.convertDateToString(generator.getFutureDate(slaDays));
+            // set followup date for all searched sites
+            if (self.subSites && self.subSites.length) {
+                _.map(self.subSites, function (site) {
+                    if (site.followupStatus && self.needReply(site.followupStatus)) {
+                        site.followupDate = new Date(defaultNeedReplyFollowupDate);
+                    } else {
+                        site.followupDate = null;
+                    }
+                    return site;
+                })
+            }
+
+            if (self.isFollowupStatusMandatory) {
+                if (self.needReply(self.selectedSubSiteFollowUpStatus)) {
+                    self.selectedSubSiteFollowupDate = defaultNeedReplyFollowupDate;
+                }
+                // this will set followup status and followup date to selected first site
+                self.onSelectedSubSiteFollowupStatusChange(self.form);
+            }
+
+            return defaultNeedReplyFollowupDate;
+        }
 
         /**
          * @description Finds the property configuration by symbolic name
@@ -73,7 +128,7 @@ module.exports = function (app) {
             }) || null;
         };
 
-        function _checkFollowupStatusRequired() {
+        function _checkFollowupStatusMandatory() {
             var property = _findPropertyConfiguration('FollowupStatus');
             if (property) {
                 self.isFollowupStatusMandatory = property.isMandatory;
@@ -88,18 +143,6 @@ module.exports = function (app) {
         self.simpleSearch = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
 
         $timeout(function () {
-            self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
-            self.correspondenceSiteTypesCopy = angular.copy(self.correspondenceSiteTypes);
-
-            self.mainSites = [];
-            self.mainSitesCopy = angular.copy(self.mainSites);
-
-            self.subSites = [];
-            self.subSitesCopy = angular.copy(self.subSites);
-
-            properties = angular.copy(lookupService.getPropertyConfigurations(self.documentClass));
-            _checkFollowupStatusRequired();
-
             if (self.correspondence.sitesToList && self.correspondence.sitesToList.length) {
                 var oldSites = angular.copy(self.correspondence.sitesToList);
                 self.selectedSiteType = self.correspondence.sitesToList[0].siteType;
@@ -175,7 +218,7 @@ module.exports = function (app) {
             return (new Site())
                 .mapFromSiteView(siteView)
                 .setFollowupStatus(self.isFollowupStatusMandatory ? followupStatusNeedReply : followupStatusWithoutReply)
-                .setFollowupDate(self.isFollowupStatusMandatory ? defaultNeedReplyFollowupDate : null)
+                .setFollowupDate(self.isFollowupStatusMandatory ? new Date(defaultNeedReplyFollowupDate) : null)
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
         }
 
@@ -366,7 +409,7 @@ module.exports = function (app) {
             if (item) {
                 self.addSiteTo(item);
                 self.selectedSubSiteFollowUpStatus = item.followupStatus;
-                self.selectedSubSiteFollowupDate = item.followupDate;
+                self.selectedSubSiteFollowupDate = item.followupDate ? generator.getDateFromTimeStamp(new Date(item.followupDate).valueOf()) : item.followupDate;
 
             } else {
                 self['sitesInfoTo'] = [];
@@ -654,6 +697,14 @@ module.exports = function (app) {
             }
         });
 
+        function _initPriorityLevelWatch() {
+            $scope.$watch(function () {
+                return self.correspondence.getInfo().priorityLevel;
+            }, function (value) {
+                _resetDefaultNeedReplyFollowupDate();
+            });
+        }
+
         function _isValidFollowupDate() {
             return ((new Date(self.selectedSubSiteFollowupDate)).valueOf() >= (new Date(self.minFollowupDate)).valueOf());
         }
@@ -703,9 +754,29 @@ module.exports = function (app) {
                         self.selectedSubSiteFollowupDate = null;
                     }
                 }
-                self.selectedSubSiteFollowupDate = null;
+                //self.selectedSubSiteFollowupDate = null;
                 self.checkFollowupDateValid(form);
             }
+        };
+
+        function _setSLAOrganization() {
+            return employeeService.getEmployee().getRegistryOrganization()
+                .then(function (result) {
+                    organizationForSLA = result;
+                });
+        }
+
+        self.$onInit = function () {
+            $timeout(function () {
+                self.form = $scope.corrSiteForm;
+                // just in case document is not passed to directive, avoid check for priority level
+                if (self.correspondence) {
+                    _initPriorityLevelWatch();
+                }
+                _setSLAOrganization();
+
+                _checkFollowupStatusMandatory();
+            });
         }
     });
 };

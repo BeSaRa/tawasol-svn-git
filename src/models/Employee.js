@@ -330,6 +330,19 @@ module.exports = function (app) {
                 return this.userOrganization.hasRegistry ? this.getNormalizeID(this.userOrganization.id) : this.getNormalizeID(this.userOrganization.registryParentId);
             };
 
+            /**
+             * @description Gets the registry organization
+             * @returns {Promise|*}
+             */
+            Employee.prototype.getRegistryOrganization = function () {
+                if (!this.userOrganization){
+                    return $q.reject(null);
+                }
+                return this.userOrganization.hasRegistry
+                    ? $q.resolve(this.userOrganization)
+                    : organizationService.loadOrganizationById(this.getRegistryOUID());
+            };
+
             Employee.prototype.isInSection = function () {
                 return this.getOUID() !== this.getRegistryOUID();
             };

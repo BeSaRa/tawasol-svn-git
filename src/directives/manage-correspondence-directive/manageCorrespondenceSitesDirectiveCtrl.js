@@ -17,7 +17,8 @@ module.exports = function (app) {
                                                                        generator,
                                                                        SiteView,
                                                                        rootEntity,
-                                                                       toast) {
+                                                                       toast,
+                                                                       employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSitesDirectiveCtrl';
@@ -55,7 +56,42 @@ module.exports = function (app) {
                 return status.lookupStrKey === 'NEED_REPLY';
             }),
             properties = angular.copy(lookupService.getPropertyConfigurations('outgoing')),
-            defaultNeedReplyFollowupDate = _createCurrentDate(3);
+            defaultFollowupNumberOfDays = 3,
+            defaultNeedReplyFollowupDate = generator.getFutureDate(defaultFollowupNumberOfDays),
+            organizationForSLA = null;
+
+        var _resetDefaultNeedReplyFollowupDate = function () {
+            if (self.correspondence && organizationForSLA) {
+                var priorityLevel = self.correspondence.getInfo().priorityLevel;
+                priorityLevel = priorityLevel.hasOwnProperty('lookupKey') ? priorityLevel.lookupKey : priorityLevel;
+
+                var slaDays = null;
+                if (typeof priorityLevel !== 'undefined' && priorityLevel !== null) {
+                    // organization has sla property and sla has property as same as document priority level
+                    if (organizationForSLA.hasOwnProperty('sla') && organizationForSLA.sla && organizationForSLA.sla.hasOwnProperty(priorityLevel)) {
+                        slaDays = organizationForSLA.sla[priorityLevel];
+                    }
+                    // if no SLA days or its less than 1, use default number of days to followup date to be today
+                    if (!slaDays || slaDays < 1) {
+                        slaDays = angular.copy(defaultFollowupNumberOfDays);
+                    }
+                }
+            }
+
+            defaultNeedReplyFollowupDate = generator.getFutureDate(slaDays);
+
+            self.followUpStatusDate = defaultNeedReplyFollowupDate;
+            self.followUpStatusDate_DL = defaultNeedReplyFollowupDate;
+
+            // set followup date for all searched sites
+            if (self.subSearchResultCopy && self.subSearchResultCopy.length) {
+                self.onFollowupStatusChange(self.followupStatus, true);
+            }
+            if (self.subSearchResult_DL_Copy && self.subSearchResult_DL_Copy.length) {
+                self.onFollowupStatusChange_DL(self.followupStatus_DL, true);
+            }
+            return defaultNeedReplyFollowupDate;
+        };
 
         /**
          * @description Finds the property configuration by symbolic name
@@ -93,7 +129,6 @@ module.exports = function (app) {
 
             self.mainSites = [];
             self.mainSitesCopy = angular.copy(self.mainSites);
-            _checkFollowupStatusMandatory();
         });
 
         self.selectedSiteTypeSimple = null;
@@ -116,7 +151,7 @@ module.exports = function (app) {
         // book vsId
         self.vsId = null;
         // current for need reply
-        self.minDate = _createCurrentDate(1);
+        self.minDate = generator.getFutureDate(1);
         // all sub correspondence sites
         self.subRecords = _concatCorrespondenceSites(true);
         // default followupStatusDate
@@ -148,18 +183,6 @@ module.exports = function (app) {
         self.isSearchByDLSiteType = false;
         self.selectedSiteType_DL = null;
         self.siteType_DLSearchText = '';
-
-        /**
-         * create current date + given days if provided.
-         * @param days
-         * @return {Date}
-         * @private
-         */
-        function _createCurrentDate(days) {
-            var date = new Date();
-            date.setDate(date.getDate() + (days || 0));
-            return date;
-        }
 
         /**
          * concatenate main and sub correspondence sites.
@@ -1017,6 +1040,14 @@ module.exports = function (app) {
             }
         });
 
+        function _initPriorityLevelWatch() {
+            $scope.$watch(function () {
+                return self.correspondence.getInfo().priorityLevel;
+            }, function (value) {
+                _resetDefaultNeedReplyFollowupDate();
+            });
+        }
+
         self.getSortingKey = function (property, modelType) {
             generator.getColumnSortingKey(property, modelType);
         };
@@ -1183,6 +1214,23 @@ module.exports = function (app) {
         self.isSubSiteSearchEnabled = function () {
             return self.simpleSubSiteResultSearchText;
         };
+
+        function _setSLAOrganization() {
+            return employeeService.getEmployee().getRegistryOrganization()
+                .then(function (result) {
+                    organizationForSLA = result;
+                });
+        }
+
+        self.$onInit = function () {
+            // just in case document is not passed to directive, avoid check for priority level
+            if (self.correspondence) {
+                _initPriorityLevelWatch();
+            }
+            _setSLAOrganization();
+
+            _checkFollowupStatusMandatory();
+        }
 
     });
 };
