@@ -99,7 +99,7 @@ module.exports = function (app) {
         }
 
         self.isDocumentTypeSwitchDisabled = function () {
-            return !!self.internal.vsId || self.duplicateVersion || !employeeService.hasPermissionTo('INTERNAL_PAPER') || self.employee.isBacklogMode() || replyTo;
+            return !!self.internal.vsId || self.duplicateVersion || !employeeService.hasPermissionTo('INTERNAL_PAPER') || self.employee.isBacklogMode();
         };
 
         self.preventPropagation = function ($event) {

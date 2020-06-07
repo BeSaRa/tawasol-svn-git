@@ -852,7 +852,7 @@ module.exports = function (app) {
         };
 
         self.isDocumentTypeSwitchDisabled = function () {
-            return !!self.outgoing.vsId || self.duplicateVersion || !self.employeeService.hasPermissionTo('OUTGOING_PAPER') || self.employee.isBacklogMode() || replyTo;
+            return !!self.outgoing.vsId || self.duplicateVersion || !self.employeeService.hasPermissionTo('OUTGOING_PAPER') || self.employee.isBacklogMode();
         }
     });
 };
