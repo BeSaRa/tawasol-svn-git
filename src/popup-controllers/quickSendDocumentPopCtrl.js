@@ -14,7 +14,9 @@ module.exports = function (app) {
                                                          errorCode,
                                                          distributionWFService,
                                                          DistributionWF,
-                                                         employeeService) {
+                                                         employeeService,
+                                                         tableGeneratorService,
+                                                         moment) {
         'ngInject';
         var self = this;
         self.controllerName = 'quickSendDocumentPopCtrl';
@@ -53,6 +55,7 @@ module.exports = function (app) {
         self.onChangePredefinedAction = function ($event) {
             self.includedMembers = [];
             self.excludedMembers = [];
+            var outOfOfficeUsers = [];
 
             if (self.selectedPredefinedAction) {
                 predefinedActionService.loadPredefinedActionById(self.selectedPredefinedAction)
@@ -60,11 +63,21 @@ module.exports = function (app) {
                         _.map(result.members, function (member) {
                             if (_isValidUser(member) || _isValidOrganization(member) || _isValidGroupMail(member)) {
                                 self.includedMembers.push(member);
+                                if (member.isUserOutOfOffice()) {
+                                    outOfOfficeUsers.push(member);
+                                }
                             } else {
                                 self.excludedMembers.push(member);
                             }
                             return member;
                         });
+                        if (outOfOfficeUsers.length) {
+                            // type cast to change to DistributionUserWFItem to access openOutOfOfficeDialog dialog
+                            _typeCastToDistributionWFItems(outOfOfficeUsers, true, true)
+                                .then(function (workflowUsers) {
+                                    dialog.alertMessage(_prepareProxyMessage(workflowUsers));
+                                });
+                        }
                     })
             }
         };
@@ -98,15 +111,54 @@ module.exports = function (app) {
             ]
         };
 
+        /**
+         * @description type cast given members to DistributionUserWFItem
+         * @param members
+         * @param fromLaunch
+         * @param returnPromise
+         * @returns {*}
+         * @private
+         */
+        function _typeCastToDistributionWFItems(members, fromLaunch, returnPromise) {
+            members = angular.isArray(members) ? members : [members];
+            return predefinedActionService.typeCastMembersToDistributionWFItems(members, true, true);
+        }
+
+        /**
+         * @description prepare proxy Message
+         * @param proxyUsers
+         * @private
+         */
+        function _prepareProxyMessage(proxyUsers) {
+            var titleTemplate = angular.element('<span class="validation-title">' + langService.get('proxy_user_message') + '</span> <br/>');
+            titleTemplate.html(langService.get('proxy_user_message'));
+
+            var tableRows = _.map(proxyUsers, function (user) {
+                return [user.arName, user.enName, user.proxyInfo.arName, user.proxyInfo.enName, user.proxyInfo.proxyDomain, moment(user.proxyInfo.proxyStartDate).format('YYYY-MM-DD'), moment(user.proxyInfo.proxyEndDate).format('YYYY-MM-DD'), user.proxyInfo.proxyMessage];
+            });
+
+            var table = tableGeneratorService.createTable([langService.get('arabic_name'), langService.get('english_name'), langService.get('proxy_arabic_name'), langService.get('proxy_english_name'), langService.get('proxy_domain'), langService.get('start_date'), langService.get('end_date'), langService.get('proxy_message')], 'error-table');
+            table.createTableRows(tableRows);
+
+            titleTemplate.append(table.getTable(true));
+
+            return titleTemplate.html();
+        }
+
         self.isAnyOutOfOffice = function () {
             return _.some(self.includedMembers, function (item) {
                 return item.isUserOutOfOffice();
             })
         };
 
+        /**
+         * @description Shows the out of office information for given user
+         * @param member
+         * @param $event
+         */
         self.openWorkflowUserOutOfOffice = function (member, $event) {
             // type cast to change to DistributionUserWFItem to access openOutOfOfficeDialog dialog
-            predefinedActionService.typeCastMembersToDistributionWFItems([member], true, true)
+            _typeCastToDistributionWFItems(member, true, true)
                 .then(function (workflowUser) {
                     return workflowUser[0].openOutOfOfficeDialog($event);
                 });
@@ -120,7 +172,7 @@ module.exports = function (app) {
             if (!self.isValidMembers()) {
                 return;
             }
-            predefinedActionService.typeCastMembersToDistributionWFItems(self.includedMembers, true, true)
+            _typeCastToDistributionWFItems(self.includedMembers, true, true)
                 .then(function (selectedWorkflowItems) {
                     self.distributionWF = new DistributionWF();
                     self.distributionWF.setNormalUsers(_.filter(selectedWorkflowItems, _filterWFUsers));
