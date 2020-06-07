@@ -256,13 +256,22 @@ module.exports = function (app) {
                 .confirmMessage(langService.get('confirm_delete').change({name: attachment.documentTitle}), null, null, $event)
                 .then(function () {
                     var attachments = angular.copy(self.attachments);
+                    if (attachments) {
+                        var attachmentIndex =  _.findIndex(self.attachments, function (item) {
+                            return item.vsId === attachment.vsId;
+                        });
+                        if (attachmentIndex > -1) {
+                            attachments.splice(attachmentIndex, 1);
+                        }
+                    }
                     linkedExportedAttachments = angular.copy(self.linkedExportedAttachments);
-                    attachments.splice(self.attachments.indexOf(attachment), 1);
                     if (attachment.refVSID) {
-                        var index = _.findIndex(linkedExportedAttachments, function (linkedExportedAttachment) {
+                        var linkedExportedIndex = _.findIndex(linkedExportedAttachments, function (linkedExportedAttachment) {
                             return linkedExportedAttachment.vsId === attachment.vsId;
                         });
-                        linkedExportedAttachments.splice(index, 1);
+                        if (linkedExportedIndex > -1) {
+                            linkedExportedAttachments.splice(linkedExportedIndex, 1);
+                        }
                     }
                     attachmentService
                         .deleteAttachment(self.vsId, self.documentClass, attachment).then(function () {
