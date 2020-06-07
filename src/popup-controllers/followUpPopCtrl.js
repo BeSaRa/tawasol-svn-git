@@ -33,6 +33,7 @@ module.exports = function (app) {
 
         self.minDate = new Date();
         //self.minDate.setDate(self.minDate.getDate() + 1);
+        self.minDate.setHours(0, 0, 0);
         self.minDateString = moment(self.minDate).format(generator.defaultDateFormat);
 
         // if no followupDate, set followupDate from organization SLA
