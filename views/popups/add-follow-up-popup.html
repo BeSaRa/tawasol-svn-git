@@ -66,16 +66,12 @@
                     <md-input-container flex>
                         <label for="folder">{{lang.add_to_folder}}</label>
                         <md-select id="folder" name="folder"
-                                   ng-model="ctrl.model.folderId"
-                                   ng-required="true">
+                                   ng-model="ctrl.model.folderId">
                             <md-option ng-repeat="folder in ctrl.folders"
                                        ng-value="folder.id"
                                        ng-disabled="!folder.status">{{folder.getTranslatedName()}}
                             </md-option>
                         </md-select>
-                        <div ng-messages="followupForm.folder.$error">
-                            <div ng-message="required">{{lang.field_required}}</div>
-                        </div>
                     </md-input-container>
                     <md-input-container flex class="cms-datepicker md-block">
                         <label for="followupDate">{{lang.followup_date}}</label>

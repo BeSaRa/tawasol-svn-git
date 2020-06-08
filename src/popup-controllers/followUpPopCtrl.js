@@ -150,7 +150,7 @@ module.exports = function (app) {
          * @returns {boolean|*|null}
          */
         self.isValidFollowup = function (form) {
-            var isValid = form.$valid && !self.inProgress && self.model.folderId && (self.model.followupDate && self.model.followupDate >= self.minDate);
+            var isValid = form.$valid && !self.inProgress && (self.model.followupDate && self.model.followupDate >= self.minDate);
             if (addToMyFollowup) {
                 return isValid;
             }
