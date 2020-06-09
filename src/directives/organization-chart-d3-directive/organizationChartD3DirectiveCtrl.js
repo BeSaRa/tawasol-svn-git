@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('organizationChartD3DirectiveCtrl', function ($element, LangWatcher, $scope, cmsTemplate, $mdPanel, generator, langService, $timeout, rootEntity, organizationService, d3) {
+    app.controller('organizationChartD3DirectiveCtrl', function ($element, employeeService, LangWatcher, $scope, cmsTemplate, $mdPanel, generator, langService, $timeout, rootEntity, organizationService, d3) {
         'ngInject';
 
         var self = this;
@@ -46,6 +46,10 @@ module.exports = function (app) {
         var transition = d3.transition().duration(duration);
 
         var Node = d3.hierarchy.prototype.constructor;
+        var tooltip = d3.select("body")
+            .append("div")
+            .attr("class", "d3-tooltip")
+            .style("opacity", 0);
 
 
         function renderNewNode(ou, node) {
@@ -164,6 +168,67 @@ module.exports = function (app) {
                     self.openRightClickMenu(node);
                 });
 
+            nodeEnter
+                .append('path')
+                .attr('class', 'indicators manageable')
+                .attr('transform', function (d) {
+                    return 'translate(-9,-12)';
+                })
+                .attr('d', function (d) {
+                    var check = 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z';
+                    return !d.data.itIsRoot ? (d.data.manageable ? check : '') : employeeService.isSuperAdminUser() ? check : '';
+                });
+
+            nodeEnter
+                .append('path')
+                .attr('class', 'indicators hasRegistry')
+                .attr('transform', function (d) {
+                    return d._children && d._children.length ? 'translate(20,-12)' : 'translate(-44,-12)';
+                })
+                .attr('d', function (d) {
+                    return d.data.hasRegistry ? 'M19,15H15A3,3 0 0,1 12,18A3,3 0 0,1 9,15H5V5H19M19,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z' : '';
+                })
+                .on('mouseover', function (d) {
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 1);
+
+                    tooltip.html(d.data.isPrivateRegistry ? langService.get('private_registry') : langService.get('has_registry'))
+                        .style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY - 28) + "px");
+                })
+                .on('mouseout', function () {
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 0);
+                });
+
+            nodeEnter
+                .append('path')
+                .attr('class', 'indicators centralArchive')
+                .attr('transform', function (d) {
+                    var xChild = !d.data.hasRegistry ? 20 : 40;
+                    var xNoChild = !d.data.hasRegistry ? -44 : -88;
+                    return (d._children && d._children.length ? 'translate(' + xChild + ',-12)' : 'translate(' + xNoChild + ',-12)');
+                })
+                .attr('d', function (d) {
+                    return d.data.centralArchive ? 'M3,3H21V7H3V3M4,8H20V21H4V8M9.5,11A0.5,0.5 0 0,0 9,11.5V13H15V11.5A0.5,0.5 0 0,0 14.5,11H9.5Z' : '';
+                })
+                .on('mouseover', function () {
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 1);
+                    tooltip.html(langService.get('has_archive'))
+                        .style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY - 28) + "px");
+                })
+                .on('mouseout', function () {
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 0);
+                });
+
+
             nodeEnter.append("text")
                 .attr("x", function (d) {
                     return d.children || d._children ? -25 : 25;
@@ -219,12 +284,20 @@ module.exports = function (app) {
 
             nodeUpdate.select('circle')
                 .style('fill', function (d) {
+                    if (!d.data.status)
+                        return '#8E8E8E';
+
                     if (d.match) {
                         foundAnimation(this);
                     }
                     if (d.class === 'found')
                         return "#ff4136";
                     return d._children && d._children.length ? "lightsteelblue" : "#fff";
+                });
+
+            nodeUpdate.select('path.hasRegistry')
+                .style('fill', function (d) {
+                    return d.data.isPrivateRegistry ? 'red' : null;
                 });
 
             nodeUpdate.select('text.clone')
@@ -454,6 +527,9 @@ module.exports = function (app) {
         self.openRightClickMenu = function (node) {
             var event = d3.event;
             event.preventDefault();
+            if ((!node.data.itIsRoot && !node.data.manageable) || node.data.itIsRoot && !employeeService.isSuperAdminUser()) {
+                return;
+            }
             var parent = node.parent;
 
             var position = $mdPanel.newPanelPosition()
