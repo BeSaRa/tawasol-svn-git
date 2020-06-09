@@ -688,6 +688,9 @@ module.exports = function (app) {
                         localStorage.setItem('userFollowupData', JSON.stringify(exportData));
                         localStorage.setItem('currentLang', langService.current);
                         var printWindow = window.open(self.printPage, '', 'left=0,top=0,width=0,height=0,toolbar=0,scrollbars=0,status=0');
+                        printWindow.onafterprint = function () {
+                            printWindow.close();
+                        };
                         if (!printWindow) {
                             toast.error(langService.get('msg_error_occurred_while_processing_request'))
                         }
