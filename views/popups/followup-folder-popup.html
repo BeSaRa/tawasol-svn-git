@@ -35,7 +35,7 @@
                     </div>
                     <div layout="row">
                         <div flex class="cms-input-container">
-                            <md-switch flex ng-model="ctrl.followupFolder.status" aria-label="{{lang.status}}">
+                            <md-switch ng-change="ctrl.validateStatus()" flex ng-model="ctrl.followupFolder.status" aria-label="{{lang.status}}">
                                 <label>{{lang.status}} : {{ctrl.followupFolder.getTranslatedStatus()}}</label>
                             </md-switch>
                         </div>

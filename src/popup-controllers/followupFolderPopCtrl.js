@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                       toast,
                                                       validationService,
                                                       followUpUserService,
+                                                      counterService,
                                                       generator,
                                                       dialog,
                                                       parent,
@@ -125,6 +126,14 @@ module.exports = function (app) {
                 .catch(function () {
 
                 });
+        };
+
+        self.validateStatus = function () {
+            console.log('HERE');
+            if (self.editMode && !self.followupFolder.status && counterService.followupFolderCount.hasOwnProperty(self.model.id) && counterService.followupFolderCount[self.model.id].first > 0) {
+                self.followupFolder.status = true;
+                toast.warning(langService.get('cannot_disable_folder_has_document'));
+            }
         };
 
         /**
