@@ -797,7 +797,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'book-search-outline',
-                        text: 'add_to_my_direct_followup',
+                        text: 'grid_action_to_my_followup',
                         shortcut: true,
                         callback: self.addToDirectFollowUp,
                         permissionKey: 'USER_FOLLOWUP_BOOKS',
