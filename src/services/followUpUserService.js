@@ -165,10 +165,10 @@ module.exports = function (app) {
                                 {
                                     ouId: employeeService.getEmployee().getOUID(),
                                     userId: employeeService.getEmployee().id,
-                                    parent: followupFolder ? followupFolder.id : null
+                                    parent: followupFolder ? followupFolder.id : null,
+                                    isDefault: !folders.length
                                 }),
-                            parent: parentFolder,
-                            isDefault: !folders.length
+                            parent: parentFolder
                         }
                     });
             },
