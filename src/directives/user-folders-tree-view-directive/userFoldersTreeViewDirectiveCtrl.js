@@ -83,7 +83,7 @@ module.exports = function (app) {
             if (self.followup) {
                 followUpUserService
                     .controllerMethod
-                    .followupFolderAdd(folder, $event)
+                    .followupFolderAdd(folder, $event , self.folders)
                     .then(function () {
                         self.reloadUserFolders();
                     });

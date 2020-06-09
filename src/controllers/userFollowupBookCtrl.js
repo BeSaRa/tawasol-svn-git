@@ -195,7 +195,7 @@ module.exports = function (app) {
         self.createFolder = function (folder, $event) {
             followUpUserService
                 .controllerMethod
-                .followupFolderAdd((folder.id ? folder : null), $event)
+                .followupFolderAdd((folder.id ? folder : null), $event , self.folders)
                 .then(function () {
                     self.reloadFollowupFolders();
                 });

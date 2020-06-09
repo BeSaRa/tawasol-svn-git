@@ -149,8 +149,9 @@ module.exports = function (app) {
              * @description Opens popup to add new User Folder
              * @param followupFolder
              * @param $event
+             * @param folders
              */
-            followupFolderAdd: function (followupFolder, $event) {
+            followupFolderAdd: function (followupFolder, $event, folders) {
                 var parentFolder = angular.copy(followupFolder);
                 return dialog
                     .showDialog({
@@ -166,7 +167,8 @@ module.exports = function (app) {
                                     userId: employeeService.getEmployee().id,
                                     parent: followupFolder ? followupFolder.id : null
                                 }),
-                            parent: parentFolder
+                            parent: parentFolder,
+                            isDefault: !folders.length
                         }
                     });
             },
