@@ -162,7 +162,7 @@ module.exports = function (app) {
          */
         self.handleFieldKeyDown = function (field, $event) {
             if ($event) {
-                if (self.rootEntity.hrEnabled && self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user' && field.fieldIdentifier === 'qid') {
+                if (self.rootEntity.hrEnabled && self.selectedEntityType.lookupStrKey && self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user' && field.fieldIdentifier === 'qid') {
                     var code = $event.which || $event.keyCode;
                     // if enter key pressed, load from server with search text
                     if (code === 13) {
@@ -232,7 +232,7 @@ module.exports = function (app) {
          * add entity document
          */
         self.addEntityToDocument = function () {
-            if (self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user') {
+            if (self.selectedEntityType.lookupStrKey && self.selectedEntityType.lookupStrKey.toLowerCase() === 'external_user') {
                 if (_checkDuplicateExternalUser()) {
                     toast.error(langService.get('record_already_exists').change({entity: langService.get('entities_qid')}));
                     return;
