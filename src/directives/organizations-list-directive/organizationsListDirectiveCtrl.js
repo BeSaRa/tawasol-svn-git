@@ -32,11 +32,6 @@ module.exports = function (app) {
 
         self.selectedOrganizations = [];
 
-        $timeout(function () {
-            self.organizationsListCopy = angular.copy(self.organizationsList);
-            _getAllParentIds();
-        });
-
         self.grid = {
             progress: null,
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.organization) || 5, // default limit
@@ -128,7 +123,9 @@ module.exports = function (app) {
                     self.grid.order = '';
                     self.getSortedData();
                     _getAllParentIds();
-                    self.grid.columnSearchCallback();
+                    $timeout(function () {
+                        self.grid.columnSearchCallback();
+                    })
                 })
         };
 
@@ -273,7 +270,12 @@ module.exports = function (app) {
             self.grid.columnSearchCriteria = angular.copy(columnSearchCriteria);
             self.grid.columnSearchCallback();
             self.getSortedData();
-        }
+        };
+
+        self.$onInit = function () {
+            self.organizationsListCopy = angular.copy(self.organizationsList);
+            _getAllParentIds();
+        };
 
     });
 };
