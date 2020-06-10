@@ -945,7 +945,9 @@ module.exports = function (app) {
                 userInDifferentDepartment: 'account-outline',
                 registryOU: 'inbox',
                 centralArchiveOu: 'archive',
-                notSyncOu: 'sync-alert'
+                notSyncOu: 'sync-alert',
+                active: 'check',
+                inactive: 'close'
             }
         };
     });

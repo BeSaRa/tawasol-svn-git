@@ -132,6 +132,10 @@ module.exports = function (app) {
                 return indicator.getFollowUpDateIndicator(followupDate);
             };
 
+            FollowupBook.prototype.getFollowupStatusIndicator = function () {
+                return indicator.getStatusIndicator(!!this.status, 'grid_indicator_followup_not_terminated', 'grid_indicator_followup_terminated');
+            };
+
             /**
              * @description Get the indicator to show followup date of book. its not showing info for correspondence site followup date
              * @param followupDate

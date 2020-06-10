@@ -1748,6 +1748,19 @@ tr.unread-row, tr.current-version {
     background: rgba(255, 235, 128, 0.38) !important;
   }
 }
+.background-gray,
+.background-gray:hover {
+  background: #ebebeb !important;
+
+  div.sidebar:after {
+    content: " *";
+    color: red;
+  }
+
+  td, td:hover {
+    background: #ebebeb !important;
+  }
+}
 
 .background-danger {
   background: #ffbcbc;

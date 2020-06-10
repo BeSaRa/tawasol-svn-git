@@ -146,6 +146,7 @@
                                     <tbody md-body>
                                     <tr md-row md-select="record" grid-right-click-directive="record"
                                         model="record"
+                                        ng-class="!record.status ? 'background-gray': ''"
                                         selected-length="{{ctrl.selectedFollowupBooks.length ? ctrl.selectedFollowupBooks.length : 0}}"
                                         ng-repeat="record in searchResults = (ctrl.followupBooks | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
 
@@ -194,6 +195,10 @@
                                         <td md-cell>{{record.docDateString}}</td>
                                         <td md-cell>{{record.actionDateString}}</td>
                                         <td md-cell class="td-data">
+                                            <!-- Status(Terminated/Not Terminated) -->
+                                            <grid-indicator-directive record="record"
+                                                                      indicator-type="status"
+                                                                      record-type="FollowupBook"></grid-indicator-directive>
                                             <grid-indicator-directive record="record"
                                                                       indicator-type="followupDate"
                                                                       record-type="FollowupBook"></grid-indicator-directive>

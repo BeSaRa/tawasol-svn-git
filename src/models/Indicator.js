@@ -578,6 +578,26 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Returns the status indicator and description
+             * @param status
+             * @param trueKey
+             * @param falseKey
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getStatusIndicator = function (status, trueKey, falseKey) {
+                var successKey = trueKey || 'active', failKey = falseKey || 'inactive';
+                return new Indicator({
+                    class: 'indicator',
+                    text: status ? successKey : failKey,
+                    icon: status ? self.getIndicatorIcons('active') : self.getIndicatorIcons('inactive'),
+                    tooltip: status ? successKey : failKey,
+                    legendText: function (indicator) {
+                        return langService.get(status ? successKey : failKey);
+                    }
+                });
+            };
+
+            /**
              * @description Returns the difference in days and date status(passed/today/coming)
              * @param dateToCheck
              * @param iconType

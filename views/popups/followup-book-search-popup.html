@@ -174,12 +174,16 @@
                             </md-select>
                         </md-input-container>
                         <!-- Terminated -->
-                        <div class="cms-input-container" flex>
-                            <md-switch flex ng-model="ctrl.searchCriteria.status">
-                                <label>{{lang.terminated}} :
-                                    {{ctrl.searchCriteria.getTranslatedYesNo('status')}}</label>
-                            </md-switch>
-                        </div>
+                        <md-input-container flex>
+                            <label for="status">{{lang.terminated}}</label>
+                            <md-select id="status" name="status"
+                                       ng-model-options="{trackBy: '$value'}"
+                                       ng-model="ctrl.searchCriteria.status">
+                                <md-option ng-repeat="option in ctrl.terminatedOptions"
+                                           ng-value="option.value">{{lang[option.langKey]}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
                     </div>
                 </div>
             </form>

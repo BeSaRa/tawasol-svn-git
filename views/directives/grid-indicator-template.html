@@ -184,6 +184,15 @@
              tooltip="{{ctrl.langService.get(ctrl.record.isBroadcastedIndicator.tooltip)}}"
     ></md-icon>
 </span>
+<!-- Status -->
+<span ng-if="ctrl.indicatorType === 'status'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.statusIndicator}">
+    <md-icon ng-if="ctrl.record.statusIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.statusIndicator.class}} {{ctrl.iconClass}} cursor-pointer"
+             md-svg-icon="{{ctrl.record.statusIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.statusIndicator.tooltip)}}"
+    ></md-icon>
+</span>
 <!-- Site Follow up due date Status -->
 <span ng-if="ctrl.indicatorType === 'siteFollowUpDueDate'" class="{{ctrl.spanClass}}"
       ng-class="{'indicator-content': ctrl.record.siteFollowUpDueDateIndicator}">

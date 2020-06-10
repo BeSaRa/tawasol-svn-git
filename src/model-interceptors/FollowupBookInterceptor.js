@@ -1,7 +1,21 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, generator, lookupService, correspondenceService, managerService ,Information, followUpUserService, _) {
+    app.run(function (CMSModelInterceptor,
+                      generator,
+                      lookupService,
+                      correspondenceService,
+                      managerService,
+                      Information,
+                      followUpUserService,
+                      _,
+                      langService) {
         'ngInject';
-        var modelName = 'FollowupBook';
+        var modelName = 'FollowupBook',
+            statusKeys = {
+                '0': 'terminated',
+                'false': 'terminated',
+                'true': 'not_terminated',
+                '1': 'not_terminated'
+            };
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
             model
@@ -19,10 +33,12 @@ module.exports = function (app) {
             delete model.followDateIndicator;
             delete model.siteFollowUpDueDateIndicator;
             delete model.numberOfDays;
+            delete model.statusInfo;
             delete model.securityLevelLookup;
             delete model.securityLevelIndicator;
             delete model.priorityLevelLookup;
             delete model.priorityLevelIndicator;
+            delete model.statusIndicator;
             delete model.folderInfo;
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
             return model;
@@ -38,6 +54,11 @@ module.exports = function (app) {
             var numberOfDays = generator.getNumberOfDays(model.followupDate, new Date(), true);
             // -(numberOfDays) means, get positive number if date is in future
             model.numberOfDays = numberOfDays === 0 ? numberOfDays : -(numberOfDays);
+            model.statusInfo = new Information({
+                arName: langService.getByLangKey(statusKeys[model.status], 'ar'),
+                enName: langService.getByLangKey(statusKeys[model.status], 'en')
+            });
+            model.statusIndicator = model.getFollowupStatusIndicator();
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
             model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);

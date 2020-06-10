@@ -29,6 +29,24 @@ module.exports = function (app) {
         self.folders = folders;
         self.todayEndOfDay = moment().endOf("day").toDate();
 
+        self.terminatedOptions = [
+            {
+                id: 1,
+                langKey: 'all',
+                value: null
+            },
+            {
+                id: 2,
+                langKey: 'not_terminated',
+                value: true
+            },
+            {
+                id: 3,
+                langKey: 'terminated',
+                value: false
+            }
+        ];
+
         $timeout(function () {
             if (self.searchCriteria.selectedSiteType) {
                 self.getMainSites(false);
@@ -141,7 +159,8 @@ module.exports = function (app) {
             var hasValue = !!self.searchCriteria.docSubject ||
                 !!self.searchCriteria.docFullSerial ||
                 !!self.searchCriteria.selectedSiteType ||
-                !!(self.searchCriteria.fromFollowupDate && self.searchCriteria.toFollowupDate);
+                !!(self.searchCriteria.fromFollowupDate && self.searchCriteria.toFollowupDate) ||
+                !!(self.searchCriteria.fromDocDate && self.searchCriteria.toDocDate);
             return !hasValue;
         };
 
