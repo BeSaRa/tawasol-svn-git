@@ -11,7 +11,8 @@ module.exports = function (app) {
                                                   langService,
                                                   referencePlanNumberService,
                                                   contextHelpService,
-                                                  $timeout) {
+                                                  $timeout,
+                                                  employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'organizationsCtrl';
@@ -27,15 +28,33 @@ module.exports = function (app) {
 
         self.resetView = false; // set to true when reset view button is clicked.
 
-        self.selectedTabIndex = 0;
-        self.selectedTabName = "chart";
         self.tabsToShow = [
             'chart',
             'grid'
         ];
+
         self.showTab = function (tabName) {
-            return self.tabsToShow.indexOf(tabName) > -1;
+            var isAvailable = (self.tabsToShow.indexOf(tabName) > -1);
+            if (tabName === 'chart') {
+                return isAvailable && employeeService.isSuperAdminUser();
+            }
+            return isAvailable;
         };
+
+        function _getAvailableTabs() {
+            return _.filter(self.tabsToShow, function (tab) {
+                return self.showTab(tab);
+            });
+        }
+
+        function _getTabIndex(tabName) {
+            return _.findIndex(_getAvailableTabs(), function (tab) {
+                return tab.toLowerCase() === tabName.toLowerCase();
+            })
+        }
+
+        self.selectedTabName = employeeService.isSuperAdminUser() ? 'chart' : 'grid';
+        self.selectedTabIndex = _getTabIndex(self.selectedTabName);
 
         /**
          * @description Set the current tab name
@@ -43,6 +62,7 @@ module.exports = function (app) {
          */
         self.setCurrentTab = function (tabName) {
             self.selectedTabName = tabName;
+            self.selectedTabIndex = _getTabIndex(self.selectedTabName);
         };
 
         function _checkOrganizationsNeedSync(organizations) {

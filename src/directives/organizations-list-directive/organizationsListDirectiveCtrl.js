@@ -22,7 +22,8 @@ module.exports = function (app) {
                 hasRegistry: null,
                 centralArchive: null,
                 isPrivateRegistry: null,
-                status: null
+                status: null,
+                manageable: true
             };
         self.controllerName = 'organizationsListDirectiveCtrl';
         // watch the language for any changes from current user.
@@ -114,7 +115,7 @@ module.exports = function (app) {
 
             self.reloadCallback(ignoreLoadOrganizations || false)
                 .then(function (result) {
-                    self.organizationsList = angular.copy(result);
+                    self.organizationsList = _filterManageable(result);
                     self.organizationsListCopy = angular.copy(self.organizationsList);
                     self.selectedOrganizations = [];
                     defer.resolve(true);
@@ -272,7 +273,18 @@ module.exports = function (app) {
             self.getSortedData();
         };
 
+        /**
+         * @description Filters the manageable organizations
+         * @param organizations
+         * @returns {Array}
+         * @private
+         */
+        var _filterManageable = function (organizations) {
+            return _.filter(angular.copy(organizations), 'manageable');
+        };
+
         self.$onInit = function () {
+            self.organizationsList = _filterManageable(self.organizationsList);
             self.organizationsListCopy = angular.copy(self.organizationsList);
             _getAllParentIds();
         };
