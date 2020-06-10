@@ -45,6 +45,10 @@
                             <tr md-row md-select="site"
                                 ng-repeat="item in ctrl.workItems  track by $index">
                                 <td md-cell class="indicator-td">
+                                    <!-- Paper/Electronic -->
+                                    <grid-indicator-directive record-type="WorkItem"
+                                                              record="item"
+                                                              indicator-type="paperElectronic"></grid-indicator-directive>
                                     <!-- Has Attachments -->
                                     <grid-indicator-directive record="item" span-class="float-right"
                                                               indicator-type="hasAttachment"
