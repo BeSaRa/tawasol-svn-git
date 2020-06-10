@@ -238,7 +238,7 @@ module.exports = function (app) {
         };
 
         self.isValidBasicCriteria = function () {
-            return !!self.selectedOrganization && !!self.selectedSecurityLevels && !!self.selectedUser;
+            return !!self.selectedOrganization && (!!self.selectedSecurityLevels && self.selectedSecurityLevels.length > 0) && !!self.selectedUser;
         };
 
         /**
