@@ -228,8 +228,14 @@ module.exports = function (app) {
          * @param defer
          */
         self.terminate = function (record, $event, defer) {
+            if (record.isTerminated()){
+                return;
+            }
             record.terminate(false, $event).then(function () {
-                return self.reloadFollowupBooks(self.grid.page);
+                return self.reloadFollowupBooks(self.grid.page)
+                    .then(function () {
+                        new ResolveDefer(defer);
+                    });
             });
         };
 
@@ -449,7 +455,7 @@ module.exports = function (app) {
                 class: "action-green",
                 sticky: true,
                 checkShow: function (action, model) {
-                    return true;
+                    return !model.isTerminated();
                 }
             },
             // Move To Folder

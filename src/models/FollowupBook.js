@@ -149,6 +149,11 @@ module.exports = function (app) {
                 return viewDocumentService.viewQueueDocument(this, actions, queueName, $event, viewOnly);
             };
 
+            FollowupBook.prototype.isTerminated = function () {
+                // if terminated, status = false, otherwise true
+                return !this.status;
+            };
+
             FollowupBook.prototype.terminate = function (ignoreMessage, $event) {
                 return followUpUserService.terminateFollowup(this, $event);
             };
