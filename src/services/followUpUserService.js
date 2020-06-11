@@ -759,7 +759,7 @@ module.exports = function (app) {
                         record.docSubject,
                         record.priorityLevelLookup.getTranslatedName(),
                         record.followupDateString,
-                        generator.getDocumentClassName(record.docClassId),
+                        langService.get(record.docClassIndicator.tooltip),
                         record.docDateString,
                         _.map(record.commentList, function (comment) {
 

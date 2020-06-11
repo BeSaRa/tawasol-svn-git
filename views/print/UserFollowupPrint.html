@@ -82,7 +82,7 @@
                             }
                             cell.append(subtable);
                         } else {
-                            cell.innerHTML = record[j] ? ('<div>' + record[j] + '</div>') : '';
+                            cell.innerHTML = (record[j] !== null && record[j] !== '') ? ('<div>' + record[j] + '</div>') : '';
                         }
                     }
                 }
