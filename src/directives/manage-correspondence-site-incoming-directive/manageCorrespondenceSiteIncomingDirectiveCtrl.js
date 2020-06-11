@@ -321,10 +321,11 @@ module.exports = function (app) {
                     criteria: null,
                     excludeOuSites: false
                 }).then(function (result) {
-                    self.subSearchResult = [];
                     self.mainSites = result;
                     self.mainSitesCopy = angular.copy(self.mainSites);
                     self.selectedMainSiteAdvanced = null;
+                    self.subSearchResult = [];
+                    self.subSearchResultCopy = angular.copy(self.subSearchResult);
                     _selectDefaultMainSiteAndGetSubSitesAdvanced();
                 });
             } else {
@@ -348,11 +349,6 @@ module.exports = function (app) {
             }).then(function (result) {
                 self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
-                // self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
-
-                /*if (self.subSearchResult.length === 1) {
-                    self.subSearchSelected.push(self.subSearchResult[0]);
-                }*/
 
                 // bind sub site search
                 if (self.isSimpleCorrespondenceSiteSearchType) {
@@ -513,7 +509,8 @@ module.exports = function (app) {
                                     return;
                                 }
                             }*/
-                            self.defaultSubSearch = angular.copy(_.map(result, _mapSubSites));
+
+                            self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                             self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                             resolve(self.subSearchResult);
                         });
@@ -559,7 +556,7 @@ module.exports = function (app) {
             }
             promise.then(function () {
                 _concatCorrespondenceSites(true).then(function () {
-                    self.subSearchResult = _.filter(self.defaultSubSearch, _filterSubSites);
+                    self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                 });
             });
         };
@@ -570,7 +567,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.site = null;
                     _concatCorrespondenceSites(true).then(function () {
-                        self.subSearchResult = _.filter(self.defaultSubSearch, _filterSubSites);
+                        self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                     });
                 });
         };

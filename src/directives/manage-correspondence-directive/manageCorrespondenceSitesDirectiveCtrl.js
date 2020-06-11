@@ -674,17 +674,19 @@ module.exports = function (app) {
                     criteria: null,
                     excludeOuSites: false
                 }).then(function (result) {
-                    self.subSearchResult = [];
                     self.mainSites = result;
                     self.mainSitesCopy = angular.copy(self.mainSites);
                     self.selectedMainSiteAdvanced = null;
+                    self.subSearchResult = [];
+                    self.subSearchResultCopy = angular.copy(self.subSearchResult);
                     _selectDefaultMainSiteAndGetSubSitesAdvanced();
                 });
             } else {
-                self.subSearchResult = [];
                 self.mainSites = [];
                 self.mainSitesCopy = angular.copy(self.mainSites);
                 self.selectedMainSiteAdvanced = null;
+                self.subSearchResult = [];
+                self.subSearchResultCopy = angular.copy(self.subSearchResult);
             }
         };
 
