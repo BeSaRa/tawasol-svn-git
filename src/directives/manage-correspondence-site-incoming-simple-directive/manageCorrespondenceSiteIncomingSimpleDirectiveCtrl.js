@@ -90,9 +90,9 @@ module.exports = function (app) {
             // set followup date for all searched sites
             if (self.subSites && self.subSites.length) {
                 _.map(self.subSites, function (site) {
-                    if (site.followupStatus && self.needReply(site.followupStatus)){
+                    if (site.followupStatus && self.needReply(site.followupStatus)) {
                         site.followupDate = new Date(defaultNeedReplyFollowupDate);
-                    } else{
+                    } else {
                         site.followupDate = null;
                     }
                     return site;
@@ -618,20 +618,21 @@ module.exports = function (app) {
         function _setSLAOrganization() {
             return employeeService.getEmployee().getRegistryOrganization()
                 .then(function (result) {
-                    organizationForSLA = result;
+                    return organizationForSLA = result;
                 });
         }
 
         self.$onInit = function () {
             $timeout(function () {
                 self.form = $scope.corrSiteForm;
-                // just in case document is not passed to directive, avoid check for priority level
-                if (self.correspondence) {
-                    _initPriorityLevelWatch();
-                }
-                _setSLAOrganization();
-
-                _checkFollowupStatusMandatory();
+                _setSLAOrganization()
+                    .then(function () {
+                        // just in case document is not passed to directive, avoid check for priority level
+                        if (self.correspondence) {
+                            _initPriorityLevelWatch();
+                        }
+                        _checkFollowupStatusMandatory();
+                    });
             });
         }
 

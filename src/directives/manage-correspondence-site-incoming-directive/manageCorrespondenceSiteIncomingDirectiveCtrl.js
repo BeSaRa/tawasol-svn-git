@@ -760,13 +760,14 @@ module.exports = function (app) {
         }
 
         self.$onInit = function () {
-            // just in case document is not passed to directive, avoid check for priority level
-            if (self.correspondence) {
-                _initPriorityLevelWatch();
-            }
-            _setSLAOrganization();
-
-            _checkFollowupStatusMandatory();
+            _setSLAOrganization()
+                .then(function () {
+                    // just in case document is not passed to directive, avoid check for priority level
+                    if (self.correspondence) {
+                        _initPriorityLevelWatch();
+                    }
+                    _checkFollowupStatusMandatory();
+                });
         }
 
     });
