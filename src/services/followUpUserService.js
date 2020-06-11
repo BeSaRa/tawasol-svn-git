@@ -739,8 +739,7 @@ module.exports = function (app) {
                     langService.get('correspondence_sites'),
                     langService.get('document_number'),
                     langService.get('subject'),
-                    langService.get('created_on'),
-                    langService.get('action_date'),
+                    langService.get('priority_level'),
                     langService.get('followup_date'),
                     langService.get('type'),
                     langService.get('document_date'),
@@ -754,12 +753,15 @@ module.exports = function (app) {
                         record.getTranslatedCorrespondenceSiteInfo(),
                         record.refDocNumber,
                         record.docSubject,
-                        record.docDateString,
-                        record.actionDateString,
+                        record.priorityLevelLookup.getTranslatedName(),
                         record.followupDateString,
                         generator.getDocumentClassName(record.docClassId),
-                        generator.convertDateToString(record.docDate),
-                        _.map(record.commentList, 'description'),
+                        record.docDateString,
+                        _.map(record.commentList, function (comment) {
+
+                            return comment.description + ' ' + langService.get('created_on') + ' ' + generator.getDateFromTimeStamp(comment.creationDate)
+                                + ' ' + langService.get('created_by') + ' ' + comment.createorInfo.getTranslatedName();
+                        }),
                         record.numberOfDays
                     ]);
                 }

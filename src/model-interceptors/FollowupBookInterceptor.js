@@ -7,6 +7,7 @@ module.exports = function (app) {
                       Information,
                       followUpUserService,
                       _,
+                      DocumentComment,
                       langService) {
         'ngInject';
         var modelName = 'FollowupBook',
@@ -71,6 +72,7 @@ module.exports = function (app) {
                 parent: folder.parent
             });
             model.setMainSiteSubSiteString();
+            model.commentList = model.commentList.length ? generator.interceptReceivedCollection('DocumentComment', model.commentList) : model.commentList;
 
             return model;
         });
