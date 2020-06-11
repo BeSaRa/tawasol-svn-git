@@ -193,6 +193,14 @@ module.exports = function (app) {
             };
 
 
+            FollowupBook.prototype.editMyDirectFollowUp = function (editMode) {
+                return followUpUserService.addCorrespondenceToMyFollowUp(this, editMode);
+            };
+
+            FollowupBook.prototype.editUserFollowUp = function (editMode) {
+                return followUpUserService.addCorrespondenceToEmployeeFollowUp(this, editMode);
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('FollowupBook', 'init', this);

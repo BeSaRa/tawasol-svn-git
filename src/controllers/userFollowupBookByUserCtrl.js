@@ -80,7 +80,7 @@ module.exports = function (app) {
         self.organizations = _mapRegOUSections();
         self.applicationUsers = [];
         self.securityLevels = [];
-        self.selectedOrganization = null;
+        self.selectedOrganization = self.employeeService.getEmployee().userOrganization;
         self.selectedUser = null;
         self.selectedSecurityLevels = null;
 
@@ -297,7 +297,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.terminate = function (record, $event, defer) {
-            if (record.isTerminated()){
+            if (record.isTerminated()) {
                 return;
             }
             record.terminate(false, $event).then(function () {
@@ -472,6 +472,21 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description edit workItem To My FollowUp
+         * @param record
+         * @param defer
+         */
+        self.editEmployeeFollowUp = function (record, $event, defer) {
+            record.editUserFollowUp(true)
+                .then(function () {
+                    return self.reloadFollowupBooks(self.grid.page)
+                        .then(function (result) {
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
         self.gridActions = [
             // Document Information
             {
@@ -571,6 +586,18 @@ module.exports = function (app) {
                 callback: self.transferToAnotherEmployee,
                 class: "action-green",
                 showInView: true,
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            // edit employee follow up
+            {
+                type: 'action',
+                icon: 'pencil',
+                text: 'grid_action_edit',
+                shortcut: true,
+                callback: self.editEmployeeFollowUp,
+                class: "action-green",
                 checkShow: function (action, model) {
                     return true;
                 }

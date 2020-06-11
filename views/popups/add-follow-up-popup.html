@@ -1,8 +1,7 @@
 <md-dialog class="dialog-extend cms-dialog" layout="column"
            ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
            ng-attr-aria-label="{{lang.add_to_my_direct_followup}}">
-    <popup-toolbar-directive ng-if="!ctrl.model.id"
-                             header-text="{{lang.follow_up_to + ' : ' + ctrl.model.docSubject}}"></popup-toolbar-directive>
+    <popup-toolbar-directive header-text="{{lang.follow_up_to + ' : ' + ctrl.model.docSubject}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
             <form name="followupForm" layout="column">
@@ -13,6 +12,7 @@
                                    ng-change="ctrl.getAppUsersForOU($event)"
                                    aria-label="{{lang.organization_unit}}"
                                    ng-model="ctrl.selectedOrganization"
+                                   ng-disabled="ctrl.editMode"
                                    md-on-close="ctrl.clearSearchText('ou')"
                                    ng-model-options="{trackBy: '$value'}"
                                    data-md-container-class="select-header-container sticky-search-bar">
@@ -39,7 +39,7 @@
                         <md-select name="applicationUser" id="applicationUser"
                                    ng-change="ctrl.onChangeUser()"
                                    ng-required="true"
-                                   ng-disabled="!ctrl.selectedOrganization"
+                                   ng-disabled="!ctrl.selectedOrganization || ctrl.editMode"
                                    aria-label="{{lang.select_user}}"
                                    ng-model="ctrl.selectedApplicationUser"
                                    ng-model-options="{trackBy: '$value'}"
@@ -65,7 +65,7 @@
                 <div layout="row">
                     <md-input-container flex>
                         <label for="folder">{{lang.add_to_folder}}</label>
-                        <md-select id="folder" name="folder"
+                        <md-select id="folder" name="folder" ng-disabled="ctrl.editMode"
                                    ng-model="ctrl.model.folderId">
                             <md-option ng-repeat="folder in ctrl.folders"
                                        ng-value="folder.id"
@@ -81,7 +81,8 @@
                         <div ng-messages="followupForm.followupDate.$error">
                             <div ng-message="valid">{{lang.invalid_date_format}}</div>
                             <div ng-message="required">{{lang.field_required}}</div>
-                            <div ng-message="mindate">{{lang.date_should_be_more_than_equal.change({datevalue: ctrl.minDateString})}}
+                            <div ng-message="mindate">{{lang.date_should_be_more_than_equal.change({datevalue:
+                                ctrl.minDateString})}}
                             </div>
                         </div>
                     </md-input-container>
@@ -90,10 +91,15 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised md-primary"
+        <md-button class="md-raised md-primary" ng-if="!ctrl.editMode"
                    ng-disabled="!ctrl.isValidFollowup(followupForm)"
                    ng-click="ctrl.saveToFollowUp()">
             {{lang.add}}
+        </md-button>
+        <md-button class="md-raised md-primary" ng-if="ctrl.editMode"
+                   ng-disabled="!ctrl.isValidFollowup(followupForm)"
+                   ng-click="ctrl.updateFollowup()">
+            {{lang.save}}
         </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closeDialog()">
             {{lang.close}}

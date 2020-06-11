@@ -7,6 +7,8 @@ module.exports = function (app) {
                                                 langService,
                                                 dialog,
                                                 addToMyFollowup,
+                                                editMode,
+                                                $timeout,
                                                 followUpOrganizations,
                                                 organizationForSLA,
                                                 moment,
@@ -19,11 +21,8 @@ module.exports = function (app) {
         self.model = followUpData;
         self.folders = folders || [];
 
+        self.editMode = editMode;
         self.addToMyFollowup = addToMyFollowup;
-        // if followup for other user, don't use folders
-        if (!addToMyFollowup) {
-            self.folders = [];
-        }
 
         self.selectedOrganization = null;
         self.selectedApplicationUser = null;
@@ -39,6 +38,19 @@ module.exports = function (app) {
         // if no followupDate, set followupDate from organization SLA
         if (!self.model.followupDate) {
             self.model.followupDate = generator.getFutureDate(organizationForSLA.sla[followUpData.priorityLevel]);
+        }
+
+        // if followup for other user, don't use folders
+        if (!addToMyFollowup) {
+            self.folders = [];
+            if (editMode) {
+                $timeout(function () {
+                    self.selectedOrganization = self.model.userOUID;
+                    self.getAppUsersForOU();
+                    self.selectedApplicationUser = self.model.userId;
+                    self.getUserFollowupFolders();
+                });
+            }
         }
 
         var _mapRegOUSections = function () {
@@ -141,6 +153,21 @@ module.exports = function (app) {
                 .saveUserFollowUp(modelToSave)
                 .then(function () {
                     toast.success(langService.get('followup_added_successfully').change({name: modelToSave.docSubject}));
+                    dialog.hide();
+                });
+        };
+
+        self.updateFollowup = function () {
+            var modelToSave = angular.copy(self.model);
+            if (!addToMyFollowup) {
+                modelToSave.userId = self.selectedApplicationUser;
+                modelToSave.userOUID = self.selectedOrganization;
+            }
+
+            return followUpUserService
+                .updateUserFollowUp(modelToSave)
+                .then(function () {
+                    toast.success(langService.get('followup_updated_successfully').change({name: modelToSave.docSubject}));
                     dialog.hide();
                 });
         };

@@ -80,6 +80,20 @@ module.exports = function (app) {
                     return errorCode.showErrorDialog(error);
                 });
         };
+
+        /**
+         * @description add follow up for document
+         * @param followUpData
+         * @returns {Promise}
+         */
+        self.updateUserFollowUp = function (followUpData) {
+            return $http
+                .put(urlService.userFollowUp, followUpData)
+                .catch(function (error) {
+                    return errorCode.showErrorDialog(error);
+                });
+        };
+
         /**
          * @description delete follow up folder
          * @param followUpFolder
@@ -263,7 +277,7 @@ module.exports = function (app) {
          * @param correspondence
          * @returns {promise}
          */
-        self.addCorrespondenceToMyFollowUp = function (correspondence) {
+        self.addCorrespondenceToMyFollowUp = function (correspondence, editMode) {
             var defer = $q.defer();
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('add-follow-up'),
@@ -271,7 +285,8 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 locals: {
                     addToMyFollowup: true,
-                    followUpOrganizations: [] // used for add to other user followup only
+                    followUpOrganizations: [], // used for add to other user followup only
+                    editMode: editMode
                 },
                 resolve: {
                     folders: function () {
@@ -284,11 +299,17 @@ module.exports = function (app) {
                     followUpData: function () {
                         'ngInject';
                         return defer.promise.then(function (folders) {
-                            return self.prepareFollowUp(correspondence).then(function (data) {
-                                folders && folders.length > 0 ? data.folderId = folders[0].id : null;
-                                data.followupDate = data.followupDate ? generator.getDateObjectFromTimeStamp(data.followupDate) : null;
-                                return data;
-                            });
+                            if (editMode) {
+                                correspondence.followupDate = correspondence.followupDate ? generator.getDateObjectFromTimeStamp(correspondence.followupDate) : null;
+
+                                return correspondence;
+                            } else {
+                                return self.prepareFollowUp(correspondence).then(function (data) {
+                                    folders && folders.length > 0 ? data.folderId = folders[0].id : null;
+                                    data.followupDate = data.followupDate ? generator.getDateObjectFromTimeStamp(data.followupDate) : null;
+                                    return data;
+                                });
+                            }
                         });
                     },
                     organizationForSLA: function (employeeService, organizationService) {
@@ -306,16 +327,18 @@ module.exports = function (app) {
         /**
          * @description open dialog for adding the document to follow up of other employee.
          * @param correspondence
+         * @param editMode
          * @returns {promise}
          */
-        self.addCorrespondenceToEmployeeFollowUp = function (correspondence) {
+        self.addCorrespondenceToEmployeeFollowUp = function (correspondence, editMode) {
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('add-follow-up'),
                 controller: 'followUpPopCtrl',
                 controllerAs: 'ctrl',
                 locals: {
                     addToMyFollowup: false,
-                    folders: [] // folders is empty because they will be fetched from user
+                    folders: [], // folders is empty because they will be fetched from user
+                    editMode: editMode
                 },
                 resolve: {
                     followUpOrganizations: function (organizationService) {
@@ -327,9 +350,15 @@ module.exports = function (app) {
                         return self.prepareFollowUp(correspondence).then(function (data) {
                             // no need to set folder as folder will be set from ouApplicationUser
                             //folders && folders.length > 0 ? data.folderId = folders[0].id : null;
-                            data.folderId = null;
-                            data.followupDate = data.followupDate ? generator.getDateObjectFromTimeStamp(data.followupDate) : null;
-                            return data;
+                            if (editMode) {
+                                correspondence.followupDate = correspondence.followupDate ? generator.getDateObjectFromTimeStamp(correspondence.followupDate) : null;
+
+                                return correspondence;
+                            } else {
+                                data.folderId = null;
+                                data.followupDate = data.followupDate ? generator.getDateObjectFromTimeStamp(data.followupDate) : null;
+                                return data;
+                            }
                         });
                     },
                     organizationForSLA: function (employeeService, organizationService) {
