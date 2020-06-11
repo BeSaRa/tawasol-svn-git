@@ -86,6 +86,14 @@ module.exports = function (app) {
         self.selectedUser = null;
         self.selectedSecurityLevels = null;
 
+        function _getOriginalFollowupBook(record) {
+            if (!(record instanceof FollowupBook) && self.openedDocumentCopy) {
+                record = angular.copy(self.openedDocumentCopy);
+            }
+
+            return angular.copy(record);
+        }
+
         /**
          * @description Get the Application Users and Security Levels for the selected Organization
          */
@@ -299,6 +307,8 @@ module.exports = function (app) {
          * @param defer
          */
         self.terminate = function (record, $event, defer) {
+            record = _getOriginalFollowupBook(record);
+
             if (record.isTerminated()) {
                 return;
             }
@@ -336,6 +346,8 @@ module.exports = function (app) {
          * @param defer
          */
         self.transferToAnotherEmployee = function (record, $event, defer) {
+            record = _getOriginalFollowupBook(record);
+
             followUpUserService
                 .openTransferDialog(record, self.selectedOrganization, self.selectedUser, $event)
                 .then(function () {
@@ -513,6 +525,8 @@ module.exports = function (app) {
          * @param defer
          */
         self.editEmployeeFollowUp = function (record, $event, defer) {
+            record = _getOriginalFollowupBook(record);
+
             record.editUserFollowUp(true)
                 .then(function () {
                     return self.reloadFollowupBooks(self.grid.page)
@@ -609,9 +623,8 @@ module.exports = function (app) {
                 class: "action-green",
                 sticky: true,
                 checkShow: function (action, model) {
-                    if (!(model instanceof FollowupBook) && self.openedDocumentCopy) {
-                        model = angular.copy(self.openedDocumentCopy);
-                    }
+                    model = _getOriginalFollowupBook(model);
+
                     return !model.isTerminated();
                 }
             },
@@ -637,9 +650,8 @@ module.exports = function (app) {
                 callback: self.editEmployeeFollowUp,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    if (!(model instanceof FollowupBook) && self.openedDocumentCopy) {
-                        model = angular.copy(self.openedDocumentCopy);
-                    }
+                    model = _getOriginalFollowupBook(model);
+
                     return !model.isTerminated();
                 }
             },
