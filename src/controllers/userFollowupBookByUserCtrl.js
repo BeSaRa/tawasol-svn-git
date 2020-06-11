@@ -482,10 +482,27 @@ module.exports = function (app) {
             userSubscriptionService.controllerMethod.openAddSubscriptionDialog(record, $event);
         };
 
-        self.printResult = function ($event) {
-            followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, self.searchCriteriaCopy, (self.selectedUser ? self.selectedUser.getTranslatedNameAndOU() : null))
+        /**
+         * @description print all or selected records
+         * @param printSelectedBulk
+         * @param $event
+         */
+        self.printResult = function (printSelectedBulk, $event) {
+            followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, (printSelectedBulk ? self.selectedFollowupBooks : self.followupBooks), (self.selectedUser ? self.selectedUser.getTranslatedNameAndOU() : null))
                 .then(function (heading) {
-                    followUpUserService.printUserFollowupFromWebPage(heading, self.searchCriteriaCopy);
+                    followUpUserService.printUserFollowupFromWebPage(heading, (printSelectedBulk ? self.selectedFollowupBooks : self.followupBooks));
+                });
+        };
+
+        /**
+         * description print selected record
+         * @param record
+         * @param $event
+         */
+        self.print = function (record, $event) {
+            followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, record, (self.selectedFolder ? self.selectedFolder.getTranslatedName() : null))
+                .then(function (heading) {
+                    followUpUserService.printUserFollowupFromWebPage(heading, record);
                 });
         };
 
@@ -624,6 +641,19 @@ module.exports = function (app) {
                         model = angular.copy(self.openedDocumentCopy);
                     }
                     return !model.isTerminated();
+                }
+            },
+            // print
+            {
+                type: 'action',
+                icon: 'printer',
+                text: 'print',
+                shortcut: true,
+                showInView: false,
+                callback: self.print,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return true;
                 }
             },
             // Subscribe

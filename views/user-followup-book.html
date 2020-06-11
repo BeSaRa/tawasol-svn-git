@@ -30,7 +30,7 @@
                 </md-button>
             </div>
             <md-button ng-if="ctrl.followupBooks.length"
-                       ng-click="ctrl.printResult($event)" class="md-icon-button" tooltip="{{lang.print}}">
+                       ng-click="ctrl.printResult(false,$event)" class="md-icon-button" tooltip="{{lang.print}}">
                 <md-icon md-svg-icon="printer"></md-icon>
             </md-button>
             <md-button ng-click="ctrl.resetFilter($event)"
@@ -97,6 +97,12 @@
                                                            tooltip="{{lang.grid_action_move_to_folder}}"
                                                            ng-click="ctrl.moveToFolderBulk($event)">
                                                     <md-icon md-svg-icon="folder-move" class="action-green"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button"
+                                                           aria-label="{{lang.print}}"
+                                                           tooltip="{{lang.print}}"
+                                                           ng-click="ctrl.printResult(true,$event)">
+                                                    <md-icon md-svg-icon="printer" class="action-green"></md-icon>
                                                 </md-button>
                                             </div>
                                         </th>
