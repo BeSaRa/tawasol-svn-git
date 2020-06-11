@@ -86,6 +86,7 @@
                                                 <span>{{ctrl.selectedFollowupBooks.length}} {{lang.items_selected}} </span>
                                                 <span flex></span>
                                                 <md-button class="md-icon-button"
+                                                           ng-if="ctrl.checkIfTerminateBulkAvailable()"
                                                            aria-label="{{lang.grid_action_terminate_followup}}"
                                                            tooltip="{{lang.grid_action_terminate_followup}}"
                                                            ng-click="ctrl.terminateBulk($event)">

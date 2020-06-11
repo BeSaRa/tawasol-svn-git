@@ -20,7 +20,8 @@ module.exports = function (app) {
                                                            toast,
                                                            _,
                                                            Information,
-                                                           distributionWFService) {
+                                                           distributionWFService,
+                                                           FollowupBook) {
         'ngInject';
         var self = this;
         self.controllerName = 'userFollowupBookByUserCtrl';
@@ -33,6 +34,7 @@ module.exports = function (app) {
         self.inlineOUSearchText = '';
         self.inlineAppUserSearchText = '';
 
+        self.openedDocumentCopy = null;
 
         self.searchCriteriaUsed = false;
         self.employeeService = employeeService;
@@ -308,11 +310,20 @@ module.exports = function (app) {
             });
         };
 
+        self.checkIfTerminateBulkAvailable = function () {
+            return _.every(self.selectedFollowupBooks, function (item) {
+                return !item.isTerminated();
+            });
+        };
+
         /**
          * @description Terminate items Bulk
          * @param $event
          */
         self.terminateBulk = function ($event) {
+            if (!self.checkIfTerminateBulkAvailable()){
+                return;
+            }
             followUpUserService.terminateBulkFollowup(self.selectedFollowupBooks).then(function () {
                 return self.reloadFollowupBooks(self.grid.page);
             });
@@ -357,12 +368,15 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+            self.openedDocumentCopy = angular.copy(record);
             correspondenceService
                 .viewCorrespondence(record, [], checkIfEditPropertiesAllowed(record, true), false)
                 .then(function () {
+                    self.openedDocumentCopy = null;
                     return self.reloadFollowupBooks(self.grid.page);
                 })
                 .catch(function () {
+                    self.openedDocumentCopy = null;
                     return self.reloadFollowupBooks(self.grid.page);
                 });
 
@@ -378,11 +392,14 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+            self.openedDocumentCopy = angular.copy(record);
             record.viewFromQueue(self.gridActions, 'search' + generator.ucFirst(record.getInfo().documentClass), $event)
                 .then(function () {
+                    self.openedDocumentCopy = null;
                     return self.reloadFollowupBooks(self.grid.page);
                 })
                 .catch(function () {
+                    self.openedDocumentCopy = null;
                     return self.reloadFollowupBooks(self.grid.page);
                 });
         };
@@ -475,6 +492,7 @@ module.exports = function (app) {
         /**
          * @description edit workItem To My FollowUp
          * @param record
+         * @param $event
          * @param defer
          */
         self.editEmployeeFollowUp = function (record, $event, defer) {
@@ -574,6 +592,9 @@ module.exports = function (app) {
                 class: "action-green",
                 sticky: true,
                 checkShow: function (action, model) {
+                    if (!(model instanceof FollowupBook) && self.openedDocumentCopy) {
+                        model = angular.copy(self.openedDocumentCopy);
+                    }
                     return !model.isTerminated();
                 }
             },
@@ -599,7 +620,10 @@ module.exports = function (app) {
                 callback: self.editEmployeeFollowUp,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return true;
+                    if (!(model instanceof FollowupBook) && self.openedDocumentCopy) {
+                        model = angular.copy(self.openedDocumentCopy);
+                    }
+                    return !model.isTerminated();
                 }
             },
             // Subscribe
