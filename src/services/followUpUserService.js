@@ -298,19 +298,20 @@ module.exports = function (app) {
                     },
                     followUpData: function () {
                         'ngInject';
-                        return defer.promise.then(function (folders) {
-                            if (editMode) {
-                                correspondence.followupDate = correspondence.followupDate ? generator.getDateObjectFromTimeStamp(correspondence.followupDate) : null;
+                        if (editMode) {
+                            var data = angular.copy(correspondence);
+                            data.followupDate = data.followupDate ? generator.getDateObjectFromTimeStamp(data.followupDate) : null;
 
-                                return correspondence;
-                            } else {
+                            return data;
+                        } else {
+                            return defer.promise.then(function (folders) {
                                 return self.prepareFollowUp(correspondence).then(function (data) {
                                     folders && folders.length > 0 ? data.folderId = folders[0].id : null;
                                     data.followupDate = data.followupDate ? generator.getDateObjectFromTimeStamp(data.followupDate) : null;
                                     return data;
                                 });
-                            }
-                        });
+                            });
+                        }
                     },
                     organizationForSLA: function (employeeService, organizationService) {
                         'ngInject';
@@ -347,19 +348,22 @@ module.exports = function (app) {
                     },
                     followUpData: function () {
                         'ngInject';
-                        return self.prepareFollowUp(correspondence).then(function (data) {
-                            // no need to set folder as folder will be set from ouApplicationUser
-                            //folders && folders.length > 0 ? data.folderId = folders[0].id : null;
-                            if (editMode) {
-                                correspondence.followupDate = correspondence.followupDate ? generator.getDateObjectFromTimeStamp(correspondence.followupDate) : null;
+                        if (editMode) {
+                            var data = angular.copy(correspondence);
+                            data.followupDate = data.followupDate ? generator.getDateObjectFromTimeStamp(data.followupDate) : null;
 
-                                return correspondence;
-                            } else {
+                            return data;
+                        } else {
+                            return self.prepareFollowUp(correspondence).then(function (data) {
+                                // no need to set folder as folder will be set from ouApplicationUser
+                                //folders && folders.length > 0 ? data.folderId = folders[0].id : null;
+
                                 data.folderId = null;
                                 data.followupDate = data.followupDate ? generator.getDateObjectFromTimeStamp(data.followupDate) : null;
                                 return data;
-                            }
-                        });
+
+                            });
+                        }
                     },
                     organizationForSLA: function (employeeService, organizationService) {
                         'ngInject';
