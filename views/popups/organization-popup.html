@@ -543,7 +543,7 @@
                                                 </md-input-container>
                                             </div>
                                         </fieldset>
-                                        <fieldset ng-if="ctrl.organization.hasRegistry">
+                                        <fieldset ng-if="ctrl.organization.hasRegistry || ctrl.organization.centralArchive">
                                             <legend class="md-accent">{{lang.sla}}</legend>
                                             <div layout="column">
                                                 <div ng-repeat="priority in ctrl.priorityLevels"
