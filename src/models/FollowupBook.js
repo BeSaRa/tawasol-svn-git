@@ -132,8 +132,12 @@ module.exports = function (app) {
                 return indicator.getFollowUpDateIndicator(followupDate);
             };
 
-            FollowupBook.prototype.getFollowupStatusIndicator = function () {
-                return indicator.getStatusIndicator(!!this.status, 'grid_indicator_followup_not_terminated', 'grid_indicator_followup_terminated');
+            FollowupBook.prototype.getSiteFollowupEndedIndicator = function ($event) {
+                // if status is false, book is terminated, show indicator
+                if (!this.status) {
+                    return indicator.getSiteFollowUpEndedIndicator(true, this);
+                }
+                return false;
             };
 
             /**

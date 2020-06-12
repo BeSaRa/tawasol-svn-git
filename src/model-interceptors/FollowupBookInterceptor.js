@@ -34,7 +34,6 @@ module.exports = function (app) {
             delete model.followDateIndicator;
             delete model.siteFollowUpDueDateIndicator;
             delete model.numberOfDays;
-            delete model.statusInfo;
             delete model.securityLevelLookup;
             delete model.securityLevelIndicator;
             delete model.priorityLevelLookup;
@@ -52,14 +51,16 @@ module.exports = function (app) {
             model.followupDateString = generator.getDateFromTimeStamp(model.followupDate);
             model.followDateIndicator = model.getFollowupDateIndicator(model.followupDate);
             model.siteFollowUpDueDateIndicator = model.getSiteFollowupDueDateIndicator(); // this indicator is used to show followup date of book. its not showing info for correspondence site followup date
+
+            /* if terminated followup book, show followup terminated indicator, not followup (past/today/future) indicator
+            So indicator is replaced with other indicator under same indicator property */
+            if (!model.status) {
+                model.siteFollowUpDueDateIndicator = model.getSiteFollowupEndedIndicator(); // this indicator is used to show terminated followup books. its not depending on correspondence site followup date values
+            }
+
             var numberOfDays = generator.getNumberOfDays(model.followupDate, new Date(), true);
             // -(numberOfDays) means, get positive number if date is in future
             model.numberOfDays = numberOfDays === 0 ? numberOfDays : -(numberOfDays);
-            model.statusInfo = new Information({
-                arName: langService.getByLangKey(statusKeys[model.status], 'ar'),
-                enName: langService.getByLangKey(statusKeys[model.status], 'en')
-            });
-            model.statusIndicator = model.getFollowupStatusIndicator();
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
             model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);

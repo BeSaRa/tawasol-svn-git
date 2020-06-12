@@ -475,20 +475,21 @@ module.exports = function (app) {
             /**
              * @description Returns the site followup ended indicator and description
              * @param isEnded
+             * @param userBookFollowup
              * @returns {Indicator}
              */
-            Indicator.prototype.getSiteFollowUpEndedIndicator = function (isEnded) {
+            Indicator.prototype.getSiteFollowUpEndedIndicator = function (isEnded, userBookFollowup) {
                 if (!isEnded) {
                     return false;
                 }
-
+                var text = !!userBookFollowup ? 'grid_indicator_followup_terminated' : 'indicator_followup_ended';
                 return new Indicator({
-                    class: 'indicator date-followup-end',
-                    text: 'indicator_followup_ended',
+                    class: 'indicator' + (!!userBookFollowup ? '' : 'date-followup-end'),
+                    text: text,
                     icon: self.getIndicatorIcons('siteFollowupEnded'),
-                    tooltip: 'indicator_followup_ended',
+                    tooltip: text,
                     legendText: function (indicator) {
-                        return langService.get('indicator_followup_ended');
+                        return langService.get(text);
                     }
                 });
             };
@@ -573,26 +574,6 @@ module.exports = function (app) {
                     tooltip: 'organization_not_synced',
                     legendText: function (indicator) {
                         return langService.get('organization_not_synced');
-                    }
-                });
-            };
-
-            /**
-             * @description Returns the status indicator and description
-             * @param status
-             * @param trueKey
-             * @param falseKey
-             * @returns {Indicator}
-             */
-            Indicator.prototype.getStatusIndicator = function (status, trueKey, falseKey) {
-                var successKey = trueKey || 'active', failKey = falseKey || 'inactive';
-                return new Indicator({
-                    class: 'indicator',
-                    text: status ? successKey : failKey,
-                    icon: status ? self.getIndicatorIcons('active') : self.getIndicatorIcons('inactive'),
-                    tooltip: status ? successKey : failKey,
-                    legendText: function (indicator) {
-                        return langService.get(status ? successKey : failKey);
                     }
                 });
             };
