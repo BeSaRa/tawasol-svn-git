@@ -65,13 +65,17 @@ module.exports = function (app) {
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
             model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
             model.priorityLevelIndicator = (model.priorityLevelLookup && model.priorityLevelLookup.lookupKey !== 0) ? model.getPriorityLevelIndicator(model.priorityLevelLookup) : null;
-            var folder = followUpUserService.getFollowupFoldersById(model.folderId);
-            model.folderInfo = !folder ? new Information() : new Information({
-                arName: folder.getNameByLanguage('ar'),
-                enName: folder.getNameByLanguage('en'),
-                id: folder.id,
-                parent: folder.parent
-            });
+            if (model.folderInfo && model.folderInfo.id) {
+                model.folderInfo = new Information(model.folderInfo);
+            } else {
+                var folder = followUpUserService.getFollowupFolderById(model.folderId);
+                model.folderInfo = !folder ? new Information() : new Information({
+                    arName: folder.getNameByLanguage('ar'),
+                    enName: folder.getNameByLanguage('en'),
+                    id: folder.id,
+                    parent: folder.parent
+                });
+            }
             model.setMainSiteSubSiteString();
             model.commentList = model.commentList.length ? generator.interceptReceivedCollection('DocumentComment', model.commentList) : model.commentList;
 

@@ -442,7 +442,7 @@ module.exports = function (app) {
              * @param folderId
              * @returns {*}
              */
-            self.getFollowupFoldersById = function (folderId) {
+            self.getFollowupFolderById = function (folderId) {
                 folderId = generator.getNormalizedValue(folderId, 'id');
                 return _.find(self.allFollowUpFolders, function (folder) {
                     return folder.id === folderId;
