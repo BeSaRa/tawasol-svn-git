@@ -145,7 +145,6 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.checkChangeOutgoingType = function () {
-            // self.checkCentralArchive();
             if (self.documentInformation || self.outgoing.contentFile) {
                 return dialog
                     .confirmMessage(langService.get('content_will_remove_confirm'))
@@ -853,6 +852,12 @@ module.exports = function (app) {
 
         self.isDocumentTypeSwitchDisabled = function () {
             return !!self.outgoing.vsId || self.duplicateVersion || !self.employeeService.hasPermissionTo('OUTGOING_PAPER') || self.employee.isBacklogMode();
-        }
+        };
+
+        self.$onInit = function () {
+            if (self.employee.isBacklogMode()) {
+                self.checkChangeOutgoingType();
+            }
+        };
     });
 };

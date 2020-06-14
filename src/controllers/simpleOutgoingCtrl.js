@@ -156,14 +156,11 @@ module.exports = function (app) {
         };
 
         self.checkChangeOutgoingType = function () {
-            if (self.employee.isBacklogMode()) {
-                return;
-            }
-            self.checkCentralArchive();
             if (self.documentInformation || self.outgoing.contentFile) {
                 return dialog
                     .confirmMessage(langService.get('content_will_remove_confirm'))
                     .then(function () {
+                        self.checkCentralArchive();
                         self.documentInformation = null;
                         self.outgoing.contentFile = null;
                         self.simpleViewUrl = null;
@@ -172,6 +169,7 @@ module.exports = function (app) {
                         self.outgoing.addMethod = !self.outgoing.addMethod;
                     })
             }
+            self.checkCentralArchive();
             return self.documentInformation = null;
         };
 
@@ -916,6 +914,12 @@ module.exports = function (app) {
                 || self.saveInProgress || !self.outgoing.sitesInfoTo.length || !_isValidFirstSubSite()
                 || ((self.documentInformationExist || (self.contentFileExist && self.contentFileSizeExist))
                     && !(self.documentInformation || self.outgoing.contentFile));
+        };
+
+        self.$onInit = function () {
+            if (self.employee.isBacklogMode()) {
+                self.checkChangeOutgoingType();
+            }
         };
 
     });
