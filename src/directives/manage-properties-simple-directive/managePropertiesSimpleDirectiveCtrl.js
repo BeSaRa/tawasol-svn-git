@@ -16,7 +16,8 @@ module.exports = function (app) {
                                                                     $stateParams,
                                                                     classificationService,
                                                                     gridService,
-                                                                    _) {
+                                                                    _,
+                                                                    $rootScope) {
         'ngInject';
         var self = this;
         self.controllerName = 'managePropertiesDirectiveSimpleCtrl';
@@ -271,6 +272,10 @@ module.exports = function (app) {
                 _selectFirstOptionForRequired();
         });
 
+        $scope.$on('$RequestRegistryOuChanged', function ($event) {
+            _broadcastSelectedRegOu();
+        });
+
         self.typeOptions = [
             {
                 key: 'personal',
@@ -304,6 +309,22 @@ module.exports = function (app) {
             return !!(self.document.hasDocumentClass('internal') || (self.document.hasDocumentClass('outgoing') && !self.document.addMethod));
 
         };
+
+        function _findRegistryOuById(id) {
+            return _.find(self.registryOrganizations, function (item) {
+                return item.id === generator.getNormalizedValue(id, 'id');
+            })
+        }
+
+        function _broadcastSelectedRegOu() {
+            var selectedOu = _findRegistryOuById(self.document.registryOU);
+            $rootScope.$broadcast('$RegistryOuChanged', selectedOu);
+        }
+
+        $rootScope.$on('$RequestSelectedRegistryOu', function ($event) {
+            _broadcastSelectedRegOu();
+        });
+
         /**
          * @description on registry change.
          * @param organizationId
@@ -311,9 +332,11 @@ module.exports = function (app) {
          */
         self.onRegistryChange = function (organizationId, field) {
             self.checkNullValues(field);
+            _broadcastSelectedRegOu();
+
+            self.subOrganizations = [];
             if (!organizationId)
                 return;
-            self.subOrganizations = [];
             organizationService
                 .loadChildrenOrganizations(organizationId)
                 .then(function (result) {

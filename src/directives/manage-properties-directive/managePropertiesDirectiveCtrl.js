@@ -19,7 +19,8 @@ module.exports = function (app) {
                                                               gridService,
                                                               classificationService,
                                                               OUClassification,
-                                                              Classification) {
+                                                              Classification,
+                                                              $rootScope) {
         'ngInject';
         var self = this;
         self.controllerName = 'managePropertiesDirectiveCtrl';
@@ -175,7 +176,7 @@ module.exports = function (app) {
                     self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
                     self.classifications = _displayCorrectClassifications(self.classifications);
                     appendMissingMainClassification();
-                    mainClassificationControl = generator.getFormControlByName(self.sourceForm,'mainClassification');
+                    mainClassificationControl = generator.getFormControlByName(self.sourceForm, 'mainClassification');
                     self.onChangeMainClassification(null, true, mainClassificationControl);
                 });
             } else {
@@ -424,6 +425,10 @@ module.exports = function (app) {
                 _selectFirstOptionForRequired();
         });
 
+        $rootScope.$on('$RequestSelectedRegistryOu', function ($event) {
+            _broadcastSelectedRegOu();
+        });
+
         self.typeOptions = [
             {
                 key: 'personal',
@@ -477,6 +482,17 @@ module.exports = function (app) {
             return (self.document.hasVsId() && $stateParams.action === 'receiveg2g');
         };
 
+        function _findRegistryOuById(id) {
+            return _.find(self.registryOrganizations, function (item) {
+                return item.id === generator.getNormalizedValue(id, 'id');
+            })
+        }
+
+        function _broadcastSelectedRegOu(){
+            var selectedOu = _findRegistryOuById(self.document.registryOU);
+            $rootScope.$broadcast('$RegistryOuChanged', selectedOu);
+        }
+
         /**
          * @description on registry change.
          * @param organizationId
@@ -484,6 +500,7 @@ module.exports = function (app) {
          */
         self.onRegistryChange = function (organizationId, field) {
             self.checkNullValues(field);
+            _broadcastSelectedRegOu();
             self.subOrganizations = [];
             organizationService
                 .loadChildrenOrganizations(organizationId)
@@ -574,7 +591,7 @@ module.exports = function (app) {
                         }
 
                         if (field.name === 'mainClassification') {
-                            var mainClassificationControl = generator.getFormControlByName(self.sourceForm,'mainClassification');
+                            var mainClassificationControl = generator.getFormControlByName(self.sourceForm, 'mainClassification');
                             self.onChangeMainClassification(null, false, mainClassificationControl);
                         }
                     }

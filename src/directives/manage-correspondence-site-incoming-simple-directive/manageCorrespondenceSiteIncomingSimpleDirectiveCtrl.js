@@ -62,31 +62,44 @@ module.exports = function (app) {
             properties = angular.copy(lookupService.getPropertyConfigurations('incoming')),
             defaultFollowupNumberOfDays = 3,
             defaultNeedReplyFollowupDate = generator.convertDateToString(generator.getFutureDate(defaultFollowupNumberOfDays)),
-            organizationForSLA = null;
+            organizationForSLA = null,
+            organizationForSLACentralArchive = null;
 
         self.selectedSubSiteFollowUpStatus = angular.copy(followupStatusWithoutReply);
         self.selectedSubSiteFollowupDate = null;
         self.isFollowupStatusMandatory = false;
 
-        function _resetDefaultNeedReplyFollowupDate() {
-            if (self.correspondence && organizationForSLA) {
+        function _isShowRegistryUnit() {
+            return (employeeService.getEmployee().inCentralArchive() && self.correspondence.getInfo().isPaper);
+        }
+
+        var _resetDefaultNeedReplyFollowupDate = function () {
+            if (self.correspondence) {
                 var priorityLevel = self.correspondence.getInfo().priorityLevel;
                 priorityLevel = priorityLevel.hasOwnProperty('lookupKey') ? priorityLevel.lookupKey : priorityLevel;
 
-                var slaDays = null;
+                var slaOu = null;
+                // if paper outgoing or incoming and current ou is central archive, use selected registryOu as slaOu
+                if (_isShowRegistryUnit() && organizationForSLACentralArchive) {
+                    slaOu = organizationForSLACentralArchive;
+                } else {
+                    slaOu = organizationForSLA;
+                }
+
                 if (typeof priorityLevel !== 'undefined' && priorityLevel !== null) {
+                    var slaDays = null;
                     // organization has sla property and sla has property as same as document priority level
-                    if (organizationForSLA.hasOwnProperty('sla') && organizationForSLA.sla && organizationForSLA.sla.hasOwnProperty(priorityLevel)) {
-                        slaDays = organizationForSLA.sla[priorityLevel];
+                    if (slaOu.hasOwnProperty('sla') && slaOu.sla && slaOu.sla.hasOwnProperty(priorityLevel)) {
+                        slaDays = slaOu.sla[priorityLevel];
                     }
                     // if no SLA days or its less than 1, use default number of days to followup date to be today
                     if (!slaDays || slaDays < 1) {
                         slaDays = angular.copy(defaultFollowupNumberOfDays);
                     }
+                    defaultNeedReplyFollowupDate = generator.convertDateToString(generator.getFutureDate(slaDays));
                 }
             }
 
-            defaultNeedReplyFollowupDate = generator.convertDateToString(generator.getFutureDate(slaDays));
             // set followup date for all searched sites
             if (self.subSites && self.subSites.length) {
                 _.map(self.subSites, function (site) {
@@ -622,11 +635,25 @@ module.exports = function (app) {
                 });
         }
 
+        $scope.$on('$RegistryOuChanged', function ($event, selectedRegOu) {
+            organizationForSLACentralArchive = selectedRegOu;
+            _resetDefaultNeedReplyFollowupDate();
+        });
+
+        /**
+         * @description Request the selected registry ou
+         * @private
+         */
+        function _requestSelectedRegistryOu() {
+            $scope.$emit('$RequestSelectedRegistryOu');
+        }
+
         self.$onInit = function () {
             $timeout(function () {
                 self.form = $scope.corrSiteForm;
                 _setSLAOrganization()
                     .then(function () {
+                        _requestSelectedRegistryOu();
                         // just in case document is not passed to directive, avoid check for priority level
                         if (self.correspondence) {
                             _initPriorityLevelWatch();
