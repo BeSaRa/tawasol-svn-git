@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                                  userInboxService,
                                                                  $state,
                                                                  employeeService,
+                                                                 cmsTemplate,
                                                                  listGeneratorService,
                                                                  correspondenceStorageService,
                                                                  correspondenceService,
@@ -348,10 +349,32 @@ module.exports = function (app) {
         };
 
         self.exportReadyToExportBulk = function ($event) {
-            correspondenceService.exportBulkWorkItemsDialog(self.selectedReadyToExports)
-                .then(function () {
-                    self.reloadReadyToExports(self.grid.page);
+            var exportViaCentral = _.filter(self.selectedReadyToExports, function (item) {
+                return item.exportViaArchive();
+            });
+            var normalExport = _.filter(self.selectedReadyToExports, function (item) {
+                return !item.exportViaArchive();
+            });
+
+            if (!exportViaCentral.length && normalExport.length) {
+                correspondenceService.exportBulkWorkItemsDialog(self.selectedReadyToExports)
+                    .then(function () {
+                        self.reloadReadyToExports(self.grid.page);
+                    });
+            } else if (exportViaCentral.length && normalExport.length) {
+                var list = listGeneratorService.createUnOrderList();
+                _.map(exportViaCentral, function (item) {
+                    list.addItemToList(item.generalStepElm.docSubject);
                 });
+                var content = langService.get('cannot_export_bulk_those_books') + '<br />' + list.getList();
+                dialog.confirmMessage(content)
+                    .then(function () {
+                        self.selectedReadyToExports = normalExport;
+                        self.exportReadyToExportBulk($event);
+                    });
+            } else {
+                dialog.infoMessage(langService.get('selected_books_cannot_direct_export'))
+            }
         };
 
 
