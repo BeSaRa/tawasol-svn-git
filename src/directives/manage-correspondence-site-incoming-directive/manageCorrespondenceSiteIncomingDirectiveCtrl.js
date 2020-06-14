@@ -376,9 +376,9 @@ module.exports = function (app) {
          */
         self.onMainSiteChangeAdvanced = function () {
             if (!!self.selectedMainSiteAdvanced) {
-                //if (!self.selectedSiteTypeAdvanced){
-                self.selectedSiteTypeAdvanced = _mapTypes(_getTypeByLookupKey(self.selectedMainSiteAdvanced.correspondenceSiteTypeId));
-                //}
+                if (!self.selectedSiteTypeAdvanced) {
+                    self.selectedSiteTypeAdvanced = _mapTypes(_getTypeByLookupKey(self.selectedMainSiteAdvanced.correspondenceSiteTypeId));
+                }
                 self.onSubSiteSearchAdvanced(true);
             }
         };
