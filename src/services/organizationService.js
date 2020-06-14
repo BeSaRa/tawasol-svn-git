@@ -450,7 +450,10 @@ module.exports = function (app) {
          * @param skipCurrentRegOu
          */
         self.loadChildrenOrganizations = function (organization, skipCurrentRegOu) {
-            var parentOuId = organization.hasOwnProperty('id') ? organization.id : organization;
+            var parentOuId = generator.getNormalizedValue(organization, 'id');// organization.hasOwnProperty('id') ? organization.id : organization;
+            if (!parentOuId) {
+                return $q.resolve([]);
+            }
             return $http
                 .get(urlService.organizations + '/' + parentOuId + '/childs-reg-parent')
                 .then(function (result) {
