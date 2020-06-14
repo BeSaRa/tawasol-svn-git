@@ -506,7 +506,7 @@ module.exports = function (app) {
             });
             followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, printDate, (self.selectedUser ? self.selectedUser.getTranslatedNameAndOU() : null))
                 .then(function (heading) {
-                    followUpUserService.printUserFollowupFromWebPage(heading, printDate);
+                    followUpUserService.printUserFollowup(heading, printDate);
                 });
         };
 
@@ -518,7 +518,7 @@ module.exports = function (app) {
         self.print = function (record, $event) {
             followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, record, (self.selectedFolder ? self.selectedFolder.getTranslatedName() : null))
                 .then(function (heading) {
-                    followUpUserService.printUserFollowupFromWebPage(heading, record);
+                    followUpUserService.printUserFollowup(heading, record);
                 });
         };
 

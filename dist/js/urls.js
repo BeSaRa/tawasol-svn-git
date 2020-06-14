@@ -313,6 +313,8 @@
                 .addToAllWithBase('exportToExcel', 'common/export/excel')
                 //export to pdf
                 .addToAllWithBase('exportToPdf', 'common/export/pdf')
+                // export to word
+                .addToAllWithBase('exportToWord', 'common/export/word')
                 //all private users
                 .addToAllWithBase('allPrivateUsers', 'cms-entity/admin/ou-application-user/all-private-users')
                 // all folder count

@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                  moment,
                                                  langService,
                                                  errorCode,
+                                                 tokenService,
                                                  FollowupBookCriteria) {
             var self = this;
             self.serviceName = 'followUpUserService';
@@ -711,25 +712,35 @@ module.exports = function (app) {
             };
 
 
-            self.printUserFollowupFromWebPage = function (heading, records) {
-                records = angular.isArray(records) ? records : [records];
+            self.printUserFollowup = function (heading, records) {
+                dialog.confirmThreeButtonMessage(langService.get('select_file_type_to_print_download'), '', langService.get('web_print'), 'WORD')
+                    .then(function (result) {
+                        var preparePrint = {
+                            token: tokenService.getToken(),
+                            url: urlService.exportToWord,
+                            isWordPrinting: result.button === 2 ? "true" : "false"
+                        };
+                        localStorage.setItem('preparePrint', JSON.stringify(preparePrint));
 
-                var exportData = _getExportData(heading, records);
+                        records = angular.isArray(records) ? records : [records];
 
-                if (!exportData.headerNames.length) {
-                    toast.info(langService.get('no_data_to_print'));
-                } else {
-                    localStorage.setItem('userFollowupData', JSON.stringify(exportData));
-                    localStorage.setItem('currentLang', langService.current);
-                    var printWindow = window.open(self.printPage, '', 'left=0,top=0,width=0,height=0,toolbar=0,scrollbars=0,status=0');
-                    printWindow.onafterprint = function () {
-                        printWindow.close();
-                    };
-                    if (!printWindow) {
-                        toast.error(langService.get('msg_error_occurred_while_processing_request'))
-                    }
-                }
-            };
+                        var exportData = _getExportData(heading, records);
+
+                        if (!exportData.headerNames.length) {
+                            toast.info(langService.get('no_data_to_print'));
+                        } else {
+                            localStorage.setItem('userFollowupData', JSON.stringify(exportData));
+                            localStorage.setItem('currentLang', langService.current);
+                            var printWindow = window.open(self.printPage, '', 'left=0,top=0,width=0,height=0,toolbar=0,scrollbars=0,status=0');
+                            printWindow.onafterprint = function () {
+                                printWindow.close();
+                            };
+                            if (!printWindow) {
+                                toast.error(langService.get('msg_error_occurred_while_processing_request'))
+                            }
+                        }
+                    });
+            }
 
             var _getExportData = function (heading, userFollowups) {
                 var headerNames = [],

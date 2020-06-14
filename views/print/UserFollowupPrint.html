@@ -3,10 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
-    <link media="all" rel="stylesheet" href="print-grid-style.css">
+    <!--<link media="all" rel="stylesheet" href="print-grid-style.css">-->
+    <style>
+        table {
+            width: 100%;
+            display: table;
+            border-collapse: separate;
+            border-spacing: 0px;
+            border-color: grey;
+            font-family: Roboto, "Helvetica Neue", sans-serif;;
+        }
+
+        table tr {
+            height: 56px;
+            display: table-row;
+        }
+
+        table thead td {
+            padding: 0 24px;
+            vertical-align: middle;
+            text-align: left;
+            color: #FFFFFF;
+            border-bottom: 1px rgba(0, 0, 0, 0.12) solid;
+            font-size: 12px;
+            white-space: nowrap;
+            font-weight: bold;
+            background: #3F51B5;
+        }
+
+        table tbody tr td {
+            padding: 0 20px;
+            color: rgba(0, 0, 0, 0.87);
+            font-size: 13px;
+            border-bottom: 1px rgba(0, 0, 0, 0.12) solid;
+            vertical-align: middle;
+            text-align: left;
+            max-width: 200px;
+        }
+
+        span {
+            white-space: pre;
+        }
+
+        table tbody tr table {
+            border: 1px rgba(0, 0, 0, 0.12) solid;
+        }
+
+        table tbody tr table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+
+        html.rtl table thead td,
+        html.rtl table tbody tr td {
+            text-align: right;
+        }
+
+        .row {
+            width: 100%;
+            margin: 10px;
+        }
+
+        .subRow {
+            display: inline-block;
+            width: 15%;
+        }
+
+        .text-bold {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-<!--<h3 id="header"></h3>-->
 <div id="headerDataContainer">
     <div class="row">
         <label class="subRow text-bold">{{lblSubject}}: </label>
@@ -28,6 +96,7 @@
 <script>
     (function () {
         var data = JSON.parse(localStorage.getItem('userFollowupData'));
+        var preparePrint = JSON.parse(localStorage.getItem('preparePrint'));
         var columns = data.headerNames;
         var columnCount = columns.length;
         var records = data.data;
@@ -88,12 +157,28 @@
                 }
                 localStorage.removeItem('userFollowupData');
                 localStorage.removeItem('currentLang');
-                resolve(true);
+                resolve(preparePrint.isWordPrinting);
             });
         }
 
-        fillData().then(function (value) {
-            window.print()
+        function printDataAsWord() {
+            var currentDocument = document.documentElement.innerHTML;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", preparePrint.url);
+            xhr.setRequestHeader('tawasol-auth-header', encodeURI(preparePrint.token));
+            xhr.setRequestHeader('Content-type', encodeURI('text/plain;charset=UTF-8'));
+            xhr.send(currentDocument);
+            xhr.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    var data = JSON.parse(this.responseText);
+                    window.open(data.rs);
+                }
+            };
+        }
+
+        fillData().then(function (isWordPrinting) {
+            (isWordPrinting === 'true') ? printDataAsWord() : window.print();
+            localStorage.removeItem('preparePrint');
         });
     })();
 </script>
