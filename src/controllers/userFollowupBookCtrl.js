@@ -264,7 +264,7 @@ module.exports = function (app) {
              * @param $event
              */
             self.terminateBulk = function ($event) {
-                if (!self.checkIfTerminateBulkAvailable()){
+                if (!self.checkIfTerminateBulkAvailable()) {
                     return;
                 }
                 followUpUserService.terminateBulkFollowup(self.selectedFollowupBooks).then(function () {
@@ -394,9 +394,13 @@ module.exports = function (app) {
              * @param $event
              */
             self.printResult = function (printSelectedBulk, $event) {
-                followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, (printSelectedBulk ? self.selectedFollowupBooks : self.followupBooks), (self.selectedFolder ? self.selectedFolder.getTranslatedName() : null))
+                var printDate = printSelectedBulk ? self.selectedFollowupBooks : self.followupBooks;
+                printDate = _.filter(printDate, function (followupBook) {
+                    return !followupBook.isTerminated();
+                });
+                followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, printDate, (self.selectedFolder ? self.selectedFolder.getTranslatedName() : null))
                     .then(function (heading) {
-                        followUpUserService.printUserFollowupFromWebPage(heading, (printSelectedBulk ? self.selectedFollowupBooks : self.followupBooks));
+                        followUpUserService.printUserFollowupFromWebPage(heading, printDate);
                     });
             };
 
