@@ -267,6 +267,7 @@ module.exports = function (app) {
                     self.grid.page = 1;
                     self.grid.searchText = '';
                     self.followupBooks = result.result;
+                    self.selectedFollowupBooks = [];
                     // if criteria is returned in result, means filter is used. otherwise, filter is reset
                     if (result.criteria) {
                         self.searchCriteriaUsed = true;
@@ -286,6 +287,7 @@ module.exports = function (app) {
                         self.searchCriteriaUsed = true;
                         self.searchCriteria = error.criteria;
                         self.followupBooks = [];
+                        self.selectedFollowupBooks = [];
                     }
                 });
         };

@@ -650,6 +650,7 @@ module.exports = function (app) {
                     .controllerMethod.openFilterDialog(self.grid, self.searchCriteria, false, $event)
                     .then(function (result) {
                         self.selectedFolder = null;
+                        self.selectedFollowupBooks = [];
                         self.grid.page = 1;
                         self.grid.searchText = '';
                         self.followupBooks = result.result;
@@ -671,6 +672,7 @@ module.exports = function (app) {
                             self.grid.searchText = '';
                             self.searchCriteriaUsed = true;
                             self.searchCriteria = error.criteria;
+                            self.selectedFollowupBooks = [];
                             self.followupBooks = [];
                         }
                     });
