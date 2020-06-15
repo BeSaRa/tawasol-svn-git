@@ -298,21 +298,23 @@ module.exports = function (app) {
 
                 self.getTerminatedBooksByUserAndFolder(userId, employeeOuId, folderId)
                     .then(function (result) {
-                        self.showAddBulkFollowupBooksToFolder(result, false, $event, folderId)
-                            .then(function () {
+                        if (result && result.length) {
+                            self.showAddBulkFollowupBooksToFolder(result, false, $event, folderId)
+                                .then(function () {
 
-                            });
+                                });
+                        }
                     })
 
             };
 
-        /**
-         * @description Gets the terminated followup books by userId, ouId, folderId
-         * @param userId
-         * @param ouId
-         * @param folderId
-         * @returns {*}
-         */
+            /**
+             * @description Gets the terminated followup books by userId, ouId, folderId
+             * @param userId
+             * @param ouId
+             * @param folderId
+             * @returns {*}
+             */
             self.getTerminatedBooksByUserAndFolder = function (userId, ouId, folderId) {
                 var searchCriteria = new FollowupBookCriteria({
                     userId: userId,
