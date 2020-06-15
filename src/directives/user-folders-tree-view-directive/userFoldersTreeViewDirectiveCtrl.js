@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                                  $rootScope,
                                                                  langService,
                                                                  followUpUserService,
+                                                                 errorCode,
                                                                  toast,
                                                                  dialog) {
         'ngInject';
@@ -61,6 +62,16 @@ module.exports = function (app) {
                     .followupFolderDeleteBulk(array.reverse())
                     .then(function () {
                         self.reloadUserFolders();
+                    })
+                    .catch(function (error) {
+                        var code = error.hasOwnProperty('data') && error.data ? error.data.ec : error;
+                        if (code === 1005) { // 1005 (FAILED_DUE_TO_LINKED_OBJECT)
+                            return dialog.confirmMessage(langService.get('can_not_delete_folder_has_followup_data_confirm_move'))
+                                .then(function () {
+                                    followUpUserService.openMoveTerminatedBooksDialog(folders.id, array);
+                                })
+                        }
+                        return $q.reject(error);
                     });
                 return;
             }
@@ -83,7 +94,7 @@ module.exports = function (app) {
             if (self.followup) {
                 followUpUserService
                     .controllerMethod
-                    .followupFolderAdd(folder, $event , self.folders)
+                    .followupFolderAdd(folder, $event, self.folders)
                     .then(function () {
                         self.reloadUserFolders();
                     });

@@ -248,6 +248,14 @@ module.exports = function (app) {
                                 });
                         });
                 },
+                /**
+                 * @description Opens the filter dialog
+                 * @param grid
+                 * @param searchCriteria
+                 * @param isAdminFollowup
+                 * @param $event
+                 * @returns {promise}
+                 */
                 openFilterDialog: function (grid, searchCriteria, isAdminFollowup, $event) {
                     return dialog
                         .showDialog({
@@ -273,9 +281,52 @@ module.exports = function (app) {
                         });
                 }
             };
+
+            /**
+             * @description Opens dialog to move terminated books to other folder
+             * @param folderId
+             * @param skipFolderIds
+             * @param $event
+             */
+            self.openMoveTerminatedBooksDialog = function (folderId, skipFolderIds, $event) {
+                folderId = angular.copy(generator.getNormalizedValue(folderId, 'id'));
+                var employee = employeeService.getEmployee(),
+                    ouApplicationUser = employeeService.getCurrentOUApplicationUser(),
+                    userId = ouApplicationUser.applicationUser.hasOwnProperty('id') ? ouApplicationUser.applicationUser.id : ouApplicationUser.applicationUser,
+                    employeeOuId = (employee.organization.ouid && employee.organization.ouid.hasOwnProperty('id')) ? employee.organization.ouid.id : employee.organization.ouid
+                ;
+
+                self.getTerminatedBooksByUserAndFolder(userId, employeeOuId, folderId)
+                    .then(function (result) {
+                        self.showAddBulkFollowupBooksToFolder(result, false, $event, folderId)
+                            .then(function () {
+
+                            });
+                    })
+
+            };
+
+        /**
+         * @description Gets the terminated followup books by userId, ouId, folderId
+         * @param userId
+         * @param ouId
+         * @param folderId
+         * @returns {*}
+         */
+            self.getTerminatedBooksByUserAndFolder = function (userId, ouId, folderId) {
+                var searchCriteria = new FollowupBookCriteria({
+                    userId: userId,
+                    userOUID: ouId,
+                    status: false,
+                    folderId: folderId
+                });
+                return self.loadUserFollowupBooksByCriteria(null, searchCriteria);
+            };
+
             /**
              * @description open dialog for adding the document to follow up.
              * @param correspondence
+             * @param editMode
              * @returns {promise}
              */
             self.addCorrespondenceToMyFollowUp = function (correspondence, editMode) {
@@ -838,12 +889,19 @@ module.exports = function (app) {
              * @param records
              * @param showRoot
              * @param $event
+             * @param skipParentFolderId
              * @returns {promise|*}
              */
-            self.showAddBulkFollowupBooksToFolder = function (records, showRoot, $event) {
+            self.showAddBulkFollowupBooksToFolder = function (records, showRoot, $event, skipParentFolderId) {
                 var defer = $q.defer();
                 self.getFollowupFolders(true)
                     .then(function (result) {
+                        if (skipParentFolderId) {
+                            skipParentFolderId = generator.getNormalizedValue(skipParentFolderId, 'id');
+                            result = _.filter(result, function (item) {
+                                return item.id !== skipParentFolderId;
+                            });
+                        }
                         defer.resolve(result);
                     });
                 return defer.promise.then(function (folders) {

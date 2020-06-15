@@ -75,8 +75,9 @@ module.exports = function (app) {
         });
 
         exception.addGeneralExceptionHandler(500, function (xhr) {
-            var ec = xhr.data.ec;
-            if (ec === 1005 && xhr.config.method === 'DELETE')
+            var ec = xhr.data.ec, url = xhr.config.url, deleteBulkFollowupFolderUrl = urlService.followUpFolders + '/bulk';
+
+            if (ec === 1005 && xhr.config.method === 'DELETE' && url !== deleteBulkFollowupFolderUrl)
                 dialog.errorMessage(langService.get('record_has_related_records'));
 
         });
