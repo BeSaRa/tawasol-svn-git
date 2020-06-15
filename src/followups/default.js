@@ -41,7 +41,7 @@ module.exports = function (app) {
             if (url === urlService.login) {
                 errorCode.showErrorDialog(xhr);
             } else {
-                if (xhr.data.ec === 9002 && localStorageService.get('CR')) {
+                if ((xhr.data.ec === 9001 || xhr.data.ec === 9002) && localStorageService.get('CR')) {
                     localStorageService.remove('CR');
                     tokenService.destroy(); // destroy the current sessions
                     employeeService.destroyEmployee(); // destroy current user data
