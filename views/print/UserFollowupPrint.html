@@ -162,7 +162,7 @@
         }
 
         function printDataAsWord() {
-            var currentDocument = document.documentElement.innerHTML;
+            var currentDocument = document.documentElement.outerHTML;
             var xhr = new XMLHttpRequest();
             xhr.open("POST", preparePrint.url);
             xhr.setRequestHeader('tawasol-auth-header', encodeURI(preparePrint.token));
