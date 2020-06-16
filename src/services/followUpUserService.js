@@ -293,8 +293,7 @@ module.exports = function (app) {
                 var employee = employeeService.getEmployee(),
                     ouApplicationUser = employeeService.getCurrentOUApplicationUser(),
                     userId = ouApplicationUser.applicationUser.hasOwnProperty('id') ? ouApplicationUser.applicationUser.id : ouApplicationUser.applicationUser,
-                    employeeOuId = (employee.organization.ouid && employee.organization.ouid.hasOwnProperty('id')) ? employee.organization.ouid.id : employee.organization.ouid
-                ;
+                    employeeOuId = (employee.organization.ouid && employee.organization.ouid.hasOwnProperty('id')) ? employee.organization.ouid.id : employee.organization.ouid;
 
                 self.getTerminatedBooksByUserAndFolder(userId, employeeOuId, folderId)
                     .then(function (result) {

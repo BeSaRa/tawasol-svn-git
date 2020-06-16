@@ -60,6 +60,10 @@ module.exports = function (app) {
                 return configurationService.CORRESPONDENCE_SITES_TYPES_LOOKUPS.indexOf(this.lookupKey) === -1;
             };
 
+            CorrespondenceSiteType.prototype.isGovernmentSiteType = function () {
+                return configurationService.G2G_CORRESPONDENCE_SITES_TYPE === this.lookupKey;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('CorrespondenceSiteType', 'init', this);

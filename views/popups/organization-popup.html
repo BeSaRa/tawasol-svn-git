@@ -231,7 +231,8 @@
                                                    name="correspondenceTypeId" id="correspondenceTypeId"
                                                    ng-model="ctrl.organization.correspondenceTypeId">
                                             <md-option tooltip="{{type.getTranslatedName(true)}}" ng-value="type"
-                                                       ng-repeat="type in ctrl.correspondenceSiteTypes track by $index">
+                                                       ng-repeat="type in ctrl.correspondenceSiteTypes track by $index"
+                                                       ng-if="!type.isGovernmentSiteType()">
                                                 {{type.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
