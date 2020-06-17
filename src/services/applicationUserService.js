@@ -483,7 +483,9 @@ module.exports = function (app) {
             return $http.get(urlService.applicationUserLdap.change({domainName: domainName}))
                 .then(function (result) {
                     return result.data.rs;
-                });
+                }).catch(function (error) {
+                    return false;
+                })
         };
 
         /**
