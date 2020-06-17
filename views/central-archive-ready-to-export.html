@@ -103,10 +103,14 @@
                                         <th ng-if="!ctrl.selectedWorkItems.length" md-column>
                                             <span></span>
                                         </th>
+                                        <th ng-if="!ctrl.selectedReadyToExports.length" md-column>
+                                            <!-- Read/Unread Indicator -->
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="workItem"
+                                        ng-class="!workItem.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                                         ng-disabled="workItem.isLocked() && !workItem.isLockedByCurrentUser()"
                                         grid-right-click-directive="workItem"
                                         selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
@@ -166,6 +170,13 @@
                                                 <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
                                                                         model="workItem">
                                                 </grid-actions-directive>
+                                            </div>
+                                        </td>
+                                        <td md-cell class="read-td">
+                                            <div class="cursor-pointer status"
+                                                 ng-class="workItem.generalStepElm.isOpen===true? 'read' : 'unread'"
+                                                 ng-if="!ctrl.selectedWorkItems.length
+                                                          || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber">
                                             </div>
                                         </td>
                                     </tr>
