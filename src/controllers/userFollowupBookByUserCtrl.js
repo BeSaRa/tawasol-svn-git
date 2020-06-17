@@ -647,11 +647,11 @@ module.exports = function (app) {
                     return true;
                 }
             },
-            // edit employee follow up
+            // edit employee follow up date
             {
                 type: 'action',
                 icon: 'pencil',
-                text: 'grid_action_edit',
+                text: 'grid_action_edit_followup_date',
                 shortcut: true,
                 callback: self.editEmployeeFollowUp,
                 class: "action-green",

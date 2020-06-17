@@ -526,11 +526,11 @@ module.exports = function (app) {
                         return !model.isTerminated();
                     }
                 },
-                // edit my follow up
+                // edit follow up date
                 {
                     type: 'action',
                     icon: 'pencil',
-                    text: 'grid_action_edit',
+                    text: 'grid_action_edit_followup_date',
                     shortcut: true,
                     callback: self.editDirectFollowUp,
                     class: "action-green",
