@@ -65,7 +65,12 @@ module.exports = function (app) {
                             window.open(result);
                             return true;
                         });
-                    })
+                    }).catch(function (error) {
+                        errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
+                            dialog.errorMessage(langService.get('certificate_missing'))
+                        });
+                        return false;
+                    });
             },
             /**
              * @description Download Attachment
@@ -455,10 +460,15 @@ module.exports = function (app) {
          */
         self.downloadSelectedOptions = function (downloadOptions, correspondence) {
             var info = correspondence.getInfo();
-            return $http.put(urlService.downloadSelected.replace('{documentClass}', info.documentClass.toLowerCase()) + "/" + info.vsId, downloadOptions).then(function (result) {
+            return $http.put(urlService.downloadSelected.replace('{documentClass}', info.documentClass.toLowerCase()) + "/" + info.vsId, downloadOptions)
+                .then(function (result) {
                     window.open(result.data.rs, '_blank');
-                }
-            );
+                }).catch(function (error) {
+                    errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
+                        dialog.errorMessage(langService.get('certificate_missing'))
+                    });
+                    return false;
+                });
         };
         /**
          * @description download all document with linked/attachment in one PDF
@@ -478,7 +488,12 @@ module.exports = function (app) {
             }).then(function (result) {
                     window.open(result.data.rs, '_blank');
                 }
-            );
+            ).catch(function (error) {
+                errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
+                    dialog.errorMessage(langService.get('certificate_missing'))
+                });
+                return false;
+            })
         }
     });
 };
