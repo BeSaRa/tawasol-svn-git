@@ -10,10 +10,10 @@
                         <label for="pinCode">{{lang.pin}}</label>
                         <input name="pinCode" id="pinCode" type="password"
                                ng-model="ctrl.pinCode" required
-                               custom-validate-directive="number">
+                               custom-validate-directive="EN">
                         <div ng-messages="signaturesForm.pinCode.$error">
                             <div ng-message="required">{{lang.field_required}}</div>
-                            <div ng-message="number">{{lang.numberonly}}</div>
+                            <div ng-message="EN">{{lang.english_number}}</div>
                         </div>
                     </md-input-container>
                 </div>
