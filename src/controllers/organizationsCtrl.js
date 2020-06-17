@@ -35,9 +35,9 @@ module.exports = function (app) {
 
         self.showTab = function (tabName) {
             var isAvailable = (self.tabsToShow.indexOf(tabName) > -1);
-            if (tabName === 'chart') {
+            /*if (tabName === 'chart') {
                 return isAvailable && employeeService.isSuperAdminUser();
-            }
+            }*/
             return isAvailable;
         };
 
