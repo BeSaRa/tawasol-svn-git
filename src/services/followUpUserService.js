@@ -665,8 +665,8 @@ module.exports = function (app) {
                         eventTarget: $event || null,
                         bindToController: true,
                         controller: function (record, emailAddress, dialog) {
+                            'ngInject';
                             var self = this;
-
                             self.record = record;
                             self.emailAddress = angular.copy(emailAddress);
 
