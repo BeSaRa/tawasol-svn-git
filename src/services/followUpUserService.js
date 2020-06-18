@@ -763,34 +763,39 @@ module.exports = function (app) {
                 }
             };
 
-
-            self.printUserFollowup = function (heading, records) {
+            self.printUserFollowup = function (heading, criteria) {
                 dialog.confirmThreeButtonMessage(langService.get('select_file_type_to_print_download'), '', langService.get('web_print'), 'WORD')
                     .then(function (result) {
-                        var preparePrint = {
-                            token: tokenService.getToken(),
-                            url: urlService.exportToWord,
-                            isWordPrinting: result.button === 2 ? "true" : "false"
-                        };
-                        localStorage.setItem('preparePrint', JSON.stringify(preparePrint));
+                        criteria.forPrinting = true;
+                        criteria.status = true; // not terminated
+                        $http.post(urlService.userFollowUp + '/print', generator.interceptSendInstance('FollowupBookCriteria', criteria))
+                            .then(result => {
+                                var preparePrint = {
+                                    token: tokenService.getToken(),
+                                    url: urlService.exportToWord,
+                                    isWordPrinting: result.button === 2 ? "true" : "false"
+                                };
+                                localStorage.setItem('preparePrint', JSON.stringify(preparePrint));
 
-                        records = angular.isArray(records) ? records : [records];
+                                var exportData = _getExportData(heading,
+                                    generator.interceptReceivedCollection('FollowupBook', generator.generateCollection(result.data.rs, FollowupBook))
+                                );
 
-                        var exportData = _getExportData(heading, records);
 
-                        if (!exportData.headerNames.length) {
-                            toast.info(langService.get('no_data_to_print'));
-                        } else {
-                            localStorage.setItem('userFollowupData', JSON.stringify(exportData));
-                            localStorage.setItem('currentLang', langService.current);
-                            var printWindow = window.open(self.printPage, '', 'left=0,top=0,width=0,height=0,toolbar=0,scrollbars=0,status=0');
-                            printWindow.onafterprint = function () {
-                                printWindow.close();
-                            };
-                            if (!printWindow) {
-                                toast.error(langService.get('msg_error_occurred_while_processing_request'))
-                            }
-                        }
+                                if (!exportData.headerNames.length) {
+                                    toast.info(langService.get('no_data_to_print'));
+                                } else {
+                                    localStorage.setItem('userFollowupData', JSON.stringify(exportData));
+                                    localStorage.setItem('currentLang', langService.current);
+                                    var printWindow = window.open(self.printPage, '', 'left=0,top=0,width=0,height=0,toolbar=0,scrollbars=0,status=0');
+                                    printWindow.onafterprint = function () {
+                                        printWindow.close();
+                                    };
+                                    if (!printWindow) {
+                                        toast.error(langService.get('msg_error_occurred_while_processing_request'))
+                                    }
+                                }
+                            })
                     });
             }
 

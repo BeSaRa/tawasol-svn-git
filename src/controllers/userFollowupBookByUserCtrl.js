@@ -502,13 +502,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.printResult = function (printSelectedBulk, $event) {
-            var printDate = printSelectedBulk ? self.selectedFollowupBooks : self.followupBooks;
-            printDate = _.filter(printDate, function (followupBook) {
-                return !followupBook.isTerminated();
-            });
-            followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, printDate, (self.selectedUser ? self.selectedUser.getTranslatedNameAndOU() : null))
+            followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, angular.copy(self.searchCriteriaCopy), (self.selectedUser ? self.selectedUser.getTranslatedNameAndOU() : null))
                 .then(function (heading) {
-                    followUpUserService.printUserFollowup(heading, printDate);
+                    followUpUserService.printUserFollowup(heading, angular.copy(self.searchCriteriaCopy));
                 });
         };
 

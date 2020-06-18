@@ -394,13 +394,13 @@ module.exports = function (app) {
              * @param $event
              */
             self.printResult = function (printSelectedBulk, $event) {
-                var printDate = printSelectedBulk ? self.selectedFollowupBooks : self.followupBooks;
-                printDate = _.filter(printDate, function (followupBook) {
-                    return !followupBook.isTerminated();
-                });
-                followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, printDate, (self.selectedFolder ? self.selectedFolder.getTranslatedName() : null))
+                if (!self.searchCriteriaUsed) {
+                    self.searchCriteriaCopy.folderId = self.selectedFolder.id
+                }
+
+                followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, angular.copy(self.searchCriteriaCopy), (self.selectedFolder ? self.selectedFolder.getTranslatedName() : null))
                     .then(function (heading) {
-                        followUpUserService.printUserFollowup(heading, printDate);
+                        followUpUserService.printUserFollowup(heading, angular.copy(self.searchCriteriaCopy));
                     });
             };
 
