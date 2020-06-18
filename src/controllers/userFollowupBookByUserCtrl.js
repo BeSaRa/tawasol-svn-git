@@ -502,6 +502,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.printResult = function (printSelectedBulk, $event) {
+            if (!self.isValidBasicCriteria()) {
+                return;
+            }
+
             followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, angular.copy(self.searchCriteriaCopy), (self.selectedUser ? self.selectedUser.getTranslatedNameAndOU() : null))
                 .then(function (heading) {
                     followUpUserService.printUserFollowup(heading, angular.copy(self.searchCriteriaCopy));
