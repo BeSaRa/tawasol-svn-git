@@ -856,6 +856,20 @@ module.exports = function (app) {
             return $http.get(urlService.availableCentralArchive)
                 .then(function (result) {
                     var organizations = generator.generateCollection(result.data.rs, WFOrganization);
+                    var priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
+
+                    _.map(organizations, function (item) {
+                        item.sla = angular.fromJson(item.sla);
+                        if (item.sla && !isNaN(item.sla)) {
+                            var number = item.sla;
+                            item.sla = {};
+                            priorityLevels.map(function (level) {
+                                item.sla[level.lookupKey] = number;
+                            });
+                        }
+                        return item;
+                    });
+
                     return organizations.length ? organizations : false;
                 });
         };
