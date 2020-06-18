@@ -765,7 +765,7 @@ module.exports = function (app) {
 
             self.printUserFollowup = function (heading, criteria) {
                 dialog.confirmThreeButtonMessage(langService.get('select_file_type_to_print_download'), '', langService.get('web_print'), 'WORD')
-                    .then(function (result) {
+                    .then(function (confirmResult) {
                         criteria.forPrinting = true;
                         criteria.status = true; // not terminated
                         $http.post(urlService.userFollowUp + '/print', generator.interceptSendInstance('FollowupBookCriteria', criteria))
@@ -773,7 +773,7 @@ module.exports = function (app) {
                                 var preparePrint = {
                                     token: tokenService.getToken(),
                                     url: urlService.exportToWord,
-                                    isWordPrinting: result.button === 2 ? "true" : "false"
+                                    isWordPrinting: confirmResult.button === 2 ? "true" : "false"
                                 };
                                 localStorage.setItem('preparePrint', JSON.stringify(preparePrint));
 

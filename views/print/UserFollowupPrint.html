@@ -72,6 +72,11 @@
         .text-bold {
             font-weight: bold;
         }
+
+        /*for subject*/
+        .col_3 {
+            min-width: 200px;
+        }
     </style>
 </head>
 <body>
@@ -143,6 +148,7 @@
                     for (var j = 0; j < columnCount; j++) {
                         var cell = row.insertCell(j);
                         if (Array.isArray(record[j]) && record[j].length) {
+                            // for comments
                             var subtable = document.createElement("table");
                             for (var s = 0; s < record[j].length; s++) {
                                 var subRow = subtable.insertRow();
@@ -152,6 +158,7 @@
                             cell.append(subtable);
                         } else {
                             cell.innerHTML = (record[j] !== null && record[j] !== '') ? ('<div>' + record[j] + '</div>') : '';
+                            cell.className = 'col_' + [j];
                         }
                     }
                 }
