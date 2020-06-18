@@ -11,6 +11,7 @@ module.exports = function (app) {
             self.fromDocDate = null;
             self.toDocDate = null;
             self.forPrinting = false;
+            self.idList = [];
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

@@ -394,13 +394,18 @@ module.exports = function (app) {
              * @param $event
              */
             self.printResult = function (printSelectedBulk, $event) {
+                var printCriteria = angular.copy(self.searchCriteriaCopy);
                 if (!self.searchCriteriaUsed) {
-                    self.searchCriteriaCopy.folderId = self.selectedFolder.id
+                    printCriteria.folderId = self.selectedFolder.id
                 }
 
-                followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, angular.copy(self.searchCriteriaCopy), (self.selectedFolder ? self.selectedFolder.getTranslatedName() : null))
+                if (printSelectedBulk) {
+                    printCriteria.idList = _.map(self.selectedFollowupBooks, 'id');
+                }
+
+                followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, printCriteria, (self.selectedFolder ? self.selectedFolder.getTranslatedName() : null))
                     .then(function (heading) {
-                        followUpUserService.printUserFollowup(heading, angular.copy(self.searchCriteriaCopy));
+                        followUpUserService.printUserFollowup(heading, printCriteria);
                     });
             };
 
@@ -410,9 +415,11 @@ module.exports = function (app) {
              * @param $event
              */
             self.print = function (record, $event) {
-                followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, record, (self.selectedFolder ? self.selectedFolder.getTranslatedName() : null))
+                var printCriteria = angular.copy(self.searchCriteriaCopy);
+                printCriteria.idList.push(record.id);
+                followUpUserService.setFollowupReportHeading(self.searchCriteriaUsed, printCriteria, (self.selectedFolder ? self.selectedFolder.getTranslatedName() : null))
                     .then(function (heading) {
-                        followUpUserService.printUserFollowup(heading, record);
+                        followUpUserService.printUserFollowup(heading, printCriteria);
                     });
             };
 
