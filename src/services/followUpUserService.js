@@ -767,7 +767,6 @@ module.exports = function (app) {
                 dialog.confirmThreeButtonMessage(langService.get('select_file_type_to_print_download'), '', langService.get('web_print'), 'WORD')
                     .then(function (confirmResult) {
                         criteria.forPrinting = true;
-                        criteria.status = true; // not terminated
                         $http.post(urlService.userFollowUp + '/print', generator.interceptSendInstance('FollowupBookCriteria', criteria))
                             .then(result => {
                                 var preparePrint = {
