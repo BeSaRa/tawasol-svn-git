@@ -163,16 +163,6 @@
                         </md-input-container>
                     </div>
                     <div layout="row">
-                        <!-- Folder -->
-                        <md-input-container flex ng-if="!ctrl.isAdminFollowup">
-                            <label for="folderId">{{lang.folder}}</label>
-                            <md-select id="folderId" name="folderId"
-                                       ng-model="ctrl.searchCriteria.folderId">
-                                <md-option ng-repeat="folder in ctrl.folders"
-                                           ng-value="folder.id">{{folder.getTranslatedName()}}
-                                </md-option>
-                            </md-select>
-                        </md-input-container>
                         <!-- Terminated -->
                         <md-input-container flex>
                             <label for="status">{{lang.terminated}}</label>
@@ -184,6 +174,17 @@
                                 </md-option>
                             </md-select>
                         </md-input-container>
+                        <!-- Folder -->
+                        <md-input-container flex ng-if="!ctrl.isAdminFollowup">
+                            <label for="folderId">{{lang.folder}}</label>
+                            <md-select id="folderId" name="folderId"
+                                       ng-model="ctrl.searchCriteria.folderId">
+                                <md-option ng-repeat="folder in ctrl.folders"
+                                           ng-value="folder.id">{{folder.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <span flex ng-if="ctrl.isAdminFollowup"></span>
                     </div>
                 </div>
             </form>
