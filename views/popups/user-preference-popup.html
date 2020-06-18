@@ -1236,7 +1236,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Predefined Actions -->
-                    <md-tab label="{{lang.predefined_actions}}" ng-if="ctrl.showTab('predefinedActions')"
+                    <md-tab label="{{lang.predefined_actions}}"
+                            ng-if="ctrl.showTab('predefinedActions') && ctrl.employee.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
                             md-on-select="ctrl.setCurrentTab('predefinedActions')">
                         <md-content class="md-padding">
                             <div layout="column">
