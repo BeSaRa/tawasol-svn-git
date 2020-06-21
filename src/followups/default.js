@@ -61,7 +61,7 @@ module.exports = function (app) {
             if (url === urlService.login) {
                 errorCode.showErrorDialog(xhr);
             } else {
-                if (!errorCode.hasErrorCode(xhr) && (xhr.config.method !== 'DELETE')) {
+                if (!errorCode.hasErrorCode(xhr) && (xhr.config.method !== 'DELETE') && !xhr.config.ignore) {
                     dialog
                         .errorMessage(langService.get('internal_server_error'));
                 }
@@ -75,7 +75,8 @@ module.exports = function (app) {
         });
 
         exception.addGeneralExceptionHandler(500, function (xhr) {
-            var ec = xhr.data.ec, url = xhr.config.url, deleteBulkFollowupFolderUrl = urlService.followUpFolders + '/bulk';
+            var ec = xhr.data.ec, url = xhr.config.url,
+                deleteBulkFollowupFolderUrl = urlService.followUpFolders + '/bulk';
 
             if (ec === 1005 && xhr.config.method === 'DELETE' && url !== deleteBulkFollowupFolderUrl)
                 dialog.errorMessage(langService.get('record_has_related_records'));

@@ -414,10 +414,13 @@ module.exports = function (app) {
                 entity: $stateParams.entity,
                 otp: otp
             });
+
+            url = 'http://eblaepm.no-ip.org:9080/CMSServices/service/no-auth/view-link/226/entity/motc?otp=6130';
             tokenService.excludeUrlInRuntime(url);
 
             return $http.get(url, {
-                responseType: 'blob'
+                responseType: 'blob',
+                ignore: true
             }).then(function (result) {
                 var urlObj = window.URL.createObjectURL(result.data);
                 var fileName = urlObj.substring(urlObj.lastIndexOf('/') + 1);
@@ -441,9 +444,15 @@ module.exports = function (app) {
 
                 return true;
             }).catch(function (error) {
-                errorCode.checkIf(error, "INVALID_LINK", function () {
-                    toast.error(langService.get('otp_failed_to_download'));
-                });
+
+                var reader = new FileReader();
+                reader.onload = function () {
+                    error.data = angular.fromJson(reader.result);
+                    errorCode.checkIf(error, "INVALID_LINK", function () {
+                        toast.error(langService.get('otp_failed_to_download'));
+                    });
+                };
+                reader.readAsText(error.data);
                 return $q.reject('INVALID_LINK');
             })
         };
