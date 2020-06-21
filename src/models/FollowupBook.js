@@ -180,8 +180,8 @@ module.exports = function (app) {
                 return managerService.manageDocumentComments(this, info.vsId, info.title, $event);
             };
 
-            FollowupBook.prototype.openSendSMSDialog = function (mobileNumber, $event) {
-                return correspondenceService.openSendSMSDialog(this, mobileNumber, $event);
+            FollowupBook.prototype.openSendSMSDialog = function ($event, receivingUser) {
+                return correspondenceService.openSendSMSDialog(this, receivingUser, $event);
             };
 
             FollowupBook.prototype.sendReminderEmail = function (email, $event) {

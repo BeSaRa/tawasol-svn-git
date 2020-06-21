@@ -456,7 +456,7 @@ module.exports = function (app) {
                 return;
             }
             record
-                .openSendSMSDialog(null, $event)
+                .openSendSMSDialog($event, self.selectedUser)
                 .then(function () {
                     return self.reloadFollowupBooks(self.grid.page)
                         .then(function (result) {

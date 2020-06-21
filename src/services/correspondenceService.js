@@ -430,7 +430,7 @@ module.exports = function (app) {
             }
             /*in case of G2G*/
             else if (correspondence.hasOwnProperty('correspondence')) {
-                if (correspondence.hasOwnProperty('priorityLevel')){
+                if (correspondence.hasOwnProperty('priorityLevel')) {
                     priorityLevel = correspondence.correspondence.priorityLevel;
                 } else {
                     priorityLevel = correspondence.correspondence.priorityLevel;
@@ -4146,12 +4146,12 @@ module.exports = function (app) {
         /**
          * @description Opens the send sms dialog
          * @param correspondence
-         * @param mobileNumber
+         * @param receivingUser
          * @param $event
          * @returns {promise}
          */
-        self.openSendSMSDialog = function (correspondence, mobileNumber, $event) {
-            var info = correspondence.getInfo();
+        self.openSendSMSDialog = function (correspondence, receivingUser, $event) {
+            var info = correspondence.getInfo(), applicationUserDefer = $q.defer();
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('send-sms'),
                 controllerAs: 'ctrl',
@@ -4159,8 +4159,7 @@ module.exports = function (app) {
                 bindToController: true,
                 controller: 'sendSmsPopCtrl',
                 locals: {
-                    record: correspondence,
-                    mobileNumber: mobileNumber
+                    record: correspondence
                 },
                 resolve: {
                     linkedEntities: function () {
@@ -4170,9 +4169,22 @@ module.exports = function (app) {
                     smsTemplates: function (applicationUserService, smsTemplateService) {
                         'ngInject';
                         return applicationUserService.getApplicationUsers()
-                            .then(function () {
+                            .then(function (result) {
+                                applicationUserDefer.resolve(result);
                                 return smsTemplateService.loadActiveSmsTemplates();
                             });
+                    },
+                    mobileNumber: function () {
+                        'ngInject';
+                        if (!receivingUser) {
+                            return null;
+                        }
+                        return applicationUserDefer.promise.then(function (applicationUsers) {
+                            var user = _.find(applicationUsers, function (item) {
+                                return generator.getNormalizedValue(receivingUser, 'id') === generator.getNormalizedValue(item, 'id');
+                            });
+                            return (!!user ? generator.getNormalizedValue(user, 'mobile') : null);
+                        });
                     }
                 }
             })

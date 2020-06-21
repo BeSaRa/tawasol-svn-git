@@ -24,6 +24,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            // load applicationUsers first before calling load SMSTemplates to map to subscribers
             var smsTemplateSubscribersIds = _.map(model.smstemplateSubscribers, "applicationUserId");
             applicationUserService
                 .getApplicationUsers()
