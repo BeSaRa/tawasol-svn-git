@@ -80,7 +80,7 @@ module.exports = function (app) {
             /**
              * @description Allows english, digits, space and special characters
              */
-            ENSS: /^(?=.*[a-zA-Z\d].*)[a-zA-Z\d-!@#$%&_*]{7,}$/,
+            ENSS: /^[a-zA-Z0-9-!@#$%&_\-*]+$/,
 
             /**
              * @description Allows at least 1 english character and can contain digits, space(not in end of string and no 2 consecutive spaces)
