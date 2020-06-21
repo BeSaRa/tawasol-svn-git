@@ -415,7 +415,6 @@ module.exports = function (app) {
                 otp: otp
             });
 
-            url = 'http://eblaepm.no-ip.org:9080/CMSServices/service/no-auth/view-link/226/entity/motc?otp=6130';
             tokenService.excludeUrlInRuntime(url);
 
             return $http.get(url, {
