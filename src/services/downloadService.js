@@ -333,6 +333,13 @@ module.exports = function (app) {
                                 _download(result.data.rs, 'Tawasol.msg');
                             }
                         })
+                        .catch(function (error) {
+                            if (errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES') === true) {
+                                dialog.errorMessage(generator.getTranslatedError(error) || langService.get('certificate_missing'));
+                                return $q.reject(error);
+                            }
+                            return $q.reject(error);
+                        })
                 });
         };
 
@@ -367,6 +374,13 @@ module.exports = function (app) {
                                     } else {
                                         _download(result.data.rs, 'Tawasol.msg');
                                     }
+                                })
+                                .catch(function (error) {
+                                    if (errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES') === true) {
+                                        dialog.errorMessage(generator.getTranslatedError(error) || langService.get('certificate_missing'));
+                                        return $q.reject(error);
+                                    }
+                                    return $q.reject(error);
                                 })
                         })
                 });
