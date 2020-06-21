@@ -97,7 +97,7 @@ module.exports = function (app) {
             self.securityLevels = _mapSecurityLevels();
 
             return distributionWFService
-                .searchUsersByCriteria({ou: self.selectedOrganization})
+                .searchFollowupUsersByCriteria({ou: self.selectedOrganization})
                 .then(function (result) {
                     self.applicationUsers = result;
                     return result;

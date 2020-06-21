@@ -229,6 +229,16 @@ module.exports = function (app) {
                 });
         };
         /**
+         * @description search for followup distribution users by criteria
+         * @param searchCriteria
+         */
+        self.searchFollowupUsersByCriteria = function (searchCriteria) {
+            return $http.post(urlService.distributionWF + '/follow-up/search', generator.interceptSendInstance('UserSearchCriteria', searchCriteria))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('WFUser', generator.generateCollection(result.data.rs, WFUser));
+                });
+        };
+        /**
          * @description load workflow users
          */
         self.loadWorkflowUsers = function () {

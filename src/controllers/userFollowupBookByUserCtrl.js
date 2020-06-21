@@ -107,7 +107,7 @@ module.exports = function (app) {
             self.selectedSecurityLevels = angular.copy(self.securityLevels); // by default, all security levels will be selected
 
             return distributionWFService
-                .searchUsersByCriteria({ou: self.selectedOrganization})
+                .searchFollowupUsersByCriteria({ou: self.selectedOrganization})
                 .then(function (result) {
                     self.applicationUsers = result;
                     return result;
