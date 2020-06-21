@@ -335,6 +335,16 @@ module.exports = function (app) {
             return value.hasOwnProperty(hasOwnPropertyName) ? self.getNestedPropertyValue(value, hasOwnPropertyName) : value;
         };
 
+        /**
+         * @description Gets the error message from error object based on current language
+         * @param error
+         * @returns {*}
+         */
+        self.getTranslatedError = function (error) {
+            var errorObj = error.data.eo;
+            return langService.current === 'ar' ? errorObj.arName : errorObj.enName;
+        };
+
         self.changeBlobToTrustedUrl = function (blob, returnPromise) {
             var urlObj = window.URL.createObjectURL(blob);
             if (returnPromise) {

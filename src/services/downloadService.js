@@ -42,7 +42,8 @@ module.exports = function (app) {
                         });
                     }).catch(function (error) {
                         errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
-                            dialog.errorMessage(langService.get('certificate_missing'))
+                            dialog.errorMessage(generator.getTranslatedError(error) || langService.get('certificate_missing'));
+                            //dialog.errorMessage(langService.get('certificate_missing'))
                         });
                         return false;
                     })
@@ -67,7 +68,8 @@ module.exports = function (app) {
                         });
                     }).catch(function (error) {
                         errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
-                            dialog.errorMessage(langService.get('certificate_missing'))
+                            dialog.errorMessage(generator.getTranslatedError(error) || langService.get('certificate_missing'));
+                            //dialog.errorMessage(langService.get('certificate_missing'))
                         });
                         return false;
                     });
@@ -465,7 +467,8 @@ module.exports = function (app) {
                     window.open(result.data.rs, '_blank');
                 }).catch(function (error) {
                     errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
-                        dialog.errorMessage(langService.get('certificate_missing'))
+                        dialog.errorMessage(generator.getTranslatedError(error) || langService.get('certificate_missing'));
+                        //dialog.errorMessage(langService.get('certificate_missing'))
                     });
                     return false;
                 });
@@ -490,7 +493,8 @@ module.exports = function (app) {
                 }
             ).catch(function (error) {
                 errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
-                    dialog.errorMessage(langService.get('certificate_missing'))
+                    dialog.errorMessage(generator.getTranslatedError(error) || langService.get('certificate_missing'));
+                    //dialog.errorMessage(langService.get('certificate_missing'))
                 });
                 return false;
             })
