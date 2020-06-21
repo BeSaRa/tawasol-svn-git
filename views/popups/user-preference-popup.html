@@ -1236,8 +1236,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Predefined Actions -->
-                    <md-tab label="{{lang.predefined_actions}}"
-                            ng-if="ctrl.showTab('predefinedActions') && ctrl.employee.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
+                    <md-tab label="{{lang.predefined_actions}}" ng-if="ctrl.showTab('predefinedActions')"
                             md-on-select="ctrl.setCurrentTab('predefinedActions')">
                         <md-content class="md-padding">
                             <div layout="column">
@@ -1375,7 +1374,8 @@
                                                            custom-validate-directive="ENSS">
                                                     <div ng-messages="certificateForm.pinCode.$error">
                                                         <div ng-message="required">{{lang.field_required}}</div>
-                                                        <div ng-message="ENSS">{{lang.english_number_special_char}}</div>
+                                                        <div ng-message="ENSS">{{lang.english_number_special_char}}
+                                                        </div>
                                                     </div>
                                                 </md-input-container>
                                                 <div>

@@ -352,6 +352,8 @@ module.exports = function (app) {
             var isAvailable = (self.tabsToShow.indexOf(tabName) > -1);
             if (tabName === 'digitalCertificates') {
                 return isAvailable && self.globalSetting.isDigitalCertificateEnabled();
+            } else if (tabName === 'predefinedActions') {
+                return isAvailable && self.employee.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW');
             }
             return isAvailable;
         };
