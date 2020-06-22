@@ -9,7 +9,7 @@
             width: 100%;
             display: table;
             border-collapse: separate;
-            border-spacing: 0px;
+            border-spacing: 0;
             border-color: grey;
             font-family: Roboto, "Helvetica Neue", sans-serif;;
         }
@@ -20,24 +20,22 @@
         }
 
         table thead td {
-            padding: 0 24px;
+            padding: 0 10px;
             vertical-align: middle;
-            text-align: left;
             color: #FFFFFF;
-            border-bottom: 1px rgba(0, 0, 0, 0.12) solid;
             font-size: 12px;
             white-space: nowrap;
             font-weight: bold;
             background: #3F51B5;
+            border-left: 1px solid white;
         }
 
         table tbody tr td {
-            padding: 0 20px;
+            padding: 0 10px;
             color: rgba(0, 0, 0, 0.87);
             font-size: 13px;
-            border-bottom: 1px rgba(0, 0, 0, 0.12) solid;
+            border-bottom: 1px gray solid;
             vertical-align: middle;
-            text-align: left;
             max-width: 200px;
         }
 
@@ -74,26 +72,43 @@
         }
 
         /*for subject*/
-        .col_3 {
-            min-width: 200px;
+        .col_3,
+        .col_8 {
+            width: 150px;
+        }
+
+        .col_9, .col_4 {
+            width: 25px;
         }
     </style>
 </head>
 <body>
-<div id="headerDataContainer">
-    <div class="row">
-        <label class="subRow text-bold">{{lblSubject}}: </label>
-        <label>{{txtSubject}}</label>
-    </div>
-    <div class="row">
-        <label class="subRow text-bold">{{lblByUser}}: </label>
-        <label>{{txtByUser}}</label>
-    </div>
-    <div class="row">
-        <label class="subRow text-bold">{{lblCreationDate}}: </label>
-        <label>{{txtCreationDate}}</label>
-    </div>
-</div>
+<table id="headerDataContainer">
+    <tr>
+        <td>
+            <p class="text-bold">{{lblSubject}}: </p>
+        </td>
+        <td>
+            <p>{{txtSubject}}</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p class="text-bold">{{lblByUser}}: </p>
+        </td>
+        <td>
+            <p>{{txtByUser}}</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p class="text-bold">{{lblCreationDate}}: </p>
+        </td>
+        <td>
+            <p>{{txtCreationDate}}</p>
+        </td>
+    </tr>
+</table>
 <table id="userFollowupTable">
 
 </table>
@@ -130,14 +145,16 @@
         function fillData() {
             return new Promise(function (resolve, reject) {
                 var table = document.getElementById('userFollowupTable');
-
+                table.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
                 //create header
                 var tableHeader = table.createTHead();
                 var rowHeader = tableHeader.insertRow(0);
 
                 // loop through headers
                 for (var i = 0; i < columnCount; i++) {
-                    rowHeader.insertCell(i).innerHTML = columns[i];
+                    var cellHeader = rowHeader.insertCell(i);
+                    cellHeader.innerHTML = columns[i];
+                    cellHeader.className = 'col_' + [i];
                 }
 
                 var tableBody = table.createTBody();
@@ -147,18 +164,15 @@
                     var row = tableBody.insertRow();
                     for (var j = 0; j < columnCount; j++) {
                         var cell = row.insertCell(j);
+                        cell.className = 'col_' + [j];
                         if (Array.isArray(record[j]) && record[j].length) {
-                            // for comments
-                            var subtable = document.createElement("table");
+                            var comments = '';
                             for (var s = 0; s < record[j].length; s++) {
-                                var subRow = subtable.insertRow();
-                                var subCell = subRow.insertCell();
-                                subCell.innerHTML = record[j][s] ? ('<div>' + record[j][s] + '</div>') : '';
+                                comments += record[j][s] ? ('<p>' + record[j][s] + '</p>') : '';
                             }
-                            cell.append(subtable);
+                            cell.innerHTML = comments;
                         } else {
                             cell.innerHTML = (record[j] !== null && record[j] !== '') ? ('<div>' + record[j] + '</div>') : '';
-                            cell.className = 'col_' + [j];
                         }
                     }
                 }
@@ -174,6 +188,7 @@
             xhr.open("POST", preparePrint.url);
             xhr.setRequestHeader('tawasol-auth-header', encodeURI(preparePrint.token));
             xhr.setRequestHeader('Content-type', encodeURI('text/plain;charset=UTF-8'));
+            console.log(currentDocument);
             xhr.send(currentDocument);
             xhr.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
