@@ -1077,7 +1077,7 @@ module.exports = function (app) {
          * @description transfer bulk workItems.
          * @param workItems
          */
-        self.transferSingleWorkItemBulk = function (workItems) {
+        self.transferBulkWorkItems = function (workItems) {
             return $http
                 .put(urlService.userInbox + '/reassign/bulk', _.map(workItems, function (workItem) {
                     return {
@@ -1156,12 +1156,11 @@ module.exports = function (app) {
         /**
          * @description open transfer dialog to select user to transfer.
          * @param workItems
+         * @param currentFollowedUpOu
          * @param currentFollowedUpUser
          * @param $event
          */
-        self.openTransferDialog = function (workItems, currentFollowedUpUser, $event) {
-            var isArray = angular.isArray(workItems);
-
+        self.openTransferDialog = function (workItems, currentFollowedUpOu, currentFollowedUpUser, $event) {
             return dialog
                 .showDialog({
                     templateUrl: cmsTemplate.getPopup('transfer-mail'),
@@ -1170,30 +1169,33 @@ module.exports = function (app) {
                     targetEvent: $event,
                     locals: {
                         workItems: workItems,
-                        isArray: isArray,
+                        currentFollowedUpOu: currentFollowedUpOu,
                         currentFollowedUpUser: currentFollowedUpUser
                     },
                     resolve: {
-                        organizations: function (organizationService) {
+                        organizations: function (distributionWFService) {
                             'ngInject';
-                            return organizationService.getOrganizationsByRegOU(employeeService.getEmployee().getRegistryOUID());
+                            return distributionWFService
+                                .loadDistWorkflowOrganizations('organizations')
+                                .then(function (result) {
+                                    return result;
+                                })
+                                .catch(function (error) {
+                                    return [];
+                                })
                         },
                         comments: function (userCommentService) {
                             'ngInject';
-                            /*return userCommentService.getUserComments()
-                                .then(function (result) {
-                                    return _.filter(result, 'status');
-                                });*/
                             return userCommentService.loadUserCommentsForDistribution();
                         }
                     }
                 })
                 .then(function (workItems) {
                     var promise;
-                    if (!isArray) {
+                    if (!angular.isArray(workItems)) {
                         promise = self.transferSingleWorkItem(workItems);
                     } else {
-                        promise = self.transferSingleWorkItemBulk(workItems);
+                        promise = self.transferBulkWorkItems(workItems);
                     }
                     return promise;
                 });

@@ -2,11 +2,16 @@ module.exports = function (app) {
     app.controller('transferMailPopCtrl', function (workItems,
                                                     correspondenceService,
                                                     dialog,
-                                                    isArray,
                                                     organizations,
+                                                    currentFollowedUpOu,
                                                     currentFollowedUpUser,
                                                     ouApplicationUserService,
-                                                    comments) {
+                                                    comments,
+                                                    _,
+                                                    langService,
+                                                    Information,
+                                                    distributionWFService,
+                                                    generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'transferMailPopCtrl';
@@ -17,11 +22,11 @@ module.exports = function (app) {
         // workItems
         self.workItems = angular.copy(workItems);
         // if it is bulk workItems.
-        self.isArray = isArray;
+        self.isArray = angular.isArray(workItems);
         // all comments
         self.comments = comments;
-        // all reg ou's for the user
-        self.organizations = organizations;
+        // current followed up ou
+        self.currentFollowedUpOu = currentFollowedUpOu;
         // current followed up user
         self.currentFollowedUpUser = currentFollowedUpUser;
         // all ouApplication users
@@ -32,21 +37,77 @@ module.exports = function (app) {
         self.selectedApplicationUser = null;
 
         self.selectedUserDomain = null;
+        self.ouSearchText = '';
+        self.appUserSearchText = '';
         self.commentSearchText = '';
+
+        var _mapRegOUSections = function () {
+            // filter all regOU (has registry)
+            var regOus = _.filter(organizations, function (item) {
+                    return item.hasRegistry;
+                }),
+                // filter all sections (no registry)
+                sections = _.filter(organizations, function (ou) {
+                    return !ou.hasRegistry;
+                }),
+                // registry parent organization
+                parentRegistryOu;
+
+            // To show (regou - section), append the dummy property "tempRegOUSection"
+            regOus = _.map(regOus, function (regOu) {
+                regOu.tempRegOUSection = new Information({
+                    arName: regOu.arName,
+                    enName: regOu.enName
+                });
+                return regOu;
+            });
+            sections = _.map(sections, function (section) {
+                parentRegistryOu = (section.regouId || section.regOuId);
+                if (typeof parentRegistryOu === 'number') {
+                    parentRegistryOu = _.find(organizations, function (ou) {
+                        return ou.id === parentRegistryOu;
+                    })
+                }
+
+                section.tempRegOUSection = new Information({
+                    arName: ((parentRegistryOu) ? parentRegistryOu.arName + ' - ' : '') + section.arName,
+                    enName: ((parentRegistryOu) ? parentRegistryOu.enName + ' - ' : '') + section.enName
+                });
+                return section;
+            });
+
+            // sort regOu-section
+            return _.sortBy([].concat(regOus, sections), [function (ou) {
+                return ou.tempRegOUSection[langService.current + 'Name'].toLowerCase();
+            }]);
+        };
+        self.organizations = _mapRegOUSections();
 
         self.setSelectedReason = function () {
             self.reason = self.selectedComment.getComment();
         };
+
+        function _setCustomAppUser(userDomain) {
+            if (!self.isArray) {
+                self.workItems.domainName = userDomain;
+            } else {
+                _.map(self.workItems, function (item) {
+                    item.domainName = userDomain;
+                    return item;
+                });
+            }
+        }
 
         self.setSelectedUser = function () {
             self.selectedUserDomain = null;
             if (self.selectedApplicationUser) {
                 self.selectedUserDomain = self.selectedApplicationUser.domainName;
             }
+            _setCustomAppUser(generator.getNormalizedValue(self.selectedApplicationUser, 'domainName'));
         };
 
         self.itemNeedReason = function () {
-            if (!isArray)
+            if (!self.isArray)
                 return !self.reason;
 
             return _.some(self.workItems, function (workItem) {
@@ -55,7 +116,7 @@ module.exports = function (app) {
         };
 
         self.itemNeedUser = function () {
-            if (!isArray)
+            if (!self.isArray)
                 return !self.selectedApplicationUser;
 
             return _.some(self.workItems, function (workItem) {
@@ -72,53 +133,43 @@ module.exports = function (app) {
         };
 
         self.transferMail = function () {
+            var data = null;
             if (!self.isArray) {
                 var info = workItems.getInfo();
-                return dialog.hide({
+                data = {
                     wobNumber: info.wobNumber,
                     comment: self.reason,
                     user: self.selectedUserDomain,
                     appUserOUID: self.selectedOrganization
-                });
+                };
             } else {
-                dialog.hide(_.map(self.workItems, function (workItem) {
-                    if (!self.hasCustomReason(workItem)) {
-                        workItem.comment = self.reason;
-                    }
-
-                    if (!self.hasCustomUser(workItem)) {
-                        workItem.user = self.selectedUserDomain
-                    }
-                    else {
-                        workItem.user = workItem.domainName;
-                    }
+                data = _.map(self.workItems, function (workItem) {
+                    workItem.comment = self.hasCustomReason(workItem) ? workItem.reason : self.reason;
+                    workItem.user = workItem.domainName;
                     workItem.appUserOUID = self.selectedOrganization;
                     return workItem;
-                }));
+                });
             }
+            dialog.hide(data);
         };
 
         /**
          * @description Get the Application Users for the selected Organization
          */
-        self.getApplicationUsersForOU = function ($event) {
+        self.getAppUsersForOU = function ($event) {
             self.selectedApplicationUser = null;
-            return ouApplicationUserService.loadRelatedOUApplicationUsers(self.selectedOrganization)
+            return distributionWFService
+                .searchUsersByCriteria({ou: self.selectedOrganization})
                 .then(function (result) {
+                    // transfer should not be to current user in current ou
                     result = _.filter(result, function (item) {
-                        return item.applicationUser.id !== self.currentFollowedUpUser.id;
+                        return !(item.id === generator.getNormalizedValue(self.currentFollowedUpUser, 'id')
+                            && item.ouId === generator.getNormalizedValue(self.currentFollowedUpOu, 'id'));
                     });
-                    self.ouApplicationUsers = result;
+                    self.applicationUsers = result;
                     self.selectedApplicationUser = null;
-                    if (!self.isArray) {
-                        self.workItems.domainName = null;
-                    }
-                    else {
-                        self.workItems = _.map(self.workItems, function (workItem) {
-                            workItem.domainName = null;
-                            return workItem;
-                        });
-                    }
+                    _setCustomAppUser(null);
+                    self.inProgress = false;
                     return result;
                 });
         };

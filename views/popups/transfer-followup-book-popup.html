@@ -146,9 +146,10 @@
                                         <div>
                                             <md-input-container>
                                                 <label for="customAppUser">{{lang.select_user}}</label>
-                                                <md-select id="customAppUser" ng-model="record.customAppUser">
+                                                <md-select id="customAppUser"
+                                                           ng-model="record.customAppUser"
+                                                           ng-model-options="{trackBy: '$value'}">
                                                     <md-option ng-value="user.id"
-                                                               ng-model-options="{trackBy: '$value'}"
                                                                ng-repeat="user in ctrl.applicationUsers">
                                                         {{user.getTranslatedName()}}
                                                     </md-option>

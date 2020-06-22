@@ -8,31 +8,59 @@
                 <div layout="column">
                     <div layout="row">
                         <md-input-container flex>
-                            <label for="selectedApplicationUser">{{lang.organization_unit}}</label>
-                            <md-select name="organization" id="organization" required
-                                       ng-change="ctrl.getApplicationUsersForOU($event)"
+                            <label for="organization">{{lang.organization_unit}}</label>
+                            <md-select id="organization" name="organization"
+                                       ng-required="true"
+                                       ng-change="ctrl.getAppUsersForOU($event)"
                                        aria-label="{{lang.organization_unit}}"
-                                       ng-model="ctrl.selectedOrganization">
-                                <md-option ng-value="ou.id" ng-repeat="ou in ctrl.organizations track by $index">
-                                    {{ou.getTranslatedName()}}
+                                       ng-model="ctrl.selectedOrganization"
+                                       md-on-close="ctrl.clearSearchText('ou')"
+                                       ng-model-options="{trackBy: '$value'}"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.ouSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option
+                                        ng-repeat="organization in ctrl.organizations | translatedNameFilter: ctrl.ouSearchText : 'getNameByLanguageRegOUSection'"
+                                        ng-value="organization.id">
+                                        <span
+                                                md-highlight-text="ctrl.ouSearchText"
+                                                md-highlight-flags="i">{{organization.getTranslatedNameRegOUSection()}}</span>
                                 </md-option>
                             </md-select>
+                            <div ng-messages="reason_form.organization.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
                         </md-input-container>
-                    </div>
-                    <div layout="row">
                         <md-input-container flex>
-                            <label for="selectedApplicationUser">{{lang.select_user}}</label>
-                            <md-select name="selectedApplicationUser" id="selectedApplicationUser"
+                            <label for="applicationUser">{{lang.select_user}}</label>
+                            <md-select name="applicationUser" id="applicationUser"
                                        ng-change="ctrl.setSelectedUser()"
                                        ng-required="ctrl.selectedOrganization"
                                        ng-disabled="!ctrl.selectedOrganization"
                                        aria-label="{{lang.select_user}}"
-                                       ng-model="ctrl.selectedApplicationUser">
-                                <md-option ng-value="user.applicationUser"
-                                           ng-repeat="user in ctrl.ouApplicationUsers track by $index">
-                                    {{user.getTranslatedApplicationUserName()}}
+                                       ng-model="ctrl.selectedApplicationUser"
+                                       ng-model-options="{trackBy: '$value.id'}"
+                                       md-on-close="ctrl.clearSearchText('appUser')"
+                                       data-md-container-class="select-header-container sticky-search-bar">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.appUserSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option ng-value="user"
+                                           ng-repeat="user in ctrl.applicationUsers | translatedNameFilter: ctrl.appUserSearchText">
+                                       <span md-highlight-text="ctrl.appUserSearchText"
+                                             md-highlight-flags="i">{{user.getTranslatedName()}}</span>
                                 </md-option>
                             </md-select>
+                            <div ng-messages="reason_form.applicationUser.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
                         </md-input-container>
                     </div>
                     <div layout="row">
@@ -125,10 +153,12 @@
                                         <div>
                                             <md-input-container>
                                                 <label for="domainName">{{lang.select_user}}</label>
-                                                <md-select id="domainName" ng-model="workItem.domainName">
-                                                    <md-option ng-value="user.applicationUser.domainName"
-                                                               ng-repeat="user in ctrl.ouApplicationUsers">
-                                                        {{user.applicationUser.getTranslatedName()}}
+                                                <md-select id="domainName"
+                                                           ng-model="workItem.domainName"
+                                                           ng-model-options="{trackBy: '$value'}">
+                                                    <md-option ng-value="user.domainName"
+                                                               ng-repeat="user in ctrl.applicationUsers">
+                                                        {{user.getTranslatedName()}}
                                                     </md-option>
                                                 </md-select>
                                             </md-input-container>

@@ -151,14 +151,7 @@ module.exports = function (app) {
                     });
                     self.applicationUsers = result;
                     self.selectedApplicationUser = null;
-                    if (!self.isArray) {
-                        self.records.customAppUser = null;
-                    } else {
-                        self.records = _.map(self.records, function (item) {
-                            item.customAppUser = null;
-                            return item;
-                        });
-                    }
+                    _setCustomAppUser(null);
                     self.inProgress = false;
                     return result;
                 });
