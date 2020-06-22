@@ -4,6 +4,7 @@ module.exports = function (app) {
                                             $timeout,
                                             generator,
                                             langService,
+                                            counterService,
                                             queueStatusService,
                                             $q,
                                             dialog,
@@ -952,11 +953,15 @@ module.exports = function (app) {
             };
 
             Correspondence.prototype.addToMyDirectFollowUp = function () {
-                return followUpUserService.addCorrespondenceToMyFollowUp(this);
+                return followUpUserService.addCorrespondenceToMyFollowUp(this).then(function () {
+                    return counterService.loadCounters();
+                });
             };
 
             Correspondence.prototype.addToUserFollowUp = function () {
-                return followUpUserService.addCorrespondenceToEmployeeFollowUp(this);
+                return followUpUserService.addCorrespondenceToEmployeeFollowUp(this).then(function () {
+                    return counterService.loadCounters();
+                });
             };
 
             // don't remove CMSModelInterceptor from last line

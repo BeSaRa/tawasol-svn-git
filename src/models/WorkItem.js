@@ -3,6 +3,7 @@ module.exports = function (app) {
                                       langService,
                                       Indicator,
                                       Information,
+                                      counterService,
                                       ResolveDefer,
                                       $sce,
                                       taskService,
@@ -931,11 +932,15 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.addToMyDirectFollowUp = function () {
-                return followUpUserService.addCorrespondenceToMyFollowUp(this);
+                return followUpUserService.addCorrespondenceToMyFollowUp(this).then(function () {
+                    return counterService.loadCounters();
+                });
             };
 
             WorkItem.prototype.addToUserFollowUp = function () {
-                return followUpUserService.addCorrespondenceToEmployeeFollowUp(this);
+                return followUpUserService.addCorrespondenceToEmployeeFollowUp(this).then(function () {
+                    return counterService.loadCounters();
+                });
             };
 
             // don't remove CMSModelInterceptor from last line
