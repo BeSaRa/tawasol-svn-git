@@ -86,6 +86,10 @@
                    ng-disabled="!ctrl.mergedLinkedDocHistoryEvents.length">
             {{lang.print}}
         </md-button>
+        <md-button class="md-raised md-primary" ng-click="ctrl.printSheetFromWebPage($event)"
+                   ng-disabled="ctrl.checkDisabled($event)">
+            {{lang.web_print}}
+        </md-button>
         <md-button class="md-raised red-text" ng-click="ctrl.closeMergedLinkedDocHistoryEventsPopupFromCtrl()">
             {{lang.close}}
         </md-button>

@@ -62,6 +62,10 @@ module.exports = function (app) {
             viewTrackingSheetService.controllerMethod.viewTrackingSheetPrint('merged_linked_document_history_events', langService.get('view_tracking_sheet_actions') + ' : ' + self.mergedLinkedDocHistorySubject);
         };
 
+        self.printSheetFromWebPage = function ($event) {
+            viewTrackingSheetService.controllerMethod.viewTrackingSheetWebPage('merged_linked_document_history_events', langService.get('view_tracking_sheet_actions') + ' : ' + self.mergedLinkedDocHistorySubject);
+        };
+
         /**
          * @description Close the popup
          */
