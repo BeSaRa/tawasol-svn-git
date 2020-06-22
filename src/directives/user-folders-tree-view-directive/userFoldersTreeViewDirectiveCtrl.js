@@ -55,7 +55,7 @@ module.exports = function (app) {
         self.removeUserFolder = function (folders, $event) {
             var array = [folders.id];
             getChildIds(folders, array);
-
+            // if user followup folder or normal folder
             if (self.followup) {
                 followUpUserService
                     .controllerMethod

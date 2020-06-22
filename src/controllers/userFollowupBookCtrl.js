@@ -230,6 +230,16 @@ module.exports = function (app) {
                     .followupFolderDeleteBulk(array.reverse(), $event)
                     .then(function () {
                         self.reloadFollowupFolders();
+                    })
+                    .catch(function (error) {
+                        var code = error.hasOwnProperty('data') && error.data ? error.data.ec : error;
+                        if (code === 1005) { // 1005 (FAILED_DUE_TO_LINKED_OBJECT)
+                            return dialog.confirmMessage(langService.get('can_not_delete_folder_has_followup_data_confirm_move'))
+                                .then(function () {
+                                    followUpUserService.openMoveTerminatedBooksDialog(folder.id, array);
+                                })
+                        }
+                        return $q.reject(error);
                     });
             };
 
