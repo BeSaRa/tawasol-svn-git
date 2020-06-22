@@ -777,7 +777,8 @@ module.exports = function (app) {
                                 record.getTranslatedAction(),
                                 //record.documentCreationDate_vts,
                                 record.actionDate_vts,
-                                _splitToNumberOfWords(record.comments || '', splitNumber)
+                                record.comments
+                                // _splitToNumberOfWords(record.comments || '', splitNumber)
                             ]);
                         }
                     }
@@ -865,7 +866,8 @@ module.exports = function (app) {
                                 record.getTranslatedAction(),
                                 record.documentCreationDate_vts,
                                 record.actionDate_vts,
-                                _splitToNumberOfWords(record.comments || '', splitNumber)
+                                record.comments
+                                //_splitToNumberOfWords(record.comments || '', splitNumber)
                             ]);
                         }
                     }
@@ -1021,7 +1023,8 @@ module.exports = function (app) {
                                 record.getTranslatedAction(),
                                 //record.documentCreationDate_vts,
                                 record.actionDate_vts,
-                                _splitToNumberOfWords(record.comments || '', splitNumber)
+                                record.comments
+                                //  _splitToNumberOfWords(record.comments || '', splitNumber)
                             ]);
                         }
                     }
@@ -1047,7 +1050,8 @@ module.exports = function (app) {
                                 record.actionByOUInfo.getTranslatedName(),
                                 record.actionToInfo.getTranslatedName(),
                                 record.actionTypeInfo.getTranslatedName(),
-                                _splitToNumberOfWords(record.comments || '', splitNumber)
+                                record.comments
+                               // _splitToNumberOfWords(record.comments || '', splitNumber)
                             ]);
                         }
                     }

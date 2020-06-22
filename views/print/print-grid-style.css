@@ -38,9 +38,11 @@ table tbody tr td {
     max-width: 200px;
 }
 
+/*
 span {
     white-space: pre;
 }
+*/
 
 table tbody tr table {
     border: 1px rgba(0, 0, 0, 0.12) solid;
