@@ -14,7 +14,6 @@ module.exports = function (app) {
 
             delete model.customAppUser;
             delete model.reason;
-            delete model.comment;
             delete model.user;
 
             return model;

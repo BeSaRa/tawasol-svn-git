@@ -124,9 +124,6 @@
                                     <th md-column>
                                         <span>{{lang.reason}}</span>
                                     </th>
-                                    <th md-column>
-                                        <span>{{lang.username}}</span>
-                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody md-body>
@@ -140,21 +137,6 @@
                                                        ng-click="ctrl.openReasonDialog(record , $event)">
                                                 {{lang.custom_reason}}
                                             </md-button>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div>
-                                            <md-input-container>
-                                                <label for="customAppUser">{{lang.select_user}}</label>
-                                                <md-select id="customAppUser"
-                                                           ng-model="record.customAppUser"
-                                                           ng-model-options="{trackBy: '$value'}">
-                                                    <md-option ng-value="user.id"
-                                                               ng-repeat="user in ctrl.applicationUsers">
-                                                        {{user.getTranslatedName()}}
-                                                    </md-option>
-                                                </md-select>
-                                            </md-input-container>
                                         </div>
                                     </td>
                                 </tr>

@@ -1049,7 +1049,5 @@ module.exports = function (app) {
                     })
             };
         }
-    )
-    ;
-}
-;
+    );
+};
