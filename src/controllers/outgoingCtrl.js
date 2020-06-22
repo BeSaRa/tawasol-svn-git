@@ -785,7 +785,7 @@ module.exports = function (app) {
         self.resetAddCorrespondence = function ($event) {
             self.outgoing = new Outgoing({
                 ou: self.employee.getOUID(),
-                addMethod: 0,
+                addMethod: self.employee.isBacklogMode() ? 1 : 0,
                 createdOn: new Date(),
                 docDate: new Date(),
                 registryOU: self.employee.getRegistryOUID(),

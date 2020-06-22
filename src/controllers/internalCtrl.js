@@ -629,7 +629,7 @@ module.exports = function (app) {
             //ou: self.employee.organization.ouid,
             self.internal = new Internal({
                 ou: self.employee.getOUID(),
-                addMethod: 0,
+                addMethod: self.employee.isBacklogMode() ? 1 : 0,
                 createdOn: new Date(),
                 docDate: new Date(),
                 registryOU: self.employee.getRegistryOUID(),
