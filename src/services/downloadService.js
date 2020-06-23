@@ -450,6 +450,9 @@ module.exports = function (app) {
                     errorCode.checkIf(error, "INVALID_LINK", function () {
                         toast.error(langService.get('otp_failed_to_download'));
                     });
+                    errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
+                        dialog.errorMessage(generator.getTranslatedError(error) || langService.get('certificate_missing'));
+                    });
                 };
                 reader.readAsText(error.data);
                 return $q.reject('INVALID_LINK');
