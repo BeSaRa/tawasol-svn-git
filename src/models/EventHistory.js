@@ -241,7 +241,10 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 return managerService.manageDocumentAttachments.apply(managerService, [this, info.vsId, info.documentClass, info.title, $event]);
             };
-
+            EventHistory.prototype.manageDocumentComments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentComments.apply(managerService, [this, info.vsId, info.title, $event]);
+            };
             EventHistory.prototype.viewUserSentItem = function (actions, gridName, $event) {
                 return viewDocumentService.viewUserSentDocument(this, actions, gridName, $event);
             };
