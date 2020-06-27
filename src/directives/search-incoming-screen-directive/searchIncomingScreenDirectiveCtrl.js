@@ -1480,9 +1480,7 @@ module.exports = function (app) {
                 callback: self.createReply,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    var info = model.getInfo(),
-                        employee = employeeService.getEmployee();
-                    return (info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'));
+                    return model.checkCreateReplyPermission();
                 }
             },
             // Launch Distribution Workflow

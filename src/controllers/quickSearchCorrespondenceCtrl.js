@@ -850,11 +850,7 @@ module.exports = function (app) {
                 callback: self.createReply,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    var info = model.getInfo(),
-                        employee = employeeService.getEmployee();
-                    return ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
-                        || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL'))
-                    ) && !model.needApprove() && !model.isBroadcasted();
+                    return model.checkCreateReplyPermission() && !model.needApprove() && !model.isBroadcasted();
                 }
             },
             // Broadcast

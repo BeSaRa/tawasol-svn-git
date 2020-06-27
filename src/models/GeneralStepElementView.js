@@ -9,7 +9,8 @@ module.exports = function (app) {
                                                     Internal,
                                                     Incoming,
                                                     Information,
-                                                    $sce) {
+                                                    $sce,
+                                                    employeeService) {
         'ngInject';
         return function GeneralStepElementView(model) {
             var self = this, correspondenceService,
@@ -128,6 +129,26 @@ module.exports = function (app) {
                     return 1;
                 }
                 return 0;
+            };
+
+            /**
+             * @description Check if book has create reply permission
+             */
+            GeneralStepElementView.prototype.checkCreateReplyPermission = function () {
+                var info = this.getInfo();
+                var employee = employeeService.getEmployee();
+                return ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
+                    || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL')));
+            };
+
+            /**
+             * @description Check if book has electronic signature permission
+             */
+            GeneralStepElementView.prototype.checkElectronicSignaturePermission = function () {
+                var info = this.getInfo();
+                var employee = employeeService.getEmployee();
+                return ((info.documentClass === 'outgoing' && employee.hasPermissionTo('ELECTRONIC_SIGNATURE')) ||
+                    (info.documentClass === 'internal' && employee.hasPermissionTo('ELECTRONIC_SIGNATURE_MEMO')))
             };
 
             // don't remove CMSModelInterceptor from last line
