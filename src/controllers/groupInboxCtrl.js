@@ -1082,12 +1082,9 @@ module.exports = function (app) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
                 checkShow: function (action, model) {
-                    var info = model.getInfo(),
-                        employee = employeeService.getEmployee();
+                    var info = model.getInfo();
                     // if docFullSerial exists, its either paper or electronic approved document
-                    return ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
-                        || (info.documentClass === 'internal') && employee.hasPermissionTo('CREATE_REPLY_INTERNAL')
-                    ) && !!info.docFullSerial;
+                    return model.checkCreateReplyPermission() && !!info.docFullSerial;
                 }
             },
             // Forward

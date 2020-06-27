@@ -922,7 +922,17 @@ module.exports = function (app) {
             };
 
             /**
-             * @description
+             * @description Check if book has create reply permission
+             */
+            WorkItem.prototype.checkCreateReplyPermission = function () {
+                var info = this.getInfo();
+                var employee = employeeService.getEmployee();
+                return ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
+                    || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL')));
+            };
+
+            /**
+             * @description Check if book has electronic signature permission
              */
             WorkItem.prototype.checkElectronicSignaturePermission = function () {
                 var info = this.getInfo();

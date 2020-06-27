@@ -1108,12 +1108,9 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'CREATE_REPLY',
                 checkShow: function (action, model) {
-                    var info = model.getInfo(),
-                        employee = employeeService.getEmployee();
+                    var info = model.getInfo();
                     // if docFullSerial exists, its either paper or electronic approved document
-                    return ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
-                        || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL'))
-                    ) && !!info.docFullSerial && !model.isBroadcasted();
+                    return model.checkCreateReplyPermission() && !!info.docFullSerial && !model.isBroadcasted();
                     //return info.documentClass === "incoming" && !model.isBroadcasted();
                 }
             },

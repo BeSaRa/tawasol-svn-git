@@ -964,6 +964,16 @@ module.exports = function (app) {
                 });
             };
 
+            /**
+             * @description Check if book has create reply permission
+             */
+            Correspondence.prototype.checkCreateReplyPermission = function () {
+                var info = this.getInfo();
+                var employee = employeeService.getEmployee();
+                return ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
+                    || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL')));
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Correspondence', 'init', this);

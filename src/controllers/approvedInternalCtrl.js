@@ -956,7 +956,7 @@ module.exports = function (app) {
                 callback: self.createReply,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return employeeService.getEmployee().hasPermissionTo('CREATE_REPLY_INTERNAL') && !model.isBroadcasted();
+                    return model.checkCreateReplyPermission() && !model.isBroadcasted();
                 }
             },
             // Launch Distribution Workflow
