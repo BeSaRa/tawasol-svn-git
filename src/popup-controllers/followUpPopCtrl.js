@@ -32,7 +32,7 @@ module.exports = function (app) {
 
         self.minDate = new Date();
         //self.minDate.setDate(self.minDate.getDate() + 1);
-        self.minDate.setHours(0, 0, 0);
+        self.minDate.setHours(0, 0, 0, 0);
         self.minDateString = moment(self.minDate).format(generator.defaultDateFormat);
 
         // if no followupDate, set followupDate from organization SLA
@@ -177,7 +177,7 @@ module.exports = function (app) {
          * @returns {boolean|*|null}
          */
         self.isValidFollowup = function (form) {
-            var isValid = form.$valid && !self.inProgress && (self.model.followupDate && self.model.followupDate >= self.minDate);
+            var isValid = form.$valid && !self.inProgress && (!!self.model.followupDate && generator.getTimeStampFromDate(self.model.followupDate) >= generator.getTimeStampFromDate(self.minDate));
             if (addToMyFollowup) {
                 return isValid;
             }

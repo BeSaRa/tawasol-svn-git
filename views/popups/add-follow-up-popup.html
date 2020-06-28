@@ -4,7 +4,7 @@
     <popup-toolbar-directive header-text="{{lang.follow_up_to + ' : ' + ctrl.model.docSubject}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
         <div class="md-dialog-content cms-dialog-content">
-            <form name="followupForm" layout="column">
+            <form name="followupForm" layout="column" force-dirty="true">
                 <div layout="row" ng-if="!ctrl.addToMyFollowup">
                     <md-input-container flex>
                         <label for="organization">{{lang.organization_unit}}</label>

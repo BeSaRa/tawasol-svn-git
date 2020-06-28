@@ -9,7 +9,8 @@ module.exports = function (app) {
                     $timeout(function () {
                         //console.log('formDirective', scope, element, attrs, ctrl);
                         var control;
-                        if (scope.hasOwnProperty('ctrl') && scope.ctrl && scope.ctrl.hasOwnProperty('editMode') && !!scope.ctrl.editMode) {
+                        if ((scope.hasOwnProperty('ctrl') && scope.ctrl && scope.ctrl.hasOwnProperty('editMode') && !!scope.ctrl.editMode)
+                            || attrs.hasOwnProperty('forceDirty') && attrs.forceDirty === 'true') {
                             for (var i = 0; i < ctrl.$$controls.length; i++) {
                                 control = ctrl.$$controls[i];
                                 if (typeof control.$setTouched !== 'undefined' && typeof control.$setTouched === 'function') {
