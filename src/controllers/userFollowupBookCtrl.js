@@ -389,6 +389,42 @@ module.exports = function (app) {
                     });
             };
 
+        /**
+         * @description Send SMS
+         * @param record
+         * @param $event
+         * @param defer
+         */
+        self.sendSMS = function (record, $event, defer) {
+            record
+                .openSendSMSDialog($event, employeeService.getEmployee())
+                .then(function () {
+                    return self.reloadFollowupBooks(self.grid.page)
+                        .then(function (result) {
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
+        /**
+         * @description Sends the reminder email to specific user
+         * @param record
+         * @param $event
+         * @param defer
+         */
+        self.sendReminderEmailToUser = function (record, $event, defer) {
+            record
+                .sendReminderEmail(null, $event)
+                .then(function (result) {
+                    if (result) {
+                        return self.reloadFollowupBooks(self.grid.page)
+                            .then(function (result) {
+                                new ResolveDefer(defer);
+                            });
+                    }
+                });
+        };
+
             /**
              * @description Subscribe
              * @param record
@@ -646,6 +682,45 @@ module.exports = function (app) {
                             callback: self.manageComments,
                             class: "action-green",
                             sticky: true,
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        }
+                    ]
+                },
+                // Send
+                {
+                    type: 'action',
+                    icon: 'send',
+                    text: 'grid_action_send',
+                    checkShow: function (action, model) {
+                        return gridService.checkToShowMainMenuBySubMenu(action, model);
+                    },
+                    permissionKey: [
+                        "SEND_SMS",
+                        ""
+                    ],
+                    checkAnyPermission: true,
+                    subMenu: [
+                        // SMS
+                        {
+                            type: 'action',
+                            icon: 'message',
+                            text: 'grid_action_send_sms',
+                            permissionKey: "SEND_SMS",
+                            callback: self.sendSMS,
+                            class: "action-green",
+                            checkShow: function (action, model) {
+                                return true;
+                            }
+                        },
+                        // send reminder email to user
+                        {
+                            type: 'action',
+                            icon: 'message',
+                            text: 'grid_action_send_email_reminder',
+                            callback: self.sendReminderEmailToUser,
+                            class: "action-green",
                             checkShow: function (action, model) {
                                 return true;
                             }
