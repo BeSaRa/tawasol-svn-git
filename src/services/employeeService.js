@@ -159,7 +159,7 @@ module.exports = function (app) {
          * @param applicationUser
          */
         self.isCurrentEmployee = function (applicationUser) {
-            if (!employee){
+            if (!employee) {
                 return false;
             }
             var id = applicationUser.hasOwnProperty('id') ? applicationUser.id : applicationUser;
@@ -178,6 +178,18 @@ module.exports = function (app) {
             var userId = ouApplicationUser.applicationUser.hasOwnProperty('id') ? ouApplicationUser.applicationUser.id : ouApplicationUser.applicationUser;
             var employeeOuId = (employee.organization.ouid && employee.organization.ouid.hasOwnProperty('id')) ? employee.organization.ouid.id : employee.organization.ouid;
             return employee.id === userId && employeeOuId === ouAppUserOuId;
+        };
+        /**
+         * @default to check if the given applicationUser same current employee.
+         * @param applicationUser
+         * @return {boolean}
+         */
+        self.isCurrentApplicationUser = function (applicationUser) {
+            // cladmin user
+            if (!employee || !employee.organization)
+                return false;
+
+            return employee.id === generator.getNormalizedValue(applicationUser, 'id');
         };
         /**
          * @description set current Employee from Updated application User.
@@ -234,7 +246,7 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.isClAdmin = function () {
-            if (!employee){
+            if (!employee) {
                 return false;
             }
             return !employee.organization || !employee.organization.hasOwnProperty('ouid') || employee.organization.ouid === -1;

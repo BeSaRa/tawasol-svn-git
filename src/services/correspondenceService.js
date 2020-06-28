@@ -4181,6 +4181,11 @@ module.exports = function (app) {
                         if (!receivingUser) {
                             return null;
                         }
+
+                        if (employeeService.isCurrentApplicationUser(receivingUser)) {
+                            return generator.getNormalizedValue(receivingUser, 'mobile');
+                        }
+
                         return applicationUserDefer.promise.then(function (applicationUsers) {
                             var user = _.find(applicationUsers, function (item) {
                                 return generator.getNormalizedValue(receivingUser, 'id') === generator.getNormalizedValue(item, 'id');

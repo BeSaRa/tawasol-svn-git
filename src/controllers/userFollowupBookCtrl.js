@@ -414,7 +414,7 @@ module.exports = function (app) {
          */
         self.sendReminderEmailToUser = function (record, $event, defer) {
             record
-                .sendReminderEmail(null, $event)
+                .sendReminderEmail(employeeService.getEmployee().email, $event)
                 .then(function (result) {
                     if (result) {
                         return self.reloadFollowupBooks(self.grid.page)
