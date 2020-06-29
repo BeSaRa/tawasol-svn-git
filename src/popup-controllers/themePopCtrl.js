@@ -53,7 +53,7 @@ module.exports = function (app) {
          * Add new theme
          */
         self.addThemeFromCtrl = function () {
-            console.log(theme);
+           // console.log(theme);
             validationService
                 .createValidation('ADD_THEME')
                 .addStep('check_required', true, generator.checkRequiredFields, self.theme, function (result) {

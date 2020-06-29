@@ -77,7 +77,6 @@ module.exports = function (app) {
                 } else {
                     slaOu = organizationForSLA;
                 }
-                console.log(slaOu);
                 if (slaOu && typeof priorityLevel !== 'undefined' && priorityLevel !== null) {
                     var slaDays = null;
                     // organization has sla property and sla has property as same as document priority level

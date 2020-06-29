@@ -217,7 +217,7 @@ module.exports = function (app) {
          * @description Saves the search criteria
          */
         self.saveSearch = function () {
-            console.log('save search');
+          //  console.log('save search');
         };
 
         self.globalSetting = rootEntity.returnRootEntity().settings;
@@ -422,7 +422,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (searchedOutgoingDocument, $event) {
-            console.log('manage tasks for searched outgoing document : ', searchedOutgoingDocument);
+         //   console.log('manage tasks for searched outgoing document : ', searchedOutgoingDocument);
         };
 
         /**
@@ -586,7 +586,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.createCopy = function (searchedOutgoingDocument, $event) {
-            console.log('create copy for searched outgoing document : ', searchedOutgoingDocument);
+           // console.log('create copy for searched outgoing document : ', searchedOutgoingDocument);
         };
 
         /**

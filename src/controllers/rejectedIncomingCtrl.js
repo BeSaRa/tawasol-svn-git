@@ -437,7 +437,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.security = function (rejectedIncoming, $event) {
-            console.log('manage security : ', rejectedIncoming);
+          //  console.log('manage security : ', rejectedIncoming);
         };
 
         /**

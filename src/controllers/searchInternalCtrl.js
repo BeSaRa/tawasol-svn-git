@@ -214,7 +214,7 @@ module.exports = function (app) {
          * @description Saves the search criteria
          */
         self.saveSearch = function () {
-            console.log('save search');
+          //  console.log('save search');
         };
 
 
@@ -440,7 +440,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (searchedInternalDocument, $event) {
-            console.log('manage tasks for searched internal document : ', searchedInternalDocument);
+          //  console.log('manage tasks for searched internal document : ', searchedInternalDocument);
         };
 
         /**
@@ -604,7 +604,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.createCopy = function (searchedInternalDocument, $event) {
-            console.log('create copy for searched internal document : ', searchedInternalDocument);
+         //   console.log('create copy for searched internal document : ', searchedInternalDocument);
         };
 
         /**

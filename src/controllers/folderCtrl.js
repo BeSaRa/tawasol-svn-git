@@ -384,7 +384,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.subscribe = function (workItem, $event) {
-            console.log('subscribe', workItem);
+           // console.log('subscribe', workItem);
         };
 
         /**
@@ -455,7 +455,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (workItem, $event) {
-            console.log('manageTasks : ', workItem);
+            // console.log('manageTasks : ', workItem);
         };
 
         /**
@@ -508,7 +508,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewDirectLinkedDocuments = function (workItem, $event) {
-            console.log('viewDirectLinkedDocuments : ', workItem);
+          //  console.log('viewDirectLinkedDocuments : ', workItem);
         };
 
         /**
@@ -517,7 +517,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewCompleteLinkedDocuments = function (workItem, $event) {
-            console.log('viewCompleteLinkedDocuments : ', workItem);
+           // console.log('viewCompleteLinkedDocuments : ', workItem);
         };
 
         /**
@@ -648,7 +648,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.signDigitalSignature = function (workItem, $event, defer) {
-            console.log('signDigitalSignature : ', workItem);
+          //  console.log('signDigitalSignature : ', workItem);
         };
 
         /**

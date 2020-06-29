@@ -209,7 +209,6 @@ module.exports = function (app) {
                     return true;
                 })
                 .catch(function (error) {
-                    console.log(error);
                 });
 
         };

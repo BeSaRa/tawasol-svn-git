@@ -294,7 +294,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.security = function (scanIncoming, $event) {
-            console.log('manage security : ', scanIncoming);
+          //  console.log('manage security : ', scanIncoming);
         };
 
         /**

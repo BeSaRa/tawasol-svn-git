@@ -511,7 +511,7 @@ module.exports = function (app) {
                         return applicationUser;
                     })
                     .catch(function (error) {
-                        console.log('addUserFail', error);
+                      //  console.log('addUserFail', error);
                         return $q.reject('addUserFail');
                     });
             }).catch(function (error) {

@@ -17,7 +17,7 @@ module.exports = function (app) {
          * @param placeholders
          */
         self.getTemplateToPrepare = function (template, placeholders) {
-            console.log("PlaceHolders", placeholders);
+           // console.log("PlaceHolders", placeholders);
             var vsId = template.hasOwnProperty('vsId') ? template.vsId : template;
             return $http.put(urlService.prepareTemplate.replace('{{vsId}}', vsId).replace('{{classDescription}}', placeholders.classDescription.toLowerCase()), placeholders)
                 .then(function (result) {

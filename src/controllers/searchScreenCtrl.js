@@ -112,7 +112,7 @@ module.exports = function (app) {
         self.reloadCurrentSearch = function () {
             self.searchScreens[self.selectedTabName].controller.reloadSearchCorrespondence()
                 .then(function () {
-                    console.log('Reloaded Complete ', self.selectedTabName);
+                  //  console.log('Reloaded Complete ', self.selectedTabName);
                 });
         };
         /**

@@ -469,7 +469,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (searchedIncomingDocument, $event) {
-            console.log('manage tasks for searched incoming document : ', searchedIncomingDocument);
+          //  console.log('manage tasks for searched incoming document : ', searchedIncomingDocument);
         };
 
         /**
@@ -628,7 +628,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.createCopy = function (searchedIncomingDocument, $event) {
-            console.log('create copy for searched incoming document : ', searchedIncomingDocument);
+          //  console.log('create copy for searched incoming document : ', searchedIncomingDocument);
         };
 
         /**

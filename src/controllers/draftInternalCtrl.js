@@ -379,7 +379,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (draftInternal, $event) {
-            console.log('manage linked documents', draftInternal);
+          // console.log('manage linked documents', draftInternal);
             var info = draftInternal.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
         };

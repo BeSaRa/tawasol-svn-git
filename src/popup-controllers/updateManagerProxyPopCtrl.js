@@ -9,8 +9,8 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'updateManagerProxyPopCtrl';
-        console.log('users who set proxy', usersWhoSetProxy);
-        console.log('current User', currentUser);
+      //  console.log('users who set proxy', usersWhoSetProxy);
+      //  console.log('current User', currentUser);
         self.availableProxies = availableProxies;
         self.currentUser = currentUser;
         self.proxyUserSearchText = '';

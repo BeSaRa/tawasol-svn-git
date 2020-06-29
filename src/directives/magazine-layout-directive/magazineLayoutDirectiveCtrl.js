@@ -28,7 +28,7 @@ module.exports = function (app) {
         self.page = 1;
 
         self.paginate = function (e) {
-            console.log(self.page);
+           // console.log(self.page);
         };
 
         self.employeeService = employeeService;
@@ -48,8 +48,8 @@ module.exports = function (app) {
 
         function _getItemPosition(item, debug) {
             if (debug) {
-                console.log(self.selectedWorkItems);
-                console.log(self.selectedWorkItems.indexOf(item));
+              //  console.log(self.selectedWorkItems);
+             //   console.log(self.selectedWorkItems.indexOf(item));
             }
             return self.selectedWorkItems.indexOf(item)
         }

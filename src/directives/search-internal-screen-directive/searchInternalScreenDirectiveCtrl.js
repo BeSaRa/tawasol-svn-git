@@ -933,7 +933,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (searchedInternalDocument, $event) {
-            console.log('manage tasks for searched internal document : ', searchedInternalDocument);
+          //  console.log('manage tasks for searched internal document : ', searchedInternalDocument);
         };
 
         /**

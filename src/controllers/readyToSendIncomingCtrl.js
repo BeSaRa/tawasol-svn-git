@@ -369,7 +369,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.security = function (readyToSendIncoming, $event) {
-            console.log('security : ', readyToSendIncoming);
+          //  console.log('security : ', readyToSendIncoming);
         };
 
         /**

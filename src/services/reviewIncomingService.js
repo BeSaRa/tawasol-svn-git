@@ -338,7 +338,7 @@ module.exports = function (app) {
          */
         self.rejectIncomingBulk = function (reviewIncomings) {
             var vsIds = reviewIncomings[0].hasOwnProperty('vsId') ? _.map(reviewIncomings, 'vsId') : reviewIncomings;
-            console.log(urlService.incomings + '/reject/bulk', vsIds);
+           // console.log(urlService.incomings + '/reject/bulk', vsIds);
             return $http
                 .put(urlService.incomings + '/reject/bulk', vsIds)
                 .then(function (result) {

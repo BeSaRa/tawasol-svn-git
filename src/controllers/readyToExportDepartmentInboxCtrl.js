@@ -558,7 +558,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-            console.log('manageReadyToExportTasks : ', readyToExport);
+          //  console.log('manageReadyToExportTasks : ', readyToExport);
         };
 
         /**
@@ -654,7 +654,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-            console.log('viewReadyToExportDirectLinkedDocuments : ', readyToExport);
+           // console.log('viewReadyToExportDirectLinkedDocuments : ', readyToExport);
         };
 
         /**
@@ -667,7 +667,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-            console.log('viewReadyToExportCompleteLinkedDocuments : ', readyToExport);
+           // console.log('viewReadyToExportCompleteLinkedDocuments : ', readyToExport);
         };
 
         /**

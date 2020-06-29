@@ -246,7 +246,7 @@ module.exports = function (app) {
          * @description Saves the search criteria
          */
         self.saveSearch = function () {
-            console.log('save search');
+           // console.log('save search');
         };
 
         self.printResult = function ($event) {
@@ -508,7 +508,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (searchedGeneralDocument, $event) {
-            console.log('manage tasks for searched general document : ', searchedGeneralDocument);
+          //  console.log('manage tasks for searched general document : ', searchedGeneralDocument);
         };
 
         /**
@@ -680,7 +680,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.createCopy = function (searchedGeneralDocument, $event) {
-            console.log('create copy for searched general document : ', searchedGeneralDocument);
+          //  console.log('create copy for searched general document : ', searchedGeneralDocument);
         };
 
         /**

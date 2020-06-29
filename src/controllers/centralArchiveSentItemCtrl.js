@@ -284,7 +284,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (centralArchiveItem, $event) {
-            console.log('manage tasks : ', centralArchiveItem)
+          //  console.log('manage tasks : ', centralArchiveItem)
         };
 
         /**
@@ -381,7 +381,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendSMS = function (centralArchiveItem, $event) {
-            console.log('Send sms : ', centralArchiveItem);
+           // console.log('Send sms : ', centralArchiveItem);
         };
 
         /**
@@ -390,7 +390,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendMainDocumentFax = function (centralArchiveItem, $event) {
-            console.log('send main document fax : ', centralArchiveItem);
+          //  console.log('send main document fax : ', centralArchiveItem);
         };
 
         /**

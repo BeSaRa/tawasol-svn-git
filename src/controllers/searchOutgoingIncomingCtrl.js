@@ -489,7 +489,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (correspondence, $event) {
-            console.log('manage tasks for searched document : ', correspondence);
+           // console.log('manage tasks for searched document : ', correspondence);
         };
 
         /**
@@ -661,7 +661,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.createCopy = function (correspondence, $event) {
-            console.log('create copy for searched document : ', correspondence);
+          //  console.log('create copy for searched document : ', correspondence);
         };
 
         /**

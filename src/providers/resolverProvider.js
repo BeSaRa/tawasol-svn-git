@@ -38,7 +38,7 @@ module.exports = function (app) {
 
         self.resolveToAllState = function (resolveName, callback) {
             if (resolvesToAll.hasOwnProperty(resolveName)) {
-                console.log("Repeated Resolve Inside Resolve ALL: ", "HAS THIS RESOLVE NAME BEFORE: ", resolveName);
+              //  console.log("Repeated Resolve Inside Resolve ALL: ", "HAS THIS RESOLVE NAME BEFORE: ", resolveName);
                 return self;
             }
             resolvesToAll[resolveName] = callback;

@@ -469,7 +469,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            console.log('manageUserInboxTasks : ', workItem);
+          //  console.log('manageUserInboxTasks : ', workItem);
         };
 
         /**
@@ -647,7 +647,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            console.log('sendMainDocumentFax : ', workItem);
+          //  console.log('sendMainDocumentFax : ', workItem);
         };
 
 
@@ -709,7 +709,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            console.log('signDigitalSignature : ', workItem);
+         //   console.log('signDigitalSignature : ', workItem);
         };
 
         /**

@@ -424,7 +424,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.security = function (draftOutgoing, $event) {
-            console.log('security : ', draftOutgoing);
+           // console.log('security : ', draftOutgoing);
         };
 
         /**

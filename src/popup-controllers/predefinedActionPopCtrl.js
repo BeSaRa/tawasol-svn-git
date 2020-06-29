@@ -889,7 +889,7 @@ module.exports = function (app) {
                     toast.success(langService.get(result.action ? 'add_to_favorites_success' : 'remove_favorites_success').change({name: workflowItem.getTranslatedName()}))
                 })
                 .catch(function (error) {
-                    console.log(error);
+                  //  console.log(error);
                     toast.error(langService.get('error_messages'));
                 });
         };

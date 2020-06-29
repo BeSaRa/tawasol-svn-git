@@ -455,7 +455,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.security = function (reviewOutgoing, $event) {
-            console.log('manage security : ', reviewOutgoing);
+          //  console.log('manage security : ', reviewOutgoing);
         };
 
         /**

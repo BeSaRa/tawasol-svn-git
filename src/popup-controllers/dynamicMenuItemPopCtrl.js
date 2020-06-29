@@ -141,7 +141,7 @@ module.exports = function (app) {
                         });
                 })
                 .catch(function (result) {
-                    console.log(result);
+                   // console.log(result);
                 });
         };
 

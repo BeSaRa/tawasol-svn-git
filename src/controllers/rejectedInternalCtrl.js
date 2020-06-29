@@ -161,7 +161,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkRejectedInternals = function ($event) {
-            console.log('remove rejected internal mails bulk : ', self.selectedRejectedInternals);
+         //   console.log('remove rejected internal mails bulk : ', self.selectedRejectedInternals);
             rejectedInternalService
                 .controllerMethod
                 .rejectedInternalRemoveBulk(self.selectedRejectedInternals, $event)
@@ -210,7 +210,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendToReviewBulk = function ($event) {
-            console.log('send to review rejected internal mails bulk : ', self.selectedRejectedInternals);
+          //  console.log('send to review rejected internal mails bulk : ', self.selectedRejectedInternals);
             rejectedInternalService
                 .controllerMethod
                 .rejectedInternalSendToReviewBulk(self.selectedRejectedInternals, $event)

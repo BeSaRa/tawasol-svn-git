@@ -220,7 +220,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(workItem, null));
                 return;
             }
-            console.log('subscribe for returned department inbox : ', workItem)
+         //   console.log('subscribe for returned department inbox : ', workItem)
         };
 
         /**
@@ -358,7 +358,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
-            console.log('manageTasksReturnedDepartmentInbox', returnedDepartmentInbox);
+         //   console.log('manageTasksReturnedDepartmentInbox', returnedDepartmentInbox);
         };
 
         /**
@@ -500,7 +500,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(returnedDepartmentInbox, null));
                 return;
             }
-            console.log('sendSMS : ', returnedDepartmentInbox);
+          //  console.log('sendSMS : ', returnedDepartmentInbox);
         };
 
         /**

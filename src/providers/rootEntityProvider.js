@@ -73,7 +73,7 @@ module.exports = function (app) {
                                             }
                                         })
                                         .catch(function (reason) {
-                                            console.log("SINGLE SIGN ON FAILED !!", reason);
+                                         //   console.log("SINGLE SIGN ON FAILED !!", reason);
                                         })
                                 });
                             }

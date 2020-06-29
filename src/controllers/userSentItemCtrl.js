@@ -222,7 +222,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.recallBulkSentItems = function ($event) {
-            console.log('recall bulk sent items : ', self.selectedUserSentItems);
+           // console.log('recall bulk sent items : ', self.selectedUserSentItems);
         };
 
         /**
@@ -448,7 +448,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendSMS = function (userSentItem, $event) {
-            console.log('sendSMS : ', userSentItem);
+          //  console.log('sendSMS : ', userSentItem);
         };
 
         /**

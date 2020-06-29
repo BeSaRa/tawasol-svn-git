@@ -117,7 +117,7 @@ module.exports = function (app) {
          */
         provider.addActionGroup = function (groupName) {
             if (_findGroupName(groupName)) {
-                console.log('this group already exists: ', groupName);
+                // console.log('this group already exists: ', groupName);
                 return this;
             }
             actionGroups.push(new GroupActions(groupName));
@@ -135,7 +135,7 @@ module.exports = function (app) {
             var length = arguments.length;
             var group = _findGroupName(groupName);
             if (!_findGroupName(groupName)) {
-                console.log("NO Group Found with this Name: ", groupName);
+                // console.log("NO Group Found with this Name: ", groupName);
                 return this;
             }
 
@@ -145,7 +145,7 @@ module.exports = function (app) {
             }
 
             if (_findActionInsideGroup(groupName, actionName)) {
-                console.log("This action exists ( " + actionName + " )in this group before : " + groupName);
+               //  console.log("This action exists ( " + actionName + " )in this group before : " + groupName);
                 return this;
             }
 

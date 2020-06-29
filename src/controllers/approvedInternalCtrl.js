@@ -268,7 +268,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-            console.log('getApprovedInternalLink', approvedInternal);
+          //  console.log('getApprovedInternalLink', approvedInternal);
         };
 
         /**
@@ -371,7 +371,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-            console.log('viewApprovedInternalDirectLinkedDocuments : ', approvedInternal);
+          //  console.log('viewApprovedInternalDirectLinkedDocuments : ', approvedInternal);
         };
 
         /**
@@ -384,7 +384,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-            console.log('viewApprovedInternalCompleteLinkedDocuments : ', approvedInternal);
+          //  console.log('viewApprovedInternalCompleteLinkedDocuments : ', approvedInternal);
         };
 
         /**
@@ -397,7 +397,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-            console.log('sendApprovedInternalLinkToDocumentByEmail : ', approvedInternal);
+           // console.log('sendApprovedInternalLinkToDocumentByEmail : ', approvedInternal);
         };
 
         /**
@@ -410,7 +410,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-            console.log('sendApprovedInternalCompositeDocumentAsAttachment : ', approvedInternal);
+          //  console.log('sendApprovedInternalCompositeDocumentAsAttachment : ', approvedInternal);
         };
 
         /**
@@ -423,7 +423,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-            console.log('sendApprovedInternalCompositeDocumentAsAttachmentByEmail : ', approvedInternal);
+         //   console.log('sendApprovedInternalCompositeDocumentAsAttachmentByEmail : ', approvedInternal);
         };
 
         /**
@@ -436,7 +436,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-            console.log('sendApprovedInternalMainDocumentFax : ', approvedInternal);
+          //  console.log('sendApprovedInternalMainDocumentFax : ', approvedInternal);
         };
 
         /**
@@ -466,7 +466,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-            console.log('sendApprovedInternalMainDocumentAsAttachment : ', approvedInternal);
+          //  console.log('sendApprovedInternalMainDocumentAsAttachment : ', approvedInternal);
         };
 
         /**
@@ -479,7 +479,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(approvedInternal, null));
                 return;
             }
-            console.log('sendApprovedInternalLink : ', approvedInternal);
+          //  console.log('sendApprovedInternalLink : ', approvedInternal);
         };
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             /*var isEditAllowed = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");

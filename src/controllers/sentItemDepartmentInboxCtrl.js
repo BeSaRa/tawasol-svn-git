@@ -164,7 +164,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.recallBulk = function ($event) {
-            console.log('recall bulk : ', $event);
+          //  console.log('recall bulk : ', $event);
         };
 
         /**
@@ -342,7 +342,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (sentItemDepartmentInbox, $event) {
-            console.log('manage tasks : ', sentItemDepartmentInbox)
+           // console.log('manage tasks : ', sentItemDepartmentInbox)
         };
 
         /**
@@ -437,7 +437,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendSMS = function (sentItemDepartmentInbox, $event) {
-            console.log('Send sms : ', sentItemDepartmentInbox);
+          //  console.log('Send sms : ', sentItemDepartmentInbox);
         };
 
         /**

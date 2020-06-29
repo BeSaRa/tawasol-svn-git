@@ -26,7 +26,6 @@ module.exports = function (app) {
                     try {
                         correspondenceService.unlockWorkItem(workItem, true, $event)
                     } catch (e) {
-                        console.log('ਆਈਟਮ ਅਨਲੌਕ ਅਸਫਲ');
                     }
                 }
                 dialog.cancel();

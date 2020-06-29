@@ -60,13 +60,11 @@ module.exports = function (app) {
         self.validateExcelFile = function () {
             if (self.validateURL) {
                 organizationService.validateExcelFile(self.validateURL).then(function (result) {
-                    console.log(result);
                     self.organizations = [];
                     angular.forEach(result, function (value, key) {
                         self.organizations.push(value);
                     });
                     self.validateURL = null;
-                    console.log(self.organizations);
                 })
             } else {
                 dialog.alertMessage(langService.get('file_required'));

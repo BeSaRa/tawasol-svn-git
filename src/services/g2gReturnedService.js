@@ -141,7 +141,7 @@ module.exports = function (app) {
             return $http
                 .post(urlService.g2gInbox + 'open', g2gCorrespondence)
                 .then(function (result) {
-                    console.log(result);
+                  //  console.log(result);
                     return result;
                 });
         };

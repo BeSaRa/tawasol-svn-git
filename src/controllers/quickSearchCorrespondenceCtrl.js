@@ -302,7 +302,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (searchedCorrespondenceDocument, $event) {
-            console.log('manage tasks for searched outgoing document : ', searchedCorrespondenceDocument);
+           // console.log('manage tasks for searched outgoing document : ', searchedCorrespondenceDocument);
         };
 
         /**
@@ -454,7 +454,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.createCopy = function (searchedCorrespondenceDocument, $event) {
-            console.log('create copy for searched outgoing document : ', searchedCorrespondenceDocument);
+           // console.log('create copy for searched outgoing document : ', searchedCorrespondenceDocument);
         };
 
         /**
