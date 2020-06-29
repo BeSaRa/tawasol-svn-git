@@ -1263,7 +1263,7 @@ module.exports = function (app) {
             var hasPermission = false;
 
             // allowed to edit security level (if not exported and docRegOuId === currentLoggedInUserRegOuId). If condition satisfied, check permission
-            if (info.docStatus !== 25
+            if (info.docStatus !== 25 && employeeService.getEmployee()
                 && (generator.getNormalizedValue(model.registryOU, 'id') === employeeService.getEmployee().getRegistryOUID())) {
                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
             }

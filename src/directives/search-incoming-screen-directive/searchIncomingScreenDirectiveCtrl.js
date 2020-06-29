@@ -1240,7 +1240,6 @@ module.exports = function (app) {
 
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
-            var info = model.getInfo();
             var hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
 
             if (checkForViewPopup)
