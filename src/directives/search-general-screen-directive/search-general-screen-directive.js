@@ -13,7 +13,8 @@ module.exports = function (app) {
                 ous: '=',
                 registryOrganizations: '=',
                 propertyConfigurations: '=',
-                controller: '='
+                controller: '=',
+                creators: '='
             }
         }
     })

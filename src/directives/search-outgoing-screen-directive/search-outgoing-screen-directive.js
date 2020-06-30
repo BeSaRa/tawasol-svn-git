@@ -15,7 +15,8 @@ module.exports = function (app) {
                 propertyConfigurations: '=',
                 approvers: '=',
                 controller: '=',
-                availableRegistryOrganizations: '='
+                availableRegistryOrganizations: '=',
+                creators : '='
             }
         }
     })

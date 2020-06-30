@@ -686,7 +686,7 @@ module.exports = function (app) {
                     return propertyConfigurationService
                         .loadAllPropertyConfigurations();
                 },
-                approvers: function (ouApplicationUserService, employeeService, registryOrganizations) {
+                    approvers: function (ouApplicationUserService, employeeService, registryOrganizations) {
                     'ngInject';
                     return ouApplicationUserService
                         .searchByCriteria({

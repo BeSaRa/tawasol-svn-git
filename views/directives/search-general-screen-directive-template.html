@@ -428,6 +428,36 @@
                         </div>
                         <!-- directive: generate-remaining-search-div-directive -->
                     </div><!-- Seventh row -->
+                    <div layout="row"><!-- Twelfth row -->
+                        <div ng-if="ctrl.checkFieldStatus('creatorId')" flex="25" layout="row">
+                            <md-input-container flex>
+                                <label for="creatorId">{{lang.creator}}</label>
+                                <md-select data-md-container-class="select-header-container sticky-search-bar"
+                                           id="creatorId"
+                                           name="creatorId"
+                                           md-on-close="ctrl.creatorsSearchText = ''"
+                                           ng-model="ctrl.searchCriteria.creatorId">
+                                    <md-select-header class="select-header" layout="column">
+                                        <div layout="row" flex class="size-100">
+                                            <input ng-model="ctrl.creatorsSearchText"
+                                                   type="search"
+                                                   ng-keydown="ctrl.allowPropagationUpDownArrows($event)"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </div>
+                                    </md-select-header>
+                                    <md-option ng-if="!ctrl.creatorsSearchText.length" ng-value="null">{{lang.none}}
+                                    </md-option>
+                                    <md-option
+                                            md-highlight-text="ctrl.creatorsSearchText" md-highlight-flags="i"
+                                            ng-value="creator"
+                                            ng-repeat="creator in ctrl.creators|translatedNameFilter:ctrl.creatorsSearchText:'getAppUserAndOuTranslate'">
+                                        {{creator.getAppUserAndOuTranslate()}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div>
                     <div ng-if="ctrl.checkFieldStatus('docNotes')" layout="row">
                         <div flex layout="row">
                             <md-input-container flex>
@@ -436,7 +466,7 @@
                                           rows="5"></textarea>
                             </md-input-container>
                         </div>
-                    </div><!-- Twelfth row -->
+                    </div><!-- Thirteen row -->
                     <div layout="row">
                         <md-button ng-click="ctrl.searchCorrespondence()" id="advanced-search-button"
                                    class="md-raised md-primary search-button">
@@ -447,7 +477,7 @@
                             {{lang.search_module_reset_filters}}
                         </md-button>
                         <span flex></span>
-                    </div><!-- Thirteen row -->
+                    </div><!-- Fourteen row -->
                 </ng-form>
             </accordion-content>
         </accordion-item>

@@ -20,9 +20,10 @@ module.exports = function (app) {
             model.FileId = model.FileId && model.FileId.hasOwnProperty('id') ? model.FileId.id : model.FileId;
             model.SecurityLevel = model.SecurityLevel && model.SecurityLevel.hasOwnProperty('id') ? model.SecurityLevel.lookupKey : model.SecurityLevel;
             model.PriorityLevel = model.PriorityLevel && model.PriorityLevel.hasOwnProperty('id') ? model.PriorityLevel.lookupKey : model.PriorityLevel;
-            model.DocType = model.DocType = model.DocType && model.DocType.hasOwnProperty('id') ? model.DocType.lookupKey : model.DocType;
+            model.DocType = model.DocType && model.DocType.hasOwnProperty('id') ? model.DocType.lookupKey : model.DocType;
             model.DocSubjectSrc = model.DocSubject;
             model.DocSubject = null;
+            model.CreatorId = model.CreatorId ? model.CreatorId.applicationUser.id : null;
             return model;
         });
 

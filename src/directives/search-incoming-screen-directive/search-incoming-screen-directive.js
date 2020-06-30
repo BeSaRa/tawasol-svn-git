@@ -14,7 +14,8 @@ module.exports = function (app) {
                 registryOrganizations: '=',
                 propertyConfigurations: '=',
                 controller: '=',
-                availableRegistryOrganizations: '='
+                availableRegistryOrganizations: '=',
+                creators : '='
             }
         }
     });

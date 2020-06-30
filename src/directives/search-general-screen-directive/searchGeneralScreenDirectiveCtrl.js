@@ -131,6 +131,8 @@ module.exports = function (app) {
         self.yearSearchText = '';
         // search text for filtering years DDL
         self.approversSearchText = '';
+        // search text for filtering years DDL
+        self.creatorsSearchText = '';
         //TODO: will remove it later
         self.validateLabelsSearch = {};
         // search text for filtering mainClassification DDL

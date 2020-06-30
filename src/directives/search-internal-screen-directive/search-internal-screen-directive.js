@@ -14,7 +14,8 @@ module.exports = function (app) {
                 registryOrganizations: '=',
                 propertyConfigurations: '=',
                 approvers: '=',
-                controller: '='
+                controller: '=',
+                creators : '='
             }
         }
     });

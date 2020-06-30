@@ -67,6 +67,7 @@ module.exports = function (app) {
         // the approvers for (outgoing , internal ) documents
         self.approvers = approvers;
         // all controller for available search screens
+        self.creators = angular.copy(approvers);
 
         self.availableRegistryOrganizations = availableRegistryOrganizations;
 
@@ -188,6 +189,7 @@ module.exports = function (app) {
                 '                                    ous="ctrl.organizations"\n' +
                 '                                    available-registry-organizations="ctrl.availableRegistryOrganizations"\n' +
                 '                                    approvers="ctrl.approvers"\n' +
+                '                                    creators="ctrl.creators"\n' +
                 '                                    ng-show="ctrl.selectedTabName === \'outgoing\'"\n' +
                 '                                    registry-organizations="ctrl.registryOrganizations"\n' +
                 '                                    property-configurations="ctrl.propertyConfigurations.Outgoing"\n' +
@@ -198,6 +200,7 @@ module.exports = function (app) {
                 '                                    controller="ctrl.searchScreens.internal"\n' +
                 '                                    ous="ctrl.organizations"\n' +
                 '                                    approvers="ctrl.approvers"\n' +
+                '                                    creators="ctrl.creators"\n' +
                 '                                    ng-show="ctrl.selectedTabName === \'internal\'"\n' +
                 '                                    registry-organizations="ctrl.registryOrganizations"\n' +
                 '                                    property-configurations="ctrl.propertyConfigurations.Internal"\n' +
@@ -207,6 +210,7 @@ module.exports = function (app) {
             self.searchForms.incoming = '<search-incoming-screen-directive\n' +
                 '                                    controller="ctrl.searchScreens.incoming"\n' +
                 '                                    ous="ctrl.organizations"\n' +
+                '                                    creators="ctrl.creators"\n' +
                 '                                    available-registry-organizations="ctrl.availableRegistryOrganizations"\n' +
                 '                                    ng-show="ctrl.selectedTabName === \'incoming\'"\n' +
                 '                                    registry-organizations="ctrl.registryOrganizations"\n' +
@@ -217,6 +221,7 @@ module.exports = function (app) {
             self.searchForms.outgoingIncoming = '<search-outgoing-incoming-screen-directive\n' +
                 '                                    controller="ctrl.searchScreens.outgoingIncoming"\n' +
                 '                                    ous="ctrl.organizations"\n' +
+                '                                    creators="ctrl.creators"\n' +
                 '                                    available-registry-organizations="ctrl.availableRegistryOrganizations"\n' +
                 '                                    ng-show="ctrl.selectedTabName === \'outgoingIncoming\'"\n' +
                 '                                    registry-organizations="ctrl.registryOrganizations"\n' +
@@ -227,6 +232,7 @@ module.exports = function (app) {
             self.searchForms.general = '<search-general-screen-directive\n' +
                 '                                    controller="ctrl.searchScreens.general"\n' +
                 '                                    ous="ctrl.organizations"\n' +
+                '                                    creators="ctrl.creators"\n' +
                 '                                    ng-show="ctrl.selectedTabName === \'general\'"\n' +
                 '                                    registry-organizations="ctrl.registryOrganizations"\n' +
                 '                                    property-configurations="ctrl.propertyConfigurations.Correspondence"\n' +
