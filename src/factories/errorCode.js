@@ -16,6 +16,7 @@ module.exports = function (app) {
                 ROOT_ENTITY_NOT_FOUND: 1001,
                 FILE_NOT_ALLOWED: 2041,
                 FAILED_INSERT_DOCUMENT: 2006,
+                ERROR_UPLOAD_FILE: 5001,
                 DUPLICATE_ENTRY: 1008,
                 INACTIVE_USER_ENTITY: 9016,
                 ACCESS_DENIED: 9011,
@@ -70,6 +71,7 @@ module.exports = function (app) {
             errorLangKeys = {
                 1001: 'no_records_found',
                 2006: 'can_not_insert_the_document',
+                5001: 'error_upload_file',
                 3023: 'can_not_edit_after_export_because_received_by_one_site',
                 14001: 'g2g_error_fetch_sent_return_book',
                 14002: 'g2g_not_authenticated',

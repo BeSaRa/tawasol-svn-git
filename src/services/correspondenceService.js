@@ -771,6 +771,10 @@ module.exports = function (app) {
                         correspondence.vsId = result.data.rs;
                         return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
                     }).catch(function (error) {
+                        if (errorCode.checkIf(error, 'ERROR_UPLOAD_FILE') === true) {
+                            dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                            return $q.reject(error);
+                        }
                         return $q.reject(self.getTranslatedError(error));
                     });
             }

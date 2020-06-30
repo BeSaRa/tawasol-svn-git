@@ -105,6 +105,7 @@ module.exports = function (app) {
              * @param fileTypeService
              * @param tokenService
              * @param langService
+             * @param errorCode
              * @return {provider}
              */
             provider.$get = function (urlService,
@@ -122,7 +123,8 @@ module.exports = function (app) {
                                       correspondenceService,
                                       fileTypeService,
                                       tokenService,
-                                      langService) {
+                                      langService,
+                                      errorCode) {
                 'ngInject';
                 var self = this;
                 self.serviceName = 'attachmentService';
@@ -245,6 +247,10 @@ module.exports = function (app) {
                         return attachment;//generator.generateInstance(attachment, Attachment, self._sharedMethods);
                     })
                         .catch(function (error) {
+                            if (errorCode.checkIf(error, 'ERROR_UPLOAD_FILE') === true) {
+                                dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                                return $q.reject(error);
+                            }
                             return $q.reject(error);
                         });
                 };
@@ -356,9 +362,14 @@ module.exports = function (app) {
                         return attachment;
                     })
                         .catch(function (error) {
+                            if (errorCode.checkIf(error, 'ERROR_UPLOAD_FILE') === true) {
+                                dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                                return $q.reject(error);
+                            }
                             return $q.reject(error);
                         });
                 };
+
                 /**
                  * @description delete given classification.
                  * @param vsId
