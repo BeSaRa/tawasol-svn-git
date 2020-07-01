@@ -181,9 +181,6 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
-                            </div>
-
-                            <div layout="row" class="p20">
                                 <!-- Correspondence Site Search Type -->
                                 <md-input-container flex>
                                     <label for="simpleCorsSiteSearch">{{lang.correspondence_Site_search_type}}</label>
@@ -199,6 +196,19 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
+                            </div>
+                            <div layout="row" class="p20">
+                                <md-input-container flex>
+                                    <label for="msTeamsSupoortURL">{{lang.teams_support_url}}</label>
+                                    <input id="msTeamsSupoortURL" name="msTeamsSupoortURL"
+                                           ng-model="ctrl.globalSetting.msTeamsSupoortURL"
+                                           custom-validate-directive="url">
+                                    <div ng-messages="globalSettingForm.msTeamsSupoortURL.$error">
+                                        <div ng-message="url">{{lang.url_only}}</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout="row" class="p20">
                                 <!-- Enable Mobile Access -->
                                 <md-input-container flex>
                                     <md-switch flex ng-model="ctrl.globalSetting.enableMobileAccess"

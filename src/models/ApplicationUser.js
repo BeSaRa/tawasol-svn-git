@@ -50,6 +50,7 @@ module.exports = function (app) {
             self.backLogMode = false;
             self.slowConnectionMode = false;
             self.pinCodePrompt = false;
+            self.isMSTeamsEnabled = null;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -351,6 +352,10 @@ module.exports = function (app) {
             };
             ApplicationUser.prototype.getEmail = function () {
                 return this.email;
+            };
+
+            ApplicationUser.prototype.getTranslatedMSTeamsStatus = function () {
+                return this.isMSTeamsEnabled ? langService.get('active') : langService.get('inactive');
             };
 
             // don't remove CMSModelInterceptor from last line

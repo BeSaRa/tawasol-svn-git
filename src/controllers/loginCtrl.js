@@ -30,12 +30,13 @@ module.exports = function (app) {
         self.flipBg = loginPage.flip;
         self.loginStatus = false;
 
-
         self.credentials = new Credentials({
             username: '',
             password: '',
             tawasolEntityId: null
         });
+
+        self.globalSettings = rootEntity.getGlobalSettings();
         // to get the current root entity information which loaded already from backend in the
         self.rootEntity = rootEntity.returnRootEntity();
         // public announcements
@@ -232,10 +233,12 @@ module.exports = function (app) {
         };
 
         self.isHelpAvailable = function () {
-            var globalSettings = rootEntity.getGlobalSettings();
-            return !!globalSettings.supportEmail || !!globalSettings.supportPhoneNo || !!globalSettings.loginAdditionalContent;
+            return !!self.globalSettings.supportEmail || !!self.globalSettings.supportPhoneNo || !!self.globalSettings.loginAdditionalContent;
         };
 
+        self.isMSTeamsAvailable = function () {
+            return self.rootEntity && self.rootEntity.rootEntity.isMSTeamsEnabled && self.globalSettings.msTeamsSupoortURL;
+        };
 
     });
 };

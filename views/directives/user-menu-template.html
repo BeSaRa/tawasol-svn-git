@@ -42,6 +42,15 @@
                     </div>
                 </md-button>
             </md-menu-item>
+            <md-menu-item
+                    ng-if="userMenu.isMSTeamsAvailable()">
+                <md-button ng-click="userMenu.openMSTeamsSupport($event)">
+                    <div layout="row" layout-align="start center">
+                        <md-icon md-svg-icon="face-agent"></md-icon>
+                        <span>{{lang.support}}</span>
+                    </div>
+                </md-button>
+            </md-menu-item>
             <md-menu-item>
                 <md-menu>
                     <md-button ng-click="$mdMenu.open($event)">

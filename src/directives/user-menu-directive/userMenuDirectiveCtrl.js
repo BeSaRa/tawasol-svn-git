@@ -12,13 +12,15 @@ module.exports = function (app) {
                                                       toast,
                                                       langService,
                                                       correspondenceService,
+                                                      $window,
                                                       errorCode) {
         'ngInject';
         var self = this;
         self.controllerName = 'userMenuDirectiveCtrl';
         self.employee = employeeService.getEmployee();
         self.employeeService = employeeService;
-
+        self.globalSettings = rootEntity.getGlobalSettings();
+        self.rootEntity = rootEntity.returnRootEntity().rootEntity;
         // selected status by default
         self.selectedStatus = {
             id: 1,
@@ -250,6 +252,14 @@ module.exports = function (app) {
 
         self.manageDocumentLinks = function ($event) {
             correspondenceService.openUserLinksPopup($event);
+        };
+
+        self.openMSTeamsSupport = function ($event) {
+            $window.open(self.globalSettings.msTeamsSupoortURL);
+        };
+
+        self.isMSTeamsAvailable = function () {
+            return self.rootEntity && self.rootEntity.isMSTeamsEnabled && self.globalSettings.msTeamsSupoortURL;
         };
 
         employeeService

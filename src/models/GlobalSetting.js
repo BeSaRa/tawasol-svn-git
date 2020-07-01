@@ -60,6 +60,7 @@ module.exports = function (app) {
             self.slowConnectionMode = false;
             self.digitalCertificateEnabled = false;
             self.digitalCertificateMode = null;
+            self.msTeamsSupoortURL = null;
             //endregion
 
             // every model has required fields

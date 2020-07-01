@@ -14,6 +14,7 @@ module.exports = function (app) {
             self.domainName = null;
             self.ouArName = null;
             self.ouEnName = null;
+            self.msTeamsChatURL = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

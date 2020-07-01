@@ -16,7 +16,6 @@ module.exports = function (app) {
             ICN_SEARCH_TEMPLATE_MENU_TYPE: 4,
             STATES_DISABLED_WHILE_ADD_TASK: [1],
             G2G_QATAR_SOURCE: true,
-            ENABLE_ACTIVE_SENDER_LINKS: false,
             FOLLOWUP_BOOK_FILTER_START_BEFORE_TYPE: 'days', //'months', 'days'
             FOLLOWUP_BOOK_FILTER_START_BEFORE_VALUE: 30
         };

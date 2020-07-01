@@ -235,7 +235,10 @@
                                         <td md-cell>{{workItem.action.getTranslatedName()}}</td>
                                         <td md-cell class="td-data">
                                             <div layout="row">
-                                                <span flex>{{workItem.senderInfo.getTranslatedName()}}</span>
+                                                <span ng-if="!workItem.senderInfo.msTeamsChatURL" flex>{{workItem.senderInfo.getTranslatedName()}}</span>
+                                                <a target="_blank" href="{{workItem.senderInfo.msTeamsChatURL}}"
+                                                   ng-if="workItem.senderInfo.msTeamsChatURL"
+                                                   flex>{{workItem.senderInfo.getTranslatedName()}}</a>
                                                 <grid-indicator-directive record="workItem"
                                                                           indicator-type="comments"
                                                                           class="p0p5"

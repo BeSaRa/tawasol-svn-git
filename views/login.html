@@ -100,6 +100,9 @@
                 <a href="" ng-click="login.showHelp($event)" ng-if="login.isHelpAvailable()">{{lang.help}}</a>
                 <span ng-if="login.isHelpAvailable()">&nbsp; | &nbsp;</span>
                 <a href="" ng-click="login.showTerms($event)">Terms</a>
+                <span ng-if="login.isMSTeamsAvailable()">&nbsp; | &nbsp;</span>
+                <a href="{{login.globalSettings.msTeamsSupoortURL}}"
+                   ng-if="login.isMSTeamsAvailable()">{{lang.support}}</a>
                 <span flex=""></span>
             </div>
             <div layout="row">

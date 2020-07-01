@@ -100,9 +100,18 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <md-switch flex ng-model="ctrl.entity.status" aria-label="{{lang.status}}">
-                                        <label>{{lang.status}} : {{ctrl.entity.getTranslatedStatus()}}</label>
-                                    </md-switch>
+                                    <div flex>
+                                        <md-switch ng-model="ctrl.entity.status" aria-label="{{lang.status}}">
+                                            <label>{{lang.status}} : {{ctrl.entity.getTranslatedStatus()}}</label>
+                                        </md-switch>
+                                    </div>
+                                    <div flex>
+                                        <md-switch ng-model="ctrl.entity.isMSTeamsEnabled"
+                                                   aria-label="{{lang.teams_integration}}">
+                                            <label>{{lang.teams_integration}} :
+                                                {{ctrl.entity.getTranslatedMSTeamsStatus()}}</label>
+                                        </md-switch>
+                                    </div>
                                 </div>
                             </div>
                         </md-content>
