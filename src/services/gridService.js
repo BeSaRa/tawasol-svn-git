@@ -905,6 +905,7 @@ module.exports = function (app) {
                 fullScreen: 'fullscreen',
                 fullScreenExit: 'fullscreen-exit',
                 endFollowup: 'calendar-remove-outline',
+                changeFollowup: 'send-clock',
                 exportAndSend: 'file-export-outline',
                 launch: 'sitemap',
                 quickSend: 'sitemap'

@@ -148,4 +148,5 @@ module.exports = function (app) {
     require('./followupBookSearchPopCtrl')(app);
     require('./followupFolderTreePopCtrl')(app);
     require('./transferFollowupBookPopCtrl')(app);
+    require('./manageCorrespondenceSiteStatusPopCtrl')(app);
 };

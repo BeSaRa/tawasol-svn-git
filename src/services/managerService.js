@@ -519,6 +519,52 @@ module.exports = function (app) {
             });
         };
 
+        /**
+         * @description Manage the follow up status of correspondence sites
+         * @param record
+         * @param $event
+         * @returns {promise}
+         */
+        self.manageCorrespondenceSiteFollowupStatus = function (record, $event) {
+            var info = record.getInfo(),
+                documentClass = _checkDocumentClass(info.documentClass);
+            var defer = $q.defer();
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('manage-correspondence-site-status'),
+                controller: 'manageCorrespondenceSiteStatusPopCtrl',
+                targetEvent: $event || false,
+                controllerAs: 'ctrl',
+                bindToController: true,
+                escapeToClose: false,
+                locals: {
+                    vsId: info.vsId,
+                    documentClass: documentClass,
+                    documentSubject: info.title
+                },
+                resolve: {
+                    correspondence: function () {
+                        'ngInject';
+                        return correspondenceService
+                            .loadCorrespondenceByVsIdClass(info.vsId, documentClass)
+                            .then(function (correspondence) {
+                                defer.resolve(correspondence);
+                                return correspondence;
+                            });
+                    },
+                    sites: function (correspondenceService) {
+                        'ngInject';
+                        if (documentClass.toLowerCase() === 'incoming') {
+                            return [];
+                        }
+                        return defer.promise.then(function (correspondence) {
+                            return correspondenceService
+                                .loadCorrespondenceSites(correspondence)
+                        });
+                    }
+                }
+            });
+        };
+
 
         self.manageDocumentContent = function (vsId, documentClass, documentSubject, $event) {
             documentClass = _checkDocumentClass(documentClass);

@@ -1164,6 +1164,22 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Change the followup status of correspondence sites
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.changeFollowupStatus = function (correspondence, $event, defer) {
+            correspondence.changeFollowupStatus($event)
+                .then(function (result) {
+                    self.reloadSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
+        /**
          * @description Preview document
          * @param searchedGeneralDocument
          * @param $event
@@ -1968,6 +1984,19 @@ module.exports = function (app) {
                         return !model.getSiteFollowupStatus() && !model.getSiteFollowupEndDate()// && model.getSiteMaxFollowupDate();
                     }
                     return false;
+                }
+            },
+            // Change Follow up Status
+            {
+                type: 'action',
+                icon: gridService.gridIcons.actions.changeFollowup,
+                text: 'grid_action_change_follow_up_status',
+                callback: self.changeFollowupStatus,
+                class: "action-green",
+                permissionKey: "MANAGE_DESTINATIONS",
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return info.documentClass === 'outgoing' || info.documentClass === 'incoming'
                 }
             },
             // Edit

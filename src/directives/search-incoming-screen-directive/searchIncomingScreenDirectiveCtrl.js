@@ -1116,6 +1116,22 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Change the followup status of correspondence sites
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.changeFollowupStatus = function (correspondence, $event, defer) {
+            correspondence.changeFollowupStatus($event)
+                .then(function (result) {
+                    self.reloadSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
+        /**
          * @description Create Reply
          * @param correspondence
          * @param $event
@@ -1876,6 +1892,18 @@ module.exports = function (app) {
                     // only for outgoing/incoming
                     // no follow up status = 0 (need reply)
                     return !model.getSiteFollowupStatus() && !model.getSiteFollowupEndDate()// && model.getSiteMaxFollowupDate();
+                }
+            },
+            // Change Follow up Status
+            {
+                type: 'action',
+                icon: gridService.gridIcons.actions.changeFollowup,
+                text: 'grid_action_change_follow_up_status',
+                callback: self.changeFollowupStatus,
+                class: "action-green",
+                permissionKey: "MANAGE_DESTINATIONS",
+                checkShow: function (action, model) {
+                    return true;
                 }
             },
             // Edit

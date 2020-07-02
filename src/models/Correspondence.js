@@ -973,6 +973,15 @@ module.exports = function (app) {
                     || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL')));
             };
 
+            /**
+             * @description Handles the change followup status of document
+             * @param $event
+             * @returns {*}
+             */
+            Correspondence.prototype.changeFollowupStatus = function ($event) {
+                return managerService.manageCorrespondenceSiteFollowupStatus(this, $event)
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Correspondence', 'init', this);

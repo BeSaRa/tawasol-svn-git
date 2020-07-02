@@ -1,0 +1,443 @@
+<md-dialog class="dialog-extend mw60 cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.correspondence_sites}}">
+    <popup-toolbar-directive header-text="{{lang.grid_action_change_follow_up_status}} : {{ctrl.documentSubject}}"
+                             close-callback="ctrl.closePopup"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <div layout="column" ng-if="ctrl.documentClass === 'outgoing'">
+                <!-- Original sites -->
+                <div flex layout="column">
+                    <md-card ng-if="ctrl.correspondence.sitesInfoTo.length" md-whiteframe="3" layout="column"
+                             class="card-overlay">
+                        <!-- Original sites toolbar -->
+                        <md-toolbar class="md-table-toolbar md-default"
+                                    ng-class="{'selected':ctrl.sitesInfoToSelected.length}">
+                            <div class="md-toolbar-tools">
+                                <div ng-if="!ctrl.sitesInfoToSelected.length" flex>{{lang.sites_original}}</div>
+                                <div ng-if="ctrl.sitesInfoToSelected.length" layout="row" flex
+                                     layout-align="start center">
+                                    <div>{{ctrl.sitesInfoToSelected.length}} {{lang.items_selected}}</div>
+                                    <span flex></span>
+                                    <div layout="row">
+                                        <div>
+                                            <md-menu-bar class="follow-up-menu-bar">
+                                                <md-menu>
+                                                    <md-button ng-click="$mdMenu.open()">
+                                                        {{ctrl.sitesInfoToFollowupStatus.getTranslatedName() ||
+                                                        lang.sites_follow_up_status}}
+                                                    </md-button>
+                                                    <md-menu-content width="3">
+                                                        <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
+                                                            <md-button
+                                                                    ng-click="ctrl.onSitesFollowupStatusChange( 'To' , status)">
+                                                                {{status.getTranslatedName()}}
+                                                            </md-button>
+                                                        </md-menu-item>
+                                                    </md-menu-content>
+                                                </md-menu>
+                                            </md-menu-bar>
+                                        </div>
+                                        <div>
+                                            <md-datepicker
+                                                    ng-if="ctrl.needReply(ctrl.sitesInfoToFollowupStatus)"
+                                                    name="sitesInfoToFollowupStatus"
+                                                    ng-model="ctrl.sitesInfoToFollowupStatusDate"
+                                                    md-placeholder="{{lang.sites_follow_up_status_date}}"
+                                                    md-min-date="ctrl.minDate"
+                                                    ng-change="ctrl.onSitesInfoFollowupDateChange('To')"
+                                                    md-open-on-focus></md-datepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-toolbar>
+                        <!-- Original sites table -->
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.sitesInfoToSelected"
+                                       md-progress="ctrl.grid.sitesInfoTo.progress">
+                                    <thead md-head md-order="ctrl.grid.sitesInfoTo.order">
+                                    <tr md-row>
+                                        <th md-column md-order-by="mainEnSiteText">
+                                            <span>{{lang.sites_main_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="mainArSiteText">
+                                            <span>{{lang.sites_sub_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="siteType">
+                                            <span>{{lang.sites_select_site_type}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_status}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_date}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_end_date}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="site"
+                                        md-on-select="ctrl.resetToStatusAndDate"
+                                        ng-repeat="site in ctrl.correspondence.sitesInfoTo  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit) |orderBy:ctrl.grid.sitesInfoTo.order  track by $index">
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedParentName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedSiteType()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row">
+                                                <!--<span flex>{{site.followupStatus.getTranslatedName()}}</span>-->
+                                                <div>
+                                                    <md-menu-bar class="follow-up-menu-bar">
+                                                        <md-menu>
+                                                            <md-button ng-click="$mdMenu.open()">
+                                                                {{site.followupStatus.getTranslatedName() ||
+                                                                lang.sites_follow_up_status}}
+                                                            </md-button>
+                                                            <md-menu-content width="3">
+                                                                <md-menu-item
+                                                                        ng-repeat="status in ctrl.followUpStatuses">
+                                                                    <md-button
+                                                                            ng-click="ctrl.setCurrentFollowUpStatus(site , status)">
+                                                                        {{status.getTranslatedName()}}
+                                                                    </md-button>
+                                                                </md-menu-item>
+                                                            </md-menu-content>
+                                                        </md-menu>
+                                                    </md-menu-bar>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row">
+                                                <md-datepicker ng-if="ctrl.needReply(site.followupStatus)"
+                                                               name="followUpStatusDate"
+                                                               ng-model="site.followupDate"
+                                                               md-placeholder="{{lang.sites_follow_up_status_date}}"
+                                                               md-max-date="ctrl.maxCreateDate"
+                                                               md-min-date="ctrl.minDate"
+                                                               md-open-on-focus></md-datepicker>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row"><span
+                                                    flex>{{site.followupEndDate|date:'yyyy-MM-dd'}}</span></div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.sitesInfoTo.limitOptions"
+                                    md-limit="ctrl.grid.sitesInfoTo.limit" md-page="ctrl.grid.sitesInfoTo.page"
+                                    md-total="{{ctrl.correspondence.sitesInfoTo.length}}" md-page-select>
+                            </md-table-pagination>
+
+                        </md-table-container>
+                    </md-card>
+                </div>
+                <br/>
+                <!-- Copy sites -->
+                <div flex layout="column">
+                    <md-card scroll-directive ng-if="ctrl.correspondence.sitesInfoCC.length" md-whiteframe="3"
+                             layout="column"
+                             class="card-overlay">
+                        <!-- Copy sites toolbar -->
+                        <md-toolbar class="md-table-toolbar md-default"
+                                    ng-class="{'selected':ctrl.sitesInfoCCSelected.length}">
+                            <div class="md-toolbar-tools">
+                                <div ng-if="!ctrl.sitesInfoCCSelected.length" flex>{{lang.sites_copy}}</div>
+                                <div ng-if="ctrl.sitesInfoCCSelected.length" layout="row" flex
+                                     layout-align="start center">
+                                    <div>{{ctrl.sitesInfoCCSelected.length}} {{lang.items_selected}}</div>
+                                    <span flex></span>
+                                    <div layout="row">
+                                        <div>
+                                            <md-menu-bar class="follow-up-menu-bar">
+                                                <md-menu>
+                                                    <md-button ng-click="$mdMenu.open()">
+                                                        {{ctrl.sitesInfoCCFollowupStatus.getTranslatedName() ||
+                                                        lang.sites_follow_up_status}}
+                                                    </md-button>
+                                                    <md-menu-content width="3">
+                                                        <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
+                                                            <md-button
+                                                                    ng-click="ctrl.onSitesFollowupStatusChange( 'CC' , status)">
+                                                                {{status.getTranslatedName()}}
+                                                            </md-button>
+                                                        </md-menu-item>
+                                                    </md-menu-content>
+                                                </md-menu>
+                                            </md-menu-bar>
+                                        </div>
+                                        <div>
+                                            <md-datepicker
+                                                    ng-if="ctrl.needReply(ctrl.sitesInfoCCFollowupStatus)"
+                                                    name="sitesInfoCCFollowupStatus"
+                                                    ng-model="ctrl.sitesInfoCCFollowupStatusDate"
+                                                    md-placeholder="{{lang.sites_follow_up_status_date}}"
+                                                    md-min-date="ctrl.minDate"
+                                                    ng-change="ctrl.onSitesInfoFollowupDateChange('CC')"
+                                                    md-open-on-focus></md-datepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-toolbar>
+                        <!-- Copy sites table -->
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.sitesInfoCCSelected"
+                                       md-progress="ctrl.grid.sitesInfoCC.progress">
+                                    <thead md-head md-order="ctrl.grid.sitesInfoCC.order">
+                                    <tr md-row>
+                                        <th md-column md-order-by="mainEnSiteText">
+                                            <span>{{lang.sites_main_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="mainArSiteText">
+                                            <span>{{lang.sites_sub_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="siteType">
+                                            <span>{{lang.sites_select_site_type}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_status}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_date}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_end_date}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="site"
+                                        md-on-select="ctrl.resetCCStatusAndDate"
+                                        ng-repeat="site in ctrl.correspondence.sitesInfoCC  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) |orderBy:ctrl.grid.sitesInfoCC.order  track by $index">
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedParentName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedSiteType()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row">
+                                                <!--<span flex>{{site.followupStatus.getTranslatedName()}}</span>-->
+                                                <div>
+                                                    <md-menu-bar class="follow-up-menu-bar">
+                                                        <md-menu>
+                                                            <md-button ng-click="$mdMenu.open()">
+                                                                {{site.followupStatus.getTranslatedName() ||
+                                                                lang.sites_follow_up_status}}
+                                                            </md-button>
+                                                            <md-menu-content width="3">
+                                                                <md-menu-item
+                                                                        ng-repeat="status in ctrl.followUpStatuses">
+                                                                    <md-button
+                                                                            ng-click="ctrl.setCurrentFollowUpStatus(site , status)">
+                                                                        {{status.getTranslatedName()}}
+                                                                    </md-button>
+                                                                </md-menu-item>
+                                                            </md-menu-content>
+                                                        </md-menu>
+                                                    </md-menu-bar>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row">
+                                                <md-datepicker ng-if="ctrl.needReply(site.followupStatus)"
+                                                               name="followUpStatusDate"
+                                                               ng-model="site.followupDate"
+                                                               md-placeholder="{{lang.sites_follow_up_status_date}}"
+                                                               md-max-date="ctrl.maxCreateDate"
+                                                               md-min-date="ctrl.minDate"
+                                                               md-open-on-focus></md-datepicker>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row"><span
+                                                    flex>{{site.followupEndDate|date:'yyyy-MM-dd'}}</span></div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.sitesInfoCC.limitOptions"
+                                    md-limit="ctrl.grid.sitesInfoCC.limit" md-page="ctrl.grid.sitesInfoCC.page"
+                                    md-total="{{ctrl.correspondence.sitesInfoCC.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+            <div layout="column" ng-if="ctrl.documentClass === 'incoming'">
+                <div flex layout="column">
+                    <md-card ng-if="ctrl.correspondence.site && ctrl.correspondence.site.subSiteId" md-whiteframe="3"
+                             layout="column" class="card-overlay">
+                        <!-- Incoming site toolbar -->
+                        <!--<md-toolbar class="md-table-toolbar md-default selected">
+                            <div class="md-toolbar-tools">
+                                <div layout="row" flex layout-align="start center">
+                                    <span flex></span>
+                                    <div layout="row">
+                                        <div>
+                                            <md-menu-bar class="follow-up-menu-bar">
+                                                <md-menu>
+                                                    <md-button ng-click="$mdMenu.open()">
+                                                        {{ctrl.correspondence.site.followupStatus.getTranslatedName() ||
+                                                        lang.sites_follow_up_status}}
+                                                    </md-button>
+                                                    <md-menu-content width="3">
+                                                        <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
+                                                            <md-button
+                                                                    ng-click="ctrl.onSiteFollowupStatusChange(status)">
+                                                                {{status.getTranslatedName()}}
+                                                            </md-button>
+                                                        </md-menu-item>
+                                                    </md-menu-content>
+                                                </md-menu>
+                                            </md-menu-bar>
+                                        </div>
+                                        <div>
+                                            <md-datepicker
+                                                    ng-if="ctrl.needReply(ctrl.correspondence.site.followupStatus)"
+                                                    name="sitesInfoToFollowupStatus"
+                                                    ng-model="ctrl.correspondence.site.followupDate"
+                                                    md-placeholder="{{lang.sites_follow_up_status_date}}"
+                                                    md-min-date="ctrl.minDate"
+                                                    md-open-on-focus></md-datepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-toolbar>-->
+
+                        <!-- Incoming site table -->
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table>
+                                    <thead md-head>
+                                    <tr md-row>
+                                        <th md-column md-order-by="">
+                                            <span>{{lang.sites_main_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="">
+                                            <span>{{lang.sites_sub_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="">
+                                            <span>{{lang.sites_select_site_type}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_status}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_date}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_end_date}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{ctrl.correspondence.site.getTranslatedParentName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{ctrl.correspondence.site.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{ctrl.correspondence.site.getTranslatedSiteType()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row">
+                                                <!--<span flex>{{ctrl.correspondence.site.followupStatus.getTranslatedName()}}</span>-->
+                                                <div>
+                                                    <md-menu-bar class="follow-up-menu-bar">
+                                                        <md-menu>
+                                                            <md-button ng-click="$mdMenu.open()">
+                                                                {{ctrl.correspondence.site.followupStatus.getTranslatedName() ||
+                                                                lang.sites_follow_up_status}}
+                                                            </md-button>
+                                                            <md-menu-content width="3">
+                                                                <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
+                                                                    <md-button
+                                                                            ng-click="ctrl.setCurrentFollowUpStatus(ctrl.correspondence.site , status)">
+                                                                        {{status.getTranslatedName()}}
+                                                                    </md-button>
+                                                                </md-menu-item>
+                                                            </md-menu-content>
+                                                        </md-menu>
+                                                    </md-menu-bar>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row">
+                                                <!--<span flex>{{ctrl.correspondence.site.followupDate|date:'yyyy-MM-dd'}}</span>-->
+                                            <md-datepicker ng-if="ctrl.needReply(ctrl.correspondence.site.followupStatus)"
+                                                           name="followUpStatusDate"
+                                                           ng-model="ctrl.correspondence.site.followupDate"
+                                                           md-placeholder="{{lang.sites_follow_up_status_date}}"
+                                                           md-max-date="ctrl.maxCreateDate"
+                                                           md-min-date="ctrl.minDate"
+                                                           md-open-on-focus></md-datepicker>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row"><span flex>{{ctrl.correspondence.site.followupEndDate|date:'yyyy-MM-dd'}}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary" ng-disabled="ctrl.checkDisabled()"
+                   ng-click="ctrl.saveCorrespondenceSites()">
+            {{lang.save}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">{{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>
