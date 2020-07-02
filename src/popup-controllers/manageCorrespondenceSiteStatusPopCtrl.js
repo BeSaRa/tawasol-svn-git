@@ -39,7 +39,43 @@ module.exports = function (app) {
         self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
 
         var defaultFollowupNumberOfDays = 3,
-            defaultNeedReplyFollowupDate = generator.getFutureDate(defaultFollowupNumberOfDays);
+            defaultNeedReplyFollowupDate = generator.getFutureDate(defaultFollowupNumberOfDays),
+            organizationForSLA = null,
+            organizationForSLACentralArchive = null;
+
+
+        function _isShowRegistryUnit() {
+            return (employeeService.getEmployee().inCentralArchive() && self.correspondence.getInfo().isPaper);
+        }
+
+        var _resetDefaultNeedReplyFollowupDate = function () {
+            if (self.correspondence) {
+                var priorityLevel = self.correspondence.getInfo().priorityLevel;
+                priorityLevel = (priorityLevel.hasOwnProperty('lookupKey') ? priorityLevel.lookupKey : priorityLevel);
+
+                var slaOu = null;
+                // if paper outgoing or incoming and current ou is central archive, use selected registryOu as slaOu
+                if (_isShowRegistryUnit() && organizationForSLACentralArchive) {
+                    slaOu = organizationForSLACentralArchive;
+                } else {
+                    slaOu = organizationForSLA;
+                }
+                if (slaOu && typeof priorityLevel !== 'undefined' && priorityLevel !== null) {
+                    var slaDays = null;
+                    // organization has sla property and sla has property as same as document priority level
+                    if (slaOu.hasOwnProperty('sla') && slaOu.sla && slaOu.sla.hasOwnProperty(priorityLevel)) {
+                        slaDays = slaOu.sla[priorityLevel];
+                    }
+                    // if no SLA days or its less than 1, use default number of days to followup date to be today
+                    if (!slaDays || slaDays < 1) {
+                        slaDays = angular.copy(defaultFollowupNumberOfDays);
+                    }
+                    defaultNeedReplyFollowupDate = generator.getFutureDate(slaDays);
+                }
+            }
+
+            return defaultNeedReplyFollowupDate;
+        };
 
         self.grid = {
             sitesInfoTo: {
@@ -196,6 +232,45 @@ module.exports = function (app) {
          */
         self.closePopup = function () {
             dialog.cancel();
+        };
+
+
+        function _setSLAOrganization() {
+            return employeeService.getEmployee().getRegistryOrganization()
+                .then(function (result) {
+                    return organizationForSLA = result;
+                });
+        }
+
+        $scope.$on('$RegistryOuChanged', function ($event, selectedRegOu) {
+            organizationForSLACentralArchive = selectedRegOu;
+            _resetDefaultNeedReplyFollowupDate();
+        });
+
+        /**
+         * @description Request the selected registry ou
+         * @private
+         */
+        function _requestSelectedRegistryOu() {
+            $scope.$emit('$RequestSelectedRegistryOu');
+        }
+
+        function _initPriorityLevelWatch() {
+            $scope.$watch(function () {
+                return self.correspondence.getInfo().priorityLevel;
+            }, function (value) {
+                _resetDefaultNeedReplyFollowupDate();
+            });
+        }
+
+        self.$onInit = function () {
+            _setSLAOrganization()
+                .then(function () {
+                    //_requestSelectedRegistryOu();
+                    if (self.correspondence) {
+                        _initPriorityLevelWatch();
+                    }
+                });
         };
     });
 };
