@@ -33,49 +33,13 @@ module.exports = function (app) {
         self.sitesInfoCCSelected = [];
         self.sitesInfoCCFollowupStatus = null;
         self.sitesInfoCCFollowupStatusDate = null;
-        self.followUpStatusDate = null;
 
         self.minDate = generator.getFutureDate(1);
 
         self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
 
-        var followupStatusWithoutReply = _.find(self.followUpStatuses, function (status) {
-                return status.lookupStrKey === 'WITHOUT_REPLY';
-            }),
-            followupStatusNeedReply = _.find(self.followUpStatuses, function (status) {
-                return status.lookupStrKey === 'NEED_REPLY';
-            }),
-            properties = angular.copy(lookupService.getPropertyConfigurations('outgoing')),
-            defaultFollowupNumberOfDays = 3,
+        var defaultFollowupNumberOfDays = 3,
             defaultNeedReplyFollowupDate = generator.getFutureDate(defaultFollowupNumberOfDays);
-
-
-        /**
-         * @description Finds the property configuration by symbolic name
-         * @param symbolicName
-         * @returns {*|null}
-         * @private
-         */
-        function _findPropertyConfiguration(symbolicName) {
-            if (!symbolicName) {
-                return null;
-            }
-            return _.find(properties, function (item) {
-                return item.symbolicName.toLowerCase() === symbolicName.toLowerCase();
-            }) || null;
-        }
-
-        function _checkFollowupStatusMandatory() {
-            var property = _findPropertyConfiguration('FollowupStatus');
-            if (property) {
-                self.isFollowupStatusMandatory = property.isMandatory;
-                if (property.isMandatory) {
-                    self.followupStatus = followupStatusNeedReply;
-                    self.followUpStatusDate = defaultNeedReplyFollowupDate;
-                }
-            }
-        }
-
 
         self.grid = {
             sitesInfoTo: {
@@ -161,21 +125,6 @@ module.exports = function (app) {
                 self['sitesInfo' + type + 'FollowupStatusDate'] = defaultNeedReplyFollowupDate;
                 _setSitesProperty(self['sitesInfo' + type + 'Selected'], 'followupDate', defaultNeedReplyFollowupDate);
             }
-
-        };
-
-
-        self.onSiteFollowupStatusChange = function (status) {
-            if (!self.needReply(status)) {
-                self.correspondence.site.followupDate = null;
-            } else {
-                if (self.correspondence.site.followupStatus.lookupStrKey !== 'NEED_REPLY')
-                    self.correspondence.site.followupStatus = null;
-            }
-            self.correspondence.site.followupStatus = status;
-            if (self.needReply(status)) {
-                self.correspondence.site.followupDate = defaultNeedReplyFollowupDate;
-            }
         };
 
         /**
@@ -225,7 +174,6 @@ module.exports = function (app) {
          * @description Saves correspondence sites
          */
         self.saveCorrespondenceSites = function () {
-            debugger
             if (self.documentClass.toLowerCase() === 'outgoing') {
                 self.correspondence
                     .updateSites()
@@ -248,10 +196,6 @@ module.exports = function (app) {
          */
         self.closePopup = function () {
             dialog.cancel();
-        };
-
-        self.$onInit = function () {
-            _checkFollowupStatusMandatory();
         };
     });
 };
