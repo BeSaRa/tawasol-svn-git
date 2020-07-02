@@ -79,17 +79,21 @@ module.exports = function (app) {
         /**
          * @description Opens dialog for edit document type
          * @param documentType
+         * @param tabName
          * @param $event
          */
-        self.openEditDocumentTypeDialog = function (documentType, $event) {
+        self.openEditDocumentTypeDialog = function (documentType, tabName, $event) {
             documentTypeService
                 .controllerMethod
-                .documentTypeEdit(documentType, $event)
+                .documentTypeEdit(documentType, tabName, $event)
                 .then(function (result) {
                     self.reloadDocumentTypes(self.grid.page)
                         .then(function () {
                             toast.success(langService.get('edit_success').change({name: result.getNames()}));
                         });
+                })
+                .catch(function () {
+                    self.reloadDocumentTypes(self.grid.page);
                 });
         };
 
@@ -186,21 +190,33 @@ module.exports = function (app) {
                 });
         };
 
-        /*/!**
-         * @description Opens dialog for add distribution workflow
-         * @param $event
-         *!/
-         self.openDistributionWorkflowDialog = function ($event) {
-         documentTypeService
-         .controllerMethod
-         .distributionWorkflowAdd($event)
-         /!*.then(function (result) {
-         self.reloadDocumentTypes(self.grid.page)
-         .then(function () {
-         toast.success(langService.get('add_success').change({name: result.getNames()}));
-         });
-         })*!/
-         };*/
+
+        /**
+         * @description Change the global of document type
+         * @param documentType
+         */
+        self.changeGlobalDocumentType = function (documentType) {
+            if (documentType.isGlobal) {
+                dialog.confirmMessage(langService.get('related_user_confirm'))
+                    .then(function () {
+                        documentType.isGlobal = true;
+                        documentTypeService.updateDocumentType(documentType).then(function () {
+                            self.reloadDocumentTypes(self.grid.page).then(function () {
+                                toast.success(langService.get('change_global_success').change({
+                                    name: documentType.getTranslatedName(),
+                                    global: documentType.getTranslatedGlobal()
+                                }));
+                            });
+                        });
+                    })
+                    .catch(function () {
+                        documentType.isGlobal = false;
+                    });
+
+            } else {
+                self.openEditDocumentTypeDialog(documentType, 'security');
+            }
+        };
 
     });
 };

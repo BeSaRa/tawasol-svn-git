@@ -189,4 +189,5 @@ module.exports = function (app) {
     require('./FollowupBook')(app);
     require('./UserFollowupBookLog')(app);
     require('./UserFollowupRequest')(app);
+    require('./PrivateDocumentType')(app);
 };

@@ -6,99 +6,185 @@
     <popup-toolbar-directive ng-if="ctrl.model.id"
                              header-text="{{ctrl.model.getNames()}}"></popup-toolbar-directive>
     <md-dialog-content scroll-directive flex>
-        <div class="md-dialog-content cms-dialog-content">
+        <div>
             <form name="documentTypeForm" autocomplete="off">
-                <div layout="column">
-                    <div layout="row">
-                        <md-input-container flex>
-                            <label for="arName">{{lang.arabic_name}}</label>
-                            <input name="arName" id="arName" required minlength="4"
-                                   ng-model="ctrl.documentType.arName"
-                                   maxlength="80" custom-validate-directive="ANS">
-                            <div ng-messages="documentTypeForm.arName.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                                <div ng-message="minlength">{{lang.short}}</div>
-                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
-                                <div ng-message="ANS">{{lang.arabic_number_space}}</div>
-                            </div>
-                        </md-input-container>
-                        <md-input-container flex>
-                            <label for="enName">{{lang.english_name}}</label>
-                            <input name="enName" id="enName" required minlength="4"
-                                   ng-model="ctrl.documentType.enName" maxlength="80"
-                                   maxlength="150" custom-validate-directive="ENS">
-                            <div ng-messages="documentTypeForm.enName.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                                <div ng-message="minlength">{{lang.short}}</div>
-                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
-                                <div ng-message="ENS">{{lang.english_number_space}}</div>
-                            </div>
-                        </md-input-container>
-                    </div>
-                    <div layout="row">
-                        <md-input-container flex>
-                            <label for="lookupStrKey">{{lang.label_document_class}}</label>
-                            <md-select name="lookupStrKey" id="lookupStrKey" required multiple
-                                       aria-label="Document Class" maxlength="40"
-                                       ng-model="ctrl.documentType.lookupStrKey"
-                                       data-md-container-class="select-header-container sticky-search-bar"
-                                       ng-model-options="{trackBy: '$value.id'}">
-                                <md-select-header class="select-header">
-                                    <div class="cms-simple-checkbox-container">
-                                        <input type="checkbox" class="cms-simple-checkbox"
-                                               ng-class="{'checked': ctrl.isChecked(), 'indeterminate': ctrl.isIndeterminate()}"
-                                               ng-checked="ctrl.isChecked()"
-                                               ng-model="ctrl.documentClassCheck">
-                                        <span class="cms-simple-checkbox-text"
-                                              ng-click="ctrl.toggleAll($event)">{{ctrl.isChecked() ? lang.un_select_all : lang.select_all}}</span>
+                <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
+                    <md-tab label="{{lang.basic_info}}"
+                            md-on-select="ctrl.setCurrentTab('basic')">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="arName">{{lang.arabic_name}}</label>
+                                        <input name="arName" id="arName" required minlength="4"
+                                               ng-model="ctrl.documentType.arName"
+                                               maxlength="80" custom-validate-directive="ANS">
+                                        <div ng-messages="documentTypeForm.arName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="ANS">{{lang.arabic_number_space}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="enName">{{lang.english_name}}</label>
+                                        <input name="enName" id="enName" required minlength="4"
+                                               ng-model="ctrl.documentType.enName" maxlength="80"
+                                               maxlength="150" custom-validate-directive="ENS">
+                                        <div ng-messages="documentTypeForm.enName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="ENS">{{lang.english_number_space}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="lookupStrKey">{{lang.label_document_class}}</label>
+                                        <md-select name="lookupStrKey" id="lookupStrKey" required multiple
+                                                   aria-label="Document Class" maxlength="40"
+                                                   ng-model="ctrl.documentType.lookupStrKey"
+                                                   data-md-container-class="select-header-container sticky-search-bar"
+                                                   ng-model-options="{trackBy: '$value.id'}">
+                                            <md-select-header class="select-header">
+                                                <div class="cms-simple-checkbox-container">
+                                                    <input type="checkbox" class="cms-simple-checkbox"
+                                                           ng-class="{'checked': ctrl.isChecked(), 'indeterminate': ctrl.isIndeterminate()}"
+                                                           ng-checked="ctrl.isChecked()"
+                                                           ng-model="ctrl.documentClassCheck">
+                                                    <span class="cms-simple-checkbox-text"
+                                                          ng-click="ctrl.toggleAll($event)">{{ctrl.isChecked() ? lang.un_select_all : lang.select_all}}</span>
+                                                </div>
+                                            </md-select-header>
+                                            <md-option ng-value="dc"
+                                                       ng-repeat="dc in ctrl.documentClasses track by $index"
+                                                       ng-disabled="ctrl.isDefaultDocumentClass(dc)">
+                                                {{dc.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="documentTypeForm.lookupStrKey.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:40})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="itemOrder">{{lang.item_order}}</label>
+                                        <input name="itemOrder" id="itemOrder" required
+                                               ng-model="ctrl.documentType.itemOrder"
+                                               custom-validate-directive="number">
+                                        <div ng-messages="documentTypeForm.itemOrder.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <div flex class="cms-input-container">
+                                        <md-switch ng-model="ctrl.documentType.status" aria-label="{{lang.status}}">
+                                            <label>{{lang.status}} : {{ctrl.documentType.getTranslatedStatus()}}</label>
+                                        </md-switch>
                                     </div>
-                                </md-select-header>
-                                <md-option ng-value="dc" ng-repeat="dc in ctrl.documentClasses track by $index"
-                                           ng-disabled="ctrl.isDefaultDocumentClass(dc)">
-                                    {{dc.getTranslatedName()}}
-                                </md-option>
-                            </md-select>
-                            <div ng-messages="documentTypeForm.lookupStrKey.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                                <div ng-message="maxlength">{{lang.max_length.change({length:40})}}</div>
+                                    <div flex class="cms-input-container">
+                                        <md-switch ng-model="ctrl.documentType.isGlobal"
+                                                   aria-label="{{lang.global}}"
+                                                   ng-disabled="!ctrl.documentType.id"
+                                                   ng-change="ctrl.onChangeGlobal()">
+                                            <span>{{lang.global}} : </span>{{ctrl.documentType.getTranslatedGlobal()}}
+                                        </md-switch>
+                                    </div>
+                                </div>
                             </div>
-                        </md-input-container>
-                    </div>
-                    <div layout="row">
-                        <md-input-container flex>
-                            <label for="itemOrder">{{lang.item_order}}</label>
-                            <input name="itemOrder" id="itemOrder" required
-                                   ng-model="ctrl.documentType.itemOrder"
-                                   custom-validate-directive="number">
-                            <div ng-messages="documentTypeForm.itemOrder.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                                <div ng-message="number">{{lang.numberonly}}</div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="{{lang.security}}" ng-disabled="ctrl.documentType.isGlobal"
+                            md-on-select="ctrl.setCurrentTab('security')">
+                        <md-content class="md-padding">
+                            <div layout="row" class="p20-0">
+                                <md-button ng-click="ctrl.openAddRelatedDataDialog($event)"
+                                           class="md-icon-button"
+                                           tooltip="{{lang.add}}">
+                                    <md-icon md-svg-icon="plus"></md-icon>
+                                </md-button>
+                                <md-button ng-click="ctrl.reloadRelatedData()" class="md-icon-button"
+                                           tooltip="{{lang.reload}}">
+                                    <md-icon md-svg-icon="refresh"></md-icon>
+                                </md-button>
+                                <span flex></span>
+                                <grid-search-directive grid="ctrl.relatedDataGrid"></grid-search-directive>
                             </div>
-                        </md-input-container>
-                        <div flex class="cms-input-container">
-                            <md-switch ng-model="ctrl.documentType.status" aria-label="{{lang.status}}">
-                                <label>{{lang.status}} : {{ctrl.documentType.getTranslatedStatus()}}</label>
-                            </md-switch>
-                        </div>
-                    </div>
-                </div>
+                            <div layout="row">
+                                <md-card layout="column"
+                                         flex class="card-overlay">
+                                    <md-table-container>
+                                        <div flex scroll-directive>
+                                            <table md-table md-progress="ctrl.relatedDataGrid.progress">
+                                                <thead md-head md-order="ctrl.relatedDataGrid.order"
+                                                       md-on-reorder="ctrl.getSortedRelatedData">
+                                                <tr md-row>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('userInfo','Information')}}">
+                                                        {{lang.user}}
+                                                    </th>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('ouInfo','Information')}}">
+                                                        {{lang.organization}}
+                                                    </th>
+                                                    <th md-column></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-row
+                                                    ng-repeat="record in ctrl.documentType.relatedRecords | limitTo: ctrl.relatedDataGrid.limit: ((ctrl.relatedDataGrid.page - 1) * ctrl.relatedDataGrid.limit) track by $index">
+                                                    <td md-cell>
+                                                        {{record.getUserInfo().getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        {{record.getOrganizationInfo().getTranslatedName()}}
+                                                    </td>
+                                                    <td md-cell>
+                                                        <div flex layout="row" layout-align="start center">
+                                                            <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                                       ng-click="ctrl.deleteRelatedData(record, $event)">
+                                                                <md-icon md-svg-icon="delete"></md-icon>
+                                                            </md-button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <md-table-pagination
+                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                md-limit-options="ctrl.relatedDataGrid.limitOptions"
+                                                md-limit="ctrl.relatedDataGrid.limit"
+                                                md-page="ctrl.relatedDataGrid.page"
+                                                md-total="{{(ctrl.documentType.relatedRecords).length}}"
+                                                md-page-select
+                                                md-on-paginate="ctrl.relatedDataGrid.pagingCallback">
+                                        </md-table-pagination>
+                                    </md-table-container>
+                                </md-card>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
             </form>
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
-        <md-button class="md-raised md-primary" ng-disabled="documentTypeForm.$invalid" ng-if="!ctrl.editMode"
-                   ng-click="ctrl.addDocumentTypeFromCtrl()">
-            {{lang.add}}
-        </md-button>
-        <md-button class="md-raised md-primary" ng-disabled="documentTypeForm.$invalid" ng-if="ctrl.editMode"
-                   ng-click="ctrl.editDocumentTypeFromCtrl()">
-            {{lang.save}}
+        <md-button class="md-raised md-primary"
+                   ng-if="ctrl.selectedTab === 'basic'"
+                   ng-disabled="!ctrl.isValidDocumentType(documentTypeForm)"
+                   ng-click="ctrl.saveDocumentType()">
+            {{ctrl.editMode ? lang.save : lang.add}}
         </md-button>
         <md-button class="md-raised"
+                   ng-if="ctrl.selectedTab === 'basic'"
                    ng-click="ctrl.resetModel()">
             {{lang.reset}}
         </md-button>
-        <md-button class="md-raised red-text" ng-click="ctrl.closeDocumentTypePopupFromCtrl()">
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">
             {{lang.close}}
         </md-button>
     </md-dialog-actions>

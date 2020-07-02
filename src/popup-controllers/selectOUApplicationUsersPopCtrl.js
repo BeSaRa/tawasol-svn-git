@@ -1,19 +1,20 @@
 module.exports = function (app) {
     app.controller('selectOUApplicationUsersPopCtrl', function (dialog,
-                                                               label,
-                                                               ouApplicationUsers,
-                                                               ouApplicationUserService,
-                                                               ApplicationUser,
-                                                               OUApplicationUser,
-                                                               Organization,
-                                                               $timeout,
-                                                               langService,
-                                                               isUserPreference,
-                                                               applicationUserService,
-                                                               organizationService,
-                                                               $q,
-                                                               _,
-                                                               singleMode) {
+                                                                label,
+                                                                ouApplicationUsers,
+                                                                ouApplicationUserService,
+                                                                ApplicationUser,
+                                                                OUApplicationUser,
+                                                                Organization,
+                                                                $timeout,
+                                                                langService,
+                                                                isUserPreference,
+                                                                applicationUserService,
+                                                                organizationService,
+                                                                $q,
+                                                                _,
+                                                                singleMode,
+                                                                organizations) {
             'ngInject';
             var self = this;
             self.controllerName = 'selectOUApplicationUsersPopCtrl';
@@ -26,8 +27,6 @@ module.exports = function (app) {
 
             self.isUserPreference = isUserPreference;
 
-            // to disable the search text after rich the max value of users needs.
-            self.isDisabled = !!(self.singleMode && self.ouApplicationUsers.length);
             // current selected application user.
             self.ouApplicationUser = null;
             // all available search criteria
@@ -38,9 +37,9 @@ module.exports = function (app) {
                 {key: 'enFullName', value: 'english_name'}
             ];
 
-            self.organizations = organizationService.organizations;
+            self.organizations = organizations; //organizationService.organizations;
 
-            self.selectedOu = self.organizations[0].id;
+            self.selectedOu = (self.organizations && self.organizations.length) ? self.organizations[0].id : null;
 
             self.hasChanges = false;
 
@@ -148,14 +147,14 @@ module.exports = function (app) {
                     self.ouApplicationUsers.push(ouApplicationUser);
                 self.ouApplicationUser = null;
                 self.hasChanges = true;
-                self.checkDisableMode();
             };
             /**
              * check if disabled
              */
             self.checkDisableMode = function () {
-                self.isDisabled = !!(self.singleMode && self.ouApplicationUsers.length);
+                return !!(self.singleMode && self.ouApplicationUsers.length);
             };
+
             /**
              * remove applicationUser from the grid
              * @param ouApplicationUser
@@ -164,7 +163,6 @@ module.exports = function (app) {
                 var index = self.ouApplicationUsers.indexOf(ouApplicationUser);
                 self.ouApplicationUsers.splice(index, 1);
                 self.hasChanges = true;
-                self.checkDisableMode();
             };
             /**
              * close dialog
