@@ -8,7 +8,7 @@ module.exports = function (app) {
                                                                       correspondence,
                                                                       sites,
                                                                       lookupService,
-                                                                      employeeService) {
+                                                                      Information) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSiteStatusPopCtrl';
@@ -21,10 +21,20 @@ module.exports = function (app) {
                 self.correspondence.sitesInfoCC = sites.second;
                 self.correspondence.sitesInfoTo = sites.first;
             }
+        } else {
+            if (self.correspondence.site.followupDate && angular.isNumber(self.correspondence.site.followupDate)) {
+                self.correspondence.site.followupDate = generator.getDateFromTimeStamp(self.correspondence.site.followupDate);
+            }
         }
 
         self.needReply = function (status) {
-            return (status && status.lookupStrKey === 'NEED_REPLY');
+            if (typeof status === 'undefined' || status === null) {
+                return false;
+            }
+            if (status instanceof Information) {
+                return generator.getNormalizedValue(status, 'id') === 0;
+            }
+            return (generator.getNormalizedValue(status, 'lookupStrKey') === 'NEED_REPLY');
         };
 
         self.sitesInfoToSelected = [];
