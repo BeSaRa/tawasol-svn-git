@@ -134,6 +134,7 @@ module.exports = function (app) {
                 .then(function () {
                     var result = scannerService.getStoredImages();
                     self.attachment = _createAttachmentFile(result.file);
+                    self.activeAttachment = self.attachment;
                     self.attachment.sourceType = 2; // scanned attachment.
                 })
                 .catch(function (error) {
@@ -154,6 +155,7 @@ module.exports = function (app) {
                         self.reloadAttachments()
                             .then(function (result) {
                                 self.attachment = null;
+                                self.activeAttachment = null;
                             })
                     } else {
                         if (attachments && attachments.length) {
@@ -213,6 +215,7 @@ module.exports = function (app) {
          */
         self.addFileToAttachments = function () {
             self.attachment = self.setNameToAttachment(self.attachment);
+            self.activeAttachment = self.attachment;
             var info = self.document.getInfo();
             var promise = attachmentService.addAttachment(info, self.attachment);
 
@@ -220,6 +223,7 @@ module.exports = function (app) {
                 .then(function (attachment) {
                     if (self.vsId) {
                         self.attachment = null;
+                        self.activeAttachment = null;
                         self.reloadAttachments()
                             .then(function (result) {
                                 toast.success(langService.get('add_success').change({name: attachment.documentTitle}));
@@ -231,6 +235,7 @@ module.exports = function (app) {
                         self.model = managerService.deepCopyAttachments(self.attachments);
                         self.getSortedData();
                         self.attachment = null;
+                        self.activeAttachment = null;
                     }
                     self.attachmentCopyBeforeEdit = null;
                 })
@@ -364,6 +369,7 @@ module.exports = function (app) {
                 .validateBeforeUpload('attachmentUpload', files[0])
                 .then(function (file) {
                     self.attachment = _createAttachmentFile(file);
+                    self.activeAttachment = self.attachment;
                 })
                 .catch(function (availableExtensions) {
                     // console.log(availableExtensions);
@@ -377,6 +383,7 @@ module.exports = function (app) {
                 .confirmMessage(langService.get('attachment_remove_confirm'))
                 .then(function () {
                     self.attachment = null;
+                    self.activeAttachment = null;
                     self.attachmentCopyBeforeEdit = null;
                 })
         };
@@ -390,6 +397,8 @@ module.exports = function (app) {
             self.attachmentCopyBeforeEdit = angular.copy(attachment);
             self.attachment.file = file;
             self.attachmentCopyBeforeEdit.file = file;
+
+            self.activeAttachment = self.attachment;
         };
 
         self.openEditAttachmentContent = function (attachment, $event) {
@@ -409,6 +418,7 @@ module.exports = function (app) {
                                 .then(function () {
                                     toast.success(langService.get('edit_success').change({name: attachment.documentTitle}));
                                     self.attachment = null;
+                                    self.activeAttachment = null;
                                 });
                         });
                 });
@@ -417,11 +427,14 @@ module.exports = function (app) {
 
         self.cancelEditAttachment = function () {
             self.attachment = null;
+            self.activeAttachment = null;
             self.attachmentCopyBeforeEdit = null;
         };
 
         self.updateAttachment = function () {
             self.attachment = self.setNameToAttachment(self.attachment);
+
+            self.activeAttachment = self.attachment;
             var promise = null;
             /*if (self.vsId) {
                 promise = attachmentService.updateAttachmentForDocWithVsId(self.vsId, self.documentClass, self.attachment);
@@ -438,6 +451,7 @@ module.exports = function (app) {
                             .then(function (result) {
                                 toast.success(langService.get('edit_success').change({name: attachment.documentTitle}));
                                 self.attachment = null;
+                                self.activeAttachment = null;
                             })
                     } else {
                         toast.success(langService.get('edit_success').change({name: attachment.documentTitle}));
@@ -448,6 +462,7 @@ module.exports = function (app) {
                         self.model = managerService.deepCopyAttachments(self.attachments);
                         self.getSortedData();
                         self.attachment = null;
+                        self.activeAttachment = null;
                     }
                     self.attachmentCopyBeforeEdit = null;
                 })
@@ -525,6 +540,7 @@ module.exports = function (app) {
                     self.reloadAttachments()
                         .then(function (result) {
                             self.attachment = null;
+                            self.activeAttachment = null;
                         })
                 })
         }

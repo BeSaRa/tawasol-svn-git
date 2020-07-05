@@ -21,7 +21,8 @@ module.exports = function (app) {
                 disableEverything: '=?',
                 linkedExportedAttachments: '=?',
                 receiveG2g: '=?',
-                receive: '=?'
+                receive: '=?',
+                activeAttachment: '=?'
             }
         }
     });

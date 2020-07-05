@@ -107,8 +107,8 @@ module.exports = function (app) {
             return self.cc.getDocument().pages.length > 1;
         };
         self.deletePage = function (page, $index, $event) {
-            dialog.confirmMessage(langService.get('confirm_delete').change({name: langService.get('page') + ' ' + ($index + 1)  }))
-                .then(function(){
+            dialog.confirmMessage(langService.get('confirm_delete').change({name: langService.get('page') + ' ' + ($index + 1)}))
+                .then(function () {
                     self.cc.getDocument().deletePage(page, function (pageAfter) {
                         self.showPage(pageAfter);
                     });
@@ -133,7 +133,14 @@ module.exports = function (app) {
 
 
         self.closeScanner = function () {
-            dialog.cancel();
+            if (!self.scannerHasDocument()) {
+                dialog.cancel();
+            } else {
+                dialog.confirmMessage(langService.get('confirm_unsaved_changes'))
+                    .then(function () {
+                        dialog.cancel();
+                    });
+            }
         };
 
         self.scannerHasDocument = function () {
@@ -941,7 +948,7 @@ module.exports = function (app) {
                         })) : ctrl.pages;
                     };
 
-                    ctrl.disableSave = function(){
+                    ctrl.disableSave = function () {
                         return ctrl.jobOptions.addType === 'location' && ctrl.jobOptions.jobType === 'append' && ctrl.jobOptions.selectedPage === null;
                     };
 

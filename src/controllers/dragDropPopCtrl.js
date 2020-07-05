@@ -311,6 +311,7 @@ module.exports = function (app) {
 
         self.cancelUpdate = function () {
             self.attachment = null;
+            self.closeDrag(null, true);
         };
 
         self.updateAttachment = function () {
@@ -346,9 +347,27 @@ module.exports = function (app) {
         /**
          * close drag and drop dialog
          */
-        self.closeDrag = function (updatedAttachment) {
-            updatedAttachment = updatedAttachment ? [updatedAttachment] : self.successFilesUploaded;
-            dialog.hide(updatedAttachment);
+        self.closeDrag = function (updatedAttachment, skipCheckUnsaved) {
+            var closeDefer = $q.defer();
+            if (skipCheckUnsaved) {
+                closeDefer.resolve(true);
+            } else {
+                if (self.validFiles && self.validFiles.length) {
+                    dialog.confirmMessage(langService.get('confirm_unsaved_changes'))
+                        .then(function () {
+                            closeDefer.resolve(true);
+                        })
+                        .catch(function () {
+                            closeDefer.reject(false);
+                        })
+                } else {
+                    closeDefer.resolve(true);
+                }
+            }
+            closeDefer.promise.then(function () {
+                updatedAttachment = updatedAttachment ? [updatedAttachment] : self.successFilesUploaded;
+                dialog.hide(updatedAttachment);
+            })
         };
         /**
          * @description delete dragged attachments.
