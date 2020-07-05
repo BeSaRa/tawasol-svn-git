@@ -104,6 +104,9 @@ module.exports = function (app) {
         var _approveBook = function (workItem, isComposite, ignoreMessage, additionalData) {
             return correspondenceService.approveCorrespondence(workItem, self.selectedSignature, self.pinCode, isComposite, ignoreMessage, additionalData)
                 .then(function (result) {
+                    if (result === 'AUTHORIZE_CANCELLED'){
+                        return result;
+                    }
                     dialog.hide(result);
                     return result;
                 });

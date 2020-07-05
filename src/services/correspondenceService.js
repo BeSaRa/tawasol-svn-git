@@ -137,6 +137,14 @@ module.exports = function (app) {
             internal: urlService.internals
         };
 
+        self.authorizeStatus = {
+            NOT_AUTHORIZED: {text: 'NOT_AUTHROIZED', value: 0},
+            FULLY_AUTHORIZED: {text: 'FULLY_AUTHORIZED', value: 1},
+            PARTIALLY_AUTHORIZED: {text: 'PARIALLY_AUTHORIZED', value: 2},
+            INTERNAL_PERSONAL: {text: 'INTERNAL_PERSONAL', value: 3},
+            SAME_USER_AUTHORIZED: {text: 'SAME_USER_AUTHORIZED', value: 4}
+        };
+
         var merge = {
                 classifications: {
                     model: OUClassification,
@@ -3273,8 +3281,9 @@ module.exports = function (app) {
          * @param isComposite
          * @param ignoreMessage
          * @param additionalData
+         * @param ignoreValidateMultiSignature
          */
-        self.approveCorrespondence = function (workItem, signature, pinCode, isComposite, ignoreMessage, additionalData) {
+        self.approveCorrespondence = function (workItem, signature, pinCode, isComposite, ignoreMessage, additionalData, ignoreValidateMultiSignature) {
             var defer = $q.defer();
             if (additionalData && workItem.isWorkItem()) {
                 additionalData.preApproveAction(null, true, true)
@@ -3287,18 +3296,46 @@ module.exports = function (app) {
             return defer.promise.then(function (changesSaved) {
                 if (changesSaved === 'savedBeforeApprove' || changesSaved === 'noSaveRequired') {
                     var info = workItem.getInfo();
-                    var sign = (new SignDocumentModel()).setSignature(workItem, signature).setIsComposite(isComposite).setPinCode(pinCode ? encryptionService.encrypt(pinCode) : null);
+                    var sign = (new SignDocumentModel())
+                        .setSignature(workItem, signature)
+                        .setIsComposite(isComposite)
+                        .setPinCode(pinCode ? encryptionService.encrypt(pinCode) : null)
+                        .setValidateMultiSignature(!ignoreValidateMultiSignature);
+
                     return $http
                         .put(_createUrlSchema(null, info.documentClass, 'authorize'), sign)
                         .then(function (result) {
-                            if (!ignoreMessage) {
-                                if (result.data.rs) {
-                                    toast.success(langService.get('sign_specific_success').change({name: workItem.getTranslatedName()}));
-                                } else {
-                                    toast.error(langService.get('something_happened_when_sign'));
+                            if (result.data.rs === self.authorizeStatus.SAME_USER_AUTHORIZED.text) {
+                                return _handleSameUserAuthorize()
+                                    .then(function (sameUserAuthorizeResult) {
+                                        if (sameUserAuthorizeResult === 'AUTHORIZE_CANCELLED') {
+                                            return sameUserAuthorizeResult;
+                                        } else {
+                                            return self.approveCorrespondence(workItem, signature, pinCode, isComposite, ignoreMessage, null, true)
+                                                .catch(function(error){
+                                                    errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
+                                                        dialog.errorMessage(langService.get('authorize_failed'))
+                                                    });
+                                                    errorCode.checkIf(error, 'NOT_ENOUGH_CERTIFICATES', function () {
+                                                        dialog.errorMessage(langService.get('certificate_missing'))
+                                                    });
+                                                    errorCode.checkIf(error, 'PIN_CODE_NOT_MATCH', function () {
+                                                        dialog.errorMessage(langService.get('pincode_not_match'))
+                                                    });
+                                                    return $q.resolve(error);
+                                                });
+                                        }
+                                    });
+                            } else {
+                                if (!ignoreMessage) {
+                                    if (result.data.rs) {
+                                        toast.success(langService.get('sign_specific_success').change({name: workItem.getTranslatedName()}));
+                                    } else {
+                                        toast.error(langService.get('something_happened_when_sign'));
+                                    }
                                 }
+                                return result.data.rs;
                             }
-                            return result.data.rs;
                         })
                         .catch(function (error) {
                             errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
@@ -3315,6 +3352,17 @@ module.exports = function (app) {
                 }
             })
         };
+
+        function _handleSameUserAuthorize(workItem, signature, pinCode, isComposite, ignoreMessage, preSaveCallback, ignoreValidateMultiSignature) {
+            return dialog.confirmMessage(langService.get('confirm_authorize_same_user').change({user: employeeService.getEmployee().getTranslatedName()}))
+                .then(function () {
+                    return $q.resolve('AUTHORIZE_SKIP_SAME_USER_CHECK');
+                })
+                .catch(function () {
+                    return $q.resolve('AUTHORIZE_CANCELLED');
+                })
+        }
+
         /**
          * @description to display dialog to select signature .
          * @param workItem
@@ -3327,63 +3375,65 @@ module.exports = function (app) {
             return applicationUserSignatureService
                 .loadApplicationUserSignatures(employeeService.getEmployee().id)
                 .then(function (signatures) {
-                    var pinCodeRequired = rootEntity.getGlobalSettings().isDigitalCertificateEnabled() && employeeService.getEmployee().hasPinCodePrompt();
-                    if (signatures && signatures.length === 1) {
-                        var pinCodeDefer = $q.defer();
-                        if (!pinCodeRequired) {
-                            pinCodeDefer.resolve('PINCODE_NOT_REQUIRED');
-                        } else {
-                            dialog
-                                .showDialog({
-                                    targetEvent: $event,
-                                    templateUrl: cmsTemplate.getPopup('pincode'),
-                                    controller: 'pinCodePopCtrl',
-                                    controllerAs: 'ctrl'
-                                })
-                                .then(function (result) {
-                                    result ? pinCodeDefer.resolve(result) : pinCodeDefer.reject('PINCODE_MISSING');
-                                })
-                                .catch(function () {
-                                    pinCodeDefer.reject('PINCODE_MISSING');
-                                });
-                        }
-
-                        return pinCodeDefer.promise.then(function (pinCode) {
-                            if (pinCode === 'PINCODE_NOT_REQUIRED') {
-                                pinCode = null;
-                            }
-                            var isComposite = workItem.isWorkItem() ? workItem.isComposite() : workItem.isCompositeSites();
-                            if (isComposite) {
-                                return dialog
-                                    .confirmMessage(langService.get('document_is_composite'))
-                                    .then(function () {
-                                        return self.approveCorrespondence(workItem, signatures[0], pinCode, true, ignoreMessage, additionalData);
-                                    })
-                                    .catch(function () {
-                                        return self.approveCorrespondence(workItem, signatures[0], pinCode, false, ignoreMessage, additionalData);
-                                    })
-                            } else {
-                                return self.approveCorrespondence(workItem, signatures[0], pinCode, false, ignoreMessage, additionalData);
-                            }
-                        });
-                    } else if (signatures && signatures.length > 1) {
-                        return dialog
-                            .showDialog({
-                                targetEvent: $event,
-                                templateUrl: cmsTemplate.getPopup('signature'),
-                                controller: 'signaturePopCtrl',
-                                controllerAs: 'ctrl',
-                                locals: {
-                                    workItem: workItem,
-                                    signatures: signatures,
-                                    additionalData: additionalData,
-                                    ignoreMessage: ignoreMessage,
-                                    pinCodeRequired: pinCodeRequired
-                                }
-                            });
-                    } else {
+                    if (!signatures || signatures.length === 0) {
                         dialog.alertMessage(langService.get('no_signature_available'));
                         return $q.reject(langService.get('no_signature_available'));
+                    } else {
+                        var pinCodeRequired = rootEntity.getGlobalSettings().isDigitalCertificateEnabled() && employeeService.getEmployee().hasPinCodePrompt();
+                        if (signatures.length === 1) {
+                            var pinCodeDefer = $q.defer();
+                            if (!pinCodeRequired) {
+                                pinCodeDefer.resolve('PINCODE_NOT_REQUIRED');
+                            } else {
+                                dialog
+                                    .showDialog({
+                                        targetEvent: $event,
+                                        templateUrl: cmsTemplate.getPopup('pincode'),
+                                        controller: 'pinCodePopCtrl',
+                                        controllerAs: 'ctrl'
+                                    })
+                                    .then(function (result) {
+                                        result ? pinCodeDefer.resolve(result) : pinCodeDefer.reject('PINCODE_MISSING');
+                                    })
+                                    .catch(function () {
+                                        pinCodeDefer.reject('PINCODE_MISSING');
+                                    });
+                            }
+
+                            return pinCodeDefer.promise.then(function (pinCode) {
+                                if (pinCode === 'PINCODE_NOT_REQUIRED') {
+                                    pinCode = null;
+                                }
+                                var isComposite = workItem.isWorkItem() ? workItem.isComposite() : workItem.isCompositeSites();
+                                if (isComposite) {
+                                    return dialog
+                                        .confirmMessage(langService.get('document_is_composite'))
+                                        .then(function () {
+                                            return self.approveCorrespondence(workItem, signatures[0], pinCode, true, ignoreMessage, additionalData);
+                                        })
+                                        .catch(function () {
+                                            return self.approveCorrespondence(workItem, signatures[0], pinCode, false, ignoreMessage, additionalData);
+                                        })
+                                } else {
+                                    return self.approveCorrespondence(workItem, signatures[0], pinCode, false, ignoreMessage, additionalData);
+                                }
+                            });
+                        } else if (signatures && signatures.length > 1) {
+                            return dialog
+                                .showDialog({
+                                    targetEvent: $event,
+                                    templateUrl: cmsTemplate.getPopup('signature'),
+                                    controller: 'signaturePopCtrl',
+                                    controllerAs: 'ctrl',
+                                    locals: {
+                                        workItem: workItem,
+                                        signatures: signatures,
+                                        additionalData: additionalData,
+                                        ignoreMessage: ignoreMessage,
+                                        pinCodeRequired: pinCodeRequired
+                                    }
+                                });
+                        }
                     }
                 });
         };

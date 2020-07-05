@@ -1039,7 +1039,7 @@ module.exports = function (app) {
 
                     userInbox
                         .launchWorkFlowCondition($event, 'reply', null, true, function () {
-                            return result === 'INTERNAL_PERSONAL'
+                            return result === correspondenceService.authorizeStatus.INTERNAL_PERSONAL.text;
                         })
                         .then(function () {
                             self.reloadUserInboxes(self.grid.page);
@@ -1067,7 +1067,7 @@ module.exports = function (app) {
                 .signESignature(workItem, $event, defer, additionalData, true)
                 .then(function (result) {
                     // make the temp workitem fully authorized.
-                    workItem.generalStepElm.docStatus = result === 'INTERNAL_PERSONAL' ? 23 : 24;
+                    workItem.generalStepElm.docStatus = (result === correspondenceService.authorizeStatus.INTERNAL_PERSONAL.text) ? 23 : 24;
                     // start launch workflow.
                     return self.launchWorkFlow(workItem, $event, defer);
                 })

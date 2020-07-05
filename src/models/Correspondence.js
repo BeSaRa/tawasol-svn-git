@@ -554,7 +554,7 @@ module.exports = function (app) {
                     .showApprovedDialog(this, $event, ignoreMessage)
                     .then(function (result) {
                         new ResolveDefer(defer);
-                        if (result === 'PARIALLY_AUTHORIZED' && !ignoreLaunch) {
+                        if (result === correspondenceService.authorizeStatus.PARTIALLY_AUTHORIZED.text && !ignoreLaunch) {
                             return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: correspondence.getTranslatedName()}))
                                 .then(function () {
                                     return correspondence.launchWorkFlow($event, 'forward', 'favorites');

@@ -642,7 +642,7 @@ module.exports = function (app) {
                     .showApprovedDialog(this, $event, ignoreMessage, additionalData)
                     .then(function (result) {
                         new ResolveDefer(defer);
-                        if (result === 'PARIALLY_AUTHORIZED' && !sendAfterApprove) {
+                        if (result === correspondenceService.authorizeStatus.PARTIALLY_AUTHORIZED.text && !sendAfterApprove) {
                             return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: workItem.getTranslatedName()}))
                                 .then(function () {
                                     return workItem.launchWorkFlow($event, 'forward', 'favorites');
@@ -658,7 +658,7 @@ module.exports = function (app) {
                     .showApprovedDialog(this, $event, ignoreMessage)
                     .then(function (result) {
                         new ResolveDefer(defer);
-                        if (result === 'PARIALLY_AUTHORIZED' && !ignoreLaunch) {
+                        if (result === correspondenceService.authorizeStatus.PARTIALLY_AUTHORIZED.text && !ignoreLaunch) {
                             return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: workItem.getTranslatedName()}))
                                 .then(function () {
                                     return workItem.launchWorkFlow($event, 'forward', 'favorites');

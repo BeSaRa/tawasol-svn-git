@@ -630,7 +630,7 @@ module.exports = function (app) {
 
                     workItem
                         .launchWorkFlowCondition($event, 'reply', null, true, function () {
-                            return result === 'INTERNAL_PERSONAL'
+                            return result === correspondenceService.authorizeStatus.INTERNAL_PERSONAL.text;
                         })
                         .then(function () {
                             self.reloadFolders(self.grid.page);

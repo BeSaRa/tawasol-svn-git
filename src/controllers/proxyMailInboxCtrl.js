@@ -605,7 +605,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     workItem
                         .launchWorkFlowCondition($event, 'reply', null, true, function () {
-                            return result === 'INTERNAL_PERSONAL'
+                            return result === correspondenceService.authorizeStatus.INTERNAL_PERSONAL.text;
                         })
                         .then(function () {
                             self.reloadProxyMailInboxes(self.grid.page)

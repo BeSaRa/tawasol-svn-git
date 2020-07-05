@@ -8,6 +8,9 @@ module.exports = function (app) {
             self.wobNum = null;
             self.authorizeAsComposite = false;
             self.pinCode = null;
+            self.dueDate = null;
+            self.comments = null;
+            self.validateMultiSignature = true;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -39,6 +42,11 @@ module.exports = function (app) {
 
             SignDocumentModel.prototype.setIsComposite = function (value) {
                 this.authorizeAsComposite = value;
+                return this;
+            };
+
+            SignDocumentModel.prototype.setValidateMultiSignature = function (value) {
+                this.validateMultiSignature = value;
                 return this;
             };
 
