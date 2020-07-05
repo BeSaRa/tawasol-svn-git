@@ -51,6 +51,7 @@ module.exports = function (app) {
             self.slowConnectionMode = false;
             self.pinCodePrompt = false;
             self.isMSTeamsEnabled = null;
+            self.otpEnabled = false;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -149,8 +150,8 @@ module.exports = function (app) {
                 return this;
             };
             ApplicationUser.prototype.getDefaultOrganization = function (returnIdOnly) {
-                if (returnIdOnly){
-                   return this.defaultOUID;
+                if (returnIdOnly) {
+                    return this.defaultOUID;
                 }
                 return organizationService.getOrganizationById(this.defaultOUID);
             };

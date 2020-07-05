@@ -113,6 +113,16 @@
                                         </md-switch>
                                     </div>
                                 </div>
+                                <div layout="row">
+                                    <div flex>
+                                        <md-switch ng-model="ctrl.entity.otpEnabled" aria-label="{{lang.otp}}">
+                                            <label>{{lang.otp}} :
+                                                {{ctrl.entity.getTranslatedYesNo('otpEnabled')}}</label>
+                                        </md-switch>
+                                    </div>
+                                    <div flex>
+                                    </div>
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>

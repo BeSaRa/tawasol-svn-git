@@ -1,0 +1,57 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{lang.enter_otp}}">
+    <popup-toolbar-directive
+            header-text="{{lang.enter_otp}}"
+            close-callback="ctrl.closeOtpPopup"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="otpForm" novalidate enter-submit-directive="btn-view-doc">
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="otp">{{lang.enter_otp}}</label>
+                        <input name="otp" id="otp" required ng-model="ctrl.otp"
+                               custom-validate-directive="number" minlength="3" maxlength="4">
+                        <div ng-messages="otpForm.otp.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="number">{{lang.numberonly}}</div>
+                            <div ng-message="minlength">{{lang.min_length.change({length: 4})}}</div>
+                            <div ng-message="maxlength">{{lang.max_length.change({length:4})}}</div>
+                        </div>
+                    </md-input-container>
+                    <div>
+                        <md-menu-bar class="p0">
+                            <md-menu>
+                                <md-button aria-label="{{lang.select_lang}}" class="md-icon-button"
+                                           ng-click="$mdMenu.open()" ng-disabled="ctrl.inProgress"
+                                           tooltip="{{langService.getKey('select_lang', 'en') + ' / ' + langService.getKey('select_lang', 'ar')}}"
+                                           tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}">
+                                    <md-icon md-svg-icon="google-translate"></md-icon>
+                                </md-button>
+                                <md-menu-content id="login-select-language-content" width="3">
+                                    <md-menu-item ng-class="{'selected':langService.is(language)}"
+                                                  ng-repeat="language in languages track by $index">
+                                        <md-button aria-label="{{language.title}}"
+                                                   ng-click="langService.setSelectedLanguage(language, true)">
+                                            <div layout-align="start center" layout="row">
+                                                <div><img ng-src="assets/images/{{language.image}}.png"></div>
+                                                <span class="language-title">{{language.title}}</span>
+                                            </div>
+                                        </md-button>
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                        </md-menu-bar>
+                    </div>
+                </div>
+                <div layout="row">
+                    <md-button class="md-raised md-primary" ng-disabled="otpForm.$invalid || ctrl.inProgress"
+                               id="btn-view-doc"
+                               ng-click="ctrl.completeLogin($event)">
+                        {{lang.login}}
+                    </md-button>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+</md-dialog>

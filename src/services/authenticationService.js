@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.service('authenticationService', function ($http,
                                                    $cookies,
+                                                   cmsTemplate,
                                                    lookupService,
                                                    tokenService,
                                                    employeeService,
@@ -15,6 +16,7 @@ module.exports = function (app) {
                                                    gridService,
                                                    encryptionService,
                                                    $q,
+                                                   toast,
                                                    errorCode,
                                                    dialog,
                                                    langService) {
@@ -32,11 +34,61 @@ module.exports = function (app) {
             return JSON.parse(encryptionService.decrypt(localStorageService.get('CR')));
         }
 
+        function _completeAuthenticationProcess(result, credentials) {
+            titleService.setTitle(rootEntity.returnRootEntity().getTranslatedAppName());
+            _saveToStorage(credentials);
+            gridService.removeAllSorting();
+            if (result.data.hasOwnProperty('rs') && result.data.rs.hasOwnProperty('token')) {
+                tokenService.setToken(result.data.rs.token);
+            }
+
+            lookupService.setLookups(result.data.rs.globalLookup);
+
+            rootEntity.setRootEntityGlobalSetting(result.data.rs.globalSetting, true);
+            if (!result.data.rs.isAdminUser) {
+                self.setLastLoginOrganizationId(result.data.rs.ou);
+            }
+            return result.data.rs;
+        }
+
+        function _openOTPDialog(result, credentials) {
+            var referenceOTP = result.data.rs;
+            var cachedCredentials = angular.copy(credentials);
+            return dialog.showDialog({
+                templateUrl: cmsTemplate.getPopup('otp-login'),
+                locals: {
+                    referenceOTP: referenceOTP
+                },
+                controller: function (referenceOTP) {
+                    'ngInject';
+                    var ctrl = this;
+                    ctrl.otp = null;
+                    ctrl.referenceOTP = referenceOTP;
+                    ctrl.inProgress = false;
+
+                    ctrl.completeLogin = function () {
+                        ctrl.inProgress = true;
+                        cachedCredentials.password = encryptionService.decrypt(credentials.password);
+                        self.authenticate(cachedCredentials, {otp: ctrl.otp, otpReference: ctrl.referenceOTP})
+                            .then(function (result) {
+                                dialog.hide(result);
+                            })
+                            .catch(function (error) {
+                                ctrl.inProgress = false;
+                                toast.error(error.data.eo[langService.current + 'Name']);
+                            });
+                    }
+                },
+                controllerAs: 'ctrl'
+            });
+        }
+
         /**
          * this method to make authentication by given credentials
          * @param credentials
+         * @param reference
          */
-        self.authenticate = function (credentials) {
+        self.authenticate = function (credentials, reference) {
             // check if the login came from inside application.
             if (credentials instanceof Credentials === false) {
                 return;
@@ -46,25 +98,22 @@ module.exports = function (app) {
             cacheCredentials = angular.copy(credentials);
             // call backend service to login.
             cacheCredentials.password = encryptionService.encrypt(cacheCredentials.password);
+
+            if (reference) {
+                cacheCredentials.otp = reference.otp;
+                cacheCredentials.otpReference = reference.otpReference;
+            }
+
             return $http.post(urlService.login, cacheCredentials, {
                 params: {
                     withEncryption: true
                 }
             }).then(function (result) {
-                titleService.setTitle(rootEntity.returnRootEntity().getTranslatedAppName());
-                _saveToStorage(credentials);
-                gridService.removeAllSorting();
-                if (result.data.hasOwnProperty('rs') && result.data.rs.hasOwnProperty('token')) {
-                    tokenService.setToken(result.data.rs.token);
+                if (typeof result.data.rs === 'string') {
+                    return _openOTPDialog(result, angular.copy(cacheCredentials));
+                } else {
+                    return _completeAuthenticationProcess(result, credentials);
                 }
-
-                lookupService.setLookups(result.data.rs.globalLookup);
-
-                rootEntity.setRootEntityGlobalSetting(result.data.rs.globalSetting, true);
-                if (!result.data.rs.isAdminUser) {
-                    self.setLastLoginOrganizationId(result.data.rs.ou);
-                }
-                return result.data.rs;
             });
         };
         /**

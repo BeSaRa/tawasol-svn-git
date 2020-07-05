@@ -48,6 +48,7 @@ module.exports = function (app) {
             self.rightFaxFolder = false;
 
             self.isMSTeamsEnabled = false;
+            self.otpEnabled = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [

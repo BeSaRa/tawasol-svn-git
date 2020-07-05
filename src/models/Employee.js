@@ -44,6 +44,7 @@ module.exports = function (app) {
             self.subscriptionEmailNotify = null;
             self.subscriptionsmsNotify = null;
             self.viewInboxAsGrid = true;
+            self.otpEnabled = false;
             // extra fields
             self.permissions = [];
             self.mappedToCentralArchive = false;
