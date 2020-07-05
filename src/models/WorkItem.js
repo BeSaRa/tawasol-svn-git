@@ -668,6 +668,26 @@ module.exports = function (app) {
                     });
             };
 
+            WorkItem.prototype.applyConditionalApprove = function ($event, defer, ignoreMessage) {
+                return dialog
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('conditional-approve'),
+                        controller: function () {
+                            'ngInject';
+                        },
+                        controllerAs: 'ctrl',
+                        resolve: {
+                            comments: function (userCommentService) {
+                                'ngInject';
+                                return userCommentService.loadUserCommentsForDistribution();
+                            }
+                        }
+                    })
+                    .then(function () {
+
+                    });
+            };
+
             WorkItem.prototype.markAsReadUnread = function ($event, ignoreMessage, isGroupMail) {
                 return correspondenceService.workItemMarkAsReadUnreadSingle(this, $event, ignoreMessage, isGroupMail);
             };
