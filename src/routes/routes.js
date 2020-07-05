@@ -635,7 +635,7 @@ module.exports = function (app) {
                     },
                     lookups: function (correspondenceService) {
                         'ngInject';
-                        return correspondenceService.getCorrespondenceLookups('common');
+                        return correspondenceService.loadCorrespondenceLookups('common', true);
                     },
                     registryOrganizations: function (employeeService, $q, _, organizationService) {
                         'ngInject';
@@ -1581,7 +1581,7 @@ module.exports = function (app) {
                 resolve: {
                     lookups: function (correspondenceService) {
                         'ngInject';
-                        return correspondenceService.getCorrespondenceLookups('common');
+                        return correspondenceService.loadCorrespondenceLookups('common');
                     },
                     organizations: function (organizationService) {
                         'ngInject';

@@ -867,11 +867,15 @@ module.exports = function (app) {
         /**
          * @description load lookups for correspondence depend on documentClass.
          * @param documentClass
+         * @param isSearchScreen
          */
-        self.loadCorrespondenceLookups = function (documentClass) {
+        self.loadCorrespondenceLookups = function (documentClass, isSearchScreen) {
             documentClass = documentClass.toLowerCase();
-            return $http
-                .get(urlService.correspondenceLookups.replace('{{documentClass}}', documentClass))
+            var url = urlService.correspondenceLookups.replace('{{documentClass}}', documentClass);
+            if (isSearchScreen) {
+                url = url + '?asSearch=true';
+            }
+            return $http.get(url)
                 .then(function (result) {
                     if (documentClass !== 'common') {
                         self.screenLookups[documentClass] = self.prepareLookups(documentClass, result.data.rs);

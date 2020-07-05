@@ -652,7 +652,7 @@ module.exports = function (app) {
             .bulkResolveToState('app.search-screen', {
                 lookups: function (correspondenceService) {
                     'ngInject';
-                    return correspondenceService.getCorrespondenceLookups('common');
+                    return correspondenceService.loadCorrespondenceLookups('common', true);
                 },
                 registryOrganizations: function (employeeService, langService, $q, _, organizationService) {
                     'ngInject';
