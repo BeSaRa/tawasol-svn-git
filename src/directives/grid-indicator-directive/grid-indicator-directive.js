@@ -16,7 +16,7 @@ module.exports = function (app) {
                 spanClass: '@?',
                 iconClass: '@?',
                 displayType: '@?',
-                callback: '='
+                callback: '=?'
             }
         }
     })

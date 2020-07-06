@@ -17,8 +17,10 @@ module.exports = function (app) {
             return !self.showIndicator;
         };
 
-
-        self.unlockWorkItem = function (record, $event) {
+        self.indicatorCallback = function (record, $event) {
+            if (!self.callback || typeof self.callback !== 'function') {
+                return;
+            }
             self.callback(record, $event);
         };
 

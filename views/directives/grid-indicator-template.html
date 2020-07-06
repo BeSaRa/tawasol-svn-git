@@ -163,7 +163,7 @@
              md-svg-icon="{{ctrl.record.isLockedWorkItemIndicator.icon}}"
              tooltip="{{ctrl.langService.get(ctrl.record.isLockedWorkItemIndicator.tooltip)
                         .change({name: ctrl.record.isLockedWorkItemIndicator.value.getTranslatedName()})}}"
-             ng-click="ctrl.unlockWorkItem(ctrl.record, $event)"
+             ng-click="ctrl.indicatorCallback(ctrl.record, $event)"
     ></md-icon>
 </span>
 <!-- Sent To RegOU from Launch (WorkItem) -->
