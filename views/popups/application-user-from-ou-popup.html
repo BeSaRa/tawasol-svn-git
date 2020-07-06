@@ -1265,10 +1265,11 @@
                                                     <label for="pinCode">{{lang.pin}}</label>
                                                     <input name="pinCode" id="pinCode" type="password"
                                                            ng-model="ctrl.userCertificate.pinCode" required
-                                                           custom-validate-directive="ENSS">
+                                                           custom-validate-directive="ENSS" maxlength="15">
                                                     <div ng-messages="certificateForm.pinCode.$error">
                                                         <div ng-message="required">{{lang.field_required}}</div>
                                                         <div ng-message="ENSS">{{lang.english_number_special_char}}</div>
+                                                        <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
                                                     </div>
                                                 </md-input-container>
                                                 <div>
