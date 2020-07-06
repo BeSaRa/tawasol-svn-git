@@ -72,6 +72,9 @@ module.exports = function (app) {
             delete model.fromOU;
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
             delete model.generalStepElm.receivedTime;
+            delete model.conditionalApproveIndicator;
+            delete model.conditionalApproveExportDate;
+            delete model.conditionalApproveComment;
             return model;
         });
 
@@ -124,8 +127,12 @@ module.exports = function (app) {
             model.isTransferredDocumentIndicator = model.getIsTransferredDocumentIndicator();
             model.isBroadcastedIndicator = model.getBroadcastIndicator();
             model.commentsIndicator = model.getCommentsIndicator();
+            if (model.isConditionalApproved()) {
+                model.conditionalApproveIndicator = model.getConditionalApproveIndicator();//  for conditional approve, due date is actually export date set while conditional approve action
+                model.conditionalApproveExportDate = generator.getDateFromTimeStamp(model.dueDateOriginal);
+                model.conditionalApproveComment = model.generalStepElm.comments;
+            }
             model.setMainSiteSubSiteString();
-
             return model;
         });
 
@@ -136,27 +143,6 @@ module.exports = function (app) {
          */
         var getNumberOfDays = function (receivedDate) {
             return (receivedDate) ? -(moment(receivedDate).diff(moment(), 'days')) : "";
-        };
-
-        /**
-         * @description convert Date to Unix Timestamp
-         * @param model
-         * @param modelProperties
-         * @returns {*}
-         */
-        var getUnixTimeStamp = function (model, modelProperties) {
-            for (var i = 0; i < modelProperties.length; i++) {
-                if (typeof model[modelProperties[i]] !== "string" && typeof model[modelProperties[i]] !== "number" && model[modelProperties[i]]) {
-                    var getDate = model[modelProperties[i]].getDate();
-                    var getMonth = model[modelProperties[i]].getMonth() + 1;
-                    var getFullYear = model[modelProperties[i]].getFullYear();
-                    model[modelProperties[i]] = getFullYear + "-" + getMonth + "-" + getDate;
-                }
-                if (typeof model[modelProperties[i]] === "string" || typeof model[modelProperties[i]] === "object") {
-                    model[modelProperties[i]] = model[modelProperties[i]] ? moment(model[modelProperties[i]], "YYYY-MM-DD").valueOf() : null;
-                }
-            }
-            return model;
         };
 
         /**

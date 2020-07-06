@@ -1,0 +1,29 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{ctrl.conditional_approve}}">
+    <popup-toolbar-directive
+            header-text="{{lang.conditional_approve }} : {{ctrl.record.getInfo().title}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="conditionalApproveForm" autocomplete="off">
+                <div layout="column" class="layout-padding p0">
+                    <div>
+                        <md-icon md-svg-icon="{{ctrl.iconsMap.indicators.date}}"></md-icon>
+                        <b>{{lang.export_date}}</b>
+                        <span class="p20">{{ctrl.record.getConditionalApproveExportDate()}}</span>
+                    </div>
+                    <div>
+                        <md-icon md-svg-icon="{{ctrl.iconsMap.indicators.comments}}"></md-icon>
+                        <b>{{lang.comment}}</b>
+                        <span class="p20">{{ctrl.record.getConditionalApproveComment()}}</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup($event)">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

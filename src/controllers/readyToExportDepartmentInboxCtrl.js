@@ -1031,6 +1031,16 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Shows conditional approve details
+         * @param workItem
+         * @param $event
+         * @returns {*}
+         */
+        self.openConditionalApproveDetails = function (workItem, $event) {
+            return workItem.showConditionalApproveDetails($event);
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */

@@ -227,7 +227,7 @@ module.exports = function (app) {
                 return new Indicator({
                     class: 'indicator badge',
                     text: commentsCount,
-                    icon: 'comment-account-outline',
+                    icon: self.getIndicatorIcons('comments'),
                     tooltip: 'indicator_comments',
                     legendText: function (indicator) {
                         return '';
@@ -574,6 +574,27 @@ module.exports = function (app) {
                     tooltip: 'organization_not_synced',
                     legendText: function (indicator) {
                         return langService.get('organization_not_synced');
+                    }
+                });
+            };
+
+            /**
+             * @description Returns the conditional approved indicator and description
+             * @param isConditionalApproved
+             * @returns {Indicator}
+             */
+            Indicator.prototype.getConditionalApproveIndicator = function (isConditionalApproved) {
+                if (!isConditionalApproved) {
+                    return false;
+                }
+
+                return new Indicator({
+                    class: 'indicator',
+                    text: 'conditional_approve',
+                    icon: self.getIndicatorIcons('conditionalApprove'),
+                    tooltip: 'conditional_approve',
+                    legendText: function (indicator) {
+                        return langService.get('conditional_approve');
                     }
                 });
             };

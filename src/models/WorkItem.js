@@ -329,6 +329,44 @@ module.exports = function (app) {
             WorkItem.prototype.isDueDatePassed = function () {
                 return moment(this.generalStepElm.dueDate).valueOf() < moment().valueOf();
             };
+
+            WorkItem.prototype.isConditionalApproved = function () {
+                return !!this.generalStepElm.dueDate;
+            };
+
+            WorkItem.prototype.getConditionalApproveExportDate = function () {
+                return this.conditionalApproveExportDate;
+            };
+
+            WorkItem.prototype.getConditionalApproveComment = function () {
+                return this.conditionalApproveComment;
+            };
+
+            WorkItem.prototype.getConditionalApproveIndicator = function () {
+                return indicator.getConditionalApproveIndicator(this.isConditionalApproved());
+            };
+
+            WorkItem.prototype.showConditionalApproveDetails = function ($event) {
+                return dialog.showDialog({
+                    $event: $event || null,
+                    templateUrl: cmsTemplate.getPopup('conditional-approve-details'),
+                    controller: function (dialog, gridService) {
+                        'ngInject';
+                        var self = this;
+
+                        self.iconsMap = gridService.gridIcons;
+
+                        self.closePopup = function () {
+                            dialog.cancel();
+                        };
+                    },
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    locals: {
+                        record: angular.copy(this)
+                    }
+                });
+            };
             /**
              * @description to start launch workflow item.
              * @param $event

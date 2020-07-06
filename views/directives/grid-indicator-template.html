@@ -262,4 +262,13 @@
              tooltip="{{ctrl.langService.get(ctrl.record.notSyncOuIndicator.tooltip)}}"
     ></md-icon>
 </span>
-
+<!-- Conditional Approve -->
+<span ng-if="ctrl.indicatorType === 'conditionalApprove'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.conditionalApproveIndicator, 'cursor-pointer': !!ctrl.callback}">
+    <md-icon ng-if="ctrl.record.conditionalApproveIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.conditionalApproveIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.conditionalApproveIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.conditionalApproveIndicator.tooltip)}}"
+             ng-click="ctrl.indicatorCallback(ctrl.record, $event)"
+    ></md-icon>
+</span>

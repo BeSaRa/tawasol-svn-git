@@ -908,7 +908,8 @@ module.exports = function (app) {
                 changeFollowup: 'send-clock',
                 exportAndSend: 'file-export-outline',
                 launch: 'sitemap',
-                quickSend: 'sitemap'
+                quickSend: 'sitemap',
+                conditionalApprove: 'clock-start'
             },
             indicators: {
                 securityLevel: 'security',
@@ -948,7 +949,10 @@ module.exports = function (app) {
                 centralArchiveOu: 'archive',
                 notSyncOu: 'sync-alert',
                 active: 'check',
-                inactive: 'close'
+                inactive: 'close',
+                conditionalApprove: 'clock-start',
+                comments: 'comment-account-outline',
+                date: 'calendar-today'
             }
         };
     });

@@ -125,24 +125,29 @@
                                             <!-- Security Level -->
                                             <grid-indicator-directive record="readyToExport"
                                                                       indicator-type="securityLevel"
-                                                                      record-type="workItem"></grid-indicator-directive>
+                                                                      record-type="WorkItem"></grid-indicator-directive>
                                             <!-- Priority Level -->
                                             <grid-indicator-directive record="readyToExport"
                                                                       indicator-type="priorityLevel"
-                                                                      record-type="workItem"></grid-indicator-directive>
+                                                                      record-type="WorkItem"></grid-indicator-directive>
                                             <!-- Paper/Electronic -->
-                                            <grid-indicator-directive record-type="workItem"
+                                            <grid-indicator-directive record-type="WorkItem"
                                                                       record="readyToExport"
                                                                       indicator-type="paperElectronic">
                                             </grid-indicator-directive>
                                             <!-- Has Attachments -->
                                             <grid-indicator-directive record="readyToExport" span-class="float-right"
                                                                       indicator-type="hasAttachment"
-                                                                      record-type="workItem"></grid-indicator-directive>
+                                                                      record-type="WorkItem"></grid-indicator-directive>
                                             <!-- Has Linked Docs -->
                                             <grid-indicator-directive record="readyToExport" span-class="float-right"
                                                                       indicator-type="hasLinkedDocuments"
-                                                                      record-type="workItem"></grid-indicator-directive>
+                                                                      record-type="WorkItem"></grid-indicator-directive>
+                                            <!-- Conditional Approve -->
+                                            <grid-indicator-directive record="readyToExport"
+                                                                      indicator-type="conditionalApprove"
+                                                                      record-type="WorkItem"
+                                                                      callback="ctrl.openConditionalApproveDetails"></grid-indicator-directive>
                                         </td>
                                         <td md-cell><span class="serial-td">{{readyToExport.generalStepElm.docFullSerial}}</span>
                                         </td>
