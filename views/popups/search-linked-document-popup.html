@@ -82,6 +82,7 @@
                                 </md-input-container>
                             </div>
                             <div layout="row">
+                                <!-- Main Classification -->
                                 <md-input-container flex>
                                     <label for="mainClassification">{{lang.linked_document_main_classification}}</label>
                                     <md-select name="mainClassification"
@@ -188,6 +189,105 @@
                                     </md-select>
                                 </md-input-container>
                             </div>
+                            <div layout="row" ng-if="!ctrl.isInternalDocClass()">
+                                <!-- Correspondence Site Type -->
+                                <md-input-container flex>
+                                    <label for="siteType">{{lang.correspondence_site_type}}</label>
+                                    <md-select name="siteType" id="siteType"
+                                               ng-model="ctrl.selectedSiteType"
+                                               md-on-close="ctrl.clearSearchText('siteType')"
+                                               ng-change="ctrl.getMainSites($event)"
+                                               data-md-container-class="select-header-container sticky-search-bar">
+                                        <md-select-header class="select-header">
+                                            <input ng-model="ctrl.siteTypeSearchText"
+                                                   ng-keydown="ctrl.handleSearchKeyDown($event, 'siteType')"
+                                                   placeholder="{{lang.search}}"
+                                                   class="select-header-input">
+                                        </md-select-header>
+                                        <md-option ng-value="null">{{lang.none}}</md-option>
+                                        <md-option
+                                                ng-repeat="option in ctrl.correspondenceSiteTypes | translatedNameFilter: ctrl.siteTypeSearchText"
+                                                ng-value="option">
+                                    <span
+                                            md-highlight-text="ctrl.siteTypeSearchText"
+                                            md-highlight-flags="i">{{option.getTranslatedName()}}</span>
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <!-- Main Site -->
+                                <md-input-container flex>
+                                    <label for="mainSite">{{lang.main_site}}</label>
+                                    <md-select id="mainSite" name="mainSite"
+                                               ng-model="ctrl.selectedMainSite"
+                                               ng-model-options="{trackBy:'$value.id'}"
+                                               ng-disabled="!ctrl.selectedSiteType"
+                                               md-on-close="ctrl.clearSearchText('mainSite')"
+                                               ng-change="ctrl.getSubSites($event)"
+                                               data-md-container-class="select-header-container sticky-search-bar">
+                                        <md-select-header class="select-header" layout="column">
+                                            <div layout="row" flex class="size-100">
+                                                <input ng-model="ctrl.mainSiteSearchText"
+                                                       ng-keydown="ctrl.handleSearchKeyDown($event, 'mainSite')"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                                <md-button ng-if="ctrl.mainSiteSearchText"
+                                                           ng-click="ctrl.loadMainSitesRecords($event)"
+                                                           class="select-header-icon md-icon-button"
+                                                           tooltip="{{lang.load_more_records}}">
+                                                    <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                </md-button>
+                                            </div>
+                                            <div class="help-text-div" ng-if="ctrl.mainSiteSearchText">
+                                                {{lang.press_enter_to_load_more_records}}
+                                            </div>
+                                        </md-select-header>
+                                        <md-option ng-value="null">{{lang.none}}</md-option>
+                                        <md-option
+                                                ng-repeat="mainSite in ctrl.mainSites | translatedNameFilter: ctrl.mainSiteSearchText"
+                                                ng-value="mainSite">
+                                    <span
+                                            md-highlight-text="ctrl.mainSiteSearchText"
+                                            md-highlight-flags="i">{{mainSite.getTranslatedName()}}</span>
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <!-- Sub Site -->
+                                <md-input-container flex>
+                                    <label for="subSite">{{lang.sub_site}}</label>
+                                    <md-select id="subSite" name="subSite"
+                                               ng-model="ctrl.selectedSubSite"
+                                               ng-model-options="{trackBy:'$value.subSiteId'}"
+                                               ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedMainSite"
+                                               md-on-close="ctrl.clearSearchText('subSite')"
+                                               data-md-container-class="select-header-container sticky-search-bar">
+                                        <md-select-header class="select-header" layout="column">
+                                            <div layout="row" flex class="size-100">
+                                                <input ng-model="ctrl.subSiteSearchText"
+                                                       ng-keydown="ctrl.handleSearchKeyDown($event, 'subSite')"
+                                                       placeholder="{{lang.search}}"
+                                                       class="select-header-input">
+                                                <md-button ng-if="ctrl.subSiteSearchText"
+                                                           ng-click="ctrl.loadSubSitesRecords($event)"
+                                                           class="select-header-icon md-icon-button"
+                                                           tooltip="{{lang.load_more_records}}">
+                                                    <md-icon md-svg-icon="magnify-plus"></md-icon>
+                                                </md-button>
+                                            </div>
+                                            <div class="help-text-div" ng-if="ctrl.subSiteSearchText">
+                                                {{lang.press_enter_to_load_more_records}}
+                                            </div>
+                                        </md-select-header>
+                                        <md-option ng-value="null">{{lang.none}}</md-option>
+                                        <md-option
+                                                ng-repeat="subSite in ctrl.subSites | translatedNameFilter: ctrl.subSiteSearchText"
+                                                ng-value="subSite">
+                                    <span
+                                            md-highlight-text="ctrl.subSiteSearchText"
+                                            md-highlight-flags="i">{{subSite.getTranslatedName() + ' -- '+ subSite.subSiteId}}</span>
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
                             <div layout="row">
                                 <md-input-container flex>
                                     <label for="fileCode">{{lang.linked_document_file_code}}</label>
@@ -201,6 +301,18 @@
                                            id="fileSerial"
                                            ng-model="ctrl.correspondence.fileSerial">
                                 </md-input-container>
+                                <!-- Originality -->
+                                <md-input-container flex ng-if="ctrl.isOutgoingDocClass()">
+                                    <label for="originality">{{lang.originality}}</label>
+                                    <md-select id="originality" name="originality"
+                                               ng-disabled="!ctrl.selectedMainSite"
+                                               ng-model="ctrl.originality">
+                                        <md-option ng-value="item.id" ng-repeat="item in ctrl.originalities">
+                                            {{item.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container flex ng-if="!ctrl.isOutgoingDocClass()"></md-input-container>
                             </div>
                         </div>
                     </md-content>

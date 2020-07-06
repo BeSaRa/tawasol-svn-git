@@ -11,15 +11,6 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-
-            if (model.mainSite) {
-                model.originality === 1 ? model.sitesInfoTo = [angular.copy(model.mainSite.convertToSiteSearchModel())] : model.sitesInfoCC = [model.mainSite.convertToSiteSearchModel()];
-            }
-
-            if (model.subSite) {
-                model.originality === 1 ? model.sitesInfoTo = [angular.copy(model.subSite)] : model.sitesInfoCC = [angular.copy(model.subSite)];
-            }
-
             if (model.year === 'All' && model.docDateFrom && model.docDateTo) {
                 model.docDate = {
                     From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
@@ -50,6 +41,13 @@ module.exports = function (app) {
                 }
             }
 
+            if (model.mainSite) {
+                model.originality === 1 ? model.sitesInfoTo = [angular.copy(model.mainSite.convertToSiteSearchModel())] : model.sitesInfoCC = [model.mainSite.convertToSiteSearchModel()];
+            }
+
+            if (model.subSite) {
+                model.originality === 1 ? model.sitesInfoTo = [angular.copy(model.subSite)] : model.sitesInfoCC = [angular.copy(model.subSite)];
+            }
             if (angular.isArray(model.sitesInfoTo) && model.sitesInfoTo.length) {
                 model.sitesInfoTo = model.sitesInfoTo[0];
                 // if followupStatus = none, delete it

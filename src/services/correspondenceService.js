@@ -808,7 +808,7 @@ module.exports = function (app) {
          */
         self.correspondenceSearch = function (correspondence, isAdminSearch) {
             var info = correspondence.getInfo(),
-                url = urlService.correspondence + '/search/' + info.documentClass,
+                url = urlService.searchDocument.change({searchType: info.documentClass}),
                 criteria;
             criteria = generator.interceptSendInstance('Search' + _getModelName(info.documentClass), correspondence);
             criteria = _checkPropertyConfiguration(criteria, lookupService.getPropertyConfigurations(info.documentClass));

@@ -17,9 +17,18 @@ module.exports = function (app) {
                                                             employeeService,
                                                             isAdminSearch,
                                                             gridService,
-                                                            organizations) {
+                                                            organizations,
+                                                            generator,
+                                                            correspondenceSiteTypes,
+                                                            correspondenceViewService,
+                                                            Site_Search,
+                                                            Lookup) {
         'ngInject';
-        var self = this;
+        var self = this,
+            noneLookup = new Lookup({
+                defaultEnName: langService.getByLangKey('none', 'en'),
+                defaultArName: langService.getByLangKey('none', 'ar')
+            });
         self.controllerName = 'searchLinkedDocumentPopCtrl';
         // all document class for Correspondences
         self.documentClasses = lookupService.returnLookups(lookupService.documentClass);
@@ -64,6 +73,35 @@ module.exports = function (app) {
         self.subClassificationSearchText = '';
         self.documentFileSearchText = '';
         self.linkedDocOuSearchText = '';
+
+        self.selectedSiteType = null;
+        self.selectedMainSite = null;
+        self.selectedSubSite = null;
+        self.originality = 1;
+
+        self.correspondenceSiteTypes = correspondenceSiteTypes;
+        self.mainSites = [];
+        self.mainSitesCopy = angular.copy(self.mainSites);
+        self.subSites = [];
+        self.subSitesCopy = angular.copy(self.subSites);
+        self.siteTypeSearchText = '';
+        self.mainSiteSearchText = '';
+        self.subSiteSearchText = '';
+
+        self.originalities = [
+            new Lookup({
+                id: 1,
+                defaultArName: langService.getByLangKey('sites_original', 'ar'),
+                defaultEnName: langService.getByLangKey('sites_original', 'en'),
+                lookupKey: 1
+            }),
+            new Lookup({
+                id: 2,
+                defaultArName: langService.getByLangKey('sites_copy', 'ar'),
+                defaultEnName: langService.getByLangKey('sites_copy', 'en'),
+                lookupKey: 2
+            })
+        ];
 
         /**
          * @description get available documentFiles for the document by security level.
@@ -215,26 +253,7 @@ module.exports = function (app) {
             }
             return years;
         };
-        /**
-         * @description start search after create your criteria.
-         */
-        self.searchLinkedDocuments = function () {
-            var vsIds = self.excludeVsId ? [self.excludeVsId] : [];
-            correspondenceService
-                .correspondenceSearch(self.correspondence.setDocClassName(self.searchType.getStringKeyValue()), isAdminSearch)
-                .then(function (result) {
-                    self.correspondences = _.filter(result, function (item) {
-                        return vsIds.indexOf(item.getInfo().vsId) === -1;
-                    });
-                    if (self.correspondences.length) {
-                        // go to result tab.
-                        self.selectedIndex = true;
-                    } else {
-                        // if no result found display message.
-                        dialog.infoMessage(langService.get('no_results_found_for_your_search_criteria'));
-                    }
-                });
-        };
+
         /**
          * @description view correspondence .
          * @param correspondence
@@ -252,12 +271,6 @@ module.exports = function (app) {
          */
         self.sendLinkedDocuments = function () {
             dialog.hide(self.selectedCorrespondences)
-        };
-        /**
-         * @description close the linkedDocument without sending any correspondence.
-         */
-        self.closeLinkedDocuments = function () {
-            dialog.cancel();
         };
 
         _getClassifications(true);
@@ -279,15 +292,6 @@ module.exports = function (app) {
                 self.correspondence.subClassification = null;
             }
         };
-
-        /**
-         * @description Clears the searchText for the given field
-         * @param fieldType
-         */
-        self.clearSearchText = function (fieldType) {
-            self[fieldType + 'SearchText'] = '';
-        };
-
 
         self.loadMainClassificationRecords = function () {
             if (self.mainClassificationSearchText) {
@@ -366,6 +370,13 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description Clears the searchText for the given field
+         * @param fieldType
+         */
+        self.clearSearchText = function (fieldType) {
+            self[fieldType + 'SearchText'] = '';
+        };
 
         /**
          * @description Handles the default dropdown behavior of selecting option on keydown inside the search box of dropdown
@@ -383,6 +394,10 @@ module.exports = function (app) {
                         self.loadSubClassificationRecords($event);
                     } else if (fieldType === 'documentFile') {
                         self.loadDocumentFilesRecords($event);
+                    } else if (fieldType === 'mainSite') {
+                        self.loadMainSitesRecords($event);
+                    } else if (fieldType === 'subSite') {
+                        self.loadSubSitesRecords($event);
                     }
                 }
                 // prevent keydown except arrow up and arrow down keys
@@ -394,6 +409,185 @@ module.exports = function (app) {
 
         self.changeDocumentClass = function () {
             self.correspondence.refDocNumber = null;
+            self.selectedSiteType = null;
+            self.selectedMainSite = null;
+            self.selectedSubSite = null;
+            self.originality = 1;
+        };
+
+        self.isOutgoingDocClass = function () {
+            return generator.getNormalizedValue(self.searchType, 'lookupKey') === 0;
+        };
+
+        self.isIncomingDocClass = function () {
+            return generator.getNormalizedValue(self.searchType, 'lookupKey') === 1;
+        };
+
+        self.isInternalDocClass = function () {
+            return generator.getNormalizedValue(self.searchType, 'lookupKey') === 2;
+        };
+
+        /**
+         * @description get selected type by typeId
+         * @param typeId
+         * @private
+         */
+        function _getTypeByLookupKey(typeId) {
+            typeId = typeId.hasOwnProperty('id') ? typeId.lookupKey : typeId;
+            return _.find(self.correspondenceSiteTypes, function (type) {
+                return typeId === type.lookupKey;
+            });
         }
+
+        /**
+         * map sub Sites.
+         * @param siteView
+         * @private
+         */
+        function _mapSubSites(siteView) {
+            return (new Site_Search())
+                .mapFromSiteView(siteView)
+                .setFollowupStatus(noneLookup)
+                .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
+        }
+
+        /**
+         * @description Get the main sites on change of site type
+         * @param $event
+         */
+        self.getMainSites = function ($event) {
+            self.selectedMainSite = null;
+            self.selectedSubSite = null;
+            self.mainSites = [];
+            self.mainSitesCopy = angular.copy(self.mainSites);
+            self.subSites = [];
+            self.subSitesCopy = angular.copy(self.subSites);
+
+            if (self.selectedSiteType) {
+                correspondenceViewService.correspondenceSiteSearch('main', {
+                    type: generator.getNormalizedValue(self.selectedSiteType, 'lookupKey'),
+                    criteria: null,
+                    excludeOuSites: false
+                }).then(function (result) {
+                    self.mainSites = result;
+                    self.mainSitesCopy = angular.copy(result);
+                });
+            }
+        };
+
+        /**
+         * @description Get sub sites on change of main site
+         * @param $event
+         */
+        self.getSubSites = function ($event) {
+            self.selectedSubSite = null;
+            self.subSites = [];
+            self.subSitesCopy = angular.copy(self.subSites);
+
+            var mainSite = generator.getNormalizedValue(self.selectedMainSite, 'id');
+            if (mainSite) {
+                correspondenceViewService.correspondenceSiteSearch('sub', {
+                    type: generator.getNormalizedValue(self.selectedSiteType, 'lookupKey'),
+                    parent: mainSite,
+                    criteria: null,
+                    excludeOuSites: false,
+                    includeDisabled: true // to include private regOu
+                }).then(function (result) {
+                    self.selectedSubSite = null;
+                    self.subSites = _.map(result, _mapSubSites);
+                    self.subSitesCopy = angular.copy(self.subSites);
+                });
+            }
+        };
+
+        /**
+         * @description request service for loading dropdown records with searchText
+         * @param $event
+         */
+        self.loadMainSitesRecords = function ($event) {
+            if (self.selectedSiteType && self.mainSiteSearchText) {
+                correspondenceViewService.correspondenceSiteSearch('main', {
+                    type: generator.getNormalizedValue(self.selectedSiteType, 'lookupKey'),
+                    criteria: self.mainSiteSearchText,
+                    excludeOuSites: false
+                }).then(function (result) {
+                    if (result.length) {
+                        var availableMainSitesIds = _.map(self.mainSitesCopy, 'id');
+                        result = _.filter(result, function (corrSite) {
+                            return availableMainSitesIds.indexOf(corrSite.id) === -1;
+                        });
+                        self.mainSites = self.mainSites.concat(result);
+                        self.mainSitesCopy = angular.copy(self.mainSites);
+                    } else {
+                        self.mainSites = angular.copy(self.mainSitesCopy);
+                    }
+                }).catch(function (error) {
+                    self.mainSites = angular.copy(self.mainSitesCopy);
+                });
+            }
+        };
+
+        /**
+         * @description request service for loading sub site dropdown records with searchText
+         * @param $event
+         */
+        self.loadSubSitesRecords = function ($event) {
+            correspondenceViewService.correspondenceSiteSearch('sub', {
+                type: generator.getNormalizedValue(self.selectedSiteType, 'lookupKey'),
+                parent: generator.getNormalizedValue(self.selectedMainSite, 'id'),
+                criteria: self.subSiteSearchText,
+                excludeOuSites: false,
+                includeDisabled: true // to include private regOu
+            }).then(function (result) {
+                if (result.length) {
+                    var availableSubSitesIds = _.map(self.subSitesCopy, 'id');
+                    result = _.filter(result, function (corrSite) {
+                        return availableSubSitesIds.indexOf(corrSite.id) === -1;
+                    });
+
+                    self.subSites = self.subSites.concat(result);
+                    self.subSitesCopy = angular.copy(self.subSites);
+
+                } else {
+                    self.subSites = angular.copy(self.subSitesCopy);
+                }
+            }).catch(function (error) {
+                return self.subSites = angular.copy(self.subSitesCopy);
+            });
+        };
+
+        /**
+         * @description start search after create your criteria.
+         */
+        self.searchLinkedDocuments = function () {
+            var vsIds = self.excludeVsId ? [self.excludeVsId] : [];
+
+            self.correspondence.siteType = self.selectedSiteType ? self.selectedSiteType : null;
+            self.correspondence.mainSite = self.selectedMainSite ? self.selectedMainSite : null;
+            self.correspondence.subSite = self.selectedSubSite ? self.selectedSubSite : null;
+            self.correspondence.originality = self.originality ? self.originality : 1;
+
+            correspondenceService
+                .correspondenceSearch(self.correspondence.setDocClassName(self.searchType.getStringKeyValue()), isAdminSearch)
+                .then(function (result) {
+                    self.correspondences = _.filter(result, function (item) {
+                        return vsIds.indexOf(item.getInfo().vsId) === -1;
+                    });
+                    if (self.correspondences.length) {
+                        // go to result tab.
+                        self.selectedIndex = true;
+                    } else {
+                        // if no result found display message.
+                        dialog.infoMessage(langService.get('no_results_found_for_your_search_criteria'));
+                    }
+                });
+        };
+
+        /**
+         * @description close the linkedDocument without sending any correspondence.
+         */
+        self.closeLinkedDocuments = function () {
+            dialog.cancel();
+        };
     });
 };

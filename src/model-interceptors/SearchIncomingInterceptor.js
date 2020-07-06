@@ -20,14 +20,6 @@ module.exports = function (app) {
                 model.createdOn = {From: angular.copy(model.createdFrom), To: angular.copy(model.createdTo)};
             }*/
 
-            if (model.mainSite) {
-                model.sitesInfoIncoming = [model.mainSite.convertToSiteSearchModel()];
-            }
-
-            if (model.subSite) {
-                model.sitesInfoIncoming = [model.subSite];
-            }
-
             model.FollowupStatus = (model.followupStatus && model.followupStatus.length) ?
                 angular.toJson(_.map(model.followupStatus, "lookupKey")) : null;
 
@@ -77,6 +69,14 @@ module.exports = function (app) {
                 };
             }
 
+
+            if (model.mainSite) {
+                model.sitesInfoIncoming = [model.mainSite.convertToSiteSearchModel()];
+            }
+
+            if (model.subSite) {
+                model.sitesInfoIncoming = [model.subSite];
+            }
             if (angular.isArray(model.sitesInfoIncoming) && model.sitesInfoIncoming.length) {
                 model.sitesInfoIncoming = model.sitesInfoIncoming[0];
                 model.sitesInfoIncoming.getSiteToIncoming(model);
