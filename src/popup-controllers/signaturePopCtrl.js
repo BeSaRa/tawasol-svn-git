@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                  workItem,
                                                  signatures,
                                                  additionalData,
+                                                 exportData,
                                                  ignoreMessage,
                                                  pinCodeRequired) {
         'ngInject';
@@ -24,6 +25,7 @@ module.exports = function (app) {
          */
         self.signatures = signatures;
         self.pinCodeRequired = pinCodeRequired;
+        self.exportData = exportData;
 
         var signatureChunkLength = 5;
         self.signatureChunks = _.chunk(signatures, signatureChunkLength);
@@ -102,9 +104,9 @@ module.exports = function (app) {
         };
 
         var _approveBook = function (workItem, isComposite, ignoreMessage, additionalData) {
-            return correspondenceService.approveCorrespondence(workItem, self.selectedSignature, self.pinCode, isComposite, ignoreMessage, additionalData)
+            return correspondenceService.approveCorrespondence(workItem, self.selectedSignature, self.pinCode, isComposite, ignoreMessage, additionalData, null, self.exportData)
                 .then(function (result) {
-                    if (result === 'AUTHORIZE_CANCELLED'){
+                    if (result === 'AUTHORIZE_CANCELLED') {
                         return result;
                     }
                     dialog.hide(result);

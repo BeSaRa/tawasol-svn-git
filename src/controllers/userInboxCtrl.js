@@ -1061,8 +1061,11 @@ module.exports = function (app) {
          * @param defer
          */
         self.conditionalApprove = function (userInbox, $event, defer) {
-            //new ResolveDefer(defer);
             userInbox.applyConditionalApprove($event, defer)
+                .then(function () {
+                    new ResolveDefer(defer);
+                    self.reloadUserInboxes(self.grid.page);
+            })
         };
         /**
          * @description approve and send the document

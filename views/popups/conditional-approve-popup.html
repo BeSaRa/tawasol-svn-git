@@ -46,10 +46,10 @@
                     <div layout="row">
                         <md-input-container flex>
                             <label for="comments">{{lang.comments}}</label>
-                            <textarea required id="comments" maxlength="200"
-                                      md-maxlength="200"
+                            <textarea rows="4" id="comments" maxlength="1024"
+                                      md-maxlength="1024"
                                       minlength="3" name="comments"
-                                      ng-model="ctrl.model.comments" class="cms-comment">
+                                      ng-model="ctrl.model.comments">
                             </textarea>
                             <div ng-messages="conditionalApproveForm.comments.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>

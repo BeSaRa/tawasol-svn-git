@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                                  readyToExportService,
                                                                  readyToExports,
                                                                  userInboxService,
+                                                                 moment,
                                                                  $state,
                                                                  employeeService,
                                                                  cmsTemplate,
@@ -243,6 +244,24 @@ module.exports = function (app) {
                 return;
             }
 
+            if (readyToExport.hasDueDate() && !readyToExport.isDueDatePassed()) {
+                var exportDate = readyToExport.generalStepElm.dueDate;
+                return dialog
+                    .confirmMessage(langService.get('conditional_approve_warning').change({date: exportDate}))
+                    .then(function () {
+                        return readyToExport
+                            .exportWorkItem($event, true)
+                            .then(function () {
+                                self.reloadReadyToExports(self.grid.page);
+                                new ResolveDefer(defer);
+                            })
+                            .catch(function (error) {
+                                if (error && error !== 'close')
+                                    toast.error(langService.get('export_failed'));
+                            });
+                    });
+            }
+
             readyToExport
                 .exportWorkItem($event, true)
                 .then(function () {
@@ -266,6 +285,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
+
             var info = readyToExport.getInfo(),
                 correspondenceToLaunch = new Outgoing({
                     docStatus: info.docStatus,
@@ -558,7 +578,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-          //  console.log('manageReadyToExportTasks : ', readyToExport);
+            //  console.log('manageReadyToExportTasks : ', readyToExport);
         };
 
         /**
@@ -654,7 +674,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-           // console.log('viewReadyToExportDirectLinkedDocuments : ', readyToExport);
+            // console.log('viewReadyToExportDirectLinkedDocuments : ', readyToExport);
         };
 
         /**
@@ -667,7 +687,7 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-           // console.log('viewReadyToExportCompleteLinkedDocuments : ', readyToExport);
+            // console.log('viewReadyToExportCompleteLinkedDocuments : ', readyToExport);
         };
 
         /**

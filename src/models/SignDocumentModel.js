@@ -67,6 +67,16 @@ module.exports = function (app) {
                 this.wobNum = wobNum;
                 return this;
             };
+
+            SignDocumentModel.prototype.setDueDate = function (dueDate) {
+                this.dueDate = dueDate;
+                return this;
+            };
+
+            SignDocumentModel.prototype.setComments = function (comments) {
+                this.comments = comments;
+                return this;
+            };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('SignDocumentModel', 'init', this);

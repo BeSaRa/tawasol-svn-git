@@ -149,4 +149,5 @@ module.exports = function (app) {
     require('./followupFolderTreePopCtrl')(app);
     require('./transferFollowupBookPopCtrl')(app);
     require('./manageCorrespondenceSiteStatusPopCtrl')(app);
+    require('./conditionalApprovePopCtrl')(app);
 };

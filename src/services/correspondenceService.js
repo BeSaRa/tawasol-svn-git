@@ -3286,8 +3286,9 @@ module.exports = function (app) {
          * @param ignoreMessage
          * @param additionalData
          * @param ignoreValidateMultiSignature
+         * @param exportedData
          */
-        self.approveCorrespondence = function (workItem, signature, pinCode, isComposite, ignoreMessage, additionalData, ignoreValidateMultiSignature) {
+        self.approveCorrespondence = function (workItem, signature, pinCode, isComposite, ignoreMessage, additionalData, ignoreValidateMultiSignature, exportedData) {
             var defer = $q.defer();
             if (additionalData && workItem.isWorkItem()) {
                 additionalData.preApproveAction(null, true, true)
@@ -3304,7 +3305,9 @@ module.exports = function (app) {
                         .setSignature(workItem, signature)
                         .setIsComposite(isComposite)
                         .setPinCode(pinCode ? encryptionService.encrypt(pinCode) : null)
-                        .setValidateMultiSignature(!ignoreValidateMultiSignature);
+                        .setValidateMultiSignature(!ignoreValidateMultiSignature)
+                        .setComments(exportedData.comments || null)
+                        .setDueDate(exportedData.exportDate || null);
 
                     return $http
                         .put(_createUrlSchema(null, info.documentClass, 'authorize'), sign)
@@ -3315,8 +3318,8 @@ module.exports = function (app) {
                                         if (sameUserAuthorizeResult === 'AUTHORIZE_CANCELLED') {
                                             return sameUserAuthorizeResult;
                                         } else {
-                                            return self.approveCorrespondence(workItem, signature, pinCode, isComposite, ignoreMessage, null, true)
-                                                .catch(function(error){
+                                            return self.approveCorrespondence(workItem, signature, pinCode, isComposite, ignoreMessage, null, true, exportedData)
+                                                .catch(function (error) {
                                                     errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
                                                         dialog.errorMessage(langService.get('authorize_failed'))
                                                     });
@@ -3373,9 +3376,10 @@ module.exports = function (app) {
          * @param $event
          * @param ignoreMessage
          * @param additionalData
+         * @param exportData
          * @returns {Promise<any>}
          */
-        self.showApprovedDialog = function (workItem, $event, ignoreMessage, additionalData) {
+        self.showApprovedDialog = function (workItem, $event, ignoreMessage, additionalData, exportData) {
             return applicationUserSignatureService
                 .loadApplicationUserSignatures(employeeService.getEmployee().id)
                 .then(function (signatures) {
@@ -3413,13 +3417,13 @@ module.exports = function (app) {
                                     return dialog
                                         .confirmMessage(langService.get('document_is_composite'))
                                         .then(function () {
-                                            return self.approveCorrespondence(workItem, signatures[0], pinCode, true, ignoreMessage, additionalData);
+                                            return self.approveCorrespondence(workItem, signatures[0], pinCode, true, ignoreMessage, additionalData, false, exportData);
                                         })
                                         .catch(function () {
-                                            return self.approveCorrespondence(workItem, signatures[0], pinCode, false, ignoreMessage, additionalData);
+                                            return self.approveCorrespondence(workItem, signatures[0], pinCode, false, ignoreMessage, additionalData, false, exportData);
                                         })
                                 } else {
-                                    return self.approveCorrespondence(workItem, signatures[0], pinCode, false, ignoreMessage, additionalData);
+                                    return self.approveCorrespondence(workItem, signatures[0], pinCode, false, ignoreMessage, additionalData, false, exportData);
                                 }
                             });
                         } else if (signatures && signatures.length > 1) {
@@ -3434,7 +3438,8 @@ module.exports = function (app) {
                                         signatures: signatures,
                                         additionalData: additionalData,
                                         ignoreMessage: ignoreMessage,
-                                        pinCodeRequired: pinCodeRequired
+                                        pinCodeRequired: pinCodeRequired,
+                                        exportData: exportData
                                     }
                                 });
                         }
