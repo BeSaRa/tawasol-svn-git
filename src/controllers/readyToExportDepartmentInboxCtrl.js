@@ -243,35 +243,28 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
-
+            var exportDefer = $q.defer();
             if (readyToExport.hasDueDate() && !readyToExport.isDueDatePassed()) {
-                var exportDate = readyToExport.generalStepElm.dueDate;
-                return dialog
-                    .confirmMessage(langService.get('conditional_approve_warning').change({date: exportDate}))
+                dialog
+                    .confirmMessage(langService.get('conditional_approve_warning').change({date: readyToExport.getConditionalApproveExportDate()}))
                     .then(function () {
-                        return readyToExport
-                            .exportWorkItem($event, true)
-                            .then(function () {
-                                self.reloadReadyToExports(self.grid.page);
-                                new ResolveDefer(defer);
-                            })
-                            .catch(function (error) {
-                                if (error && error !== 'close')
-                                    toast.error(langService.get('export_failed'));
-                            });
+                        exportDefer.resolve(true);
                     });
+            } else {
+                exportDefer.resolve(true);
             }
-
-            readyToExport
-                .exportWorkItem($event, true)
-                .then(function () {
-                    self.reloadReadyToExports(self.grid.page);
-                    new ResolveDefer(defer);
-                })
-                .catch(function (error) {
-                    if (error && error !== 'close')
-                        toast.error(langService.get('export_failed'));
-                });
+            return exportDefer.promise.then(function () {
+                return readyToExport
+                    .exportWorkItem($event, true)
+                    .then(function () {
+                        self.reloadReadyToExports(self.grid.page);
+                        new ResolveDefer(defer);
+                    })
+                    .catch(function (error) {
+                        if (error && error !== 'close')
+                            toast.error(langService.get('export_failed'));
+                    });
+            });
         };
 
         /**
@@ -285,35 +278,46 @@ module.exports = function (app) {
                 dialog.infoMessage(generator.getBookLockMessage(readyToExport, null));
                 return;
             }
+            var exportDefer = $q.defer();
+            if (readyToExport.hasDueDate() && !readyToExport.isDueDatePassed()) {
+                dialog
+                    .confirmMessage(langService.get('conditional_approve_warning').change({date: readyToExport.getConditionalApproveExportDate()}))
+                    .then(function () {
+                        exportDefer.resolve(true);
+                    });
+            } else {
+                exportDefer.resolve(true);
+            }
+            return exportDefer.promise.then(function () {
+                var info = readyToExport.getInfo(),
+                    correspondenceToLaunch = new Outgoing({
+                        docStatus: info.docStatus,
+                        docSubject: info.title,
+                        documentTitle: info.title,
+                        vsId: info.vsId,
+                        securityLevel: readyToExport.generalStepElm.securityLevel,
+                        sitesInfoTo: generator.isJsonString(readyToExport.generalStepElm.sitesInfoTo) ? JSON.parse(readyToExport.generalStepElm.sitesInfoTo) : readyToExport.generalStepElm.sitesInfoTo,
+                        sitesInfoCC: generator.isJsonString(readyToExport.generalStepElm.sitesInfoCC) ? JSON.parse(readyToExport.generalStepElm.sitesInfoCC) : readyToExport.generalStepElm.sitesInfoCC
+                    });
 
-            var info = readyToExport.getInfo(),
-                correspondenceToLaunch = new Outgoing({
-                    docStatus: info.docStatus,
-                    docSubject: info.title,
-                    documentTitle: info.title,
-                    vsId: info.vsId,
-                    securityLevel: readyToExport.generalStepElm.securityLevel,
-                    sitesInfoTo: generator.isJsonString(readyToExport.generalStepElm.sitesInfoTo) ? JSON.parse(readyToExport.generalStepElm.sitesInfoTo) : readyToExport.generalStepElm.sitesInfoTo,
-                    sitesInfoCC: generator.isJsonString(readyToExport.generalStepElm.sitesInfoCC) ? JSON.parse(readyToExport.generalStepElm.sitesInfoCC) : readyToExport.generalStepElm.sitesInfoCC
-                });
-
-            readyToExport
-                .exportWorkItem($event, true)
-                .then(function () {
-                    return correspondenceToLaunch.launchWorkFlow($event, 'forward', 'favorites')
-                        .then(function () {
-                            self.reloadReadyToExports(self.grid.page);
-                            new ResolveDefer(defer);
-                        })
-                        .catch(function () {
-                            self.reloadReadyToExports(self.grid.page);
-                            new ResolveDefer(defer);
-                        });
-                })
-                .catch(function (error) {
-                    if (error && error !== 'close')
-                        toast.error(langService.get('export_failed'));
-                });
+                readyToExport
+                    .exportWorkItem($event, true)
+                    .then(function () {
+                        return correspondenceToLaunch.launchWorkFlow($event, 'forward', 'favorites')
+                            .then(function () {
+                                self.reloadReadyToExports(self.grid.page);
+                                new ResolveDefer(defer);
+                            })
+                            .catch(function () {
+                                self.reloadReadyToExports(self.grid.page);
+                                new ResolveDefer(defer);
+                            });
+                    })
+                    .catch(function (error) {
+                        if (error && error !== 'close')
+                            toast.error(langService.get('export_failed'));
+                    });
+            });
         };
 
         /**
@@ -369,21 +373,29 @@ module.exports = function (app) {
         };
 
         self.exportReadyToExportBulk = function ($event) {
-            var exportViaCentral = _.filter(self.selectedReadyToExports, function (item) {
-                return item.exportViaArchive();
-            });
-            var normalExport = _.filter(self.selectedReadyToExports, function (item) {
-                return !item.exportViaArchive();
+            var exportViaCentral = [], normalExport = [], conditionalApproveDueDatePassed = [];
+            _.map(self.selectedReadyToExports, function (item) {
+                if (item.isConditionalApproved() && !item.isDueDatePassed()) {
+                    conditionalApproveDueDatePassed.push(item);
+                } else if (item.exportViaArchive()) {
+                    exportViaCentral.push(item);
+                } else {
+                    normalExport.push(item);
+                }
+                return item;
             });
 
-            if (!exportViaCentral.length && normalExport.length) {
+            if (!exportViaCentral.length && !conditionalApproveDueDatePassed.length && normalExport.length) {
                 correspondenceService.exportBulkWorkItemsDialog(self.selectedReadyToExports)
                     .then(function () {
                         self.reloadReadyToExports(self.grid.page);
                     });
-            } else if (exportViaCentral.length && normalExport.length) {
+            } else if ((exportViaCentral.length || conditionalApproveDueDatePassed.length) && normalExport.length) {
                 var list = listGeneratorService.createUnOrderList();
                 _.map(exportViaCentral, function (item) {
+                    list.addItemToList(item.generalStepElm.docSubject);
+                });
+                _.map(conditionalApproveDueDatePassed, function (item) {
                     list.addItemToList(item.generalStepElm.docSubject);
                 });
                 var content = langService.get('cannot_export_bulk_those_books') + '<br />' + list.getList();
