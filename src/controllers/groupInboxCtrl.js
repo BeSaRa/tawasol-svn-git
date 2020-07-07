@@ -177,6 +177,49 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Launch distribution workflow for selected work items
+         * @param $event
+         */
+        self.forwardBulk = function ($event) {
+            var selectedItems = angular.copy(self.selectedWorkItems);
+            if (!self.checkIfForwardBulkAvailable()) {
+                if (self.itemsAlreadyBroadCasted.length === selectedItems.length) {
+                    dialog.alertMessage(langService.get('selected_items_are_broadcasted_can_not_forward'));
+                    return false;
+                }
+                dialog.confirmMessage(langService.get('some_items_are_broadcasted_skip_and_forward'), null, null, $event).then(function () {
+                    self.selectedWorkItems = selectedItems = _.filter(self.selectedWorkItems, function (workItem) {
+                        return self.itemsAlreadyBroadCasted.indexOf(workItem.generalStepElm.vsId) === -1;
+                    });
+                    if (self.selectedWorkItems.length)
+                        forwardBulk(selectedItems, $event);
+                })
+            } else {
+                forwardBulk(selectedItems, $event);
+            }
+        };
+
+        function forwardBulk(selectedItems, $event) {
+            return correspondenceService
+                .launchCorrespondenceWorkflow(selectedItems, $event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadGroupInbox(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
+                });
+        }
+
+        self.checkIfForwardBulkAvailable = function () {
+            self.itemsAlreadyBroadCasted = [];
+            _.map(self.selectedWorkItems, function (workItem) {
+                if (workItem.isBroadcasted())
+                    self.itemsAlreadyBroadCasted.push(workItem.generalStepElm.vsId);
+            });
+            return !(self.itemsAlreadyBroadCasted && self.itemsAlreadyBroadCasted.length);
+        };
+
+        /**
          * @description Create Reply
          * @param workItem
          * @param $event
@@ -241,7 +284,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Forward
+         * @description Reply
          * @param workItem
          * @param $event
          * @param defer
