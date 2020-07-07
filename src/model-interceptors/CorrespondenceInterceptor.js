@@ -235,6 +235,10 @@ module.exports = function (app) {
                 model.tags = angular.fromJson(model.tags);
             }
 
+            if (model.tags === null) {
+                model.tags = [];
+            }
+
             model.linkedDocs = (model.linkedDocs && model.linkedDocs.length) ? angular.fromJson(model.linkedDocs) : model.linkedDocs;
             var linkedDocs = angular.copy(model.linkedDocs) || [];
             if (model.linkedDocs && model.linkedDocs.length && !angular.isArray(model.linkedDocs))
