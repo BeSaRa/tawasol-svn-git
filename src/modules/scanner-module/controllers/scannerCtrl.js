@@ -14,9 +14,11 @@ module.exports = function (app) {
                                             dialog,
                                             PixColorFormat,
                                             Uploader,
+                                            rootEntity,
                                             FileType,
                                             Tags,
                                             Page,
+                                            generator,
                                             PleaseWaitDialog,
                                             LoadScannerOption,
                                             CCToolkit) {
@@ -146,6 +148,7 @@ module.exports = function (app) {
         self.scannerHasDocument = function () {
             return self.cc.getDocument() && self.cc.getDocument().pages.length;
         };
+
         // TODO : enhance send method
         self.sendDocument = function () {
             if (!self.scannerHasDocument()) {
@@ -160,6 +163,14 @@ module.exports = function (app) {
                 var uploader = new Uploader(self.cc, null, function (progress) {
 
                 }, function (blob, file, url) {
+                    var globalFileSize = rootEntity.getGlobalSettings().fileSize,
+                        globalFileSizeString = globalFileSize + 'MB';
+                    var globalSettingSizeBytes = generator.convertMBtoBytes(globalFileSize);
+                    if (blob.size > globalSettingSizeBytes) {
+                        toast.info(langService.get('file_size_limit_exceeded').change({limit: globalFileSizeString}));
+                        return;
+                    }
+
                     var images = {
                         blob: blob,
                         file: file,

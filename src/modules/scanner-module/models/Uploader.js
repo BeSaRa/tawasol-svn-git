@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('Uploader', function (getDefaultRequest, $timeout, ajaxRequest, FileType, DataEncoding) {
+    app.factory('Uploader', function (getDefaultRequest, $timeout, ajaxRequest, FileType, DataEncoding, generator) {
         'ngInject';
         return function Uploader(CCToolkit, /*beginUploadUrl, uploadChunkUrl, endUploadUrl,*/ uploadErrorCallback, progressCallback, completeCallback) {
 
@@ -23,7 +23,8 @@ module.exports = function (app) {
                 }
 
                 // image.ChunkSize = 65536; //64K
-                image.ChunkSize = 614400; //600K
+                // image.ChunkSize = 614400; //600K
+                image.ChunkSize = generator.convertMBtoBytes(2); //2MB
                 _beginUpload.call(this, image);
             };
 

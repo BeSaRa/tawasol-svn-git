@@ -28,6 +28,15 @@ module.exports = function (app) {
             return popupNumber;
         };
 
+        var megaByteToBytesValue = 1048576;
+        self.convertMBtoBytes = function (megaByteValue) {
+            return !megaByteValue ? megaByteValue : (megaByteToBytesValue * megaByteValue);
+        };
+
+        self.convertBytesToMB = function (bytesValue) {
+            return !bytesValue ? bytesValue : (bytesValue / megaByteToBytesValue);
+        };
+
 
         var documentClassMap = {
             OUTGOING: 1,
@@ -659,13 +668,13 @@ module.exports = function (app) {
          * @param reverse to get from document class name the int number
          * @return {*}
          */
-        self.getDocumentClassName = function (docType , reverse) {
+        self.getDocumentClassName = function (docType, reverse) {
             var documentClass = {
                 0: 'outgoing',
                 1: 'incoming',
                 2: 'internal'
             };
-            return reverse ? Object.values(documentClass).indexOf(docType.toLowerCase()) :  documentClass[Number(docType)];
+            return reverse ? Object.values(documentClass).indexOf(docType.toLowerCase()) : documentClass[Number(docType)];
         };
 
 
