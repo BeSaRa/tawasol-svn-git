@@ -420,7 +420,9 @@
                                 </div>
                                 <div layout="row">
                                     <md-switch flex ng-model="ctrl.applicationUser.slowConnectionMode"
-                                               ng-disabled="!ctrl.globalSetting.slowConnectionMode"
+                                               ng-disabled="!ctrl.globalSetting.slowConnectionMode ||
+                                                            !ctrl.employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') ||
+                                                            !ctrl.employeeService.hasPermissionTo('PRINT_DOCUMENT')"
                                                aria-label="{{lang.slow_connection_mode}}">
                                         <label>{{lang.slow_connection_mode}} :
                                             {{ctrl.applicationUser.getTranslatedYesNo('slowConnectionMode')}}</label>

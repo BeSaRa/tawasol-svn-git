@@ -19,7 +19,7 @@
                                   md-diameter="30"></md-progress-circular>
         </div>
 
-        <div layout="row" layout-align="center center" ng-if="ctrl.isShowSlowConnection()">
+        <div layout="row" layout-align="center center" ng-if="ctrl.isShowSlowConnectionVisible()">
             <span>{{lang.viewing_mode}} :&nbsp;</span>
             <span>{{lang.current === 'en' ? lang.office_online : lang.pdf_viewer}}</span>
             <span>&nbsp;&nbsp;</span>

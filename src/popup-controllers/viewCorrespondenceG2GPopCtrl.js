@@ -91,8 +91,9 @@ module.exports = function (app) {
          * @description Checks if toggle slow connection is enabled for entity from global settings and for user from preferences to switch views
          * @returns {*|boolean}
          */
-        self.isShowSlowConnection = function () {
-            return rootEntity.getGlobalSettings().isSlowConnectionMode() && !employeeService.getEmployee().isSlowConnectionMode();
+        self.isShowSlowConnectionVisible = function () {
+            return rootEntity.getGlobalSettings().isSlowConnectionMode() && !employeeService.getEmployee().isSlowConnectionMode() &&
+                employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT');
         };
 
         /**
