@@ -28,7 +28,7 @@ module.exports = function (app) {
             return popupNumber;
         };
 
-        var megaByteToBytesValue = 1048576;
+        var megaByteToBytesValue = 1000000;
         self.convertMBtoBytes = function (megaByteValue) {
             return !megaByteValue ? megaByteValue : (megaByteToBytesValue * megaByteValue);
         };
