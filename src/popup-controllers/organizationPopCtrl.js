@@ -552,6 +552,10 @@ module.exports = function (app) {
             if (!model.hasRegistry) {
                 required.splice(required.indexOf('correspondenceTypeId'), 1);
             }
+            // if no registry and no central archive, sla is not required
+            if (!model.hasRegistry && !model.centralArchive) {
+                required.splice(required.indexOf('sla'), 1);
+            }
 
             _.map(required, function (property) {
                 if (!generator.validRequired(model[property]))
@@ -566,7 +570,7 @@ module.exports = function (app) {
         self.addOrganizationFromCtrl = function () {
             validationService
                 .createValidation('ADD_ORGANIZATION')
-                .addStep('check_required', true, generator.checkRequiredFields, self.organization, function (result) {
+                .addStep('check_required', true, self.checkRequiredFields, self.organization, function (result) {
                     return !result.length || (result.length === 1 && result[0] === 'registryParentId' && self.organization.hasRegistry);
                 })
                 .notifyFailure(function (step, result) {
