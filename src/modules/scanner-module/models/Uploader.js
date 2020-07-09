@@ -24,7 +24,7 @@ module.exports = function (app) {
 
                 // image.ChunkSize = 65536; //64K
                 // image.ChunkSize = 614400; //600K
-                image.ChunkSize = generator.convertMBtoBytes(2); //2MB
+                image.ChunkSize = generator.convertMBtoBytes(1.5); //2MB
                 _beginUpload.call(this, image);
             };
 
