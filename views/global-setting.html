@@ -634,7 +634,12 @@
                                     </md-switch>
                                 </div>
                                 <div flex>
-
+                                    <!-- enable WF to order by user rank  -->
+                                    <md-switch ng-model="ctrl.globalSetting.orderUsersByRank"
+                                               aria-label="{{lang.order_users_by_rank}}">
+                                        <span>{{lang.order_users_by_rank}} : </span>{{
+                                        ctrl.globalSetting.getTranslatedYesNo('orderUsersByRank')}}
+                                    </md-switch>
                                 </div>
                             </div>
                         </div>

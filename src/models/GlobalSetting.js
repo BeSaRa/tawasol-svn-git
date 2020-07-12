@@ -61,6 +61,7 @@ module.exports = function (app) {
             self.digitalCertificateEnabled = false;
             self.digitalCertificateMode = null;
             self.msTeamsSupoortURL = null;
+            self.orderUsersByRank = false;
             //endregion
 
             // every model has required fields
