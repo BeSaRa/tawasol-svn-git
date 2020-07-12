@@ -846,7 +846,7 @@ module.exports = function (app) {
             })
             // add-outgoing
             .state('app.outgoing.add', {
-                url: '/add?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod',
+                url: '/add?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod?versionNumber',
                 templateUrl: templateProvider.getView('outgoing-add'),
                 controller: 'outgoingCtrl',
                 controllerAs: 'ctrl',
@@ -854,7 +854,7 @@ module.exports = function (app) {
             })
             // add simple outgoing
             .state('app.outgoing.simple-add', {
-                url: '/simpleAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod',
+                url: '/simpleAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod?versionNumber',
                 templateUrl: templateProvider.getView('outgoing-simple-add'),
                 controller: 'simpleOutgoingCtrl',
                 controllerAs: 'ctrl',
@@ -1270,7 +1270,7 @@ module.exports = function (app) {
             })
             // add-internal
             .state('app.internal.add', {
-                url: '/add?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod',
+                url: '/add?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod?versionNumber',
                 templateUrl: templateProvider.getView('internal-add'),
                 controller: 'internalCtrl',
                 controllerAs: 'ctrl',
@@ -1279,7 +1279,7 @@ module.exports = function (app) {
 
             // add simple internal
             .state('app.internal.simple-add', {
-                url: '/simpleAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod',
+                url: '/simpleAdd?vsId?wobNum?action?createAsAttachment?sourceDocClass?addMethod?versionNumber',
                 templateUrl: templateProvider.getView('internal-simple-add'),
                 controller: 'simpleInternalCtrl',
                 controllerAs: 'ctrl',

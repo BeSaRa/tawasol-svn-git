@@ -628,7 +628,25 @@ module.exports = function (app) {
          * @param defer
          */
         self.createReply = function (workItem, $event, defer) {
-            workItem.createReply($event)
+            workItem.createReply($event, false)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                }).catch(function (error) {
+                if (error && errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                    dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: workItem.getInfo().wobNumber}));
+                    return false;
+                }
+            });
+        };
+
+        /**
+         * @description Create Reply Specific version
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.createReplySpecificVersion = function (workItem, $event, defer) {
+            workItem.createReply($event, true)
                 .then(function (result) {
                     new ResolveDefer(defer);
                 }).catch(function (error) {
@@ -1065,7 +1083,7 @@ module.exports = function (app) {
                 .then(function () {
                     new ResolveDefer(defer);
                     self.reloadUserInboxes(self.grid.page);
-            })
+                })
         };
         /**
          * @description approve and send the document
@@ -1553,7 +1571,19 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     // if docFullSerial exists, its either paper or electronic approved document
                     return model.checkCreateReplyPermission() && !!info.docFullSerial && !model.isBroadcasted();
-                    //return info.documentClass === "incoming" && !model.isBroadcasted();
+                }
+            },
+            // Create Reply For Specific Version
+            {
+                type: 'action',
+                icon: 'pen',
+                text: 'grid_action_create_reply_specific_version',
+                callback: self.createReplySpecificVersion,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    // if docFullSerial exists, its either paper or electronic approved document
+                    return model.checkCreateReplyPermission(true) && !!info.docFullSerial && !model.isBroadcasted();
                 }
             },
             // Forward

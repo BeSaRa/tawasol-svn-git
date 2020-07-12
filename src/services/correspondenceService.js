@@ -1141,6 +1141,7 @@ module.exports = function (app) {
                 },
                 resolve: {
                     loadBarcode: function () {
+                        'ngInject';
                         return self
                             .correspondenceGetBarcode(correspondence)
                             .then(function (result) {
@@ -1326,14 +1327,16 @@ module.exports = function (app) {
          * @param wobNumber
          * @param vsId
          * @param createAsAttachment
+         * @param versionNumber
          */
-        self.createReplyForDocument = function (sourceDocClass, targetDocClass, wobNumber, vsId, createAsAttachment) {
+        self.createReplyForDocument = function (sourceDocClass, targetDocClass, wobNumber, vsId, createAsAttachment, versionNumber) {
             var data = new FollowupAction({
                 createAsAttachment: createAsAttachment,
                 sourceClassId: self.docClassIds[sourceDocClass.toLowerCase()],
                 destClassId: self.docClassIds[targetDocClass.toLowerCase()],
                 wobNum: wobNumber || '', // wobNum will be sent if create reply from inbox
-                vsId: vsId  // vsId will be sent always
+                vsId: vsId , // vsId will be sent always
+                versionNumber: versionNumber || null
             });
 
             return $http
@@ -3834,6 +3837,7 @@ module.exports = function (app) {
                     },
                     resolve: {
                         versions: function () {
+                            'ngInject';
                             return self.loadDocumentVersions(correspondence);
                         }
                     }

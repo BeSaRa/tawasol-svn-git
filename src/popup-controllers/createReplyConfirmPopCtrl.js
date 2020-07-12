@@ -5,7 +5,8 @@ module.exports = function (app) {
                                                    $state,
                                                    employeeService,
                                                    generator,
-                                                   _) {
+                                                   _,
+                                                   gridService) {
         'ngInject';
         var self = this;
 
@@ -16,6 +17,10 @@ module.exports = function (app) {
         self.replyForm = 0;
         self.addMethod = null;
         self.createAsAttachment = false;
+
+        self.showGrid = false;
+        self.selectedVersions = [];
+        self.allowDuplicateAction = false;
 
         var permissions = {
             outgoingPaper: 'OUTGOING_PAPER',
@@ -34,7 +39,7 @@ module.exports = function (app) {
                 id: 1,
                 key: 'paper',
                 disabled: function () {
-                    return !self.employee.hasPermissionTo(_getPaperPermissionKey())
+                    return !self.employee.hasPermissionTo(_getPaperPermissionKey());
                 }
             }
         ];
@@ -49,15 +54,29 @@ module.exports = function (app) {
             {id: 1, key: 'reply_internal'}
         ];
         self.createAsOptions = [
-            {id: true, key: 'attachments'},
-            {id: false, key: 'linked_documents'}
+            {
+                id: 0,
+                value: true,
+                key: 'attachments',
+                disabled: function () {
+                    return false;
+                }
+            },
+            {
+                id: 1,
+                value: false,
+                key: 'linked_documents',
+                disabled: function () {
+                    return !!self.isSpecificVersion;
+                }
+            }
         ];
 
         self.validateLabels = {
             replyType: 'reply_type',
             addMethod: 'label_document_type',
             replyForm: 'reply_form',
-            createAsAttachment: 'link_incoming_as'
+            createAsAttachment: 'link_as'
         };
 
         /**
@@ -73,7 +92,12 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.isCreateReplyDisabled = function () {
-            return self.addMethod === null;
+            var disabled = self.addMethod === null;
+            if (self.isSpecificVersion) {
+                console.log('self.selectedVersion', self.selectedVersions);
+                disabled = disabled || !self.selectedVersions || !self.selectedVersions.length;
+            }
+            return disabled;
         };
 
         /**
@@ -106,8 +130,50 @@ module.exports = function (app) {
                 action: 'reply',
                 createAsAttachment: self.createAsAttachment,
                 sourceDocClass: info.documentClass,
-                addMethod: self.addMethod
+                addMethod: self.addMethod,
+                versionNumber: self.isSpecificVersion ? generator.getNormalizedValue(self.selectedVersions[0], 'majorVersionNumber') : null
             });
+        };
+
+
+        self.grid = {
+            progress: null,
+            limit: 5, //self.globalSetting.searchAmount, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.versions.length + 21);
+                    }
+                }
+            ],
+            truncateSubject: gridService.getGridSubjectTruncateByGridName(gridService.grids.others.createReplyVersionSelect),
+            setTruncateSubject: function ($event) {
+                gridService.setGridSubjectTruncateByGridName(gridService.grids.others.createReplyVersionSelect, self.grid.truncateSubject);
+            }
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.versions = $filter('orderBy')(self.versions, self.grid.order);
+        };
+
+        /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function (property, modelType) {
+            return generator.getColumnSortingKey(property, modelType);
+        };
+
+        self.openVersion = function (version, $event) {
+            return version.viewFromQueueById([], 'userInbox', $event);
         };
 
         /**
@@ -133,6 +199,15 @@ module.exports = function (app) {
                 self.addMethod = 0;
             }
         }
+
+        function _setCreateAsAttachment(createAsAttachment) {
+            self.createAsAttachment = createAsAttachment;
+        }
+
+        self.$onInit = function () {
+            _setCreateAsAttachment(!!self.isSpecificVersion);
+            self.showGrid = !!self.isSpecificVersion;
+        };
 
     });
 };

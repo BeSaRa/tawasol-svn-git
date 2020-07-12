@@ -163,7 +163,8 @@ module.exports = function (app) {
                     var vsId = $stateParams.vsId, wobNum = $stateParams.wobNum, action = $stateParams.action,
                         createAsAttachment = $stateParams.createAsAttachment === "true",
                         sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'outgoing',
-                        addMethod = $stateParams.addMethod;
+                        addMethod = $stateParams.addMethod,
+                        versionNumber = $stateParams.versionNumber;
 
                     if (action !== 'reply')
                         return $timeout(function () {
@@ -171,7 +172,7 @@ module.exports = function (app) {
                         });
 
                     if (wobNum || vsId) {
-                        return correspondenceService.createReplyForDocument(sourceDocClass, targetDocClass, wobNum, vsId, createAsAttachment)
+                        return correspondenceService.createReplyForDocument(sourceDocClass, targetDocClass, wobNum, vsId, createAsAttachment, versionNumber)
                             .then(function (outgoing) {
                                 if (!createAsAttachment) {
                                     outgoing.linkedDocs = [outgoing.linkedDocList[0]];
@@ -275,7 +276,8 @@ module.exports = function (app) {
                     var vsId = $stateParams.vsId, wobNum = $stateParams.wobNum, action = $stateParams.action,
                         createAsAttachment = $stateParams.createAsAttachment === "true",
                         sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'outgoing',
-                        addMethod = $stateParams.addMethod;
+                        addMethod = $stateParams.addMethod,
+                        versionNumber = $stateParams.versionNumber;
 
                     if (action !== 'reply')
                         return $timeout(function () {
@@ -283,7 +285,7 @@ module.exports = function (app) {
                         });
 
                     if (wobNum || vsId) {
-                        return correspondenceService.createReplyForDocument(sourceDocClass, targetDocClass, wobNum, vsId, createAsAttachment)
+                        return correspondenceService.createReplyForDocument(sourceDocClass, targetDocClass, wobNum, vsId, createAsAttachment, versionNumber)
                             .then(function (outgoing) {
                                 if (!createAsAttachment) {
                                     outgoing.linkedDocs = [outgoing.linkedDocList[0]];
@@ -478,7 +480,8 @@ module.exports = function (app) {
                     var vsId = $stateParams.vsId, wobNum = $stateParams.wobNum, action = $stateParams.action,
                         createAsAttachment = $stateParams.createAsAttachment === "true",
                         sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'internal',
-                        addMethod = $stateParams.addMethod;
+                        addMethod = $stateParams.addMethod,
+                        versionNumber = $stateParams.versionNumber;
 
                     if (action !== 'reply')
                         return $timeout(function () {
@@ -486,7 +489,7 @@ module.exports = function (app) {
                         });
 
                     if (wobNum || vsId) {
-                        return correspondenceService.createReplyForDocument(sourceDocClass, targetDocClass, wobNum, vsId, createAsAttachment)
+                        return correspondenceService.createReplyForDocument(sourceDocClass, targetDocClass, wobNum, vsId, createAsAttachment, versionNumber)
                             .then(function (internal) {
                                 if (!createAsAttachment) {
                                     internal.linkedDocs = [internal.linkedDocList[0]];
@@ -549,7 +552,8 @@ module.exports = function (app) {
                     var vsId = $stateParams.vsId, wobNum = $stateParams.wobNum, action = $stateParams.action,
                         createAsAttachment = $stateParams.createAsAttachment === "true",
                         sourceDocClass = $stateParams.sourceDocClass, targetDocClass = 'internal',
-                        addMethod = $stateParams.addMethod;
+                        addMethod = $stateParams.addMethod,
+                        versionNumber = $stateParams.versionNumber;
 
                     if (action !== 'reply')
                         return $timeout(function () {
@@ -557,7 +561,7 @@ module.exports = function (app) {
                         });
 
                     if (wobNum || vsId) {
-                        return correspondenceService.createReplyForDocument(sourceDocClass, targetDocClass, wobNum, vsId, createAsAttachment)
+                        return correspondenceService.createReplyForDocument(sourceDocClass, targetDocClass, wobNum, vsId, createAsAttachment, versionNumber)
                             .then(function (internal) {
                                 if (!createAsAttachment) {
                                     internal.linkedDocs = [internal.linkedDocList[0]];
@@ -686,7 +690,7 @@ module.exports = function (app) {
                     return propertyConfigurationService
                         .loadAllPropertyConfigurations();
                 },
-                    approvers: function (ouApplicationUserService, employeeService, registryOrganizations) {
+                approvers: function (ouApplicationUserService, employeeService, registryOrganizations) {
                     'ngInject';
                     return ouApplicationUserService
                         .searchByCriteria({

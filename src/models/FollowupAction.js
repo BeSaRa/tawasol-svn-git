@@ -12,6 +12,7 @@ module.exports = function (app) {
             self.sourceClassId = null;
             self.destClassId = null;
             self.vsId = '';
+            self.versionNumber = null;
 
 
             // every model has required fields

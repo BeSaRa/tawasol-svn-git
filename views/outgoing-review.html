@@ -98,7 +98,7 @@
                                     </tr>
                                     </thead>
                                     <tbody md-body>
-                                    <tr md-row md-select="reviewOutgoing" grid-right-click-directive
+                                    <tr md-row md-select="reviewOutgoing" grid-row-right-click-directive
                                         model="reviewOutgoing"
                                         selected-length="{{ctrl.selectedReviewOutgoings.length ? ctrl.selectedReviewOutgoings.length : 0}}"
                                         ng-repeat="reviewOutgoing in searchResults = (ctrl.reviewOutgoings | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))  track by $index">

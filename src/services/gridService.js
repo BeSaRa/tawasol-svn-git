@@ -130,7 +130,8 @@ module.exports = function (app) {
                 taskDoc: 'taskDoc',
                 comments: 'comment',
                 commentInclude: 'commentInc',
-                commentExclude: 'commentExc'
+                commentExclude: 'commentExc',
+                createReplyVersionSelect: 'createReplyVersionSelect'
             },
             trackingSheet: {
                 workflowHistory: 'vts_workflowHistory',

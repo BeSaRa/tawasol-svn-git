@@ -857,8 +857,9 @@ module.exports = function (app) {
                 return correspondenceService.openIcnArchiveOptionsDialog(this, $event);
             };
 
-            Correspondence.prototype.createReply = function ($event) {
-                var docClass = this.getInfo().documentClass;
+            Correspondence.prototype.createReply = function ($event, isSpecificVersion) {
+                var docClass = this.getInfo().documentClass,
+                    record = angular.copy(this);
                 if (docClass === 'incoming' || docClass === 'internal') {
                     return dialog.showDialog({
                         $event: $event || null,
@@ -867,7 +868,14 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         bindToController: true,
                         locals: {
-                            record: angular.copy(this)
+                            record: record,
+                            isSpecificVersion: isSpecificVersion
+                        },
+                        resolve: {
+                            versions: function () {
+                                'ngInject';
+                                return isSpecificVersion ? correspondenceService.loadDocumentVersions(record) : null;
+                            }
                         }
                     });
                 }
@@ -966,11 +974,16 @@ module.exports = function (app) {
             /**
              * @description Check if book has create reply permission
              */
-            Correspondence.prototype.checkCreateReplyPermission = function () {
-                var info = this.getInfo();
-                var employee = employeeService.getEmployee();
-                return ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
-                    || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL')));
+            Correspondence.prototype.checkCreateReplyPermission = function (isSpecificVersion) {
+                var info = this.getInfo(),
+                    employee = employeeService.getEmployee(),
+                    isAllowed = ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
+                        || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL')));
+
+                if (isSpecificVersion) {
+                    isAllowed = isAllowed && employee.hasPermissionTo('VIEW_DOCUMENT_VERSION');
+                }
+                return isAllowed;
             };
 
             /**

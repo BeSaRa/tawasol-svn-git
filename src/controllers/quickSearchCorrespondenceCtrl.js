@@ -598,7 +598,20 @@ module.exports = function (app) {
          * @param defer
          */
         self.createReply = function (correspondence, $event, defer) {
-            correspondence.createReply($event)
+            correspondence.createReply($event, false)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
+        };
+
+        /**
+         * @description Create Reply Specific version
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.createReplySpecificVersion = function (correspondence, $event, defer) {
+            correspondence.createReply($event, true)
                 .then(function (result) {
                     new ResolveDefer(defer);
                 });
@@ -867,6 +880,17 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function (action, model) {
                     return model.checkCreateReplyPermission() && !model.needApprove() && !model.isBroadcasted();
+                }
+            },
+            // Create Reply For Specific Version
+            {
+                type: 'action',
+                icon: 'pen',
+                text: 'grid_action_create_reply_specific_version',
+                callback: self.createReplySpecificVersion,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return model.checkCreateReplyPermission(true) && !model.needApprove() && !model.isBroadcasted();
                 }
             },
             // Broadcast

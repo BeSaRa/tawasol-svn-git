@@ -134,11 +134,16 @@ module.exports = function (app) {
             /**
              * @description Check if book has create reply permission
              */
-            GeneralStepElementView.prototype.checkCreateReplyPermission = function () {
-                var info = this.getInfo();
-                var employee = employeeService.getEmployee();
-                return ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
-                    || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL')));
+            GeneralStepElementView.prototype.checkCreateReplyPermission = function (isSpecificVersion) {
+                var info = this.getInfo(),
+                    employee = employeeService.getEmployee(),
+                    isAllowed = ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
+                        || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL')));
+
+                if (isSpecificVersion) {
+                    isAllowed = isAllowed && employee.hasPermissionTo('VIEW_DOCUMENT_VERSION');
+                }
+                return isAllowed;
             };
 
             /**

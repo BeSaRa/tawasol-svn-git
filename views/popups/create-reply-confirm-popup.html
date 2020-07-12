@@ -12,10 +12,10 @@
                         <legend class="md-accent">{{lang.reply_type}}</legend>
                         <div layout="row">
                             <md-radio-group ng-model="ctrl.replyType" ng-change="ctrl.onChangeReplyType($event)">
-                                <div ng-repeat='replyType in ctrl.replyTypeOptions'>
+                                <div ng-repeat='option in ctrl.replyTypeOptions'>
                                     <div flex layout-padding layout-align="start center">
-                                        <md-radio-button flex ng-value="replyType.id">
-                                            {{lang[replyType.key]}}
+                                        <md-radio-button flex ng-value="option.id">
+                                            {{lang[option.key]}}
                                         </md-radio-button>
                                     </div>
                                 </div>
@@ -45,10 +45,10 @@
                         <legend class="md-accent">{{lang.reply_form}}</legend>
                         <div layout="row">
                             <md-radio-group ng-model="ctrl.replyForm">
-                                <div ng-repeat='replyFormOption in ctrl.replyFormOptions'>
+                                <div ng-repeat='option in ctrl.replyFormOptions'>
                                     <div flex layout-padding layout-align="start center">
-                                        <md-radio-button flex ng-value="replyFormOption.id">
-                                            {{lang[replyFormOption.key]}}
+                                        <md-radio-button flex ng-value="option.id">
+                                            {{lang[option.key]}}
                                         </md-radio-button>
                                     </div>
                                 </div>
@@ -57,13 +57,14 @@
                     </fieldset>
                     <!-- Use as attachment or linked doc -->
                     <fieldset class="size-50">
-                        <legend class="md-accent">{{lang.link_incoming_as}}</legend>
+                        <legend class="md-accent">{{lang.link_as}}</legend>
                         <div layout="row">
                             <md-radio-group ng-model="ctrl.createAsAttachment">
-                                <div ng-repeat='useAs in ctrl.createAsOptions'>
+                                <div ng-repeat='option in ctrl.createAsOptions'>
                                     <div flex layout-padding layout-align="start center">
-                                        <md-radio-button flex ng-value="useAs.id">
-                                            {{lang[useAs.key]}}
+                                        <md-radio-button flex ng-value="option.value"
+                                                         ng-disabled="option.disabled()">
+                                            {{lang[option.key]}}
                                         </md-radio-button>
                                     </div>
                                 </div>
@@ -72,11 +73,105 @@
                     </fieldset>
                 </div>
             </form>
+            <div layout="column">
+                <div layout="row">
+                    <span flex></span>
+                    <md-switch aria-label="{{lang.truncate_subject}}"
+                               class="m0"
+                               ng-model="ctrl.grid.truncateSubject"
+                               ng-change="ctrl.grid.setTruncateSubject($event)">
+                        <span>{{lang.truncate_subject}} : </span>
+                        {{ctrl.grid.truncateSubject ? lang.yes : lang.no }}
+                    </md-switch>
+                </div>
+                <md-card class="m0">
+                    <md-table-container>
+                        <div flex scroll-directive>
+                            <table md-table ng-model="ctrl.selectedVersions"
+                                   md-progress="ctrl.grid.progress"
+                                   md-row-select="true">
+                                <thead md-head md-order="ctrl.grid.order"
+                                       md-on-reorder="ctrl.getSortedData">
+                                <tr md-row>
+                                    <th md-column md-order-by="">
+                                        <!-- Has Content Indicator -->
+                                    </th>
+                                    <th md-column md-order-by="docSubject">
+                                        <span>{{lang.subject}}</span>
+                                    </th>
+                                    <th md-column md-order-by="">
+                                        <span>{{lang.version}}</span>
+                                    </th>
+                                    <th md-column
+                                        md-order-by="{{ctrl.getSortingKey('lastModifierInfo', 'Information')}}">
+                                        <span>{{lang.updated_by}}</span>
+                                    </th>
+                                    <th md-column md-order-by="lastModified">
+                                        <span>{{lang.updated_on}}</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-select="item" md-row
+                                    ng-class="item.isCurrentVersion() ? 'current-version': ''"
+                                    ng-repeat="item in ctrl.versions | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
+                                    <td md-cell class="indicator-td">
+                                        <!-- Version Has Content -->
+                                        <grid-indicator-directive record="item"
+                                                                  indicator-type="versionHasContent">
+                                        </grid-indicator-directive>
+                                    </td>
+                                    <!--<td md-cell md-truncate class="subject">
+                                        <a href="" class="view-doc" md-truncate
+                                           title="{{item.docSubject}}"
+                                           ng-click="ctrl.openVersion(item , $event)">{{item.docSubject}}</a>
+                                    </td>-->
+                                    <td md-cell class="subject">
+                                        <a href="" ng-if="item.hasContent() && ctrl.grid.truncateSubject"
+                                           class="view-doc subject-internal" md-truncate
+                                           tooltip="{{item.docSubject}}"
+                                           ng-click="ctrl.openVersion(item, $event)">{{item.docSubject}}</a>
+                                        <span ng-if="!item.hasContent() && ctrl.grid.truncateSubject"
+                                              class="view-doc subject-internal" md-truncate
+                                              tooltip="{{item.docSubject}}">{{item.docSubject}}</span>
+                                        <a href="" ng-if="item.hasContent() && !ctrl.grid.truncateSubject"
+                                           class="view-doc subject-internal"
+                                           tooltip="{{item.docSubject}}"
+                                           ng-click="ctrl.openVersion(item, $event)">{{item.docSubject}}</a>
+                                        <span ng-if="!item.hasContent() && !ctrl.grid.truncateSubject"
+                                              class="view-doc subject-internal"
+                                              tooltip="{{item.docSubject}}">{{item.docSubject}}</span>
+                                    </td>
+                                    <td md-cell>
+                                        {{item.majorVersionNumber}}
+                                        <!--{{item.virtualVersionNumber}}-->
+                                    </td>
+                                    <td md-cell>
+                                        {{item.lastModifierInfo.getTranslatedName()}}
+                                    </td>
+                                    <td md-cell>
+                                        {{item.lastModifiedFormatted}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit"
+                                md-page="ctrl.grid.page"
+                                md-total="{{ctrl.versions.length}}"
+                                md-page-select></md-table-pagination>
+                    </md-table-container>
+                </md-card>
+
+            </div>
         </div>
     </md-dialog-content>
     <md-dialog-actions class="cms-dialog-actions">
         <md-button class="md-raised md-primary"
-                   ng-disabled="ctrl.isCreateReplyDisabled(reason_form)"
+                   ng-disabled="ctrl.isCreateReplyDisabled(create_reply_form)"
                    ng-click="ctrl.setCreateReply($event)">
             {{lang.grid_action_create_reply}}
         </md-button>

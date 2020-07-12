@@ -864,13 +864,26 @@ module.exports = function (app) {
          * @param defer
          */
         self.createReply = function (correspondence, $event, defer) {
-            correspondence.createReply($event)
+            correspondence.createReply($event, false)
                 .then(function (result) {
                     new ResolveDefer(defer);
                 });
             /*var info = correspondence.getInfo();
             dialog.hide();
             $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});*/
+        };
+
+        /**
+         * @description Create Reply Specific version
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
+        self.createReplySpecificVersion = function (correspondence, $event, defer) {
+            correspondence.createReply($event, true)
+                .then(function (result) {
+                    new ResolveDefer(defer);
+                });
         };
 
         /**
@@ -1564,6 +1577,17 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function (action, model) {
                     return model.checkCreateReplyPermission();
+                }
+            },
+            // Create Reply
+            {
+                type: 'action',
+                icon: 'pen',
+                text: 'grid_action_create_reply',
+                callback: self.createReplySpecificVersion,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return model.checkCreateReplyPermission(true);
                 }
             },
             // Launch Distribution Workflow
