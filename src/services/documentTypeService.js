@@ -9,8 +9,7 @@ module.exports = function (app) {
                                                  _,
                                                  langService,
                                                  toast,
-                                                 lookupService,
-                                                 PrivateDocumentType) {
+                                                 lookupService) {
         'ngInject';
         var self = this;
         self.serviceName = 'documentTypeService';
@@ -46,43 +45,41 @@ module.exports = function (app) {
              * @param documentClassFromUser
              */
             documentTypeAdd: function ($event, documentClassFromUser) {
-                var documentClassLookup, defer = $q.defer();
+                var documentClassLookup,defer = $q.defer();
                 if (documentClassFromUser) {
                     documentClassLookup = _.filter(lookupService.returnLookups(lookupService.documentClass), function (lookup) {
                         return lookup.lookupStrKey.toLowerCase() === documentClassFromUser.toLowerCase();
                     });
                 }
 
-                defer.resolve(documentClassFromUser ? self.loadDocumentTypes() : self.documentTypes);
+              defer.resolve(documentClassFromUser ? self.loadDocumentTypes(): self.documentTypes);
 
                 return defer.promise.then(function (documentTypes) {
-                    return dialog
-                        .showDialog({
-                            targetEvent: $event,
-                            templateUrl: cmsTemplate.getPopup('document-type'),
-                            controller: 'documentTypePopCtrl',
-                            controllerAs: 'ctrl',
-                            locals: {
-                                editMode: false,
-                                documentType: new DocumentType(
-                                    {
-                                        itemOrder: generator.createNewID(documentTypes, 'itemOrder'),
-                                        lookupStrKey: documentClassFromUser ? documentClassLookup : null
-                                    }),
-                                documentTypes: documentTypes,
-                                documentClassFromUser: documentClassLookup,
-                                defaultTabName: 'basic'
-                            }
-                        });
+                return dialog
+                    .showDialog({
+                        targetEvent: $event,
+                        templateUrl: cmsTemplate.getPopup('document-type'),
+                        controller: 'documentTypePopCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            editMode: false,
+                            documentType: new DocumentType(
+                                {
+                                    itemOrder: generator.createNewID(documentTypes, 'itemOrder'),
+                                    lookupStrKey: documentClassFromUser ? documentClassLookup : null
+                                }),
+                            documentTypes: documentTypes,
+                            documentClassFromUser: documentClassLookup
+                        }
+                    });
                 })
             },
             /**
              * @description Opens popup to edit document type
              * @param documentType
-             * @param defaultTabName
              * @param $event
              */
-            documentTypeEdit: function (documentType, defaultTabName, $event) {
+            documentTypeEdit: function (documentType, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -93,13 +90,12 @@ module.exports = function (app) {
                             editMode: true,
                             documentType: documentType,
                             documentTypes: self.documentTypes,
-                            documentClassFromUser: null,
-                            defaultTabName: defaultTabName || 'basic'
+                            documentClassFromUser: null
                         }
                     });
             },
             /**
-             * @description Show confirm box and delete document type
+             * @description Show confirm box and delete bulk document type
              * @param documentType
              * @param $event
              */
@@ -141,23 +137,9 @@ module.exports = function (app) {
                                 return response;
                             });
                     });
-            },
-            /**
-             * @description Show confirm box and delete private document type
-             * @param privateDocumentType
-             * @param $event
-             */
-            privateDocumentTypeDelete: function (privateDocumentType, $event) {
-                return dialog
-                    .confirmMessage(langService.get('confirm_delete').change({name: privateDocumentType.getTranslatedUserAndOrganizationName()}), null, null, $event)
-                    .then(function () {
-                        return self.deletePrivateDocumentType(privateDocumentType)
-                            .then(function () {
-                                toast.success(langService.get("delete_specific_success").change({name: privateDocumentType.getTranslatedUserAndOrganizationName()}));
-                                return true;
-                            });
-                    });
-            },
+            }
+
+
         };
 
         /**
@@ -173,7 +155,6 @@ module.exports = function (app) {
                     return generator.interceptReceivedInstance('DocumentType', generator.generateInstance(result.data.rs, DocumentType, self._sahredMethods));
                 });
         };
-
         /**
          * @description Update the given document type.
          * @param documentType
@@ -184,6 +165,7 @@ module.exports = function (app) {
                 .put(urlService.documentTypes,
                     generator.interceptSendInstance('DocumentType', documentType))
                 .then(function () {
+
                     return documentType;
                 });
         };
@@ -197,16 +179,6 @@ module.exports = function (app) {
             var id = documentType.hasOwnProperty('id') ? documentType.id : documentType;
             return $http.delete((urlService.documentTypes + '/' + id));
         };
-
-        /**
-         * @description Delete given private document type.
-         * @param privateDocumentType
-         * @return {Promise|null}
-         */
-        self.deletePrivateDocumentType = function (privateDocumentType) {
-            return $http.delete((urlService.documentTypes + '/private/' + generator.getNormalizedValue(privateDocumentType, 'id')));
-        };
-
 
         /**
          * @description Delete bulk document types.
@@ -235,71 +207,6 @@ module.exports = function (app) {
             });
         };
 
-
-        /**
-         * @description Sets the original document type to private and add new private document type
-         * @param documentType
-         * @param ouApplicationUser
-         * @return {Promise|DocumentType}
-         */
-        self.addPrivateDocumentType = function (documentType, ouApplicationUser) {
-            // if its first privateDocumentType, means original document type was global.
-            // set it to private and update, then add privateDocumentType
-            var isGlobalDefer = $q.defer();
-            if (documentType.relatedRecords && documentType.relatedRecords.length === 0) {
-                // set private for original document type and update
-                documentType.isGlobal = false;
-                documentType.update()
-                    .then(function () {
-                        isGlobalDefer.resolve(true);
-                    })
-            } else {
-                isGlobalDefer.resolve(true);
-            }
-
-            return isGlobalDefer.promise.then(function () {
-                var privateDocumentType = new PrivateDocumentType({
-                    ouId: ouApplicationUser.getOuId(),
-                    userId: ouApplicationUser.getApplicationUserId(),
-                    lookup: generator.interceptSendInstance('DocumentType', documentType)
-                });
-                return $http
-                    .post(urlService.documentTypes + '/private', privateDocumentType)
-                    .then(function (result) {
-                        return generator.interceptReceivedInstance('PrivateDocumentType', generator.generateInstance(result.data.rs, PrivateDocumentType));
-                    });
-            });
-
-        };
-
-        /**
-         * @description Loads the private document types by documentType lookupKey
-         * @param lookupKey
-         * @returns {*}
-         */
-        self.loadPrivateDocumentTypesByLookupKey = function (lookupKey) {
-            lookupKey = generator.getNormalizedValue(lookupKey, 'lookupKey');
-            return $http.get(urlService.documentTypes + '/private/lookup-key/' + lookupKey)
-                .then(function (result) {
-                    return generator.interceptReceivedCollection('PrivateDocumentType', generator.generateCollection(result.data.rs, PrivateDocumentType));
-                });
-        };
-
-        /**
-         * @description Loads the private document types by userId and ouId
-         * @param userId
-         * @param ouId
-         * @returns {*}
-         */
-        self.loadPrivateDocumentTypesByUserIdAndOuId = function (userId, ouId) {
-            userId = generator.getNormalizedValue(userId, 'id');
-            ouId = generator.getNormalizedValue(ouId, 'id');
-            return $http.get(urlService.documentTypes + '/private/user-id/' + userId + '/ou-id/' + ouId)
-                .then(function (result) {
-                    return generator.interceptReceivedCollection('PrivateDocumentType', generator.generateCollection(result.data.rs, PrivateDocumentType));
-                });
-        };
-
         /**
          * @description Get document type by documentTypeId
          * @param documentTypeId
@@ -313,7 +220,7 @@ module.exports = function (app) {
         };
         /**
          * @description Get document type by lookupKey
-         * @param lookupKey
+         * @param documentTypeId
          * @returns {DocumentType|undefined} return DocumentType Model or undefined if not found.
          */
         self.getDocumentTypeByLookupKey = function (lookupKey) {

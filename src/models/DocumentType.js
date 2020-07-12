@@ -4,7 +4,7 @@ module.exports = function (app) {
                                           _) {
         'ngInject';
         return function DocumentType(model) {
-            var self = this, documentTypeService;
+            var self = this;
             self.id = null;
             self.category = null;
             self.lookupKey = null;
@@ -14,10 +14,6 @@ module.exports = function (app) {
             self.status = true;
             self.parent = null;
             self.itemOrder = 1;
-            self.isGlobal = true;
-            // temporary property - to be deleted before sending
-            self.relatedRecords = [];
-
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [
@@ -25,17 +21,11 @@ module.exports = function (app) {
                 'enName',
                 'lookupStrKey',
                 'status',
-                'itemOrder',
-                'isGlobal'
+                'itemOrder'
             ];
 
             if (model)
                 angular.extend(this, model);
-
-            DocumentType.prototype.setDocumentTypeService = function (service) {
-                documentTypeService = service;
-                return this;
-            };
 
             /**
              * @description Get all required fields
@@ -94,22 +84,6 @@ module.exports = function (app) {
              */
             DocumentType.prototype.getNameByLanguage = function (language) {
                 return this[language + 'Name'];
-            };
-
-            /**
-             * @description Get the globalization of document type as Yes or No instead of true or false.
-             * @returns {string}
-             */
-            DocumentType.prototype.getTranslatedGlobal = function () {
-                return this.isGlobal ? langService.get('yes') : langService.get('no');
-            };
-
-            DocumentType.prototype.setPrivateAndAddUser = function(ouApplicationUser){
-                return documentTypeService.addPrivateDocumentType(this, ouApplicationUser);
-            };
-
-            DocumentType.prototype.getTranslatedGlobal = function () {
-                return this.isGlobal ? langService.get('global') : langService.get('not_global');
             };
 
             // don't remove CMSModelInterceptor from last line

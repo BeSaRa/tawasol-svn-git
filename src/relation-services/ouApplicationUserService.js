@@ -148,10 +148,9 @@ module.exports = function (app) {
              * @param label to dialog. If not found, will be select user.
              * @param $event to display popup from the current mouse click event.
              * @param isUserPreference
-             * @param forceSingle
              * @returns {Promise|ApplicationUser} return the selected application users.
              */
-            selectOUApplicationUsers: function (ouApplicationUsers, label, $event, isUserPreference, forceSingle) {
+            selectOUApplicationUsers: function (ouApplicationUsers, label, $event, isUserPreference) {
                 return dialog
                     .showDialog({
                         templateUrl: cmsTemplate.getPopup('select-ou-application-users'),
@@ -159,7 +158,7 @@ module.exports = function (app) {
                         controller: 'selectOUApplicationUsersPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
-                            singleMode: forceSingle || false,
+                            singleMode: false,
                             ouApplicationUsers: !ouApplicationUsers ? [] : ouApplicationUsers,
                             label: label,
                             isUserPreference: isUserPreference

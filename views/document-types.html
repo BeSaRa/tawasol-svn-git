@@ -52,10 +52,6 @@
                                             <span>{{lang.status}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedDocumentTypes.length" md-column
-                                            md-order-by="isGlobal">
-                                            <span>{{lang.global}}</span>
-                                        </th>
-                                        <th ng-if="!ctrl.selectedDocumentTypes.length" md-column
                                             md-order-by="documentClassesString">
                                             <span>{{lang.label_document_class}}</span>
                                         </th>
@@ -80,13 +76,6 @@
                                                        ng-model="documentType.status">
                                             </md-switch>
                                         </td>
-                                        <td md-cell>
-                                            <md-switch aria-label="{{lang.global}}"
-                                                       title="{{documentType.getTranslatedGlobal()}}"
-                                                       ng-change="ctrl.changeGlobalDocumentType(documentType)"
-                                                       ng-model="documentType.isGlobal">
-                                            </md-switch>
-                                        </td>
                                         <td md-cell>{{documentType.documentClassesString}}</td>
                                         <td md-cell>{{documentType.itemOrder}}</td>
                                         <td md-cell>
@@ -96,7 +85,7 @@
                                                     <md-icon md-svg-icon="delete"></md-icon>
                                                 </md-button>
                                                 <md-button class="md-icon-button" title="{{lang.edit}}"
-                                                           ng-click="ctrl.openEditDocumentTypeDialog(documentType, null, $event)">
+                                                           ng-click="ctrl.openEditDocumentTypeDialog(documentType, $event)">
                                                     <md-icon md-svg-icon="pencil"></md-icon>
                                                 </md-button>
                                             </div>
