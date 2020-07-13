@@ -1017,7 +1017,7 @@ module.exports = function (app) {
             /**
              * @description Check if book has create reply permission
              */
-            WorkItem.prototype.checkCreateReplyPermission = function () {
+            WorkItem.prototype.checkCreateReplyPermission = function (isSpecificVersion) {
                 var info = this.getInfo(),
                     employee = employeeService.getEmployee(),
                     isAllowed =  ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
