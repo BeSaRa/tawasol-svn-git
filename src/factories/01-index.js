@@ -8,7 +8,6 @@ module.exports = function (app) {
     require('./util')(app);
     require('./errorCode')(app);
     require('./ResolveDefer')(app);
-    require('./base64Factory')(app);
     require('./CryptoJS')(app);
     require('./d3')(app);
 };

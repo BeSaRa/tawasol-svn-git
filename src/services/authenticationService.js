@@ -5,7 +5,6 @@ module.exports = function (app) {
                                                    lookupService,
                                                    tokenService,
                                                    employeeService,
-                                                   base64Factory,
                                                    localStorageService,
                                                    GlobalSetting,
                                                    urlService,
