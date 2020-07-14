@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                                       toast,
                                                                       $scope,
                                                                       generator,
+                                                                      employeeService,
                                                                       dialog,
                                                                       langService,
                                                                       correspondence,
