@@ -511,7 +511,7 @@ module.exports = function (app) {
                         return applicationUser;
                     })
                     .catch(function (error) {
-                      //  console.log('addUserFail', error);
+                        //  console.log('addUserFail', error);
                         return $q.reject('addUserFail');
                     });
             }).catch(function (error) {
@@ -760,6 +760,13 @@ module.exports = function (app) {
 
         self.totalApplicationUsersCount = function () {
             return $http.get(urlService.applicationUsers + '/count')
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        };
+
+        self.exportApplicationUsers = function () {
+            return $http.get(urlService.applicationUsers + '/export/excel')
                 .then(function (result) {
                     return result.data.rs;
                 });

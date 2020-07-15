@@ -12,6 +12,10 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
+            <md-button class="md-icon-button" title="{{lang.export}}"
+                       ng-click="ctrl.exportApplicationUsers($event)">
+                <md-icon md-svg-icon="file-excel"></md-icon>
+            </md-button>
             <search-filter-directive change-icon-model="ctrl.searchMode" cancel-callback="ctrl.reloadApplicationUsers()"
                                      on-change="ctrl.searchInApplicationUser"
                                      model="ctrl.searchModel"></search-filter-directive>

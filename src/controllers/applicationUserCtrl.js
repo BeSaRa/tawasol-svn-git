@@ -217,5 +217,11 @@ module.exports = function (app) {
                         });
                 });
         };
+
+        self.exportApplicationUsers = function ($event) {
+            applicationUserService.exportApplicationUsers().then(function (result) {
+                window.open(result);
+            })
+        }
     });
 };
