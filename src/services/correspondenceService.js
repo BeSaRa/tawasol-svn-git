@@ -3309,8 +3309,8 @@ module.exports = function (app) {
                         .setIsComposite(isComposite)
                         .setPinCode(pinCode ? encryptionService.encrypt(pinCode) : null)
                         .setValidateMultiSignature(!ignoreValidateMultiSignature)
-                        .setComments(exportedData.comments || null)
-                        .setDueDate(exportedData.exportDate || null);
+                        .setComments(generator.getNormalizedValue(exportedData, 'comments') || null)
+                        .setDueDate(generator.getNormalizedValue(exportedData, 'exportDate') || null);
 
                     return $http
                         .put(_createUrlSchema(null, info.documentClass, 'authorize'), sign)

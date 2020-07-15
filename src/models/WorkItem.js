@@ -714,7 +714,7 @@ module.exports = function (app) {
                     });
             };
 
-            WorkItem.prototype.applyConditionalApprove = function ($event, defer, ignoreMessage) {
+            WorkItem.prototype.applyConditionalApprove = function ($event, defer, ignoreMessage, ignoreLaunch) {
                 var workItem = this;
                 return dialog
                     .showDialog({
