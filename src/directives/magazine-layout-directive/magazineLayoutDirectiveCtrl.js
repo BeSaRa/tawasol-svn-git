@@ -352,7 +352,7 @@ module.exports = function (app) {
                     return _getSortingColumnHeaderText('received_date');
                 },
                 value: function () {
-                    return 'generalStepElm.receivedDate';
+                    return 'receivedDateTime';
                 },
                 icon: 'arrow-up'
             },
@@ -362,7 +362,7 @@ module.exports = function (app) {
                     return _getSortingColumnHeaderText('received_date', true);
                 },
                 value: function () {
-                    return '-generalStepElm.receivedDate';
+                    return '-receivedDateTime';
                 },
                 icon: 'arrow-down'
             },

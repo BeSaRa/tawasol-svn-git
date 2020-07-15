@@ -313,6 +313,9 @@ module.exports = function (app) {
             WorkItem.prototype.getReceivedTime = function () {
                 return this.generalStepElm.receivedTime;
             };
+            WorkItem.prototype.getReceivedDateTime = function () {
+                return this.receivedDateTime;
+            };
 
             WorkItem.prototype.hasDocumentClass = function (documentClass) {
                 return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();

@@ -76,7 +76,7 @@ module.exports = function (app) {
             searchColumns: {
                 serial: 'generalStepElm.docFullSerial',
                 subject: 'generalStepElm.docSubject',
-                receivedDate: 'generalStepElm.receivedDate',
+                receivedDateTime: 'receivedDateTime',
                 action: function (record) {
                     return self.getSortingKey('action', 'WorkflowAction');
                 },

@@ -106,8 +106,9 @@
                         <md-icon flex md-svg-icon="{{workItem.getTypeIcon().icon}}"
                                  class="{{workItem.getTypeIcon().class}}"></md-icon>
                     </div>
-                    <div class="magazine-date">
+                    <div class="magazine-date" layout="column" layout-align="start center">
                         <span tooltip="{{lang.get('received_date')}}">{{workItem.getReceivedDate()}}</span>
+                        <span tooltip="{{lang.get('received_date')}}">{{workItem.getReceivedTime()}}</span>
                     </div>
                 </div>
                 <div class="magazine-content" layout="column" flex>
@@ -149,7 +150,9 @@
                     </div>
                     <div layout="column" class="magazine-middle">
                         <div layout="row" class="magazine-title">
-                            <span flex><a md-truncate href="" ng-click="ctrl.viewDocument(workItem , $event)" tooltip="{{workItem.getSubject()}}">{{workItem.getSubject()}}</a></span>
+                            <span flex>
+                                <a md-truncate href="" ng-click="ctrl.viewDocument(workItem , $event)" tooltip="{{workItem.getSubject()}}">{{workItem.getSubject()}}</a>
+                            </span>
                             <span class="magazine-serial bg-red">{{lang.action}} : {{workItem.action.getTranslatedName()}}</span>
                         </div>
                     </div>

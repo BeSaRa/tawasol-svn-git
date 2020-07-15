@@ -47,6 +47,7 @@ module.exports = function (app) {
             delete model.type;
             delete model.department;
             delete model.sender;
+            delete model.receivedDateTime;
 
             delete model.securityLevelLookup;
             delete model.securityLevelIndicator;
@@ -81,6 +82,7 @@ module.exports = function (app) {
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.generalStepElm.numberOfDays = getNumberOfDays(model.generalStepElm.receivedDate);
             model.generalStepElm.receivedTime = generator.getTimeFromTimeStamp(angular.copy(model.generalStepElm.receivedDate));
+            model.receivedDateTime = generator.getDateFromTimeStamp(model.generalStepElm.receivedDate, true);
             model.generalStepElm.receivedDate ? getDateFromUnixTimeStamp(model.generalStepElm, ["receivedDate"]) : "";
 
             model.dueDateOriginal = angular.copy(model.generalStepElm.dueDate);

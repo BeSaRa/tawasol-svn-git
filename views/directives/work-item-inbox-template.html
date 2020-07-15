@@ -71,7 +71,7 @@
                     <span>{{lang.subject}}</span>
                 </th>
                 <th ng-if="!ctrl.selectedWorkItems.length" md-column
-                    md-order-by="generalStepElm.receivedDate">
+                    md-order-by="receivedDateTime">
                     <span>{{lang.received_date}}</span>
                 </th>
                 <th ng-if="!ctrl.selectedWorkItems.length" md-column
@@ -188,7 +188,7 @@
                           class="view-doc subject-internal"
                           tooltip="{{userInbox.generalStepElm.docSubject}}">{{userInbox.generalStepElm.docSubject}}</span>
                 </td>
-                <td md-cell>{{userInbox.getReceivedDate()}}</td>
+                <td md-cell>{{userInbox.getReceivedDateTime()}}</td>
                 <td md-cell>{{userInbox.action.getTranslatedName()}}</td>
                 <td md-cell class="td-data">
                     <div layout="row">

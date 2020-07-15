@@ -106,6 +106,9 @@ module.exports = function (app) {
             GeneralStepElementView.prototype.getReceivedTime = function () {
                 return this.generalStepElm.receivedDate ? moment(this.generalStepElm.receivedDate).format('hh:mm A') : '';
             };
+            GeneralStepElementView.prototype.getReceivedDateTime = function () {
+                return this.receivedDateTime;
+            };
 
             GeneralStepElementView.prototype.isTransferredDocument = function () {
                 // if no incomingVSID, then its directly sent from launch(transferred)
