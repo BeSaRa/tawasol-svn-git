@@ -98,6 +98,14 @@ module.exports = function (app) {
             overdueOutgoingDocuments: {
                 permission: false,
                 state: 'app.search.quick-search'
+            },
+            groupMail: {
+                permission: 'GROUP_MAIL',
+                state: 'app.inbox.group-inbox'
+            },
+            deptInbox: {
+                permission: "OPEN_DEPARTMENT’S_INCOMING_QUEUE",
+                state: 'app.department-inbox.incoming'
             }
         };
 
@@ -214,6 +222,18 @@ module.exports = function (app) {
                 ar: langService.getKey('counter_internal_approved', 'ar'),
                 en: langService.getKey('counter_internal_approved', 'en'),
                 value: 'internalApproved'
+            },
+            {
+                id: 20,
+                ar: langService.getKey('counter_group_mail', 'ar'),
+                en: langService.getKey('counter_group_mail', 'en'),
+                value: 'groupMail'
+            },
+            {
+                id: 21,
+                ar: langService.getKey('counter_dept_incoming', 'ar'),
+                en: langService.getKey('counter_dept_incoming', 'en'),
+                value: 'deptInbox'
             }
         ];
 
