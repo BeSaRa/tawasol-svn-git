@@ -331,6 +331,46 @@ module.exports = function (app) {
             });
         };
 
+        function _checkIfDDLControl(control) {
+            // 0 property in object $$element is the control itself
+            if (!control || !control.$$element || !control.$$element.hasOwnProperty('0')) {
+                return false;
+            }
+            return control.$$element[0].tagName === 'MD-SELECT';
+        }
+
+        /**
+         * @description Find the dropdown controls in given form
+         * @param form
+         * @param filterRequired
+         * @returns {null|*}
+         */
+        self.getDropdownFormControls = function (form, filterRequired) {
+            if (!form || form.$$controls.length === 0) {
+                return null;
+            }
+            return _.filter(form.$$controls, function (control) {
+                if (!_checkIfDDLControl(control)) {
+                    return false;
+                }
+                if (!filterRequired) {
+                    return true;
+                }
+
+                return control.hasOwnProperty('$validators') && control.$validators.hasOwnProperty('required')
+                    && (control.$$attr.required && control.$$attr.required === true);
+            });
+        };
+
+        self.validateRequiredFieldValue = function (field) {
+            if (!field)
+                return;
+
+            if (!field.$modelValue) {
+                field.$setValidity('required', false);
+            }
+        };
+
         /**
          * @description Returns the value of property by checking hasOwnProperty value
          * @param value
