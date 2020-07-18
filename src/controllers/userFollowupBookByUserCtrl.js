@@ -114,8 +114,8 @@ module.exports = function (app) {
                 });
         };
 
-        self.notCurrentUser = function (user) {
-            return employeeService.getEmployee().id === user.id;
+        self.isCurrentUser = function (user) {
+            return employeeService.getEmployee() && employeeService.getEmployee().id === generator.getNormalizedValue(user,  'id');
         };
 
 

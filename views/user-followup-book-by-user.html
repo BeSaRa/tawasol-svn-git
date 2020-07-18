@@ -80,7 +80,7 @@
                                placeholder="{{lang.search}}"
                                class="select-header-input">
                     </md-select-header>
-                    <md-option ng-if="!ctrl.notCurrentUser(user)"
+                    <md-option ng-if="!ctrl.isCurrentUser(user)"
                                ng-value="user"
                                ng-repeat="user in ctrl.applicationUsers | translatedNameFilter: ctrl.inlineAppUserSearchText">
                                        <span md-highlight-text="ctrl.inlineAppUserSearchText"
