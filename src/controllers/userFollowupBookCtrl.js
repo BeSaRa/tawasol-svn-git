@@ -397,7 +397,7 @@ module.exports = function (app) {
          */
         self.sendSMS = function (record, $event, defer) {
             record
-                .openSendSMSDialog($event, employeeService.getEmployee())
+                .openSendSMSDialog($event, null)
                 .then(function () {
                     return self.reloadFollowupBooks(self.grid.page)
                         .then(function (result) {
@@ -414,7 +414,7 @@ module.exports = function (app) {
          */
         self.sendReminderEmailToUser = function (record, $event, defer) {
             record
-                .sendReminderEmail(employeeService.getEmployee().email, $event)
+                .sendReminderEmail($event, null)
                 .then(function (result) {
                     if (result) {
                         return self.reloadFollowupBooks(self.grid.page)

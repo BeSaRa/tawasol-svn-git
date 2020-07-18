@@ -652,12 +652,12 @@ module.exports = function (app) {
             /**
              * @description Opens dialog to enter email address
              * @param record
-             * @param emailAddress
+             * @param receivingUser
              * @param $event
              * @returns {promise}
              * @private
              */
-            function _openSendEmailDialog(record, emailAddress, $event) {
+            function _openSendEmailDialog(record, receivingUser, $event) {
                 return dialog
                     .showDialog({
                         templateUrl: cmsTemplate.getPopup('email'),
@@ -682,8 +682,23 @@ module.exports = function (app) {
                             };
                         },
                         locals: {
-                            record: record,
-                            emailAddress: emailAddress
+                            record: record
+                        },
+                        resolve: {
+                            emailAddress: function (applicationUserService) {
+                                'ngInject';
+                                if(!receivingUser){
+                                    return null;
+                                }
+                                if (employeeService.isCurrentApplicationUser(receivingUser)) {
+                                    return generator.getNormalizedValue(receivingUser, 'email');
+                                }
+
+                                return applicationUserService.loadApplicationUserById(receivingUser)
+                                    .then(function (appUser) {
+                                        return (!!appUser ? generator.getNormalizedValue(appUser, 'email') : null);
+                                    });
+                            }
                         }
                     })
             }
@@ -691,24 +706,21 @@ module.exports = function (app) {
             /**
              * @description Send reminder email
              * @param correspondence
-             * @param emailAddress
+             * @param receivingUser
              * @param $event
              * @returns {promise}
              */
-            self.sendReminderEmail = function (correspondence, emailAddress, $event) {
+            self.sendReminderEmail = function (correspondence, receivingUser, $event) {
                 var info = correspondence.getInfo(),
                     defer = $q.defer();
-                /*if (emailAddress) {
-                    defer.resolve(emailAddress);
-                } else {*/
-                _openSendEmailDialog(correspondence, emailAddress, $event)
+
+                _openSendEmailDialog(correspondence, receivingUser, $event)
                     .then(function (email) {
                         defer.resolve(email);
                     })
                     .catch(function (error) {
                         defer.reject(false);
                     });
-                //}
                 return defer.promise.then(function (email) {
                     return $http.put(urlService.userFollowUp + '/send-remainder/' + info.id + '/user-email?email=' + email, {})
                         .then(function (result) {

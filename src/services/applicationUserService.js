@@ -574,6 +574,18 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Load application user by applicationUserId
+         * @param applicationUserId
+         * @returns {ApplicationUser|undefined} return ApplicationUser Model or undefined if not found.
+         */
+        self.loadApplicationUserById = function (applicationUserId) {
+            applicationUserId = generator.getNormalizedValue(applicationUserId, 'id');
+            return $http.get(urlService.applicationUsers + '/' + applicationUserId).then(function (result) {
+                return generator.interceptReceivedInstance('ApplicationUser', generator.generateInstance(result.data.rs, ApplicationUser, self._sharedMethods));
+            });
+        };
+
+        /**
          * @description Get application user by applicationUserId
          * @param applicationUserId
          * @returns {ApplicationUser|undefined} return ApplicationUser Model or undefined if not found.

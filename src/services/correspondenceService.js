@@ -1335,7 +1335,7 @@ module.exports = function (app) {
                 sourceClassId: self.docClassIds[sourceDocClass.toLowerCase()],
                 destClassId: self.docClassIds[targetDocClass.toLowerCase()],
                 wobNum: wobNumber || '', // wobNum will be sent if create reply from inbox
-                vsId: vsId , // vsId will be sent always
+                vsId: vsId, // vsId will be sent always
                 versionNumber: versionNumber || null
             });
 
@@ -4220,7 +4220,7 @@ module.exports = function (app) {
          * @returns {promise}
          */
         self.openSendSMSDialog = function (correspondence, receivingUser, $event) {
-            var info = correspondence.getInfo(), applicationUserDefer = $q.defer();
+            var info = correspondence.getInfo();
             return dialog.showDialog({
                 templateUrl: cmsTemplate.getPopup('send-sms'),
                 controllerAs: 'ctrl',
@@ -4235,29 +4235,23 @@ module.exports = function (app) {
                         'ngInject';
                         return self.getLinkedEntitiesByVsIdClass(info.vsId, info.documentClass);
                     },
-                    smsTemplates: function (applicationUserService, smsTemplateService) {
+                    smsTemplates: function (smsTemplateService) {
                         'ngInject';
-                        return applicationUserService.getApplicationUsers()
-                            .then(function (result) {
-                                applicationUserDefer.resolve(result);
-                                return smsTemplateService.loadActiveSmsTemplates();
-                            });
+                        /* No need to load application users as we will not use sms template subscribers */
+                        return smsTemplateService.loadActiveSmsTemplates(true);
                     },
-                    mobileNumber: function () {
+                    mobileNumber: function (applicationUserService) {
                         'ngInject';
                         if (!receivingUser) {
                             return null;
                         }
-
                         if (employeeService.isCurrentApplicationUser(receivingUser)) {
                             return generator.getNormalizedValue(receivingUser, 'mobile');
                         }
 
-                        return applicationUserDefer.promise.then(function (applicationUsers) {
-                            var user = _.find(applicationUsers, function (item) {
-                                return generator.getNormalizedValue(receivingUser, 'id') === generator.getNormalizedValue(item, 'id');
-                            });
-                            return (!!user ? generator.getNormalizedValue(user, 'mobile') : null);
+                        return applicationUserService.loadApplicationUserById(receivingUser)
+                            .then(function (appUser) {
+                            return (!!appUser ? generator.getNormalizedValue(appUser, 'mobile') : null);
                         });
                     }
                 }

@@ -184,8 +184,8 @@ module.exports = function (app) {
                 return correspondenceService.openSendSMSDialog(this, receivingUser, $event);
             };
 
-            FollowupBook.prototype.sendReminderEmail = function (email, $event) {
-                return followUpUserService.sendReminderEmail(this, email, $event);
+            FollowupBook.prototype.sendReminderEmail = function ($event, receivingUser) {
+                return followUpUserService.sendReminderEmail(this, receivingUser, $event);
             };
 
             FollowupBook.prototype.getFolderId = function () {

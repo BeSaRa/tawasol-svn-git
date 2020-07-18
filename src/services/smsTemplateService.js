@@ -40,10 +40,12 @@ module.exports = function (app) {
          * @description load sms templates from server.
          * @returns {Promise|smsTemplates}
          */
-        self.loadActiveSmsTemplates = function () {
+        self.loadActiveSmsTemplates = function (skipInterceptReceive) {
             return $http.get(urlService.smsTemplates + '/active').then(function (result) {
                 self.smsTemplates = generator.generateCollection(result.data.rs, SmsTemplate, self._sharedMethods);
-                self.smsTemplates = generator.interceptReceivedCollection('SmsTemplate', self.smsTemplates);
+                if (!skipInterceptReceive) {
+                    self.smsTemplates = generator.interceptReceivedCollection('SmsTemplate', self.smsTemplates);
+                }
                 return self.smsTemplates;
             });
         };

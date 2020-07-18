@@ -476,7 +476,7 @@ module.exports = function (app) {
                 return;
             }
             record
-                .sendReminderEmail(null, $event)
+                .sendReminderEmail($event, self.selectedUser)
                 .then(function (result) {
                     if (result) {
                         return self.reloadFollowupBooks(self.grid.page)
