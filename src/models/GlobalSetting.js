@@ -62,6 +62,7 @@ module.exports = function (app) {
             self.digitalCertificateMode = null;
             self.msTeamsSupoortURL = null;
             self.orderUsersByRank = false;
+            self.stampModuleEnabled = false;
             //endregion
 
             // every model has required fields
@@ -153,6 +154,10 @@ module.exports = function (app) {
 
             GlobalSetting.prototype.isDigitalCertificateEnabled = function () {
                 return this.digitalCertificateEnabled;
+            };
+
+            GlobalSetting.prototype.isStampModuleEnabled = function () {
+                return this.stampModuleEnabled;
             };
 
             // don't remove CMSModelInterceptor from last line

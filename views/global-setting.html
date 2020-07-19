@@ -493,6 +493,13 @@
                                 </div>
                             </div>
                             <div layout="row" class="p20">
+                                <!-- Stamp Module Enabled -->
+                                <md-input-container flex>
+                                    <md-switch flex ng-model="ctrl.globalSetting.stampModuleEnabled"
+                                               aria-label="{{lang.enable_stamp_module}} ">
+                                        <span>{{lang.enable_stamp_module}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('stampModuleEnabled')}}
+                                    </md-switch>
+                                </md-input-container>
                                 <!-- Digital Certificate Enabled -->
                                 <md-input-container flex>
                                     <md-switch flex ng-model="ctrl.globalSetting.digitalCertificateEnabled"
@@ -500,6 +507,24 @@
                                                aria-label="{{lang.digital_certificate}} ">
                                         <span>{{lang.digital_certificate}} : </span>{{ctrl.globalSetting.getTranslatedYesNo('digitalCertificateEnabled')}}
                                     </md-switch>
+                                </md-input-container>
+                            </div>
+                            <div layout="row" class="p20">
+                                <!-- Document Security Schema -->
+                                <md-input-container flex>
+                                    <label for="securitySchema">{{lang.documents_security_schema}}</label>
+                                    <md-select required name="securitySchema" id="securitySchema"
+                                               ng-change="ctrl.confirmChangeSecuritySchema($event)"
+                                               ng-model="ctrl.globalSetting.securitySchema">
+                                        <md-option
+                                                ng-repeat="securitySchema in ctrl.documentSecuritySchemas track by $index"
+                                                ng-value="securitySchema.lookupKey">
+                                            {{securitySchema.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="globalSettingForm.securitySchema.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
                                 </md-input-container>
                                 <!-- Default Certificate Mode -->
                                 <md-input-container flex>
@@ -520,31 +545,6 @@
                                 </md-input-container>
                             </div>
                             <div layout="row" class="p20">
-                                <!-- Document Security Schema -->
-                                <md-input-container flex>
-                                    <label for="securitySchema">{{lang.documents_security_schema}}</label>
-                                    <!--<md-select required name="securitySchema" multiple
-                                               ng-model="ctrl.globalSetting.securitySchema"
-                                               ng-model-options="{trackBy: '$value.id'}">
-                                        <md-option
-                                                ng-repeat="securitySchema in ctrl.documentSecuritySchemas track by $index"
-                                                ng-value="securitySchema">
-                                            {{securitySchema.getTranslatedName()}}
-                                        </md-option>
-                                    </md-select>-->
-                                    <md-select required name="securitySchema" id="securitySchema"
-                                               ng-change="ctrl.confirmChangeSecuritySchema($event)"
-                                               ng-model="ctrl.globalSetting.securitySchema">
-                                        <md-option
-                                                ng-repeat="securitySchema in ctrl.documentSecuritySchemas track by $index"
-                                                ng-value="securitySchema.lookupKey">
-                                            {{securitySchema.getTranslatedName()}}
-                                        </md-option>
-                                    </md-select>
-                                    <div ng-messages="globalSettingForm.securitySchema.$error">
-                                        <div ng-message="required">{{lang.field_required}}</div>
-                                    </div>
-                                </md-input-container>
                                 <!-- Default Export Type -->
                                 <md-input-container flex>
                                     <label for="defaultExportTypeGrouping">{{lang.default_export_type}}</label>
@@ -557,8 +557,6 @@
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
-                            </div>
-                            <div layout="row" class="p20">
                                 <!-- Excluded Conversion File Types -->
                                 <md-input-container flex>
                                     <label for="excludedConversionFileTypes">{{lang.excluded_conversion_file_types}}</label>
@@ -572,7 +570,6 @@
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
-                                <div flex></div>
                             </div>
                         </div>
                         <br/>
