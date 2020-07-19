@@ -46,8 +46,8 @@
                                                 </md-button>
                                                 <md-button class="md-icon-button"
                                                            tooltip="{{lang.grid_action_remove_permanent}}"
-                                                           ng-if="ctrl.isSelectedHasContent()"
-                                                           ng-click="ctrl.removePermanentlyBulk($event) && ctrl.employeeService.hasPermissionTo('DELETE_INCOMING_PERMENANT')">
+                                                           ng-if="ctrl.isSelectedHasContent()  && ctrl.employeeService.hasPermissionTo('DELETE_INCOMING_PERMENANT')"
+                                                           ng-click="ctrl.removePermanentlyBulk($event)">
                                                     <md-icon md-svg-icon="delete-forever"
                                                              class="action-green"></md-icon>
                                                 </md-button>
