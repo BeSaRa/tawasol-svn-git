@@ -236,9 +236,28 @@ module.exports = function (app) {
         self.getMainDocumentContentAsPDF = function (vsId, labelId) {
             var queryString = _generateQueryString({
                     //'tawasol-auth-header': tokenService.getToken(),
-                    'labelId': labelId
+                    'labelId': labelId,
+                    'with-protection': true
                 }),
                 url = urlService.downloadDocumentContentPDF.replace('{vsId}', vsId) + queryString;
+            return $http.get(url, {
+                responseType: 'blob'
+            })
+                .then(function (result) {
+                    return result.data;
+                })
+        };
+
+        /**
+         * @description download attachment content as PDF from server
+         */
+        self.getAttachmentContentAsPDF = function (vsId, labelId) {
+            var queryString = _generateQueryString({
+                    //'tawasol-auth-header': tokenService.getToken(),
+                    'labelId': labelId,
+                    'with-protection': true
+                }),
+                url = urlService.downloadAttachmentContentPDF.replace('{vsId}', vsId) + queryString;
             return $http.get(url, {
                 responseType: 'blob'
             })
