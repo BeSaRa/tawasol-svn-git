@@ -46,9 +46,10 @@
                                                 </md-button>
                                                 <md-button class="md-icon-button"
                                                            tooltip="{{lang.grid_action_remove_permanent}}"
-                                                           ng-if="ctrl.isSelectedHasContent()"
+                                                           ng-if="ctrl.isSelectedHasContent() && ctrl.employeeService.hasPermissionTo('DELETE_INTERNAL_PERMENANT')"
                                                            ng-click="ctrl.removePermanentlyBulk($event)">
-                                                    <md-icon md-svg-icon="delete-forever" class="action-green"></md-icon>
+                                                    <md-icon md-svg-icon="delete-forever"
+                                                             class="action-green"></md-icon>
                                                 </md-button>
                                             </div>
                                         </th>
@@ -102,7 +103,8 @@
                                             <span ng-if="!deletedInternal.hasContent() && ctrl.grid.truncateSubject"
                                                   class="view-doc subject-internal" md-truncate
                                                   tooltip="{{deletedInternal.docSubject}}">{{deletedInternal.docSubject}}</span>
-                                            <a href="" ng-if="deletedInternal.hasContent() && !ctrl.grid.truncateSubject"
+                                            <a href=""
+                                               ng-if="deletedInternal.hasContent() && !ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal"
                                                tooltip="{{deletedInternal.docSubject}}"
                                                ng-click="ctrl.viewDocument(deletedInternal, $event)">{{deletedInternal.docSubject}}</a>

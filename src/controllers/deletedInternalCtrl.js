@@ -23,6 +23,7 @@ module.exports = function (app) {
         self.deletedInternals = deletedInternals;
         self.deletedInternalsCopy = angular.copy(self.deletedInternals);
         self.selectedDeletedInternals = [];
+        self.employeeService = employeeService;
 
         /**
          * @description View document
@@ -72,7 +73,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.removePermanently = function(correspondence, $event, defer){
+        self.removePermanently = function (correspondence, $event, defer) {
             correspondence.removePermanentlyDocument($event)
                 .then(function () {
                     self.reloadDeletedInternals(self.grid.page)
@@ -253,6 +254,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.removePermanently,
                 class: "action-green",
+                permissionKey: 'DELETE_INTERNAL_PERMENANT',
                 checkShow: function (action, model) {
                     return true;
                 }

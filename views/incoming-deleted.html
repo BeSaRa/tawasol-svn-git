@@ -47,8 +47,9 @@
                                                 <md-button class="md-icon-button"
                                                            tooltip="{{lang.grid_action_remove_permanent}}"
                                                            ng-if="ctrl.isSelectedHasContent()"
-                                                           ng-click="ctrl.removePermanentlyBulk($event)">
-                                                    <md-icon md-svg-icon="delete-forever" class="action-green"></md-icon>
+                                                           ng-click="ctrl.removePermanentlyBulk($event) && ctrl.employeeService.hasPermissionTo('DELETE_INCOMING_PERMENANT')">
+                                                    <md-icon md-svg-icon="delete-forever"
+                                                             class="action-green"></md-icon>
                                                 </md-button>
                                             </div>
                                         </th>
@@ -92,7 +93,8 @@
                                             <span ng-if="!deletedIncoming.hasContent() && ctrl.grid.truncateSubject"
                                                   class="view-doc subject-internal" md-truncate
                                                   tooltip="{{deletedIncoming.docSubject}}">{{deletedIncoming.docSubject}}</span>
-                                            <a href="" ng-if="deletedIncoming.hasContent() && !ctrl.grid.truncateSubject"
+                                            <a href=""
+                                               ng-if="deletedIncoming.hasContent() && !ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal"
                                                tooltip="{{deletedIncoming.docSubject}}"
                                                ng-click="ctrl.viewDocument(deletedIncoming, $event)">{{deletedIncoming.docSubject}}</a>

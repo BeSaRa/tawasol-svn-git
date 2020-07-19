@@ -23,6 +23,7 @@ module.exports = function (app) {
         self.deletedIncomings = deletedIncomings;
         self.deletedIncomingsCopy = angular.copy(self.deletedIncomings);
         self.selectedDeletedIncomings = [];
+        self.employeeService = employeeService;
 
         /**
          * @description View document
@@ -252,6 +253,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.removePermanently,
                 class: "action-green",
+                permissionKey: 'DELETE_INCOMING_PERMENANT',
                 checkShow: function (action, model) {
                     return true;
                 }
