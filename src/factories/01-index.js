@@ -10,4 +10,5 @@ module.exports = function (app) {
     require('./ResolveDefer')(app);
     require('./CryptoJS')(app);
     require('./d3')(app);
+    require('./PSPDFKit')(app);
 };
