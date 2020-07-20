@@ -430,6 +430,20 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description add correspondence To My FollowUp
+         * @param document
+         * @param $event
+         */
+        self.addToDirectFollowUp = function (document, $event) {
+            document.addToMyDirectFollowUp()
+                .then(function () {
+                    counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    //self.resetAddCorrespondence();
+                });
+        };
+
         self.docActionManageTasks = function (document, $event) {
             console.log('manage tasks', document);
         };
@@ -587,6 +601,18 @@ module.exports = function (app) {
                 callback: self.addToIcnArchive,
                 class: "action-green",
                 permissionKey: 'ICN_ENTRY_TEMPLATE',
+                checkShow: function (action, model, index) {
+                    isVisible = gridService.checkToShowAction(action) && _hasContent();
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
+            },
+            // add to my follow up
+            {
+                text: langService.get('add_to_my_direct_followup'),
+                callback: self.addToDirectFollowUp,
+                permissionKey: 'USER_FOLLOWUP_BOOKS',
+                class: "action-green",
                 checkShow: function (action, model, index) {
                     isVisible = gridService.checkToShowAction(action) && _hasContent();
                     self.setDropdownAvailability(index, isVisible);
