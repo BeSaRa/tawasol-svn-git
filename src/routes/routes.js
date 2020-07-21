@@ -16,7 +16,7 @@ module.exports = function (app) {
 
 
         versionServiceProvider
-            .setVersionNumber('2.3.0')
+            .setVersionNumber('2.4.0')
             .setBuildNumber('T#6244')
             .setPrivateBuildNumber('T#6244');
 
@@ -1736,6 +1736,13 @@ module.exports = function (app) {
                 controller: 'userFollowupBookByUserCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_user_book_followup'
+            })
+            .state('app.administration.document-stamps', {
+                url: '/document-stamps',
+                templateUrl: templateProvider.getView('document-stamps'),
+                controller: 'documentStampCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_document_stamps'
             })
 
     });

@@ -122,4 +122,5 @@ module.exports = function (app) {
     require('./encryptionService')(app);
     require('./predefinedActionService')(app);
     require('./followUpUserService')(app);
+    require('./documentStampService')(app);
 };

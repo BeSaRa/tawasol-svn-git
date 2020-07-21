@@ -677,6 +677,97 @@
                             </div>
                         </md-content>
                     </md-tab>
+                    <!-- Document Stamps -->
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('documentStamps')"
+                            label="{{lang.document_stamps}}" ng-click="ctrl.setCurrentTab('documentStamps')">
+                        <md-content class="md-padding">
+                            <div layout="column">
+                                <div layout="row" class="p20-0">
+                                    <md-button ng-click="ctrl.openAddDocumentStampDialog($event)"
+                                               class="md-icon-button"
+                                               tooltip="{{lang.add}}">
+                                        <md-icon md-svg-icon="plus"></md-icon>
+                                    </md-button>
+                                    <md-button ng-click="ctrl.reloadDocumentStamps()" class="md-icon-button"
+                                               tooltip="{{lang.reload}}">
+                                        <md-icon md-svg-icon="refresh"></md-icon>
+                                    </md-button>
+                                    <span flex></span>
+                                    <grid-search-directive grid="ctrl.documentStampGrid"></grid-search-directive>
+                                </div>
+                                <div layout="column">
+                                    <div scroll-directive>
+                                        <md-card md-whiteframe="3" class="card-overlay">
+                                            <md-table-container>
+                                                <div scroll-directive>
+                                                    <table md-table md-row-select="true"
+                                                           multiple="true"
+                                                           ng-model="ctrl.selectedDocumentStamps"
+                                                           md-progress="ctrl.documentStampGrid.progress">
+                                                        <thead md-head md-order="ctrl.documentStampGrid.order"
+                                                               md-on-reorder="ctrl.getSortedDataStamp">
+                                                        <tr md-row>
+                                                            <th colspan="5" class="table-selector-header"
+                                                                ng-if="ctrl.selectedDocumentStamps.length"
+                                                                md-column>
+                                                                <div layout="row" layout-align="start center">
+                                                                    <span>{{ctrl.selectedDocumentStamps.length}} {{lang.items_selected}} </span>
+                                                                    <span flex></span>
+                                                                </div>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDocumentStamps.length"
+                                                                md-column
+                                                                md-order-by="docSubject">
+                                                                <span>{{lang.document_subject}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDocumentStamps.length"
+                                                                md-column
+                                                                md-order-by="documentTitle">
+                                                                <span>{{lang.document_title}}</span>
+                                                            </th>
+                                                            <th ng-if="!ctrl.selectedDocumentStamps.length"
+                                                                md-column>
+                                                                <span>{{lang.actions}}</span>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody md-body>
+                                                        <tr md-row md-select="documentStamp"
+                                                            ng-repeat="documentStamp in ctrl.documentStamps | limitTo: ctrl.documentStampGrid.limit: ((ctrl.documentStampGrid.page - 1) * ctrl.documentStampGrid.limit) track by $index">
+                                                            <td md-cell>{{documentStamp.docSubject}}</td>
+                                                            <td md-cell>{{documentStamp.documentTitle}}</td>
+                                                            <td md-cell>
+                                                                <div flex layout="row" layout-align="start center">
+                                                                    <!--<md-button class="md-icon-button"
+                                                                               title="{{lang.delete}}"
+                                                                               ng-click="ctrl.removeDocumentStamp(documentStamp, $event)">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                    </md-button>-->
+                                                                    <md-button class="md-icon-button"
+                                                                               title="{{lang.edit}}"
+                                                                               ng-click="ctrl.openEditDocumentStampDialog(documentStamp, $event)">
+                                                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                                                    </md-button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <md-table-pagination
+                                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                        md-limit-options="ctrl.documentStampGrid.limitOptions"
+                                                        md-limit="ctrl.documentStampGrid.limit"
+                                                        md-page="ctrl.documentStampGrid.page"
+                                                        md-total="{{ctrl.documentStamps.length}}" md-page-select>
+                                                </md-table-pagination>
+                                            </md-table-container>
+                                        </md-card>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
                     <!-- Children -->
                     <md-tab label="{{lang.childs}}" ng-if="ctrl.editMode && ctrl.showTab('children')"
                             ng-click="ctrl.setCurrentTab('children')">

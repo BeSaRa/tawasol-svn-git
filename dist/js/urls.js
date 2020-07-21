@@ -405,6 +405,8 @@
                 .addToAllWithBase('userFollowUp', 'cms-entity/user/user-followup-book')
                 // preapre followup
                 .addToAllWithBase('prepareFollowUp', 'cms-entity/user/user-followup-book/prepare-followup/vsid/:vsId/doc-class/:classKey')
+                // document stamps
+                .addToAllWithBase('documentStamp', 'cms-entity/admin/tawasol-stamp')
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();
@@ -421,6 +423,11 @@
 
             // to add a groupExtensions
             attachmentServiceProvider
+                .addExtensionGroup('png_jpg', [
+                    '.png',
+                    '.jpg',
+                    '.jpeg'
+                ])
                 .addExtensionGroup('userSignature', [
                     '.png'
                 ])

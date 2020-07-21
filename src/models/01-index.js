@@ -189,4 +189,6 @@ module.exports = function (app) {
     require('./FollowupBook')(app);
     require('./UserFollowupBookLog')(app);
     require('./UserFollowupRequest')(app);
+    require('./TawasolDocument')(app);
+    require('./TawasolStamp')(app);
 };

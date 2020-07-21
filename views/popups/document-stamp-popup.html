@@ -1,0 +1,87 @@
+<md-dialog class="dialog-extend cms-dialog" layout="column"
+           ng-class="{'cms-dialog-full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_document_stamp: ctrl.model.getNames()}}">
+    <popup-toolbar-directive ng-if="!ctrl.model.id"
+                             header-text="{{lang.add_new_document_stamp}}"></popup-toolbar-directive>
+    <popup-toolbar-directive ng-if="ctrl.model.id"
+                             header-text="{{ctrl.model.getSubjectTitle()}}"></popup-toolbar-directive>
+    <md-dialog-content scroll-directive flex>
+        <div class="md-dialog-content cms-dialog-content">
+            <form name="documentStampForm" autocomplete="off">
+                <div layout="column">
+                    <div layout="row">
+                        <!-- Document Subject -->
+                        <md-input-container flex>
+                            <label for="docSubject">{{lang.arabic_name}}</label>
+                            <input name="docSubject" id="docSubject" required minlength="4"
+                                   ng-model="ctrl.documentStamp.docSubject"
+                                   custom-validate-directive="A1NS">
+                            <div ng-messages="documentStampForm.docSubject.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- Document Title-->
+                        <md-input-container flex>
+                            <label for="documentTitle">{{lang.english_name}}</label>
+                            <input name="documentTitle" id="documentTitle" required minlength="4"
+                                   ng-model="ctrl.documentStamp.documentTitle"
+                                   custom-validate-directive="E1NS">
+                            <div ng-messages="documentStampForm.documentTitle.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Document Stamp File -->
+                        <md-input-container flex>
+                            <div>
+                                <input type="file" id="docStampFile" name="docStampFile" class="ng-hide"
+                                       catch-upload-file-directive="ctrl.checkFile"
+                                       ng-model="ctrl.docStampFile" aria-label="{{lang.document_file}}"
+                                       accept="{{ctrl.allowedDocStampFormats}}">
+                                <md-button id="uploadButton" class="md-raised md-primary" aria-label="attach_file"
+                                           ng-click="ctrl.openBrowseFile()">
+                                    {{lang.browse_file}}
+                                </md-button>
+                                <span flex ng-if="ctrl.isDocStampAttached">{{ctrl.docStampFile.name}}</span>
+                            </div>
+                            <div class="help-text-div">{{lang.allowed_formats.change({formats: ctrl.allowedDocStampFormats})}}</div>
+                        </md-input-container>
+                        <div flex class="p20">
+                            <md-switch aria-label="{{lang.status}}"
+                                       ng-model="ctrl.documentStamp.status">
+                                <label>{{lang.status}} : {{ctrl.documentStamp.getTranslatedStatus()}}</label>
+                            </md-switch>
+                        </div>
+                    </div>
+                    <div layout="row" ng-if="ctrl.stampUrl">
+                        <div flex>
+                            <img ng-src="{{ctrl.stampUrl}}"
+                                 name="stampUrl" id="stampUrl"
+                                 class="upload-image border-red" flex height="120">
+                        </div>
+                        <div flex></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions class="cms-dialog-actions">
+        <md-button class="md-raised md-primary"
+                   ng-disabled="!ctrl.isValidForm(documentStampForm)"
+                   ng-click="ctrl.saveDocumentStamp($event)">
+            {{ctrl.editMode ? lang.save : lang.add}}
+        </md-button>
+        <md-button class="md-raised"
+                   ng-click="ctrl.resetModel()">
+            {{lang.reset}}
+        </md-button>
+        <md-button class="md-raised red-text" ng-click="ctrl.closePopup()">
+            {{lang.close}}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

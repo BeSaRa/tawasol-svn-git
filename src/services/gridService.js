@@ -119,7 +119,8 @@ module.exports = function (app) {
                 attachmentType: 'attachType',
                 dynamicMenuItem: 'dynamicMenu',
                 organization: 'organization',
-                serialNumbers: 'serialNumbers'
+                serialNumbers: 'serialNumbers',
+                documentStamp: 'docStamp'
             },
             others: {
                 linkedDoc: 'linkedDoc',

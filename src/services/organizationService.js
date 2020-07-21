@@ -525,7 +525,8 @@ module.exports = function (app) {
                         ouAssignedUsers: [],
                         organizations: self.allOrganizationsStructure,
                         defaultTab: 'basic',
-                        serials: []
+                        serials: [],
+                        documentStamps: []
                     },
                     resolve: {
                         classifications: function (classificationService) {
@@ -617,6 +618,10 @@ module.exports = function (app) {
                             'ngInject';
                             return documentTemplateService
                                 .loadDocumentTemplates(organization.id, null, (!organization.hasRegistry ? organization.id : null));
+                        },
+                        documentStamps: function(documentStampService){
+                            'ngInject';
+                            return documentStampService.loadDocumentStamps(generator.getNormalizedValue(organization, 'id'));
                         },
                         allPropertyConfigurations: function (propertyConfigurationService, $q) {
                             'ngInject';

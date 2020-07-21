@@ -150,4 +150,5 @@ module.exports = function (app) {
     require('./transferFollowupBookPopCtrl')(app);
     require('./manageCorrespondenceSiteStatusPopCtrl')(app);
     require('./conditionalApprovePopCtrl')(app);
+    require('./documentStampPopCtrl')(app);
 };

@@ -30,8 +30,10 @@ module.exports = function (app) {
                                                     organization,
                                                     organizations,
                                                     documentTemplates,
+                                                    documentStamps,
                                                     ReferencePlanItemStartSerial,
                                                     documentTemplateService,
+                                                    documentStampService,
                                                     PropertyConfiguration,
                                                     allPropertyConfigurations,
                                                     propertyConfigurationService,
@@ -144,6 +146,9 @@ module.exports = function (app) {
 
         self.documentTemplates = documentTemplates;
         self.documentTemplatesCopy = angular.copy(self.documentTemplates);
+
+        self.documentStamps = documentStamps;
+        self.documentStampsCopy = angular.copy(self.documentStamps);
 
         self.unAssignedUserSearchText = '';
 
@@ -368,6 +373,7 @@ module.exports = function (app) {
         self.showSaveButton = function () {
             return !(self.selectedTab === 'property_config'
                 || self.selectedTab === 'document_templates'
+                || self.selectedTab === 'documentStamps'
                 || self.selectedTab === 'correspondence_sites'
                 || self.selectedTab === 'classifications'
                 || self.selectedTab === 'users'
@@ -1362,6 +1368,118 @@ module.exports = function (app) {
         };
 
 
+        /**
+         * @description Contains the selected document stamps
+         * @type {Array}
+         */
+        self.selectedDocumentStamps = [];
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataStamp = function () {
+            self.documentStamps = $filter('orderBy')(self.documentStamps, self.documentStampGrid.order);
+        };
+
+        /**
+         * @description Contains options for grid configuration
+         * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
+         */
+        self.documentStampGrid = {
+            name: 'documentStampGrid',
+            progress: null,
+            limit: 5, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.documentStamps.length + 21)
+                    }
+                }
+            ],
+            searchColumns: {
+                docSubject: 'docSubject',
+                documentTitle: 'documentTitle'
+            },
+            searchText: '',
+            searchCallback: function (grid) {
+                self.documentStamps = gridService.searchGridData(self.documentStampGrid, self.documentStampsCopy);
+            }
+        };
+
+        /**
+         * @description Opens dialog for add new document stamp
+         * @param $event
+         */
+        self.openAddDocumentStampDialog = function ($event) {
+            documentStampService
+                .controllerMethod
+                .documentStampAdd($event, organization.id, $event)
+                .then(function (result) {
+                    self.reloadDocumentStamps(self.documentStampGrid.page)
+                        .then(function () {
+                            toast.success(langService.get('add_success').change({name: result.getSubjectTitle()}));
+                        });
+                });
+        };
+
+        /**
+         * @description Opens dialog for edit document stamp
+         * @param $event
+         * @param documentStamp
+         */
+        self.openEditDocumentStampDialog = function (documentStamp, $event) {
+            documentStampService
+                .controllerMethod
+                .documentStampEdit(documentStamp, $event)
+                .then(function (result) {
+                    self.reloadDocumentStamps(self.documentStampGrid.page)
+                        .then(function () {
+                            toast.success(langService.get('edit_success').change({name: result.getSubjectTitle()}));
+                        });
+                });
+        };
+
+        /**
+         * @description Reload the grid of document stamp
+         * @param pageNumber
+         * @return {*|Promise<U>}
+         */
+        self.reloadDocumentStamps = function (pageNumber) {
+            var defer = $q.defer();
+            self.documentStampGrid.progress = defer.promise;
+            return documentStampService
+                .loadDocumentStamps(organization)
+                .then(function (result) {
+                    self.documentStamps = result;
+                    self.documentStampsCopy = angular.copy(self.documentStamps);
+                    self.selectedDocumentStamps = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.documentStampGrid.page = pageNumber;
+                    self.getSortedDataStamp();
+                    self.documentStampGrid.searchCallback();
+                    return result;
+                });
+        };
+
+        /**
+         * @description Delete single document stamp
+         * @param documentStamp
+         * @param $event
+         */
+        self.removeDocumentStamp = function (documentStamp, $event) {
+            /*documentStampService
+                .controllerMethod
+                .documentStampDelete(documentStamp, $event)
+                .then(function () {
+                    self.reloadDocumentStamps(self.documentStampGrid.page);
+                });*/
+        };
+
+
         self.selectedPropertyConfigurations = [];
 
         /**
@@ -2088,6 +2206,7 @@ module.exports = function (app) {
             'security_settings',
             'workflow_settings',
             'document_templates',
+            'documentStamps',
             'children',
             'serials',
             'classifications',
@@ -2121,6 +2240,8 @@ module.exports = function (app) {
         self.showTab = function (tabName) {
             if (tabName === 'departmentUsers') {
                 return self.tabsToShow.indexOf(tabName) > -1 && self.organization.hasRegistry;
+            } else if (tabName === 'documentStamps'){
+                return self.tabsToShow.indexOf(tabName) > -1 && employeeService.hasPermissionTo('MANAGE_STAMPS');
             }
             return self.tabsToShow.indexOf(tabName) > -1;
         };

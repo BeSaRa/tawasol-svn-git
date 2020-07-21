@@ -13,6 +13,7 @@ module.exports = function (app) {
             .addMenuPermissions('menu_item_public_announcements', ['MANAGE_PUBLIC_ANNOUNCEMENTS'])
             .addMenuPermissions('menu_item_private_announcements', ['MANAGE_PRIVATE_ANNOUNCEMENTS'])
             .addMenuPermissions('menu_item_manage_roles', ['MANAGE_CUSTOM_ROLES'])
+            .addMenuPermissions('menu_item_document_stamps', ['MANAGE_STAMPS'])
             .addMenuPermissions('menu_item_sms_template', ['MANAGE_SMS_TEMPLATES'])
             .addMenuPermissions('menu_item_correspondence_site_type', ['MANAGE_CORRESPONDENCE_SITE_TYPES'])
             .addMenuPermissions('menu_item_organization_types', ['MANAGE_ORGANIZATION_TYPES'])

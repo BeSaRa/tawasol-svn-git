@@ -1294,5 +1294,17 @@
     "sort_order": 3,
     "active": true,
     "sort_value": 0
+  },
+  {
+    "ID": 121,
+    "lang_key": "menu_item_document_stamps",
+    "icon": "stamper",
+    "parent": 8,
+    "link": "#document-stamps",
+    "state": "app.administration.document-stamps",
+    "icon_type": "font",
+    "sort_order": 3,
+    "active": true,
+    "sort_value": 0
   }
 ]

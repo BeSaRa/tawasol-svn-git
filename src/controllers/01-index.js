@@ -86,4 +86,5 @@ module.exports = function (app) {
     require('./serialsScreenCtrl')(app);
     require('./userFollowupBookCtrl')(app);
     require('./userFollowupBookByUserCtrl')(app);
+    require('./documentStampCtrl')(app);
 };

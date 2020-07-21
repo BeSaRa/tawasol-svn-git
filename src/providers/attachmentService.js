@@ -428,6 +428,31 @@ module.exports = function (app) {
                     });
                 };
 
+                var _getAllowedExtensions = function(groupName){
+                    return fileTypeService.getDocumentFileTypes()
+                        .then(function (allFileTypes) {
+                            var allowedExtensions = [];
+                            if (groupName === 'scannerImport') {
+                                allowedExtensions = provider.getExtensionGroup(groupName);
+                            } else if (groupName === 'userSignature') {
+                                allowedExtensions = provider.getExtensionGroup(groupName);
+                            } else if (groupName === 'userCertificate') {
+                                allowedExtensions = provider.getExtensionGroup(groupName);
+                            } else if (groupName === 'png_jpg') {
+                                allowedExtensions = provider.getExtensionGroup(groupName);
+                            } else {
+                                allowedExtensions = _.map(rootEntity.getGlobalSettings().fileType, function (allowed) {
+                                    var type = _.find(allFileTypes, function (fileType) {
+                                        return fileType.id === allowed;
+                                    });
+                                    return type ? type.extension : null;
+                                });
+                                allowedExtensions = _.filter(allowedExtensions);
+                            }
+                            return allowedExtensions;
+                        });
+                };
+
                 /**
                  * @description validate before upload extensions
                  * @param groupName
@@ -446,6 +471,8 @@ module.exports = function (app) {
                         } else if (groupName === 'userSignature') {
                             allowedExtensions = provider.getExtensionGroup(groupName);
                         } else if (groupName === 'userCertificate') {
+                            allowedExtensions = provider.getExtensionGroup(groupName);
+                        } else if (groupName === 'png_jpg') {
                             allowedExtensions = provider.getExtensionGroup(groupName);
                         } else {
                             allowedExtensions = _.map(rootEntity.getGlobalSettings().fileType, function (allowed) {
@@ -481,26 +508,6 @@ module.exports = function (app) {
                         }
                         return extensionDefer.promise;
                     });
-
-                    /* var allowedExtensions = provider.getExtensionGroup(groupName), result = false;
-                     var defer = $q.defer();
-
-                     var extension = '.' + file.name.split('.').pop().toLowerCase();
-
-                     var position = _.findIndex(allowedExtensions, function (item) {
-                         return item === extension;
-                     });
-
-                     if (getResult) {
-                         return position !== -1;
-                     }
-
-                     if (position !== -1) {
-                         _resolveFile(defer, file);
-                     } else {
-                         rejectFile(defer, allowedExtensions);
-                     }
-                     return defer.promise;*/
                 };
 
                 /**

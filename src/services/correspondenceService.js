@@ -72,7 +72,9 @@ module.exports = function (app) {
                                                    FollowupBook,
                                                    FollowupBookCriteria,
                                                    FollowupAction,
-                                                   encryptionService) {
+                                                   encryptionService,
+                                                   TawasolStamp,
+                                                   TawasolDocument) {
         'ngInject';
         var self = this, managerService, correspondenceStorageService;
         self.serviceName = 'correspondenceService';
@@ -94,6 +96,8 @@ module.exports = function (app) {
         util.inherits(OutgoingIncomingSearch, IncomingSearch);
         // follow up
         util.inherits(FollowupBookCriteria, FollowupBook);
+        // tawasol stamp
+        util.inherits(TawasolStamp, TawasolDocument);
 
 
         /**

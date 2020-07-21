@@ -90,6 +90,25 @@ module.exports = function (app) {
                     return organizationService.loadOrganizations(true);
                 }
             })
+            .bulkResolveToState('app.administration.document-stamps', {
+                organizations: function (organizationService, _) {
+                    'ngInject';
+                    return organizationService.loadOrganizations()
+                        .then(function (result) {
+                            return _.filter(result, function (organization) {
+                                return organization.hasRegistry;
+                            })
+                        });
+                },
+                documentStamps: function (documentStampService, selectedRegOU) {
+                    'ngInject';
+                    return documentStampService.loadDocumentStamps(selectedRegOU, null);
+                },
+                selectedRegOU: function (employeeService) {
+                    'ngInject';
+                    return employeeService.isAdminUser() ? -1 : employeeService.getEmployee().organization.ouRegistryID;
+                }
+            })
             .bulkResolveToState('app.administration.organizations', {
                 escalationProcess: function (lookupService) {
                     'ngInject';
