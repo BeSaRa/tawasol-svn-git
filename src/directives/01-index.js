@@ -118,4 +118,5 @@ module.exports = function (app) {
     require('./caps-lock-detection-directive/caps-lock-detection-directive')(app);
     require('./organizations-list-directive/01-index')(app);
     require('./organization-chart-d3-directive/01-index')(app);
+    require('./pspdf-viewer-directive/01-index')(app);
 };

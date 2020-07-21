@@ -43,6 +43,8 @@ module.exports = function (app) {
         self.info = null;
         self.editContentFrom = null;
 
+        self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
+
         self.excludedManagePopupsFromGrids = [
             // 'departmentIncoming',
             'g2gIncoming',
@@ -120,6 +122,29 @@ module.exports = function (app) {
                 employeeService.hasPermissionTo('DOWNLOAD_MAIN_DOCUMENT') && employeeService.hasPermissionTo('PRINT_DOCUMENT');
         };
 
+        self.isOfficeOnlineViewer = function (url) {
+            return url && url.$$unwrapTrustedValue().indexOf('.aspx') !== -1;
+        };
+
+        self.isTheMainDocumentInView = function () {
+            return self.mainDocument && !self.editMode && self.viewURL;
+        };
+
+        self.displayMainIframeViewer = function () {
+            return (self.isTheMainDocumentInView() && !self.psPDFViewerEnabled) || self.isTheMainDocumentInView() && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL);
+        };
+
+        self.displayMainPSPDFViewer = function () {
+            return self.isTheMainDocumentInView() && self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.viewURL);
+        };
+
+        self.displaySecondIframeViewer = function () {
+            return (!self.mainDocument && !self.psPDFViewerEnabled) || (!self.mainDocument && self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.secondURL));
+        };
+
+        self.displaySecondPSPDFViewer = function () {
+            return !self.mainDocument && self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.secondURL);
+        };
         /**
          * @description Toggles the view mode for the document/attachment/linked doc
          */

@@ -302,11 +302,14 @@
                         <md-icon md-svg-icon="reload"></md-icon>
                     </md-button>
                 </div>
-                <iframe ng-if="ctrl.mainDocument && !ctrl.editMode && ctrl.viewURL" id="iframe-main-document"
+                <iframe ng-if="ctrl.displayMainIframeViewer()"
+                        id="iframe-main-document"
                         class="iframe-main-document"
                         ng-src="{{ctrl.viewURL}}" flex
                         frameborder="0"></iframe>
-
+                <pspdf-viewer-directive doc-url="ctrl.viewURL"
+                                        ng-if="ctrl.displayMainPSPDFViewer()"
+                                        id="pdfViewer" class="iframe-main-document" flex></pspdf-viewer-directive>
                 <iframe ng-if="ctrl.mainDocument && ctrl.editMode" id="iframe-main-document"
                         class="iframe-main-document"
                         ng-src="{{ctrl.content.editURL}}" flex
@@ -336,8 +339,13 @@
                         <md-icon md-svg-icon="chevron-left"></md-icon>
                     </md-button>
                 </div>
-
-                <iframe ng-if="!ctrl.mainDocument" class="iframe-main-document" ng-src="{{ctrl.secondURL}}" flex
+                <pspdf-viewer-directive doc-url="ctrl.secondURL"
+                                        ng-if="ctrl.displaySecondPSPDFViewer()"
+                                        id="attachment-linked-docs-viewer" class="iframe-main-document"
+                                        flex></pspdf-viewer-directive>
+                <iframe ng-if="ctrl.displaySecondIframeViewer()"
+                        class="iframe-main-document"
+                        ng-src="{{ctrl.secondURL}}" flex
                         frameborder="0"></iframe>
 
             </div>
