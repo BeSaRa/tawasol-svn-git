@@ -343,7 +343,7 @@ module.exports = function (app) {
          */
         self.getPrivateAnnouncementByOUID = function () {
             var employee = employeeService.getEmployee();
-            var ouID = employee.hasOwnProperty('organization') ? employee.organization.ouid : null;
+            var ouID = employee && employee.hasOwnProperty('organization') ? employee.organization.ouid : null;
             if (!ouID) {
                 return $q.resolve([]);
             }
