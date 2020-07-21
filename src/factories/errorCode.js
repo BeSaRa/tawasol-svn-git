@@ -66,7 +66,8 @@ module.exports = function (app) {
                 DOCUMENT_HAS_BEEN_DELETED: 3045,
                 NOT_ENOUGH_CERTIFICATES: 3047,
                 PIN_CODE_NOT_MATCH: 3048,
-                DUPLICATE_BOOK_FOLLOWUP: 3049
+                DUPLICATE_BOOK_FOLLOWUP: 3049,
+                CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS: 2060
             },
             errorLangKeys = {
                 1001: 'no_records_found',
@@ -98,7 +99,8 @@ module.exports = function (app) {
                 3047: 'certificate_missing',
                 3048: 'pincode_not_match',
                 3044: 'g2g_recall_failed',
-                3049: 'duplicate_followup_book'
+                3049: 'duplicate_followup_book',
+                2060: 'cannot_export_too_many_attachments_or_linked_documents'
             };
 
         return {

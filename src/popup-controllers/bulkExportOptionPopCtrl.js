@@ -145,6 +145,13 @@ module.exports = function (app) {
                 })
                 .catch(function (error) {
                     self.disableExport = false;
+                    errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS', function () {
+                        dialog
+                            .errorMessage(self.getTranslatedError(error))
+                            .then(function () {
+                                dialog.hide(error);
+                            });
+                    });
                     /*errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
                         dialog
                             .errorMessage(langService.get('already_exported_please_refresh'))
@@ -181,5 +188,13 @@ module.exports = function (app) {
             dialog.cancel();
         };
 
+        /**
+         * @description get error message
+         * @returns {string}
+         */
+        self.getTranslatedError = function (error) {
+            var errorObj = error.data.eo;
+            return langService.current === 'ar' ? errorObj.arName : errorObj.enName;
+        };
     });
 };

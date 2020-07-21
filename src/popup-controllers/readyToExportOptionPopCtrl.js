@@ -228,13 +228,19 @@ module.exports = function (app) {
                     })
                     .catch(function (error) {
                         self.disableExport = false;
-                        errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
+                        if (errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT') === true) {
                             dialog
                                 .errorMessage(langService.get('already_exported_please_refresh'))
                                 .then(function () {
+                                    dialog.hide(error)
+                                });
+                        } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS') === true) {
+                            dialog
+                                .errorMessage(self.getTranslatedError(error))
+                                .then(function () {
                                     dialog.hide(error);
                                 });
-                        });
+                        }
                     });
             }
 
@@ -247,13 +253,19 @@ module.exports = function (app) {
                     })
                     .catch(function (error) {
                         self.disableExport = false;
-                        errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
+                        if (errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT') === true) {
                             dialog
                                 .errorMessage(langService.get('already_exported_please_refresh'))
                                 .then(function () {
                                     dialog.hide(error)
                                 });
-                        });
+                        } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS') === true) {
+                            dialog
+                                .errorMessage(self.getTranslatedError(error))
+                                .then(function () {
+                                    dialog.hide(error);
+                                });
+                        }
                     });
             } else {
                 readyToExportService
@@ -264,13 +276,19 @@ module.exports = function (app) {
                     })
                     .catch(function (error) {
                         self.disableExport = false;
-                        errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
+                        if (errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT') === true) {
                             dialog
                                 .errorMessage(langService.get('already_exported_please_refresh'))
                                 .then(function () {
                                     dialog.hide(error)
                                 });
-                        });
+                        } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS') === true) {
+                            dialog
+                                .errorMessage(self.getTranslatedError(error))
+                                .then(function () {
+                                    dialog.hide(error);
+                                });
+                        }
                     });
             }
         };
@@ -288,13 +306,19 @@ module.exports = function (app) {
                         });
                 })
                 .catch(function (error) {
-                    errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
+                    if (errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT') === true) {
                         dialog
                             .errorMessage(langService.get('already_exported_please_refresh'))
                             .then(function () {
                                 dialog.hide(error)
                             });
-                    });
+                    } else if (errorCode.checkIf(error, 'CANNOT_EXPORT_TOO_MANY_ATTACHMENTS_OR_LINKED_DOCUMENTS') === true) {
+                        dialog
+                            .errorMessage(self.getTranslatedError(error))
+                            .then(function () {
+                                dialog.hide(error);
+                            });
+                    }
                 });
         };
         // validate before send to export
@@ -353,6 +377,15 @@ module.exports = function (app) {
         if (!self.isGroupExport) {
             self.onChangeExportType();
         }
+
+        /**
+         * @description get error message
+         * @returns {string}
+         */
+        self.getTranslatedError = function (error) {
+            var errorObj = error.data.eo;
+            return langService.current === 'ar' ? errorObj.arName : errorObj.enName;
+        };
 
         // set linkedDocList from prepareExport to attachmentLinkedDocs in model to set them as selected by default
         _setDefaultLinkedDocs();
