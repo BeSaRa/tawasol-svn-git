@@ -49,6 +49,9 @@ module.exports = function (app) {
 
             self.isMSTeamsEnabled = false;
             self.otpEnabled = false;
+            // PSPDFViewer properties
+            self.psPDFEnabled = false;
+            self.psPDFLicenseKey = null;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [

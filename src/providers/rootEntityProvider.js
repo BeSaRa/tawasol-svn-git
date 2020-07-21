@@ -73,7 +73,7 @@ module.exports = function (app) {
                                             }
                                         })
                                         .catch(function (reason) {
-                                         //   console.log("SINGLE SIGN ON FAILED !!", reason);
+                                            //   console.log("SINGLE SIGN ON FAILED !!", reason);
                                         })
                                 });
                             }
@@ -150,6 +150,9 @@ module.exports = function (app) {
                 },
                 getFavIcon: function () {
                     return loaded && this.returnRootEntity().settings.loginLogo ? $sce.trustAsResourceUrl(this.returnRootEntity().settings.loginLogo.fileUrl) : false;
+                },
+                hasPSPDFViewer: function () {
+                    return rootEntity && rootEntity.hasPSPDFViewer();
                 }
             };
         }

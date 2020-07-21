@@ -44,6 +44,7 @@ module.exports = function (app) {
             lookupService.setLookups(result.data.rs.globalLookup);
 
             rootEntity.setRootEntityGlobalSetting(result.data.rs.globalSetting, true);
+            rootEntity.returnRootEntity().updateRootEntity(result.data.rs.tawasolEntity);
             if (!result.data.rs.isAdminUser) {
                 self.setLastLoginOrganizationId(result.data.rs.ou);
             }

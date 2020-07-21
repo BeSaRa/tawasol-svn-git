@@ -143,6 +143,7 @@ module.exports = function (app) {
                                 if (result.hasOwnProperty('token')) {
                                     lookupService.setLookups(result.globalLookup); // set lookups
                                     rootEntity.setRootEntityGlobalSetting(result.globalSetting, true);
+                                    rootEntity.returnRootEntity().updateRootEntity(result.tawasolEntity);
                                     var themeId = result.userInfo.defaultThemeID;
                                     var promise = $q.defer();
                                     $timeout(function () {

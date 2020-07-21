@@ -91,6 +91,16 @@ module.exports = function (app) {
                 });
                 return defer.promise;
             };
+
+            RootEntity.prototype.updateRootEntity = function (entity) {
+                self.rootEntity = entity;
+                return this;
+            };
+
+            RootEntity.prototype.hasPSPDFViewer = function () {
+                return self.rootEntity.hasOwnProperty('psPDFEnabled') && !!self.rootEntity.psPDFEnabled;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('RootEntity', 'init', this);
