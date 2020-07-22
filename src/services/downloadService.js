@@ -296,24 +296,6 @@ module.exports = function (app) {
                     return result.data.rs;
                 })
         };
-
-        /**
-         * @description download attachment content as PDF from server
-         */
-        self.getAttachmentContentAsPDF = function (vsId, labelId) {
-            var queryString = _generateQueryString({
-                    //'tawasol-auth-header': tokenService.getToken(),
-                    'labelId': labelId
-                }),
-                url = urlService.downloadAttachmentContentPDF.replace('{vsId}', vsId) + queryString;
-            return $http.get(url, {
-                responseType: 'blob'
-            })
-                .then(function (result) {
-                    return result.data;
-                })
-        };
-
         /**
          * @description download document template from server
          */
