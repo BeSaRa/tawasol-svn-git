@@ -473,19 +473,19 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkToShowAction = function (action) {
-            if (action.hide)
+            if (action.hide || !employeeService.getEmployee())
                 return false;
             else {
                 var hasPermission = true;
                 // check if permission key(s) property available and user has permissions regarding the permission key(s)
                 if (action.hasOwnProperty('permissionKey')) {
                     if (typeof action.permissionKey === 'string') {
-                        hasPermission = employeeService.hasPermissionTo(action.permissionKey);
+                        hasPermission = employeeService.getEmployee().hasPermissionTo(action.permissionKey);
                     } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                         if (action.hasOwnProperty('checkAnyPermission')) {
-                            hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
+                            hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
                         } else {
-                            hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasThesePermissions(action.permissionKey);
+                            hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                         }
                     }
                 }
