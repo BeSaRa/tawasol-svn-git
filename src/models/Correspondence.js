@@ -972,13 +972,17 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Check if book has create reply permission
+             * @description Check if correspondence has create reply permission
+             * @param isSpecificVersion
+             * @returns {boolean|boolean}
              */
             Correspondence.prototype.checkCreateReplyPermission = function (isSpecificVersion) {
                 var info = this.getInfo(),
                     employee = employeeService.getEmployee(),
-                    isAllowed = ((info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
-                        || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL')));
+                    isAllowed = employee && (
+                        (info.documentClass === 'incoming' && employee.hasPermissionTo('CREATE_REPLY'))
+                        || (info.documentClass === 'internal' && employee.hasPermissionTo('CREATE_REPLY_INTERNAL'))
+                    );
 
                 if (isSpecificVersion) {
                     isAllowed = isAllowed && employee.hasPermissionTo('VIEW_DOCUMENT_VERSION');
