@@ -21,6 +21,8 @@ module.exports = function (app) {
 
         self.viewURL = '';
 
+        self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
+
         /**
          * @description Checks if toggle slow connection is enabled for entity from global settings and for user from preferences to switch views
          * @returns {*|boolean}
@@ -80,6 +82,18 @@ module.exports = function (app) {
         };
         self.closeDocumentReadOnlyDialog = function () {
             dialog.hide();
+        };
+
+        self.displayMainIframeViewer = function () {
+            return (!self.psPDFViewerEnabled || (self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL)));
+        };
+
+        self.displayMainPSPDFViewer = function () {
+            return self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.viewURL);
+        };
+
+        self.isOfficeOnlineViewer = function (url) {
+            return url && url.$$unwrapTrustedValue().indexOf('.aspx') !== -1;
         };
 
     });
