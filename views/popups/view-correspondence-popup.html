@@ -207,10 +207,14 @@
                 </div>
             </md-sidenav>
             <div id="iframe-parent" layout="column" class="relative" flex>
-                <iframe id="iframe-main-document" ng-if="ctrl.correspondence && !ctrl.editMode && ctrl.viewURL"
+                <iframe id="iframe-main-document" ng-if="ctrl.displayMainIframeViewer()"
                         ng-src="{{ctrl.viewURL}}" flex
                         class="iframe-main-document"
                         frameborder="0"></iframe>
+                <pspdf-viewer-directive doc-url="ctrl.viewURL"
+                                        ng-if="ctrl.displayMainPSPDFViewer()"
+                                        id="pdfViewer" class="iframe-main-document" flex></pspdf-viewer-directive>
+
                 <iframe id="iframe-main-document" ng-if="!ctrl.correspondence || (ctrl.correspondence && ctrl.editMode)"
                         ng-src="{{ctrl.content.editURL}}" flex
                         class="iframe-main-document"
