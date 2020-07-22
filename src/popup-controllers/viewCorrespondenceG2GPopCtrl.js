@@ -36,6 +36,8 @@ module.exports = function (app) {
 
         self.viewURL = '';
 
+        self.psPDFViewerEnabled = rootEntity.hasPSPDFViewer();
+
         var _getMainDocContentByVsId = function (vsId) {
             vsId = vsId || self.model.getInfo().vsId;
             downloadService.getMainDocumentContentAsPDF(vsId)
@@ -150,6 +152,18 @@ module.exports = function (app) {
                 return !(self.correspondence.sitesInfoTo && self.correspondence.sitesInfoTo.length);
             }
             return false;
+        };
+
+        self.displayMainIframeViewer = function () {
+            return (!self.psPDFViewerEnabled || (self.psPDFViewerEnabled && self.isOfficeOnlineViewer(self.viewURL)));
+        };
+
+        self.displayMainPSPDFViewer = function () {
+            return self.psPDFViewerEnabled && !self.isOfficeOnlineViewer(self.viewURL);
+        };
+
+        self.isOfficeOnlineViewer = function (url) {
+            return url && url.$$unwrapTrustedValue().indexOf('.aspx') !== -1;
         };
 
 

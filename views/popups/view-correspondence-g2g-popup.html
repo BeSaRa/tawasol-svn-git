@@ -188,10 +188,13 @@
                 </div>
             </md-sidenav>
             <div id="iframe-parent" layout="column" class="relative" flex>
-                <iframe ng-if="ctrl.viewURL" id="iframe-main-document"
+                <iframe ng-if="ctrl.displayMainIframeViewer()" id="iframe-main-document"
                         class="iframe-main-document"
                         ng-src="{{ctrl.viewURL}}" flex
                         frameborder="0"></iframe>
+                <pspdf-viewer-directive doc-url="ctrl.viewURL"
+                                        ng-if="ctrl.displayMainPSPDFViewer()"
+                                        id="pdfViewer" class="iframe-main-document" flex></pspdf-viewer-directive>
             </div>
         </div>
     </md-dialog-content>
