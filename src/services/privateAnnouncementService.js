@@ -50,6 +50,9 @@ module.exports = function (app) {
              * @param $event
              */
             privateAnnouncementAdd: function (organizations, organizationsHasRegistry, $event) {
+                if (!employeeService.getEmployee()) {
+                    return;
+                }
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -61,7 +64,8 @@ module.exports = function (app) {
                             privateAnnouncement: new PrivateAnnouncement(
                                 {
                                     itemOrder: generator.createNewID(self.privateAnnouncements, 'itemOrder'),
-                                    startDate: new Date()
+                                    startDate: new Date(),
+                                    creator: employeeService.getEmployee().id
                                 }),
                             privateAnnouncements: self.privateAnnouncements,
                             organizations: organizations,
@@ -372,13 +376,13 @@ module.exports = function (app) {
         };
 
         function isCurrentOU(currentUserOUID) {
-            if (employeeService.isClAdmin()){
+            if (employeeService.isClAdmin()) {
                 return false;
             }
             var ouID = employeeService.getEmployee().organization.ouid;
             return currentUserOUID === ouID;
 
-        };
+        }
 
         /**
          * @description open popup to show private announcements, if not available then show alert
@@ -397,7 +401,7 @@ module.exports = function (app) {
                         templateUrl: cmsTemplate.getPopup('show-private-announcement'),
                         controller: 'showPrivateAnnouncementPopCtrl',
                         controllerAs: 'ctrl',
-                        bindToController:true,
+                        bindToController: true,
                         locals: {
                             privateAnnouncements: result,
                             isCloseAutomatically: isCloseAutomatically

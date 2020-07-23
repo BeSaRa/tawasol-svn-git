@@ -4,7 +4,6 @@ module.exports = function (app) {
                                                            employeeService,
                                                            editMode,
                                                            toast,
-                                                           PrivateAnnouncement,
                                                            validationService,
                                                            generator,
                                                            dialog,

@@ -10,7 +10,7 @@ module.exports = function (app) {
 
             //region Private Announcement properties
             self.id = null;
-            self.creator = employeeService.getEmployee().id;//"1";
+            self.creator = null;
             self.startDate = null;
             self.endDate = null;
             self.status = true;
