@@ -218,7 +218,7 @@ module.exports = function (app) {
                     .displayTemplates(templates, $event)
                     .then(function (template) {
                         self.template = template;
-
+                        self.uploadedCallback && self.uploadedCallback();
                         if (self.isSimpleAdd) {
                             return self.getTrustViewUrl(template.getSubjectTitle(), $event);
                         } else {
@@ -257,6 +257,7 @@ module.exports = function (app) {
                                     return correspondenceService
                                         .sendUploadedFileToPrepare(file, self.document)
                                         .then(function (result) {
+                                            self.uploadedCallback && self.uploadedCallback();
                                             if (self.isSimpleAdd)
                                                 return self.getTrustViewUrl(file.name, null, result);
 

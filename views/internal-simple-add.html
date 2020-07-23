@@ -121,6 +121,7 @@
                                     <accordion-content>
                                         <div layout="row">
                                             <manage-content-directive
+                                                    uploaded-callback="ctrl.injectIframe"
                                                     edit-content="ctrl.editContent"
                                                     display-prepare="!ctrl.internal.addMethod"
                                                     document-information="ctrl.documentInformation"
@@ -167,13 +168,8 @@
                                                           md-svg-icon="arrow-{{ctrl.activeDocumentViewer ?  'down' : 'up'}}-bold-circle-outline"></md-icon>
                                               </md-button>-->
                                         </div>
-                                        <div layout="row">
+                                        <div id="iframe-inject-area" flex layout="row">
                                             <!--document viewer editor-->
-                                            <iframe class="simple-viewer-iframe" id="document-viewer"
-                                                    ng-if="ctrl.simpleViewUrl"
-                                                    ng-src="{{ctrl.simpleViewUrl}}"
-                                                    flex
-                                                    frameborder="0"></iframe>
                                         </div>
                                     </accordion-content>
                                 </accordion-item>

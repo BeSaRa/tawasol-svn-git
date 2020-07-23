@@ -2,6 +2,8 @@ module.exports = function (app) {
     app.controller('simpleOutgoingCtrl', function (Outgoing,
                                                    $state,
                                                    $stateParams,
+                                                   $compile,
+                                                   $scope,
                                                    outgoingService,
                                                    queueStatusService,
                                                    loadingIndicatorService,
@@ -947,6 +949,19 @@ module.exports = function (app) {
                 self.checkChangeOutgoingType();
             }
         };
+
+        self.injectIframe = function () {
+            var iframe = '<iframe class="simple-viewer-iframe" id="document-viewer"\n' +
+                '                                                    ng-show="ctrl.simpleViewUrl"\n' +
+                '                                                    ng-src="{{ctrl.simpleViewUrl}}"\n' +
+                '                                                    flex\n' +
+                '                                                    frameborder="0"></iframe>';
+
+
+                if (!angular.element('#document-viewer').length)
+                    angular.element('#iframe-inject-area').append($compile(iframe)($scope));
+
+        }
 
     });
 };

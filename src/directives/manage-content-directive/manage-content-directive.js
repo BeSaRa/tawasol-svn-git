@@ -20,7 +20,8 @@ module.exports = function (app) {
                 signaturesCount: '=',
                 simpleViewUrl: '=?',
                 isSimpleAdd: '=?',
-                receiveDocument: '=?'
+                receiveDocument: '=?',
+                uploadedCallback : '=?'
             }
         }
     })

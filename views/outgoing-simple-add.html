@@ -142,6 +142,7 @@
                                     <accordion-content layout="column">
                                         <div layout="row">
                                             <manage-content-directive
+                                                    uploaded-callback="ctrl.injectIframe"
                                                     edit-content="ctrl.editContent"
                                                     display-prepare="!ctrl.outgoing.addMethod"
                                                     document-information="ctrl.documentInformation"
@@ -183,13 +184,8 @@
                                                 <span class="counter blue">{{ctrl.outgoing.linkedEntities.length}}</span>
                                             </div>
                                         </div>
-                                        <div flex layout="row">
+                                        <div id="iframe-inject-area" flex layout="row">
                                             <!--document viewer editor-->
-                                            <iframe class="simple-viewer-iframe" id="document-viewer"
-                                                    ng-if="ctrl.simpleViewUrl"
-                                                    ng-src="{{ctrl.simpleViewUrl}}"
-                                                    flex
-                                                    frameborder="0"></iframe>
                                         </div>
                                     </accordion-content>
                                 </accordion-item>
