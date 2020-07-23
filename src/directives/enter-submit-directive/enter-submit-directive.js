@@ -11,7 +11,7 @@ module.exports = function (app) {
                         return attribute.name === 'ng-enter';
                     });
                     // don't click submit button if element has ng-enter directive.
-                    if (code === 13 && formInScope.$valid && !hasNgEnter) {
+                    if (code === 13 && (!e.shiftKey && !e.altKey && !e.ctrlKey) && formInScope.$valid && !hasNgEnter) {
                         e.preventDefault();
                         angular.element('#' + attrs['enterSubmitDirective']).click();
                     }

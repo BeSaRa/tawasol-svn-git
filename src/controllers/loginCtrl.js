@@ -125,11 +125,15 @@ module.exports = function (app) {
         }
 
         /**
-         * login method
+         * @description Login method
          * @param event
          * @param callback
          */
         self.login = function (event, callback) {
+            // if already login request is sent, don't request again until request is finished(loginStatus = false)
+            if (self.loginStatus) {
+                return;
+            }
             self.loginStatus = true;
             authenticationService
                 .authenticate(self.credentials)
@@ -138,7 +142,10 @@ module.exports = function (app) {
                     _completeLogin(callback, result);
                 })
                 .catch(function (error) {
-                    self.loginStatus = false;
+                    // enable button after some delay to avoid request while error message is being displayed
+                    $timeout(function () {
+                        self.loginStatus = false;
+                    }, 1000);
                     return $q.reject(false);
                 });
         };
