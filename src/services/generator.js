@@ -331,7 +331,7 @@ module.exports = function (app) {
             });
         };
 
-        function _checkIfDDLControl(control) {
+        function _checkIfSelectFormControl(control) {
             // 0 property in object $$element is the control itself
             if (!control || !control.$$element || !control.$$element.hasOwnProperty('0')) {
                 return false;
@@ -340,17 +340,18 @@ module.exports = function (app) {
         }
 
         /**
-         * @description Find the dropdown controls in given form
+         * @description Find the md-select controls in given form
          * @param form
          * @param filterRequired
+         * if true, filters the md-select controls with required attribute
          * @returns {null|*}
          */
-        self.getDropdownFormControls = function (form, filterRequired) {
+        self.getSelectFormControls = function (form, filterRequired) {
             if (!form || form.$$controls.length === 0) {
                 return null;
             }
             return _.filter(form.$$controls, function (control) {
-                if (!_checkIfDDLControl(control)) {
+                if (!_checkIfSelectFormControl(control)) {
                     return false;
                 }
                 if (!filterRequired) {
@@ -362,9 +363,23 @@ module.exports = function (app) {
             });
         };
 
-        self.validateRequiredFieldValue = function (field) {
+        self.validateRequiredSelectFields = function (form) {
+            var selectControls = self.getSelectFormControls(form, true);
+            if (selectControls) {
+                _.map(selectControls, function (control) {
+                    self.validateRequiredFieldValue(control, true);
+                });
+            }
+        };
+
+        self.validateRequiredFieldValue = function (field, isRequired) {
             if (!field)
                 return;
+
+            if (!isRequired) {
+                field.$setValidity('required', true);
+                return;
+            }
 
             if (!field.$modelValue) {
                 field.$setValidity('required', false);
