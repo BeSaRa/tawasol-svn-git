@@ -4,6 +4,7 @@ module.exports = function (app) {
                                             Sidebar,
                                             generator,
                                             urlService,
+                                            langService,
                                             employeeService,
                                             MenuItem,
                                             $q,
@@ -74,6 +75,17 @@ module.exports = function (app) {
             return menuItem === dynamicMenuItemService.dynamicMenuItemsTypes.icnSearchTemplate
                 || menuItem === dynamicMenuItemService.dynamicMenuItemsTypes.icnEntryTemplate;
         };
+        var specialItems = ['menu_item_outgoing', 'menu_item_internal', 'menu_item_incoming'];
+
+        function _appendAllChildNameToParent(item) {
+            item.searchText = (item.translate + '|' + (_.map(item.children, function (i) {
+                i.searchText = i.translate;
+                if (specialItems.indexOf(item.lang_key) !== -1) {
+                    i.searchText += item.translate;
+                }
+                return i.searchText;
+            })).join('|'));
+        }
 
 
         self.prepareDynamicMenuItems = function () {
@@ -92,6 +104,10 @@ module.exports = function (app) {
             self.getMenuHierarchy();
             self.getDynamicMenuHierarchy(dynamicMenuItems);
             self.allParents = self.menuParents.concat(self.dynamicMenuParents);
+            self.allParents.map(_appendAllChildNameToParent);
+            langService.listeningToChange(function () {
+                self.allParents.map(_appendAllChildNameToParent);
+            });
             return self.allParents;
         };
 

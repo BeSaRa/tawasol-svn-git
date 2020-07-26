@@ -2,7 +2,7 @@
     <li id="menu-id-{{item.ID}}" menu-item-directive ng-if="item.active && menu.showMenuItem(item)" flex
         class="sidebar-menu-item menu-item-level-{{menu.level}}"
         ng-class="{'header':item.type === 'header','has-child':item.children.length,'opened':item.open,'active-menu':menu.isCurrentState(item)}"
-        ng-repeat="item in menu.items|filter:menu.search | orderBy:'sort_order' track by $index">
+        ng-repeat="item in menu.items|filter:{searchText:menu.search}| orderBy:'sort_order' track by $index">
         <div ng-if="item.type === 'header'" class="sidebar-menu-item-content">
             <span class="sidebar-menu-item-header">{{menu.lang.user_folders}}</span>
         </div>
@@ -15,7 +15,7 @@
                 <span class="menu-item-text"
                       tooltip="{{menu.getTooltip(item)}}"
                       md-truncate
-                      md-highlight-flags="i" md-highlight-text="menu.search" flex>{{lang.get(item.lang_key)}}</span>
+                      md-highlight-flags="i" md-highlight-text="menu.search" flex>{{item.translate}}</span>
                 <span ng-if="menu.counters.counter.hasCounter(item.lang_key)"
                       ng-class="{'red':item.hasChildrenItems(),'orange':!item.hasChildrenItems()}"
                       class="menu-counter">{{menu.counters.counter.getCount(item.lang_key,'first')}}</span>
@@ -32,7 +32,7 @@
                 <span class="menu-item-text"
                       tooltip="{{menu.getTooltip(item)}}"
                       md-truncate
-                      md-highlight-flags="i" md-highlight-text="menu.search" flex>{{lang.get(item.lang_key)}}</span>
+                      md-highlight-flags="i" md-highlight-text="menu.search" flex>{{item.translate}}</span>
                 <span ng-if="menu.counters.counter.hasCounter(item.lang_key)"
                       ng-class="{'red':item.hasChildrenItems(),'orange':!item.hasChildrenItems()}"
                       class="menu-counter">{{menu.counters.counter.getCount(item.lang_key,'first')}}</span>

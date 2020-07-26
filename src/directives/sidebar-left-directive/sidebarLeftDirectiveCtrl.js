@@ -7,7 +7,6 @@ module.exports = function (app) {
         self.rootEntity = rootEntity;
         self.service = sidebarService;
         self.search = '';
-
         self.toggleSidebarLocked = function (sidebarCode) {
             return sidebarService.getSidebar(sidebarCode).toggleLocked();
         };

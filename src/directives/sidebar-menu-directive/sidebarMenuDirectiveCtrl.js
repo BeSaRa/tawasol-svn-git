@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('sidebarMenuDirectiveCtrl', function ($state,
+                                                         _,
                                                          counterService,
                                                          employeeService,
                                                          LangWatcher,
@@ -66,7 +67,7 @@ module.exports = function (app) {
          * @returns {string}
          */
         self.getTooltip = function (item) {
-            var text = langService.get(item.lang_key);
+            var text = item.translate;
             if (typeof (self.counters.counter.hasCounter) === 'undefined') {
                 return '';
             }

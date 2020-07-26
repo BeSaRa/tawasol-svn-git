@@ -21,11 +21,10 @@ module.exports = function (app) {
                 }
             }
 
-            $rootScope.$watch(function () {
-                return langService.current;
-            }, function () {
+            langService.listeningToChange(function (current) {
                 model.translate = langService.get(model.lang_key);
             });
+
             return model;
         });
 
