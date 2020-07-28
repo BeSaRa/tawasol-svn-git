@@ -121,6 +121,9 @@ module.exports = function (app) {
                     return item.lookupKey !== 'SEPARATOR';
                 });
             };
+            ReferencePlanItem.prototype.hasEmptyReferenceFormat = function () {
+                return _.includes(this.refernceFormat.split('|'), "none:");
+            };
             /**
              * @description set per organization unit reverse to Per Entity.
              * @param perOu

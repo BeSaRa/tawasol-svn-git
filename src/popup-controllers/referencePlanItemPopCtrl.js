@@ -74,6 +74,12 @@ module.exports = function (app) {
             self.referencePlanItem.retrieveItemComponent();
             return validationService
                 .createValidation('CHECK_REFERENCE_PLAN_ITEM')
+                .addStep('check_static_text_required', true, self.referencePlanItem, function (result) {
+                    return !result.hasEmptyReferenceFormat();
+                })
+                .notifyFailure(function () {
+                    dialog.errorMessage(langService.get('static_text_required_to_save_reference_item'));
+                })
                 // to check if at least has one reference planItem not Separator.
                 .addStep('check_format', true, self.referencePlanItem, function (result) {
                     return result.hasFormat();
