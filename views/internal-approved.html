@@ -30,6 +30,9 @@
                                        md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
+                                        <th ng-if="!ctrl.selectedApprovedInternals.length" md-column>
+                                            <!-- Read/Unread Indicator -->
+                                        </th>
                                         <th colspan="{{ctrl.selectedApprovedInternals.length > 1 ? 6 : 7}}"
                                             ng-if="ctrl.selectedApprovedInternals.length" md-column>
                                             <div layout="row" layout-align="start center">
@@ -77,9 +80,6 @@
                                         <th ng-if="!ctrl.selectedApprovedInternals.length" md-column>
 
                                         </th>
-                                        <th ng-if="!ctrl.selectedApprovedInternals.length" md-column>
-                                            <!-- Read/Unread Indicator -->
-                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody md-body>
@@ -90,6 +90,17 @@
                                         ng-class="!approvedInternal.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                                         selected-length="{{ctrl.selectedApprovedInternals.length ? ctrl.selectedApprovedInternals.length : 0}}"
                                         ng-repeat="approvedInternal in searchResults = (ctrl.approvedInternals | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        <td md-cell class="read-td">
+                                            <!--ng-click="ctrl.markAsReadUnread(approvedInternal, $event)"
+                                            tooltip="{{approvedInternal.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
+                                                 tooltip-direction="top"
+                                            -->
+                                            <div class="cursor-pointer status absolute-read"
+                                                 ng-class="approvedInternal.generalStepElm.isOpen===true? 'read' : 'unread'"
+                                                 ng-if="!ctrl.selectedApprovedInternals.length
+                                                          || ctrl.selectedApprovedInternals.length===1 && ctrl.selectedApprovedInternals[0].generalStepElm.workObjectNumber === approvedInternal.generalStepElm.workObjectNumber">
+                                            </div>
+                                        </td>
                                         <td md-cell>
                                             <span class="serial-td">{{approvedInternal.generalStepElm.docFullSerial}}</span>
                                         </td>
@@ -103,14 +114,16 @@
                                                                              plain-text-only="!approvedInternal.hasContent()"
                                                                              click-callback="ctrl.viewDocument">
                                             </grid-document-subject-directive>-->
-                                            <a href="" ng-if="approvedInternal.hasContent() && ctrl.grid.truncateSubject"
+                                            <a href=""
+                                               ng-if="approvedInternal.hasContent() && ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal" md-truncate
                                                tooltip="{{approvedInternal.generalStepElm.docSubject}}"
                                                ng-click="ctrl.viewDocument(approvedInternal, $event)">{{approvedInternal.generalStepElm.docSubject}}</a>
                                             <span ng-if="!approvedInternal.hasContent() && ctrl.grid.truncateSubject"
                                                   class="view-doc subject-internal" md-truncate
                                                   tooltip="{{approvedInternal.generalStepElm.docSubject}}">{{approvedInternal.generalStepElm.docSubject}}</span>
-                                            <a href="" ng-if="approvedInternal.hasContent() && !ctrl.grid.truncateSubject"
+                                            <a href=""
+                                               ng-if="approvedInternal.hasContent() && !ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal"
                                                tooltip="{{approvedInternal.generalStepElm.docSubject}}"
                                                ng-click="ctrl.viewDocument(approvedInternal, $event)">{{approvedInternal.generalStepElm.docSubject}}</a>
@@ -136,24 +149,13 @@
                                                 </grid-actions-directive>
                                             </div>
                                         </td>
-                                        <td md-cell class="read-td">
-                                            <!--ng-click="ctrl.markAsReadUnread(approvedInternal, $event)"
-                                            tooltip="{{approvedInternal.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
-                                                 tooltip-direction="top"
-                                            -->
-                                            <div class="cursor-pointer status"
-                                                 ng-class="approvedInternal.generalStepElm.isOpen===true? 'read' : 'unread'"
-                                                 ng-if="!ctrl.selectedApprovedInternals.length
-                                                          || ctrl.selectedApprovedInternals.length===1 && ctrl.selectedApprovedInternals[0].generalStepElm.workObjectNumber === approvedInternal.generalStepElm.workObjectNumber" >
-                                            </div>
-                                        </td>
                                     </tr>
                                     <tr md-row ng-if="!ctrl.approvedInternals.length">
-                                        <td md-cell colspan="7" class="red-text text-center">{{lang.no_records_found}}
+                                        <td md-cell colspan="8" class="red-text text-center">{{lang.no_records_found}}
                                         </td>
                                     </tr>
                                     <tr md-row ng-if="ctrl.approvedInternals.length && !searchResults.length">
-                                        <td md-cell colspan="7" class="red-text text-center">
+                                        <td md-cell colspan="8" class="red-text text-center">
                                             {{lang.no_records_found_matching_search}}
                                         </td>
                                     </tr>

@@ -61,6 +61,9 @@
                                        md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
+                                        <th ng-if="!ctrl.selectedWorkItems.length" md-column>
+                                            <!-- Read/Unread Indicator -->
+                                        </th>
                                         <th colspan="{{ctrl.selectedWorkItems.length > 1 ? 10 : 11}}"
                                             ng-if="ctrl.selectedWorkItems.length" md-column>
                                             <div layout="row" layout-align="start center">
@@ -148,9 +151,6 @@
                                                 <md-icon md-svg-icon="view-list"></md-icon>
                                             </md-button>
                                         </th>
-                                        <th ng-if="!ctrl.selectedWorkItems.length" md-column>
-                                            <!-- Read/Unread Indicator -->
-                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody md-body>
@@ -159,6 +159,16 @@
                                         ng-class="!workItem.generalStepElm.isOpen? 'unread-row': 'read-row'"
                                         selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
                                         ng-repeat="workItem in searchResults = (ctrl.workItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        <td md-cell class="read-td">
+                                            <div class="cursor-pointer status absolute-read"
+                                                 ng-class="workItem.generalStepElm.isOpen===true? 'read' : 'unread'"
+                                                 ng-click="ctrl.markAsReadUnread(workItem, $event)"
+                                                 ng-if="!ctrl.selectedWorkItems.length
+                                                          || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber"
+                                                 tooltip="{{workItem.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
+                                                 tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}">
+                                            </div>
+                                        </td>
 
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
@@ -262,16 +272,6 @@
                                                 <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
                                                                         model="workItem">
                                                 </grid-actions-directive>
-                                            </div>
-                                        </td>
-                                        <td md-cell class="read-td">
-                                            <div class="cursor-pointer status"
-                                                 ng-class="workItem.generalStepElm.isOpen===true? 'read' : 'unread'"
-                                                 ng-click="ctrl.markAsReadUnread(workItem, $event)"
-                                                 ng-if="!ctrl.selectedWorkItems.length
-                                                          || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber"
-                                                 tooltip="{{workItem.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
-                                                 tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}">
                                             </div>
                                         </td>
                                     </tr>

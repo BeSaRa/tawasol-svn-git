@@ -5,6 +5,9 @@
                md-progress="ctrl.grid.progress">
             <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.sortingCallback">
             <tr md-row>
+                <th ng-if="!ctrl.selectedWorkItems.length" md-column>
+                    <!-- Read/Unread Indicator -->
+                </th>
                 <th colspan="{{ctrl.selectedWorkItems.length > 1 ? 11 : 12}}"
                     ng-if="ctrl.selectedWorkItems.length" md-column>
                     <div layout="row" layout-align="start center">
@@ -98,9 +101,6 @@
                         <md-icon md-svg-icon="view-list"></md-icon>
                     </md-button>
                 </th>
-                <th ng-if="!ctrl.selectedWorkItems.length" md-column>
-                    <!-- Read/Unread Indicator -->
-                </th>
             </tr>
             </thead>
             <tbody md-body>
@@ -110,6 +110,16 @@
                 ng-class="!userInbox.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                 selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
                 ng-repeat="userInbox in searchResults = (ctrl.workItems | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                <td md-cell class="read-td">
+                    <div class="cursor-pointer status absolute-read"
+                         ng-class="userInbox.generalStepElm.isOpen===true? 'read' : 'unread'"
+                         ng-click="ctrl.markAsReadUnread(userInbox, $event)"
+                         ng-if="!ctrl.selectedWorkItems.length
+                                                          || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber"
+                         tooltip="{{userInbox.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
+                         tooltip-direction="top">
+                    </div>
+                </td>
                 <td md-cell class="indicator-td">
                     <!-- Doc class -->
                     <grid-indicator-directive record="userInbox"
@@ -217,16 +227,6 @@
                         <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
                                                 model="userInbox">
                         </grid-actions-directive>
-                    </div>
-                </td>
-                <td md-cell class="read-td">
-                    <div class="cursor-pointer status"
-                         ng-class="userInbox.generalStepElm.isOpen===true? 'read' : 'unread'"
-                         ng-click="ctrl.markAsReadUnread(userInbox, $event)"
-                         ng-if="!ctrl.selectedWorkItems.length
-                                                          || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber"
-                         tooltip="{{userInbox.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
-                         tooltip-direction="top">
                     </div>
                 </td>
             </tr>

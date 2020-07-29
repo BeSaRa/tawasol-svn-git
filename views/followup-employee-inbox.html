@@ -35,6 +35,9 @@
                                        md-progress="ctrl.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
+                                        <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column>
+                                            <!-- Read/Unread Indicator -->
+                                        </th>
                                         <th colspan="{{ctrl.selectedFollowupEmployeeInboxes.length > 1 ? 13 : 14}}"
                                             ng-if="ctrl.selectedFollowupEmployeeInboxes.length" md-column>
                                             <div layout="row" layout-align="start center">
@@ -119,9 +122,6 @@
                                         <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column>
                                             <!-- Grid Actions -->
                                         </th>
-                                        <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column>
-                                            <!-- Read/Unread Indicator -->
-                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody md-body>
@@ -131,6 +131,16 @@
                                         ng-class="!followupEmployeeInbox.generalStepElm.isOpen? 'unread-row': 'read-row'"
                                         selected-length="{{ctrl.selectedFollowupEmployeeInboxes.length ? ctrl.selectedFollowupEmployeeInboxes.length : 0}}"
                                         ng-repeat="followupEmployeeInbox in searchResults = (ctrl.followupEmployeeInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        <td md-cell class="read-td">
+                                            <div class="cursor-pointer status absolute-read"
+                                                 ng-class="followupEmployeeInbox.generalStepElm.isOpen===true? 'read' : 'unread'"
+                                                 ng-click="ctrl.markAsReadUnread(followupEmployeeInbox, $event)"
+                                                 ng-if="!ctrl.selectedFollowupEmployeeInboxes.length
+                                                          || ctrl.selectedFollowupEmployeeInboxes.length===1 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber === followupEmployeeInbox.generalStepElm.workObjectNumber"
+                                                 tooltip="{{followupEmployeeInbox.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
+                                                 tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}">
+                                            </div>
+                                        </td>
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
                                             <grid-indicator-directive record="followupEmployeeInbox"
@@ -176,14 +186,16 @@
                                                                              plain-text-only="!followupEmployeeInbox.hasContent()"
                                                                              click-callback="ctrl.viewDocument">
                                             </grid-document-subject-directive>-->
-                                            <a href="" ng-if="followupEmployeeInbox.hasContent() && ctrl.grid.truncateSubject"
+                                            <a href=""
+                                               ng-if="followupEmployeeInbox.hasContent() && ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal" md-truncate
                                                tooltip="{{followupEmployeeInbox.generalStepElm.docSubject}}"
                                                ng-click="ctrl.viewDocument(followupEmployeeInbox, $event)">{{followupEmployeeInbox.generalStepElm.docSubject}}</a>
                                             <span ng-if="!followupEmployeeInbox.hasContent() && ctrl.grid.truncateSubject"
                                                   class="view-doc subject-internal" md-truncate
                                                   tooltip="{{followupEmployeeInbox.generalStepElm.docSubject}}">{{followupEmployeeInbox.generalStepElm.docSubject}}</span>
-                                            <a href="" ng-if="followupEmployeeInbox.hasContent() && !ctrl.grid.truncateSubject"
+                                            <a href=""
+                                               ng-if="followupEmployeeInbox.hasContent() && !ctrl.grid.truncateSubject"
                                                class="view-doc subject-internal"
                                                tooltip="{{followupEmployeeInbox.generalStepElm.docSubject}}"
                                                ng-click="ctrl.viewDocument(followupEmployeeInbox, $event)">{{followupEmployeeInbox.generalStepElm.docSubject}}</a>
@@ -222,16 +234,6 @@
                                                 <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
                                                                         model="followupEmployeeInbox">
                                                 </grid-actions-directive>
-                                            </div>
-                                        </td>
-                                        <td md-cell class="read-td">
-                                            <div class="cursor-pointer status"
-                                                 ng-class="followupEmployeeInbox.generalStepElm.isOpen===true? 'read' : 'unread'"
-                                                 ng-click="ctrl.markAsReadUnread(followupEmployeeInbox, $event)"
-                                                 ng-if="!ctrl.selectedFollowupEmployeeInboxes.length
-                                                          || ctrl.selectedFollowupEmployeeInboxes.length===1 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber === followupEmployeeInbox.generalStepElm.workObjectNumber"
-                                                 tooltip="{{followupEmployeeInbox.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
-                                                 tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}">
                                             </div>
                                         </td>
                                     </tr>

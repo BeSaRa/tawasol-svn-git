@@ -30,6 +30,9 @@
                                        md-progress="ctrl.grid.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
+                                        <th ng-if="!ctrl.selectedReadyToExports.length" md-column>
+                                            <!-- Read/Unread Indicator -->
+                                        </th>
                                         <th colspan="{{ctrl.selectedReadyToExports.length > 1 ? 9 : 10}}"
                                             ng-if="ctrl.selectedReadyToExports.length" md-column>
                                             <div layout="row" layout-align="start center">
@@ -43,7 +46,8 @@
                                                     <md-icon md-svg-icon="stop" class="action-green"></md-icon>
                                                 </md-button>
 
-                                                <md-button ng-if="ctrl.employeeService.hasPermissionTo('BULK_EXPORT')" class="md-icon-button" aria-label="{{lang.inbox_export}}"
+                                                <md-button ng-if="ctrl.employeeService.hasPermissionTo('BULK_EXPORT')"
+                                                           class="md-icon-button" aria-label="{{lang.inbox_export}}"
                                                            tooltip="{{lang.inbox_export}}"
                                                            ng-click="ctrl.exportReadyToExportBulk($event)">
                                                     <md-icon md-svg-icon="export" class="action-red"></md-icon>
@@ -108,9 +112,6 @@
                                         <th ng-if="!ctrl.selectedReadyToExports.length" md-column>
                                             <span></span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedReadyToExports.length" md-column>
-                                            <!-- Read/Unread Indicator -->
-                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody md-body>
@@ -121,6 +122,17 @@
                                         selected-length="{{ctrl.selectedReadyToExports.length ? ctrl.selectedReadyToExports.length : 0}}"
                                         model="readyToExport"
                                         ng-repeat="readyToExport in searchResults = (ctrl.readyToExports | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        <td md-cell class="read-td">
+                                            <!--ng-click="ctrl.markAsReadUnread(readyToExport, $event)"
+                                            tooltip="{{readyToExport.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
+                                                 tooltip-direction="top"
+                                            -->
+                                            <div class="cursor-pointer status absolute-read"
+                                                 ng-class="readyToExport.generalStepElm.isOpen===true? 'read' : 'unread'"
+                                                 ng-if="!ctrl.selectedReadyToExports.length
+                                                          || ctrl.selectedReadyToExports.length===1 && ctrl.selectedReadyToExports[0].generalStepElm.workObjectNumber === readyToExport.generalStepElm.workObjectNumber">
+                                            </div>
+                                        </td>
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
                                             <grid-indicator-directive record="readyToExport"
@@ -195,17 +207,6 @@
                                                 <grid-actions-directive shortcut-actions="ctrl.shortcutActions"
                                                                         model="readyToExport">
                                                 </grid-actions-directive>
-                                            </div>
-                                        </td>
-                                        <td md-cell class="read-td">
-                                            <!--ng-click="ctrl.markAsReadUnread(readyToExport, $event)"
-                                            tooltip="{{readyToExport.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
-                                                 tooltip-direction="top"
-                                            -->
-                                            <div class="cursor-pointer status"
-                                                 ng-class="readyToExport.generalStepElm.isOpen===true? 'read' : 'unread'"
-                                                 ng-if="!ctrl.selectedReadyToExports.length
-                                                          || ctrl.selectedReadyToExports.length===1 && ctrl.selectedReadyToExports[0].generalStepElm.workObjectNumber === readyToExport.generalStepElm.workObjectNumber">
                                             </div>
                                         </td>
                                     </tr>

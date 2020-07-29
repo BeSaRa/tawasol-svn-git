@@ -1751,6 +1751,7 @@ tr.unread-row, tr.current-version {
     background: rgba(255, 235, 128, 0.38) !important;
   }
 }
+
 .background-gray,
 .background-gray:hover {
   background: #ebebeb !important;
@@ -2389,6 +2390,12 @@ html.rtl {
     left: 450px;
     right: 50px;
   }
+
+  .absolute-read {
+    position: absolute;
+    left: auto !important;
+    right: 0 !important;
+  }
 }
 
 #overlay-to-reload-document {
@@ -2575,6 +2582,12 @@ md-chips.custom-chips {
     padding-right: 5px;
   }
 }
+
 .no-click {
   cursor: default !important;
+}
+
+.absolute-read {
+  position: absolute;
+  left: 10px;
 }
