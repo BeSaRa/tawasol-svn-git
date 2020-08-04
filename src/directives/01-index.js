@@ -33,6 +33,7 @@ module.exports = function (app) {
     require('./vertical-divider-directive/vertical-divider-directive')(app);
     require('./grid-right-click-directive/grid-right-click-directive')(app);
     require('./grid-context-menu-directive/01-index')(app);
+    require('./grid-shortcut-actions-directive/01-index')(app);
     require('./manage-tags-directive/01-index')(app);
     require('./manage-attachments-directive/01-index')(app);
     require('./browse-file-directive/browse-file-directive')(app);

@@ -1,0 +1,27 @@
+<md-menu id="grid-shortcut-menu"
+         md-position-mode="{{lang.current === 'en' ? 'target-right target' : 'target-left target'}}">
+    <md-button aria-label="Grid Horizontal Actions"
+               class="md-icon-button"
+               ng-click="ctrl.openShortcutMenu($mdMenu, $event)">
+        <md-icon md-menu-origin md-svg-icon="dots-vertical"></md-icon>
+    </md-button>
+    <md-menu-content width="2" layout="row">
+        <md-menu-item ng-repeat="action in ctrl.shortcutActions track by $index"
+                      ng-disabled="action.disabledAction">
+            <md-button aria-label="{{action.title}}"
+                       tooltip="{{action.title}}"
+                       tooltip-direction="{{lang.current === 'en' ? 'left': 'right'}}"
+                       ng-if="action.isActionMenu && !action.hasSubMenu"
+                       ng-click="ctrl.processMenu(action, $event)"
+                       class="md-icon-button"
+                       ng-disabled="action.disabledAction">
+                <md-icon md-menu-align-target
+                         class="{{action.class}}"
+                         md-svg-icon="{{action.icon}}"></md-icon>
+            </md-button>
+
+            <vertical-divider-directive
+                    ng-if="action.isSeparator && !$first && !$last"></vertical-divider-directive>
+        </md-menu-item>
+    </md-menu-content>
+</md-menu>
